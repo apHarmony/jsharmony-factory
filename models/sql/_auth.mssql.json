@@ -1,0 +1,19 @@
+{
+  "client_sql_auth": [
+    "select PE_ID,PE_Hash,PE_STS,PE_FName,PE_LName,PE_LL_Tstmp,PE_Email,C.C_ID,C.C_Name,C_ATstmp,0 INV_OVERDUE from CPE inner join C on C.C_ID = CPE.C_ID inner join UCOD_C_STS on UCOD_C_STS.CODEVAL=C.C_STS and UCOD_C_STS.CODECODE='A' where lower(PE_Email)=lower(@PE_Email);",
+    "select CR_Name as SR_Name from CR inner join CPER on CPER.CR_ID=CR.CR_ID inner join CPE on CPE.PE_ID=CPER.PE_ID where CR_STS='ACTIVE' and lower(PE_Email)=lower(@PE_Email) and PE_STS='ACTIVE';"
+  ],
+  "client_sql_login": "select PE_ID,PE_Hash,PE_STS from CPE where lower(PE_Email)=lower(@PE_Email)",
+  "client_sql_superlogin": "select PE.PE_ID,PE_Hash from PE inner join SPER on SPER.PE_ID = PE.PE_ID inner join SR on SR.SR_ID = SPER.SR_ID and SR.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@PE_Email)",
+  "client_sql_loginsuccess": "update CPE set PE_LL_IP=@PE_LL_IP,PE_LL_Tstmp=@PE_LL_Tstmp where PE_ID=@PE_ID;select @@rowcount as XROWCOUNT;",
+  "client_sql_passwordreset": "update CPE set PE_HASH=@PE_HASH,PE_LL_Tstmp=@PE_LL_Tstmp where PE_ID=@PE_ID;select @@rowcount as XROWCOUNT;",
+  "admin_sql_auth": [
+    "select PE_ID,PE_Hash,PE_STS,PE_FName,PE_LName,PE_LL_Tstmp,PE_Email from PE where lower(PE_Email)=lower(@PE_Email);",
+    "select SR_Name from SR inner join SPER on SPER.SR_ID=SR.SR_ID inner join PE on PE.PE_ID=SPER.PE_ID where SR_STS='ACTIVE' and lower(PE_Email)=lower(@PE_Email) and PE_STS='ACTIVE';"
+  ],
+  "admin_sql_login": "select PE_ID,PE_Hash,PE_STS from PE where lower(PE_Email)=lower(@PE_Email)",
+  "admin_sql_superlogin": "select PE.PE_ID,PE_Hash from PE inner join SPER on SPER.PE_ID = PE.PE_ID inner join SR on SR.SR_ID = SPER.SR_ID and SR.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@PE_Email)",
+  "admin_sql_loginsuccess": "update PE set PE_LL_IP=@PE_LL_IP,PE_LL_Tstmp=@PE_LL_Tstmp where PE_ID=@PE_ID;select @@rowcount as XROWCOUNT;",
+  "admin_sql_passwordreset": "update PE set PE_HASH=@PE_HASH,PE_LL_IP=@PE_LL_IP,PE_LL_Tstmp=@PE_LL_Tstmp where PE_ID=@PE_ID;select @@rowcount as XROWCOUNT;",
+  "admin_sql_check_email": "select PE_Email from PE where PE_ID=@PE_ID"
+}

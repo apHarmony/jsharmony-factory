@@ -1,0 +1,16 @@
+{
+  "LOG": {
+    "comment":"LOG",
+    "title":"System Logs",
+    "table":"",
+    "access":"B", 
+    "layout":"exec", 
+    "topmenu":"Administration",
+    "caption": [ "", "Request", "Requests" ],
+	  "fields":[
+      {"control":"button","value":"Download Logs","controlstyle": "padding:3px 8px;",
+        "onclick": "LOG_Download();"}
+	  ],
+    "js": "function LOG_Download(){  $('#xfileproxy').prop('src', '/_funcs/LOG_DOWNLOAD'); }"
+	}
+}

@@ -1,0 +1,333 @@
+/*
+Copyright 2017 apHarmony
+
+This file is part of jsHarmony.
+
+jsHarmony is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+jsHarmony is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this package.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+======================
+HEADER AND TOP BUTTONS
+======================
+*/
+
+body {
+	background-image:url('/images/top.png');
+}
+#xhead{
+	width:100%;
+	height:117px;
+}
+#xtoplinks{
+	height:21px;
+	background-image:url('/images/toplinks.png');
+	color:#fff;
+	font-size:12px;
+	padding-top:2px;
+	padding-right:15px;
+  padding-left:12px;
+	position:absolute;
+  white-space: nowrap;
+	top:0px;
+	right:0px;
+  z-index:5;
+}
+#xtoplinks a{
+	color:#fff;
+	text-decoration:none;
+}
+#xtoplinks a:hover{
+	text-decoration:underline;
+}
+#xtoplinks_corner{
+	float:left;
+	top:0px;
+  left:-18px;
+	position:absolute;
+}
+#xbrand_link{
+	display:block;
+	border:0;
+	text-decoration:none;
+	position:absolute;
+	top:13px;
+	left:12px;
+	width:86px;
+	height:54px;
+}
+#xlogo{
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+#xlogoimg{
+	position:absolute;
+	left:0px;
+  top:0px;
+}
+#xsublogo{
+  display:block;
+  position:absolute;
+	top:0px;
+	left:0px;
+	border:0;
+  white-space:nowrap;
+  color:white;
+  vertical-align:top;
+}
+#xsubcaption {
+  display:inline-block;
+  position:relative;
+  font-style:italic;
+  top:-7px;
+  padding-left:4px;
+  font-size:11px;
+}
+#xmenu {
+	padding-top:34px;
+	padding-left:370px;
+  min-height:60px;
+}
+#xmenu a{
+	font-family: 'PT Sans', arial, helvetica, sans-serif;
+	color:#ffffff;
+	text-decoration:none;
+	font-size:15px;
+	display:inline-block;
+	padding:14px 8px 28px 8px;
+	position:relative;
+	margin-right:7px;
+	margin-left:7px;
+}
+#xmenu a:hover{
+	text-decoration:underline;
+}
+#xmenu a .bottom{
+	display:none;
+}
+#xmenu a.selected{
+/*	color:#000000;*/
+	background-image:url('/images/menu_highlight_triangle.png');
+	background-repeat:no-repeat;
+	background-position:bottom center;
+}
+#xmenu a.selected:hover{
+	text-decoration:none;
+}
+#xmenu a.selected .bottom{
+	background-image:url('/images/menu_highlight_bl.png');
+	width:6px;
+	height:10px;
+	display:block;
+	position:absolute;
+	top:52px;
+	left:-6px;
+}
+#xmenu a#xmenu_more {
+  display:none;
+  position:absolute;
+  right:0px;
+  top:5px;
+  padding:0 0 0 2px;
+  background-image:url('/images/menu_divider.png');
+  background-repeat:repeat-y;
+  margin-left:0px;
+}
+#xmenu_more_bg {
+  padding:43px 20px 18px 26px;
+  background-image:url('/images/top.png');
+  background-position-y:-5px;
+  background-repeat:repeat-x;
+}
+a#xmenu_more img {
+  position:relative;
+  top:-1px;
+  padding-left:4px;
+}
+#xmenuside {
+  display:none;
+  position:absolute;
+  top:84px;
+  right:0px;
+  z-index:9999;
+}
+#xmenuside a{
+  background-image:url('/images/menu_side_bg.png');
+  text-align:center;
+  height:26px;
+  color:white;
+  display:block;
+  padding:6px 35px 0px 35px;
+  font-family: 'PT Sans', arial, helvetica, sans-serif;
+	color:#ffffff;
+	text-decoration:none;
+	font-size:15px;
+}
+#xmenuside a:hover{
+  text-decoration:underline;
+}
+#xmenuside a.selected {
+  color:#000000;
+	background-image:url('/images/menu_highlight_bg.png');
+  height:25px;
+  padding-top:7px;
+}
+/* SUBMENU */
+.xsubmenu{
+	padding-left:26px;
+  position:relative;
+}
+.xsubmenu div { display:inline-block; }
+.xsubmenu .head{
+	font-weight:bold;
+	padding-right:6px;
+}
+.xsubmenu a {
+	font-family: 'PT Sans', arial, helvetica, sans-serif;
+	color:#202020;
+	text-decoration:none;
+  display:inline-block;
+}
+.xsubmenu a:hover {
+	text-decoration:underline;
+}
+.xsubmenu .xsubmenu_more {
+  position:absolute;
+  display:block;
+  top:-8px;
+  right:0px;
+  padding:7px 29px 0 29px;
+  background-color:#eeeeee;
+  border-left:1px solid #777;
+  border-right:1px solid #777;
+  height:23px;
+  z-index:2;
+}
+#xsubmenuside {
+  position:absolute;
+  top:117px;
+  right:0px;
+  z-index:9998;
+}
+#xsubmenuside a {
+  background-color:#eeeeee;
+  text-align:left;
+  font-family: 'PT Sans', arial, helvetica, sans-serif;
+	color:#202020;
+	text-decoration:none;
+  display:block;
+  padding:6px 16px 5px 16px;
+  font-size:13px;
+  border-bottom:1px solid #777;
+  border-right:1px solid #777;
+  border-left:1px solid #777;
+}
+#xsubmenuside a:hover {
+	text-decoration:underline;
+}
+
+
+/*
+===============
+CUSTOM CONTROLS
+===============
+*/
+
+.xdate_mmddyy {
+	width:86px;
+}
+.xtstmp {
+	width:150px;
+}
+.xdropdown_VS {
+	width:50px;
+}
+.xdropdown_S {
+	width:125px;
+}
+.xdropdown_M{
+	width:240px;
+}
+.xdropdown_L{
+	width:400px;
+}
+.xdropdown_VL{
+	width:615px;
+}
+/*
+	width:597px;
+*/	
+.xlabel_VS {
+	width:43px;
+}
+.xlabel_S {
+	width:117px;
+}
+.xlabel_M {
+	width:233px;
+}
+.xlabel_L {
+	width:392px;
+}
+.xlabel_VL {
+	width:590px;
+}
+.xtextbox_VS {
+	width:43px;
+}
+.xtextbox_S {
+	width:117px;
+}
+.xtextbox_M {
+	width:233px;
+}
+.xtextbox_L {
+	width:392px;
+}
+.xtextbox_VL {
+	width:608px;
+}
+/*
+	width:590px;
+*/	
+.xtextbox_email {
+	width:392px;
+}
+.xtextbox_mmddyy {
+	width:80px;
+}
+.xtextbox_phone {
+	width:117px;
+}
+.xtextbox_tstmp {
+	width:105px;
+}
+.xcaption_2 {
+	width:120px;
+	text-align:right;
+}
+
+
+/*
+================
+PRINT STYLESHEET
+================
+*/
+@media print {
+  #xhead { height: 90px; }
+  #xmenu { display:none !important; }
+  .xsubmenu { display:none !important; }
+  #xtoplinks { display:none !important; }
+}

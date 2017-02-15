@@ -1,0 +1,9 @@
+{
+  "help_view": "HSHOWL",
+  "help_panelid": "hp_code", 
+  "help_panelidComment": "Not implemented",
+  "default_buttons": {
+    "add": { "icon": "add", "text": "Add %%%CAPTION%%%", "access": "I", "class": "xbuttonadd" }
+  }
+
+}

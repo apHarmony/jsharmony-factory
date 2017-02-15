@@ -1,0 +1,6 @@
+{
+"comment":"TMPL_DEFAULT",
+  "layout": "exec",
+  "access": "B",
+  "topmenu":"reports"
+}

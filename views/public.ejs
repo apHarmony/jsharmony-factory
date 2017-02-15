@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><%=global.site_title%> - <%= title %></title>
+<link rel="stylesheet" type="text/css" href="/system.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+<script type="text/javascript"><%-req.getBaseJS()%></script>
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/jquery-ui/js/jquery-ui-1.10.3.custom-aspa.min.js"></script>
+<link rel="stylesheet" href="/jquery-ui/css/jquery-ui-1.10.3.custom.min.css" />
+<script type="text/javascript" src="/js/jquery.colorbox-min.js"></script>
+<link rel="stylesheet" href="/js/colorbox/colorbox.css" />
+<style type="text/css">
+#xmenu a{
+  padding-right:24px;
+  padding-left:24px;
+}
+#xmenu a#xmenu_more{ 
+  padding-right:0; 
+  padding-left:2px; 
+}
+body, p, ol, ul, td, #xbody {
+  font-size:15px;
+}
+#xbody {
+  /*min-width:1024px;*/
+  /*width:100%;*/
+  min-height:573px;
+}
+body {
+
+}
+</style>
+</head>
+
+<body class="xpublic">
+<div id="xmain">
+
+<div id="xhead">
+  <div id="xtoplinks"><img src="/images/toplinks_corner.png" id="xtoplinks_corner" alt="" title="" />
+    <a href="<%-global.home_url%>/">Home</a> &nbsp;|&nbsp; 
+    <a href="/client/">Login</a>
+  </div>
+  <a id="xbrand_link" href="<%-global.home_url%>/">&nbsp;</a>
+  <div id="xlogo">
+    <a id="xlogoimg" href="<%-global.home_url%>/"><img src="/images/logo.png" alt="<%=global.site_title%>" title="<%=global.site_title%>" /></a>
+  </div>
+  
+  <div id="xmenu">
+  </div>
+  <div id="xmenuside"></div>
+
+</div>
+
+<div id="xbody">
+<%-ejsext.BreadCrumbs(req, jsh, modelid)%>
+<h1 style="display:inline-block;" id="xform_title"><%= title %></h1>
+<%- body %>
+</div><!-- xbody -->
+
+<div class="clear"></div>
+</div><!--xmain-->
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+"comment":"RQ",
+  "title":"Remote Queue",
+  "table":"RQ",
+  "access":"BIUD", 
+  "layout":"form", 
+  "caption": [ "", "Request", "Requests" ],
+	"fields":[
+	  {"name":"RQ_ID","type":"bigint","key": 1},
+    {"name":"RQ_FILE","type":"file","access":"BIU","nl":1,
+       "control":"file_upload","caption":"Document",
+       "controlparams": { 
+         "sqlparams": {
+                       "FILE_NAME": "RQ_ID"
+         },
+         "data_folder": "RQ"
+       },
+      "validate": [ "Required" ]}
+	]
+	
+}
