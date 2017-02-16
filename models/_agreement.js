@@ -28,12 +28,13 @@ exports = module.exports = {};
 
 exports.check = function (req, res, next) {
   if (!req.gdata.C_ATstmp) {
-    return jsh.Redirect302(res, req.baseurl + 'agreement/');
+    return this.jsh.Redirect302(res, req.baseurl + 'agreement/');
   }
   next();
 }
 
 exports.welcome = function (req, res, next) {
+  var _this = this;
   var verb = req.method.toLowerCase();
   if (verb !== 'get') return next();
   
@@ -43,18 +44,19 @@ exports.welcome = function (req, res, next) {
     function (cb) { HelperRender.getTXT(req, res, appsrv, 'agreement', 'CMS', 'AGREEMENT_DONE', function (rslt) { cms_welcome = rslt; cb(); }) },
     function (cb) {
       var params = {};
-      req.jshconfig.menu(req, res, jsh, params, function () {
-        HelperRender.reqGet(req, res, this.jsh, 'welcome', 'Welcome', { basetemplate: 'client', TopMenu: '', XMenu: params.XMenu, params: { cms_welcome: cms_welcome, req: req } }, cb);
+      req.jshconfig.menu(req, res, _this.jsh, params, function () {
+        HelperRender.reqGet(req, res, _this.jsh, 'welcome', 'Welcome', { basetemplate: 'client', TopMenu: '', XMenu: params.XMenu, params: { cms_welcome: cms_welcome, req: req } }, cb);
       });
     }
   ]);
 }
 
 exports.form = function (req, res, next) {
+  var _this = this;
   var verb = req.method.toLowerCase();
   if (verb !== 'get') return next();
   
-  if (req.gdata.C_ATstmp) { return jsh.Redirect302(res, req.baseurl); }
+  if (req.gdata.C_ATstmp) { return _this.jsh.Redirect302(res, req.baseurl); }
   
   req.bcrumb_override = '<a href="' + global.home_url + '/">Home</a> &gt; User Agreement';
   //Get cms_join_text from database
@@ -62,16 +64,16 @@ exports.form = function (req, res, next) {
   var COD_STATE = [];
   var COD_MONTH = [];
   var COD_YEAR = [];
-  var appsrv = this;
+  var appsrv = _this;
   var blank_code = {};
-  blank_code[appsrv.jsh.map.codeval] = '';
-  blank_code[appsrv.jsh.map.codetxt] = '';
+  blank_code[_this.jsh.map.codeval] = '';
+  blank_code[_this.jsh.map.codetxt] = '';
   async.series([
     function (cb) { HelperRender.getTXT(req, res, appsrv, 'agreeement', 'CMS', 'AGREEMENT', function (rslt) { cms_agreement = rslt; cb(); }) },
     function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', "agreement_COD_STATE", [], {}, function (rslt) { COD_STATE = rslt; COD_STATE.unshift(blank_code); cb(); }) },
     function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', "agreement_COD_MONTH", [], {}, function (rslt) { COD_MONTH = rslt; COD_MONTH.unshift(blank_code); cb(); }) },
     function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', "agreement_COD_YEAR", [], {}, function (rslt) { COD_YEAR = rslt; COD_YEAR.unshift(blank_code); cb(); }) },
-    function (cb) { HelperRender.reqGet(req, res, this.jsh, 'agreement.form', 'User Agreement', { basetemplate: 'public', TopMenu: 'join', params: { cms_agreement: cms_agreement, COD_STATE: COD_STATE, COD_MONTH: COD_MONTH, COD_YEAR: COD_YEAR } }, cb); }
+    function (cb) { HelperRender.reqGet(req, res, _this.jsh, 'agreement.form', 'User Agreement', { basetemplate: 'public', TopMenu: 'join', params: { cms_agreement: cms_agreement, COD_STATE: COD_STATE, COD_MONTH: COD_MONTH, COD_YEAR: COD_YEAR } }, cb); }
   ]);
 }
 
