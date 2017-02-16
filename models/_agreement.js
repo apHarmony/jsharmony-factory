@@ -21,7 +21,7 @@ var HelperRender = require('jsharmony/lib/HelperRender.js');
 var async = require('async');
 var XValidate = require('jsharmony-validate');
 var _ = require('lodash');
-var Helper = require('jsharmony/lib/Helper.js');
+var Helper = require('jsharmony/Helper');
 var crypto = require('crypto');
 
 exports = module.exports = {};

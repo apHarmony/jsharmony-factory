@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var Helper = require('jsharmony/lib/Helper.js');
-var HelperFS = require('jsharmony/lib/HelperFS.js');
+var Helper = require('jsharmony/Helper');
+var HelperFS = require('jsharmony/HelperFS');
 var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');

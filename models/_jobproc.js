@@ -20,8 +20,8 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 var _ = require('lodash');
 var fs = require('fs');
 var async = require('async');
-var Helper = require('jsharmony/lib/Helper.js');
-var HelperFS = require('jsharmony/lib/HelperFS.js');
+var Helper = require('jsharmony/Helper');
+var HelperFS = require('jsharmony/HelperFS');
 var XValidate = require('jsharmony-validate');
 var SMS = require('../lib/SMS.js');
 

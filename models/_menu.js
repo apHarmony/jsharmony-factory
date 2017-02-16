@@ -18,7 +18,7 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 var _ = require('lodash');
-var Helper = require('jsharmony/lib/Helper.js');
+var Helper = require('jsharmony/Helper');
 
 exports = module.exports = function GenMenu(type, req, res, jsh, params, onComplete) {
   if(!req.isAuthenticated){
