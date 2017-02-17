@@ -51,7 +51,7 @@ function jsHarmonyFactory(adminConfig, clientConfig){
   this.app.use(express.static(path.join(__dirname, 'public')));
 
   if(clientConfig){
-    clientConfig = _.extend(jsHarmonyFactory.GetDefaultClientConfig(),clientConfig);
+    clientConfig = jsHarmonyFactory.MergeConfig(jsHarmonyFactory.GetDefaultClientConfig(),clientConfig);
     this.app.get(/^\/client$/, function (req, res, next) { res.redirect('/client/'); });
     this.app.use('/client', cookieParser(global.clientcookiesalt, { path: '/client/' }));
     this.app.all('/client/login', function (req, res, next) { req._override_basetemplate = 'public'; req._override_title = 'Customer Portal Login'; next(); });
@@ -61,7 +61,7 @@ function jsHarmonyFactory(adminConfig, clientConfig){
   }
 
   if(!adminConfig) adminConfig = {};
-  adminConfig = _.extend(jsHarmonyFactory.GetDefaultAdminConfig(),adminConfig);
+  adminConfig = jsHarmonyFactory.MergeConfig(jsHarmonyFactory.GetDefaultAdminConfig(),adminConfig);
   this.app.use('/', cookieParser(global.admincookiesalt, { path: '/' }));
   this.app.all('/login', function (req, res, next) { req._override_basetemplate = 'public'; req._override_title = 'Login'; next(); });
   this.app.all('/login/forgot_password', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
@@ -69,6 +69,21 @@ function jsHarmonyFactory(adminConfig, clientConfig){
   this.app.use('/', jsHarmony.Init.Routes(this.app.jsh, adminConfig));
 
   jsHarmony.Init.addDefaultRoutes(this.app);
+}
+
+jsHarmonyFactory.MergeConfig = function(srcconfig, newconfig){
+  var rslt = srcconfig;
+  for(var f in newconfig){
+    if(!(f in rslt)) rslt[f] = newconfig[f];
+    else if(_.includes(['auth','datalock','datalocktypes','globalparams','sqlparams'],f)){
+      rslt[f] = _.extend(rslt[f],newconfig[f]);
+    }
+    else if(_.includes(['public_apps','private_apps'],f)){
+      rslt[f] = newconfig[f].concat(rslt[f]);
+    }
+    else rslt[f] = newconfig[f];
+  }
+  return rslt;
 }
 
 jsHarmonyFactory.GetDefaultAdminConfig = function(){
@@ -93,6 +108,7 @@ jsHarmonyFactory.GetDefaultAdminConfig = function(){
     menu: menu.bind(null, 'S'),
     globalparams: {
       'barcode_server': global.barcode_settings.server,
+      'scanner_server': global.scanner_settings.server,
       'user_id': function (req) { return req.user_id; }
     },
     sqlparams: {

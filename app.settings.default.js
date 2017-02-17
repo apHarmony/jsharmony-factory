@@ -28,6 +28,7 @@ global.support_email = 'donotreply@jsharmony.com';
 global.error_email = 'donotreply@jsharmony.com';
 global.mailer_email = 'DO NOT REPLY <donotreply@jsharmony.com>';
 global.barcode_settings = { server: 'https://localhost:3101' };
+global.scanner_settings = { server: 'https://localhost:3105' };
 global.google_settings = { API_KEY: '' };
 global.twilio_settings = {
   SMS_FROM: '+12223334444',
