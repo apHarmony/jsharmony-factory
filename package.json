@@ -1,6 +1,6 @@
 {
   "name": "jsharmony-factory",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Enterprise framework for jsHarmony",
   "main": "index.js",
   "scripts": {
@@ -39,13 +39,14 @@
     "async": "^2.1.4",
     "cookie-parser": "^1.4.3",
     "decompress-zip": "^0.3.0",
-    "jsharmony": "^1.0.8",
+    "jsharmony": "^1.0.9",
     "jsharmony-validate": "^1.0.2",
     "lodash": "^4.17.4",
     "moment": "^2.17.1",
     "nodemailer": "^3.1.0",
     "nodemailer-ses-transport": "^1.5.0",
     "nodemailer-smtp-pool": "^2.8.2",
+    "nodemailer-html-to-text": "^2.1.0",
     "twilio": "^2.11.1"
   }
 }

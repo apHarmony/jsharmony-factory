@@ -33,18 +33,17 @@ var cookieParser = require('cookie-parser');
 var agreement = require('./models/_agreement.js');
 var adminfuncs = require('./models/_funcs.js');
 var menu = require('./models/_menu.js');
-var jobproc = require('./models/_jobproc.js');
 
-function jsHarmonyFactory(adminConfig, clientConfig){
+function jsHarmonyFactory(adminConfig, clientConfig, onSettingsLoaded){
   var _this = this;
   var factorypath = path.dirname(module.filename);
 
-  this.LoadSettings();
+  if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
   HelperFS.loadViews(factorypath + '/views', '');
   if(!global.modeldir) global.modeldir = [];
   global.modeldir.unshift(factorypath + '/models/');
   this.app = jsHarmony.App({'noroutes':1});
-  this.app.jsh.SetJobProc(jobproc);
+  this.app.jsh.SetJobProc(global.JobProc);
   this.VerifySettings();
 
   global.mailer = require('./lib/Mailer.js');
@@ -201,9 +200,10 @@ jsHarmonyFactory.GetDefaultClientConfig = function(){
   return jshconfig_client;
 }
 
-jsHarmonyFactory.prototype.LoadSettings = function(custom_settings_path){
-  //Include appropriate settings file based on path
+jsHarmonyFactory.LoadSettings = function(custom_settings_path){
+  if(global.jsHarmonyFactorySettings_Loaded){ throw new Error('jsHarmonyFactory settings already loaded'); }
 
+  //Include appropriate settings file based on Path
   if (!global.appbasepath) global.appbasepath = path.dirname(require.main.filename);
   
   //Create array of application path
@@ -226,6 +226,9 @@ jsHarmonyFactory.prototype.LoadSettings = function(custom_settings_path){
   if (fs.existsSync(host_settings_file)) require(host_settings_file);
   //Load custom settings
   if(custom_settings_path && fs.existsSync(custom_settings_path)) require(custom_settings_path);
+
+  if(!global.JobProc) global.JobProc = require('./models/_jobproc.js');
+  global.jsHarmonyFactorySettings_Loaded = true;
 }
 
 jsHarmonyFactory.prototype.VerifySettings = function(){
@@ -248,6 +251,7 @@ jsHarmonyFactory.prototype.Run = function (cb) {
     https_ip: global.https_ip,
     https_cert: global.https_cert,
     https_key: global.https_key,
+    https_ca: global.https_ca,
   } },_this.app.jsh,_this.app,cb);
 }
 

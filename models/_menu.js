@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2017 apHarmony
 
 This file is part of jsHarmony.

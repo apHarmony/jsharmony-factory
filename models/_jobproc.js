@@ -27,6 +27,7 @@ var SMS = require('../lib/SMS.js');
 
 function AppSrvJobProc(appsrv) {
   this.AppSrv = appsrv;
+  this.TaskHistory = {};
   this.Run();
 }
 
@@ -57,6 +58,17 @@ AppSrvJobProc.prototype.Run = function () {
 
 AppSrvJobProc.prototype.CheckJobQueue = function (onComplete) {
   var _this = this;
+  if (global.enable_scheduler && global.scheduled_tasks) {
+    var curdt = new Date();
+    for (var t in global.scheduled_tasks) {
+      if (!(t in this.TaskHistory)) this.TaskHistory[t] = new Date(0);
+      if (global.scheduled_tasks[t].when(curdt, this.TaskHistory[t])) {
+        global.log('Running Task ' + t);
+        global.scheduled_tasks[t].action(this);
+        this.TaskHistory[t] = curdt;
+      }
+    }
+  }
   this.AppSrv.ExecRow('jobproc', "jobproc_jobcheck", [], {}, function (err, rslt) {
     if (err != null) { global.log(err); return onComplete(null); }
     if ((rslt != null) && (rslt.length == 1) && (rslt[0] != null)) {
@@ -436,6 +448,15 @@ AppSrvJobProc.prototype.PopQueue = function (req, res, queueid, queueresult, onC
       else if (onComplete) onComplete();
     });
   });
+}
+
+AppSrvJobProc.ExecuteSQL = function (sql){
+  return function (jobproc){
+    jobproc.AppSrv.ExecRecordset('jobproc', sql, [], { }, function (err, rslt) {
+      if (err) global.log('Error Running Task: '+err.toString());
+      if (rslt && rslt[0]) global.log('Task Result: '+JSON.stringify(rslt));
+    });
+  }
 }
 
 module.exports = AppSrvJobProc;

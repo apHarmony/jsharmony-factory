@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2017 apHarmony
 
 This file is part of jsHarmony.
@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var HelperRender = require('jsharmony/lib/HelperRender.js');
+var HelperRender = require('jsharmony/HelperRender');
 var async = require('async');
 var XValidate = require('jsharmony-validate');
 var _ = require('lodash');
