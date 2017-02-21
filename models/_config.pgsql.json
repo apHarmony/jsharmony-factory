@@ -52,6 +52,8 @@
     "email_subject": "EMAIL_SUBJECT",
     "email_text": "EMAIL_TEXT",
     "email_html": "EMAIL_HTML",
+    "email_d_id": "EMAIL_D_ID",
+    "email_d_filename": "EMAIL_D_FileName",
     "sms_txt_attrib": "SMS_TXT_ATTRIB",
     "sms_to": "SMS_TO",
     "sms_body": "SMS_BODY",

@@ -217,6 +217,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
     if (global.debug_params.no_job_email) return callback(null);
     var attachments = [];
     if (job.EMAIL_ATTACH && tmppath) attachments.push({ filename: 'D' + D_ID + '.pdf', content: fs.createReadStream(tmppath) });
+    if (job.EMAIL_D_ID) attachments.push({ filename: job.EMAIL_D_FileName, content: fs.createReadStream(global.datadir + '/D/D_FILE_' + job.EMAIL_D_ID) });
     if (job.EMAIL_TXT_ATTRIB) Helper.SendTXTEmail('jobproc', thisapp.jsh, job.EMAIL_TXT_ATTRIB, job.EMAIL_TO, job.EMAIL_CC, job.EMAIL_BCC, attachments, dbdata, callback);
     else Helper.SendBaseEmail('jobproc', thisapp.jsh, job.EMAIL_SUBJECT, job.EMAIL_TEXT, job.EMAIL_HTML, job.EMAIL_TO, job.EMAIL_CC, job.EMAIL_BCC, attachments, dbdata, callback);
   }
@@ -410,6 +411,7 @@ AppSrvJobProc.prototype.SubscribeToQueue = function (req, res, queueid) {
 
 AppSrvJobProc.prototype.CheckSubscriberQueue = function (onComplete) {
   var _this = this;
+  if(!_this.AppSrv.jsh.Config.queues.length) return onComplete();
   this.AppSrv.ExecRecordset('jobproc', "jobproc_queuesubscribers", [], {}, function (err, rslt) {
     if (err != null) { global.log(err); return onComplete(null); }
     //Handle invalid queue
