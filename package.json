@@ -1,6 +1,6 @@
 {
   "name": "jsharmony-factory",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Enterprise framework for jsHarmony",
   "main": "index.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "async": "^2.1.4",
     "cookie-parser": "^1.4.3",
     "decompress-zip": "^0.3.0",
-    "jsharmony": "^1.0.16",
+    "jsharmony": "^1.0.17",
     "jsharmony-validate": "^1.0.2",
     "lodash": "^4.17.4",
     "moment": "^2.17.1",
