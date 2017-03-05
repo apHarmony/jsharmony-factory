@@ -252,6 +252,7 @@ jsHarmonyFactory.prototype.Run = function (cb) {
     https_cert: global.https_cert,
     https_key: global.https_key,
     https_ca: global.https_ca,
+    request_timeout: global.request_timeout,
   } },_this.app.jsh,_this.app,cb);
 }
 
