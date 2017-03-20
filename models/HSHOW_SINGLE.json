@@ -1,0 +1,8 @@
+{
+  "comment":"HSHOW_SINGLE",
+	"inherits":"HSHOW",
+  "fields":[
+    {"name":"h_id","__REMOVEFIELD__":1},
+    {"name":"hp_code","type":"varchar","length":50,"key":1,"datalock":{"C_ID":"client_ALWAYS"}}
+  ]
+}
