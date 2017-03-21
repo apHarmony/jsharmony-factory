@@ -1,20 +1,27 @@
 {
-"comment":"HSHOWL",
+  "HSHOWL": {
     "title":"Help Index",
 	"table":"v_hl",
+    "sqlwhere":"(h_index_a=1)",
 	"access":"B", 
     "roles": {"*":"B","C*":"B"},
 	"caption":[0,"Help Module","Help Modules"],
     "layout":"grid", 
 	"hide_system_buttons": ["help","export"],
-	"sort":["^h_title"], 
+	"sort":["^h_seq","^h_title"], 
 	"samplerepeat":5,
 	"popup":[850,525],
 	"fields":[
 	  {"name":"h_id","type":"bigint","key": 1,"datalock":{"C_ID":"client_ALWAYS"}},
+	  {"name":"h_seq","type":"int","access":"B","control":"hidden"},
       {"name":"hp_code","type":"varchar","length":50,"access":"F","datalock":{"C_ID":"client_ALWAYS"}},
 	  {"name":"h_title","type":"varchar","length":"70","caption":"Help Module","controlstyle":"width:350px;","access":"B","link":"edit:HSHOW","sample":"Test - General Information"}
 	],
-  "oninit": "if('hp_code' in _GET) xform_HSHOWL.Data['hp_code'] = _GET.hp_code;",
-  "onload": "if(!('hp_code' in xform_HSHOWL.Data)) return true; if(xform_HSHOWL.RowCount == 0){ delete xform_HSHOWL.Data.hp_code; XForm_Select(callback); } else { XExt.navTo($('#xgrid_HSHOWL_placeholder a').first().prop('href')); } return false;"
+    "oninit": "if('hp_code' in _GET) xform_HSHOWL.Data['hp_code'] = _GET.hp_code;",
+    "onload": "if(!('hp_code' in xform_HSHOWL.Data)) return true; if(xform_HSHOWL.RowCount == 0){ delete xform_HSHOWL.Data.hp_code; XForm_Select(callback); } else { XExt.navTo($('#xgrid_HSHOWL_placeholder a').first().prop('href')); } return false;"
+ },
+  "HSHOWL_P": {
+    "inherits": "HSHOWL",
+    "sqlwhere":"(h_index_p=1)"
+ }
 }

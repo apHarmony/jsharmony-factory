@@ -10,16 +10,27 @@
 	"fields":[
       {"control":"html","value":"<script type='text/javascript' src='/js/ckeditor/ckeditor.js'></script>"},
 	  {"name":"H_ID","type":"bigint","key":1},
-	  {"name":"H_Title","type":"varchar","length":70,"access":"BIU",
-	      "control":"textbox_VL","sample":"Test - General Information",
-				"validate":["Required"],
-		  "caption":"Module Title","captionstyle":"width:120px;"},
+	  {"name":"H_Title","type":"varchar","length":70,"access":"BIU","control":"textbox_VL",
+	   "validate":["Required"],"caption":"Module Title","captionstyle":"width:120px;text-align:right;"},
+		  
+      {"name":"H_SEQ","type":"int","access":"BIU","control":"textbox_VS","nl":1,
+       "caption":"Sequence","captionstyle":"width:120px;text-align:right;"},
+
+      {"name":"H_INDEX_A","type":"int","access":"BIU","control":"checkbox","validate":["Required"],
+       "controlparams":{"value_true":"1","value_false":"0"},"caption":"Admin Help Index",
+       "captionstyle":"width:120px;text-align:right;"},
+
+      {"name":"H_INDEX_P","type":"int","access":"BIU","control":"checkbox","validate":["Required"],
+       "controlparams":{"value_true":"1","value_false":"0"},"caption":"Portal Help Index",
+       "captionstyle":"width:120px;text-align:right;"},
+		  
+		  
 	  {"name":"HP_CODE","type":"varchar","length":50,"access":"BI","nl":1,
 	      "control":"dropdown_VL","sample":"Test - General","lov":{"sql":"select HP_CODE as CODEVal,HP_Desc as CODETxt from HP order by HP_Desc","blank":""},
 		  "caption":"Panel"},
 	  {"name":"H_Text","type":"varchar","length":99999,"access":"BIU","nl":1,
 	      "control":"textarea","controlstyle":"width:590px;height:400px;","sample":"Here goes the text ...........",
-		  	"caption":"Body","captionstyle":"width:120px;height:400px;vertical-align:top;padding-top:3px;",
+		  	"caption":"Body","captionstyle":"width:120px;height:400px;vertical-align:top;padding-top:3px;text-align:right;",
 				"validate":["Required"]},
 	  {"name":"H_ETstmp","type":"datetime","length":7,"access":"B","nl":1,
 	      "control":"textbox_tstmp",
