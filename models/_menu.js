@@ -86,6 +86,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
         else if (menuitem[jsh.map.menu_command] in jsh.Models) {
           var link_targetmodelid = jsh.parseLink(menuitem[jsh.map.menu_command]).modelid;
           link_url = jsh.getURL(req, menuitem[jsh.map.menu_command]);
+          if (menuitem[jsh.map.menu_subcommand]) link_url += menuitem[jsh.map.menu_subcommand];
           link_onclick = jsh.getModelLinkOnClick(link_targetmodelid, req, menuitem[jsh.map.menu_command]);
         }
 
