@@ -306,7 +306,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
     job_sql += this.AppSrv.getSQL('jobproc_add_RQST_RQ');
     job_sql_ptypes.push(dbtypes.VarChar(255));
     job_sql_params['RQ_NAME'] = jrow.RQ_NAME;
-    jobvalidate.AddValidator('_obj.RQ_NAME', 'RQ_NAME', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
+    jobvalidate.AddValidator('_obj.RQ_NAME', 'RQ_NAME', 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.VarChar(dbtypes.MAX));
     job_sql_params['RQ_MESSAGE'] = jrow.RQ_MESSAGE || '';
     jobvalidate.AddValidator('_obj.RQ_MESSAGE', 'RQ_MESSAGE', 'B', [XValidate._v_MaxLength(8)]);
@@ -411,7 +411,7 @@ AppSrvJobProc.prototype.SubscribeToQueue = function (req, res, queueid) {
 
 AppSrvJobProc.prototype.CheckSubscriberQueue = function (onComplete) {
   var _this = this;
-  if(!_this.AppSrv.jsh.Config.queues.length) return onComplete();
+  if(_.isEmpty(_this.AppSrv.jsh.Config.queues)) return onComplete();
   this.AppSrv.ExecRecordset('jobproc', "jobproc_queuesubscribers", [], {}, function (err, rslt) {
     if (err != null) { global.log(err); return onComplete(null); }
     //Handle invalid queue
