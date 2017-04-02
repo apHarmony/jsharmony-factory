@@ -3,20 +3,20 @@
     "select '-----TABLE-----' as table_boundary;",
     "select pe_id,pe_hash,pe_sts,pe_fname,pe_lname,PE_LL_Tstmp,PE_Email,C.C_ID,C.C_Name,C_ATstmp,0 INV_OVERDUE from CPE inner join C on C.C_ID = CPE.C_ID inner join UCOD_C_STS on UCOD_C_STS.CODEVAL=C.C_STS and UCOD_C_STS.CODECODE='A' where lower(PE_Email)=lower(@pe_email);",
     "select '-----TABLE-----' as table_boundary;",
-    "select cr_name as sr_name from CR inner join CPER on CPER.CR_ID=CR.CR_ID inner join CPE on CPE.PE_ID=CPER.PE_ID where CR_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email) and PE_STS='ACTIVE';"
+    "select cper.cr_name as sr_name from CR inner join CPER on CPER.CR_Name=CR.CR_Name inner join CPE on CPE.PE_ID=CPER.PE_ID where CR_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email) and PE_STS='ACTIVE';"
   ],
   "client_sql_login": "select pe_id,pe_hash,pe_sts from CPE where lower(PE_Email)=lower(@pe_email)",
-  "client_sql_superlogin": "select PE.pe_id,pe_hash from PE inner join SPER on SPER.PE_ID = PE.PE_ID inner join SR on SR.SR_ID = SPER.SR_ID and SR.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email)",
+  "client_sql_superlogin": "select PE.pe_id,pe_hash from PE inner join SPER on SPER.PE_ID = PE.PE_ID and SPER.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email)",
   "client_sql_loginsuccess": "with xrslt as (update CPE set PE_LL_IP=@pe_ll_ip,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id returning 1) select count(*) xrowcount from xrslt;",
   "client_sql_passwordreset": "with xrslt as (update CPE set PE_HASH=@pe_hash,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id returning 1) select count(*) xrowcount from xrslt;",
   "admin_sql_auth": [
     "select '-----TABLE-----' as table_boundary;",
     "select pe_id,pe_hash,pe_sts,pe_fname,pe_lname,PE_LL_Tstmp,PE_Email from PE where lower(PE_Email)=lower(@pe_email);",
     "select '-----TABLE-----' as table_boundary;",
-    "select sr_name from SR inner join SPER on SPER.SR_ID=SR.SR_ID inner join PE on PE.PE_ID=SPER.PE_ID where SR_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email) and PE_STS='ACTIVE';"
+    "select sper.sr_name from SR inner join SPER on SPER.SR_Name=SR.SR_Name inner join PE on PE.PE_ID=SPER.PE_ID where SR_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email) and PE_STS='ACTIVE';"
   ],
   "admin_sql_login": "select pe_id,pe_hash,pe_sts from PE where lower(PE_Email)=lower(@pe_email)",
-  "admin_sql_superlogin": "select PE.pe_id,pe_hash from PE inner join SPER on SPER.PE_ID = PE.PE_ID inner join SR on SR.SR_ID = SPER.SR_ID and SR.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email)",
+  "admin_sql_superlogin": "select PE.pe_id,pe_hash from PE inner join SPER on SPER.PE_ID = PE.PE_ID and SPER.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email)",
   "admin_sql_loginsuccess": "with xrslt as (update PE set PE_LL_IP=@pe_ll_ip,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id returning 1) select count(*) xrowcount from xrslt;",
   "admin_sql_passwordreset": "with xrslt as (update PE set PE_HASH=@pe_hash,PE_LL_IP=@pe_ll_ip,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id returning 1) select count(*) xrowcount from xrslt;",
   "admin_sql_check_email": "select PE_Email from PE where PE_ID=@pe_id"
