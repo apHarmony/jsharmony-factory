@@ -18,7 +18,6 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
-var https = require('https');
 var fs = require('fs');
 var path = require('path');
 var debug = require('debug')('jsharmony');
@@ -51,6 +50,7 @@ function jsHarmonyFactory(adminConfig, clientConfig, onSettingsLoaded){
 
   if(clientConfig){
     clientConfig = jsHarmonyFactory.MergeConfig(jsHarmonyFactory.GetDefaultClientConfig(),clientConfig);
+    _this.clientConfig = clientConfig;
     this.app.get(/^\/client$/, function (req, res, next) { res.redirect('/client/'); });
     this.app.use('/client', cookieParser(global.clientcookiesalt, { path: '/client/' }));
     this.app.all('/client/login', function (req, res, next) { req._override_basetemplate = 'public'; req._override_title = 'Customer Portal Login'; next(); });
@@ -61,6 +61,7 @@ function jsHarmonyFactory(adminConfig, clientConfig, onSettingsLoaded){
 
   if(!adminConfig) adminConfig = {};
   adminConfig = jsHarmonyFactory.MergeConfig(jsHarmonyFactory.GetDefaultAdminConfig(),adminConfig);
+  _this.adminConfig = adminConfig;
   this.app.use('/', cookieParser(global.admincookiesalt, { path: '/' }));
   this.app.all('/login', function (req, res, next) { req._override_basetemplate = 'public'; req._override_title = 'Login'; next(); });
   this.app.all('/login/forgot_password', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
@@ -234,26 +235,38 @@ jsHarmonyFactory.LoadSettings = function(custom_settings_path){
 jsHarmonyFactory.prototype.VerifySettings = function(){
   function verify_config(x, _caption) { if (!x || (_.isObject(x) && _.isEmpty(x))) { console.log('*** Missing app.settings.js setting: ' + _caption); return false; } return true; }
   var good_config = true;
-  _.each(['http_port', 'https_port', 'clientsalt', 'clientcookiesalt', 'adminsalt', 'admincookiesalt', 'frontsalt'], function (val) { good_config &= verify_config(global[val], 'global.' + val); });
+  _.each(['clientsalt', 'clientcookiesalt', 'adminsalt', 'admincookiesalt', 'frontsalt'], function (val) { good_config &= verify_config(global[val], 'global.' + val); });
   if (!global.home_url) global.home_url = '';
+  if ((typeof global.http_port === 'undefined') && (typeof global.https_port === 'undefined')) global.http_port = 0;
   if (!good_config) { console.log('\r\n*** Invalid config, could not start server ***\r\n'); process.exit(1); }
 }
 
 jsHarmonyFactory.prototype.Run = function (cb) {
   var _this = this;
-  _this.app.set('port', process.env.PORT || global.http_port);
-  _this.app.set('tlsport', process.env.TLSPORT || global.https_port);
-
-  jsHarmony.Run({ server: {
-    http_port: _this.app.get('port'),
-    http_ip: global.http_ip,
-    https_port: _this.app.get('tlsport'),
-    https_ip: global.https_ip,
-    https_cert: global.https_cert,
-    https_key: global.https_key,
-    https_ca: global.https_ca,
+  
+  var jshconfig = { server: {
     request_timeout: global.request_timeout,
-  } },_this.app.jsh,_this.app,cb);
+  } };
+  if(typeof global.http_port !== 'undefined'){
+    _this.app.set('port', process.env.PORT || global.http_port);
+    jshconfig.server.http_port = _this.app.get('port');
+    jshconfig.server.http_ip = global.http_ip;
+  }
+  if(typeof global.https_port !== 'undefined'){
+    _this.app.set('tlsport', process.env.TLSPORT || global.https_port);
+    jshconfig.server.https_port = _this.app.get('tlsport');
+    jshconfig.server.https_ip = global.https_ip;
+    jshconfig.server.https_cert = global.https_cert;
+    jshconfig.server.https_key = global.https_key;
+    jshconfig.server.https_ca = global.https_ca;
+  }
+  else {
+    if(_this.adminConfig && _this.adminConfig.auth && (typeof _this.adminConfig.auth.allow_insecure_http_logins === 'undefined'))
+      _this.adminConfig.auth.allow_insecure_http_logins = true;
+    if(_this.clientConfig && _this.clientConfig.auth && (typeof _this.adminConfig.auth.allow_insecure_http_logins === 'undefined'))
+      _this.clientConfig.auth.allow_insecure_http_logins = true;
+  }
+  jsHarmony.Run(jshconfig,_this.app.jsh,_this.app,cb);
 }
 
 exports = module.exports = jsHarmonyFactory;

@@ -24,9 +24,9 @@ global.http_ip = '0.0.0.0';
 global.https_ip = '0.0.0.0';
 global.https_key = global.appbasepath + '/cert/localhost-key.pem';
 global.https_cert = global.appbasepath + '/cert/localhost-cert.pem';
-global.support_email = 'donotreply@jsharmony.com';
-global.error_email = 'donotreply@jsharmony.com';
-global.mailer_email = 'DO NOT REPLY <donotreply@jsharmony.com>';
+global.support_email = 'donotreply@company.com';
+global.error_email = 'donotreply@company.com';
+global.mailer_email = 'DO NOT REPLY <donotreply@company.com>';
 global.barcode_settings = { server: 'https://localhost:3101' };
 global.scanner_settings = { server: 'https://localhost:3105' };
 global.google_settings = { API_KEY: '' };
@@ -37,10 +37,10 @@ global.twilio_settings = {
 };
 global.mailer_settings = {
   type: 'smtp',
-  host: 'mail.jsharmony.com',
+  host: 'mail.company.com',
   port: 465,
   auth: {
-    user: 'donotreply@jsharmony.com',
+    user: 'donotreply@company.com',
     pass: ''
   },
   secure: true,
@@ -57,7 +57,7 @@ global.debug_params = {
   db_requests: false,     //Log every database request through DB.js
   db_error_sql_state: true,       //Log SQL state during DB error
   job_requests: false,   //Record all JOB requests on LOG/CONSOLE
-  email_override: 'donotreply@jsharmony.com',  //Send all emails to this address instead of to the client
+  email_override: 'donotreply@company.com',  //Send all emails to this address instead of to the client
   sms_override: '+12223334444',         //Send all SMS messages to this phone instead of to the client
   no_job_email: false,                   //Disable sending EMAILS from JOB
   no_job_sms: false,                     //Disable sending SMS messages from JOB
