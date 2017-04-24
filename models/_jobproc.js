@@ -116,8 +116,8 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
   //Process Report ID (make sure it's in the system)
   var reportid = job.RQST_ANAME;
   var modelid = '_report_' + reportid;
-  if (!(modelid in thisapp.jsh.Models)) return _this.SetJobResult(job, 'ERROR', 'Report not found in collection', onComplete);
-  var model = thisapp.jsh.Models[modelid];
+  if (!thisapp.jsh.hasModel(undefined, modelid)) return _this.SetJobResult(job, 'ERROR', 'Report not found in collection', onComplete);
+  var model = thisapp.jsh.getModel(undefined, modelid);
   
   //Process Parameters (validate)
   var rparams = {};

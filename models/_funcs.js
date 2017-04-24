@@ -41,7 +41,7 @@ exports.LOG_DOWNLOAD = function (req, res, next) {
   var appsrv = this;
   var jsh = this.jsh;
   var dbtypes = appsrv.DB.types;
-  var model = jsh.Models['LOG'];
+  var model = jsh.getModel(req, 'LOG');
   
   if (!Helper.HasModelAccess(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
   

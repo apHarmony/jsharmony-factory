@@ -55,7 +55,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
           link_url = '#';
           link_onclick = menuitem[jsh.map.menu_command].substr(3) + ' return false;';
         }
-        else if (menuitem[jsh.map.menu_command] in jsh.Models) {
+        else if (jsh.hasModel(req, menuitem[jsh.map.menu_command])) {
           var link_targetmodelid = jsh.parseLink(menuitem[jsh.map.menu_command]).modelid;
           link_url = jsh.getURL(req, menuitem[jsh.map.menu_command]);
           link_onclick = jsh.getModelLinkOnClick(link_targetmodelid, req, menuitem[jsh.map.menu_command]);
@@ -83,7 +83,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
           link_url = '#';
           link_onclick = menuitem[jsh.map.menu_command].substr(3)+' return false;';
         }
-        else if (menuitem[jsh.map.menu_command] in jsh.Models) {
+        else if (jsh.hasModel(req, menuitem[jsh.map.menu_command])) {
           var link_targetmodelid = jsh.parseLink(menuitem[jsh.map.menu_command]).modelid;
           link_url = jsh.getURL(req, menuitem[jsh.map.menu_command]);
           if (menuitem[jsh.map.menu_subcommand]) link_url += menuitem[jsh.map.menu_subcommand];
