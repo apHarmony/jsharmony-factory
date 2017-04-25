@@ -30,7 +30,7 @@
     "  SM.SM_SubCmd,coalesce(SM.SM_Seq,SM.SM_ID) SM_Seq,SM.SM_ID from SM",
     "  inner join CRM on CRM.SM_ID=SM.SM_ID inner join CR on CR.CR_Name = CRM.CR_Name inner join CPER on CPER.CR_Name = CR.CR_Name and CPER.PE_ID=@PE_ID",
     "  where SM_ID_Parent = (select SM_ID from SM where SM_NAME=@ROOT_MENU)",
-    "  order by coalesce(SM_Seq,SM.SM_ID),SM_Name,SM.SM_ID;",
+    "  order by coalesce(SM.SM_Seq,SM.SM_ID),SM_Name,SM.SM_ID;",
     "select distinct SM.SM_Name,SM.SM_DESC,SM.SM_Cmd,SM.SM_SubCmd,coalesce(SM.SM_Seq,SM.SM_ID) SM_Seq,SM.SM_ID,SM_Parent.SM_Name SM_Parent_Name from SM",
     "  inner join CRM on CRM.SM_ID=SM.SM_ID inner join CR on CR.CR_Name = CRM.CR_Name inner join CPER on CPER.CR_Name = CR.CR_Name and CPER.PE_ID=@PE_ID",
     "  inner join SM SM_Parent on SM_Parent.SM_ID = SM.SM_ID_Parent",
