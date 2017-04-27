@@ -68,6 +68,8 @@
     "codeparentid": "CODEParentID",
     "codeicon": "CODEIcon",
     "codeid": "CODEID",
-    "codeparent": "CODEParent"
+    "codeparent": "CODEParent",
+    "codeseq": "CODESeq",
+    "codetype": "CODEType"
   }
 }

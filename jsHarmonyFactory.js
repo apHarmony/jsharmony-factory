@@ -49,41 +49,28 @@ function jsHarmonyFactory(adminConfig, clientConfig, onSettingsLoaded){
   this.app.use(express.static(path.join(__dirname, 'public')));
 
   if(clientConfig){
-    clientConfig = jsHarmonyFactory.MergeConfig(jsHarmonyFactory.GetDefaultClientConfig(),clientConfig);
+    clientConfig = Helper.MergeConfig(jsHarmonyFactory.GetDefaultClientConfig(),clientConfig);
     _this.clientConfig = clientConfig;
     this.app.get(/^\/client$/, function (req, res, next) { res.redirect('/client/'); });
     this.app.use('/client', cookieParser(global.clientcookiesalt, { path: '/client/' }));
     this.app.all('/client/login', function (req, res, next) { req._override_basetemplate = 'public'; req._override_title = 'Customer Portal Login'; next(); });
     this.app.all('/client/login/forgot_password', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
     this.app.all('/client/logout', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
-    this.app.use('/client', jsHarmony.Init.Routes(this.app.jsh, clientConfig));
+    _this.clientRouter = jsHarmony.Init.Routes(this.app.jsh, clientConfig);
+    this.app.use('/client', _this.clientRouter);
   }
 
   if(!adminConfig) adminConfig = {};
-  adminConfig = jsHarmonyFactory.MergeConfig(jsHarmonyFactory.GetDefaultAdminConfig(),adminConfig);
+  adminConfig = Helper.MergeConfig(jsHarmonyFactory.GetDefaultAdminConfig(),adminConfig);
   _this.adminConfig = adminConfig;
   this.app.use('/', cookieParser(global.admincookiesalt, { path: '/' }));
   this.app.all('/login', function (req, res, next) { req._override_basetemplate = 'public'; req._override_title = 'Login'; next(); });
   this.app.all('/login/forgot_password', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
   this.app.all('/logout', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
-  this.app.use('/', jsHarmony.Init.Routes(this.app.jsh, adminConfig));
+  _this.adminRouter = jsHarmony.Init.Routes(this.app.jsh, adminConfig);
+  this.app.use('/', _this.adminRouter);
 
   jsHarmony.Init.addDefaultRoutes(this.app);
-}
-
-jsHarmonyFactory.MergeConfig = function(srcconfig, newconfig){
-  var rslt = srcconfig;
-  for(var f in newconfig){
-    if(!(f in rslt)) rslt[f] = newconfig[f];
-    else if(_.includes(['auth','datalock','datalocktypes','globalparams','sqlparams'],f)){
-      rslt[f] = _.extend(rslt[f],newconfig[f]);
-    }
-    else if(_.includes(['public_apps','private_apps'],f)){
-      rslt[f] = newconfig[f].concat(rslt[f]);
-    }
-    else rslt[f] = newconfig[f];
-  }
-  return rslt;
 }
 
 jsHarmonyFactory.GetDefaultAdminConfig = function(){
