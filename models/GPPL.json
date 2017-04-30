@@ -1,0 +1,43 @@
+{
+  "GPPL": {
+    "title":"Parameters",
+    "table":"v_gppl",
+    "access":"BU", 
+    "caption":[0,"Parameter","Parameters"],
+    "layout":"grid", 
+    "sort":["^gpp_process","^gpp_attrib"], 
+    "topmenu":"administration",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"gpp_id","type":"bigint","key":1},
+      {"name":"gpp_process","type":"varchar","length":32,"access": "B","comment": "dropdown_S",
+       "lov": {"UCOD":"gpp_process_v","blank":1},"validate":["Required"],"control":"hidden",
+       "caption":"Process","captionstyle":"width:120px;text-align:right;"},
+      {"name":"gpp_attrib","type":"varchar","length":16,"access": "B","comment": "dropdown_M",
+       "lov":{"UCOD2":"gpp_process_attrib_v","blank": 1,"parent":"gpp_process"},"validate":["Required"],
+       "caption":"Attribute","control":"hidden"},
+      {"name":"ppd_desc","type":"varchar","length":"255","caption":"Description","access":"B"},
+      {"name":"gpp_val","type":"varchar","length":"256","validate":["Required"],"access":"BU","control":"textbox_L",
+       "caption":"Value"},
+      {"name":"gpp_info","type":"varchar","length":"500","access":"B","control":"textzoom",
+       "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
+       "controlstyle":"width:48px;display:none;"}
+    ],
+    "dberrors": [
+      [ "PK_GPP", "Duplicate Key (Process + Attribute)" ]
+    ]
+  },    
+  "X_GPPL": {
+    "inherits":"GPPL",
+    "title":"G Parameters",
+    "access":"BIUD", 
+    "fields":[
+      {"name":"gpp_process","access": "BIU","control": "dropdown_S"},
+      {"name":"gpp_attrib","access": "BIU","control": "dropdown_M"},
+      {"name":"gpp_val","control": "textbox_M"}
+    ]     
+  }
+}

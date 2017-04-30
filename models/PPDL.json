@@ -1,0 +1,43 @@
+{
+  "X_PPDL": {
+    "title":"Parameter Definitions",
+    "table":"v_ppdl",
+    "access":"BIUD", 
+    "caption":[0,"Parameter","Parameters"],
+    "layout":"grid", 
+    "sort":["^ppd_process","^ppd_attrib"], 
+    "topmenu":"administration",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"ppd_id","type":"bigint","key":1},
+      {"name":"ppd_process","type":"varchar","length":32,"access": "BIU","control": "textbox_S",
+       "validate":["Required"],
+       "caption":"Process","captionstyle":"width:120px;"},
+      {"name":"ppd_attrib","type":"varchar","length":16,"access": "BIU","control": "textbox_S",
+       "validate":["Required"],
+       "caption":"Attribute"},
+      {"name":"ppd_desc","type":"varchar","length":"255","access":"BIU","control": "textbox_L",
+       "caption":"Description"},
+      {"name":"ppd_type","type":"varchar","length":8,"access": "BIU","control": "dropdown_S",
+       "lov": {"UCOD":"ppd_type","blank":1},"validate":["Required"],
+       "controlstyle":"width:82px;","caption":"Type"},
+      {"name":"codename","type":"varchar","length":"16","access":"BIU","control":"textbox_VS",
+       "caption":"Code"},
+      {"name":"ppd_xpp","type":"bit","access":"BIU","control":"checkbox","validate":["Required"],
+       "controlparams":{"value_true":"1","value_false":"0"},"caption":"X","default":"0"},
+      {"name":"ppd_gpp","type":"bit","access":"BIU","control":"checkbox","validate":["Required"],
+       "controlparams":{"value_true":"1","value_false":"0"},"caption":"G","default":"0"},
+      {"name":"ppd_ppp","type":"bit","access":"BIU","control":"checkbox","validate":["Required"],
+       "controlparams":{"value_true":"1","value_false":"0"},"caption":"P","default":"0"},
+      {"name":"ppd_info","type":"varchar","length":"500","access":"B","control":"textzoom",
+       "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
+       "controlstyle":"width:48px;display:none;"}
+    ],
+    "dberrors": [
+      [ "PK_PPD", "Duplicate Key (Process + Attribute)" ]
+    ]
+  }    
+}

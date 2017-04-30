@@ -1,0 +1,33 @@
+{
+  "X_XPPL": {
+    "title":"X Parameters",
+    "table":"v_xppl",
+    "access":"BIUD", 
+    "caption":[0,"Parameter","Parameters"],
+    "layout":"grid", 
+    "sort":["^xpp_process","^xpp_attrib"], 
+    "topmenu":"administration",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"xpp_id","type":"bigint","key":1},
+      {"name":"xpp_process","type":"varchar","length":32,"access": "BIU","control": "dropdown_S",
+       "lov": {"UCOD":"xpp_process_v","blank":1},"validate":["Required"],
+       "caption":"Process","captionstyle":"width:120px;text-align:right;"},
+      {"name":"xpp_attrib","type":"varchar","length":16,"access": "BIU","control": "dropdown_M",
+       "lov":{"UCOD2":"xpp_process_attrib_v","blank": 1,"parent":"xpp_process"},"validate":["Required"],
+       "caption":"Attribute"},
+      {"name":"ppd_desc","type":"varchar","length":"255","caption":"Description","access":"B"},
+      {"name":"xpp_val","type":"varchar","length":"256","validate":["Required"],"access":"BU","control":"textbox_M",
+       "caption":"Value"},
+      {"name":"xpp_info","type":"varchar","length":"500","access":"B","control":"textzoom",
+       "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
+       "controlstyle":"width:48px;display:none;"}
+    ],
+    "dberrors": [
+      [ "PK_XPP", "Duplicate Key (Process + Attribute)" ]
+    ]
+  }    
+}
