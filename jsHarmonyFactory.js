@@ -35,6 +35,7 @@ var menu = require('./models/_menu.js');
 
 function jsHarmonyFactory(adminConfig, clientConfig, onSettingsLoaded){
   var _this = this;
+  _this.typename = 'jsHarmonyFactory';
   var factorypath = path.dirname(module.filename);
 
   if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
