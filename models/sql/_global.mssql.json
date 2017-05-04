@@ -1,5 +1,6 @@
 {
   "TSTMP": "dbo.myNOW()",
   "CUSER": "dbo.myCUSER()",
-  "SMS_SendTXTSMS": "select TXT_TVAL,TXT_VAL,TXT_BCC from TXT where TXT_PROCESS='SMS' and TXT_ATTRIB=@TXT_ATTRIB"
+  "SMS_SendTXTSMS": "select TXT_TVAL,TXT_VAL,TXT_BCC from TXT where TXT_PROCESS='SMS' and TXT_ATTRIB=@TXT_ATTRIB",
+  "FUN_PREFIX":"dbo."
 }

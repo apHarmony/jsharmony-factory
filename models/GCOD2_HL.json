@@ -1,0 +1,23 @@
+{
+    "comment":"GCOD2_HL",
+    "title":"Code2 Tables",
+    "table":"GCOD2_H",
+    "access":"B",
+    "layout":"grid", 
+	"caption":[0,"Code2 Table","Code2 Tables"],
+    "roles": {"X_B":"B","DADMIN":"*"},
+	"sort":["^codename"],
+	"topmenu":"administration",
+	"fields":[
+	  {"name":"codename","type":"varchar","length":"16","key":1,"control": "html", 
+       "caption":"Code2 Table Name","access":"B","controlstyle":"width:120px;",
+       "value": "<a href='/GCOD2L?codename=<#=data[j]['codename']#>'><#=data[j]['codename']#></a>"},
+	  {"name":"codemean","type":"varchar","length":"128",
+       "caption":"Table Description","access":"B","controlstyle":"width:260px;","control": "html", 
+       "value": "<a href='/GCOD2L?codename=<#=data[j]['codename']#>'><#=data[j]['codemean']#></a>"},
+	  {"name":"codecodemean","type":"varchar","length":"128",
+       "caption":"Code","access":"B","controlstyle":"width:160px;"},
+      {"name":"codeattribmean","type":"varchar","length":"128",
+       "caption":"Attribute","access":"B","controlstyle":"width:160px;"}
+	]
+}
