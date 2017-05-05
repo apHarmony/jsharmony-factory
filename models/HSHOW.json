@@ -1,5 +1,5 @@
 {
-"comment":"HSHOW",
+  "HSHOW": {
 	"title":"Help",
 	"table":"h",
 	"access":"B", 
@@ -19,4 +19,12 @@
 		  "caption":"","captionstyle":"width:60px;height:400px;vertical-align:top;padding-top:3px;"},
 	  {"control": "html","value": "<div id='h_text_disp' style='padding:15px 0;border-top:1px solid #aaa;'></div>"}
 	]
+  },	
+  "HSHOW_SINGLE": {
+    "inherits":"HSHOW",
+    "fields":[
+      {"name":"h_id","__REMOVEFIELD__":1},
+      {"name":"hp_code","type":"varchar","length":50,"key":1,"datalock":{"C_ID":"client_ALWAYS"}}
+    ]
+  }
 }

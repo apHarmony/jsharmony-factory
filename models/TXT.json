@@ -1,7 +1,7 @@
 {
     "comment":"TXT",
 	"title":"Text Module",
-	"table":"v_txt_biud",
+	"table":"txt",
 	"access":"BU", 
     "layout":"form", 
 	"topmenu":"administration",
@@ -31,14 +31,14 @@
 	  {"name":"txt_etstmp","type":"datetime","length":7,"access":"B","nl":1,
 	      "control":"textbox_tstmp",
 		  "caption":"Entered"},
-	  {"name":"txt_eu_fmt","type":"varchar","length":20,"access":"B",
-	      "control":"textbox","controlstyle":"width:158px;",
-          "caption":""},
+      {"name":"txt_eu_fmt","type":"varchar","length":20,"access":"B",
+          "sqlselect":"(%%%FUN_PREFIX%%%mycuser_fmt(txt_eu))",
+          "control":"textbox","controlstyle":"width:158px;","caption":""},
 	  {"name":"txt_mtstmp","type":"datetime","length":7,"access":"B","nl":1,
 	      "control":"textbox_tstmp",
 		  "caption":"Last Updated"},
-	  {"name":"txt_mu_fmt","type":"varchar","length":20,"access":"B",
-	      "control":"textbox","controlstyle":"width:158px;",
-          "caption":"","eol":1}
+      {"name":"txt_mu_fmt","type":"varchar","length":20,"access":"B",
+          "sqlselect":"(%%%FUN_PREFIX%%%mycuser_fmt(txt_mu))",
+          "control":"textbox","controlstyle":"width:158px;","caption":"","eol":1}
 	]
 }

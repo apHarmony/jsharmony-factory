@@ -1,6 +1,6 @@
 {
     "title":"Help Modules",
-	"table":"v_hl",
+	"table":"h",
 	"access":"BIU", 
 	"caption":[0,"Help Module","Help Modules"],
     "layout":"grid", 
@@ -14,8 +14,10 @@
     "nogridadd":1,
 	"fields":[
 	  {"name":"h_id","type":"bigint","key":1},
-	  {"name":"h_title","type":"varchar","length":"70","caption":"Module Title","controlstyle":"min-width:200px;","access":"B","link":"edit:H","sample":"Test - General Information"},
-      {"name":"hp_desc","type":"varchar","length":"50","caption":"Panel Name","controlstyle":"min-width:100px;","access":"B","sample":"Test - General"},
+	  {"name":"h_title","type":"varchar","length":"70","caption":"Module Title","controlstyle":"min-width:200px;","access":"B","link":"edit:H"},
+      {"name":"hp_desc","type":"varchar","length":"50","caption":"Panel Name","controlstyle":"min-width:100px;","access":"B",
+       "sqlselect":"(select hp_desc from hp where hp.hp_code = h.hp_code)",
+       "sql_search":"(select hp_desc from hp where hp.hp_code = h.hp_code)"},
       {"name":"h_seq","type":"int","caption":"Seq","access":"BU","control":"textbox_VS"},
       {"name":"h_index_a","type":"bit","access":"BU","control":"checkbox","validate":["Required"],
        "controlparams":{"value_true":"1","value_false":"0"},"caption":"Admin"},

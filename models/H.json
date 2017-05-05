@@ -1,7 +1,7 @@
 {
 "comment":"H",
 	"title":"Help Module",
-	"table":"v_h_biud",
+	"table":"h",
 	"access":"BIUD", 
     "layout":"form", 
     "caption": [ "", "Help Module", "Help Modules" ],
@@ -36,15 +36,15 @@
 	  {"name":"h_etstmp","type":"datetime","length":7,"access":"B","nl":1,
 	      "control":"textbox_tstmp",
 		    "caption":"Entered"},
-	  {"name":"h_eu_fmt","type":"varchar","length":20,"access":"B",
-	      "control":"textbox","controlstyle":"width:158px;","sample":"Sam Employee",
-        "caption":""},
+      {"name":"h_eu_fmt","type":"varchar","length":20,"access":"B",
+          "sqlselect":"(%%%FUN_PREFIX%%%mycuser_fmt(h_eu))",
+          "control":"textbox","controlstyle":"width:158px;","caption":""},
 	  {"name":"h_mtstmp","type":"datetime","length":7,"access":"B","nl":1,
 	      "control":"textbox_tstmp",
 		    "caption":"Last Updated"},
-	  {"name":"h_mu_fmt","type":"varchar","length":20,"access":"B",
-	      "control":"textbox","controlstyle":"width:158px;","sample":"Sam Employee",
-		    "caption":"","eol":1}
+      {"name":"h_mu_fmt","type":"varchar","length":20,"access":"B",
+          "sqlselect":"(%%%FUN_PREFIX%%%mycuser_fmt(h_mu))",
+          "control":"textbox","controlstyle":"width:158px;","caption":"","eol":1}
 	],
 	"dberrors":[
 		["UNQ_H_H_UNIQUE","This Help Panel has already been defined."],
