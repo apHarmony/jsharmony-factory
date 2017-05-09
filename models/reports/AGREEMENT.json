@@ -32,7 +32,7 @@
       "onclick": "XRunQueue();"}
   ],
   "reportdata" : {
-    "cms_agreement": { "sql": "select TXT_VAL \"TXT_VAL\" from TXT where TXT_PROCESS='CMS' and TXT_ATTRIB='AGREEMENT'", "nodatalock": ["C_ID"] },
+    "cms_agreement": { "sql": "select TXT_VAL \"TXT_VAL\" from jsharmony.TXT where TXT_PROCESS='CMS' and TXT_ATTRIB='AGREEMENT'", "nodatalock": ["C_ID"] },
     "C":{
       "sql":"select C_ID \"C_ID\" from C where C_ID=@C_ID %%%DATALOCKS%%%",
       "children":{

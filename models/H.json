@@ -1,7 +1,7 @@
 {
 "comment":"H",
 	"title":"Help Module",
-	"table":"h",
+	"table":"jsharmony.h",
 	"access":"BIUD", 
     "layout":"form", 
     "caption": [ "", "Help Module", "Help Modules" ],
@@ -27,7 +27,7 @@
 		  
 		  
 	  {"name":"hp_code","type":"varchar","length":50,"access":"BI","nl":1,
-	      "control":"dropdown_VL","sample":"Test - General","lov":{"sql":"select hp_code as CODEVal,hp_desc as CODETxt from HP order by hp_desc","blank":""},
+	      "control":"dropdown_VL","sample":"Test - General","lov":{"sql":"select hp_code as CODEVal,hp_desc as CODETxt from jsharmony.HP order by hp_desc","blank":""},
 		  "caption":"Panel"},
 	  {"name":"h_text","type":"varchar","length":99999,"access":"BIU","nl":1,
 	      "control":"textarea","controlstyle":"width:590px;height:400px;","sample":"Here goes the text ...........",
@@ -37,13 +37,13 @@
 	      "control":"textbox_tstmp",
 		    "caption":"Entered"},
       {"name":"h_eu_fmt","type":"varchar","length":20,"access":"B",
-          "sqlselect":"(%%%FUN_PREFIX%%%mycuser_fmt(h_eu))",
+          "sqlselect":"(jsharmony.mycuser_fmt(h_eu))",
           "control":"textbox","controlstyle":"width:158px;","caption":""},
 	  {"name":"h_mtstmp","type":"datetime","length":7,"access":"B","nl":1,
 	      "control":"textbox_tstmp",
 		    "caption":"Last Updated"},
       {"name":"h_mu_fmt","type":"varchar","length":20,"access":"B",
-          "sqlselect":"(%%%FUN_PREFIX%%%mycuser_fmt(h_mu))",
+          "sqlselect":"(jsharmony.mycuser_fmt(h_mu))",
           "control":"textbox","controlstyle":"width:158px;","caption":"","eol":1}
 	],
 	"dberrors":[

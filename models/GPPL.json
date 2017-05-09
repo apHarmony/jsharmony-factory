@@ -1,7 +1,7 @@
 {
   "GPPL": {
     "title":"Parameters",
-    "table":"v_gppl",
+    "table":"jsharmony.v_gppl",
     "access":"BU", 
     "caption":[0,"Parameter","Parameters"],
     "layout":"grid", 
@@ -14,10 +14,11 @@
     "fields":[
       {"name":"gpp_id","type":"bigint","key":1},
       {"name":"gpp_process","type":"varchar","length":32,"access": "B","comment": "dropdown_S",
-       "lov": {"UCOD":"gpp_process_v","blank":1},"validate":["Required"],"control":"hidden",
+       "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_gpp_process_v order by codseq,codetxt","blank":1},"validate":["Required"],"control":"hidden",
        "caption":"Process","captionstyle":"width:120px;text-align:right;"},
       {"name":"gpp_attrib","type":"varchar","length":16,"access": "B","comment": "dropdown_M",
-       "lov":{"UCOD2":"gpp_process_attrib_v","blank": 1,"parent":"gpp_process"},"validate":["Required"],
+       "lov":{"sql2":"select CODEVal1 as CODEParent, CODEVal2 as CODEVal, CODETxt from jsharmony.ucod2_gpp_process_attrib_v order by codseq,codetxt",
+       "blank": 1,"parent":"gpp_process"},"validate":["Required"],
        "caption":"Attribute","control":"hidden"},
       {"name":"ppd_desc","type":"varchar","length":"255","caption":"Description","access":"B"},
       {"name":"gpp_val","type":"varchar","length":"256","validate":["Required"],"access":"BU","control":"textbox_L",

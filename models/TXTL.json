@@ -1,7 +1,7 @@
 {
     "comment":"TXTL",
 	"title":"Text Maintenance",
-	"table":"txt",
+	"table":"jsharmony.txt",
 	"access":"B", 
     "layout":"grid", 
 	"caption":[0,"Text","Text"],

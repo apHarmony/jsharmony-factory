@@ -1,0 +1,50 @@
+{
+  "X_SML": {
+    "title":"Menu Items",
+    "table":"jsharmony.sm",
+    "access":"BIUD", 
+    "caption":[0,"Menu Item","Menu Items"],
+    "layout":"grid", 
+    "sort":[{"sm_id_parent":"asc"},{"sm_seq":"asc"},{"sm_name":"asc"}], 
+    "topmenu":"administration",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"sm_id_auto","type":"bigint","key":1},
+      {"name":"sm_utype","type":"char","length":1,"access": "BIU","control":"textbox_VS",
+       "validate":["Required","RegEx:'/S|C/','be one of the following S-System, C-Customer'"],
+       "controlstyle":"width:10px;","default":"S",
+       "caption":"T","caption_ext":"User Type","captionstyle":"text-align:center;"},
+      {"name":"sm_id","type":"bigint","access": "BIU","control": "textbox_VS",
+       "validate":["Required","IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
+       "caption":"ID","captionstyle": "text-align:right;"},
+      {"name":"sm_id_parent","type":"smallint","access": "BIU","control": "textbox_VS",
+       "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
+       "sql_sort":"(coalesce(sm_id_parent,0))",
+       "caption":"Parent","captionstyle": "text-align:right;"},
+      {"name":"sm_seq","type":"smallint","access": "BIU","control": "textbox_VS",
+       "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
+       "sql_sort":"(coalesce(coalesce(sm_seq,sm_id),0))",
+       "caption":"Seq","captionstyle": "text-align:right;"},
+      {"name":"sm_name","type":"varchar","length":30,"access": "BIU","control": "textbox_M",
+       "validate":["Required"],"caption":"Name"},
+      {"name":"sm_desc","type":"varchar","length":"255","access":"BIU","control": "textbox_M",
+       "validate":["Required"],"caption":"Description"},
+      {"name":"sm_cmd","type":"varchar","length":30,"access": "BIU","control": "textbox_M",
+       "caption":"Command"},
+      {"name":"sm_sts","type":"varchar","length":8,"access": "BIU","control": "dropdown_S",
+       "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
+       "controlstyle":"width:70px;","caption":"Status"}
+    ],
+    "dberrors": [
+      [ "UNQ_SM_SM_ID", "Duplicate ID" ],
+      [ "UNQ_SM_SM_NAME", "Duplicate Name" ],
+      [ "UNQ_SM_SM_DESC", "Duplicate Description" ],
+      [ "FK_SM_SM", "Non Existing Parent" ],
+      [ "CK_SM_SM_UTYPE", "User Type values: S-System, C-Customer" ],
+      [ "FK_SRM_SM", "This ID is used in SRM - cannot be modified or deleted" ]
+    ]
+  }    
+}

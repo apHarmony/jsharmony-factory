@@ -1,7 +1,7 @@
 {
     "comment":"GCOD_HL",
 	"title":"Code Tables",
-	"table":"GCOD_H",
+	"table":"jsharmony.GCOD_H",
 	"access":"B", 
     "layout":"grid", 
 	"caption":[0,"Code Table","Code Tables"],

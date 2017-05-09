@@ -10,7 +10,7 @@ if(!codename) return Helper.GenError(req, res, -2, "Error: "+modelid+" routetype
 
 //Check if code exists
 var dbtypes = jsh.AppSrv.DB.types;
-jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean from GCOD_H where codename=@codename", [dbtypes.VarChar(16)], { 'codename': codename }, function (err, rslt) {
+jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean from jsharmony.GCOD_H where codename=@codename", [dbtypes.VarChar(16)], { 'codename': codename }, function (err, rslt) {
   if (err) { global.log(err); Helper.GenError(req, res, -99999, "An unexpected error has occurred"); return; }
   if (rslt && rslt.length) {
     //Set title

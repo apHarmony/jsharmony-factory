@@ -1,7 +1,7 @@
 {
     "comment":"TXT",
 	"title":"Text Module",
-	"table":"txt",
+	"table":"jsharmony.txt",
 	"access":"BU", 
     "layout":"form", 
 	"topmenu":"administration",
@@ -32,13 +32,13 @@
 	      "control":"textbox_tstmp",
 		  "caption":"Entered"},
       {"name":"txt_eu_fmt","type":"varchar","length":20,"access":"B",
-          "sqlselect":"(%%%FUN_PREFIX%%%mycuser_fmt(txt_eu))",
+          "sqlselect":"(jsharmony.mycuser_fmt(txt_eu))",
           "control":"textbox","controlstyle":"width:158px;","caption":""},
 	  {"name":"txt_mtstmp","type":"datetime","length":7,"access":"B","nl":1,
 	      "control":"textbox_tstmp",
 		  "caption":"Last Updated"},
       {"name":"txt_mu_fmt","type":"varchar","length":20,"access":"B",
-          "sqlselect":"(%%%FUN_PREFIX%%%mycuser_fmt(txt_mu))",
+          "sqlselect":"(jsharmony.mycuser_fmt(txt_mu))",
           "control":"textbox","controlstyle":"width:158px;","caption":"","eol":1}
 	]
 }

@@ -1,7 +1,7 @@
 {
   "X_PPDL": {
     "title":"Parameter Definitions",
-    "table":"v_ppdl",
+    "table":"jsharmony.v_ppdl",
     "access":"BIUD", 
     "caption":[0,"Parameter","Parameters"],
     "layout":"grid", 
@@ -22,7 +22,7 @@
       {"name":"ppd_desc","type":"varchar","length":"255","access":"BIU","control": "textbox_L",
        "caption":"Description"},
       {"name":"ppd_type","type":"varchar","length":8,"access": "BIU","control": "dropdown_S",
-       "lov": {"UCOD":"ppd_type","blank":1},"validate":["Required"],
+       "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_ppd_type order by codseq,codetxt","blank":1},"validate":["Required"],
        "controlstyle":"width:82px;","caption":"Type"},
       {"name":"codename","type":"varchar","length":"16","access":"BIU","control":"textbox_VS",
        "caption":"Code"},

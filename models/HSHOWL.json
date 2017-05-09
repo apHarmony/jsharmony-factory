@@ -1,7 +1,7 @@
 {
   "HSHOWL": {
     "title":"Help Index",
-	"table":"h",
+	"table":"jsharmony.h",
     "sqlwhere":"(h_index_a=cast(1 as bit))",
 	"access":"B", 
     "roles": {"*":"B","C*":"B"},

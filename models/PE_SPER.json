@@ -2,13 +2,13 @@
     "comment":"PE_SPER",
     "layout":"multisel", 
 	"access":"BU",
-	"table":"sper",
+	"table":"jsharmony.sper",
 	"fields":[
 	  {"name":"pe_id","type":"bigint","access":"F"},
 	  {"name":"sper_id","type":"bigint","key":1},
 	  {"name":"sr_name","type":"varchar","length":"8","cellstyle":"width:300px;",
        "caption":"Role","access":"B",
-       "lov": { "sql": "select sr_name as CODEVal, sr_desc as CODETxt,SR_SEQ as CODSeq from SR" }
+       "lov": { "sql": "select sr_name as CODEVal, sr_desc as CODETxt,SR_SEQ as CODSeq from jsharmony.SR" }
        }
 	]
 }

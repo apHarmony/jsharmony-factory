@@ -1,7 +1,7 @@
 {
-  "agreement_COD_STATE": "select codeval2 CODEVal, codeval2 CODETxt from ucod2_country_state where codeval1='USA' and (codetdt is null or (codetdt is not null and codetdt > getdate())) order by codseq,codeval2",
-  "agreement_COD_MONTH": "select MTH as CODEVal,MTH as CODETxt from V_MONTHS order by N",
-  "agreement_COD_YEAR": "select YR as CODEVal,YR as CODETxt from V_YEARS order by YR",
+  "agreement_COD_STATE": "select codeval2 CODEVal, codeval2 CODETxt from jsharmony.ucod2_country_state where codeval1='USA' and (codetdt is null or (codetdt is not null and codetdt > getdate())) order by codseq,codeval2",
+  "agreement_COD_MONTH": "select MTH as CODEVal,MTH as CODETxt from jsharmony.V_MONTHS order by N",
+  "agreement_COD_YEAR": "select YR as CODEVal,YR as CODETxt from jsharmony.V_YEARS order by YR",
   "agreement_sign": [
     "begin transaction;",
     "update C set C_ATstmp=getdate() where C_ID=@C_ID;",

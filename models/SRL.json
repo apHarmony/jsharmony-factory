@@ -1,0 +1,33 @@
+{
+  "X_SRL": {
+    "title":"User Roles",
+    "table":"jsharmony.sr",
+    "access":"BIUD", 
+    "caption":[0,"Role","Roles"],
+    "layout":"grid", 
+    "sort":[{"sr_seq":"asc"},{"sr_name":"asc"}], 
+    "topmenu":"administration",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"sr_id","type":"bigint","key":1},
+      {"name":"sr_seq","type":"smallint","access": "BIU","control": "textbox_VS",
+       "validate":["Required","IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
+       "caption":"Seq","captionstyle": "text-align:right;"},
+      {"name":"sr_name","type":"varchar","length":16,"access": "BIU","control": "textbox_S",
+       "validate":["Required"],
+       "caption":"Name"},
+      {"name":"sr_desc","type":"varchar","length":"255","access":"BIU","control": "textbox_M",
+       "validate":["Required"],"caption":"Description"},
+      {"name":"sr_sts","type":"varchar","length":8,"access": "BIU","control": "dropdown_S",
+       "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
+       "controlstyle":"width:70px;","caption":"Status"},
+      {"name":"privs","control":"html","value":"PRIVS","link":"edit:SRMSEL_HW&sr_name"}
+    ],
+    "dberrors": [
+      [ "PK_SR", "Duplicate Role Name" ]
+    ]
+  }    
+}

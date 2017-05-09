@@ -4,16 +4,16 @@
     "select CPER.CR_Name as SR_Name from CR inner join CPER on CPER.CR_Name=CR.CR_Name inner join CPE on CPE.PE_ID=CPER.PE_ID where CR_STS='ACTIVE' and lower(PE_Email)=lower(@PE_Email) and PE_STS='ACTIVE';"
   ],
   "client_sql_login": "select PE_ID,PE_Hash,PE_STS from CPE where lower(PE_Email)=lower(@PE_Email)",
-  "client_sql_superlogin": "select PE.PE_ID,PE_Hash from PE inner join SPER on SPER.PE_ID = PE.PE_ID and SPER.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@PE_Email)",
+  "client_sql_superlogin": "select PE.PE_ID,PE_Hash from jsharmony.PE inner join jsharmony.SPER on SPER.PE_ID = PE.PE_ID and SPER.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@PE_Email)",
   "client_sql_loginsuccess": "update CPE set PE_LL_IP=@PE_LL_IP,PE_LL_Tstmp=@PE_LL_Tstmp where PE_ID=@PE_ID;select @@rowcount as XROWCOUNT;",
   "client_sql_passwordreset": "update CPE set PE_HASH=@PE_HASH,PE_LL_Tstmp=@PE_LL_Tstmp where PE_ID=@PE_ID;select @@rowcount as XROWCOUNT;",
   "admin_sql_auth": [
-    "select PE_ID,PE_Hash,PE_STS,PE_FName,PE_LName,PE_LL_Tstmp,PE_Email from PE where lower(PE_Email)=lower(@PE_Email);",
-    "select SPER.SR_Name from SR inner join SPER on SPER.SR_Name=SR.SR_Name inner join PE on PE.PE_ID=SPER.PE_ID where SR_STS='ACTIVE' and lower(PE_Email)=lower(@PE_Email) and PE_STS='ACTIVE';"
+    "select PE_ID,PE_Hash,PE_STS,PE_FName,PE_LName,PE_LL_Tstmp,PE_Email from jsharmony.PE where lower(PE_Email)=lower(@PE_Email);",
+    "select SPER.SR_Name from jsharmony.SR inner join jsharmony.SPER on SPER.SR_Name=SR.SR_Name inner join jsharmony.PE on PE.PE_ID=SPER.PE_ID where SR_STS='ACTIVE' and lower(PE_Email)=lower(@PE_Email) and PE_STS='ACTIVE';"
   ],
-  "admin_sql_login": "select PE_ID,PE_Hash,PE_STS from PE where lower(PE_Email)=lower(@PE_Email)",
-  "admin_sql_superlogin": "select PE.PE_ID,PE_Hash from PE inner join SPER on SPER.PE_ID = PE.PE_ID and SPER.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@PE_Email)",
-  "admin_sql_loginsuccess": "update PE set PE_LL_IP=@PE_LL_IP,PE_LL_Tstmp=@PE_LL_Tstmp where PE_ID=@PE_ID;select @@rowcount as XROWCOUNT;",
-  "admin_sql_passwordreset": "update PE set PE_HASH=@PE_HASH,PE_LL_IP=@PE_LL_IP,PE_LL_Tstmp=@PE_LL_Tstmp where PE_ID=@PE_ID;select @@rowcount as XROWCOUNT;",
-  "admin_sql_check_email": "select PE_Email from PE where PE_ID=@PE_ID"
+  "admin_sql_login": "select PE_ID,PE_Hash,PE_STS from jsharmony.PE where lower(PE_Email)=lower(@PE_Email)",
+  "admin_sql_superlogin": "select PE.PE_ID,PE_Hash from jsharmony.PE inner join jsharmony.SPER on SPER.PE_ID = PE.PE_ID and SPER.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@PE_Email)",
+  "admin_sql_loginsuccess": "update jsharmony.PE set PE_LL_IP=@PE_LL_IP,PE_LL_Tstmp=@PE_LL_Tstmp where PE_ID=@PE_ID;select @@rowcount as XROWCOUNT;",
+  "admin_sql_passwordreset": "update jsharmony.PE set PE_HASH=@PE_HASH,PE_LL_IP=@PE_LL_IP,PE_LL_Tstmp=@PE_LL_Tstmp where PE_ID=@PE_ID;select @@rowcount as XROWCOUNT;",
+  "admin_sql_check_email": "select PE_Email from jsharmony.PE where PE_ID=@PE_ID"
 }

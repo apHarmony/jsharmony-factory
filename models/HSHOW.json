@@ -1,7 +1,7 @@
 {
   "HSHOW": {
 	"title":"Help",
-	"table":"h",
+	"table":"jsharmony.h",
 	"access":"B", 
     "roles": {"*":"B","C*":"B"},
     "layout":"form", 
