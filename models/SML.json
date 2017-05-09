@@ -40,8 +40,11 @@
     ],
     "dberrors": [
       [ "UNQ_SM_SM_ID", "Duplicate ID" ],
+      [ "sm_sm_id_key", "Duplicate ID" ],
       [ "UNQ_SM_SM_NAME", "Duplicate Name" ],
-      [ "UNQ_SM_SM_DESC", "Duplicate Description" ],
+      [ "sm_sm_name_key", "Duplicate Name" ],
+      [ "UNQ_SM_SM_DESC", "Duplicate Description within Parent" ],
+      [ "sm_sm_id_parent_sm_desc_key", "Duplicate Description within Parent" ],
       [ "FK_SM_SM", "Non Existing Parent" ],
       [ "CK_SM_SM_UTYPE", "User Type values: S-System, C-Customer" ],
       [ "FK_SRM_SM", "This ID is used in SRM - cannot be modified or deleted" ]

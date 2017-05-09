@@ -27,7 +27,9 @@
       {"name":"privs","control":"html","value":"PRIVS","link":"edit:SRMSEL_HW&sr_name"}
     ],
     "dberrors": [
-      [ "PK_SR", "Duplicate Role Name" ]
+      [ "PK_SR", "Duplicate Role Name" ],
+      [ "sr_pkey", "Duplicate Role Name" ],
+      [ "sr_sr_desc_key", "Duplicate Role Description" ]
     ]
   }    
 }

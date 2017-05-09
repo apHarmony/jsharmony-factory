@@ -32,6 +32,7 @@
        "controlstyle":"width:48px;display:none;"}
 	],
     "dberrors": [
-      [ "PK_PPP", "Duplicate Key (Process + Attribute)" ]
+      [ "PK_PPP", "Duplicate Key (Process + Attribute)" ],
+      [ "ppp_ppp_process_ppp_attrib_key", "Duplicate Key (Process + Attribute)" ]
     ]
 }

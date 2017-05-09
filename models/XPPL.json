@@ -22,14 +22,15 @@
        "blank": 1,"parent":"xpp_process"},"validate":["Required"],
        "caption":"Attribute"},
       {"name":"ppd_desc","type":"varchar","length":"255","caption":"Description","access":"B"},
-      {"name":"xpp_val","type":"varchar","length":"256","validate":["Required"],"access":"BU","control":"textbox_M",
+      {"name":"xpp_val","type":"varchar","length":"256","validate":["Required"],"access":"BIU","control":"textbox_M",
        "caption":"Value"},
       {"name":"xpp_info","type":"varchar","length":"500","access":"B","control":"textzoom",
        "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
        "controlstyle":"width:48px;display:none;"}
     ],
     "dberrors": [
-      [ "PK_XPP", "Duplicate Key (Process + Attribute)" ]
+      [ "PK_XPP", "Duplicate Key (Process + Attribute)" ],
+      [ "xpp_xpp_process_xpp_attrib_key", "Duplicate Key (Process + Attribute)" ]
     ]
   }    
 }

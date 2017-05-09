@@ -2,7 +2,7 @@
     "comment":"PE_SPER",
     "layout":"multisel", 
 	"access":"BU",
-	"table":"jsharmony.sper",
+	"table":"sper",
 	"fields":[
 	  {"name":"pe_id","type":"bigint","access":"F"},
 	  {"name":"sper_id","type":"bigint","key":1},

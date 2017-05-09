@@ -1,6 +1,6 @@
 {
   "layout":"grid", 
-    "table":"pe",
+    "table":"jsharmony.pe",
     "caption":[0,"User","Users"],
     "title":"Users",
     "access":"BI", 
