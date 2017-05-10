@@ -2,7 +2,7 @@
     "comment":"PE_SPEF",
     "layout":"multisel", 
 	"access":"BU",
-	"table":"spef",
+	"table":"jsharmony.spef",
 	"fields":[
 	  {"name":"pe_id","type":"bigint","access":"F"},
 	  {"name":"spef_id","type":"bigint","key":1},

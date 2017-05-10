@@ -123,6 +123,7 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
   var rparams = {};
   if (job.RQST_PARMS) rparams = JSON.parse(job.RQST_PARMS);
   var fieldlist = thisapp.getFieldNames(null, model.fields, 'B');
+  _.map(fieldlist, function (field) { if (!(field in rparams)) rparams[field] = ''; });
   if (!thisapp.ParamCheck('rparams', rparams, _.map(fieldlist, function (field) { return '&' + field; }))) { return _this.SetJobResult(job, 'ERROR', 'Invalid Parameters', onComplete); }
   
   var sql_ptypes = [];
@@ -216,7 +217,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
     //Add attachment??
     if (global.debug_params.no_job_email) return callback(null);
     var attachments = [];
-    if (job.EMAIL_ATTACH && tmppath) attachments.push({ filename: 'D' + D_ID + '.pdf', content: fs.createReadStream(tmppath) });
+    if (job.EMAIL_ATTACH && tmppath) attachments.push({ filename: 'D' + (D_ID||'0') + '.pdf', content: fs.createReadStream(tmppath) });
     if (job.EMAIL_D_ID) attachments.push({ filename: job.EMAIL_D_FileName, content: fs.createReadStream(global.datadir + '/D/D_FILE_' + job.EMAIL_D_ID) });
     if (job.EMAIL_TXT_ATTRIB) Helper.SendTXTEmail('jobproc', thisapp.jsh, job.EMAIL_TXT_ATTRIB, job.EMAIL_TO, job.EMAIL_CC, job.EMAIL_BCC, attachments, dbdata, callback);
     else Helper.SendBaseEmail('jobproc', thisapp.jsh, job.EMAIL_SUBJECT, job.EMAIL_TEXT, job.EMAIL_HTML, job.EMAIL_TO, job.EMAIL_CC, job.EMAIL_BCC, attachments, dbdata, callback);

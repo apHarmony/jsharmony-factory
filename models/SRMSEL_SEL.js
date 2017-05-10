@@ -27,7 +27,7 @@ function SRMSEL_SEL_ForAllChildren(add_op) {
 	  window.xLoader.StartLoading(SRMSEL_SEL_loadobj);
 	  
 	  function fselectall() {
-	    jtbl.find('input.checkbox.SRMSEL_SEL').each(function () {
+	    jtbl.find('input.checkbox.srmsel_sel').each(function () {
 	      add_op(this);
 	    });
 	    SRMSEL_SEL_oncommit();
@@ -54,7 +54,7 @@ function SRMSEL_SEL_oninit(xform) {
 }
 
 function SRMSEL_SEL_oncommit(){
-	  if(!SRMSEL_SEL_loadobj){ $('.save').first().focus().blur(); return; }
+	  if(!SRMSEL_SEL_loadobj){ $(document.activeElement).blur(); return; }
 	  if (SRMSEL_SEL_ops.length == 0) {
 	    window.xLoader.StopLoading(SRMSEL_SEL_loadobj);
 	    XExt.Alert('Operation complete.',function(){
