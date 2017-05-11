@@ -116,7 +116,7 @@
     ],
     "dberrors":[
       ["fk_sper_pe","Cannot delete a user with selected role(s)."],
-      ["fk_pef_pe","Cannot delete a user with selected function(s)."],
+      ["fk_spef_pe","Cannot delete a user with selected function(s)."],
       ["unq_pe_pe_email","A user with the same Email address already exists."]
     ]
   },    

@@ -21,6 +21,8 @@
        "caption":"Name"},
       {"name":"sr_desc","type":"varchar","length":"255","access":"BIU","control": "textbox_M",
        "validate":["Required"],"caption":"Description"},
+      {"name":"sr_code","type":"varchar","length":"255","access":"BIU","control": "textbox_S","caption":"Code"},
+      {"name":"sr_attrib","type":"varchar","length":"255","access":"BIU","control": "textbox_S","caption":"Attribute"},
       {"name":"sr_sts","type":"varchar","length":8,"access": "BIU","control": "dropdown_S",
        "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
        "controlstyle":"width:70px;","caption":"Status"},
