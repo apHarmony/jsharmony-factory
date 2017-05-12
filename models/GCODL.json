@@ -1,5 +1,5 @@
 {
-    "comment":"GCODL",
+  "GCODL": {
     "layout":"grid", 
 	"caption":[0,"Code","Codes"],
 	"access":"BIUD", 
@@ -41,4 +41,5 @@
       ["PK_GCOD_","CODE Value has to be unique"],
       ["UNQ_GCOD_","CODE Description has to be unique"]
     ]
+  }
 }

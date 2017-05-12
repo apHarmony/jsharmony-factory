@@ -1,5 +1,5 @@
 {
-    "comment":"GCOD_HL",
+  "GCOD_HL": {
 	"title":"Code Tables",
 	"table":"jsharmony.GCOD_H",
 	"access":"B", 
@@ -8,11 +8,15 @@
     "roles": {"X_B":"B","DADMIN":"*"},
 	"sort":["^codename"], 
 	"topmenu":"administration",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
 	"fields":[
-      {"name":"codename","type":"varchar","length":"16","key":1,
+      {"name":"codename","type":"varchar","length":"16","key":1,"validate":["Required"],
        "caption":"Code Table Name","access":"B","controlstyle":"width:120px;","control": "html",
        "value": "<a href='/GCODL?codename=<#=data[j]['codename']#>'><#=data[j]['codename']#></a>"},
-      {"name":"codemean","type":"varchar","length":"128",
+      {"name":"codemean","type":"varchar","length":"128","validate":["Required"],
        "caption":"Table Description","access":"B","controlstyle":"width:260px;","control": "html",
        "value": "<a href='/GCODL?codename=<#=data[j]['codename']#>'><#=data[j]['codemean']#></a>"},
       {"name":"codecodemean","type":"varchar","length":"128",
@@ -20,4 +24,15 @@
       {"name":"codeattribmean","type":"varchar","length":"128",
        "caption":"Attribute","access":"B","controlstyle":"width:160px;"}
 	]
+  },    
+  "X_GCOD_HL": {
+    "inherits":"GCOD_HL",
+    "access":"BIUD",
+    "fields":[
+      {"name":"codename","access": "BI","control": "textbox"},
+      {"name":"codemean","access": "BIU","control": "textbox"},
+      {"name":"codecodemean","access": "BIU","control": "textbox"},
+      {"name":"codeattribmean","access": "BIU","control": "textbox"}
+    ]
+  }
 }

@@ -1,8 +1,8 @@
 {
-    "comment":"PPPL",
+  "PPPL": {
     "title":"User Parameters",
 	"table":"jsharmony.v_pppl",
-	"sqlwhere":"(pe_id=(select mype from v_mype))",
+	"sqlwhere":"(pe_id=(select mype from jsharmony.v_mype))",
 	"access":"BIUD", 
 	"caption":[0,"Parameter","Parameters"],
     "layout":"grid", 
@@ -35,4 +35,5 @@
       [ "PK_PPP", "Duplicate Key (Process + Attribute)" ],
       [ "ppp_ppp_process_ppp_attrib_key", "Duplicate Key (Process + Attribute)" ]
     ]
+  }    
 }

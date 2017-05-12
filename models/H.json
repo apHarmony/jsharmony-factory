@@ -1,5 +1,5 @@
 {
-"comment":"H",
+  "H": {
 	"title":"Help Module",
 	"table":"jsharmony.h",
 	"access":"BIUD", 
@@ -50,4 +50,5 @@
 		["UNQ_H_H_UNIQUE","This Help Panel has already been defined."],
 		["UNQ_H_H_Title","The Help Panel with the same title has already been defined."]
 	]
+  }
 }

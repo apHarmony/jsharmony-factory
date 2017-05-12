@@ -1,4 +1,5 @@
 {
+  "HL": {
     "title":"Help Modules",
 	"table":"jsharmony.h",
 	"access":"BIU", 
@@ -25,4 +26,5 @@
        "controlparams":{"value_true":"1","value_false":"0"},"caption":"Portal"},
 	  {"name":"h_mtstmp","type":"datetime","length":"7","format":"tstmp","caption":"Last Update","access":"B"}
 	]
+  }
 }

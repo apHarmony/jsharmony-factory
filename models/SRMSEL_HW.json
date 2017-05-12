@@ -1,20 +1,21 @@
 {
-  "comment":"SRMSEL_HW",
-  "layout": "form", 
-  "title":"",
-  "table": "jsharmony.sr",
-  "access": "B", 
-  "roles": {"C_B":"B","C_BU":"B","C_X":"*"},
-  "caption": [ 0, "Item", "Items" ],
-  "topmenu": "items",
-  "tabpos":"top",
-  "tabpanelstyle": "min-width:1000px;",
-  "popup":[1050,700],
-  "tabs":{
-    "SELECTOR":{"caption": "Menu Items Selector","target":"SRMSEL_SEL","bindings":{"sr_name":"sr_name"}}
-  },
-  "fields":[
-    {"name":"sr_id","type":"bigint"},
-    {"name":"sr_name","type":"varchar","length":16,"access":"BF","key":1}
-  ]
+  "X_SRMSEL_HW": {
+    "layout": "form", 
+    "title":"",
+    "table": "jsharmony.sr",
+    "access": "B", 
+    "roles": {"C_B":"B","C_BU":"B","C_X":"*"},
+    "caption": [ 0, "Item", "Items" ],
+    "topmenu": "items",
+    "tabpos":"top",
+    "tabpanelstyle": "min-width:1000px;",
+    "popup":[1050,700],
+    "tabs":{
+      "SELECTOR":{"caption": "Menu Items Selector","target":"SRMSEL_SEL","bindings":{"sr_name":"sr_name"}}
+    },
+    "fields":[
+      {"name":"sr_id","type":"bigint"},
+      {"name":"sr_name","type":"varchar","length":16,"access":"BF","key":1}
+    ]
+  }  
 }

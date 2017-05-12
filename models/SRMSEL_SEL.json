@@ -1,5 +1,5 @@
 {
-    "comment":"SRMSEL_SEL",
+  "SRMSEL_SEL": {
     "layout":"grid", 
 	"title": "Menu Items for Role <#=data.sr_name#>",
 	"table":"jsharmony.V_SRMSEL",
@@ -46,4 +46,5 @@
       {"name":"sm_desc","type":"varchar","length":"255","access":"B","control": "label",
        "validate":["Required"],"caption":"Description"}
 	]
+  }	
 }
