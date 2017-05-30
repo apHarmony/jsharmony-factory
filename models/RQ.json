@@ -1,7 +1,7 @@
 {
 "comment":"RQ",
   "title":"Remote Queue",
-  "table":"RQ",
+  "table":"jsharmony.RQ",
   "access":"BIUD", 
   "layout":"form", 
   "caption": [ "", "Request", "Requests" ],

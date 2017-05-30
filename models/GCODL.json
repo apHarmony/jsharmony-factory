@@ -5,7 +5,7 @@
 	"access":"BIUD", 
 	"sort":["^codseq","^codeval"], 
 	"topmenu":"administration",
-    "roles": {"X_B":"B"},
+    "roles": {"X_B":"B","DADMIN":"*"},
     "breadcrumbs": { "parents": ["GCOD_HL"] },
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",

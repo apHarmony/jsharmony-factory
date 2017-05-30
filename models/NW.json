@@ -1,0 +1,122 @@
+{
+  "NWUCS": {
+    "layout":"form", 
+    "table":"S",
+    "access":"B", 
+    "unbound": 1,
+//    "roles": {"X_B":"B","X_X":"B"},
+    "tabpos":"top",
+    "tabs": {
+      "User":{"target":"NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
+      "Cust":{"target":"NL_C","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
+      "System":{"target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+    },
+    "tabpanelstyle": "min-width:900px;",
+    "fields":[
+	  {"name":"n_scope","type":"varchar","length":"8","access": "F"},
+      {"name":"n_scope_id", "type": "bigint","access": "F"}
+    ]
+  },  
+  "NWUS": {
+    "table":"S",
+    "access":"B", 
+//    "roles": {"X_B":"B","X_X":"B","T_B":"B","T_X":"B"},
+    "layout":"form", 
+    "tabpos":"top",
+    "unbound": 1,
+    "tabs": {
+      "User":{"target":"NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
+      "System":{"target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+    },
+    "tabpanelstyle": "min-width:900px;",
+    "fields":[
+      {"name":"n_scope","type":"varchar","length":"8","access": "F"},
+      {"name":"n_scope_id", "type": "bigint","access": "F" }
+    ]
+  }, 
+  "NWCSC":{
+    "table":"S",
+    "access":"B", 
+//    "roles": {"CX_B":"B","CX_X":"BIU","CSYSADMIN":"BIU","CMGR":"BIU","CADMIN":"BIU"},
+    "layout":"form", 
+    "tabpos":"top",
+    "unbound": 1,
+    "tabs": {
+      "Client":{"target":"NL_CC","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
+      "System":{"target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+    },
+    "tabpanelstyle": "min-width:900px;",
+      "fields":[
+        {"name":"n_scope","type":"varchar","length":"8","access": "F"},
+        {"name":"n_scope_id", "type": "bigint","access": "F" }
+      ]
+  },
+  "NWCSCB":{
+    "table":"S",
+    "access":"B", 
+//    "roles": {"CX_B":"B","CX_X":"B","CSYSADMIN":"B","CMGR":"B","CADMIN":"B"},
+    "layout":"form", 
+    "tabpos":"top",
+    "unbound": 1,
+    "tabs": {
+      "Client":{"target":"NL_CB","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
+      "System":{"target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+    },
+    "tabpanelstyle": "min-width:900px;",
+    "fields":[
+      {"name":"n_scope","type":"varchar","length":"8"},
+      {"name":"n_scope_id", "type": "bigint" }
+    ]
+  },
+  "NL_U_BASE": {
+    "inherits": "NL",
+    "access":"BI", 
+    "title":"User Notes",
+    "caption":[0,"Note","User Notes"]
+  },
+  "NL_C_BASE": {
+    "inherits": "NL",
+    "access":"B", 
+    "title":"Customer Notes",
+    "caption":[0,"Note","Customer Notes"],
+    "buttons":[]
+  },
+  "NL_S_BASE": {
+    "inherits": "NL",
+    "access":"B", 
+    "title":"System Notes",
+    "caption":[0,"Note","System Notes"],
+    "buttons":[],
+    "fields": [
+      {"name": "n_eu_fmt", "access":""},
+      {"name":"n_etstmp", "link":"edit:NB"}
+    ]
+  },
+  "NL_CC_BASE": {
+    "inherits": "NL",
+    "access":"BI", 
+    "title":"Customer Notes",
+    "caption":[0,"Note","Customer Notes"]
+  },
+  "NL_CB_BASE": {
+    "inherits": "NL_C",
+    "fields": [
+      {"name":"n_etstmp", "link":"edit:NB"}
+    ]
+  },
+  "NL_U": {
+    "inherits": "NL_U_BASE"
+  },
+  "NL_C": {
+    "inherits": "NL_C_BASE"
+  },
+  "NL_S": {
+    "inherits": "NL_S_BASE"
+  },
+  "NL_CC": {
+    "inherits": "NL_CC_BASE"
+  },
+  "NL_CB": {
+    "inherits": "NL_CB_BASE"
+  }
+}

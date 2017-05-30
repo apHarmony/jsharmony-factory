@@ -1,0 +1,34 @@
+{
+  "DL_BASE": {
+    "layout":"grid", 
+    "title":"Documents",
+	"table":"jsharmony.D",
+	"access":"BIUD", 
+	"sort":["vd_utstmp"], 
+	"samplerepeat":5,
+	"caption":[0,"Document","Documents"],
+	"topmenu":"dashboard",
+    "buttons":[{"link":"add:D","bindings":{"d_scope_id":"d_scope_id","d_scope":"d_scope"}}],
+	"fields":[
+	  {"name":"d_id","type":"bigint","key": 1,"datalock":{"C_ID":"client_D_ID"}},
+      {"name":"d_scope","type":"varchar","length":8,"access":"F","datalock":{"C_ID":"client_D_SCOPE"}},
+      {"name":"d_scope_fmt","type":"varchar","length":8,"access":"BF","datalock":{"C_ID":"client_D_SCOPE"},
+       "sqlselect":"('XXXXXX'+d_scope)","link":"edit:D","caption":"=","caption_ext":"Scope"},
+	  {"name":"d_scope_id","type":"bigint","access":"F","datalock":{"C_ID":"client_D_SCOPE_ID"}},
+	  {"name":"d_utstmp","type":"datetime","length":"7","format":"tstmp","caption":"Uploaded","access":"B",
+	   "controlstyle": "width:100px;","link":"edit:D"},
+	  {"name":"d_sts","type":"varchar","length":8,"caption":"Status","access":"B"},
+      {"name":"title_h","type":"varchar","length":8,"access":""},
+	  {"name":"title_b","type":"varchar","length":8,"access":""},
+	  {"name":"d_ctgr_txt","type":"varchar","length":50,"caption":"Category","access":"B","sqlselect":"(D_CTGR)"},
+	  {"name":"d_desc","type":"varchar","length":255,"caption":"Description","access":"B","controlstyle":"width:200px;"},
+      {"name":"btndownload","caption": "Download","control": "html",
+       "value": "<a href='_dl/D/<#=data[j]['d_id']#>/d_file'>Download</a>"},
+      {"name":"btndetails","caption": "Details","value": "Details","control": "html",
+       "link": "edit:D","access":"B"}
+	]
+  },
+  "DL": {
+    "inherits":"DL_BASE"
+  }  
+}

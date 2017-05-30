@@ -1,0 +1,20 @@
+{
+  "X_CRMSEL_HW": {
+    "layout": "form", 
+    "title":"",
+    "table": "jsharmony.cr",
+    "access": "B", 
+    "caption": [ 0, "Item", "Items" ],
+    "topmenu": "items",
+    "tabpos":"top",
+    "tabpanelstyle": "min-width:1000px;",
+    "popup":[1050,700],
+    "tabs":{
+      "SELECTOR":{"caption": "Menu Items Selector","target":"CRMSEL_SEL","bindings":{"cr_name":"cr_name"}}
+    },
+    "fields":[
+      {"name":"cr_id","type":"bigint"},
+      {"name":"cr_name","type":"varchar","length":16,"access":"BF","key":1}
+    ]
+  }  
+}

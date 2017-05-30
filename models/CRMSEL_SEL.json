@@ -1,8 +1,8 @@
 {
-  "SRMSEL_SEL": {
+  "CRMSEL_SEL": {
     "layout":"grid", 
-	"title": "Menu Items for Role <#=data.sr_name#>",
-	"table":"jsharmony.V_SRMSEL",
+	"title": "Menu Items for Role <#=data.cr_name#>",
+	"table":"jsharmony.V_CRMSEL",
 	"access":"BU", 
 	"caption":[0,"Item","Items"],
     "sort":[{"sm_id_parent":"asc"},{"sm_seq":"asc"},{"sm_name":"asc"}], 
@@ -17,18 +17,18 @@
     "validationlevel": "cell",        "comment4":"cell, or row",
     "hide_system_buttons" : ["export"],    
 	"buttons": [
-	    {"link":"js:SRMSEL_SEL_SelectAll();", "icon": "ok", "text": "Select All", "access": "U" },
-	    {"link":"js:SRMSEL_SEL_DeselectAll();", "icon": "cancel", "text": "Deselect All", "access": "U" }
+	    {"link":"js:CRMSEL_SEL_SelectAll();", "icon": "ok", "text": "Select All", "access": "U" },
+	    {"link":"js:CRMSEL_SEL_DeselectAll();", "icon": "cancel", "text": "Deselect All", "access": "U" }
 	],
-    "oninit": "SRMSEL_SEL_oninit(xform);",
-    "oncommit": "SRMSEL_SEL_oncommit();",
+    "oninit": "CRMSEL_SEL_oninit(xform);",
+    "oncommit": "CRMSEL_SEL_oncommit();",
 	"fields":[
-	  {"name":"sr_name","type":"varchar","length":16,"access":"FB","datalock":{"C_ID":"client_C_ID"},"control":"hidden","key":1,
+	  {"name":"cr_name","type":"varchar","length":16,"access":"FB","datalock":{"C_ID":"client_C_ID"},"control":"hidden","key":1,
 	   "caption":""},
-      {"name":"srmsel_sel","type":"smallint","access":"BU","caption":"Select","control":"checkbox",
+      {"name":"crmsel_sel","type":"smallint","access":"BU","caption":"Select","control":"checkbox",
        "controlparams":{"value_true":"1","value_false":"0","value_hidden":""},"captionstyle": "text-align:center;"},
-      {"name":"new_sr_name","type":"varchar","length":16,"access":"BU","control":"hidden","captionstyle":"display:none;","cellstyle":"display:none;",
-       "sqlselect":"@sr_name"},
+      {"name":"new_cr_name","type":"varchar","length":16,"access":"BU","control":"hidden","captionstyle":"display:none;","cellstyle":"display:none;",
+       "sqlselect":"@cr_name"},
       {"name":"sm_id","type":"bigint","access": "B","control": "label","key":1,
        "validate":["Required","IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
        "caption":"ID","captionstyle": "text-align:right;"},

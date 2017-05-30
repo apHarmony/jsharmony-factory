@@ -5,11 +5,11 @@
   "agreement_sign": [
     "start transaction;",
     "update C set C_ATstmp=current_date where C_ID=@C_ID;",
-    "with xrslt as (insert into RQST(RQST_SOURCE, RQST_ATYPE, RQST_ANAME, RQST_PARMS) values('CLIENT', 'REPORT', 'AGREEMENT',@RQST_PARMS) returning RQST_ID)",
-    "  insert into RQST_D(RQST_ID, D_SCOPE, D_SCOPE_ID, D_CTGR, D_Desc) select RQST_ID, 'C',@C_ID, 'AGREEMNT', 'Customer Portal Agreement' from xrslt;",
+    "with xrslt as (insert into jsharmony.RQST(RQST_SOURCE, RQST_ATYPE, RQST_ANAME, RQST_PARMS) values('CLIENT', 'REPORT', 'AGREEMENT',@RQST_PARMS) returning RQST_ID)",
+    "  insert into jsharmony.RQST_D(RQST_ID, D_SCOPE, D_SCOPE_ID, D_CTGR, D_Desc) select RQST_ID, 'C',@C_ID, 'AGREEMNT', 'Customer Portal Agreement' from xrslt;",
     "commit transaction;"
   ],
-  "agreement_paymentresult": "select PACC_STS \"PACC_STS\",PACC_PP_Result \"PACC_PP_Result\",C_PRE.C_ID \"C_ID\",C_PRE.PE_ID \"PE_ID\",NEW_CLIENT_Result \"NEW_CLIENT_Result\",PE_LL_Tstmp \"PE_LL_Tstmp\" from C_PRE left outer join CPE on C_PRE.PE_ID=CPE.PE_ID where C_PRE_ID=@payment_id and PACC_fp_hash=@fp_hash;",
+  "agreement_paymentresult": "select PACC_STS \"PACC_STS\",PACC_PP_Result \"PACC_PP_Result\",C_PRE.C_ID \"C_ID\",C_PRE.PE_ID \"PE_ID\",NEW_CLIENT_Result \"NEW_CLIENT_Result\",PE_LL_Tstmp \"PE_LL_Tstmp\" from C_PRE left outer join jsharmony.CPE on C_PRE.PE_ID=CPE.PE_ID where C_PRE_ID=@payment_id and PACC_fp_hash=@fp_hash;",
   "agreement_COD_C_ID": "select C_ID as codeval,C_Name as codetxt from C where 1=1 %%%DATALOCKS%%% order by C_Name",
-  "agreement_report_N": "select N.C_ID \"C_ID\",N_TYPE \"N_TYPE\",N_EU,to_char(N_ETstmp,'MM/DD/YYYY') as N_ETstmp,N_Note from N inner join C on C.C_ID=N.C_ID where N.C_ID=@C_ID %%%DATALOCKS%%%"
+  "agreement_report_N": "select N.C_ID \"C_ID\",N_TYPE \"N_TYPE\",N_EU,to_char(N_ETstmp,'MM/DD/YYYY') as N_ETstmp,N_Note from jsharmony.N inner join C on C.C_ID=N.C_ID where N.C_ID=@C_ID %%%DATALOCKS%%%"
 }

@@ -4,7 +4,6 @@
     "title":"",
     "table": "jsharmony.sr",
     "access": "B", 
-    "roles": {"C_B":"B","C_BU":"B","C_X":"*"},
     "caption": [ 0, "Item", "Items" ],
     "topmenu": "items",
     "tabpos":"top",

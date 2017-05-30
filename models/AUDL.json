@@ -1,0 +1,28 @@
+{
+  "AUDL_BASE": {
+    "title":"Audit Trail",
+	"table":"jsharmony.V_AUDL_RAW",
+	"access":"B", 
+    "layout":"grid", 
+	"caption":[0,"Record","Test ResultsRecords"],
+	"sort":["vaud_tstmp","^column_name"], 
+	"topmenu":"administration",
+	"fields":[
+	  {"name":"db_k","type":"varchar","length":"1","caption":"D","access":"B","controlstyle":"text-align:right;"},
+	  {"name":"aud_tstmp","type":"datetime","length":"7","format":"tstmp","caption":"Date - Time","access":"B"},
+	  {"name":"c_name","type":"varchar","length":"50","caption":"Customer","access":""},
+	  {"name":"e_name","type":"varchar","length":"72","caption":"Item","access":""},
+	  {"name":"aud_op","type":"varchar","length":"1","caption":"OP","access":"B"},
+	  {"name":"table_name","type":"varchar","length":"50","caption":"TABLE","access":"B"},
+	  {"name":"ref_name","type":"varchar","length":"50","caption":"REF","access":"B"},
+	  {"name":"column_name","type":"varchar","length":"1","caption":"VAR","access":"B"},
+	  {"name":"column_val","type":"varchar","length":"1","caption":"VAL","access":"B"},
+	  {"name":"subj","type":"varchar","length":"50","caption":"INFO","access":"B"},
+      {"name":"pe_name","type":"varchar","length":"50","caption":"User","access":"B"},
+      {"name":"table_id","type":"bigint","caption":"TID","access":"B","controlstyle":"text-align:right;" } 
+	]
+  },	
+  "AUDL": {
+    "inherits":"AUDL_BASE"
+  }
+}
