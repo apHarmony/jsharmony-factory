@@ -64,8 +64,8 @@
     },
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-      {"name":"n_scope","type":"varchar","length":"8"},
-      {"name":"n_scope_id", "type": "bigint" }
+      {"name":"n_scope","type":"varchar","length":"8","access": "F"},
+      {"name":"n_scope_id", "type": "bigint", "access": "F" }
     ]
   },
   "NL_U_BASE": {
