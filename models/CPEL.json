@@ -25,7 +25,7 @@
 	]
   },	
   "CPEL": {
-    "inhertits":"CPEL_BASE" 
+    "inherits":"CPEL_BASE" 
   },
   "CPEL_CLIENT": {
     "inherits": "CPEL",
