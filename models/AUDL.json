@@ -8,7 +8,7 @@
 	"sort":["vaud_tstmp","^column_name"], 
 	"topmenu":"administration",
 	"fields":[
-	  {"name":"db_k","type":"varchar","length":"1","caption":"D","access":"B","controlstyle":"text-align:right;"},
+	  {"name":"db_k","type":"varchar","length":"1","caption":"D","access":"","controlstyle":"text-align:right;"},
 	  {"name":"aud_tstmp","type":"datetime","length":"7","format":"tstmp","caption":"Date - Time","access":"B"},
 	  {"name":"c_name","type":"varchar","length":"50","caption":"Customer","access":""},
 	  {"name":"e_name","type":"varchar","length":"72","caption":"Item","access":""},
