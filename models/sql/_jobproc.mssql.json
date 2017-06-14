@@ -21,7 +21,7 @@
   ],
   "jobproc_saveRQ": "insert into jsharmony.RQ(RQ_NAME,RQ_MESSAGE) values(@RQ_NAME,'{}');select scope_identity();",
   "jobproc_saveRQ_MESSAGE": "update jsharmony.RQ set RQ_MESSAGE = @RQ_MESSAGE where RQ_ID=@RQ_ID;",
-  "jobproc_saveN": "insert into N(N_SCOPE,N_SCOPE_ID,N_STS,N_TYPE,N_Note) values(@N_SCOPE,@N_SCOPE_ID,'A',@N_TYPE,@N_Note);",
+  "jobproc_saveN": "insert into jsharmony.N(N_SCOPE,N_SCOPE_ID,N_STS,N_TYPE,N_Note) values(@N_SCOPE,@N_SCOPE_ID,'A',@N_TYPE,@N_Note);",
   "jobproc_jobresult": "update jsharmony.RQST set RQST_RSLT=@RQST_RSLT,RQST_RSLT_TStmp=[dbo].[myNOW](),RQST_SNotes=@RQST_SNotes where RQST_ID=@RQST_ID",
   "jobproc_add_BEGIN": "declare @RQST_ID bigint; begin transaction; insert into jsharmony.RQST(RQST_SOURCE,RQST_ATYPE,RQST_ANAME,RQST_PARMS) values (@RQST_SOURCE,@RQST_ATYPE,@RQST_ANAME,@RQST_PARMS);select @RQST_ID = SCOPE_IDENTITY();",
   "jobproc_add_RQST_D": "insert into jsharmony.RQST_D(RQST_ID,D_SCOPE,D_SCOPE_ID,D_CTGR,D_Desc) values (@RQST_ID,@D_SCOPE,@D_SCOPE_ID,@D_CTGR,@D_Desc);",

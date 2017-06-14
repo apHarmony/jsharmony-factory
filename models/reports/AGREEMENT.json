@@ -42,7 +42,7 @@
         },
         "NTYPE":{
           "bindings":{"C_ID":"C_ID"},
-          "sql":"select distinct N.C_ID \"C_ID\",N_TYPE \"N_TYPE\" from N inner join C on C.C_ID=N.C_ID where N.C_ID=@C_ID %%%DATALOCKS%%%",
+          "sql":"select distinct N.C_ID \"C_ID\",N_TYPE \"N_TYPE\" from jsharmony.N inner join C on C.C_ID=N.C_ID where N.C_ID=@C_ID %%%DATALOCKS%%%",
           "children":{
             "N":{
              "bindings":{"C_ID":"C_ID","N_TYPE": "N_TYPE"},
