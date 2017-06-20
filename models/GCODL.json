@@ -11,10 +11,13 @@
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
-    "bindings":{"codename":"codename"},
+    "bindings":{"codename":"codename","codeschema":"codeschema"},
 	"fields":[
 	  {"name":"gcod_id","type":"bigint","access":"FB","key":1,"control":"hidden"},
-      {"name":"codename","type":"varchar","access":"FIUD","virtual":1,"sqlwhere":"1=1","sqlupdate":"","sqlinsert":"","length":16,"control":"hidden"},
+      {"name":"codename","type":"varchar","access":"FIUD","virtual":1,"sqlwhere":"1=1",
+       "sqlupdate":"","sqlinsert":"","length":16,"control":"hidden"},
+      {"name":"codeschema","type":"varchar","access":"FIUD","virtual":1,"sqlwhere":"1=1",
+       "sqlupdate":"","sqlinsert":"","length":16,"control":"hidden"},
 	  {"name":"codseq","type":"smallint","access":"BIU","control":"textbox_VS","format":["decimal","0"],
 	   "validate":["IsNumeric"],"controlstyle":"text-align:right;","caption":"Seq"},
 	  {"name":"codeval","type":"varchar","length":"8","access":"BI","control":"textbox_S",
@@ -34,7 +37,7 @@
        "controlstyle":"width:130px;","caption":"Termination Comment"},
       {"name":"info","type":"varchar","length":"500","access":"B","control":"textzoom",
        "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
-       "sqlselect":"(%%%FUN_PREFIX%%%audit_info(COD_ETstmp,COD_EU,COD_MTstmp,COD_MU))",
+       "sqlselect":"(jsharmony.audit_info(COD_ETstmp,COD_EU,COD_MTstmp,COD_MU))",
        "controlstyle":"width:48px;display:none;"}
 	],
     "dberrors": [

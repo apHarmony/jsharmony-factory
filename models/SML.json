@@ -6,7 +6,7 @@
     "caption":[0,"Menu Item","Menu Items"],
     "layout":"grid", 
     "sort":[{"sm_id_parent":"asc"},{"sm_seq":"asc"},{"sm_name":"asc"}], 
-    "topmenu":"administration",
+    "topmenu":"dev",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
@@ -46,6 +46,7 @@
       [ "UNQ_SM_SM_DESC", "Duplicate Description within Parent" ],
       [ "sm_sm_id_parent_sm_desc_key", "Duplicate Description within Parent" ],
       [ "FK_SM_SM", "Non Existing Parent" ],
+      [ "sm_sm_id_parent_fkey", "Non Existing Parent" ],
       [ "CK_SM_SM_UTYPE", "User Type values: S-System, C-Customer" ],
       [ "FK_SRM_SM", "This ID is used in SRM - cannot be modified or deleted" ]
     ]

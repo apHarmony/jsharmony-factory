@@ -10,5 +10,9 @@
        "caption":"Function","access":"B",
        "lov": { "sql": "select sf_name as CODEVal, sf_desc as CODETxt,SF_SEQ as CODSeq from jsharmony.SF" }
        }
-	]
+	],
+    "dberrors":[
+      ["fk_spef_pe","Cannot delete a user with selected function(s)."],
+      ["FK_SPEF_PE","Cannot delete a user with selected function(s)."]
+    ]
 }

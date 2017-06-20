@@ -22,7 +22,7 @@
 	  {"name":"title_b","type":"varchar","length":8,"access":""},
 	  {"name":"d_ctgr_txt","type":"varchar","length":50,"caption":"Category","access":"B","sqlselect":"(D_CTGR)"},
 	  {"name":"d_desc","type":"varchar","length":255,"caption":"Description","access":"B","controlstyle":"width:200px;"},
-      {"name":"btndownload","caption": "Download","control": "html",
+      {"name":"btndownload","caption": "Download","control": "html","disable_sort":1,
        "value": "<a href='_dl/D/<#=data[j]['d_id']#>/d_file'>Download</a>"},
       {"name":"btndetails","caption": "Details","value": "Details","control": "html",
        "link": "edit:D","access":"B"}

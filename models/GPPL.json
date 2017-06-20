@@ -35,6 +35,7 @@
     "inherits":"GPPL",
     "title":"G Parameters",
     "access":"BIUD", 
+    "topmenu":"dev",
     "fields":[
       {"name":"gpp_process","access": "BIU","control": "dropdown_S"},
       {"name":"gpp_attrib","access": "BIU","control": "dropdown_M"},

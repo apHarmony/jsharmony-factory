@@ -8,6 +8,10 @@ if(params && params.query && params.query.codename) codename = params.query.code
 else if(params && params.post && params.post.codename) codename = params.post.codename;
 if(!codename) return Helper.GenError(req, res, -2, "Error: "+modelid+" routetype: "+routetype+" missing codename.");
 
+var codeschema = '';
+if(params && params.query && params.query.codeschema) codeschema = params.query.codeschema;
+else if(params && params.post && params.post.codeschema) codeschema = params.post.codeschema;
+
 //Check if code exists
 var dbtypes = jsh.AppSrv.DB.types;
 jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean from jsharmony.GCOD2_H where codename=@codename", [dbtypes.VarChar(16)], { 'codename': codename }, function (err, rslt) {
@@ -17,6 +21,7 @@ jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean 
     model.title = 'TABLE - '+rslt[0]['codemean'];
     //Set table
     model.table = 'GCOD2_'+codename;
+    if(codeschema) model.table = codeschema+'.'+model.table;
     //Set caption of codecode column
     jsh.AppSrv.getFieldByName(model.fields,'codecode').caption = rslt[0]['codecodemean'];
     if (!rslt[0]['codecodemean']) { 

@@ -5,7 +5,7 @@
     "table": "jsharmony.sr",
     "access": "B", 
     "caption": [ 0, "Item", "Items" ],
-    "topmenu": "items",
+    "topmenu": "dev",
     "tabpos":"top",
     "tabpanelstyle": "min-width:1000px;",
     "popup":[1050,700],
