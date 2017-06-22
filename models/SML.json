@@ -1,6 +1,7 @@
 {
   "X_SML": {
     "title":"Menu Items",
+    "dev":1,
     "table":"jsharmony.sm",
     "access":"BIUD", 
     "caption":[0,"Menu Item","Menu Items"],

@@ -1,6 +1,7 @@
 {
   "X_SFL": {
     "title":"User Functions",
+    "dev":1,
     "table":"jsharmony.sf",
     "access":"BIUD", 
     "caption":[0,"Function","Functions"],

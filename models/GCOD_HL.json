@@ -28,6 +28,7 @@
   },    
   "X_GCOD_HL": {
     "inherits":"GCOD_HL",
+    "dev":1,
     "access":"BIUD",
     "fields":[
       {"name":"codeschema","access": "BI","control": "textbox"},

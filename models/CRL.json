@@ -1,6 +1,7 @@
 {
   "X_CRL": {
     "title":"Customer User Roles",
+    "dev":1,
     "table":"jsharmony.cr",
     "access":"BIUD", 
     "caption":[0,"Role","Roles"],

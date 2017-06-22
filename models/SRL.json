@@ -1,6 +1,7 @@
 {
   "X_SRL": {
     "title":"User Roles",
+    "dev":1,
     "table":"jsharmony.sr",
     "access":"BIUD", 
     "caption":[0,"Role","Roles"],

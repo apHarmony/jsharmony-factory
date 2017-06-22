@@ -1,6 +1,7 @@
 {
   "X_CRMSEL_HW": {
     "layout": "form", 
+    "dev":1,
     "title":"",
     "table": "jsharmony.cr",
     "access": "B", 

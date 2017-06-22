@@ -1,6 +1,7 @@
 {
   "X_PPDL": {
     "title":"Parameter Definitions",
+    "dev":1,
     "table":"jsharmony.v_ppdl",
     "access":"BIUD", 
     "caption":[0,"Parameter","Parameters"],

@@ -33,6 +33,7 @@
   },    
   "X_GPPL": {
     "inherits":"GPPL",
+    "dev":1,
     "title":"G Parameters",
     "access":"BIUD", 
     "topmenu":"dev",

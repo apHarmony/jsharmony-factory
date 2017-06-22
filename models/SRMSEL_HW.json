@@ -1,5 +1,6 @@
 {
   "X_SRMSEL_HW": {
+    "dev":1,
     "layout": "form", 
     "title":"",
     "table": "jsharmony.sr",
