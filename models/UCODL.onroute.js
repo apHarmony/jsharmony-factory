@@ -14,13 +14,13 @@ else if(params && params.post && params.post.codeschema) codeschema = params.pos
 
 //Check if code exists
 var dbtypes = jsh.AppSrv.DB.types;
-jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean from jsharmony.GCOD_H where codename=@codename", [dbtypes.VarChar(16)], { 'codename': codename }, function (err, rslt) {
+jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean from jsharmony.UCOD_H where codename=@codename", [dbtypes.VarChar(16)], { 'codename': codename }, function (err, rslt) {
   if (err) { global.log(err); Helper.GenError(req, res, -99999, "An unexpected error has occurred"); return; }
   if (rslt && rslt.length) {
     //Set title
-    model.title = 'TABLE - '+rslt[0]['codemean'];
+    model.title = 'SYSTEM TABLE - '+rslt[0]['codemean']+' - '+codeschema;
     //Set table
-    model.table = 'GCOD_'+codename;
+    model.table = 'UCOD_'+codename;
     if(codeschema) model.table = codeschema+'.'+model.table;
     //Set caption of codecode column
     jsh.AppSrv.getFieldByName(model.fields,'codecode').caption = rslt[0]['codecodemean'];
@@ -30,7 +30,7 @@ jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean 
     }
     //Set caption of codeattrib column
     jsh.AppSrv.getFieldByName(model.fields,'codeattrib').caption = rslt[0]['codeattribmean'];
-    if (!rslt[0]['codeattribmean']) { 
+    if (!rslt[0]['codeattribMEAN']) { 
       jsh.AppSrv.getFieldByName(model.fields,'codeattrib').access = 'B'; 
       jsh.AppSrv.getFieldByName(model.fields,'codeattrib').control = 'hidden'; 
     }

@@ -1,40 +1,49 @@
 {
-  "GCOD2_HL": {
-    "title":"Code2 Tables",
-    "table":"jsharmony.GCOD2_H",
+  "UCOD2_HL": {
+    "title":"System Code2 Tables",
+    "dev":1,
+    "table":"jsharmony.UCOD2_H",
     "access":"B",
     "layout":"grid", 
-	"caption":[0,"Code2 Table","Code2 Tables"],
+	"caption":[0,"System Code2 Table","System Code2 Tables"],
     "roles": {"X_B":"B","DADMIN":"*"},
-	"sort":["^codename"],
-    "topmenu":"administration",
+    "sort":["^codename","^codeschema"], 
+	"topmenu":"dev",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
 	"fields":[
-      {"name":"codeschema","type":"varchar","length":"16","access":"B","caption":"Schema","control":"hidden"},
-	  {"name":"codename","type":"varchar","length":"16","key":1,"control": "html", 
+      {"name":"ucod2_h_id","type":"bigint","key":1},
+      {"name":"click","type":"varchar","length":"128","validate":["Required"],"sqlselect":"'U'",
+       "caption":"","access":"B","control": "html",
+       "value": "<a href='/UCOD2L?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'>U</a>"},
+      {"name":"codeschema","type":"varchar","length":"16","access":"B","caption":"Schema"},
+	  {"name":"codename","type":"varchar","length":"16","control": "html", 
        "caption":"Code2 Table Name","access":"B","controlstyle":"width:120px;","validate":["Required"],
-       "value": "<a href='/GCOD2L?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codename']#></a>"},
+       "value": "<a href='/UCOD2L?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codename']#></a>"},
 	  {"name":"codemean","type":"varchar","length":"128","validate":["Required"],
        "caption":"Table Description","access":"B","controlstyle":"width:260px;","control": "html", 
-       "value": "<a href='/GCOD2L?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codemean']#></a>"},
+       "value": "<a href='/UCOD2L?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codemean']#></a>"},
 	  {"name":"codecodemean","type":"varchar","length":"128",
        "caption":"Code","access":"B","controlstyle":"width:160px;"},
       {"name":"codeattribmean","type":"varchar","length":"128",
        "caption":"Attribute","access":"B","controlstyle":"width:160px;"},
       {"name":"my_create","type":"varchar","length":"128",
-       "sqlselect":"(case jsharmony.table_type(codeschema,concat('gcod2_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
-       "link":"add:POPUP_EXEC_CREATE_GCOD2&codeschema=codeschema&codename=codename&codemean=codemean",
+       "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod2_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
+       "link":"add:POPUP_EXEC_CREATE_UCOD2&codeschema=codeschema&codename=codename&codemean=codemean",
        "caption":"Create","access":""}
-	]
+	],
+    "dberrors": [
+      [ "UNQ_UCOD2_H", "Duplicate" ],
+      [ "ucod2_h_codeschema_codename_key", "Duplicate" ],
+      [ "ucod2_h_coalesce_codename_idx", "Duplicate" ]
+    ]  
   },	
-  "X_GCOD2_HL": {
-    "inherits":"GCOD2_HL",
+  "X_UCOD2_HL": {
+    "inherits":"UCOD2_HL",
     "dev":1,
     "access":"BIUD",
-    "topmenu":"dev",
     "fields":[
       {"name":"codeschema","access": "BI","control": "textbox"},
       {"name":"codename","access": "BI","control": "textbox"},

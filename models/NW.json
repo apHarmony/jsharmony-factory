@@ -34,10 +34,9 @@
       {"name":"n_scope_id", "type": "bigint","access": "F" }
     ]
   }, 
-  "NWCSC":{
+  "NWCSC_BASE":{
     "table":"S",
     "access":"B", 
-//    "roles": {"CX_B":"B","CX_X":"BIU","CSYSADMIN":"BIU","CMGR":"BIU","CADMIN":"BIU"},
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
@@ -50,6 +49,9 @@
         {"name":"n_scope","type":"varchar","length":"8","access": "F"},
         {"name":"n_scope_id", "type": "bigint","access": "F" }
       ]
+  },
+  "NWCSC":{
+    "inherits":"NWCSC_BASE"
   },
   "NWCSCB":{
     "table":"S",

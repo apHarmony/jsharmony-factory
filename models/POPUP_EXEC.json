@@ -1,0 +1,25 @@
+{
+ "POPUP_EXEC": {
+  "layout": "exec",
+  "title": "Popup Exec Title",
+  "access": "BU",
+  "roles": {"X_X":"*"},
+  "topmenu":"dev",
+  "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
+  "popup":[450,250],
+  "fields": [
+    {"control":"html","value":"<center>"},
+    {"name":"questione","nl": 1,"control":"html","caption":"",
+     "value":"To be overwritten"},
+    {"name":"YES","caption":"","nl": 1,"control":"button","value":"Yes","controlstyle": "padding:3px 8px;margin-top:10px;",
+     "onclick":"XRunDBFunc(function(){XForm_RefreshParent();window.close();});"},
+    {"name":"NO","caption":"","control":"button","value":"No","controlstyle": "padding:3px 8px;margin-top:10px;",
+     "onclick": "window.close();"},
+    {"control":"html","value":"</center>"},
+    {"name":"RSLT","type":"bigint","access":"B","control":"hidden"}
+  ],
+  "dberrors":[
+    ["No Random Pool participants selected.","No Random Pool participants selected."]
+  ]
+ }
+}

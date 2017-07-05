@@ -7,7 +7,7 @@
 	"caption":[0,"Code Table","Code Tables"],
     "roles": {"X_B":"B","DADMIN":"*"},
 	"sort":["^codename"], 
-	"topmenu":"dev",
+    "topmenu":"administration",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
@@ -23,19 +23,25 @@
       {"name":"codecodemean","type":"varchar","length":"128",
        "caption":"Code","access":"B","controlstyle":"width:160px;"},
       {"name":"codeattribmean","type":"varchar","length":"128",
-       "caption":"Attribute","access":"B","controlstyle":"width:160px;"}
+       "caption":"Attribute","access":"B","controlstyle":"width:160px;"},
+      {"name":"my_create","type":"varchar","length":"128",
+       "sqlselect":"(case jsharmony.table_type(codeschema,concat('gcod_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
+       "link":"add:POPUP_EXEC_CREATE_GCOD&codeschema=codeschema&codename=codename&codemean=codemean",
+       "caption":"Create","access":""}
 	]
   },    
   "X_GCOD_HL": {
     "inherits":"GCOD_HL",
     "dev":1,
     "access":"BIUD",
+    "topmenu":"dev",
     "fields":[
       {"name":"codeschema","access": "BI","control": "textbox"},
       {"name":"codename","access": "BI","control": "textbox"},
       {"name":"codemean","access": "BIU","control": "textbox"},
       {"name":"codecodemean","access": "BIU","control": "textbox"},
-      {"name":"codeattribmean","access": "BIU","control": "textbox"}
+      {"name":"codeattribmean","access": "BIU","control": "textbox"},
+      {"name":"my_create","access": "B"}
     ]
   }
 }

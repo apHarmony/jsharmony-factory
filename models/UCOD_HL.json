@@ -1,0 +1,70 @@
+{
+  "UCOD_HL": {
+	"title":"System Code Tables",
+    "dev":1,
+	"table":"jsharmony.UCOD_H",
+	"access":"B", 
+    "layout":"grid", 
+	"caption":[0,"System Code Table","System Code Tables"],
+    "roles": {"X_B":"B","DADMIN":"*"},
+    "sort":["^codename","^codeschema"], 
+	"topmenu":"dev",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+	"fields":[
+      {"name":"ucod_h_id","type":"bigint","key":1},
+      {"name":"click","type":"varchar","length":"128","validate":["Required"],"sqlselect":"'U'",
+       "caption":"","access":"B","control": "html",
+       "value": "<a href='/UCODL?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'>U</a>"},
+      {"name":"codeschema","type":"varchar","length":"16","access":"B","caption":"Schema"},
+      {"name":"codename","type":"varchar","length":"16","validate":["Required"],
+       "caption":"Code Table Name","access":"B","controlstyle":"width:120px;","control": "html",
+       "value": "<a href='/UCODL?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codename']#></a>"},
+      {"name":"codemean","type":"varchar","length":"128","validate":["Required"],
+       "caption":"Table Description","access":"B","controlstyle":"width:260px;","control": "html",
+       "value": "<a href='/UCODL?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codemean']#></a>"},
+      {"name":"codecodemean","type":"varchar","length":"128",
+       "caption":"Code","access":"B","controlstyle":"width:160px;"},
+      {"name":"codeattribmean","type":"varchar","length":"128",
+       "caption":"Attribute","access":"B","controlstyle":"width:160px;"},
+      {"name":"my_create","type":"varchar","length":"128",
+       "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
+       "link":"add:POPUP_EXEC_CREATE_UCOD&codeschema=codeschema&codename=codename&codemean=codemean",
+       "caption":"Create","access":""}
+	],
+    "dberrors": [
+      [ "UNQ_UCOD_H", "Duplicate" ],
+      [ "ucod_h_codeschema_codename_key", "Duplicate" ],
+      [ "ucod_h_coalesce_codename_idx", "Duplicate" ]
+    ]  
+  },    
+  "X_UCOD_HL": {
+    "inherits":"UCOD_HL",
+    "dev":1,
+    "access":"BIUD",
+    "fields":[
+      {"name":"codeschema","access": "BI","control": "textbox"},
+      {"name":"codename","access": "BI","control": "textbox"},
+      {"name":"codemean","access": "BIU","control": "textbox"},
+      {"name":"codecodemean","access": "BIU","control": "textbox"},
+      {"name":"codeattribmean","access": "BIU","control": "textbox"},
+      {"name":"my_create","access": "B"}
+    ]
+  },
+  "CREATE_UCOD": {
+      "layout": "exec",
+      "title": "Create UCOD",
+      "access": "U",
+      //ADD ROLES
+      "sqlexec": "select jsharmony.create_ucod(@codeschema, @codename, @codemean);", 
+      "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
+      "popup":[450,250],
+      "fields": [
+        {"name":"codeschema","type":"varchar","length":"16","access":"U","control":"hidden"},
+        {"name":"codename","type":"varchar","length":"16","access":"U","control":"hidden"},
+        {"name":"codemean","type":"varchar","length":"128","access":"U","control":"hidden"}
+      ]
+  }
+}

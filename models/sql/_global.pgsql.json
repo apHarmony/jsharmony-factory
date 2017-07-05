@@ -2,5 +2,8 @@
   "TSTMP": "public.myNOW()",
   "CUSER": "public.myCUSER()",
   "SMS_SendTXTSMS": "select TXT_TVAL,TXT_VAL,TXT_BCC from jsharmony.TXT where TXT_PROCESS='SMS' and TXT_ATTRIB=@TXT_ATTRIB",
-  "FUN_PREFIX":""
+  "FUN_PREFIX":"",
+  "PROC_RUN":"select ",
+  "PAR_LIST_BEG":"(",
+  "PAR_LIST_END":")"
 }
