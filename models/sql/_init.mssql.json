@@ -1,0 +1,12 @@
+{
+  "init_sysadmin_access": ["select case when count(*)=15 then 1 else 0 end jsinitaccess from (",
+                            "SELECT * FROM fn_my_permissions(NULL, 'SERVER')",
+                            "  where permission_name in ('CREATE SERVER ROLE')",
+                            "union all",
+                            "SELECT * FROM fn_my_permissions(NULL, 'DATABASE')",
+                            "  where permission_name in ",
+                            "  ('create table','create view','create procedure','create function','create default',",
+                            "   'create type','create schema','create synonym','create role',",
+                            "   'select','insert','update','delete','execute')",
+                            ") PERMS"]
+}

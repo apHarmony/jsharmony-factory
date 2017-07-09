@@ -1,0 +1,5 @@
+{
+  "init_sysadmin_access": ["select",
+                   "(case when (rolcreaterole and has_database_privilege('BK', 'CREATE')) then 1 else 0 end) sysadmin_access",
+                   "from pg_authid where rolname = current_user"]
+}

@@ -32,7 +32,7 @@ npm install jsharmony-factory --save
    global.frontsalt = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'; //REQUIRED: Use a 60+ mixed character string
    ```
    ** Alternatively use the jsharmony-db-mssql library for SQL Server
-3. Create a "data" folder and "models" folder.  Develop the models for the project.
+3. Create a "data" folder and a "models" folder.  Develop the models for the project.
 4. Start the server with the following command:
    ```javascript
    node app.js

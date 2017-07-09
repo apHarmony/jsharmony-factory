@@ -155,9 +155,9 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
     thisapp.rptsrv.phqueue.push({ modelid: modelid, params: sql_params, data: dbdata }, function (err, tmppath, dispose) {
       /* Report Done */ 
       fs.stat(tmppath, function (err, stat) {
-        if (err != null) return dispose();
+        if (err != null) return _this.SetJobResult(job, 'ERROR', 'Report file not found: '+err.toString(), onComplete);
         var fsize = stat.size;
-        if (fsize > global.max_filesize) return _this.SetJobResult(job, 'ERROR', 'Report file size exceeds system maximum file size', onComplete);
+        if (fsize > global.max_filesize) return _this.SetJobResult(job, 'ERROR', 'Report file size exceeds system maximum file size', function () { dispose(onComplete); });
         //Report is available at tmppath
         _this.processJobResult(job, dbdata, tmppath, fsize, function () { dispose(onComplete); });
       });

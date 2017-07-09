@@ -1,0 +1,1 @@
+ALTER ROLE jsharmony_role_exec ADD MEMBER %%%INIT_DB_USER%%%;
