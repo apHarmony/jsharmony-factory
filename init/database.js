@@ -64,12 +64,27 @@ exports.Run = function(run_cb){
     });
   }); })
 
+  //Confirm database table creation
+  .then(xlib.getStringAsync(function(){
+    console.log('\r\nCreate the required database tables for jsHarmony Factory?');
+    console.log('1) Yes');
+    console.log('2) No');
+  },function(rslt,retry,reject){
+    if(rslt=="1"){ }
+    else if(rslt=="2"){ 
+      console.log('\r\nDatabase tables will not be initialized.\r\n\r\nYou can manually run this operation in the future via:\r\nnpm run -s init-factory');
+      reject();
+      return false;
+    }
+    else{ console.log('Invalid entry.  Please enter the number of your selection'); retry(); return false; }
+  }))
+
   //Check if user has sysadmin access
   .then(function(){ return new Promise(function(resolve, reject){
     var firstrun = true;
     var xfunc = function(){
       if(dbadmin_access) return resolve();
-      console.log('\r\nChecking for db admin access');
+      console.log('\r\nChecking if current user has db admin access');
       db.Scalar('',JSHdb.ParseSQL('init_sysadmin_access',sqlbase),[],{},function(err,rslt){
         if(!err && rslt && (rslt.toString()=="1")){
           dbadmin_access = true;
@@ -78,8 +93,8 @@ exports.Run = function(run_cb){
         }
         if(err){ console.log('\r\nError checking for db admin access'); if(firstrun) return reject(); }
         //Log in
-        if(!err) console.log('No CREATE access');
-        console.log('\r\nPlease enter a database admin user:');
+        if(!err) console.log('> User does not have db admin access');
+        console.log('\r\nPlease enter a database admin user for creating the database tables:');
         xlib.getString(function(rslt, retry){
           if(!rslt){ console.log('Invalid entry.  Please enter a valid database user'); retry(); return false; }
           dbadmin_user = rslt;
@@ -100,21 +115,6 @@ exports.Run = function(run_cb){
     };
     xfunc();
   }); })
-
-  //Confirm database table creation
-  .then(xlib.getStringAsync(function(){
-    console.log('\r\nCreate the required database tables for jsHarmony Factory?');
-    console.log('1) Yes');
-    console.log('2) No');
-  },function(rslt,retry,reject){
-    if(rslt=="1"){ }
-    else if(rslt=="2"){ 
-      console.log('\r\nDatabase tables will not be initialized.\r\n\r\nYou can manually run this operation in the future via:\r\nnpm run -s init-factory');
-      reject();
-      return false;
-    }
-    else{ console.log('Invalid entry.  Please enter the number of your selection'); retry(); return false; }
-  }))
 
   //Load Database Scripts
   .then(function(){ return new Promise(function(resolve, reject){
