@@ -104,7 +104,14 @@ AppSrvJobProc.prototype.ExecJob_MESSAGE = function (job, onComplete) {
   if (job.RQST_ATYPE != 'MESSAGE') return _this.SetJobResult(job, 'ERROR', 'RQST_ATYPE not MESSAGE', onComplete);
   
   var rparams = {};
-  if (job.RQST_PARMS) rparams = JSON.parse(job.RQST_PARMS);
+  if (job.RQST_PARMS){
+    try{
+      rparams = JSON.parse(job.RQST_PARMS);
+    }
+    catch (ex) {
+      return _this.SetJobResult(job, 'ERROR', 'Error parsing JOB MESSAGE - Invalid JSON', onComplete);
+    }
+  }
   _this.processJobResult(job, rparams, '', 0, onComplete);
 };
 
