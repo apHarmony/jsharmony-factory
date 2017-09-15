@@ -41,7 +41,7 @@ function jsHarmonyFactory(adminConfig, clientConfig, onSettingsLoaded){
   if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
   HelperFS.loadViews(factorypath + '/views', '');
   if(!global.modeldir) global.modeldir = [];
-  global.modeldir.unshift(factorypath + '/models/');
+  global.modeldir.unshift({ path: factorypath + '/models/', component: 'jsharmony-factory' });
   this.app = jsHarmony.App({'noroutes':1});
   this.app.jsh.SetJobProc(global.JobProc);
   this.VerifySettings();

@@ -69,14 +69,13 @@ exports.Run = function(run_cb){
     console.log('\r\nCreate the required database tables for jsHarmony Factory?');
     console.log('1) Yes');
     console.log('2) No');
-  },function(rslt,retry,reject){
-    if(rslt=="1"){ }
+  },function(rslt,retry){
+    if(rslt=="1"){ return true; }
     else if(rslt=="2"){ 
       console.log('\r\nDatabase tables will not be initialized.\r\n\r\nYou can manually run this operation in the future via:\r\nnpm run -s init-factory');
-      reject();
       return false;
     }
-    else{ console.log('Invalid entry.  Please enter the number of your selection'); retry(); return false; }
+    else{ console.log('Invalid entry.  Please enter the number of your selection'); retry(); }
   }))
 
   //Check if user has sysadmin access
