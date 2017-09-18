@@ -31,7 +31,7 @@ function jsHarmonyFactoryAPI(){
   var path_models_sql = path.join(path.dirname(module.filename),'./models/sql/');
   this.sqlbase = {};
   this.db = new JSHdb();
-  this.sqlbase.SQL = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
+  this.sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
   this.codegen = new jsHarmonyCodeGen(this.db);
 }
 //Execute DB Operation

@@ -21,9 +21,9 @@
        "sql_search":"(select hp_desc from jsharmony.hp where hp.hp_code = h.hp_code)"},
       {"name":"h_seq","type":"int","caption":"Seq","access":"BU","control":"textbox_VS"},
       {"name":"h_index_a","type":"bit","access":"BU","control":"checkbox","validate":["Required"],
-       "controlparams":{"value_true":"1","value_false":"0"},"caption":"Admin"},
+       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Admin"},
       {"name":"h_index_p","type":"bit","access":"BU","control":"checkbox","validate":["Required"],
-       "controlparams":{"value_true":"1","value_false":"0"},"caption":"Portal"},
+       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Portal"},
 	  {"name":"h_mtstmp","type":"datetime","length":"7","format":"tstmp","caption":"Last Update","access":"B"}
 	]
   }

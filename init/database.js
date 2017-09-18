@@ -49,7 +49,7 @@ exports.Run = function(run_cb){
     if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
     //Load database driver
     db = new JSHdb();
-    sqlbase.SQL = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
+    sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
 	
     if(global.dbconfig){
       dbaccess_user = dbadmin_user = global.dbconfig.user;
