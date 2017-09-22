@@ -59,6 +59,7 @@
 	  {"name":"d_size","type":"bigint","access":"B",
 	   "control":"label_S",
 	   "caption":"Bytes"},
+    {"name":"d_filename","type":"varchar","length":67,"access":"B"},
     {"name":"d_file","type":"file","access":"BIU","nl":1,
        "control":"file_upload","caption":"Document",
        "controlparams": { 
