@@ -1,6 +1,6 @@
 {
   "GCOD2_HL": {
-    "title":"Code2 Tables",
+    "title":"Admin 2-Dimensional Code Tables",
     "table":"jsharmony.GCOD2_H",
     "access":"B",
     "layout":"grid", 
@@ -24,10 +24,10 @@
        "caption":"Code","access":"B","controlstyle":"width:160px;"},
       {"name":"codeattribmean","type":"varchar","length":"128",
        "caption":"Attribute","access":"B","controlstyle":"width:160px;"},
-      {"name":"my_create","type":"varchar","length":"128",
+      {"name":"my_create","type":"varchar","length":"128","cellstyle":"text-align:center;",
        "sqlselect":"(case jsharmony.table_type(codeschema,concat('gcod2_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
        "link":"add:POPUP_EXEC_CREATE_GCOD2&codeschema=codeschema&codename=codename&codemean=codemean",
-       "caption":"Create","access":""}
+       "caption":"Create Table","access":""}
 	]
   },	
   "X_GCOD2_HL": {

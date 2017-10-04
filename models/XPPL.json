@@ -1,6 +1,6 @@
 {
   "X_XPPL": {
-    "title":"X Parameters",
+    "title":"System (X) Parameters",
     "dev":1,
     "table":"jsharmony.v_xppl",
     "access":"BIUD", 

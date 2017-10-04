@@ -1,6 +1,6 @@
 {
   "UCOD_HL": {
-	"title":"System Code Tables",
+	"title":"System 1-Dimensional Code Tables",
     "dev":1,
 	"table":"jsharmony.UCOD_H",
 	"access":"B", 
@@ -30,10 +30,10 @@
        "caption":"Code","access":"B","controlstyle":"width:160px;"},
       {"name":"codeattribmean","type":"varchar","length":"128",
        "caption":"Attribute","access":"B","controlstyle":"width:160px;"},
-      {"name":"my_create","type":"varchar","length":"128",
+      {"name":"my_create","type":"varchar","length":"128","cellstyle":"text-align:center;",
        "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
        "link":"add:POPUP_EXEC_CREATE_UCOD&codeschema=codeschema&codename=codename&codemean=codemean",
-       "caption":"Create","access":""}
+       "caption":"Create Table","access":""}
 	],
     "dberrors": [
       [ "UNQ_UCOD_H", "Duplicate" ],
