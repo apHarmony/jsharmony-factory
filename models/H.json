@@ -17,11 +17,11 @@
       {"name":"h_seq","type":"int","access":"BIU","control":"textbox_VS","nl":1,
        "caption":"Sequence","captionstyle":"width:120px;text-align:right;"},
 
-      {"name":"h_index_a","type":"boolean","access":"BIU","control":"checkbox","validate":["Required"],
+      {"name":"h_index_a","type":"boolean","access":"BIU","control":"checkbox",
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Admin Help Index","default":"1",
        "captionstyle":"width:120px;text-align:right;"},
 
-      {"name":"h_index_p","type":"boolean","access":"BIU","control":"checkbox","validate":["Required"],
+      {"name":"h_index_p","type":"boolean","access":"BIU","control":"checkbox",
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Portal Help Index","default":"1",
        "captionstyle":"width:120px;text-align:right;"},
 		  
