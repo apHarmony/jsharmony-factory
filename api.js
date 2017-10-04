@@ -28,11 +28,18 @@ function jsHarmonyFactoryAPI(){
   if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
 
   //Initialize DB Components
-  var path_models_sql = path.join(path.dirname(module.filename),'./models/sql/');
   this.sqlbase = {};
   this.db = new JSHdb();
-  this.sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
-  this.codegen = new jsHarmonyCodeGen(this.db);
+
+  if(!global.modeldir) global.modeldir = [];
+  global.modeldir.unshift({ path: path.join(path.dirname(module.filename),'./models/'), component: 'jsharmony-factory' });
+  jsHarmony.LoadSQL(path.dirname(require.resolve('jsharmony'))+'/sql/', global.dbconfig._driver.name, this.sqlbase);
+  for (var i = 0; i < global.modeldir.length; i++) {
+    jsHarmony.LoadSQL(global.modeldir[i].path + 'sql/', global.dbconfig._driver.name, this.sqlbase);
+  }
+  
+
+  this.codegen = new jsHarmonyCodeGen(this.db, this.sqlbase);
 }
 //Execute DB Operation
 jsHarmonyFactoryAPI.prototype.dbTest = function(onComplete){

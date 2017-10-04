@@ -87,6 +87,10 @@
 		"control":"textbox",
 		"controlclass":"xtextbox_VL"
 	},
+	"textbox_decimal":{
+		"control":"textbox",
+		"controlclass":"xtextbox_decimal"
+	},
 	"textbox_email":{
 		"control":"textbox",
 		"controlclass":"xtextbox_email"
@@ -95,6 +99,11 @@
 		"control":"textbox",
 		"format":["date","MM/DD/YY"],
 		"controlclass":"xtextbox_mmddyy"
+	},
+	"textbox_hhmmss":{
+		"control":"textbox",
+		"format":["time","hh:mm:ss A"],
+		"controlclass":"xtextbox_hhmmss"
 	},
 	"textbox_phone":{
 		"control":"textbox",
@@ -120,7 +129,11 @@
     "control": "label",
     "controlstyle": "color:#000;padding-right:15px;",
     "captionstyle": "color:#000;font-weight:bold;margin-bottom:12px;"
-  }
+  },
+	"textarea_M":{
+		"control":"textarea",
+		"controlclass":"xtextarea_M"
+	}
 
 	
 }

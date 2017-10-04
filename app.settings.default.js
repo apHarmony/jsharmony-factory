@@ -52,7 +52,7 @@ global.mailer_settings = {
 global.debug_params = {
   web_detailed_errors: true, //Be sure to set to false in production - you do not want error stack traces showing to users
   pipe_log : true,  //Show LOG messages on CONSOLE
-  appsrv_requests: true,  //Record all APPSRV requests on LOG/CONSOLE
+  appsrv_requests: false,  //Record all APPSRV requests on LOG/CONSOLE
   report_debug: false,  //Display report warnings (Null value, etc.)
   db_requests: false,     //Log every database request through DB.js
   db_error_sql_state: true,       //Log SQL state during DB error

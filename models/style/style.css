@@ -305,7 +305,10 @@ CUSTOM CONTROLS
 .xtextbox_email {
 	width:392px;
 }
-.xtextbox_mmddyy {
+.xtextbox_decimal {
+	width:200px;
+}
+.xtextbox_mmddyy,.xtextbox_hhmmss {
 	width:80px;
 }
 .xtextbox_phone {
@@ -313,6 +316,20 @@ CUSTOM CONTROLS
 }
 .xtextbox_tstmp {
 	width:105px;
+}
+.xtextbox_tstmp7 {
+	width:185px;
+}
+.xtextbox_tstmp7z {
+	width:220px;
+}
+.xtextarea_M {
+	width:590px;
+	height:120px;
+}
+.xtextarea_caption {
+	vertical-align:top;
+	padding-top:4px;
 }
 .xcaption_2 {
 	width:120px;
