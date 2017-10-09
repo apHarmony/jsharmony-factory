@@ -3,6 +3,7 @@
     "comment":"LOG",
     "title":"System Logs",
     "table":"",
+    "dev":1,
     "access":"B", 
     "layout":"exec", 
     "topmenu":"Administration",

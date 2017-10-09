@@ -5,5 +5,13 @@
   "FUN_PREFIX":"dbo.",
   "PROC_RUN":"EXEC",
   "PAR_LIST_BEG":" ",
-  "PAR_LIST_END":" "
+  "PAR_LIST_END":" ",
+  "X_SMLW_TOP":"select case when @cur_sm_id_auto <> 0 then @cur_sm_id_auto else (select top 1 sm_id_auto from jsharmony.sm where 1=1 order by sm_utype desc,coalesce(SM.SM_Seq,SM.SM_ID),SM_Name,SM.SM_ID) end as sm_id_auto from jsharmony.dual",
+  "X_SMLW_INSERT":["update jsharmony.SM set sm_seq=coalesce(sm_seq,sm_id)+1",
+                   "  where coalesce(sm_seq,sm_id) > (select coalesce(sm_seq,sm_id) from jsharmony.sm where sm_id=@sm_id_parent) ",
+                   "    and sm_utype = (select sm_utype from jsharmony.sm where sm_id=@sm_id_parent)",
+                   "    and cast((coalesce(sm_seq,sm_id)-(select coalesce(sm_seq,sm_id) from jsharmony.sm where sm_id=@sm_id_parent)) as decimal)/(select count(*) from jsharmony.sm sm2 where coalesce(sm2.sm_seq,sm2.sm_id) > (select coalesce(sm_seq,sm_id) from jsharmony.sm where sm_id=@sm_id_parent) and coalesce(sm2.sm_seq,sm2.sm_id) <= coalesce(sm.sm_seq,sm.sm_id))<=1.0;",
+                   "insert into jsharmony.SM (sm_id,sm_id_parent,sm_utype,sm_seq,sm_name,sm_desc,sm_sts)",
+                   "  select (select max(sm_id)+1 from jsharmony.SM),sm_id,sm_utype,coalesce(sm_seq,sm_id)+1,@sm_name,@sm_desc,'ACTIVE' from jsharmony.SM where sm_id=@sm_id_parent;",
+                   "select SCOPE_IDENTITY() sm_id_auto;"]
 }

@@ -1,0 +1,67 @@
+{
+  "X_SMLW": {
+    "dev":1,
+    "layout":"form", 
+    "title":"Menu Items",
+    "table":"",
+    "access":"B", 
+    "caption":[0,"Menu Item","Menu Items"],
+    "sqlselect": "X_SMLW_TOP",
+    "querystring": { "|action": "edit", "|cur_sm_id_auto": "0" },
+    "buttons": [{"link":"X_SML", "icon": "list", "text": "List View", "access": "B" }],
+    "topmenu":"dev",
+    "hide_system_buttons" : ["print","export"], 
+    "fields":[
+	  { "control": "html", "value": "<div class=\"clear\" style=\"padding-bottom:15px;width:1000px;\"></div>" },
+      {"name": "cur_sm_id_auto", "type": "bigint", "key": 1 },
+      {"name": "sm_id_auto", "type": "bigint","access": "BF","caption": "","control": "tree","virtual": 1,
+       "controlstyle": "float:left;margin-right:10px;height:400px;width:300px;",
+       "lov": { "sql": "select sm_id as CODEID,sm_id_parent as CODEParentID,sm_id_auto as CODEVal,sm_desc as CODETxt,'folder' as CODEIcon from jsharmony.sm where 1=1 %%%DATALOCKS%%% order by sm_utype desc,coalesce(SM.SM_Seq,SM.SM_ID),SM_Name,SM.SM_ID" },
+       "controlparams": {
+          "expand_all": true,
+          "item_context_menu": [
+            { "icon": "add", "text": "Add Child Item", "action": "X_SMLW_item_insert(context_item);", "access": "IUD", "class": "add" },
+            { "icon": "delete", "text": "Delete", "action": "X_SMLW_item_delete(context_item);", "access": "IUD", "class": "delete" }
+          ]
+        },
+        "onchange": "X_SMLW_sm_id_onchange(obj,newval);"
+      },
+      {
+        "name": "X_SML_EDIT",
+        "control": "subform",
+        "controlstyle": "width:780px;float:left;",
+        "target": "X_SML_EDIT",
+        "bindings": { "sm_id_auto": "sm_id_auto" },
+        "caption": "",
+        "access": "BIUD"
+      }
+	  ],
+    "oninit": "X_SMLW_oninit();"
+  },
+  "X_SMLW_INSERT": {
+      "layout": "exec",
+      "title": "Add Menu Item",
+      "access": "U",
+      "dev": 1,
+      "sqlexec": "X_SMLW_INSERT",
+      "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
+      "popup":[450,250],
+      "fields": [
+        {"name":"sm_id_parent","type":"bigint","access":"U","control":"hidden"},
+        {"name":"sm_name","type":"varchar","length": 30,"access":"U","control":"hidden"},
+        {"name":"sm_desc","type":"varchar","length": 255,"access":"U","control":"hidden"}
+      ]
+  },
+  "X_SMLW_DELETE": {
+      "layout": "exec",
+      "title": "Delete Menu Item",
+      "access": "U",
+      "dev": 1,
+      "sqlexec": ["delete from jsharmony.SM where sm_id_auto=@sm_id_auto"],
+      "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
+      "popup":[450,250],
+      "fields": [
+        {"name":"sm_id_auto","type":"bigint","access":"U","control":"hidden"}
+      ]
+  }
+}
