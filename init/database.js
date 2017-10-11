@@ -25,21 +25,23 @@ var wclib = require('jsharmony/WebConnect.js');
 var wc = new wclib.WebConnect();
 var xlib = wclib.xlib;
 var JSHdb = require('jsharmony-db');
-var db = null;
 var jsHarmonyFactory = require('../index');
-var sqlbase = {};
-var dbadmin_access = false;
-var dbadmin_user = '';
-var dbadmin_password = '';
-var dbaccess_user = '';
-var dbaccess_password = '';
-var dbscripts = {};
-var dbscript_names = [];
-var path_models_sql = path.join(path.dirname(module.filename),'../models/sql/');
 
-exports = module.exports = {};
+function DatabaseScripter(){
+  this.db = null;
+  this.sqlbase = {};
+  this.dbadmin_access = false;
+  this.dbadmin_user = '';
+  this.dbadmin_password = '';
+  this.dbaccess_user = '';
+  this.dbaccess_password = '';
+};
 
-exports.Run = function(run_cb){
+DatabaseScripter.prototype.Run = function(scripttype, run_cb){
+  var _this = this;
+  var dbscripts = {};
+  var dbscript_names = [];
+
   Promise.resolve()
 
   //Check if the database connection string works
@@ -49,11 +51,12 @@ exports.Run = function(run_cb){
     if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
     //Load database driver
     db = new JSHdb();
-    sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
+    var path_models_sql = path.join(path.dirname(module.filename),'../models/sql/');
+    _this.sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
 	
     if(global.dbconfig){
-      dbaccess_user = dbadmin_user = global.dbconfig.user;
-      dbaccess_password = dbadmin_password = global.dbconfig.password;
+      _this.dbaccess_user = _this.dbadmin_user = global.dbconfig.user;
+      _this.dbaccess_password = _this.dbadmin_password = global.dbconfig.password;
     }
     db.Scalar('','select 1',[],{},function(err,rslt){
       if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your global.dbconfig in app.settings.js and try again by running:\r\nnpm run -s init-factory'); return reject(); }
@@ -64,6 +67,7 @@ exports.Run = function(run_cb){
     });
   }); })
 
+  /*
   //Confirm database table creation
   .then(xlib.getStringAsync(function(){
     console.log('\r\nCreate the required database tables for jsHarmony Factory?');
@@ -77,33 +81,34 @@ exports.Run = function(run_cb){
     }
     else{ console.log('Invalid entry.  Please enter the number of your selection'); retry(); }
   }))
+  */
 
   //Check if user has sysadmin access
   .then(function(){ return new Promise(function(resolve, reject){
     var firstrun = true;
     var xfunc = function(){
-      if(dbadmin_access) return resolve();
+      if(_this.dbadmin_access) return resolve();
       console.log('\r\nChecking if current user has db admin access');
-      db.Scalar('',JSHdb.ParseSQL('init_sysadmin_access',sqlbase),[],{},function(err,rslt){
+      db.Scalar('',JSHdb.ParseSQL('init_sysadmin_access',_this.sqlbase),[],{},function(err,rslt){
         if(!err && rslt && (rslt.toString()=="1")){
-          dbadmin_access = true;
+          _this.dbadmin_access = true;
           console.log('OK');
           return resolve();
         }
         if(err){ console.log('\r\nError checking for db admin access'); if(firstrun) return reject(); }
         //Log in
         if(!err) console.log('> User does not have db admin access');
-        console.log('\r\nPlease enter a database admin user for creating the database tables:');
+        console.log('\r\nPlease enter a database ADMIN user with create access:');
         xlib.getString(function(rslt, retry){
           if(!rslt){ console.log('Invalid entry.  Please enter a valid database user'); retry(); return false; }
-          dbadmin_user = rslt;
-          console.log('\r\nPlease enter the database admin password:');
+          _this.dbadmin_user = rslt;
+          console.log('\r\nPlease enter the database ADMIN password:');
           xlib.getString(function(rslt, retry){
             if(!rslt){ console.log('Invalid entry.  Please enter a valid database password'); retry(); return false; }
-            dbadmin_password = rslt;
+            _this.dbadmin_password = rslt;
             db.Close(function(){
-              global.dbconfig.user = dbadmin_user;
-              global.dbconfig.password = dbadmin_password;
+              global.dbconfig.user = _this.dbadmin_user;
+              global.dbconfig.password = _this.dbadmin_password;
               firstrun = false;
               db = new JSHdb();
               return xfunc();
@@ -135,12 +140,13 @@ exports.Run = function(run_cb){
 
   .then(function(){ return new Promise(function(resolve, reject){
     console.log('\r\nRunning database initialization scripts...');
-    sqlbase.SQL['INIT_DB_USER'] = dbaccess_user;
-    sqlbase.SQL['INIT_DB_LCASE'] = global.dbconfig.database;
+    _this.sqlbase.SQL['INIT_DB_USER'] = _this.dbaccess_user;
+    _this.sqlbase.SQL['INIT_DB'] = global.dbconfig.database;
+    _this.sqlbase.SQL['INIT_DB_LCASE'] = global.dbconfig.database;
 
     async.eachSeries(dbscript_names, function(dbscript_name, cb){
       console.log(dbscript_name);
-      db.Scalar('',JSHdb.ParseSQL(dbscripts[dbscript_name],sqlbase),[],{},function(err,rslt){
+      db.Scalar('',JSHdb.ParseSQL(dbscripts[dbscript_name],_this.sqlbase),[],{},function(err,rslt){
         if(err){ console.log('\r\nERROR: Error initializing database: '+err.toString()); return cb(err); }
         console.log('OK');
         return cb();
@@ -163,3 +169,5 @@ exports.Run = function(run_cb){
     process.exit(1);
   });
 }
+
+exports = module.exports = DatabaseScripter;

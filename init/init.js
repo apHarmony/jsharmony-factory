@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var Init_DB = require('./database.js');
+var DatabaseScripter = require('./database.js')();
 
 var jsHarmonyFactory_Init = {};
 global.cliReturnCode = 1;
@@ -30,7 +30,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
 
   //Initialize Database
   .then(function(){ return new Promise(function(resolve, reject){
-    Init_DB.Run(resolve);
+    DatabaseScripter.Run('init',resolve);
   }); })
 
   //Callback
