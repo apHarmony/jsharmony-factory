@@ -50,7 +50,7 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
     //Load app.settings.js and parse inheritance
     if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
     //Load database driver
-    db = new JSHdb();
+    _this.db = new JSHdb();
     var path_models_sql = path.join(path.dirname(module.filename),'../models/sql/');
     _this.sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
 	
@@ -58,7 +58,7 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
       _this.dbaccess_user = _this.dbadmin_user = global.dbconfig.user;
       _this.dbaccess_password = _this.dbadmin_password = global.dbconfig.password;
     }
-    db.Scalar('','select 1',[],{},function(err,rslt){
+    _this.db.Scalar('','select 1',[],{},function(err,rslt){
       if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your global.dbconfig in app.settings.js and try again by running:\r\nnpm run -s init-factory'); return reject(); }
       if(rslt && (rslt.toString()=="1")){
         console.log('OK');
@@ -89,7 +89,7 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
     var xfunc = function(){
       if(_this.dbadmin_access) return resolve();
       console.log('\r\nChecking if current user has db admin access');
-      db.Scalar('',JSHdb.ParseSQL('init_sysadmin_access',_this.sqlbase),[],{},function(err,rslt){
+      _this.db.Scalar('',JSHdb.ParseSQL('init_sysadmin_access',_this.sqlbase),[],{},function(err,rslt){
         if(!err && rslt && (rslt.toString()=="1")){
           _this.dbadmin_access = true;
           console.log('OK');
@@ -106,11 +106,11 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
           xlib.getString(function(rslt, retry){
             if(!rslt){ console.log('Invalid entry.  Please enter a valid database password'); retry(); return false; }
             _this.dbadmin_password = rslt;
-            db.Close(function(){
+            _this.db.Close(function(){
               global.dbconfig.user = _this.dbadmin_user;
               global.dbconfig.password = _this.dbadmin_password;
               firstrun = false;
-              db = new JSHdb();
+              _this.db = new JSHdb();
               return xfunc();
             });
           },'*');
@@ -145,12 +145,18 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
     _this.sqlbase.SQL['INIT_DB_LCASE'] = global.dbconfig.database;
 
     async.eachSeries(dbscript_names, function(dbscript_name, cb){
-      console.log(dbscript_name);
-      db.Scalar('',JSHdb.ParseSQL(dbscripts[dbscript_name],_this.sqlbase),[],{},function(err,rslt){
-        if(err){ console.log('\r\nERROR: Error initializing database: '+err.toString()); return cb(err); }
-        console.log('OK');
-        return cb();
-      });
+      var bsql = _this.db.sql.ParseBatchSQL(JSHdb.ParseSQL(dbscripts[dbscript_name],_this.sqlbase));
+      var bi = 0;
+
+      async.eachSeries(bsql, function(sql, sql_cb){
+        bi++;
+        console.log(dbscript_name + ' ' + bi.toString());
+        _this.db.Scalar('',sql,[],{},function(err,rslt){
+          if(err){ console.log('\r\n'+sql); console.log('\r\nERROR: Error initializing database: '+err.toString()); return cb(err); }
+          console.log('OK');
+          return sql_cb();
+        });
+      }, cb);
     }, function(err){
       if(err){ console.log('\r\nERROR: Initialization failed.'); return reject(); }
       console.log('\r\nInitialization Complete');
@@ -160,12 +166,12 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
 
   //Callback
   .then(function(){
-    db.Close(function(){ if(run_cb) run_cb(); });
+    _this.db.Close(function(){ if(run_cb) run_cb(); });
   })
 
   .catch(function(err){
     if(err) console.log(err);
-    db.Close();
+    _this.db.Close();
     process.exit(1);
   });
 }
