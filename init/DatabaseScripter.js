@@ -30,23 +30,18 @@ var jsHarmonyFactory = require('../index');
 function DatabaseScripter(){
   this.db = null;
   this.sqlbase = {};
-  this.dbadmin_access = false;
-  this.dbadmin_user = '';
-  this.dbadmin_password = '';
-  this.dbaccess_user = '';
-  this.dbaccess_password = '';
 };
 
 DatabaseScripter.prototype.Run = function(scripttype, run_cb){
   var _this = this;
   var dbscripts = {};
   var dbscript_names = [];
+  if(!scripttype) throw new Error('DatabaseScripter - scripttype is required');
 
   Promise.resolve()
 
   //Check if the database connection string works
   .then(function(){ return new Promise(function(resolve, reject){
-    console.log('\r\nTesting database connection');
     //Load app.settings.js and parse inheritance
     if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
     //Load database driver
@@ -54,14 +49,9 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
     var path_models_sql = path.join(path.dirname(module.filename),'../models/sql/');
     _this.sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
 	
-    if(global.dbconfig){
-      _this.dbaccess_user = _this.dbadmin_user = global.dbconfig.user;
-      _this.dbaccess_password = _this.dbadmin_password = global.dbconfig.password;
-    }
     _this.db.Scalar('','select 1',[],{},function(err,rslt){
       if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your global.dbconfig in app.settings.js and try again by running:\r\nnpm run -s init-factory'); return reject(); }
       if(rslt && (rslt.toString()=="1")){
-        console.log('OK');
         resolve();
       }
     });
@@ -83,46 +73,9 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
   }))
   */
 
-  //Check if user has sysadmin access
-  .then(function(){ return new Promise(function(resolve, reject){
-    var firstrun = true;
-    var xfunc = function(){
-      if(_this.dbadmin_access) return resolve();
-      console.log('\r\nChecking if current user has db admin access');
-      _this.db.Scalar('',JSHdb.ParseSQL('init_sysadmin_access',_this.sqlbase),[],{},function(err,rslt){
-        if(!err && rslt && (rslt.toString()=="1")){
-          _this.dbadmin_access = true;
-          console.log('OK');
-          return resolve();
-        }
-        if(err){ console.log('\r\nError checking for db admin access'); if(firstrun) return reject(); }
-        //Log in
-        if(!err) console.log('> User does not have db admin access');
-        console.log('\r\nPlease enter a database ADMIN user with create access:');
-        xlib.getString(function(rslt, retry){
-          if(!rslt){ console.log('Invalid entry.  Please enter a valid database user'); retry(); return false; }
-          _this.dbadmin_user = rslt;
-          console.log('\r\nPlease enter the database ADMIN password:');
-          xlib.getString(function(rslt, retry){
-            if(!rslt){ console.log('Invalid entry.  Please enter a valid database password'); retry(); return false; }
-            _this.dbadmin_password = rslt;
-            _this.db.Close(function(){
-              global.dbconfig.user = _this.dbadmin_user;
-              global.dbconfig.password = _this.dbadmin_password;
-              firstrun = false;
-              _this.db = new JSHdb();
-              return xfunc();
-            });
-          },'*');
-        });
-      });
-    };
-    xfunc();
-  }); })
-
   //Load Database Scripts
   .then(function(){ return new Promise(function(resolve, reject){
-    console.log('\r\nLoading database initialization scripts...');
+    console.log('Loading scripts...');
 
     var path_init_sql = path.join(path.dirname(module.filename),global.dbconfig._driver.name);
     var files = fs.readdirSync(path_init_sql);
@@ -131,18 +84,19 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
     for (var i = 0; i < files.length; i++) {
       var fname = files[i];
       if (fname.indexOf('.sql', fname.length - 4) == -1) continue;
+      if (fname.substr(0,scripttype.length+1) != (scripttype+'.')) continue;
       dbscripts[fname] = fs.readFileSync(path_init_sql + '/' + fname,'utf8');
       dbscript_names.push(fname);
     }
-    console.log('OK');
     resolve();
   }); })
 
   .then(function(){ return new Promise(function(resolve, reject){
-    console.log('\r\nRunning database initialization scripts...');
-    _this.sqlbase.SQL['INIT_DB_USER'] = _this.dbaccess_user;
-    _this.sqlbase.SQL['INIT_DB'] = global.dbconfig.database;
-    _this.sqlbase.SQL['INIT_DB_LCASE'] = global.dbconfig.database;
+    console.log('Running scripts...');
+    _this.sqlbase.SQL['INIT_DB'] = global._JSH_DBNAME;
+    _this.sqlbase.SQL['INIT_DB_LCASE'] = global._JSH_DBNAME.toLowerCase();
+    _this.sqlbase.SQL['INIT_DB_USER'] = global._JSH_DBUSER;
+    _this.sqlbase.SQL['INIT_DB_PASS'] = global._JSH_DBPASS;
 
     async.eachSeries(dbscript_names, function(dbscript_name, cb){
       var bsql = _this.db.sql.ParseBatchSQL(JSHdb.ParseSQL(dbscripts[dbscript_name],_this.sqlbase));
@@ -152,14 +106,13 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
         bi++;
         console.log(dbscript_name + ' ' + bi.toString());
         _this.db.Scalar('',sql,[],{},function(err,rslt){
-          if(err){ console.log('\r\n'+sql); console.log('\r\nERROR: Error initializing database: '+err.toString()); return cb(err); }
-          console.log('OK');
+          if(err){ console.log('\r\n'+sql); console.log('\r\nERROR: Error running database scripts: '+err.toString()); return cb(err); }
           return sql_cb();
         });
       }, cb);
     }, function(err){
-      if(err){ console.log('\r\nERROR: Initialization failed.'); return reject(); }
-      console.log('\r\nInitialization Complete');
+      if(err){ console.log('\r\nERROR: Database Operation failed.'); return reject(); }
+      console.log('Database Operation Complete');
       resolve();
     });
   }); })
@@ -174,6 +127,34 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
     _this.db.Close();
     process.exit(1);
   });
+}
+
+DatabaseScripter.getDBServer = function(){
+  var dbtype = global.dbconfig._driver.name;
+  if(dbtype=='pgsql') return global.dbconfig.host;
+  else if(dbtype=='mssql') return global.dbconfig.server;
+  else throw new Error('Database type not supported');
+}
+
+DatabaseScripter.setDBServer = function(val){
+  var dbtype = global.dbconfig._driver.name;
+  if(dbtype=='pgsql') global.dbconfig.host = val;
+  else if(dbtype=='mssql') global.dbconfig.server = val;
+  else throw new Error('Database type not supported');
+}
+
+DatabaseScripter.getDBName = function(){
+  return global.dbconfig.database;
+}
+
+DatabaseScripter.setDBName = function(val){
+  var dbtype = global.dbconfig._driver.name;
+  if(!val){
+    if(dbtype=='pgsql') global.dbconfig.database = 'postgres';
+    else if(dbtype=='mssql') global.dbconfig.database = 'master';
+    else throw new Error('Database type not supported');
+  }
+  else global.dbconfig.database = val;
 }
 
 exports = module.exports = DatabaseScripter;
