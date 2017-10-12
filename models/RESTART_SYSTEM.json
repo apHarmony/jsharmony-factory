@@ -3,7 +3,6 @@
     "comment":"RESTART_SYSTEM",
     "title":"Restart System",
     "table":"",
-    "dev":1,
     "access":"B", 
     "layout":"exec", 
     "topmenu":"Administration",

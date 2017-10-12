@@ -10,21 +10,22 @@
     "fields":[
       {"control":"html","value":"<script type='text/javascript' src='/js/ckeditor/ckeditor.js'></script>"},
       {"name":"txt_id","type":"bigint","key": 1},
-      {"name":"txt_process","type":"varchar","length":8,"access":"B",  
-          "control":"textbox_M",
-          "caption":"Process","captionstyle":"width:120px;text-align:right;"},
-      {"name":"txt_attrib","type":"varchar","length":8,"access":"B",  
-          "control":"textbox_M",
-          "caption":"Attribute","captionstyle":"width:102px;text-align:right;"},
+      {"name":"txt_process","type":"varchar","length":8,"access":"B","validate":["Required"],  
+       "control":"textbox_S",
+       "caption":"Process","captionstyle":"width:120px;text-align:right;"},
+      {"name":"txt_attrib","type":"varchar","length":8,"access":"B","validate":["Required"],  
+       "control":"textbox_S",
+       "caption":"Attribute","captionstyle":"width:98px;text-align:right;"},
+      {"name":"txt_type","type":"varchar","length":8,"access":"B","control":"dropdown_S",
+       "lov": { "sql": "select CODEVal, CODETxt from jsharmony.ucod_txt_type order by codseq,codetxt", 
+       "blank": 1 }, "validate": ["Required"], "default": "HTML",
+       "caption":"Body Type","captionstyle":"width:98px;text-align:right;"},
       {"name":"txt_desc","type":"varchar","length":255,"access":"B","nl":1,
           "control":"textarea","controlstyle":"width:590px;height:50px;",
           "caption":"Description","captionstyle":"width:120px;height:35px;vertical-align:top;padding-top:3px;text-align:right;"},
       {"name":"txt_tval","type":"varchar","length":255,"access":"BIU","nl":1,
           "control":"textarea","controlstyle":"width:590px;height:35px;",
           "caption":"Title / Subject","captionstyle":"width:120px;height:35px;vertical-align:top;padding-top:3px;text-align:right;"},
-      {"name":"txt_type","type":"varchar","length":8,"access":"B","nl": 1,
-          "control":"textbox_M",
-          "caption":"Body Type"},
       {"name":"txt_val","type":"varchar","length":99999,"access":"BIU","nl":1,
           "control":"textarea","controlstyle":"width:590px;height:235px;",
           "caption":"Body","captionstyle":"width:120px;height:235px;vertical-align:top;padding-top:3px;text-align:right;"},
@@ -40,6 +41,9 @@
       {"name":"txt_mu_fmt","type":"varchar","length":20,"access":"B",
           "sqlselect":"(jsharmony.mycuser_fmt(txt_mu))",
           "control":"textbox","controlstyle":"width:158px;","caption":"","eol":1}
+    ],
+    "dberrors": [
+      [ "txt_ucod_txt_type_fkey", "Incorrect Body Type" ]
     ]
   },
   "X_TXT": {
@@ -52,8 +56,7 @@
       {"name":"txt_process","access":"BIU"},
       {"name":"txt_attrib","access":"BIU"},
       {"name":"txt_desc","access":"BIU"},
-      {"name":"txt_type","access":"BIU"},
-      {"control":"html", "value":"HTML or TEXT", "__AFTER__":"txt_type"}
+      {"name":"txt_type","access":"BIU"}
     ]
   }	
 }
