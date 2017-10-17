@@ -183,7 +183,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
 
   //Create Database
   .then(function(){ return new Promise(function(resolve, reject){
-    if(!global._JSH_DBUSER) global._JSH_DBUSER = 'jsharmony_'+global._JSH_DBNAME+'_user';
+    if(!global._JSH_DBUSER) global._JSH_DBUSER = 'jsharmony_'+global._JSH_DBNAME.toLowerCase()+'_user';
     if(!global._JSH_DBPASS) global._JSH_DBPASS = xlib.getSalt(16);
     console.log('');
     console.log('===============================');
@@ -211,15 +211,19 @@ jsHarmonyFactory_Init.Run = function(run_cb){
       }
       else global._ORIG_DEFAULTS = false;
     }
-    resolve();
+    DatabaseScripter.setDBName(global._JSH_DBNAME);
+    db.Close(function(){
+      resolve();
+    });
   }); })
 
   //Initialize Database
   .then(function(){ return new Promise(function(resolve, reject){
     console.log('');
     console.log('=============================');
-    console.log('Running INIT Database Scripts');
+    console.log('Running INIT Database Scriptss');
     console.log('=============================');
+console.log(global.dbconfig);
     dbs.Run('init',resolve);
   }); })
 

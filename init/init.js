@@ -89,7 +89,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
           else{ process.stdout.write('Invalid entry.  Please enter a valid database user: '); retry(); }
       }))
 
-      //Ask for admin user
+      //Ask for admin password
       .then(xlib.getStringAsync(function(){
         if(global.dbconfig.password){
           console.log('Database password: ******   (from app.settings.js)');

@@ -1,23 +1,29 @@
-/****** Object:  DatabaseRole [jsharmony_role_dev]    Script Date: 7/11/2017 9:51:30 AM ******/
-CREATE ROLE [jsharmony_role_dev]
-GO
-/****** Object:  DatabaseRole [jsharmony_role_exec]    Script Date: 7/11/2017 9:51:30 AM ******/
+/****** Object:  DatabaseRole [jsharmony_role_exec]    Script Date: 10/13/2017 1:20:40 PM ******/
 CREATE ROLE [jsharmony_role_exec]
 GO
-ALTER ROLE [db_datareader] ADD MEMBER [jsharmony_role_dev]
-GO
-ALTER ROLE [db_datawriter] ADD MEMBER [jsharmony_role_dev]
+/****** Object:  DatabaseRole [jsharmony_role_dev]    Script Date: 10/13/2017 1:20:40 PM ******/
+CREATE ROLE [jsharmony_role_dev]
 GO
 ALTER ROLE [db_datareader] ADD MEMBER [jsharmony_role_exec]
 GO
 ALTER ROLE [db_datawriter] ADD MEMBER [jsharmony_role_exec]
 GO
-/****** Object:  Schema [jsharmony]    Script Date: 7/11/2017 9:51:31 AM ******/
+ALTER ROLE [db_datareader] ADD MEMBER [jsharmony_role_dev]
+GO
+ALTER ROLE [db_datawriter] ADD MEMBER [jsharmony_role_dev]
+GO
+GRANT CREATE TABLE TO [jsharmony_role_dev] AS [dbo]
+GO
+GRANT VIEW ANY COLUMN ENCRYPTION KEY DEFINITION TO [public] AS [dbo]
+GO
+GRANT VIEW ANY COLUMN MASTER KEY DEFINITION TO [public] AS [dbo]
+GO
+/****** Object:  Schema [jsharmony]    Script Date: 10/13/2017 1:20:40 PM ******/
 CREATE SCHEMA [jsharmony]
 GO
 GRANT ALTER ON SCHEMA::[jsharmony] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[audit_info]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[audit_info]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -43,11 +49,10 @@ BEGIN
 END
 
 
-
 GO
 GRANT EXECUTE ON [jsharmony].[audit_info] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[CHECK_PP]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[CHECK_PP]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -131,9 +136,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[EXISTS_D]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[EXISTS_D]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -175,9 +179,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[EXISTS_N]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[EXISTS_N]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -217,9 +220,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[GET_CPE_NAME]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[GET_CPE_NAME]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -245,11 +247,10 @@ DECLARE @rslt NVARCHAR(MAX) = NULL
 END
 
 
-
 GO
 GRANT EXECUTE ON [jsharmony].[GET_CPE_NAME] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[GET_PE_NAME]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[GET_PE_NAME]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -273,11 +274,10 @@ DECLARE @rslt NVARCHAR(MAX) = NULL
 
 END
 
-
 GO
 GRANT EXECUTE ON [jsharmony].[GET_PE_NAME] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[GET_PPD_DESC]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[GET_PPD_DESC]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -307,9 +307,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myCUSER]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -333,13 +332,12 @@ END
 
 
 
-
 GO
 GRANT REFERENCES ON [jsharmony].[myCUSER] TO [jsharmony_role_dev] AS [dbo]
 GO
 GRANT EXECUTE ON [jsharmony].[myCUSER] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_DO]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_DO]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -376,9 +374,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_FMT]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_FMT]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -404,13 +401,12 @@ END
 
 
 
-
 GO
 GRANT REFERENCES ON [jsharmony].[myCUSER_FMT] TO [jsharmony_role_dev] AS [dbo]
 GO
 GRANT EXECUTE ON [jsharmony].[myCUSER_FMT] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_FMT_DO]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_FMT_DO]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -455,9 +451,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myHASH]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myHASH]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -512,9 +507,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myMMDDYYHHMI]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myMMDDYYHHMI]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -530,9 +524,8 @@ BEGIN
   RETURN convert(varchar(50),@X,1)+' '+substring(convert(varchar(50),@X,14),1,5)
 END
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myNOW]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myNOW]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -557,13 +550,12 @@ END
 
 
 
-
 GO
 GRANT REFERENCES ON [jsharmony].[myNOW] TO [jsharmony_role_dev] AS [dbo]
 GO
 GRANT EXECUTE ON [jsharmony].[myNOW] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myNOW_DO]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myNOW_DO]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -588,9 +580,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myPE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myPE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -616,9 +607,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myPE_DO]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myPE_DO]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -643,9 +633,8 @@ DECLARE @pe_id BIGINT=-1;
   return (@rslt);
 END
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myTODATE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myTODATE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -666,9 +655,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myTODAY]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myTODAY]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -686,11 +674,10 @@ END
 
 
 
-
 GO
 GRANT EXECUTE ON [jsharmony].[myTODAY] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myTODAY_DO]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myTODAY_DO]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -711,9 +698,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALC]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALC]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -749,9 +735,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALD]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -798,9 +783,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALN]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALN]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -836,9 +820,8 @@ END
 
 
 
-
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[TABLE_TYPE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[TABLE_TYPE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -868,11 +851,10 @@ END
 
 
 
-
 GO
 GRANT EXECUTE ON [jsharmony].[TABLE_TYPE] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  Table [jsharmony].[PPD]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[PPD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -898,9 +880,8 @@ CREATE TABLE [jsharmony].[PPD](
   [PPD_ATTRIB] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  View [jsharmony].[UCOD_PPP_PROCESS_V]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[UCOD_PPP_PROCESS_V]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -919,9 +900,8 @@ SELECT distinct
   FROM jsharmony.PPD
  where PPD_PPP = 1
 
-
 GO
-/****** Object:  Table [jsharmony].[AUD_H]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[AUD_H]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -944,9 +924,8 @@ CREATE TABLE [jsharmony].[AUD_H](
   [AUD_SEQ] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[AUD_D]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[AUD_D]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -961,9 +940,8 @@ CREATE TABLE [jsharmony].[AUD_D](
   [COLUMN_NAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  View [jsharmony].[V_AUDL_RAW]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_AUDL_RAW]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1005,9 +983,8 @@ LEFT OUTER JOIN jsharmony.AUD_D ON AUD_H.AUD_SEQ = AUD_D.AUD_SEQ
 
 
 
-
 GO
-/****** Object:  View [jsharmony].[UCOD_XPP_PROCESS_V]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[UCOD_XPP_PROCESS_V]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1026,9 +1003,8 @@ SELECT distinct
   FROM jsharmony.PPD
  where PPD_XPP = 1
 
-
 GO
-/****** Object:  View [jsharmony].[UCOD2_GPP_PROCESS_ATTRIB_V]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[UCOD2_GPP_PROCESS_ATTRIB_V]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1051,9 +1027,8 @@ SELECT NULL CODSEQ
       ,NULL COD_Notes
   FROM jsharmony.PPD
  WHERE PPD_GPP = 1
-
 GO
-/****** Object:  View [jsharmony].[UCOD2_PPP_PROCESS_ATTRIB_V]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[UCOD2_PPP_PROCESS_ATTRIB_V]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1078,9 +1053,8 @@ SELECT NULL CODSEQ
   FROM jsharmony.PPD
  WHERE PPD_PPP = 1
 
-
 GO
-/****** Object:  View [jsharmony].[UCOD2_XPP_PROCESS_ATTRIB_V]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[UCOD2_XPP_PROCESS_ATTRIB_V]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1105,9 +1079,8 @@ SELECT NULL CODSEQ
   FROM jsharmony.PPD
  WHERE PPD_XPP = 1
 
-
 GO
-/****** Object:  Table [jsharmony].[SPER]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[SPER]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1127,9 +1100,8 @@ CREATE TABLE [jsharmony].[SPER](
   [SPER_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  View [jsharmony].[V_MY_ROLES]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_MY_ROLES]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1143,9 +1115,8 @@ select SPER.SR_NAME
  where SPER.PE_ID = jsharmony.myPE()
 
 
-
 GO
-/****** Object:  Table [jsharmony].[NUMBERS]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[NUMBERS]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1157,9 +1128,8 @@ CREATE TABLE [jsharmony].[NUMBERS](
   [N] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  View [jsharmony].[V_MONTHS]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_MONTHS]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1182,9 +1152,8 @@ select N,
 
 
 
-
 GO
-/****** Object:  View [jsharmony].[V_YEARS]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_YEARS]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1202,9 +1171,8 @@ select datepart(year,sysdatetime())+N-1 year,
 
 
 
-
 GO
-/****** Object:  Table [jsharmony].[PPP]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[PPP]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1226,9 +1194,8 @@ CREATE TABLE [jsharmony].[PPP](
   [PPP_ATTRIB] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[GPP]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[GPP]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1248,9 +1215,8 @@ CREATE TABLE [jsharmony].[GPP](
   [GPP_ATTRIB] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[XPP]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[XPP]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1270,9 +1236,8 @@ CREATE TABLE [jsharmony].[XPP](
   [XPP_ATTRIB] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  View [jsharmony].[V_PP]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_PP]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1302,9 +1267,8 @@ CREATE VIEW [jsharmony].[V_PP] AS
 
 
 
-
 GO
-/****** Object:  Table [jsharmony].[CRM]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[CRM]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1324,9 +1288,8 @@ CREATE TABLE [jsharmony].[CRM](
   [CRM_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[CR]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[CR]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1353,9 +1316,8 @@ CREATE TABLE [jsharmony].[CR](
   [CR_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[SM]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[SM]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1393,9 +1355,8 @@ CREATE TABLE [jsharmony].[SM](
   [SM_Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[DUAL]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[DUAL]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1410,9 +1371,8 @@ CREATE TABLE [jsharmony].[DUAL](
   [DUAL_IDENT] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  View [jsharmony].[V_CRMSEL]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_CRMSEL]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1466,9 +1426,8 @@ SELECT jsharmony.CRM.CRM_ID,
 
 
 
-
 GO
-/****** Object:  Table [jsharmony].[CPER]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[CPER]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1488,9 +1447,8 @@ CREATE TABLE [jsharmony].[CPER](
   [CPER_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  View [jsharmony].[V_CPER_NOSTAR]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_CPER_NOSTAR]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1502,9 +1460,8 @@ select *
   from jsharmony.CPER
  where CR_NAME <> 'C*';
 
-
 GO
-/****** Object:  Table [jsharmony].[SR]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[SR]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1531,9 +1488,8 @@ CREATE TABLE [jsharmony].[SR](
   [SR_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[SRM]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[SRM]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1553,9 +1509,8 @@ CREATE TABLE [jsharmony].[SRM](
   [SRM_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  View [jsharmony].[V_SRMSEL]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_SRMSEL]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1605,9 +1560,8 @@ SELECT jsharmony.SRM.SRM_ID,
   LEFT OUTER JOIN jsharmony.SRM ON jsharmony.SRM.SR_NAME = M.SR_Name AND jsharmony.SRM.SM_ID = M.SM_ID;
 
 
-
 GO
-/****** Object:  View [jsharmony].[V_GPPL]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_GPPL]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1676,9 +1630,8 @@ SELECT jsharmony.GPP.*,
 
 
 
-
 GO
-/****** Object:  View [jsharmony].[V_PPPL]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_PPPL]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1739,9 +1692,8 @@ SELECT PPP.*,
 
 
 
-
 GO
-/****** Object:  View [jsharmony].[V_XPPL]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_XPPL]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1810,9 +1762,8 @@ SELECT XPP.*,
 
 
 
-
 GO
-/****** Object:  View [jsharmony].[V_PPDL]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_PPDL]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1880,9 +1831,8 @@ SELECT PPD.*,
 
 
 
-
 GO
-/****** Object:  View [jsharmony].[UCOD_GPP_PROCESS_V]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[UCOD_GPP_PROCESS_V]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1899,9 +1849,8 @@ SELECT distinct
       ,NULL CODETCM
   FROM jsharmony.PPD
  where PPD_GPP = 1
-
 GO
-/****** Object:  View [jsharmony].[V_MYPE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  View [jsharmony].[V_MYPE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1909,9 +1858,8 @@ GO
 
 create view [jsharmony].[V_MYPE] as
 select jsharmony.myPE() MYPE
-
 GO
-/****** Object:  Table [jsharmony].[CPE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[CPE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1951,9 +1899,8 @@ CREATE TABLE [jsharmony].[CPE](
   [PE_UNQ_PE_Email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[D]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[D]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1984,9 +1931,8 @@ CREATE TABLE [jsharmony].[D](
   [D_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[GCOD_H]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[GCOD_H]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2007,9 +1953,8 @@ CREATE TABLE [jsharmony].[GCOD_H](
   [CODENAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[GCOD2_D_SCOPE_D_CTGR]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[GCOD2_D_SCOPE_D_CTGR]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2042,9 +1987,8 @@ CREATE TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR](
   [CODEVAL2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[GCOD2_H]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[GCOD2_H]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2065,9 +2009,8 @@ CREATE TABLE [jsharmony].[GCOD2_H](
   [CODENAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[H]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[H]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2100,9 +2043,8 @@ CREATE TABLE [jsharmony].[H](
   [H_UNIQUE] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[HP]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[HP]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2124,9 +2066,8 @@ CREATE TABLE [jsharmony].[HP](
   [HP_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[N]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[N]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2152,9 +2093,8 @@ CREATE TABLE [jsharmony].[N](
   [N_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[PE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[PE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2202,9 +2142,8 @@ CREATE TABLE [jsharmony].[PE](
   [PE_UNQ_PE_Email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[RQ]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[RQ]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2224,9 +2163,8 @@ CREATE TABLE [jsharmony].[RQ](
   [RQ_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[RQST]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[RQST]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2249,9 +2187,8 @@ CREATE TABLE [jsharmony].[RQST](
   [RQST_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[RQST_D]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[RQST_D]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2268,9 +2205,8 @@ CREATE TABLE [jsharmony].[RQST_D](
   [RQST_D_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[RQST_EMAIL]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[RQST_EMAIL]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2292,9 +2228,8 @@ CREATE TABLE [jsharmony].[RQST_EMAIL](
   [RQST_EMAIL_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[RQST_N]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[RQST_N]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2311,9 +2246,8 @@ CREATE TABLE [jsharmony].[RQST_N](
   [RQST_N_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[RQST_RQ]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[RQST_RQ]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2328,9 +2262,8 @@ CREATE TABLE [jsharmony].[RQST_RQ](
   [RQST_RQ_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[RQST_SMS]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[RQST_SMS]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2346,9 +2279,8 @@ CREATE TABLE [jsharmony].[RQST_SMS](
   [RQST_SMS_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[SCRIPT]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[SCRIPT]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2361,9 +2293,8 @@ CREATE TABLE [jsharmony].[SCRIPT](
   [SCRIPT_NAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[SF]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[SF]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2395,9 +2326,8 @@ CREATE TABLE [jsharmony].[SF](
   [SF_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[SPEF]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[SPEF]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2417,9 +2347,8 @@ CREATE TABLE [jsharmony].[SPEF](
   [SPEF_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[TXT]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[TXT]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2447,9 +2376,8 @@ CREATE TABLE [jsharmony].[TXT](
   [TXT_ATTRIB] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_AC]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_AC]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2478,9 +2406,8 @@ CREATE TABLE [jsharmony].[UCOD_AC](
   [UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_AC1]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_AC1]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2509,9 +2436,8 @@ CREATE TABLE [jsharmony].[UCOD_AC1](
   [UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_AHC]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_AHC]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2540,9 +2466,8 @@ CREATE TABLE [jsharmony].[UCOD_AHC](
   [UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_COUNTRY]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_COUNTRY]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2571,9 +2496,8 @@ CREATE TABLE [jsharmony].[UCOD_COUNTRY](
   [UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_D_SCOPE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_D_SCOPE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2602,9 +2526,8 @@ CREATE TABLE [jsharmony].[UCOD_D_SCOPE](
   [UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_H]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_H]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2632,9 +2555,8 @@ CREATE TABLE [jsharmony].[UCOD_H](
   [CODENAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_N_SCOPE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_N_SCOPE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2663,9 +2585,8 @@ CREATE TABLE [jsharmony].[UCOD_N_SCOPE](
   [UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_N_TYPE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_N_TYPE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2694,9 +2615,8 @@ CREATE TABLE [jsharmony].[UCOD_N_TYPE](
   [UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_PPD_TYPE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_PPD_TYPE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2725,9 +2645,8 @@ CREATE TABLE [jsharmony].[UCOD_PPD_TYPE](
   [UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_RQST_ATYPE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_RQST_ATYPE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2756,9 +2675,8 @@ CREATE TABLE [jsharmony].[UCOD_RQST_ATYPE](
   [UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_RQST_SOURCE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_RQST_SOURCE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2787,9 +2705,8 @@ CREATE TABLE [jsharmony].[UCOD_RQST_SOURCE](
   [UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_TXT_TYPE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_TXT_TYPE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2818,9 +2735,8 @@ CREATE TABLE [jsharmony].[UCOD_TXT_TYPE](
   [UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD_V_STS]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_V_STS]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2853,9 +2769,8 @@ CREATE TABLE [jsharmony].[UCOD_V_STS](
   [CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD2_COUNTRY_STATE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD2_COUNTRY_STATE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2886,9 +2801,8 @@ CREATE TABLE [jsharmony].[UCOD2_COUNTRY_STATE](
   [CODEVAL2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[UCOD2_H]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[UCOD2_H]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2915,9 +2829,8 @@ CREATE TABLE [jsharmony].[UCOD2_H](
   [CODENAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [jsharmony].[V]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Table [jsharmony].[V]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2944,18 +2857,16 @@ CREATE TABLE [jsharmony].[V](
   [V_NO_REV] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 GO
-/****** Object:  Index [IX_D_C_ID]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Index [IX_D_C_ID]    Script Date: 10/13/2017 1:20:40 PM ******/
 CREATE NONCLUSTERED INDEX [IX_D_C_ID] ON [jsharmony].[D]
 (
   [C_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
-
 GO
-/****** Object:  Index [IX_D_SCOPE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Index [IX_D_SCOPE]    Script Date: 10/13/2017 1:20:40 PM ******/
 CREATE NONCLUSTERED INDEX [IX_D_SCOPE] ON [jsharmony].[D]
 (
   [D_SCOPE] ASC,
@@ -2963,18 +2874,16 @@ CREATE NONCLUSTERED INDEX [IX_D_SCOPE] ON [jsharmony].[D]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
-
 GO
-/****** Object:  Index [IX_H]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Index [IX_H]    Script Date: 10/13/2017 1:20:40 PM ******/
 CREATE NONCLUSTERED INDEX [IX_H] ON [jsharmony].[H]
 (
   [HP_CODE] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
-
 GO
-/****** Object:  Index [IX_RQ_RQ_NAME]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Index [IX_RQ_RQ_NAME]    Script Date: 10/13/2017 1:20:40 PM ******/
 CREATE NONCLUSTERED INDEX [IX_RQ_RQ_NAME] ON [jsharmony].[RQ]
 (
   [RQ_NAME] ASC
@@ -3514,7 +3423,7 @@ ALTER TABLE [jsharmony].[SM]  WITH CHECK ADD  CONSTRAINT [CK_SM_SM_UTYPE] CHECK 
 GO
 ALTER TABLE [jsharmony].[SM] CHECK CONSTRAINT [CK_SM_SM_UTYPE]
 GO
-/****** Object:  StoredProcedure [jsharmony].[AUDH]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[AUDH]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3674,9 +3583,8 @@ END
 
 
 
-
 GO
-/****** Object:  StoredProcedure [jsharmony].[AUDH_BASE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[AUDH_BASE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3767,9 +3675,8 @@ END
 
 
 
-
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3805,9 +3712,8 @@ END
 
 
 
-
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE_P]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE_P]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3849,9 +3755,8 @@ END
 
 
 
-
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE2]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE2]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3887,9 +3792,8 @@ END
 
 
 
-
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE2_P]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE2_P]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3930,9 +3834,8 @@ END
 
 
 
-
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_FOREIGN]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_FOREIGN]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3964,9 +3867,8 @@ RETURN( @return_value)
 END
 
 
-
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_FOREIGN_P]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_FOREIGN_P]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4004,9 +3906,8 @@ END
 
 
 
-
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_gcod]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[create_gcod]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4053,11 +3954,10 @@ END
 
 
 
-
 GO
 GRANT EXECUTE ON [jsharmony].[create_gcod] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_gcod2]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[create_gcod2]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4104,11 +4004,10 @@ END
 
 
 
-
 GO
 GRANT EXECUTE ON [jsharmony].[create_gcod2] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_ucod]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[create_ucod]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4144,11 +4043,10 @@ END
 
 
 
-
 GO
 GRANT EXECUTE ON [jsharmony].[create_ucod] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_ucod2]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[create_ucod2]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4184,11 +4082,10 @@ END
 
 
 
-
 GO
 GRANT EXECUTE ON [jsharmony].[create_ucod2] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[ZZ-FILEDEBUG]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[ZZ-FILEDEBUG]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4260,9 +4157,8 @@ END
 
 
 
-
 GO
-/****** Object:  Trigger [jsharmony].[CPE_IUD]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Trigger [jsharmony].[CPE_IUD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4654,11 +4550,10 @@ BEGIN
   RETURN
 
 END
-
 GO
 ALTER TABLE [jsharmony].[CPE] ENABLE TRIGGER [CPE_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[CPER_IUD]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Trigger [jsharmony].[CPER_IUD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4853,11 +4748,10 @@ BEGIN
   RETURN
 
 END
-
 GO
 ALTER TABLE [jsharmony].[CPER] ENABLE TRIGGER [CPER_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[D_IUD]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Trigger [jsharmony].[D_IUD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5358,11 +5252,10 @@ BEGIN
 
 END
 
-
 GO
 ALTER TABLE [jsharmony].[D] ENABLE TRIGGER [D_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[GCOD2_D_SCOPE_D_CTGR_IUD]    Script Date: 7/11/2017 9:51:31 AM ******/
+/****** Object:  Trigger [jsharmony].[GCOD2_D_SCOPE_D_CTGR_IUD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5621,11 +5514,10 @@ BEGIN
   RETURN
 
 END
-
 GO
 ALTER TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR] ENABLE TRIGGER [GCOD2_D_SCOPE_D_CTGR_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[GPP_IUD]    Script Date: 7/11/2017 9:51:32 AM ******/
+/****** Object:  Trigger [jsharmony].[GPP_IUD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5783,11 +5675,10 @@ BEGIN
 
 END
 
-
 GO
 ALTER TABLE [jsharmony].[GPP] ENABLE TRIGGER [GPP_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[H_IUD]    Script Date: 7/11/2017 9:51:32 AM ******/
+/****** Object:  Trigger [jsharmony].[H_IUD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6015,7 +5906,7 @@ END
 GO
 ALTER TABLE [jsharmony].[H] ENABLE TRIGGER [H_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[N_IUD]    Script Date: 7/11/2017 9:51:32 AM ******/
+/****** Object:  Trigger [jsharmony].[N_IUD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6448,11 +6339,10 @@ BEGIN
 
 END
 
-
 GO
 ALTER TABLE [jsharmony].[N] ENABLE TRIGGER [N_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[PE_IUD]    Script Date: 7/11/2017 9:51:32 AM ******/
+/****** Object:  Trigger [jsharmony].[PE_IUD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6819,11 +6709,10 @@ BEGIN
   RETURN
 
 END
-
 GO
 ALTER TABLE [jsharmony].[PE] ENABLE TRIGGER [PE_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[PPD_IUD]    Script Date: 7/11/2017 9:51:32 AM ******/
+/****** Object:  Trigger [jsharmony].[PPD_IUD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6887,11 +6776,10 @@ END
 
 
 
-
 GO
 ALTER TABLE [jsharmony].[PPD] ENABLE TRIGGER [PPD_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[PPP_IUD]    Script Date: 7/11/2017 9:51:32 AM ******/
+/****** Object:  Trigger [jsharmony].[PPP_IUD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7052,11 +6940,10 @@ BEGIN
 
 END
 
-
 GO
 ALTER TABLE [jsharmony].[PPP] ENABLE TRIGGER [PPP_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[SPEF_IUD]    Script Date: 7/11/2017 9:51:32 AM ******/
+/****** Object:  Trigger [jsharmony].[SPEF_IUD]    Script Date: 10/13/2017 1:20:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7212,11 +7099,10 @@ BEGIN
   RETURN
 
 END
-
 GO
 ALTER TABLE [jsharmony].[SPEF] ENABLE TRIGGER [SPEF_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[SPER_IUD]    Script Date: 7/11/2017 9:51:32 AM ******/
+/****** Object:  Trigger [jsharmony].[SPER_IUD]    Script Date: 10/13/2017 1:20:41 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7407,11 +7293,10 @@ BEGIN
   RETURN
 
 END
-
 GO
 ALTER TABLE [jsharmony].[SPER] ENABLE TRIGGER [SPER_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[TXT_IUD]    Script Date: 7/11/2017 9:51:32 AM ******/
+/****** Object:  Trigger [jsharmony].[TXT_IUD]    Script Date: 10/13/2017 1:20:41 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7649,11 +7534,10 @@ BEGIN
 
 END
 
-
 GO
 ALTER TABLE [jsharmony].[TXT] ENABLE TRIGGER [TXT_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[XPP_IUD]    Script Date: 7/11/2017 9:51:32 AM ******/
+/****** Object:  Trigger [jsharmony].[XPP_IUD]    Script Date: 10/13/2017 1:20:41 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7810,11 +7694,10 @@ BEGIN
 
 END
 
-
 GO
 ALTER TABLE [jsharmony].[XPP] ENABLE TRIGGER [XPP_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[V_CRMSEL_IUD_INSTEADOF_UPDATE]    Script Date: 7/11/2017 9:51:32 AM ******/
+/****** Object:  Trigger [jsharmony].[V_CRMSEL_IUD_INSTEADOF_UPDATE]    Script Date: 10/13/2017 1:20:41 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7854,9 +7737,8 @@ end
 
 
 
-
 GO
-/****** Object:  Trigger [jsharmony].[V_SRMSEL_IUD_INSTEADOF_UPDATE]    Script Date: 7/11/2017 9:51:33 AM ******/
+/****** Object:  Trigger [jsharmony].[V_SRMSEL_IUD_INSTEADOF_UPDATE]    Script Date: 10/13/2017 1:20:41 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7892,7 +7774,6 @@ begin
    
   END
 end
-
 
 
 GO
@@ -9062,6 +8943,8 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_RQ', @level2type=N'COLUMN',@level2name=N'RQST_ID'
 GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - RQ (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_RQ'
+GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_SMS', @level2type=N'COLUMN',@level2name=N'RQST_SMS_ID'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_SMS', @level2type=N'COLUMN',@level2name=N'RQST_ID'
@@ -9071,6 +8954,8 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS TO' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_SMS', @level2type=N'COLUMN',@level2name=N'SMS_TO'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - SMS (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_SMS'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Scripts (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SCRIPT'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_ID'
 GO
@@ -9632,7 +9517,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Las
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - TOrder Payment Method' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Active / Closed' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
@@ -9684,7 +9569,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Las
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - TOrder Payment Method' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Active / Hold / Closed' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
@@ -9944,7 +9829,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Las
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - TOrder Payment Method' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Process Parameter Type' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
@@ -9996,7 +9881,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Las
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Source (COLTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Source (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
@@ -10022,7 +9907,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Las
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - text Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Text Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
@@ -10234,7 +10119,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version last m
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Versions' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Versions (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
 GO
@@ -10501,3 +10386,4 @@ End
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPaneCount', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'VIEW',@level1name=N'V_SRMSEL'
 GO
+

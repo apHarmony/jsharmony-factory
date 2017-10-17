@@ -5,8 +5,12 @@ GRANT ALTER ON SCHEMA::[dbo] TO [jsharmony_role_dev] AS [dbo];
 GRANT ALTER ON SCHEMA::[jsharmony] TO [jsharmony_role_dev] AS [dbo];
 GO
 
-EXEC sp_addrolemember N'jsharmony_role_dev', N'%%%INIT_DB_USER%%%';
+if not exists(select principal_id from sys.database_principals where name = '%%%INIT_DB_USER%%%')
+begin
+  create user %%%INIT_DB_USER%%% for login %%%INIT_DB_USER%%%;
+end
 GO
 
-EXEC sp_addrolemember N'jsharmony_role_exec', N'%%%INIT_DB_USER%%%';
+alter role jsharmony_role_dev add member %%%INIT_DB_USER%%%;
+alter role jsharmony_role_exec add member %%%INIT_DB_USER%%%;
 GO

@@ -1,0 +1,1 @@
+create database %%%INIT_DB%%%;

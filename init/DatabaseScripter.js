@@ -97,6 +97,10 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
     _this.sqlbase.SQL['INIT_DB_LCASE'] = global._JSH_DBNAME.toLowerCase();
     _this.sqlbase.SQL['INIT_DB_USER'] = global._JSH_DBUSER;
     _this.sqlbase.SQL['INIT_DB_PASS'] = global._JSH_DBPASS;
+    _this.sqlbase.SQL['INIT_DB_HASH_ADMIN'] = global.adminsalt;
+    _this.sqlbase.SQL['INIT_DB_HASH_CLIENT'] = global.clientsalt;
+    _this.sqlbase.SQL['INIT_DB_ADMIN_EMAIL'] = global._JSH_ADMIN_EMAIL||'admin@jsharmony.com';
+    _this.sqlbase.SQL['INIT_DB_ADMIN_PASS'] = global._JSH_ADMIN_PASS||'ChangeMe';
 
     async.eachSeries(dbscript_names, function(dbscript_name, cb){
       var bsql = _this.db.sql.ParseBatchSQL(JSHdb.ParseSQL(dbscripts[dbscript_name],_this.sqlbase));
@@ -155,6 +159,7 @@ DatabaseScripter.setDBName = function(val){
     else throw new Error('Database type not supported');
   }
   else global.dbconfig.database = val;
+  if((dbtype=='mssql') && (global.dbconfig.options)) global.dbconfig.options.database = global.dbconfig.database;
 }
 
 exports = module.exports = DatabaseScripter;
