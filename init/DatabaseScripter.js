@@ -93,14 +93,21 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
 
   .then(function(){ return new Promise(function(resolve, reject){
     console.log('Running scripts...');
+    var default_pass = 'ChangeMe';
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@$*_-?";
+    for(var i=0;i<6;i++) default_pass += chars.charAt(Math.floor(Math.random()*chars.length));
+
+    if(!global._JSH_ADMIN_EMAIL) global._JSH_ADMIN_EMAIL = 'admin@jsharmony.com';
+    if(!global._JSH_ADMIN_PASS) global._JSH_ADMIN_PASS = default_pass;
+
     _this.sqlbase.SQL['INIT_DB'] = global._JSH_DBNAME;
     _this.sqlbase.SQL['INIT_DB_LCASE'] = global._JSH_DBNAME.toLowerCase();
     _this.sqlbase.SQL['INIT_DB_USER'] = global._JSH_DBUSER;
     _this.sqlbase.SQL['INIT_DB_PASS'] = global._JSH_DBPASS;
     _this.sqlbase.SQL['INIT_DB_HASH_ADMIN'] = global.adminsalt;
     _this.sqlbase.SQL['INIT_DB_HASH_CLIENT'] = global.clientsalt;
-    _this.sqlbase.SQL['INIT_DB_ADMIN_EMAIL'] = global._JSH_ADMIN_EMAIL||'admin@jsharmony.com';
-    _this.sqlbase.SQL['INIT_DB_ADMIN_PASS'] = global._JSH_ADMIN_PASS||'ChangeMe';
+    _this.sqlbase.SQL['INIT_DB_ADMIN_EMAIL'] = global._JSH_ADMIN_EMAIL;
+    _this.sqlbase.SQL['INIT_DB_ADMIN_PASS'] = global._JSH_ADMIN_PASS;
 
     async.eachSeries(dbscript_names, function(dbscript_name, cb){
       var bsql = _this.db.sql.ParseBatchSQL(JSHdb.ParseSQL(dbscripts[dbscript_name],_this.sqlbase));

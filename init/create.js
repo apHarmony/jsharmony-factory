@@ -33,6 +33,7 @@ var DEFAULT_DB_NAME = '___DB_NAME___';
 var DEFAULT_DB_USER = '___DB_USER___';
 var DEFAULT_DB_PASS = '___DB_PASS___';
 global._IS_WINDOWS = /^win/.test(process.platform);
+global._NSTART_CMD = global._IS_WINDOWS ? 'nstart.cmd' : 'nstart.sh';
 
 var jsHarmonyFactory_Init = {};
 global.cliReturnCode = 1;
@@ -76,6 +77,8 @@ jsHarmonyFactory_Init.Run = function(run_cb){
 
   global._ADMIN_DBUSER = '';
   global._ADMIN_DBPASS = '';
+  global._JSH_ADMIN_EMAIL = '';
+  global._JSH_ADMIN_PASS = '';
 
   if(!global.dbconfig){
     console.log('ERROR: No global.dbconfig defined in app.settings.js');
@@ -223,7 +226,6 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     console.log('=============================');
     console.log('Running INIT Database Scriptss');
     console.log('=============================');
-console.log(global.dbconfig);
     dbs.Run('init',resolve);
   }); })
 
@@ -256,6 +258,12 @@ console.log(global.dbconfig);
       console.log('** Be sure to configure ports and HTTPS for security');
       console.log('');
     }
+    console.log('Then start the server by running '+(global._IS_WINDOWS?'':'./')+global._NSTART_CMD);
+    console.log('');
+    console.log('Log in with the admin account below:');
+    console.log('User: '+global._JSH_ADMIN_EMAIL);
+    console.log('Password: '+global._JSH_ADMIN_PASS);
+    console.log('');
     resolve();
   }); })
 

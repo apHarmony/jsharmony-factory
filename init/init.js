@@ -29,6 +29,7 @@ var wc = new wclib.WebConnect();
 var xlib = wclib.xlib;
 var fs = require('fs');
 global._IS_WINDOWS = /^win/.test(process.platform);
+global._NSTART_CMD = global._IS_WINDOWS ? 'nstart.cmd' : 'nstart.sh';
 
 
 var jsHarmonyFactory_Init = {};
@@ -150,6 +151,12 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     console.log('');
     console.log('** Please verify the configuration in '+global.appbasepath+(global._IS_WINDOWS?'\\':'/')+'app.settings.js');
     console.log('** Be sure to configure ports and HTTPS for security');
+    console.log('');
+    console.log('Then start the server by running '+(global._IS_WINDOWS?'':'./')+global._NSTART_CMD);
+    console.log('');
+    console.log('Log in with the admin account below:');
+    console.log('User: '+global._JSH_ADMIN_EMAIL);
+    console.log('Password: '+global._JSH_ADMIN_PASS);
     console.log('');
     global.cliReturnCode = 0; //Success
     if(run_cb) run_cb();
