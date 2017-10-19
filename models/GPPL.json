@@ -1,6 +1,6 @@
 {
   "GPPL": {
-    "title":"Parameters",
+    "title":"System Settings",
     "table":"jsharmony.v_gppl",
     "access":"BU", 
     "caption":[0,"Parameter","Parameters"],
@@ -34,7 +34,7 @@
   "X_GPPL": {
     "inherits":"GPPL",
     "dev":1,
-    "title":"System (G) Parameters",
+    "title":"System (G) Settings",
     "access":"BIUD", 
     "topmenu":"dev",
     "fields":[

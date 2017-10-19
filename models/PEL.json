@@ -2,7 +2,7 @@
   "layout":"grid", 
     "table":"jsharmony.pe",
     "caption":[0,"User","Users"],
-    "title":"Users",
+    "title":"System Users",
     "access":"BI", 
     "sort":["^pe_name1"],
     "topmenu":"administration",

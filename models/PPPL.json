@@ -1,6 +1,6 @@
 {
   "PPPL": {
-    "title":"User Parameters",
+    "title":"User Settings",
 	"table":"jsharmony.v_pppl",
 	"sqlwhere":"(pe_id=(select mype from jsharmony.v_mype))",
 	"access":"BIUD", 

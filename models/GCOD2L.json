@@ -47,5 +47,11 @@
       ["UNQ_GCOD_","CODE Description has to be unique"],
       ["d_d_scope_d_ctgr","Scope - Document combination is used - cannot be removed."]
     ]
-  }    
+  },
+  "X_GCOD2L": {
+    "inherits":"GCOD2L",
+    "dev":1,
+    "topmenu":"dev",
+    "breadcrumbs": { "parents": ["X_GCOD2_HL"] }
+  }
 }

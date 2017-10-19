@@ -1,10 +1,10 @@
 {
   "X_HPL": {
-    "title":"Help Headers",
+    "title":"Help Panels",
     "dev":1,
     "table":"jsharmony.hp",
     "access":"BIUD", 
-    "caption":[0,"Help Header","Help Headers"],
+    "caption":[0,"Help Panel","Help Panels"],
     "layout":"grid", 
     "sort":[{"hp_desc":"asc"}], 
     "topmenu":"dev",
@@ -23,9 +23,9 @@
        "control":"textbox_L", "caption":"Name"}
     ],
     "dberrors": [
-      [ "hp_hp_code_key", "Duplicate Help Header Code" ],
-      [ "hp_hp_desc_key", "Duplicate Help Header Name" ],
-      [ "h_hp_code_fkey", "Cannot delete. This Help Heder already referred by Help Module" ]
+      [ "hp_hp_code_key", "Duplicate Help Panel Code" ],
+      [ "hp_hp_desc_key", "Duplicate Help Panel Name" ],
+      [ "h_hp_code_fkey", "Cannot delete. This Help Panel already referred by Help Module" ]
     ]
   }    
 }

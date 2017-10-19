@@ -1,0 +1,15 @@
+{
+  "comment":"ADMIN",
+  "layout":"form", 
+  "table":"",
+  "caption":[0,"Administration","Administration"],
+  "title":"Administration",
+  "access":"B",
+  "unbound": 1,
+  "topmenu":"administration",
+  "fields":[
+    {"control":"html","value":"<div class=\"clear\">Please select an administration option below</div>"},
+    {"control":"html","value":"<ul id='xsubmenu_listing'></ul>"}
+  ],
+  "oninit": "$('.xsubmenu:visible').children('a').not('.xsubmenu_more').each(function(){ var link = $('<a href=\\'#\\'></a>').prop('href',this.href).text($(this).text()); $('<li/>').append(link).appendTo('#xsubmenu_listing'); });"
+}

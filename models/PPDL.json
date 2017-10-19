@@ -1,6 +1,6 @@
 {
   "X_PPDL": {
-    "title":"Parameter Definitions",
+    "title":"Settings Definitions",
     "dev":1,
     "table":"jsharmony.v_ppdl",
     "access":"BIUD", 
@@ -28,9 +28,9 @@
       {"name":"codename","type":"varchar","length":"16","access":"BIU","control":"textbox_VS",
        "caption":"Code"},
       {"name":"ppd_xpp","type":"boolean","access":"BIU","control":"checkbox",
-       "controlparams":{"value_true":"true","value_false":"false"},"caption":"System","default":"0"},
+       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Developer","default":"0"},
       {"name":"ppd_gpp","type":"boolean","access":"BIU","control":"checkbox",
-       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Admin","default":"0"},
+       "controlparams":{"value_true":"true","value_false":"false"},"caption":"System","default":"0"},
       {"name":"ppd_ppp","type":"boolean","access":"BIU","control":"checkbox",
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"User","default":"0"},
       {"name":"ppd_info","type":"varchar","length":"500","access":"B","control":"textzoom",

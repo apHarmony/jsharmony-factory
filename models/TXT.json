@@ -13,7 +13,7 @@
       {"name":"txt_process","type":"varchar","length":8,"access":"B","validate":["Required"],  
        "control":"textbox_S",
        "caption":"Process","captionstyle":"width:120px;text-align:right;"},
-      {"name":"txt_attrib","type":"varchar","length":8,"access":"B","validate":["Required"],  
+      {"name":"txt_attrib","type":"varchar","length":16,"access":"B","validate":["Required"],  
        "control":"textbox_S",
        "caption":"Attribute","captionstyle":"width:98px;text-align:right;"},
       {"name":"txt_type","type":"varchar","length":8,"access":"B","control":"dropdown_S",

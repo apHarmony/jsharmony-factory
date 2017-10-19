@@ -1,7 +1,7 @@
 {
   "LOG": {
     "comment":"LOG",
-    "title":"System Logs",
+    "title":"Logs",
     "table":"",
     "access":"B", 
     "layout":"exec", 

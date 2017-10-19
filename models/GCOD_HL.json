@@ -41,7 +41,12 @@
       {"name":"codemean","access": "BIU","control": "textbox"},
       {"name":"codecodemean","access": "BIU","control": "textbox"},
       {"name":"codeattribmean","access": "BIU","control": "textbox"},
-      {"name":"my_create","access": "B"}
+      {"name":"my_create","access": "B"},
+      {"name":"click2","type":"varchar","length":"128","validate":["Required"],
+       "sqlselect":"(case jsharmony.table_type(codeschema,concat('gcod_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
+       "caption":"Edit Codes","access":"B","control": "html","cellstyle": "text-align:center;",
+       "value": "<a href='/X_GCODL?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><# if(data[j]['click2']){ #><img src='/images/icon_edit.png' height='14' style='position:relative;top:2px;' /><# } #></a>",
+       "__AFTER__": "my_create"}
     ]
   }
 }

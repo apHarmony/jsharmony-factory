@@ -33,7 +33,11 @@
       {"name":"my_create","type":"varchar","length":"128","cellstyle":"text-align:center;",
        "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod2_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
        "link":"add:POPUP_EXEC_CREATE_UCOD2&codeschema=codeschema&codename=codename&codemean=codemean",
-       "caption":"Create Table","access":""}
+       "caption":"Create Table","access":""},
+      {"name":"click2","type":"varchar","length":"128","validate":["Required"],
+       "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod2_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
+       "caption":"Edit Codes","access":"B","control": "html","cellstyle": "text-align:center;",
+       "value": "<a href='/UCOD2L?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><# if(data[j]['click2']){ #><img src='/images/icon_edit.png' height='14' style='position:relative;top:2px;' /><# } #></a>"}
 	],
     "dberrors": [
       [ "UNQ_UCOD2_H", "Duplicate" ],

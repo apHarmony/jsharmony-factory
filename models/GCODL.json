@@ -44,5 +44,11 @@
       ["PK_GCOD_","CODE Value has to be unique"],
       ["UNQ_GCOD_","CODE Description has to be unique"]
     ]
+  },
+  "X_GCODL": {
+    "inherits":"GCODL",
+    "dev":1,
+    "topmenu":"dev",
+    "breadcrumbs": { "parents": ["X_GCOD_HL"] }
   }
 }
