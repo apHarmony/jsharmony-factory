@@ -13,7 +13,7 @@
 	  {"name":"d_id","type":"bigint","key": 1,"datalock":{"C_ID":"client_D_ID"}},
       {"name":"d_scope","type":"varchar","length":8,"access":"F","datalock":{"C_ID":"client_D_SCOPE"}},
       {"name":"d_scope_fmt","type":"varchar","length":8,"access":"BF","datalock":{"C_ID":"client_D_SCOPE"},
-       "sqlselect":"('XXXXXX'+d_scope)","link":"edit:D","caption":"=","caption_ext":"Scope"},
+       "sqlselect":"(d_scope)","link":"edit:D","caption":"=","caption_ext":"Scope"},
 	  {"name":"d_scope_id","type":"bigint","access":"F","datalock":{"C_ID":"client_D_SCOPE_ID"}},
 	  {"name":"d_utstmp","type":"datetime","length":"7","format":"tstmp","caption":"Uploaded","access":"B",
 	   "controlstyle": "width:100px;","link":"edit:D"},

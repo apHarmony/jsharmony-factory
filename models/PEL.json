@@ -1,5 +1,6 @@
 {
-  "layout":"grid", 
+  "PEL_BASE": {
+    "layout":"grid", 
     "table":"jsharmony.pe",
     "caption":[0,"User","Users"],
     "title":"System Users",
@@ -20,4 +21,8 @@
       {"name":"pe_email","type":"varchar","length":"255","caption":"EMail","access":"B"},
       {"name":"pe_ll_tstmp","type":"date","format":["date","MM/DD/YY"],"caption":"Last Login","access":"B"}
     ]
+  },
+  "PEL": {
+    "inherits":"PEL_BASE"  
+  }
 }

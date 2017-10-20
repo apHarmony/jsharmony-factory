@@ -1,0 +1,33 @@
+{
+  "GPE_NWUS": {
+    "inherits": "NWUS",
+    "roles": {"O_B":"B","O_X":"*"},
+    "tabs": {
+      "User":{"target":"GPE_NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
+      "System":{"target":"GPE_NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+    }
+  },
+   "GPE_NL_U": {
+    "inherits": "NL_U",
+    "roles": {"O_B":"B","O_X":"*"},
+    "buttons":[{"link":"add:GPE_N","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"n_type"}}],
+    "fields":[
+      {"name":"n_etstmp","link":"edit:GPE_N"}
+    ]   
+  },
+  "GPE_NL_S": {
+    "inherits": "NL_S",
+    "roles": {"O_B":"B","O_X":"*"},
+    "fields":[
+      {"name":"n_etstmp","link":"edit:GPE_NB"}
+    ]   
+  },
+   "GPE_N": {
+    "inherits": "N",
+    "roles": {"O_B":"B","O_X":"*"}
+  },
+   "GPE_NB": {
+    "inherits": "NB",
+    "roles": {"O_B":"B","O_X":"*"}
+  }
+}

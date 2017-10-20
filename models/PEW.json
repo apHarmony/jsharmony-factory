@@ -1,0 +1,22 @@
+{
+  "PEW": {
+    "layout": "form", 
+    "title": "System User - <#=data.pe_lname#>, <#=data.pe_fname#>",
+    "table": "jsharmony.pe",
+    "access": "B", 
+    "caption": [ 0, "User", "Users" ],
+    "topmenu": "administration",
+	"tabpos":"top",
+    "tabs":{
+      "General":{"target":"PE","bindings":{"pe_id":"pe_id"}},
+      "Documents":{"target":"GPE_DL","bindings":{"d_scope_id":"pe_id","d_scope":"'PE'"}},
+      "Notes":{"target":"GPE_NWUS","bindings":{"n_scope_id":"pe_id","n_scope":"'PE'"}}
+    },
+	"popup":[1100,900],
+	"fields":[
+      {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"client_PR_ID"}},
+      {"name":"pe_fname","type":"varchar","access":"B"},
+      {"name":"pe_lname","type":"varchar","access":"B"}
+	]
+  }
+}

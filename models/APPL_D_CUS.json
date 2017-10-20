@@ -1,0 +1,30 @@
+{
+  "GPE_DL": {
+    "inherits": "DL",
+    "table":"jsharmony.V_DL",
+    "title":"Documents - <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
+    "roles": {"O_B":"B","O_X":"*"},
+    "buttons":[{"link":"add:GPE_D","bindings":{"d_scope_id":"d_scope_id","d_scope":"d_scope"}}],
+    "breadcrumbs":{
+      "sql": ["select pe_fname, pe_lname from jsharmony.pe where pe_id=@d_scope_id"],
+      "sql_params": ["d_scope","d_scope_id"]
+    },
+    "fields":[
+      {"name":"d_scope","access":"F"},
+      {"name":"d_utstmp","link":"edit:GPE_D"},
+      {"name":"btndownload","value": "<a href='_dl/GPE_D/<#=data[j]['d_id']#>/d_file'>Download</a>"},
+      {"name":"btndetails","link":"edit:GPE_D"}
+    ]   
+  },
+  "GPE_D": {
+    "inherits": "D",
+    "table":"jsharmony.V_D_EXT",
+    "title":"Document - <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
+    "breadcrumbs":{
+      "sql": ["select pe_fname, pe_lname from jsharmony.PE ",
+              " where pe_id=coalesce(@d_scope_id,(select d_scope_id from jsharmony.d where d_id = @d_id))"],
+      "sql_params": ["d_scope_id","d_scope"]
+    },
+    "roles": {"O_B":"B","O_X":"*"}
+  }
+}
