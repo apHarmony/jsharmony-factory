@@ -345,6 +345,9 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
     job_sql_params['EMAIL_TEXT'] = jrow.EMAIL_TEXT || null;
     job_sql_ptypes.push(dbtypes.VarChar(dbtypes.MAX));
     job_sql_params['EMAIL_HTML'] = jrow.EMAIL_HTML || null;
+    job_sql_ptypes.push(dbtypes.BigInt);
+    job_sql_params['EMAIL_D_ID'] = jrow.EMAIL_D_ID || null;
+    jobvalidate.AddValidator('_obj.EMAIL_D_ID', 'EMAIL_D_ID', 'B', [XValidate._v_IsNumeric()]);
   }
   if ('SMS_TO' in jrow) {
     //Add SMS to Job

@@ -1,7 +1,7 @@
 {
  "D_BASE": {
   "title":"Document",
-  "table":"XXX.D",
+  "table":"REPLACE_WITH_LOCAL_EDITABLE_D_VIEW",
   "access":"BIUD", 
   "layout":"form", 
   "caption": [ "", "Document", "Documents" ],
@@ -23,7 +23,7 @@
        "lov":{"sql2":"select codeval1 as CODEParent, codeval2 as CODEVal, codetxt as CODETxt from jsharmony.GCOD2_D_SCOPE_D_CTGR order by CODETxt", 
        "blank":1, "parent":"d_scope","nodatalock":["C_ID"]},
        "control":"dropdown_L","validate":["Required"],
-       "caption":"Type","captionstyle":"width:105px;;text-align:right;"},
+       "caption":"Type","captionstyle":"width:105px;text-align:right;"},
 	  {"name":"c_name_ext","type":"varchar","length":255,"access":"","control":"hidden","nl":1},
 	  {"name":"e_name","type":"varchar","length":255,"access":"","control":"hidden","nl":1},
 	  {"name":"d_desc","type":"varchar","length":255,"access":"BIU","nl":1,
