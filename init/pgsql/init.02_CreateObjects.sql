@@ -5,7 +5,7 @@
 -- Dumped from database version 9.5.5
 -- Dumped by pg_dump version 9.5.1
 
--- Started on 2017-10-10 11:14:01
+-- Started on 2017-10-23 12:55:19
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -28,7 +28,7 @@ ALTER SCHEMA jsharmony OWNER TO postgres;
 SET search_path = jsharmony, pg_catalog;
 
 --
--- TOC entry 717 (class 1247 OID 45171)
+-- TOC entry 723 (class 1247 OID 45171)
 -- Name: toaudit; Type: TYPE; Schema: jsharmony; Owner: postgres
 --
 
@@ -46,7 +46,7 @@ CREATE TYPE toaudit AS (
 ALTER TYPE toaudit OWNER TO postgres;
 
 --
--- TOC entry 348 (class 1255 OID 45172)
+-- TOC entry 354 (class 1255 OID 45172)
 -- Name: audit(toaudit, bigint, bigint, character varying, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -121,7 +121,7 @@ $$;
 ALTER FUNCTION jsharmony.audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) OWNER TO postgres;
 
 --
--- TOC entry 344 (class 1255 OID 45173)
+-- TOC entry 350 (class 1255 OID 45173)
 -- Name: audit_base(toaudit, bigint, bigint, character varying, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -186,7 +186,7 @@ $$;
 ALTER FUNCTION jsharmony.audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) OWNER TO postgres;
 
 --
--- TOC entry 315 (class 1255 OID 45174)
+-- TOC entry 321 (class 1255 OID 45174)
 -- Name: audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -201,7 +201,7 @@ CREATE FUNCTION audit_info(timestamp without time zone, character varying, times
 ALTER FUNCTION jsharmony.audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) OWNER TO postgres;
 
 --
--- TOC entry 306 (class 1255 OID 45175)
+-- TOC entry 312 (class 1255 OID 45175)
 -- Name: check_code(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -228,7 +228,7 @@ $$;
 ALTER FUNCTION jsharmony.check_code(in_tblname character varying, in_codeval character varying) OWNER TO postgres;
 
 --
--- TOC entry 305 (class 1255 OID 45176)
+-- TOC entry 311 (class 1255 OID 45176)
 -- Name: check_code2(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -255,7 +255,7 @@ $$;
 ALTER FUNCTION jsharmony.check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) OWNER TO postgres;
 
 --
--- TOC entry 342 (class 1255 OID 45177)
+-- TOC entry 348 (class 1255 OID 45177)
 -- Name: check_code2_p(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -287,7 +287,7 @@ $_$;
 ALTER FUNCTION jsharmony.check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) OWNER TO postgres;
 
 --
--- TOC entry 334 (class 1255 OID 45178)
+-- TOC entry 340 (class 1255 OID 45178)
 -- Name: check_code_p(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -318,7 +318,7 @@ $_$;
 ALTER FUNCTION jsharmony.check_code_p(in_tblname character varying, in_codeval character varying) OWNER TO postgres;
 
 --
--- TOC entry 336 (class 1255 OID 45179)
+-- TOC entry 342 (class 1255 OID 45179)
 -- Name: check_foreign(character varying, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -345,7 +345,7 @@ $$;
 ALTER FUNCTION jsharmony.check_foreign(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
 
 --
--- TOC entry 337 (class 1255 OID 45180)
+-- TOC entry 343 (class 1255 OID 45180)
 -- Name: check_foreign_p(character varying, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -377,7 +377,7 @@ $_$;
 ALTER FUNCTION jsharmony.check_foreign_p(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
 
 --
--- TOC entry 361 (class 1255 OID 45181)
+-- TOC entry 367 (class 1255 OID 45181)
 -- Name: check_pp(character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -458,7 +458,7 @@ $$;
 ALTER FUNCTION jsharmony.check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) OWNER TO postgres;
 
 --
--- TOC entry 356 (class 1255 OID 45182)
+-- TOC entry 362 (class 1255 OID 45182)
 -- Name: cpe_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -648,7 +648,7 @@ $$;
 ALTER FUNCTION jsharmony.cpe_iud() OWNER TO postgres;
 
 --
--- TOC entry 357 (class 1255 OID 45183)
+-- TOC entry 363 (class 1255 OID 45183)
 -- Name: cper_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -788,7 +788,7 @@ $_$;
 ALTER FUNCTION jsharmony.cper_iud() OWNER TO postgres;
 
 --
--- TOC entry 347 (class 1255 OID 49881)
+-- TOC entry 353 (class 1255 OID 49881)
 -- Name: create_gcod(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -840,7 +840,7 @@ $$;
 ALTER FUNCTION jsharmony.create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
 
 --
--- TOC entry 339 (class 1255 OID 49884)
+-- TOC entry 345 (class 1255 OID 49884)
 -- Name: create_gcod2(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -892,7 +892,7 @@ $$;
 ALTER FUNCTION jsharmony.create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
 
 --
--- TOC entry 332 (class 1255 OID 49886)
+-- TOC entry 338 (class 1255 OID 49886)
 -- Name: create_ucod(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -938,7 +938,7 @@ $$;
 ALTER FUNCTION jsharmony.create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
 
 --
--- TOC entry 345 (class 1255 OID 49888)
+-- TOC entry 351 (class 1255 OID 49888)
 -- Name: create_ucod2(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -983,7 +983,7 @@ $$;
 ALTER FUNCTION jsharmony.create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
 
 --
--- TOC entry 323 (class 1255 OID 45184)
+-- TOC entry 328 (class 1255 OID 45184)
 -- Name: d_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1034,12 +1034,12 @@ CREATE FUNCTION d_iud() RETURNS trigger
         my_d_scope = case TG_OP when 'DELETE' then OLD.D_SCOPE else NEW.D_SCOPE end;
         my_d_scope_id = case TG_OP when 'DELETE' then OLD.D_SCOPE_ID else NEW.D_SCOPE_ID end;
 
-        if getcid is not null then
+        if getcid is not null and my_d_scope not in ('PE') then
           sqlcmd := 'select '||getcid||'($1,$2);';
           EXECUTE sqlcmd INTO my_c_id USING my_d_scope, my_d_scope_id;
         end if;
 
-        if geteid is not null then
+        if geteid is not null and my_d_scope not in ('PE') then
           sqlcmd := 'select '||geteid||'($1,$2);';
           EXECUTE sqlcmd INTO my_e_id USING my_d_scope, my_d_scope_id;
         end if;
@@ -1221,7 +1221,7 @@ $_$;
 ALTER FUNCTION jsharmony.d_iud() OWNER TO postgres;
 
 --
--- TOC entry 333 (class 1255 OID 46224)
+-- TOC entry 339 (class 1255 OID 46224)
 -- Name: digest(bytea, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1233,7 +1233,7 @@ CREATE FUNCTION digest(bytea, text) RETURNS bytea
 ALTER FUNCTION jsharmony.digest(bytea, text) OWNER TO postgres;
 
 --
--- TOC entry 304 (class 1255 OID 46225)
+-- TOC entry 310 (class 1255 OID 46225)
 -- Name: digest(text, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1245,7 +1245,7 @@ CREATE FUNCTION digest(text, text) RETURNS bytea
 ALTER FUNCTION jsharmony.digest(text, text) OWNER TO postgres;
 
 --
--- TOC entry 318 (class 1255 OID 46300)
+-- TOC entry 324 (class 1255 OID 46300)
 -- Name: gcod2_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1380,7 +1380,7 @@ $$;
 ALTER FUNCTION jsharmony.gcod2_iud() OWNER TO postgres;
 
 --
--- TOC entry 354 (class 1255 OID 46301)
+-- TOC entry 360 (class 1255 OID 46301)
 -- Name: gcod_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1507,7 +1507,7 @@ $$;
 ALTER FUNCTION jsharmony.gcod_iud() OWNER TO postgres;
 
 --
--- TOC entry 309 (class 1255 OID 45186)
+-- TOC entry 315 (class 1255 OID 45186)
 -- Name: get_cpe_name(bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1531,7 +1531,7 @@ $$;
 ALTER FUNCTION jsharmony.get_cpe_name(in_pe_id bigint) OWNER TO postgres;
 
 --
--- TOC entry 307 (class 1255 OID 45187)
+-- TOC entry 313 (class 1255 OID 45187)
 -- Name: get_pe_name(bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1555,7 +1555,7 @@ $$;
 ALTER FUNCTION jsharmony.get_pe_name(in_pe_id bigint) OWNER TO postgres;
 
 --
--- TOC entry 308 (class 1255 OID 45188)
+-- TOC entry 314 (class 1255 OID 45188)
 -- Name: get_ppd_desc(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1580,7 +1580,7 @@ $$;
 ALTER FUNCTION jsharmony.get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) OWNER TO postgres;
 
 --
--- TOC entry 355 (class 1255 OID 63142)
+-- TOC entry 361 (class 1255 OID 63142)
 -- Name: good_email(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1592,7 +1592,7 @@ CREATE FUNCTION good_email(x text) RETURNS boolean
 ALTER FUNCTION jsharmony.good_email(x text) OWNER TO postgres;
 
 --
--- TOC entry 320 (class 1255 OID 45189)
+-- TOC entry 326 (class 1255 OID 45189)
 -- Name: gpp_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1712,7 +1712,7 @@ $$;
 ALTER FUNCTION jsharmony.gpp_iud() OWNER TO postgres;
 
 --
--- TOC entry 362 (class 1255 OID 45190)
+-- TOC entry 368 (class 1255 OID 45190)
 -- Name: h_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1846,7 +1846,7 @@ $$;
 ALTER FUNCTION jsharmony.h_iud() OWNER TO postgres;
 
 --
--- TOC entry 310 (class 1255 OID 45191)
+-- TOC entry 316 (class 1255 OID 45191)
 -- Name: mycuser(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1858,7 +1858,7 @@ CREATE FUNCTION mycuser() RETURNS text
 ALTER FUNCTION jsharmony.mycuser() OWNER TO postgres;
 
 --
--- TOC entry 358 (class 1255 OID 63143)
+-- TOC entry 364 (class 1255 OID 63143)
 -- Name: mycuser_email(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1893,7 +1893,7 @@ END;$$;
 ALTER FUNCTION jsharmony.mycuser_email(u text) OWNER TO postgres;
 
 --
--- TOC entry 338 (class 1255 OID 45192)
+-- TOC entry 344 (class 1255 OID 45192)
 -- Name: mycuser_fmt(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1930,7 +1930,7 @@ END;$$;
 ALTER FUNCTION jsharmony.mycuser_fmt(u text) OWNER TO postgres;
 
 --
--- TOC entry 351 (class 1255 OID 45193)
+-- TOC entry 357 (class 1255 OID 45193)
 -- Name: myhash(character, bigint, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1972,7 +1972,7 @@ $$;
 ALTER FUNCTION jsharmony.myhash(par_type character, par_pe_id bigint, par_pw character varying) OWNER TO postgres;
 
 --
--- TOC entry 319 (class 1255 OID 45194)
+-- TOC entry 325 (class 1255 OID 45194)
 -- Name: myisnumeric(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -1992,7 +1992,7 @@ $_$;
 ALTER FUNCTION jsharmony.myisnumeric(text) OWNER TO postgres;
 
 --
--- TOC entry 326 (class 1255 OID 46454)
+-- TOC entry 332 (class 1255 OID 46454)
 -- Name: mymmddyy(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2004,7 +2004,7 @@ CREATE FUNCTION mymmddyy(timestamp without time zone) RETURNS character varying
 ALTER FUNCTION jsharmony.mymmddyy(timestamp without time zone) OWNER TO postgres;
 
 --
--- TOC entry 341 (class 1255 OID 45195)
+-- TOC entry 347 (class 1255 OID 45195)
 -- Name: mymmddyyhhmi(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2016,7 +2016,7 @@ CREATE FUNCTION mymmddyyhhmi(timestamp without time zone) RETURNS character vary
 ALTER FUNCTION jsharmony.mymmddyyhhmi(timestamp without time zone) OWNER TO postgres;
 
 --
--- TOC entry 314 (class 1255 OID 46456)
+-- TOC entry 320 (class 1255 OID 46456)
 -- Name: mymmddyyyyhhmi(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2028,7 +2028,7 @@ CREATE FUNCTION mymmddyyyyhhmi(timestamp without time zone) RETURNS character va
 ALTER FUNCTION jsharmony.mymmddyyyyhhmi(timestamp without time zone) OWNER TO postgres;
 
 --
--- TOC entry 335 (class 1255 OID 45196)
+-- TOC entry 341 (class 1255 OID 45196)
 -- Name: mynow(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2040,7 +2040,7 @@ CREATE FUNCTION mynow() RETURNS timestamp without time zone
 ALTER FUNCTION jsharmony.mynow() OWNER TO postgres;
 
 --
--- TOC entry 330 (class 1255 OID 45197)
+-- TOC entry 336 (class 1255 OID 45197)
 -- Name: mype(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2067,7 +2067,7 @@ END;$$;
 ALTER FUNCTION jsharmony.mype() OWNER TO postgres;
 
 --
--- TOC entry 331 (class 1255 OID 45198)
+-- TOC entry 337 (class 1255 OID 45198)
 -- Name: mytodate(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2079,7 +2079,7 @@ CREATE FUNCTION mytodate(timestamp without time zone) RETURNS date
 ALTER FUNCTION jsharmony.mytodate(timestamp without time zone) OWNER TO postgres;
 
 --
--- TOC entry 329 (class 1255 OID 45199)
+-- TOC entry 335 (class 1255 OID 45199)
 -- Name: mytoday(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2091,7 +2091,7 @@ CREATE FUNCTION mytoday() RETURNS date
 ALTER FUNCTION jsharmony.mytoday() OWNER TO postgres;
 
 --
--- TOC entry 349 (class 1255 OID 45200)
+-- TOC entry 355 (class 1255 OID 45200)
 -- Name: n_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2117,17 +2117,38 @@ CREATE FUNCTION n_iud() RETURNS trigger
 
         my_toa.op := TG_OP;
         my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := case when TG_OP = 'DELETE' then NULL else get_c_id(NEW.n_scope, NEW.n_scope_ID) end;
+
+        if TG_OP = 'DELETE' then
+          my_toa.c_id := NULL;
+        else
+          if NEW.n_scope in ('PE')
+          then 
+            my_toa.c_id := NULL;
+          else  
+            my_toa.c_id := get_c_id(NEW.n_scope, NEW.n_scope_ID);
+          end if;  
+        end if; 
+        
         my_toa.e_id := NULL;
         my_toa.ref_name := NULL;
         my_toa.ref_id := NULL;
         my_toa.subj := NULL;
 
-        if TG_OP = 'DELETE' THEN
-          my_c_id := get_c_id(OLD.n_scope, OLD.n_scope_ID);
+        if TG_OP = 'DELETE' then
+          if OLD.n_scope in ('PE')
+          then 
+            my_C_ID := NULL;
+          else  
+            my_c_id := get_c_id(OLD.n_scope, OLD.n_scope_ID);
+          end if;  
           my_n_scope := OLD.n_scope;
         else
-          my_c_id := get_c_id(NEW.n_scope, NEW.n_scope_ID);
+          if NEW.n_scope in ('PE')
+          then 
+            my_C_ID := NULL;
+          else  
+            my_c_id := get_c_id(NEW.n_scope, NEW.n_scope_ID);
+          end if;  
           my_n_scope := NEW.n_scope;
         end if; 
 
@@ -2175,7 +2196,7 @@ CREATE FUNCTION n_iud() RETURNS trigger
           
 
         IF (TG_OP='INSERT' OR TG_OP='UPDATE') THEN
-          IF NOT check_foreign(NEW.n_scope, NEW.n_scope_ID) THEN
+          IF NOT jsharmony.check_foreign(NEW.n_scope, NEW.n_scope_ID)>0 THEN
             RAISE EXCEPTION  'Table % does not contain record % .', NEW.n_scope, NEW.n_scope_ID::text ;
     END IF;
   END IF;   
@@ -2273,7 +2294,7 @@ $$;
 ALTER FUNCTION jsharmony.n_iud() OWNER TO postgres;
 
 --
--- TOC entry 311 (class 1255 OID 45201)
+-- TOC entry 317 (class 1255 OID 45201)
 -- Name: nonequal(bit, bit); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2297,7 +2318,7 @@ $$;
 ALTER FUNCTION jsharmony.nonequal(x1 bit, x2 bit) OWNER TO postgres;
 
 --
--- TOC entry 350 (class 1255 OID 63113)
+-- TOC entry 356 (class 1255 OID 63113)
 -- Name: nonequal(boolean, boolean); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2321,7 +2342,7 @@ $$;
 ALTER FUNCTION jsharmony.nonequal(x1 boolean, x2 boolean) OWNER TO postgres;
 
 --
--- TOC entry 312 (class 1255 OID 45202)
+-- TOC entry 318 (class 1255 OID 45202)
 -- Name: nonequal(smallint, smallint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2345,7 +2366,7 @@ $$;
 ALTER FUNCTION jsharmony.nonequal(x1 smallint, x2 smallint) OWNER TO postgres;
 
 --
--- TOC entry 313 (class 1255 OID 45203)
+-- TOC entry 319 (class 1255 OID 45203)
 -- Name: nonequal(integer, integer); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2369,7 +2390,7 @@ $$;
 ALTER FUNCTION jsharmony.nonequal(x1 integer, x2 integer) OWNER TO postgres;
 
 --
--- TOC entry 324 (class 1255 OID 45204)
+-- TOC entry 330 (class 1255 OID 45204)
 -- Name: nonequal(bigint, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2393,7 +2414,7 @@ $$;
 ALTER FUNCTION jsharmony.nonequal(x1 bigint, x2 bigint) OWNER TO postgres;
 
 --
--- TOC entry 322 (class 1255 OID 45205)
+-- TOC entry 329 (class 1255 OID 45205)
 -- Name: nonequal(numeric, numeric); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2417,7 +2438,7 @@ $$;
 ALTER FUNCTION jsharmony.nonequal(x1 numeric, x2 numeric) OWNER TO postgres;
 
 --
--- TOC entry 325 (class 1255 OID 45206)
+-- TOC entry 331 (class 1255 OID 45206)
 -- Name: nonequal(text, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2441,7 +2462,7 @@ $$;
 ALTER FUNCTION jsharmony.nonequal(x1 text, x2 text) OWNER TO postgres;
 
 --
--- TOC entry 327 (class 1255 OID 45207)
+-- TOC entry 333 (class 1255 OID 45207)
 -- Name: nonequal(timestamp without time zone, timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2465,7 +2486,7 @@ $$;
 ALTER FUNCTION jsharmony.nonequal(x1 timestamp without time zone, x2 timestamp without time zone) OWNER TO postgres;
 
 --
--- TOC entry 321 (class 1255 OID 45208)
+-- TOC entry 327 (class 1255 OID 45208)
 -- Name: pe_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2675,7 +2696,7 @@ $$;
 ALTER FUNCTION jsharmony.pe_iud() OWNER TO postgres;
 
 --
--- TOC entry 359 (class 1255 OID 45210)
+-- TOC entry 365 (class 1255 OID 45210)
 -- Name: ppd_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2804,7 +2825,7 @@ $$;
 ALTER FUNCTION jsharmony.ppd_iud() OWNER TO postgres;
 
 --
--- TOC entry 343 (class 1255 OID 45211)
+-- TOC entry 349 (class 1255 OID 45211)
 -- Name: ppp_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2930,7 +2951,7 @@ $$;
 ALTER FUNCTION jsharmony.ppp_iud() OWNER TO postgres;
 
 --
--- TOC entry 360 (class 1255 OID 63144)
+-- TOC entry 366 (class 1255 OID 63144)
 -- Name: sanit(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -2952,7 +2973,7 @@ $$;
 ALTER FUNCTION jsharmony.sanit(x text) OWNER TO postgres;
 
 --
--- TOC entry 346 (class 1255 OID 45212)
+-- TOC entry 352 (class 1255 OID 45212)
 -- Name: spef_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -3049,7 +3070,7 @@ $$;
 ALTER FUNCTION jsharmony.spef_iud() OWNER TO postgres;
 
 --
--- TOC entry 353 (class 1255 OID 45213)
+-- TOC entry 359 (class 1255 OID 45213)
 -- Name: sper_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -3155,7 +3176,7 @@ $$;
 ALTER FUNCTION jsharmony.sper_iud() OWNER TO postgres;
 
 --
--- TOC entry 317 (class 1255 OID 49879)
+-- TOC entry 323 (class 1255 OID 49879)
 -- Name: table_type(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -3187,7 +3208,7 @@ $$;
 ALTER FUNCTION jsharmony.table_type(in_schema character varying, in_name character varying) OWNER TO postgres;
 
 --
--- TOC entry 316 (class 1255 OID 45214)
+-- TOC entry 322 (class 1255 OID 45214)
 -- Name: txt_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -3310,7 +3331,7 @@ $$;
 ALTER FUNCTION jsharmony.txt_iud() OWNER TO postgres;
 
 --
--- TOC entry 328 (class 1255 OID 45215)
+-- TOC entry 334 (class 1255 OID 45215)
 -- Name: v_crmsel_iud_insteadof_update(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -3351,7 +3372,7 @@ $$;
 ALTER FUNCTION jsharmony.v_crmsel_iud_insteadof_update() OWNER TO postgres;
 
 --
--- TOC entry 340 (class 1255 OID 45216)
+-- TOC entry 346 (class 1255 OID 45216)
 -- Name: v_srmsel_iud_insteadof_update(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -3392,7 +3413,7 @@ $$;
 ALTER FUNCTION jsharmony.v_srmsel_iud_insteadof_update() OWNER TO postgres;
 
 --
--- TOC entry 352 (class 1255 OID 45217)
+-- TOC entry 358 (class 1255 OID 45217)
 -- Name: xpp_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -3568,7 +3589,7 @@ CREATE SEQUENCE aud_h_aud_seq_seq
 ALTER TABLE aud_h_aud_seq_seq OWNER TO postgres;
 
 --
--- TOC entry 3143 (class 0 OID 0)
+-- TOC entry 3172 (class 0 OID 0)
 -- Dependencies: 185
 -- Name: aud_h_aud_seq_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -3625,7 +3646,7 @@ CREATE SEQUENCE cpe_pe_id_seq
 ALTER TABLE cpe_pe_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3146 (class 0 OID 0)
+-- TOC entry 3175 (class 0 OID 0)
 -- Dependencies: 187
 -- Name: cpe_pe_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -3664,7 +3685,7 @@ CREATE SEQUENCE cper_cper_id_seq
 ALTER TABLE cper_cper_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3149 (class 0 OID 0)
+-- TOC entry 3178 (class 0 OID 0)
 -- Dependencies: 189
 -- Name: cper_cper_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -3707,7 +3728,7 @@ CREATE SEQUENCE cr_cr_id_seq
 ALTER TABLE cr_cr_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3152 (class 0 OID 0)
+-- TOC entry 3181 (class 0 OID 0)
 -- Dependencies: 191
 -- Name: cr_cr_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -3746,7 +3767,7 @@ CREATE SEQUENCE crm_crm_id_seq
 ALTER TABLE crm_crm_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3155 (class 0 OID 0)
+-- TOC entry 3184 (class 0 OID 0)
 -- Dependencies: 193
 -- Name: crm_crm_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -3800,7 +3821,7 @@ CREATE SEQUENCE d_d_id_seq
 ALTER TABLE d_d_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3158 (class 0 OID 0)
+-- TOC entry 3187 (class 0 OID 0)
 -- Dependencies: 195
 -- Name: d_d_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -3824,7 +3845,7 @@ CREATE TABLE dual (
 ALTER TABLE dual OWNER TO postgres;
 
 --
--- TOC entry 3160 (class 0 OID 0)
+-- TOC entry 3189 (class 0 OID 0)
 -- Dependencies: 196
 -- Name: TABLE dual; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
@@ -3848,7 +3869,7 @@ CREATE SEQUENCE dual_dual_ident_seq
 ALTER TABLE dual_dual_ident_seq OWNER TO postgres;
 
 --
--- TOC entry 3162 (class 0 OID 0)
+-- TOC entry 3191 (class 0 OID 0)
 -- Dependencies: 197
 -- Name: dual_dual_ident_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4026,7 +4047,7 @@ CREATE SEQUENCE gpp_gpp_id_seq
 ALTER TABLE gpp_gpp_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3172 (class 0 OID 0)
+-- TOC entry 3201 (class 0 OID 0)
 -- Dependencies: 201
 -- Name: gpp_gpp_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4072,7 +4093,7 @@ CREATE SEQUENCE h_h_id_seq
 ALTER TABLE h_h_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3175 (class 0 OID 0)
+-- TOC entry 3204 (class 0 OID 0)
 -- Dependencies: 203
 -- Name: h_h_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4110,7 +4131,7 @@ CREATE SEQUENCE hp_hp_id_seq
 ALTER TABLE hp_hp_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3178 (class 0 OID 0)
+-- TOC entry 3207 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: hp_hp_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4160,7 +4181,7 @@ CREATE SEQUENCE n_n_id_seq
 ALTER TABLE n_n_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3181 (class 0 OID 0)
+-- TOC entry 3210 (class 0 OID 0)
 -- Dependencies: 207
 -- Name: n_n_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4236,7 +4257,7 @@ CREATE SEQUENCE pe_pe_id_seq
 ALTER TABLE pe_pe_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3185 (class 0 OID 0)
+-- TOC entry 3214 (class 0 OID 0)
 -- Dependencies: 210
 -- Name: pe_pe_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4285,7 +4306,7 @@ CREATE SEQUENCE ppd_ppd_id_seq
 ALTER TABLE ppd_ppd_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3188 (class 0 OID 0)
+-- TOC entry 3217 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: ppd_ppd_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4329,7 +4350,7 @@ CREATE SEQUENCE ppp_ppp_id_seq
 ALTER TABLE ppp_ppp_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3191 (class 0 OID 0)
+-- TOC entry 3220 (class 0 OID 0)
 -- Dependencies: 214
 -- Name: ppp_ppp_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4373,7 +4394,7 @@ CREATE SEQUENCE rq_rq_id_seq
 ALTER TABLE rq_rq_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3194 (class 0 OID 0)
+-- TOC entry 3223 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: rq_rq_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4437,7 +4458,7 @@ CREATE SEQUENCE rqst_d_rqst_d_id_seq
 ALTER TABLE rqst_d_rqst_d_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3198 (class 0 OID 0)
+-- TOC entry 3227 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: rqst_d_rqst_d_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4483,7 +4504,7 @@ CREATE SEQUENCE rqst_email_rqst_email_id_seq
 ALTER TABLE rqst_email_rqst_email_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3201 (class 0 OID 0)
+-- TOC entry 3230 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: rqst_email_rqst_email_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4524,7 +4545,7 @@ CREATE SEQUENCE rqst_n_rqst_n_id_seq
 ALTER TABLE rqst_n_rqst_n_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3204 (class 0 OID 0)
+-- TOC entry 3233 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: rqst_n_rqst_n_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4563,7 +4584,7 @@ CREATE SEQUENCE rqst_rq_rqst_rq_id_seq
 ALTER TABLE rqst_rq_rqst_rq_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3207 (class 0 OID 0)
+-- TOC entry 3236 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: rqst_rq_rqst_rq_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4587,7 +4608,7 @@ CREATE SEQUENCE rqst_rqst_id_seq
 ALTER TABLE rqst_rqst_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3209 (class 0 OID 0)
+-- TOC entry 3238 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: rqst_rqst_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4627,7 +4648,7 @@ CREATE SEQUENCE rqst_sms_rqst_sms_id_seq
 ALTER TABLE rqst_sms_rqst_sms_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3212 (class 0 OID 0)
+-- TOC entry 3241 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: rqst_sms_rqst_sms_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4670,7 +4691,7 @@ CREATE SEQUENCE sf_sf_id_seq
 ALTER TABLE sf_sf_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3215 (class 0 OID 0)
+-- TOC entry 3244 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: sf_sf_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4720,7 +4741,7 @@ CREATE SEQUENCE sm_sm_id_auto_seq
 ALTER TABLE sm_sm_id_auto_seq OWNER TO postgres;
 
 --
--- TOC entry 3218 (class 0 OID 0)
+-- TOC entry 3247 (class 0 OID 0)
 -- Dependencies: 232
 -- Name: sm_sm_id_auto_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4759,7 +4780,7 @@ CREATE SEQUENCE spef_spef_id_seq
 ALTER TABLE spef_spef_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3221 (class 0 OID 0)
+-- TOC entry 3250 (class 0 OID 0)
 -- Dependencies: 234
 -- Name: spef_spef_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4798,7 +4819,7 @@ CREATE SEQUENCE sper_sper_id_seq
 ALTER TABLE sper_sper_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3224 (class 0 OID 0)
+-- TOC entry 3253 (class 0 OID 0)
 -- Dependencies: 236
 -- Name: sper_sper_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4841,7 +4862,7 @@ CREATE SEQUENCE sr_sr_id_seq
 ALTER TABLE sr_sr_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3227 (class 0 OID 0)
+-- TOC entry 3256 (class 0 OID 0)
 -- Dependencies: 238
 -- Name: sr_sr_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4880,7 +4901,7 @@ CREATE SEQUENCE srm_srm_id_seq
 ALTER TABLE srm_srm_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3230 (class 0 OID 0)
+-- TOC entry 3259 (class 0 OID 0)
 -- Dependencies: 240
 -- Name: srm_srm_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -4927,7 +4948,7 @@ CREATE SEQUENCE txt_txt_id_seq
 ALTER TABLE txt_txt_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3233 (class 0 OID 0)
+-- TOC entry 3262 (class 0 OID 0)
 -- Dependencies: 242
 -- Name: txt_txt_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -5076,7 +5097,7 @@ CREATE SEQUENCE ucod2_h_ucod2_h_id_seq
 ALTER TABLE ucod2_h_ucod2_h_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3241 (class 0 OID 0)
+-- TOC entry 3270 (class 0 OID 0)
 -- Dependencies: 281
 -- Name: ucod2_h_ucod2_h_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -5250,7 +5271,7 @@ CREATE SEQUENCE ucod_h_ucod_h_id_seq
 ALTER TABLE ucod_h_ucod_h_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3252 (class 0 OID 0)
+-- TOC entry 3281 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: ucod_h_ucod_h_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -5364,7 +5385,7 @@ CREATE SEQUENCE ucod_ucod_id_seq
 ALTER TABLE ucod_ucod_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3261 (class 0 OID 0)
+-- TOC entry 3290 (class 0 OID 0)
 -- Dependencies: 258
 -- Name: ucod_ucod_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -5385,7 +5406,7 @@ INHERITS (ucod);
 ALTER TABLE ucod_v_sts OWNER TO postgres;
 
 --
--- TOC entry 3263 (class 0 OID 0)
+-- TOC entry 3292 (class 0 OID 0)
 -- Dependencies: 282
 -- Name: TABLE ucod_v_sts; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
@@ -5529,6 +5550,111 @@ CREATE VIEW v_crmsel AS
 ALTER TABLE v_crmsel OWNER TO postgres;
 
 --
+-- TOC entry 293 (class 1259 OID 76010)
+-- Name: v_d_ext; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW v_d_ext AS
+ SELECT d.d_id,
+    d.d_scope,
+    d.d_scope_id,
+    d.c_id,
+    d.e_id,
+    d.d_sts,
+    d.d_ctgr,
+    d.d_desc,
+    d.d_ext,
+    d.d_size,
+    (('D'::text || ((d.d_id)::character varying)::text) || (COALESCE(d.d_ext, ''::character varying))::text) AS d_filename,
+    d.d_etstmp,
+    d.d_eu,
+    mycuser_fmt((d.d_eu)::text) AS d_eu_fmt,
+    d.d_mtstmp,
+    d.d_mu,
+    mycuser_fmt((d.d_mu)::text) AS d_mu_fmt,
+    d.d_utstmp,
+    d.d_uu,
+    mycuser_fmt((d.d_uu)::text) AS d_uu_fmt,
+    d.d_snotes,
+    NULL::text AS title_h,
+    NULL::text AS title_b,
+    d.d_scope AS d_lock,
+    NULL::text AS c_name,
+    NULL::text AS c_name_ext,
+    NULL::text AS e_name
+   FROM d;
+
+
+ALTER TABLE v_d_ext OWNER TO postgres;
+
+--
+-- TOC entry 294 (class 1259 OID 76056)
+-- Name: v_d_x; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW v_d_x AS
+ SELECT d.d_id,
+    d.d_scope,
+    d.d_scope_id,
+    d.c_id,
+    d.e_id,
+    d.d_sts,
+    d.d_ctgr,
+    d.d_desc,
+    d.d_ext,
+    d.d_size,
+    d.d_etstmp,
+    d.d_eu,
+    d.d_mtstmp,
+    d.d_mu,
+    d.d_utstmp,
+    d.d_uu,
+    d.d_synctstmp,
+    d.d_snotes,
+    d.d_id_main,
+    (('D'::text || ((d.d_id)::character varying)::text) || (COALESCE(d.d_ext, ''::character varying))::text) AS d_filename
+   FROM d;
+
+
+ALTER TABLE v_d_x OWNER TO postgres;
+
+--
+-- TOC entry 292 (class 1259 OID 75993)
+-- Name: v_dl; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW v_dl AS
+ SELECT d.d_id,
+    d.d_scope,
+    d.d_scope_id,
+    d.c_id,
+    d.e_id,
+    d.d_sts,
+    d.d_ctgr,
+    gdd.codetxt AS d_ctgr_txt,
+    d.d_desc,
+    d.d_ext,
+    d.d_size,
+    (('D'::text || ((d.d_id)::character varying)::text) || (COALESCE(d.d_ext, ''::character varying))::text) AS d_filename,
+    d.d_etstmp,
+    d.d_eu,
+    mycuser_fmt((d.d_eu)::text) AS d_eu_fmt,
+    d.d_mtstmp,
+    d.d_mu,
+    mycuser_fmt((d.d_mu)::text) AS d_mu_fmt,
+    d.d_utstmp,
+    d.d_uu,
+    mycuser_fmt((d.d_uu)::text) AS d_uu_fmt,
+    d.d_snotes,
+    NULL::text AS title_h,
+    NULL::text AS title_b
+   FROM (d
+     LEFT JOIN gcod2_d_scope_d_ctgr gdd ON ((((gdd.codeval1)::text = (d.d_scope)::text) AND ((gdd.codeval2)::text = (d.d_ctgr)::text))));
+
+
+ALTER TABLE v_dl OWNER TO postgres;
+
+--
 -- TOC entry 262 (class 1259 OID 45691)
 -- Name: v_gppl; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
@@ -5548,44 +5674,6 @@ CREATE VIEW v_gppl AS
 
 
 ALTER TABLE v_gppl OWNER TO postgres;
-
---
--- TOC entry 263 (class 1259 OID 45695)
--- Name: v_months; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW v_months AS
- SELECT numbers.n,
-    "right"(('0'::text || ((numbers.n)::character varying)::text), 2) AS mth
-   FROM numbers
-  WHERE (numbers.n <= 12);
-
-
-ALTER TABLE v_months OWNER TO postgres;
-
---
--- TOC entry 264 (class 1259 OID 45699)
--- Name: v_my_roles; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW v_my_roles AS
- SELECT sper.sr_name
-   FROM sper
-  WHERE (sper.pe_id = mype());
-
-
-ALTER TABLE v_my_roles OWNER TO postgres;
-
---
--- TOC entry 265 (class 1259 OID 45703)
--- Name: v_mype; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW v_mype AS
- SELECT mype() AS mype;
-
-
-ALTER TABLE v_mype OWNER TO postgres;
 
 --
 -- TOC entry 266 (class 1259 OID 45707)
@@ -5640,6 +5728,137 @@ CREATE VIEW v_pp AS
 
 
 ALTER TABLE v_pp OWNER TO postgres;
+
+--
+-- TOC entry 297 (class 1259 OID 76089)
+-- Name: v_house; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW v_house AS
+ SELECT name.pp_val AS house_name,
+    addr.pp_val AS house_addr,
+    city.pp_val AS house_city,
+    state.pp_val AS house_state,
+    zip.pp_val AS house_zip,
+    (((((((COALESCE(addr.pp_val, ''::character varying))::text || ', '::text) || (COALESCE(city.pp_val, ''::character varying))::text) || ' '::text) || (COALESCE(state.pp_val, ''::character varying))::text) || ' '::text) || (COALESCE(zip.pp_val, ''::character varying))::text) AS house_full_addr,
+    bphone.pp_val AS house_bphone,
+    fax.pp_val AS house_fax,
+    email.pp_val AS house_email,
+    contact.pp_val AS house_contact
+   FROM (((((((((dual
+     LEFT JOIN v_pp name ON ((((name.pp_process)::text = 'HOUSE'::text) AND ((name.pp_attrib)::text = 'NAME'::text))))
+     LEFT JOIN v_pp addr ON ((((addr.pp_process)::text = 'HOUSE'::text) AND ((addr.pp_attrib)::text = 'ADDR'::text))))
+     LEFT JOIN v_pp city ON ((((city.pp_process)::text = 'HOUSE'::text) AND ((city.pp_attrib)::text = 'CITY'::text))))
+     LEFT JOIN v_pp state ON ((((state.pp_process)::text = 'HOUSE'::text) AND ((state.pp_attrib)::text = 'STATE'::text))))
+     LEFT JOIN v_pp zip ON ((((zip.pp_process)::text = 'HOUSE'::text) AND ((zip.pp_attrib)::text = 'ZIP'::text))))
+     LEFT JOIN v_pp bphone ON ((((bphone.pp_process)::text = 'HOUSE'::text) AND ((bphone.pp_attrib)::text = 'BPHONE'::text))))
+     LEFT JOIN v_pp fax ON ((((fax.pp_process)::text = 'HOUSE'::text) AND ((fax.pp_attrib)::text = 'FAX'::text))))
+     LEFT JOIN v_pp email ON ((((email.pp_process)::text = 'HOUSE'::text) AND ((email.pp_attrib)::text = 'EMAIL'::text))))
+     LEFT JOIN v_pp contact ON ((((contact.pp_process)::text = 'HOUSE'::text) AND ((contact.pp_attrib)::text = 'CONTACT'::text))));
+
+
+ALTER TABLE v_house OWNER TO postgres;
+
+--
+-- TOC entry 263 (class 1259 OID 45695)
+-- Name: v_months; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW v_months AS
+ SELECT numbers.n,
+    "right"(('0'::text || ((numbers.n)::character varying)::text), 2) AS mth
+   FROM numbers
+  WHERE (numbers.n <= 12);
+
+
+ALTER TABLE v_months OWNER TO postgres;
+
+--
+-- TOC entry 264 (class 1259 OID 45699)
+-- Name: v_my_roles; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW v_my_roles AS
+ SELECT sper.sr_name
+   FROM sper
+  WHERE (sper.pe_id = mype());
+
+
+ALTER TABLE v_my_roles OWNER TO postgres;
+
+--
+-- TOC entry 265 (class 1259 OID 45703)
+-- Name: v_mype; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW v_mype AS
+ SELECT mype() AS mype;
+
+
+ALTER TABLE v_mype OWNER TO postgres;
+
+--
+-- TOC entry 296 (class 1259 OID 76077)
+-- Name: v_n_ext; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW v_n_ext AS
+ SELECT n.n_id,
+    n.n_scope,
+    n.n_scope_id,
+    n.n_sts,
+    n.c_id,
+    n.e_id,
+    n.n_type,
+    n.n_note,
+    n.n_etstmp,
+    n.n_eu,
+    mycuser_fmt((n.n_eu)::text) AS n_eu_fmt,
+    n.n_mtstmp,
+    n.n_mu,
+    mycuser_fmt((n.n_mu)::text) AS n_mu_fmt,
+    n.n_snotes,
+    NULL::text AS title_h,
+    NULL::text AS title_b,
+    NULL::text AS c_name,
+    NULL::text AS c_name_ext,
+    NULL::text AS e_name
+   FROM n;
+
+
+ALTER TABLE v_n_ext OWNER TO postgres;
+
+--
+-- TOC entry 295 (class 1259 OID 76068)
+-- Name: v_nl; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW v_nl AS
+ SELECT n.n_id,
+    n.n_scope,
+    n.n_scope_id,
+    n.n_sts,
+    NULL::bigint AS c_id,
+    NULL::text AS c_name,
+    NULL::text AS c_name_ext,
+    n.e_id,
+    NULL::text AS e_name,
+    n.n_type,
+    n.n_note,
+    mytodate(n.n_etstmp) AS n_dt,
+    n.n_etstmp,
+    n.n_eu,
+    mycuser_fmt((n.n_eu)::text) AS n_eu_fmt,
+    n.n_mtstmp,
+    n.n_mu,
+    mycuser_fmt((n.n_mu)::text) AS n_mu_fmt,
+    n.n_snotes,
+    NULL::text AS title_h,
+    NULL::text AS title_b
+   FROM n;
+
+
+ALTER TABLE v_nl OWNER TO postgres;
 
 --
 -- TOC entry 285 (class 1259 OID 63114)
@@ -5755,7 +5974,7 @@ CREATE SEQUENCE v_v_id_seq
 ALTER TABLE v_v_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3279 (class 0 OID 0)
+-- TOC entry 3314 (class 0 OID 0)
 -- Dependencies: 284
 -- Name: v_v_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -5813,7 +6032,7 @@ CREATE SEQUENCE xpp_xpp_id_seq
 ALTER TABLE xpp_xpp_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3283 (class 0 OID 0)
+-- TOC entry 3318 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: xpp_xpp_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
@@ -5822,7 +6041,7 @@ ALTER SEQUENCE xpp_xpp_id_seq OWNED BY xpp.xpp_id;
 
 
 --
--- TOC entry 2450 (class 2604 OID 45742)
+-- TOC entry 2474 (class 2604 OID 45742)
 -- Name: aud_seq; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5830,7 +6049,7 @@ ALTER TABLE ONLY aud_h ALTER COLUMN aud_seq SET DEFAULT nextval('aud_h_aud_seq_s
 
 
 --
--- TOC entry 2458 (class 2604 OID 45743)
+-- TOC entry 2482 (class 2604 OID 45743)
 -- Name: pe_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5838,7 +6057,7 @@ ALTER TABLE ONLY cpe ALTER COLUMN pe_id SET DEFAULT nextval('cpe_pe_id_seq'::reg
 
 
 --
--- TOC entry 2460 (class 2604 OID 45744)
+-- TOC entry 2484 (class 2604 OID 45744)
 -- Name: cper_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5846,7 +6065,7 @@ ALTER TABLE ONLY cper ALTER COLUMN cper_id SET DEFAULT nextval('cper_cper_id_seq
 
 
 --
--- TOC entry 2461 (class 2604 OID 45745)
+-- TOC entry 2485 (class 2604 OID 45745)
 -- Name: cr_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5854,7 +6073,7 @@ ALTER TABLE ONLY cr ALTER COLUMN cr_id SET DEFAULT nextval('cr_cr_id_seq'::regcl
 
 
 --
--- TOC entry 2463 (class 2604 OID 45746)
+-- TOC entry 2487 (class 2604 OID 45746)
 -- Name: crm_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5862,7 +6081,7 @@ ALTER TABLE ONLY crm ALTER COLUMN crm_id SET DEFAULT nextval('crm_crm_id_seq'::r
 
 
 --
--- TOC entry 2473 (class 2604 OID 45747)
+-- TOC entry 2497 (class 2604 OID 45747)
 -- Name: d_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5870,7 +6089,7 @@ ALTER TABLE ONLY d ALTER COLUMN d_id SET DEFAULT nextval('d_d_id_seq'::regclass)
 
 
 --
--- TOC entry 2474 (class 2604 OID 45748)
+-- TOC entry 2498 (class 2604 OID 45748)
 -- Name: dual_ident; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5878,7 +6097,7 @@ ALTER TABLE ONLY dual ALTER COLUMN dual_ident SET DEFAULT nextval('dual_dual_ide
 
 
 --
--- TOC entry 2641 (class 2604 OID 46461)
+-- TOC entry 2665 (class 2604 OID 46461)
 -- Name: gcod2_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5886,7 +6105,7 @@ ALTER TABLE ONLY gcod2_d_scope_d_ctgr ALTER COLUMN gcod2_id SET DEFAULT nextval(
 
 
 --
--- TOC entry 2642 (class 2604 OID 46462)
+-- TOC entry 2666 (class 2604 OID 46462)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5894,7 +6113,7 @@ ALTER TABLE ONLY gcod2_d_scope_d_ctgr ALTER COLUMN cod_etstmp SET DEFAULT mynow(
 
 
 --
--- TOC entry 2643 (class 2604 OID 46463)
+-- TOC entry 2667 (class 2604 OID 46463)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5902,7 +6121,7 @@ ALTER TABLE ONLY gcod2_d_scope_d_ctgr ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2644 (class 2604 OID 46464)
+-- TOC entry 2668 (class 2604 OID 46464)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5910,7 +6129,7 @@ ALTER TABLE ONLY gcod2_d_scope_d_ctgr ALTER COLUMN cod_mtstmp SET DEFAULT mynow(
 
 
 --
--- TOC entry 2645 (class 2604 OID 46465)
+-- TOC entry 2669 (class 2604 OID 46465)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5918,7 +6137,7 @@ ALTER TABLE ONLY gcod2_d_scope_d_ctgr ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2487 (class 2604 OID 45749)
+-- TOC entry 2511 (class 2604 OID 45749)
 -- Name: gpp_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5926,7 +6145,7 @@ ALTER TABLE ONLY gpp ALTER COLUMN gpp_id SET DEFAULT nextval('gpp_gpp_id_seq'::r
 
 
 --
--- TOC entry 2494 (class 2604 OID 45750)
+-- TOC entry 2518 (class 2604 OID 45750)
 -- Name: h_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5934,7 +6153,7 @@ ALTER TABLE ONLY h ALTER COLUMN h_id SET DEFAULT nextval('h_h_id_seq'::regclass)
 
 
 --
--- TOC entry 2495 (class 2604 OID 45751)
+-- TOC entry 2519 (class 2604 OID 45751)
 -- Name: hp_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5942,7 +6161,7 @@ ALTER TABLE ONLY hp ALTER COLUMN hp_id SET DEFAULT nextval('hp_hp_id_seq'::regcl
 
 
 --
--- TOC entry 2503 (class 2604 OID 45752)
+-- TOC entry 2527 (class 2604 OID 45752)
 -- Name: n_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5950,7 +6169,7 @@ ALTER TABLE ONLY n ALTER COLUMN n_id SET DEFAULT nextval('n_n_id_seq'::regclass)
 
 
 --
--- TOC entry 2513 (class 2604 OID 45753)
+-- TOC entry 2537 (class 2604 OID 45753)
 -- Name: pe_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5958,7 +6177,7 @@ ALTER TABLE ONLY pe ALTER COLUMN pe_id SET DEFAULT nextval('pe_pe_id_seq'::regcl
 
 
 --
--- TOC entry 2522 (class 2604 OID 45754)
+-- TOC entry 2546 (class 2604 OID 45754)
 -- Name: ppd_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5966,7 +6185,7 @@ ALTER TABLE ONLY ppd ALTER COLUMN ppd_id SET DEFAULT nextval('ppd_ppd_id_seq'::r
 
 
 --
--- TOC entry 2527 (class 2604 OID 45755)
+-- TOC entry 2551 (class 2604 OID 45755)
 -- Name: ppp_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5974,7 +6193,7 @@ ALTER TABLE ONLY ppp ALTER COLUMN ppp_id SET DEFAULT nextval('ppp_ppp_id_seq'::r
 
 
 --
--- TOC entry 2530 (class 2604 OID 45756)
+-- TOC entry 2554 (class 2604 OID 45756)
 -- Name: rq_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5982,7 +6201,7 @@ ALTER TABLE ONLY rq ALTER COLUMN rq_id SET DEFAULT nextval('rq_rq_id_seq'::regcl
 
 
 --
--- TOC entry 2533 (class 2604 OID 45757)
+-- TOC entry 2557 (class 2604 OID 45757)
 -- Name: rqst_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5990,7 +6209,7 @@ ALTER TABLE ONLY rqst ALTER COLUMN rqst_id SET DEFAULT nextval('rqst_rqst_id_seq
 
 
 --
--- TOC entry 2534 (class 2604 OID 45758)
+-- TOC entry 2558 (class 2604 OID 45758)
 -- Name: rqst_d_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -5998,7 +6217,7 @@ ALTER TABLE ONLY rqst_d ALTER COLUMN rqst_d_id SET DEFAULT nextval('rqst_d_rqst_
 
 
 --
--- TOC entry 2535 (class 2604 OID 45759)
+-- TOC entry 2559 (class 2604 OID 45759)
 -- Name: rqst_email_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6006,7 +6225,7 @@ ALTER TABLE ONLY rqst_email ALTER COLUMN rqst_email_id SET DEFAULT nextval('rqst
 
 
 --
--- TOC entry 2536 (class 2604 OID 45760)
+-- TOC entry 2560 (class 2604 OID 45760)
 -- Name: rqst_n_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6014,7 +6233,7 @@ ALTER TABLE ONLY rqst_n ALTER COLUMN rqst_n_id SET DEFAULT nextval('rqst_n_rqst_
 
 
 --
--- TOC entry 2537 (class 2604 OID 45761)
+-- TOC entry 2561 (class 2604 OID 45761)
 -- Name: rqst_rq_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6022,7 +6241,7 @@ ALTER TABLE ONLY rqst_rq ALTER COLUMN rqst_rq_id SET DEFAULT nextval('rqst_rq_rq
 
 
 --
--- TOC entry 2538 (class 2604 OID 45762)
+-- TOC entry 2562 (class 2604 OID 45762)
 -- Name: rqst_sms_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6030,7 +6249,7 @@ ALTER TABLE ONLY rqst_sms ALTER COLUMN rqst_sms_id SET DEFAULT nextval('rqst_sms
 
 
 --
--- TOC entry 2539 (class 2604 OID 45763)
+-- TOC entry 2563 (class 2604 OID 45763)
 -- Name: sf_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6038,7 +6257,7 @@ ALTER TABLE ONLY sf ALTER COLUMN sf_id SET DEFAULT nextval('sf_sf_id_seq'::regcl
 
 
 --
--- TOC entry 2543 (class 2604 OID 45764)
+-- TOC entry 2567 (class 2604 OID 45764)
 -- Name: sm_id_auto; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6046,7 +6265,7 @@ ALTER TABLE ONLY sm ALTER COLUMN sm_id_auto SET DEFAULT nextval('sm_sm_id_auto_s
 
 
 --
--- TOC entry 2545 (class 2604 OID 45765)
+-- TOC entry 2569 (class 2604 OID 45765)
 -- Name: spef_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6054,7 +6273,7 @@ ALTER TABLE ONLY spef ALTER COLUMN spef_id SET DEFAULT nextval('spef_spef_id_seq
 
 
 --
--- TOC entry 2546 (class 2604 OID 45766)
+-- TOC entry 2570 (class 2604 OID 45766)
 -- Name: sper_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6062,7 +6281,7 @@ ALTER TABLE ONLY sper ALTER COLUMN sper_id SET DEFAULT nextval('sper_sper_id_seq
 
 
 --
--- TOC entry 2547 (class 2604 OID 45767)
+-- TOC entry 2571 (class 2604 OID 45767)
 -- Name: sr_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6070,7 +6289,7 @@ ALTER TABLE ONLY sr ALTER COLUMN sr_id SET DEFAULT nextval('sr_sr_id_seq'::regcl
 
 
 --
--- TOC entry 2549 (class 2604 OID 45768)
+-- TOC entry 2573 (class 2604 OID 45768)
 -- Name: srm_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6078,7 +6297,7 @@ ALTER TABLE ONLY srm ALTER COLUMN srm_id SET DEFAULT nextval('srm_srm_id_seq'::r
 
 
 --
--- TOC entry 2555 (class 2604 OID 45769)
+-- TOC entry 2579 (class 2604 OID 45769)
 -- Name: txt_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6086,7 +6305,7 @@ ALTER TABLE ONLY txt ALTER COLUMN txt_id SET DEFAULT nextval('txt_txt_id_seq'::r
 
 
 --
--- TOC entry 2560 (class 2604 OID 45770)
+-- TOC entry 2584 (class 2604 OID 45770)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6094,7 +6313,7 @@ ALTER TABLE ONLY ucod ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq
 
 
 --
--- TOC entry 2566 (class 2604 OID 45771)
+-- TOC entry 2590 (class 2604 OID 45771)
 -- Name: ucod2_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6102,7 +6321,7 @@ ALTER TABLE ONLY ucod2_country_state ALTER COLUMN ucod2_id SET DEFAULT nextval('
 
 
 --
--- TOC entry 2567 (class 2604 OID 45772)
+-- TOC entry 2591 (class 2604 OID 45772)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6110,7 +6329,7 @@ ALTER TABLE ONLY ucod2_country_state ALTER COLUMN cod_etstmp SET DEFAULT mynow()
 
 
 --
--- TOC entry 2568 (class 2604 OID 45773)
+-- TOC entry 2592 (class 2604 OID 45773)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6118,7 +6337,7 @@ ALTER TABLE ONLY ucod2_country_state ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2569 (class 2604 OID 45774)
+-- TOC entry 2593 (class 2604 OID 45774)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6126,7 +6345,7 @@ ALTER TABLE ONLY ucod2_country_state ALTER COLUMN cod_mtstmp SET DEFAULT mynow()
 
 
 --
--- TOC entry 2570 (class 2604 OID 45775)
+-- TOC entry 2594 (class 2604 OID 45775)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6134,7 +6353,7 @@ ALTER TABLE ONLY ucod2_country_state ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2655 (class 2604 OID 49503)
+-- TOC entry 2679 (class 2604 OID 49503)
 -- Name: ucod2_h_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6142,7 +6361,7 @@ ALTER TABLE ONLY ucod2_h ALTER COLUMN ucod2_h_id SET DEFAULT nextval('ucod2_h_uc
 
 
 --
--- TOC entry 2571 (class 2604 OID 45776)
+-- TOC entry 2595 (class 2604 OID 45776)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6150,7 +6369,7 @@ ALTER TABLE ONLY ucod_ac ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_
 
 
 --
--- TOC entry 2572 (class 2604 OID 45777)
+-- TOC entry 2596 (class 2604 OID 45777)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6158,7 +6377,7 @@ ALTER TABLE ONLY ucod_ac ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2573 (class 2604 OID 45778)
+-- TOC entry 2597 (class 2604 OID 45778)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6166,7 +6385,7 @@ ALTER TABLE ONLY ucod_ac ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2574 (class 2604 OID 45779)
+-- TOC entry 2598 (class 2604 OID 45779)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6174,7 +6393,7 @@ ALTER TABLE ONLY ucod_ac ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2575 (class 2604 OID 45780)
+-- TOC entry 2599 (class 2604 OID 45780)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6182,7 +6401,7 @@ ALTER TABLE ONLY ucod_ac ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2576 (class 2604 OID 45781)
+-- TOC entry 2600 (class 2604 OID 45781)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6190,7 +6409,7 @@ ALTER TABLE ONLY ucod_ac1 ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id
 
 
 --
--- TOC entry 2577 (class 2604 OID 45782)
+-- TOC entry 2601 (class 2604 OID 45782)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6198,7 +6417,7 @@ ALTER TABLE ONLY ucod_ac1 ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2578 (class 2604 OID 45783)
+-- TOC entry 2602 (class 2604 OID 45783)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6206,7 +6425,7 @@ ALTER TABLE ONLY ucod_ac1 ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2579 (class 2604 OID 45784)
+-- TOC entry 2603 (class 2604 OID 45784)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6214,7 +6433,7 @@ ALTER TABLE ONLY ucod_ac1 ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2580 (class 2604 OID 45785)
+-- TOC entry 2604 (class 2604 OID 45785)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6222,7 +6441,7 @@ ALTER TABLE ONLY ucod_ac1 ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2581 (class 2604 OID 45786)
+-- TOC entry 2605 (class 2604 OID 45786)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6230,7 +6449,7 @@ ALTER TABLE ONLY ucod_ahc ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id
 
 
 --
--- TOC entry 2582 (class 2604 OID 45787)
+-- TOC entry 2606 (class 2604 OID 45787)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6238,7 +6457,7 @@ ALTER TABLE ONLY ucod_ahc ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2583 (class 2604 OID 45788)
+-- TOC entry 2607 (class 2604 OID 45788)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6246,7 +6465,7 @@ ALTER TABLE ONLY ucod_ahc ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2584 (class 2604 OID 45789)
+-- TOC entry 2608 (class 2604 OID 45789)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6254,7 +6473,7 @@ ALTER TABLE ONLY ucod_ahc ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2585 (class 2604 OID 45790)
+-- TOC entry 2609 (class 2604 OID 45790)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6262,7 +6481,7 @@ ALTER TABLE ONLY ucod_ahc ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2586 (class 2604 OID 45791)
+-- TOC entry 2610 (class 2604 OID 45791)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6270,7 +6489,7 @@ ALTER TABLE ONLY ucod_country ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_uco
 
 
 --
--- TOC entry 2587 (class 2604 OID 45792)
+-- TOC entry 2611 (class 2604 OID 45792)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6278,7 +6497,7 @@ ALTER TABLE ONLY ucod_country ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2588 (class 2604 OID 45793)
+-- TOC entry 2612 (class 2604 OID 45793)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6286,7 +6505,7 @@ ALTER TABLE ONLY ucod_country ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2589 (class 2604 OID 45794)
+-- TOC entry 2613 (class 2604 OID 45794)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6294,7 +6513,7 @@ ALTER TABLE ONLY ucod_country ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2590 (class 2604 OID 45795)
+-- TOC entry 2614 (class 2604 OID 45795)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6302,7 +6521,7 @@ ALTER TABLE ONLY ucod_country ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2591 (class 2604 OID 45796)
+-- TOC entry 2615 (class 2604 OID 45796)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6310,7 +6529,7 @@ ALTER TABLE ONLY ucod_d_scope ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_uco
 
 
 --
--- TOC entry 2592 (class 2604 OID 45797)
+-- TOC entry 2616 (class 2604 OID 45797)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6318,7 +6537,7 @@ ALTER TABLE ONLY ucod_d_scope ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2593 (class 2604 OID 45798)
+-- TOC entry 2617 (class 2604 OID 45798)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6326,7 +6545,7 @@ ALTER TABLE ONLY ucod_d_scope ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2594 (class 2604 OID 45799)
+-- TOC entry 2618 (class 2604 OID 45799)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6334,7 +6553,7 @@ ALTER TABLE ONLY ucod_d_scope ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2595 (class 2604 OID 45800)
+-- TOC entry 2619 (class 2604 OID 45800)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6342,7 +6561,7 @@ ALTER TABLE ONLY ucod_d_scope ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2650 (class 2604 OID 49488)
+-- TOC entry 2674 (class 2604 OID 49488)
 -- Name: ucod_h_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6350,7 +6569,7 @@ ALTER TABLE ONLY ucod_h ALTER COLUMN ucod_h_id SET DEFAULT nextval('ucod_h_ucod_
 
 
 --
--- TOC entry 2596 (class 2604 OID 45801)
+-- TOC entry 2620 (class 2604 OID 45801)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6358,7 +6577,7 @@ ALTER TABLE ONLY ucod_n_scope ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_uco
 
 
 --
--- TOC entry 2597 (class 2604 OID 45802)
+-- TOC entry 2621 (class 2604 OID 45802)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6366,7 +6585,7 @@ ALTER TABLE ONLY ucod_n_scope ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2598 (class 2604 OID 45803)
+-- TOC entry 2622 (class 2604 OID 45803)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6374,7 +6593,7 @@ ALTER TABLE ONLY ucod_n_scope ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2599 (class 2604 OID 45804)
+-- TOC entry 2623 (class 2604 OID 45804)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6382,7 +6601,7 @@ ALTER TABLE ONLY ucod_n_scope ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2600 (class 2604 OID 45805)
+-- TOC entry 2624 (class 2604 OID 45805)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6390,7 +6609,7 @@ ALTER TABLE ONLY ucod_n_scope ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2602 (class 2604 OID 45806)
+-- TOC entry 2626 (class 2604 OID 45806)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6398,7 +6617,7 @@ ALTER TABLE ONLY ucod_n_type ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod
 
 
 --
--- TOC entry 2601 (class 2604 OID 45807)
+-- TOC entry 2625 (class 2604 OID 45807)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6406,7 +6625,7 @@ ALTER TABLE ONLY ucod_n_type ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2603 (class 2604 OID 45808)
+-- TOC entry 2627 (class 2604 OID 45808)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6414,7 +6633,7 @@ ALTER TABLE ONLY ucod_n_type ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2604 (class 2604 OID 45809)
+-- TOC entry 2628 (class 2604 OID 45809)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6422,7 +6641,7 @@ ALTER TABLE ONLY ucod_n_type ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2605 (class 2604 OID 45810)
+-- TOC entry 2629 (class 2604 OID 45810)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6430,7 +6649,7 @@ ALTER TABLE ONLY ucod_n_type ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2606 (class 2604 OID 45811)
+-- TOC entry 2630 (class 2604 OID 45811)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6438,7 +6657,7 @@ ALTER TABLE ONLY ucod_ppd_type ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_uc
 
 
 --
--- TOC entry 2607 (class 2604 OID 45812)
+-- TOC entry 2631 (class 2604 OID 45812)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6446,7 +6665,7 @@ ALTER TABLE ONLY ucod_ppd_type ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2608 (class 2604 OID 45813)
+-- TOC entry 2632 (class 2604 OID 45813)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6454,7 +6673,7 @@ ALTER TABLE ONLY ucod_ppd_type ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2609 (class 2604 OID 45814)
+-- TOC entry 2633 (class 2604 OID 45814)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6462,7 +6681,7 @@ ALTER TABLE ONLY ucod_ppd_type ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2610 (class 2604 OID 45815)
+-- TOC entry 2634 (class 2604 OID 45815)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6470,7 +6689,7 @@ ALTER TABLE ONLY ucod_ppd_type ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2611 (class 2604 OID 45816)
+-- TOC entry 2635 (class 2604 OID 45816)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6478,7 +6697,7 @@ ALTER TABLE ONLY ucod_rqst_atype ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_
 
 
 --
--- TOC entry 2612 (class 2604 OID 45817)
+-- TOC entry 2636 (class 2604 OID 45817)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6486,7 +6705,7 @@ ALTER TABLE ONLY ucod_rqst_atype ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2613 (class 2604 OID 45818)
+-- TOC entry 2637 (class 2604 OID 45818)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6494,7 +6713,7 @@ ALTER TABLE ONLY ucod_rqst_atype ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2614 (class 2604 OID 45819)
+-- TOC entry 2638 (class 2604 OID 45819)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6502,7 +6721,7 @@ ALTER TABLE ONLY ucod_rqst_atype ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2615 (class 2604 OID 45820)
+-- TOC entry 2639 (class 2604 OID 45820)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6510,7 +6729,7 @@ ALTER TABLE ONLY ucod_rqst_atype ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2616 (class 2604 OID 45821)
+-- TOC entry 2640 (class 2604 OID 45821)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6518,7 +6737,7 @@ ALTER TABLE ONLY ucod_rqst_source ALTER COLUMN ucod_id SET DEFAULT nextval('ucod
 
 
 --
--- TOC entry 2617 (class 2604 OID 45822)
+-- TOC entry 2641 (class 2604 OID 45822)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6526,7 +6745,7 @@ ALTER TABLE ONLY ucod_rqst_source ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2618 (class 2604 OID 45823)
+-- TOC entry 2642 (class 2604 OID 45823)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6534,7 +6753,7 @@ ALTER TABLE ONLY ucod_rqst_source ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2619 (class 2604 OID 45824)
+-- TOC entry 2643 (class 2604 OID 45824)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6542,7 +6761,7 @@ ALTER TABLE ONLY ucod_rqst_source ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2620 (class 2604 OID 45825)
+-- TOC entry 2644 (class 2604 OID 45825)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6550,7 +6769,7 @@ ALTER TABLE ONLY ucod_rqst_source ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2621 (class 2604 OID 45826)
+-- TOC entry 2645 (class 2604 OID 45826)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6558,7 +6777,7 @@ ALTER TABLE ONLY ucod_txt_type ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_uc
 
 
 --
--- TOC entry 2622 (class 2604 OID 45827)
+-- TOC entry 2646 (class 2604 OID 45827)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6566,7 +6785,7 @@ ALTER TABLE ONLY ucod_txt_type ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2623 (class 2604 OID 45828)
+-- TOC entry 2647 (class 2604 OID 45828)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6574,7 +6793,7 @@ ALTER TABLE ONLY ucod_txt_type ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2624 (class 2604 OID 45829)
+-- TOC entry 2648 (class 2604 OID 45829)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6582,7 +6801,7 @@ ALTER TABLE ONLY ucod_txt_type ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2625 (class 2604 OID 45830)
+-- TOC entry 2649 (class 2604 OID 45830)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6590,7 +6809,7 @@ ALTER TABLE ONLY ucod_txt_type ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2656 (class 2604 OID 54254)
+-- TOC entry 2684 (class 2604 OID 54254)
 -- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6598,7 +6817,7 @@ ALTER TABLE ONLY ucod_v_sts ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_
 
 
 --
--- TOC entry 2657 (class 2604 OID 54255)
+-- TOC entry 2680 (class 2604 OID 54255)
 -- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6606,7 +6825,7 @@ ALTER TABLE ONLY ucod_v_sts ALTER COLUMN cod_etstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2658 (class 2604 OID 54256)
+-- TOC entry 2681 (class 2604 OID 54256)
 -- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6614,7 +6833,7 @@ ALTER TABLE ONLY ucod_v_sts ALTER COLUMN cod_eu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2659 (class 2604 OID 54257)
+-- TOC entry 2682 (class 2604 OID 54257)
 -- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6622,7 +6841,7 @@ ALTER TABLE ONLY ucod_v_sts ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
 
 
 --
--- TOC entry 2660 (class 2604 OID 54258)
+-- TOC entry 2683 (class 2604 OID 54258)
 -- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6630,7 +6849,7 @@ ALTER TABLE ONLY ucod_v_sts ALTER COLUMN cod_mu SET DEFAULT mycuser();
 
 
 --
--- TOC entry 2661 (class 2604 OID 54259)
+-- TOC entry 2685 (class 2604 OID 54259)
 -- Name: v_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6638,7 +6857,7 @@ ALTER TABLE ONLY v ALTER COLUMN v_id SET DEFAULT nextval('v_v_id_seq'::regclass)
 
 
 --
--- TOC entry 2630 (class 2604 OID 45831)
+-- TOC entry 2654 (class 2604 OID 45831)
 -- Name: xpp_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6646,7 +6865,7 @@ ALTER TABLE ONLY xpp ALTER COLUMN xpp_id SET DEFAULT nextval('xpp_xpp_id_seq'::r
 
 
 --
--- TOC entry 2672 (class 2606 OID 45833)
+-- TOC entry 2696 (class 2606 OID 45833)
 -- Name: aud_d_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6655,7 +6874,7 @@ ALTER TABLE ONLY aud_d
 
 
 --
--- TOC entry 2674 (class 2606 OID 45835)
+-- TOC entry 2698 (class 2606 OID 45835)
 -- Name: aud_h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6664,7 +6883,7 @@ ALTER TABLE ONLY aud_h
 
 
 --
--- TOC entry 2677 (class 2606 OID 45837)
+-- TOC entry 2701 (class 2606 OID 45837)
 -- Name: cpe_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6673,7 +6892,7 @@ ALTER TABLE ONLY cpe
 
 
 --
--- TOC entry 2679 (class 2606 OID 45839)
+-- TOC entry 2703 (class 2606 OID 45839)
 -- Name: cper_cper_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6682,7 +6901,7 @@ ALTER TABLE ONLY cper
 
 
 --
--- TOC entry 2681 (class 2606 OID 45841)
+-- TOC entry 2705 (class 2606 OID 45841)
 -- Name: cper_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6691,7 +6910,7 @@ ALTER TABLE ONLY cper
 
 
 --
--- TOC entry 2683 (class 2606 OID 45843)
+-- TOC entry 2707 (class 2606 OID 45843)
 -- Name: cr_cr_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6700,7 +6919,7 @@ ALTER TABLE ONLY cr
 
 
 --
--- TOC entry 2685 (class 2606 OID 45845)
+-- TOC entry 2709 (class 2606 OID 45845)
 -- Name: cr_cr_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6709,7 +6928,7 @@ ALTER TABLE ONLY cr
 
 
 --
--- TOC entry 2687 (class 2606 OID 45847)
+-- TOC entry 2711 (class 2606 OID 45847)
 -- Name: cr_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6718,7 +6937,7 @@ ALTER TABLE ONLY cr
 
 
 --
--- TOC entry 2689 (class 2606 OID 45849)
+-- TOC entry 2713 (class 2606 OID 45849)
 -- Name: crm_crm_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6727,7 +6946,7 @@ ALTER TABLE ONLY crm
 
 
 --
--- TOC entry 2691 (class 2606 OID 45851)
+-- TOC entry 2715 (class 2606 OID 45851)
 -- Name: crm_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6736,7 +6955,7 @@ ALTER TABLE ONLY crm
 
 
 --
--- TOC entry 2693 (class 2606 OID 45853)
+-- TOC entry 2717 (class 2606 OID 45853)
 -- Name: d_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6745,7 +6964,7 @@ ALTER TABLE ONLY d
 
 
 --
--- TOC entry 2696 (class 2606 OID 45855)
+-- TOC entry 2720 (class 2606 OID 45855)
 -- Name: dual_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6754,7 +6973,7 @@ ALTER TABLE ONLY dual
 
 
 --
--- TOC entry 2854 (class 2606 OID 46498)
+-- TOC entry 2878 (class 2606 OID 46498)
 -- Name: gcod2_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6763,7 +6982,7 @@ ALTER TABLE ONLY gcod2
 
 
 --
--- TOC entry 2856 (class 2606 OID 46415)
+-- TOC entry 2880 (class 2606 OID 46415)
 -- Name: gcod2_codeval1_codeval2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6772,7 +6991,7 @@ ALTER TABLE ONLY gcod2
 
 
 --
--- TOC entry 2860 (class 2606 OID 46502)
+-- TOC entry 2884 (class 2606 OID 46502)
 -- Name: gcod2_d_scope_d_ctgr_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6781,7 +7000,7 @@ ALTER TABLE ONLY gcod2_d_scope_d_ctgr
 
 
 --
--- TOC entry 2862 (class 2606 OID 46472)
+-- TOC entry 2886 (class 2606 OID 46472)
 -- Name: gcod2_d_scope_d_ctgr_codeval1_codeval2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6790,7 +7009,7 @@ ALTER TABLE ONLY gcod2_d_scope_d_ctgr
 
 
 --
--- TOC entry 2864 (class 2606 OID 46470)
+-- TOC entry 2888 (class 2606 OID 46470)
 -- Name: gcod2_d_scope_d_ctgr_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6799,7 +7018,7 @@ ALTER TABLE ONLY gcod2_d_scope_d_ctgr
 
 
 --
--- TOC entry 2698 (class 2606 OID 45857)
+-- TOC entry 2722 (class 2606 OID 45857)
 -- Name: gcod2_h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6808,7 +7027,7 @@ ALTER TABLE ONLY gcod2_h
 
 
 --
--- TOC entry 2858 (class 2606 OID 46411)
+-- TOC entry 2882 (class 2606 OID 46411)
 -- Name: gcod2_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6817,7 +7036,7 @@ ALTER TABLE ONLY gcod2
 
 
 --
--- TOC entry 2848 (class 2606 OID 46359)
+-- TOC entry 2872 (class 2606 OID 46359)
 -- Name: gcod_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6826,7 +7045,7 @@ ALTER TABLE ONLY gcod
 
 
 --
--- TOC entry 2850 (class 2606 OID 46361)
+-- TOC entry 2874 (class 2606 OID 46361)
 -- Name: gcod_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6835,7 +7054,7 @@ ALTER TABLE ONLY gcod
 
 
 --
--- TOC entry 2700 (class 2606 OID 45859)
+-- TOC entry 2724 (class 2606 OID 45859)
 -- Name: gcod_h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6844,7 +7063,7 @@ ALTER TABLE ONLY gcod_h
 
 
 --
--- TOC entry 2852 (class 2606 OID 46357)
+-- TOC entry 2876 (class 2606 OID 46357)
 -- Name: gcod_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6853,7 +7072,7 @@ ALTER TABLE ONLY gcod
 
 
 --
--- TOC entry 2702 (class 2606 OID 45861)
+-- TOC entry 2726 (class 2606 OID 45861)
 -- Name: gpp_gpp_process_gpp_attrib_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6862,7 +7081,7 @@ ALTER TABLE ONLY gpp
 
 
 --
--- TOC entry 2704 (class 2606 OID 45863)
+-- TOC entry 2728 (class 2606 OID 45863)
 -- Name: gpp_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6871,7 +7090,7 @@ ALTER TABLE ONLY gpp
 
 
 --
--- TOC entry 2706 (class 2606 OID 45865)
+-- TOC entry 2730 (class 2606 OID 45865)
 -- Name: h_h_title_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6880,7 +7099,7 @@ ALTER TABLE ONLY h
 
 
 --
--- TOC entry 2709 (class 2606 OID 45867)
+-- TOC entry 2733 (class 2606 OID 45867)
 -- Name: h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6889,7 +7108,7 @@ ALTER TABLE ONLY h
 
 
 --
--- TOC entry 2711 (class 2606 OID 45869)
+-- TOC entry 2735 (class 2606 OID 45869)
 -- Name: hp_hp_code_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6898,7 +7117,7 @@ ALTER TABLE ONLY hp
 
 
 --
--- TOC entry 2713 (class 2606 OID 45871)
+-- TOC entry 2737 (class 2606 OID 45871)
 -- Name: hp_hp_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6907,7 +7126,7 @@ ALTER TABLE ONLY hp
 
 
 --
--- TOC entry 2715 (class 2606 OID 45873)
+-- TOC entry 2739 (class 2606 OID 45873)
 -- Name: hp_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6916,7 +7135,7 @@ ALTER TABLE ONLY hp
 
 
 --
--- TOC entry 2717 (class 2606 OID 45875)
+-- TOC entry 2741 (class 2606 OID 45875)
 -- Name: n_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6925,7 +7144,7 @@ ALTER TABLE ONLY n
 
 
 --
--- TOC entry 2719 (class 2606 OID 45877)
+-- TOC entry 2743 (class 2606 OID 45877)
 -- Name: numbers_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6934,7 +7153,7 @@ ALTER TABLE ONLY numbers
 
 
 --
--- TOC entry 2722 (class 2606 OID 45879)
+-- TOC entry 2746 (class 2606 OID 45879)
 -- Name: pe_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6943,7 +7162,7 @@ ALTER TABLE ONLY pe
 
 
 --
--- TOC entry 2724 (class 2606 OID 45881)
+-- TOC entry 2748 (class 2606 OID 45881)
 -- Name: ppd_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6952,7 +7171,7 @@ ALTER TABLE ONLY ppd
 
 
 --
--- TOC entry 2726 (class 2606 OID 45883)
+-- TOC entry 2750 (class 2606 OID 45883)
 -- Name: ppd_ppd_process_ppd_attrib_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6961,7 +7180,7 @@ ALTER TABLE ONLY ppd
 
 
 --
--- TOC entry 2728 (class 2606 OID 45885)
+-- TOC entry 2752 (class 2606 OID 45885)
 -- Name: ppp_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6970,7 +7189,7 @@ ALTER TABLE ONLY ppp
 
 
 --
--- TOC entry 2730 (class 2606 OID 45887)
+-- TOC entry 2754 (class 2606 OID 45887)
 -- Name: ppp_ppp_process_ppp_attrib_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6979,7 +7198,7 @@ ALTER TABLE ONLY ppp
 
 
 --
--- TOC entry 2732 (class 2606 OID 45889)
+-- TOC entry 2756 (class 2606 OID 45889)
 -- Name: rq_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6988,7 +7207,7 @@ ALTER TABLE ONLY rq
 
 
 --
--- TOC entry 2736 (class 2606 OID 45891)
+-- TOC entry 2760 (class 2606 OID 45891)
 -- Name: rqst_d_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -6997,7 +7216,7 @@ ALTER TABLE ONLY rqst_d
 
 
 --
--- TOC entry 2738 (class 2606 OID 45893)
+-- TOC entry 2762 (class 2606 OID 45893)
 -- Name: rqst_email_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7006,7 +7225,7 @@ ALTER TABLE ONLY rqst_email
 
 
 --
--- TOC entry 2740 (class 2606 OID 45895)
+-- TOC entry 2764 (class 2606 OID 45895)
 -- Name: rqst_n_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7015,7 +7234,7 @@ ALTER TABLE ONLY rqst_n
 
 
 --
--- TOC entry 2734 (class 2606 OID 45897)
+-- TOC entry 2758 (class 2606 OID 45897)
 -- Name: rqst_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7024,7 +7243,7 @@ ALTER TABLE ONLY rqst
 
 
 --
--- TOC entry 2742 (class 2606 OID 45899)
+-- TOC entry 2766 (class 2606 OID 45899)
 -- Name: rqst_rq_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7033,7 +7252,7 @@ ALTER TABLE ONLY rqst_rq
 
 
 --
--- TOC entry 2744 (class 2606 OID 45901)
+-- TOC entry 2768 (class 2606 OID 45901)
 -- Name: rqst_sms_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7042,7 +7261,7 @@ ALTER TABLE ONLY rqst_sms
 
 
 --
--- TOC entry 2746 (class 2606 OID 45903)
+-- TOC entry 2770 (class 2606 OID 45903)
 -- Name: sf_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7051,7 +7270,7 @@ ALTER TABLE ONLY sf
 
 
 --
--- TOC entry 2748 (class 2606 OID 45905)
+-- TOC entry 2772 (class 2606 OID 45905)
 -- Name: sf_sf_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7060,7 +7279,7 @@ ALTER TABLE ONLY sf
 
 
 --
--- TOC entry 2750 (class 2606 OID 45907)
+-- TOC entry 2774 (class 2606 OID 45907)
 -- Name: sf_sf_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7069,7 +7288,7 @@ ALTER TABLE ONLY sf
 
 
 --
--- TOC entry 2752 (class 2606 OID 45909)
+-- TOC entry 2776 (class 2606 OID 45909)
 -- Name: sm_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7078,7 +7297,7 @@ ALTER TABLE ONLY sm
 
 
 --
--- TOC entry 2754 (class 2606 OID 45911)
+-- TOC entry 2778 (class 2606 OID 45911)
 -- Name: sm_sm_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7087,7 +7306,7 @@ ALTER TABLE ONLY sm
 
 
 --
--- TOC entry 2756 (class 2606 OID 45913)
+-- TOC entry 2780 (class 2606 OID 45913)
 -- Name: sm_sm_id_parent_sm_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7096,7 +7315,7 @@ ALTER TABLE ONLY sm
 
 
 --
--- TOC entry 2758 (class 2606 OID 45915)
+-- TOC entry 2782 (class 2606 OID 45915)
 -- Name: sm_sm_id_sm_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7105,7 +7324,7 @@ ALTER TABLE ONLY sm
 
 
 --
--- TOC entry 2760 (class 2606 OID 45917)
+-- TOC entry 2784 (class 2606 OID 45917)
 -- Name: sm_sm_name_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7114,7 +7333,7 @@ ALTER TABLE ONLY sm
 
 
 --
--- TOC entry 2762 (class 2606 OID 45919)
+-- TOC entry 2786 (class 2606 OID 45919)
 -- Name: spef_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7123,7 +7342,7 @@ ALTER TABLE ONLY spef
 
 
 --
--- TOC entry 2764 (class 2606 OID 45921)
+-- TOC entry 2788 (class 2606 OID 45921)
 -- Name: spef_spef_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7132,7 +7351,7 @@ ALTER TABLE ONLY spef
 
 
 --
--- TOC entry 2766 (class 2606 OID 45923)
+-- TOC entry 2790 (class 2606 OID 45923)
 -- Name: sper_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7141,7 +7360,7 @@ ALTER TABLE ONLY sper
 
 
 --
--- TOC entry 2768 (class 2606 OID 45925)
+-- TOC entry 2792 (class 2606 OID 45925)
 -- Name: sper_sper_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7150,7 +7369,7 @@ ALTER TABLE ONLY sper
 
 
 --
--- TOC entry 2770 (class 2606 OID 45927)
+-- TOC entry 2794 (class 2606 OID 45927)
 -- Name: sr_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7159,7 +7378,7 @@ ALTER TABLE ONLY sr
 
 
 --
--- TOC entry 2772 (class 2606 OID 45929)
+-- TOC entry 2796 (class 2606 OID 45929)
 -- Name: sr_sr_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7168,7 +7387,7 @@ ALTER TABLE ONLY sr
 
 
 --
--- TOC entry 2774 (class 2606 OID 45931)
+-- TOC entry 2798 (class 2606 OID 45931)
 -- Name: sr_sr_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7177,7 +7396,7 @@ ALTER TABLE ONLY sr
 
 
 --
--- TOC entry 2776 (class 2606 OID 45933)
+-- TOC entry 2800 (class 2606 OID 45933)
 -- Name: srm_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7186,7 +7405,7 @@ ALTER TABLE ONLY srm
 
 
 --
--- TOC entry 2778 (class 2606 OID 45935)
+-- TOC entry 2802 (class 2606 OID 45935)
 -- Name: srm_srm_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7195,7 +7414,7 @@ ALTER TABLE ONLY srm
 
 
 --
--- TOC entry 2780 (class 2606 OID 45937)
+-- TOC entry 2804 (class 2606 OID 45937)
 -- Name: txt_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7204,7 +7423,7 @@ ALTER TABLE ONLY txt
 
 
 --
--- TOC entry 2782 (class 2606 OID 45939)
+-- TOC entry 2806 (class 2606 OID 45939)
 -- Name: txt_txt_process_txt_attrib_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7213,7 +7432,7 @@ ALTER TABLE ONLY txt
 
 
 --
--- TOC entry 2788 (class 2606 OID 45941)
+-- TOC entry 2812 (class 2606 OID 45941)
 -- Name: ucod2_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7222,7 +7441,7 @@ ALTER TABLE ONLY ucod2
 
 
 --
--- TOC entry 2790 (class 2606 OID 45943)
+-- TOC entry 2814 (class 2606 OID 45943)
 -- Name: ucod2_codeval1_codeval2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7231,7 +7450,7 @@ ALTER TABLE ONLY ucod2
 
 
 --
--- TOC entry 2794 (class 2606 OID 45945)
+-- TOC entry 2818 (class 2606 OID 45945)
 -- Name: ucod2_country_state_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7240,7 +7459,7 @@ ALTER TABLE ONLY ucod2_country_state
 
 
 --
--- TOC entry 2796 (class 2606 OID 45947)
+-- TOC entry 2820 (class 2606 OID 45947)
 -- Name: ucod2_country_state_codeval1_codeval2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7249,7 +7468,7 @@ ALTER TABLE ONLY ucod2_country_state
 
 
 --
--- TOC entry 2798 (class 2606 OID 45949)
+-- TOC entry 2822 (class 2606 OID 45949)
 -- Name: ucod2_country_state_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7258,7 +7477,7 @@ ALTER TABLE ONLY ucod2_country_state
 
 
 --
--- TOC entry 2872 (class 2606 OID 49514)
+-- TOC entry 2896 (class 2606 OID 49514)
 -- Name: ucod2_h_codeschema_codename_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7267,7 +7486,7 @@ ALTER TABLE ONLY ucod2_h
 
 
 --
--- TOC entry 2874 (class 2606 OID 49512)
+-- TOC entry 2898 (class 2606 OID 49512)
 -- Name: ucod2_h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7276,7 +7495,7 @@ ALTER TABLE ONLY ucod2_h
 
 
 --
--- TOC entry 2792 (class 2606 OID 45951)
+-- TOC entry 2816 (class 2606 OID 45951)
 -- Name: ucod2_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7285,7 +7504,7 @@ ALTER TABLE ONLY ucod2
 
 
 --
--- TOC entry 2804 (class 2606 OID 45953)
+-- TOC entry 2828 (class 2606 OID 45953)
 -- Name: ucod_ac1_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7294,7 +7513,7 @@ ALTER TABLE ONLY ucod_ac1
 
 
 --
--- TOC entry 2806 (class 2606 OID 45955)
+-- TOC entry 2830 (class 2606 OID 45955)
 -- Name: ucod_ac1_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7303,7 +7522,7 @@ ALTER TABLE ONLY ucod_ac1
 
 
 --
--- TOC entry 2800 (class 2606 OID 45957)
+-- TOC entry 2824 (class 2606 OID 45957)
 -- Name: ucod_ac_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7312,7 +7531,7 @@ ALTER TABLE ONLY ucod_ac
 
 
 --
--- TOC entry 2802 (class 2606 OID 45959)
+-- TOC entry 2826 (class 2606 OID 45959)
 -- Name: ucod_ac_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7321,7 +7540,7 @@ ALTER TABLE ONLY ucod_ac
 
 
 --
--- TOC entry 2808 (class 2606 OID 45961)
+-- TOC entry 2832 (class 2606 OID 45961)
 -- Name: ucod_ahc_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7330,7 +7549,7 @@ ALTER TABLE ONLY ucod_ahc
 
 
 --
--- TOC entry 2810 (class 2606 OID 45963)
+-- TOC entry 2834 (class 2606 OID 45963)
 -- Name: ucod_ahc_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7339,7 +7558,7 @@ ALTER TABLE ONLY ucod_ahc
 
 
 --
--- TOC entry 2784 (class 2606 OID 45965)
+-- TOC entry 2808 (class 2606 OID 45965)
 -- Name: ucod_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7348,7 +7567,7 @@ ALTER TABLE ONLY ucod
 
 
 --
--- TOC entry 2812 (class 2606 OID 45967)
+-- TOC entry 2836 (class 2606 OID 45967)
 -- Name: ucod_country_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7357,7 +7576,7 @@ ALTER TABLE ONLY ucod_country
 
 
 --
--- TOC entry 2814 (class 2606 OID 45969)
+-- TOC entry 2838 (class 2606 OID 45969)
 -- Name: ucod_country_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7366,7 +7585,7 @@ ALTER TABLE ONLY ucod_country
 
 
 --
--- TOC entry 2816 (class 2606 OID 45971)
+-- TOC entry 2840 (class 2606 OID 45971)
 -- Name: ucod_d_scope_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7375,7 +7594,7 @@ ALTER TABLE ONLY ucod_d_scope
 
 
 --
--- TOC entry 2818 (class 2606 OID 45973)
+-- TOC entry 2842 (class 2606 OID 45973)
 -- Name: ucod_d_scope_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7384,7 +7603,7 @@ ALTER TABLE ONLY ucod_d_scope
 
 
 --
--- TOC entry 2867 (class 2606 OID 49499)
+-- TOC entry 2891 (class 2606 OID 49499)
 -- Name: ucod_h_codeschema_codename_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7393,7 +7612,7 @@ ALTER TABLE ONLY ucod_h
 
 
 --
--- TOC entry 2869 (class 2606 OID 49497)
+-- TOC entry 2893 (class 2606 OID 49497)
 -- Name: ucod_h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7402,7 +7621,7 @@ ALTER TABLE ONLY ucod_h
 
 
 --
--- TOC entry 2820 (class 2606 OID 45975)
+-- TOC entry 2844 (class 2606 OID 45975)
 -- Name: ucod_n_scope_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7411,7 +7630,7 @@ ALTER TABLE ONLY ucod_n_scope
 
 
 --
--- TOC entry 2822 (class 2606 OID 45977)
+-- TOC entry 2846 (class 2606 OID 45977)
 -- Name: ucod_n_scope_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7420,7 +7639,7 @@ ALTER TABLE ONLY ucod_n_scope
 
 
 --
--- TOC entry 2824 (class 2606 OID 45979)
+-- TOC entry 2848 (class 2606 OID 45979)
 -- Name: ucod_n_type_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7429,7 +7648,7 @@ ALTER TABLE ONLY ucod_n_type
 
 
 --
--- TOC entry 2826 (class 2606 OID 45981)
+-- TOC entry 2850 (class 2606 OID 45981)
 -- Name: ucod_n_type_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7438,7 +7657,7 @@ ALTER TABLE ONLY ucod_n_type
 
 
 --
--- TOC entry 2786 (class 2606 OID 45983)
+-- TOC entry 2810 (class 2606 OID 45983)
 -- Name: ucod_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7447,7 +7666,7 @@ ALTER TABLE ONLY ucod
 
 
 --
--- TOC entry 2828 (class 2606 OID 45985)
+-- TOC entry 2852 (class 2606 OID 45985)
 -- Name: ucod_ppd_type_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7456,7 +7675,7 @@ ALTER TABLE ONLY ucod_ppd_type
 
 
 --
--- TOC entry 2830 (class 2606 OID 45987)
+-- TOC entry 2854 (class 2606 OID 45987)
 -- Name: ucod_ppd_type_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7465,7 +7684,7 @@ ALTER TABLE ONLY ucod_ppd_type
 
 
 --
--- TOC entry 2832 (class 2606 OID 45989)
+-- TOC entry 2856 (class 2606 OID 45989)
 -- Name: ucod_rqst_atype_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7474,7 +7693,7 @@ ALTER TABLE ONLY ucod_rqst_atype
 
 
 --
--- TOC entry 2834 (class 2606 OID 45991)
+-- TOC entry 2858 (class 2606 OID 45991)
 -- Name: ucod_rqst_atype_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7483,7 +7702,7 @@ ALTER TABLE ONLY ucod_rqst_atype
 
 
 --
--- TOC entry 2836 (class 2606 OID 45993)
+-- TOC entry 2860 (class 2606 OID 45993)
 -- Name: ucod_rqst_source_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7492,7 +7711,7 @@ ALTER TABLE ONLY ucod_rqst_source
 
 
 --
--- TOC entry 2838 (class 2606 OID 45995)
+-- TOC entry 2862 (class 2606 OID 45995)
 -- Name: ucod_rqst_source_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7501,7 +7720,7 @@ ALTER TABLE ONLY ucod_rqst_source
 
 
 --
--- TOC entry 2840 (class 2606 OID 45997)
+-- TOC entry 2864 (class 2606 OID 45997)
 -- Name: ucod_txt_type_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7510,7 +7729,7 @@ ALTER TABLE ONLY ucod_txt_type
 
 
 --
--- TOC entry 2842 (class 2606 OID 45999)
+-- TOC entry 2866 (class 2606 OID 45999)
 -- Name: ucod_txt_type_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7519,7 +7738,7 @@ ALTER TABLE ONLY ucod_txt_type
 
 
 --
--- TOC entry 2876 (class 2606 OID 54261)
+-- TOC entry 2900 (class 2606 OID 54261)
 -- Name: ucod_v_sts_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7528,7 +7747,7 @@ ALTER TABLE ONLY ucod_v_sts
 
 
 --
--- TOC entry 2878 (class 2606 OID 54263)
+-- TOC entry 2902 (class 2606 OID 54263)
 -- Name: ucod_v_sts_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7537,7 +7756,7 @@ ALTER TABLE ONLY ucod_v_sts
 
 
 --
--- TOC entry 2880 (class 2606 OID 54265)
+-- TOC entry 2904 (class 2606 OID 54265)
 -- Name: ucod_v_sts_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7546,7 +7765,7 @@ ALTER TABLE ONLY ucod_v_sts
 
 
 --
--- TOC entry 2882 (class 2606 OID 54267)
+-- TOC entry 2906 (class 2606 OID 54267)
 -- Name: v_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7555,7 +7774,7 @@ ALTER TABLE ONLY v
 
 
 --
--- TOC entry 2884 (class 2606 OID 54269)
+-- TOC entry 2908 (class 2606 OID 54269)
 -- Name: v_v_no_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7564,7 +7783,7 @@ ALTER TABLE ONLY v
 
 
 --
--- TOC entry 2844 (class 2606 OID 46001)
+-- TOC entry 2868 (class 2606 OID 46001)
 -- Name: xpp_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7573,7 +7792,7 @@ ALTER TABLE ONLY xpp
 
 
 --
--- TOC entry 2846 (class 2606 OID 46003)
+-- TOC entry 2870 (class 2606 OID 46003)
 -- Name: xpp_xpp_process_xpp_attrib_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7582,7 +7801,7 @@ ALTER TABLE ONLY xpp
 
 
 --
--- TOC entry 2675 (class 1259 OID 46004)
+-- TOC entry 2699 (class 1259 OID 46004)
 -- Name: cpe_pe_email_unique; Type: INDEX; Schema: jsharmony; Owner: postgres
 --
 
@@ -7590,7 +7809,7 @@ CREATE UNIQUE INDEX cpe_pe_email_unique ON cpe USING btree (lower((pe_email)::te
 
 
 --
--- TOC entry 2694 (class 1259 OID 46508)
+-- TOC entry 2718 (class 1259 OID 46508)
 -- Name: fki_d_d_scope_d_ctgr; Type: INDEX; Schema: jsharmony; Owner: postgres
 --
 
@@ -7598,7 +7817,7 @@ CREATE INDEX fki_d_d_scope_d_ctgr ON d USING btree (d_scope, d_ctgr);
 
 
 --
--- TOC entry 2707 (class 1259 OID 46005)
+-- TOC entry 2731 (class 1259 OID 46005)
 -- Name: h_hp_code_unique; Type: INDEX; Schema: jsharmony; Owner: postgres
 --
 
@@ -7606,7 +7825,7 @@ CREATE UNIQUE INDEX h_hp_code_unique ON h USING btree (hp_code) WHERE (hp_code I
 
 
 --
--- TOC entry 2720 (class 1259 OID 46006)
+-- TOC entry 2744 (class 1259 OID 46006)
 -- Name: pe_pe_email_unique; Type: INDEX; Schema: jsharmony; Owner: postgres
 --
 
@@ -7614,7 +7833,7 @@ CREATE UNIQUE INDEX pe_pe_email_unique ON pe USING btree (lower((pe_email)::text
 
 
 --
--- TOC entry 2870 (class 1259 OID 49515)
+-- TOC entry 2894 (class 1259 OID 49515)
 -- Name: ucod2_h_coalesce_codename_idx; Type: INDEX; Schema: jsharmony; Owner: postgres
 --
 
@@ -7622,7 +7841,7 @@ CREATE UNIQUE INDEX ucod2_h_coalesce_codename_idx ON ucod2_h USING btree ((COALE
 
 
 --
--- TOC entry 2865 (class 1259 OID 49500)
+-- TOC entry 2889 (class 1259 OID 49500)
 -- Name: ucod_h_coalesce_codename_idx; Type: INDEX; Schema: jsharmony; Owner: postgres
 --
 
@@ -7630,7 +7849,7 @@ CREATE UNIQUE INDEX ucod_h_coalesce_codename_idx ON ucod_h USING btree ((COALESC
 
 
 --
--- TOC entry 2926 (class 2620 OID 46007)
+-- TOC entry 2949 (class 2620 OID 46007)
 -- Name: cpe_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7638,7 +7857,7 @@ CREATE TRIGGER cpe_iud BEFORE INSERT OR DELETE OR UPDATE ON cpe FOR EACH ROW EXE
 
 
 --
--- TOC entry 2927 (class 2620 OID 46008)
+-- TOC entry 2950 (class 2620 OID 46008)
 -- Name: cper_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7646,7 +7865,7 @@ CREATE TRIGGER cper_iud BEFORE INSERT OR DELETE OR UPDATE ON cper FOR EACH ROW E
 
 
 --
--- TOC entry 2928 (class 2620 OID 46009)
+-- TOC entry 2951 (class 2620 OID 46009)
 -- Name: d_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7654,7 +7873,7 @@ CREATE TRIGGER d_iud BEFORE INSERT OR DELETE OR UPDATE ON d FOR EACH ROW EXECUTE
 
 
 --
--- TOC entry 2943 (class 2620 OID 46475)
+-- TOC entry 2966 (class 2620 OID 46475)
 -- Name: gcod2_d_scope_d_ctgr_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7662,7 +7881,7 @@ CREATE TRIGGER gcod2_d_scope_d_ctgr_iud BEFORE INSERT OR DELETE OR UPDATE ON gco
 
 
 --
--- TOC entry 2942 (class 2620 OID 46416)
+-- TOC entry 2965 (class 2620 OID 46416)
 -- Name: gcod2_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7670,7 +7889,7 @@ CREATE TRIGGER gcod2_iud BEFORE INSERT OR DELETE OR UPDATE ON gcod2 FOR EACH ROW
 
 
 --
--- TOC entry 2941 (class 2620 OID 46362)
+-- TOC entry 2964 (class 2620 OID 46362)
 -- Name: gcod_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7678,7 +7897,7 @@ CREATE TRIGGER gcod_iud BEFORE INSERT OR DELETE OR UPDATE ON gcod FOR EACH ROW E
 
 
 --
--- TOC entry 2929 (class 2620 OID 46010)
+-- TOC entry 2952 (class 2620 OID 46010)
 -- Name: gpp_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7686,7 +7905,7 @@ CREATE TRIGGER gpp_iud BEFORE INSERT OR DELETE OR UPDATE ON gpp FOR EACH ROW EXE
 
 
 --
--- TOC entry 2930 (class 2620 OID 46011)
+-- TOC entry 2953 (class 2620 OID 46011)
 -- Name: h_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7694,7 +7913,7 @@ CREATE TRIGGER h_iud BEFORE INSERT OR DELETE OR UPDATE ON h FOR EACH ROW EXECUTE
 
 
 --
--- TOC entry 2931 (class 2620 OID 46012)
+-- TOC entry 2954 (class 2620 OID 46012)
 -- Name: n_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7702,7 +7921,7 @@ CREATE TRIGGER n_iud BEFORE INSERT OR DELETE OR UPDATE ON n FOR EACH ROW EXECUTE
 
 
 --
--- TOC entry 2932 (class 2620 OID 46013)
+-- TOC entry 2955 (class 2620 OID 46013)
 -- Name: pe_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7710,7 +7929,7 @@ CREATE TRIGGER pe_iud BEFORE INSERT OR DELETE OR UPDATE ON pe FOR EACH ROW EXECU
 
 
 --
--- TOC entry 2933 (class 2620 OID 46014)
+-- TOC entry 2956 (class 2620 OID 46014)
 -- Name: ppd_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7718,7 +7937,7 @@ CREATE TRIGGER ppd_iud BEFORE INSERT OR DELETE OR UPDATE ON ppd FOR EACH ROW EXE
 
 
 --
--- TOC entry 2934 (class 2620 OID 46015)
+-- TOC entry 2957 (class 2620 OID 46015)
 -- Name: ppp_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7726,7 +7945,7 @@ CREATE TRIGGER ppp_iud BEFORE INSERT OR DELETE OR UPDATE ON ppp FOR EACH ROW EXE
 
 
 --
--- TOC entry 2935 (class 2620 OID 46016)
+-- TOC entry 2958 (class 2620 OID 46016)
 -- Name: spef_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7734,7 +7953,7 @@ CREATE TRIGGER spef_iud BEFORE INSERT OR DELETE OR UPDATE ON spef FOR EACH ROW E
 
 
 --
--- TOC entry 2936 (class 2620 OID 46017)
+-- TOC entry 2959 (class 2620 OID 46017)
 -- Name: sper_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7742,7 +7961,7 @@ CREATE TRIGGER sper_iud BEFORE INSERT OR DELETE OR UPDATE ON sper FOR EACH ROW E
 
 
 --
--- TOC entry 2937 (class 2620 OID 46018)
+-- TOC entry 2960 (class 2620 OID 46018)
 -- Name: txt_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7750,7 +7969,7 @@ CREATE TRIGGER txt_iud BEFORE INSERT OR DELETE OR UPDATE ON txt FOR EACH ROW EXE
 
 
 --
--- TOC entry 2938 (class 2620 OID 46019)
+-- TOC entry 2961 (class 2620 OID 46019)
 -- Name: v_crmsel_iud_insteadof_update; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7758,7 +7977,7 @@ CREATE TRIGGER v_crmsel_iud_insteadof_update INSTEAD OF UPDATE ON v_crmsel FOR E
 
 
 --
--- TOC entry 2940 (class 2620 OID 46020)
+-- TOC entry 2963 (class 2620 OID 46020)
 -- Name: v_srmsel_iud_insteadof_update; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7766,7 +7985,7 @@ CREATE TRIGGER v_srmsel_iud_insteadof_update INSTEAD OF UPDATE ON v_srmsel FOR E
 
 
 --
--- TOC entry 2939 (class 2620 OID 46021)
+-- TOC entry 2962 (class 2620 OID 46021)
 -- Name: xpp_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -7774,7 +7993,7 @@ CREATE TRIGGER xpp_iud BEFORE INSERT OR DELETE OR UPDATE ON xpp FOR EACH ROW EXE
 
 
 --
--- TOC entry 2885 (class 2606 OID 46022)
+-- TOC entry 2909 (class 2606 OID 46022)
 -- Name: aud_d_aud_seq_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7783,7 +8002,7 @@ ALTER TABLE ONLY aud_d
 
 
 --
--- TOC entry 2886 (class 2606 OID 46027)
+-- TOC entry 2910 (class 2606 OID 46027)
 -- Name: cpe_pe_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7792,7 +8011,7 @@ ALTER TABLE ONLY cpe
 
 
 --
--- TOC entry 2887 (class 2606 OID 46032)
+-- TOC entry 2911 (class 2606 OID 46032)
 -- Name: cper_cr_name_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7801,7 +8020,7 @@ ALTER TABLE ONLY cper
 
 
 --
--- TOC entry 2888 (class 2606 OID 46037)
+-- TOC entry 2912 (class 2606 OID 46037)
 -- Name: cper_pe_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7810,7 +8029,7 @@ ALTER TABLE ONLY cper
 
 
 --
--- TOC entry 2889 (class 2606 OID 46042)
+-- TOC entry 2913 (class 2606 OID 46042)
 -- Name: cr_cr_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7819,25 +8038,25 @@ ALTER TABLE ONLY cr
 
 
 --
--- TOC entry 2890 (class 2606 OID 46047)
+-- TOC entry 2914 (class 2606 OID 75675)
 -- Name: crm_cr_name_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY crm
-    ADD CONSTRAINT crm_cr_name_fkey FOREIGN KEY (cr_name) REFERENCES cr(cr_name);
+    ADD CONSTRAINT crm_cr_name_fkey FOREIGN KEY (cr_name) REFERENCES cr(cr_name) ON DELETE CASCADE;
 
 
 --
--- TOC entry 2891 (class 2606 OID 46052)
+-- TOC entry 2915 (class 2606 OID 75896)
 -- Name: crm_sm_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY crm
-    ADD CONSTRAINT crm_sm_id_fkey FOREIGN KEY (sm_id) REFERENCES sm(sm_id);
+    ADD CONSTRAINT crm_sm_id_fkey FOREIGN KEY (sm_id) REFERENCES sm(sm_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
--- TOC entry 2893 (class 2606 OID 46503)
+-- TOC entry 2917 (class 2606 OID 46503)
 -- Name: d_d_scope_d_ctgr; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7846,7 +8065,7 @@ ALTER TABLE ONLY d
 
 
 --
--- TOC entry 2892 (class 2606 OID 46057)
+-- TOC entry 2916 (class 2606 OID 46057)
 -- Name: d_d_scope_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7855,7 +8074,7 @@ ALTER TABLE ONLY d
 
 
 --
--- TOC entry 2894 (class 2606 OID 46062)
+-- TOC entry 2918 (class 2606 OID 46062)
 -- Name: gpp_ppd_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7864,7 +8083,7 @@ ALTER TABLE ONLY gpp
 
 
 --
--- TOC entry 2895 (class 2606 OID 46067)
+-- TOC entry 2919 (class 2606 OID 46067)
 -- Name: h_hp_code_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7873,7 +8092,7 @@ ALTER TABLE ONLY h
 
 
 --
--- TOC entry 2896 (class 2606 OID 46072)
+-- TOC entry 2920 (class 2606 OID 46072)
 -- Name: n_n_scope_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7882,7 +8101,7 @@ ALTER TABLE ONLY n
 
 
 --
--- TOC entry 2897 (class 2606 OID 46077)
+-- TOC entry 2921 (class 2606 OID 46077)
 -- Name: n_n_sts_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7891,7 +8110,7 @@ ALTER TABLE ONLY n
 
 
 --
--- TOC entry 2898 (class 2606 OID 46082)
+-- TOC entry 2922 (class 2606 OID 46082)
 -- Name: n_n_type_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7900,7 +8119,7 @@ ALTER TABLE ONLY n
 
 
 --
--- TOC entry 2899 (class 2606 OID 46087)
+-- TOC entry 2923 (class 2606 OID 46087)
 -- Name: pe_pe_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7909,7 +8128,7 @@ ALTER TABLE ONLY pe
 
 
 --
--- TOC entry 2900 (class 2606 OID 46092)
+-- TOC entry 2924 (class 2606 OID 46092)
 -- Name: pe_ucod2_country_state_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7918,7 +8137,7 @@ ALTER TABLE ONLY pe
 
 
 --
--- TOC entry 2901 (class 2606 OID 46097)
+-- TOC entry 2925 (class 2606 OID 46097)
 -- Name: pe_ucod_country_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7927,7 +8146,7 @@ ALTER TABLE ONLY pe
 
 
 --
--- TOC entry 2902 (class 2606 OID 46102)
+-- TOC entry 2926 (class 2606 OID 46102)
 -- Name: ppd_ucod_ppd_type_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7936,25 +8155,25 @@ ALTER TABLE ONLY ppd
 
 
 --
--- TOC entry 2903 (class 2606 OID 46107)
+-- TOC entry 2927 (class 2606 OID 75720)
 -- Name: ppp_pe_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY ppp
-    ADD CONSTRAINT ppp_pe_id_fkey FOREIGN KEY (pe_id) REFERENCES pe(pe_id);
+    ADD CONSTRAINT ppp_pe_id_fkey FOREIGN KEY (pe_id) REFERENCES pe(pe_id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 2904 (class 2606 OID 46112)
+-- TOC entry 2928 (class 2606 OID 75735)
 -- Name: ppp_ppd_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY ppp
-    ADD CONSTRAINT ppp_ppd_fkey FOREIGN KEY (ppp_process, ppp_attrib) REFERENCES ppd(ppd_process, ppd_attrib);
+    ADD CONSTRAINT ppp_ppd_fkey FOREIGN KEY (ppp_process, ppp_attrib) REFERENCES ppd(ppd_process, ppd_attrib) ON DELETE CASCADE;
 
 
 --
--- TOC entry 2907 (class 2606 OID 46117)
+-- TOC entry 2931 (class 2606 OID 46117)
 -- Name: rqst_d_rqst_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7963,16 +8182,7 @@ ALTER TABLE ONLY rqst_d
 
 
 --
--- TOC entry 2908 (class 2606 OID 46122)
--- Name: rqst_email_d_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY rqst_email
-    ADD CONSTRAINT rqst_email_d_id_fkey FOREIGN KEY (email_d_id) REFERENCES d(d_id);
-
-
---
--- TOC entry 2909 (class 2606 OID 46127)
+-- TOC entry 2932 (class 2606 OID 46127)
 -- Name: rqst_email_rqst_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7981,7 +8191,7 @@ ALTER TABLE ONLY rqst_email
 
 
 --
--- TOC entry 2910 (class 2606 OID 46132)
+-- TOC entry 2933 (class 2606 OID 46132)
 -- Name: rqst_n_rqst_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7990,7 +8200,7 @@ ALTER TABLE ONLY rqst_n
 
 
 --
--- TOC entry 2911 (class 2606 OID 46137)
+-- TOC entry 2934 (class 2606 OID 46137)
 -- Name: rqst_rq_rqst_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7999,7 +8209,7 @@ ALTER TABLE ONLY rqst_rq
 
 
 --
--- TOC entry 2912 (class 2606 OID 46142)
+-- TOC entry 2935 (class 2606 OID 46142)
 -- Name: rqst_sms_rqst_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8008,7 +8218,7 @@ ALTER TABLE ONLY rqst_sms
 
 
 --
--- TOC entry 2905 (class 2606 OID 46147)
+-- TOC entry 2929 (class 2606 OID 46147)
 -- Name: rqst_ucod_rqst_atype_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8017,7 +8227,7 @@ ALTER TABLE ONLY rqst
 
 
 --
--- TOC entry 2906 (class 2606 OID 46152)
+-- TOC entry 2930 (class 2606 OID 46152)
 -- Name: rqst_ucod_rqst_source_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8026,7 +8236,7 @@ ALTER TABLE ONLY rqst
 
 
 --
--- TOC entry 2913 (class 2606 OID 46157)
+-- TOC entry 2936 (class 2606 OID 46157)
 -- Name: sf_sf_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8035,7 +8245,7 @@ ALTER TABLE ONLY sf
 
 
 --
--- TOC entry 2915 (class 2606 OID 46219)
+-- TOC entry 2938 (class 2606 OID 46219)
 -- Name: sm_sm_id_parent_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8044,7 +8254,7 @@ ALTER TABLE ONLY sm
 
 
 --
--- TOC entry 2914 (class 2606 OID 46167)
+-- TOC entry 2937 (class 2606 OID 46167)
 -- Name: sm_sm_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8053,7 +8263,7 @@ ALTER TABLE ONLY sm
 
 
 --
--- TOC entry 2916 (class 2606 OID 46172)
+-- TOC entry 2939 (class 2606 OID 46172)
 -- Name: spef_pe_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8062,7 +8272,7 @@ ALTER TABLE ONLY spef
 
 
 --
--- TOC entry 2917 (class 2606 OID 46177)
+-- TOC entry 2940 (class 2606 OID 46177)
 -- Name: spef_sf_name_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8071,7 +8281,7 @@ ALTER TABLE ONLY spef
 
 
 --
--- TOC entry 2918 (class 2606 OID 46182)
+-- TOC entry 2941 (class 2606 OID 46182)
 -- Name: sper_pe_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8080,7 +8290,7 @@ ALTER TABLE ONLY sper
 
 
 --
--- TOC entry 2919 (class 2606 OID 46187)
+-- TOC entry 2942 (class 2606 OID 46187)
 -- Name: sper_sr_name_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8089,7 +8299,7 @@ ALTER TABLE ONLY sper
 
 
 --
--- TOC entry 2920 (class 2606 OID 46192)
+-- TOC entry 2943 (class 2606 OID 46192)
 -- Name: sr_sr_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8098,25 +8308,25 @@ ALTER TABLE ONLY sr
 
 
 --
--- TOC entry 2922 (class 2606 OID 46236)
+-- TOC entry 2945 (class 2606 OID 75871)
 -- Name: srm_sm_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY srm
-    ADD CONSTRAINT srm_sm_id_fkey FOREIGN KEY (sm_id) REFERENCES sm(sm_id) ON DELETE CASCADE;
+    ADD CONSTRAINT srm_sm_id_fkey FOREIGN KEY (sm_id) REFERENCES sm(sm_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
--- TOC entry 2921 (class 2606 OID 46202)
+-- TOC entry 2944 (class 2606 OID 75710)
 -- Name: srm_sr_name_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY srm
-    ADD CONSTRAINT srm_sr_name_fkey FOREIGN KEY (sr_name) REFERENCES sr(sr_name);
+    ADD CONSTRAINT srm_sr_name_fkey FOREIGN KEY (sr_name) REFERENCES sr(sr_name) ON DELETE CASCADE;
 
 
 --
--- TOC entry 2923 (class 2606 OID 46207)
+-- TOC entry 2946 (class 2606 OID 46207)
 -- Name: txt_ucod_txt_type_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8125,7 +8335,7 @@ ALTER TABLE ONLY txt
 
 
 --
--- TOC entry 2925 (class 2606 OID 54270)
+-- TOC entry 2948 (class 2606 OID 54270)
 -- Name: v_v_sts_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8134,7 +8344,7 @@ ALTER TABLE ONLY v
 
 
 --
--- TOC entry 2924 (class 2606 OID 46212)
+-- TOC entry 2947 (class 2606 OID 46212)
 -- Name: xpp_ppd_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8143,7 +8353,7 @@ ALTER TABLE ONLY xpp
 
 
 --
--- TOC entry 3081 (class 0 OID 0)
+-- TOC entry 3110 (class 0 OID 0)
 -- Dependencies: 8
 -- Name: jsharmony; Type: ACL; Schema: -; Owner: postgres
 --
@@ -8156,8 +8366,8 @@ GRANT USAGE ON SCHEMA jsharmony TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- TOC entry 3082 (class 0 OID 0)
--- Dependencies: 348
+-- TOC entry 3111 (class 0 OID 0)
+-- Dependencies: 354
 -- Name: audit(toaudit, bigint, bigint, character varying, text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8169,8 +8379,8 @@ GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id 
 
 
 --
--- TOC entry 3083 (class 0 OID 0)
--- Dependencies: 344
+-- TOC entry 3112 (class 0 OID 0)
+-- Dependencies: 350
 -- Name: audit_base(toaudit, bigint, bigint, character varying, text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8182,8 +8392,8 @@ GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_tabl
 
 
 --
--- TOC entry 3084 (class 0 OID 0)
--- Dependencies: 315
+-- TOC entry 3113 (class 0 OID 0)
+-- Dependencies: 321
 -- Name: audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8195,8 +8405,8 @@ GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying,
 
 
 --
--- TOC entry 3085 (class 0 OID 0)
--- Dependencies: 306
+-- TOC entry 3114 (class 0 OID 0)
+-- Dependencies: 312
 -- Name: check_code(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8208,8 +8418,8 @@ GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval charac
 
 
 --
--- TOC entry 3086 (class 0 OID 0)
--- Dependencies: 305
+-- TOC entry 3115 (class 0 OID 0)
+-- Dependencies: 311
 -- Name: check_code2(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8221,8 +8431,8 @@ GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 char
 
 
 --
--- TOC entry 3087 (class 0 OID 0)
--- Dependencies: 342
+-- TOC entry 3116 (class 0 OID 0)
+-- Dependencies: 348
 -- Name: check_code2_p(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8234,8 +8444,8 @@ GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 ch
 
 
 --
--- TOC entry 3088 (class 0 OID 0)
--- Dependencies: 334
+-- TOC entry 3117 (class 0 OID 0)
+-- Dependencies: 340
 -- Name: check_code_p(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8247,8 +8457,8 @@ GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval char
 
 
 --
--- TOC entry 3089 (class 0 OID 0)
--- Dependencies: 336
+-- TOC entry 3118 (class 0 OID 0)
+-- Dependencies: 342
 -- Name: check_foreign(character varying, bigint); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8260,8 +8470,8 @@ GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigin
 
 
 --
--- TOC entry 3090 (class 0 OID 0)
--- Dependencies: 337
+-- TOC entry 3119 (class 0 OID 0)
+-- Dependencies: 343
 -- Name: check_foreign_p(character varying, bigint); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8273,8 +8483,8 @@ GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid big
 
 
 --
--- TOC entry 3091 (class 0 OID 0)
--- Dependencies: 361
+-- TOC entry 3120 (class 0 OID 0)
+-- Dependencies: 367
 -- Name: check_pp(character varying, character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8287,8 +8497,8 @@ GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character 
 
 
 --
--- TOC entry 3092 (class 0 OID 0)
--- Dependencies: 356
+-- TOC entry 3121 (class 0 OID 0)
+-- Dependencies: 362
 -- Name: cpe_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8300,8 +8510,8 @@ GRANT ALL ON FUNCTION cpe_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3093 (class 0 OID 0)
--- Dependencies: 357
+-- TOC entry 3122 (class 0 OID 0)
+-- Dependencies: 363
 -- Name: cper_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8313,8 +8523,8 @@ GRANT ALL ON FUNCTION cper_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3094 (class 0 OID 0)
--- Dependencies: 347
+-- TOC entry 3123 (class 0 OID 0)
+-- Dependencies: 353
 -- Name: create_gcod(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8325,8 +8535,8 @@ GRANT ALL ON FUNCTION create_gcod(in_codeschema character varying, in_codename c
 
 
 --
--- TOC entry 3095 (class 0 OID 0)
--- Dependencies: 339
+-- TOC entry 3124 (class 0 OID 0)
+-- Dependencies: 345
 -- Name: create_gcod2(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8337,8 +8547,8 @@ GRANT ALL ON FUNCTION create_gcod2(in_codeschema character varying, in_codename 
 
 
 --
--- TOC entry 3096 (class 0 OID 0)
--- Dependencies: 332
+-- TOC entry 3125 (class 0 OID 0)
+-- Dependencies: 338
 -- Name: create_ucod(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8349,8 +8559,8 @@ GRANT ALL ON FUNCTION create_ucod(in_codeschema character varying, in_codename c
 
 
 --
--- TOC entry 3097 (class 0 OID 0)
--- Dependencies: 345
+-- TOC entry 3126 (class 0 OID 0)
+-- Dependencies: 351
 -- Name: create_ucod2(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8361,8 +8571,8 @@ GRANT ALL ON FUNCTION create_ucod2(in_codeschema character varying, in_codename 
 
 
 --
--- TOC entry 3098 (class 0 OID 0)
--- Dependencies: 323
+-- TOC entry 3127 (class 0 OID 0)
+-- Dependencies: 328
 -- Name: d_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8374,8 +8584,8 @@ GRANT ALL ON FUNCTION d_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3099 (class 0 OID 0)
--- Dependencies: 333
+-- TOC entry 3128 (class 0 OID 0)
+-- Dependencies: 339
 -- Name: digest(bytea, text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8387,8 +8597,8 @@ GRANT ALL ON FUNCTION digest(bytea, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_
 
 
 --
--- TOC entry 3100 (class 0 OID 0)
--- Dependencies: 304
+-- TOC entry 3129 (class 0 OID 0)
+-- Dependencies: 310
 -- Name: digest(text, text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8400,8 +8610,8 @@ GRANT ALL ON FUNCTION digest(text, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_e
 
 
 --
--- TOC entry 3101 (class 0 OID 0)
--- Dependencies: 318
+-- TOC entry 3130 (class 0 OID 0)
+-- Dependencies: 324
 -- Name: gcod2_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8413,8 +8623,8 @@ GRANT ALL ON FUNCTION gcod2_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3102 (class 0 OID 0)
--- Dependencies: 354
+-- TOC entry 3131 (class 0 OID 0)
+-- Dependencies: 360
 -- Name: gcod_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8426,8 +8636,8 @@ GRANT ALL ON FUNCTION gcod_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3103 (class 0 OID 0)
--- Dependencies: 309
+-- TOC entry 3132 (class 0 OID 0)
+-- Dependencies: 315
 -- Name: get_cpe_name(bigint); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8439,8 +8649,8 @@ GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO jsharmony_%%%INIT_DB_LCAS
 
 
 --
--- TOC entry 3104 (class 0 OID 0)
--- Dependencies: 307
+-- TOC entry 3133 (class 0 OID 0)
+-- Dependencies: 313
 -- Name: get_pe_name(bigint); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8452,8 +8662,8 @@ GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO jsharmony_%%%INIT_DB_LCASE
 
 
 --
--- TOC entry 3105 (class 0 OID 0)
--- Dependencies: 308
+-- TOC entry 3134 (class 0 OID 0)
+-- Dependencies: 314
 -- Name: get_ppd_desc(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8465,8 +8675,8 @@ GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attr
 
 
 --
--- TOC entry 3106 (class 0 OID 0)
--- Dependencies: 355
+-- TOC entry 3135 (class 0 OID 0)
+-- Dependencies: 361
 -- Name: good_email(text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8479,8 +8689,8 @@ GRANT ALL ON FUNCTION good_email(x text) TO jsharmony_harp_role_exec;
 
 
 --
--- TOC entry 3107 (class 0 OID 0)
--- Dependencies: 320
+-- TOC entry 3136 (class 0 OID 0)
+-- Dependencies: 326
 -- Name: gpp_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8492,8 +8702,8 @@ GRANT ALL ON FUNCTION gpp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3108 (class 0 OID 0)
--- Dependencies: 362
+-- TOC entry 3137 (class 0 OID 0)
+-- Dependencies: 368
 -- Name: h_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8506,8 +8716,8 @@ GRANT ALL ON FUNCTION h_iud() TO jsharmony_harp_role_exec;
 
 
 --
--- TOC entry 3109 (class 0 OID 0)
--- Dependencies: 310
+-- TOC entry 3138 (class 0 OID 0)
+-- Dependencies: 316
 -- Name: mycuser(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8519,8 +8729,8 @@ GRANT ALL ON FUNCTION mycuser() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3110 (class 0 OID 0)
--- Dependencies: 358
+-- TOC entry 3139 (class 0 OID 0)
+-- Dependencies: 364
 -- Name: mycuser_email(text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8533,8 +8743,8 @@ GRANT ALL ON FUNCTION mycuser_email(u text) TO jsharmony_harp_role_exec;
 
 
 --
--- TOC entry 3111 (class 0 OID 0)
--- Dependencies: 338
+-- TOC entry 3140 (class 0 OID 0)
+-- Dependencies: 344
 -- Name: mycuser_fmt(text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8546,8 +8756,8 @@ GRANT ALL ON FUNCTION mycuser_fmt(u text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_
 
 
 --
--- TOC entry 3112 (class 0 OID 0)
--- Dependencies: 351
+-- TOC entry 3141 (class 0 OID 0)
+-- Dependencies: 357
 -- Name: myhash(character, bigint, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8559,8 +8769,8 @@ GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw charac
 
 
 --
--- TOC entry 3113 (class 0 OID 0)
--- Dependencies: 319
+-- TOC entry 3142 (class 0 OID 0)
+-- Dependencies: 325
 -- Name: myisnumeric(text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8572,8 +8782,8 @@ GRANT ALL ON FUNCTION myisnumeric(text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_ex
 
 
 --
--- TOC entry 3114 (class 0 OID 0)
--- Dependencies: 326
+-- TOC entry 3143 (class 0 OID 0)
+-- Dependencies: 332
 -- Name: mymmddyy(timestamp without time zone); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8585,8 +8795,8 @@ GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO jsharmony_%%%INIT
 
 
 --
--- TOC entry 3115 (class 0 OID 0)
--- Dependencies: 341
+-- TOC entry 3144 (class 0 OID 0)
+-- Dependencies: 347
 -- Name: mymmddyyhhmi(timestamp without time zone); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8598,8 +8808,8 @@ GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO jsharmony_%%%
 
 
 --
--- TOC entry 3116 (class 0 OID 0)
--- Dependencies: 314
+-- TOC entry 3145 (class 0 OID 0)
+-- Dependencies: 320
 -- Name: mymmddyyyyhhmi(timestamp without time zone); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8611,8 +8821,8 @@ GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO jsharmony_%
 
 
 --
--- TOC entry 3117 (class 0 OID 0)
--- Dependencies: 335
+-- TOC entry 3146 (class 0 OID 0)
+-- Dependencies: 341
 -- Name: mynow(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8624,8 +8834,8 @@ GRANT ALL ON FUNCTION mynow() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3118 (class 0 OID 0)
--- Dependencies: 330
+-- TOC entry 3147 (class 0 OID 0)
+-- Dependencies: 336
 -- Name: mype(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8637,8 +8847,8 @@ GRANT ALL ON FUNCTION mype() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3119 (class 0 OID 0)
--- Dependencies: 331
+-- TOC entry 3148 (class 0 OID 0)
+-- Dependencies: 337
 -- Name: mytodate(timestamp without time zone); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8650,8 +8860,8 @@ GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO jsharmony_%%%INIT
 
 
 --
--- TOC entry 3120 (class 0 OID 0)
--- Dependencies: 329
+-- TOC entry 3149 (class 0 OID 0)
+-- Dependencies: 335
 -- Name: mytoday(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8663,8 +8873,8 @@ GRANT ALL ON FUNCTION mytoday() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3121 (class 0 OID 0)
--- Dependencies: 349
+-- TOC entry 3150 (class 0 OID 0)
+-- Dependencies: 355
 -- Name: n_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8676,8 +8886,8 @@ GRANT ALL ON FUNCTION n_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3122 (class 0 OID 0)
--- Dependencies: 311
+-- TOC entry 3151 (class 0 OID 0)
+-- Dependencies: 317
 -- Name: nonequal(bit, bit); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8689,8 +8899,8 @@ GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3123 (class 0 OID 0)
--- Dependencies: 350
+-- TOC entry 3152 (class 0 OID 0)
+-- Dependencies: 356
 -- Name: nonequal(boolean, boolean); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8703,8 +8913,8 @@ GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO jsharmony_harp_role_ex
 
 
 --
--- TOC entry 3124 (class 0 OID 0)
--- Dependencies: 312
+-- TOC entry 3153 (class 0 OID 0)
+-- Dependencies: 318
 -- Name: nonequal(smallint, smallint); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8716,8 +8926,8 @@ GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO jsharmony_%%%INIT_DB
 
 
 --
--- TOC entry 3125 (class 0 OID 0)
--- Dependencies: 313
+-- TOC entry 3154 (class 0 OID 0)
+-- Dependencies: 319
 -- Name: nonequal(integer, integer); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8729,8 +8939,8 @@ GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO jsharmony_%%%INIT_DB_L
 
 
 --
--- TOC entry 3126 (class 0 OID 0)
--- Dependencies: 324
+-- TOC entry 3155 (class 0 OID 0)
+-- Dependencies: 330
 -- Name: nonequal(bigint, bigint); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8742,8 +8952,8 @@ GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO jsharmony_%%%INIT_DB_LCA
 
 
 --
--- TOC entry 3127 (class 0 OID 0)
--- Dependencies: 322
+-- TOC entry 3156 (class 0 OID 0)
+-- Dependencies: 329
 -- Name: nonequal(numeric, numeric); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8755,8 +8965,8 @@ GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO jsharmony_%%%INIT_DB_L
 
 
 --
--- TOC entry 3128 (class 0 OID 0)
--- Dependencies: 325
+-- TOC entry 3157 (class 0 OID 0)
+-- Dependencies: 331
 -- Name: nonequal(text, text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8768,8 +8978,8 @@ GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO jsharmony_%%%INIT_DB_LCASE%%
 
 
 --
--- TOC entry 3129 (class 0 OID 0)
--- Dependencies: 327
+-- TOC entry 3158 (class 0 OID 0)
+-- Dependencies: 333
 -- Name: nonequal(timestamp without time zone, timestamp without time zone); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8781,8 +8991,8 @@ GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp with
 
 
 --
--- TOC entry 3130 (class 0 OID 0)
--- Dependencies: 321
+-- TOC entry 3159 (class 0 OID 0)
+-- Dependencies: 327
 -- Name: pe_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8794,8 +9004,8 @@ GRANT ALL ON FUNCTION pe_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3131 (class 0 OID 0)
--- Dependencies: 359
+-- TOC entry 3160 (class 0 OID 0)
+-- Dependencies: 365
 -- Name: ppd_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8808,8 +9018,8 @@ GRANT ALL ON FUNCTION ppd_iud() TO jsharmony_harp_role_exec;
 
 
 --
--- TOC entry 3132 (class 0 OID 0)
--- Dependencies: 343
+-- TOC entry 3161 (class 0 OID 0)
+-- Dependencies: 349
 -- Name: ppp_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8821,8 +9031,8 @@ GRANT ALL ON FUNCTION ppp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3133 (class 0 OID 0)
--- Dependencies: 360
+-- TOC entry 3162 (class 0 OID 0)
+-- Dependencies: 366
 -- Name: sanit(text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8835,8 +9045,8 @@ GRANT ALL ON FUNCTION sanit(x text) TO jsharmony_harp_role_exec;
 
 
 --
--- TOC entry 3134 (class 0 OID 0)
--- Dependencies: 346
+-- TOC entry 3163 (class 0 OID 0)
+-- Dependencies: 352
 -- Name: spef_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8848,8 +9058,8 @@ GRANT ALL ON FUNCTION spef_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3135 (class 0 OID 0)
--- Dependencies: 353
+-- TOC entry 3164 (class 0 OID 0)
+-- Dependencies: 359
 -- Name: sper_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8861,8 +9071,8 @@ GRANT ALL ON FUNCTION sper_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3136 (class 0 OID 0)
--- Dependencies: 317
+-- TOC entry 3165 (class 0 OID 0)
+-- Dependencies: 323
 -- Name: table_type(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8874,8 +9084,8 @@ GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character 
 
 
 --
--- TOC entry 3137 (class 0 OID 0)
--- Dependencies: 316
+-- TOC entry 3166 (class 0 OID 0)
+-- Dependencies: 322
 -- Name: txt_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8887,8 +9097,8 @@ GRANT ALL ON FUNCTION txt_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3138 (class 0 OID 0)
--- Dependencies: 328
+-- TOC entry 3167 (class 0 OID 0)
+-- Dependencies: 334
 -- Name: v_crmsel_iud_insteadof_update(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8900,8 +9110,8 @@ GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO jsharmony_%%%INIT_DB_LC
 
 
 --
--- TOC entry 3139 (class 0 OID 0)
--- Dependencies: 340
+-- TOC entry 3168 (class 0 OID 0)
+-- Dependencies: 346
 -- Name: v_srmsel_iud_insteadof_update(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8913,8 +9123,8 @@ GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO jsharmony_%%%INIT_DB_LC
 
 
 --
--- TOC entry 3140 (class 0 OID 0)
--- Dependencies: 352
+-- TOC entry 3169 (class 0 OID 0)
+-- Dependencies: 358
 -- Name: xpp_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -8926,7 +9136,7 @@ GRANT ALL ON FUNCTION xpp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- TOC entry 3141 (class 0 OID 0)
+-- TOC entry 3170 (class 0 OID 0)
 -- Dependencies: 183
 -- Name: aud_d; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -8938,7 +9148,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE aud_d TO jsharmony_%%%INIT_DB_LCASE%%
 
 
 --
--- TOC entry 3142 (class 0 OID 0)
+-- TOC entry 3171 (class 0 OID 0)
 -- Dependencies: 184
 -- Name: aud_h; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -8950,7 +9160,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE aud_h TO jsharmony_%%%INIT_DB_LCASE%%
 
 
 --
--- TOC entry 3144 (class 0 OID 0)
+-- TOC entry 3173 (class 0 OID 0)
 -- Dependencies: 185
 -- Name: aud_h_aud_seq_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -8962,7 +9172,7 @@ GRANT SELECT,UPDATE ON SEQUENCE aud_h_aud_seq_seq TO jsharmony_%%%INIT_DB_LCASE%
 
 
 --
--- TOC entry 3145 (class 0 OID 0)
+-- TOC entry 3174 (class 0 OID 0)
 -- Dependencies: 186
 -- Name: cpe; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -8974,7 +9184,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cpe TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3147 (class 0 OID 0)
+-- TOC entry 3176 (class 0 OID 0)
 -- Dependencies: 187
 -- Name: cpe_pe_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -8986,7 +9196,7 @@ GRANT SELECT,UPDATE ON SEQUENCE cpe_pe_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_r
 
 
 --
--- TOC entry 3148 (class 0 OID 0)
+-- TOC entry 3177 (class 0 OID 0)
 -- Dependencies: 188
 -- Name: cper; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -8998,7 +9208,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cper TO jsharmony_%%%INIT_DB_LCASE%%%
 
 
 --
--- TOC entry 3150 (class 0 OID 0)
+-- TOC entry 3179 (class 0 OID 0)
 -- Dependencies: 189
 -- Name: cper_cper_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9010,7 +9220,7 @@ GRANT SELECT,UPDATE ON SEQUENCE cper_cper_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 
 
 --
--- TOC entry 3151 (class 0 OID 0)
+-- TOC entry 3180 (class 0 OID 0)
 -- Dependencies: 190
 -- Name: cr; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9022,7 +9232,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cr TO jsharmony_%%%INIT_DB_LCASE%%%_r
 
 
 --
--- TOC entry 3153 (class 0 OID 0)
+-- TOC entry 3182 (class 0 OID 0)
 -- Dependencies: 191
 -- Name: cr_cr_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9034,7 +9244,7 @@ GRANT SELECT,UPDATE ON SEQUENCE cr_cr_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 
 
 --
--- TOC entry 3154 (class 0 OID 0)
+-- TOC entry 3183 (class 0 OID 0)
 -- Dependencies: 192
 -- Name: crm; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9046,7 +9256,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE crm TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3156 (class 0 OID 0)
+-- TOC entry 3185 (class 0 OID 0)
 -- Dependencies: 193
 -- Name: crm_crm_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9058,7 +9268,7 @@ GRANT SELECT,UPDATE ON SEQUENCE crm_crm_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3157 (class 0 OID 0)
+-- TOC entry 3186 (class 0 OID 0)
 -- Dependencies: 194
 -- Name: d; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9070,7 +9280,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE d TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 
 
 --
--- TOC entry 3159 (class 0 OID 0)
+-- TOC entry 3188 (class 0 OID 0)
 -- Dependencies: 195
 -- Name: d_d_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9082,7 +9292,7 @@ GRANT SELECT,UPDATE ON SEQUENCE d_d_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role
 
 
 --
--- TOC entry 3161 (class 0 OID 0)
+-- TOC entry 3190 (class 0 OID 0)
 -- Dependencies: 196
 -- Name: dual; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9094,7 +9304,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE dual TO jsharmony_%%%INIT_DB_LCASE%%%
 
 
 --
--- TOC entry 3163 (class 0 OID 0)
+-- TOC entry 3192 (class 0 OID 0)
 -- Dependencies: 197
 -- Name: dual_dual_ident_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9106,7 +9316,7 @@ GRANT SELECT,UPDATE ON SEQUENCE dual_dual_ident_seq TO jsharmony_%%%INIT_DB_LCAS
 
 
 --
--- TOC entry 3164 (class 0 OID 0)
+-- TOC entry 3193 (class 0 OID 0)
 -- Dependencies: 274
 -- Name: gcod_gcod_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9118,7 +9328,7 @@ GRANT SELECT,UPDATE ON SEQUENCE gcod_gcod_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 
 
 --
--- TOC entry 3165 (class 0 OID 0)
+-- TOC entry 3194 (class 0 OID 0)
 -- Dependencies: 275
 -- Name: gcod; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9130,7 +9340,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod TO jsharmony_%%%INIT_DB_LCASE%%%
 
 
 --
--- TOC entry 3166 (class 0 OID 0)
+-- TOC entry 3195 (class 0 OID 0)
 -- Dependencies: 273
 -- Name: gcod2_gcod2_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9142,7 +9352,7 @@ GRANT SELECT,UPDATE ON SEQUENCE gcod2_gcod2_id_seq TO jsharmony_%%%INIT_DB_LCASE
 
 
 --
--- TOC entry 3167 (class 0 OID 0)
+-- TOC entry 3196 (class 0 OID 0)
 -- Dependencies: 276
 -- Name: gcod2; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9154,7 +9364,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2 TO jsharmony_%%%INIT_DB_LCASE%%
 
 
 --
--- TOC entry 3168 (class 0 OID 0)
+-- TOC entry 3197 (class 0 OID 0)
 -- Dependencies: 277
 -- Name: gcod2_d_scope_d_ctgr; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9166,7 +9376,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2_d_scope_d_ctgr TO jsharmony_%%%
 
 
 --
--- TOC entry 3169 (class 0 OID 0)
+-- TOC entry 3198 (class 0 OID 0)
 -- Dependencies: 198
 -- Name: gcod2_h; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9178,7 +9388,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2_h TO jsharmony_%%%INIT_DB_LCASE
 
 
 --
--- TOC entry 3170 (class 0 OID 0)
+-- TOC entry 3199 (class 0 OID 0)
 -- Dependencies: 199
 -- Name: gcod_h; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9190,7 +9400,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod_h TO jsharmony_%%%INIT_DB_LCASE%
 
 
 --
--- TOC entry 3171 (class 0 OID 0)
+-- TOC entry 3200 (class 0 OID 0)
 -- Dependencies: 200
 -- Name: gpp; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9202,7 +9412,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gpp TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3173 (class 0 OID 0)
+-- TOC entry 3202 (class 0 OID 0)
 -- Dependencies: 201
 -- Name: gpp_gpp_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9214,7 +9424,7 @@ GRANT SELECT,UPDATE ON SEQUENCE gpp_gpp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3174 (class 0 OID 0)
+-- TOC entry 3203 (class 0 OID 0)
 -- Dependencies: 202
 -- Name: h; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9226,7 +9436,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE h TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 
 
 --
--- TOC entry 3176 (class 0 OID 0)
+-- TOC entry 3205 (class 0 OID 0)
 -- Dependencies: 203
 -- Name: h_h_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9238,7 +9448,7 @@ GRANT SELECT,UPDATE ON SEQUENCE h_h_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role
 
 
 --
--- TOC entry 3177 (class 0 OID 0)
+-- TOC entry 3206 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: hp; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9250,7 +9460,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE hp TO jsharmony_%%%INIT_DB_LCASE%%%_r
 
 
 --
--- TOC entry 3179 (class 0 OID 0)
+-- TOC entry 3208 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: hp_hp_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9262,7 +9472,7 @@ GRANT SELECT,UPDATE ON SEQUENCE hp_hp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 
 
 --
--- TOC entry 3180 (class 0 OID 0)
+-- TOC entry 3209 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: n; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9274,7 +9484,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE n TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 
 
 --
--- TOC entry 3182 (class 0 OID 0)
+-- TOC entry 3211 (class 0 OID 0)
 -- Dependencies: 207
 -- Name: n_n_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9286,7 +9496,7 @@ GRANT SELECT,UPDATE ON SEQUENCE n_n_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role
 
 
 --
--- TOC entry 3183 (class 0 OID 0)
+-- TOC entry 3212 (class 0 OID 0)
 -- Dependencies: 208
 -- Name: numbers; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9298,7 +9508,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE numbers TO jsharmony_%%%INIT_DB_LCASE
 
 
 --
--- TOC entry 3184 (class 0 OID 0)
+-- TOC entry 3213 (class 0 OID 0)
 -- Dependencies: 209
 -- Name: pe; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9310,7 +9520,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE pe TO jsharmony_%%%INIT_DB_LCASE%%%_r
 
 
 --
--- TOC entry 3186 (class 0 OID 0)
+-- TOC entry 3215 (class 0 OID 0)
 -- Dependencies: 210
 -- Name: pe_pe_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9322,7 +9532,7 @@ GRANT SELECT,UPDATE ON SEQUENCE pe_pe_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 
 
 --
--- TOC entry 3187 (class 0 OID 0)
+-- TOC entry 3216 (class 0 OID 0)
 -- Dependencies: 211
 -- Name: ppd; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9334,7 +9544,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ppd TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3189 (class 0 OID 0)
+-- TOC entry 3218 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: ppd_ppd_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9346,7 +9556,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ppd_ppd_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3190 (class 0 OID 0)
+-- TOC entry 3219 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: ppp; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9358,7 +9568,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ppp TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3192 (class 0 OID 0)
+-- TOC entry 3221 (class 0 OID 0)
 -- Dependencies: 214
 -- Name: ppp_ppp_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9370,7 +9580,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ppp_ppp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3193 (class 0 OID 0)
+-- TOC entry 3222 (class 0 OID 0)
 -- Dependencies: 215
 -- Name: rq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9382,7 +9592,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rq TO jsharmony_%%%INIT_DB_LCASE%%%_r
 
 
 --
--- TOC entry 3195 (class 0 OID 0)
+-- TOC entry 3224 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: rq_rq_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9394,7 +9604,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rq_rq_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 
 
 --
--- TOC entry 3196 (class 0 OID 0)
+-- TOC entry 3225 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: rqst; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9406,7 +9616,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst TO jsharmony_%%%INIT_DB_LCASE%%%
 
 
 --
--- TOC entry 3197 (class 0 OID 0)
+-- TOC entry 3226 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: rqst_d; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9418,7 +9628,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_d TO jsharmony_%%%INIT_DB_LCASE%
 
 
 --
--- TOC entry 3199 (class 0 OID 0)
+-- TOC entry 3228 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: rqst_d_rqst_d_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9430,7 +9640,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_d_rqst_d_id_seq TO jsharmony_%%%INIT_DB_LCA
 
 
 --
--- TOC entry 3200 (class 0 OID 0)
+-- TOC entry 3229 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: rqst_email; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9442,7 +9652,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_email TO jsharmony_%%%INIT_DB_LC
 
 
 --
--- TOC entry 3202 (class 0 OID 0)
+-- TOC entry 3231 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: rqst_email_rqst_email_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9454,7 +9664,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_email_rqst_email_id_seq TO jsharmony_%%%INI
 
 
 --
--- TOC entry 3203 (class 0 OID 0)
+-- TOC entry 3232 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: rqst_n; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9466,7 +9676,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_n TO jsharmony_%%%INIT_DB_LCASE%
 
 
 --
--- TOC entry 3205 (class 0 OID 0)
+-- TOC entry 3234 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: rqst_n_rqst_n_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9478,7 +9688,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_n_rqst_n_id_seq TO jsharmony_%%%INIT_DB_LCA
 
 
 --
--- TOC entry 3206 (class 0 OID 0)
+-- TOC entry 3235 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: rqst_rq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9490,7 +9700,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_rq TO jsharmony_%%%INIT_DB_LCASE
 
 
 --
--- TOC entry 3208 (class 0 OID 0)
+-- TOC entry 3237 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: rqst_rq_rqst_rq_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9502,7 +9712,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_rq_rqst_rq_id_seq TO jsharmony_%%%INIT_DB_L
 
 
 --
--- TOC entry 3210 (class 0 OID 0)
+-- TOC entry 3239 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: rqst_rqst_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9514,7 +9724,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_rqst_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 
 
 --
--- TOC entry 3211 (class 0 OID 0)
+-- TOC entry 3240 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: rqst_sms; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9526,7 +9736,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_sms TO jsharmony_%%%INIT_DB_LCAS
 
 
 --
--- TOC entry 3213 (class 0 OID 0)
+-- TOC entry 3242 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: rqst_sms_rqst_sms_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9538,7 +9748,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_sms_rqst_sms_id_seq TO jsharmony_%%%INIT_DB
 
 
 --
--- TOC entry 3214 (class 0 OID 0)
+-- TOC entry 3243 (class 0 OID 0)
 -- Dependencies: 229
 -- Name: sf; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9550,7 +9760,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sf TO jsharmony_%%%INIT_DB_LCASE%%%_r
 
 
 --
--- TOC entry 3216 (class 0 OID 0)
+-- TOC entry 3245 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: sf_sf_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9562,7 +9772,7 @@ GRANT SELECT,UPDATE ON SEQUENCE sf_sf_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 
 
 --
--- TOC entry 3217 (class 0 OID 0)
+-- TOC entry 3246 (class 0 OID 0)
 -- Dependencies: 231
 -- Name: sm; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9574,7 +9784,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sm TO jsharmony_%%%INIT_DB_LCASE%%%_r
 
 
 --
--- TOC entry 3219 (class 0 OID 0)
+-- TOC entry 3248 (class 0 OID 0)
 -- Dependencies: 232
 -- Name: sm_sm_id_auto_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9586,7 +9796,7 @@ GRANT SELECT,UPDATE ON SEQUENCE sm_sm_id_auto_seq TO jsharmony_%%%INIT_DB_LCASE%
 
 
 --
--- TOC entry 3220 (class 0 OID 0)
+-- TOC entry 3249 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: spef; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9598,7 +9808,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spef TO jsharmony_%%%INIT_DB_LCASE%%%
 
 
 --
--- TOC entry 3222 (class 0 OID 0)
+-- TOC entry 3251 (class 0 OID 0)
 -- Dependencies: 234
 -- Name: spef_spef_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9610,7 +9820,7 @@ GRANT SELECT,UPDATE ON SEQUENCE spef_spef_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 
 
 --
--- TOC entry 3223 (class 0 OID 0)
+-- TOC entry 3252 (class 0 OID 0)
 -- Dependencies: 235
 -- Name: sper; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9622,7 +9832,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sper TO jsharmony_%%%INIT_DB_LCASE%%%
 
 
 --
--- TOC entry 3225 (class 0 OID 0)
+-- TOC entry 3254 (class 0 OID 0)
 -- Dependencies: 236
 -- Name: sper_sper_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9634,7 +9844,7 @@ GRANT SELECT,UPDATE ON SEQUENCE sper_sper_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 
 
 --
--- TOC entry 3226 (class 0 OID 0)
+-- TOC entry 3255 (class 0 OID 0)
 -- Dependencies: 237
 -- Name: sr; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9646,7 +9856,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sr TO jsharmony_%%%INIT_DB_LCASE%%%_r
 
 
 --
--- TOC entry 3228 (class 0 OID 0)
+-- TOC entry 3257 (class 0 OID 0)
 -- Dependencies: 238
 -- Name: sr_sr_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9658,7 +9868,7 @@ GRANT SELECT,UPDATE ON SEQUENCE sr_sr_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 
 
 --
--- TOC entry 3229 (class 0 OID 0)
+-- TOC entry 3258 (class 0 OID 0)
 -- Dependencies: 239
 -- Name: srm; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9670,7 +9880,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE srm TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3231 (class 0 OID 0)
+-- TOC entry 3260 (class 0 OID 0)
 -- Dependencies: 240
 -- Name: srm_srm_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9682,7 +9892,7 @@ GRANT SELECT,UPDATE ON SEQUENCE srm_srm_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3232 (class 0 OID 0)
+-- TOC entry 3261 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: txt; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9694,7 +9904,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE txt TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3234 (class 0 OID 0)
+-- TOC entry 3263 (class 0 OID 0)
 -- Dependencies: 242
 -- Name: txt_txt_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9706,7 +9916,7 @@ GRANT SELECT,UPDATE ON SEQUENCE txt_txt_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3235 (class 0 OID 0)
+-- TOC entry 3264 (class 0 OID 0)
 -- Dependencies: 243
 -- Name: ucod; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9718,7 +9928,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod TO jsharmony_%%%INIT_DB_LCASE%%%
 
 
 --
--- TOC entry 3236 (class 0 OID 0)
+-- TOC entry 3265 (class 0 OID 0)
 -- Dependencies: 244
 -- Name: ucod2_ucod2_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9730,7 +9940,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ucod2_ucod2_id_seq TO jsharmony_%%%INIT_DB_LCASE
 
 
 --
--- TOC entry 3237 (class 0 OID 0)
+-- TOC entry 3266 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: ucod2; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9742,7 +9952,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2 TO jsharmony_%%%INIT_DB_LCASE%%
 
 
 --
--- TOC entry 3238 (class 0 OID 0)
+-- TOC entry 3267 (class 0 OID 0)
 -- Dependencies: 246
 -- Name: ucod2_country_state; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9754,7 +9964,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_country_state TO jsharmony_%%%I
 
 
 --
--- TOC entry 3239 (class 0 OID 0)
+-- TOC entry 3268 (class 0 OID 0)
 -- Dependencies: 291
 -- Name: ucod2_gpp_process_attrib_v; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9767,7 +9977,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_gpp_process_attrib_v TO jsharmo
 
 
 --
--- TOC entry 3240 (class 0 OID 0)
+-- TOC entry 3269 (class 0 OID 0)
 -- Dependencies: 279
 -- Name: ucod2_h; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9779,7 +9989,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_h TO jsharmony_%%%INIT_DB_LCASE
 
 
 --
--- TOC entry 3242 (class 0 OID 0)
+-- TOC entry 3271 (class 0 OID 0)
 -- Dependencies: 281
 -- Name: ucod2_h_ucod2_h_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9791,7 +10001,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ucod2_h_ucod2_h_id_seq TO jsharmony_%%%INIT_DB_L
 
 
 --
--- TOC entry 3243 (class 0 OID 0)
+-- TOC entry 3272 (class 0 OID 0)
 -- Dependencies: 290
 -- Name: ucod2_ppp_process_attrib_v; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9804,7 +10014,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_ppp_process_attrib_v TO jsharmo
 
 
 --
--- TOC entry 3244 (class 0 OID 0)
+-- TOC entry 3273 (class 0 OID 0)
 -- Dependencies: 289
 -- Name: ucod2_xpp_process_attrib_v; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9817,7 +10027,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_xpp_process_attrib_v TO jsharmo
 
 
 --
--- TOC entry 3245 (class 0 OID 0)
+-- TOC entry 3274 (class 0 OID 0)
 -- Dependencies: 247
 -- Name: ucod_ac; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9829,7 +10039,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ac TO jsharmony_%%%INIT_DB_LCASE
 
 
 --
--- TOC entry 3246 (class 0 OID 0)
+-- TOC entry 3275 (class 0 OID 0)
 -- Dependencies: 248
 -- Name: ucod_ac1; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9841,7 +10051,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ac1 TO jsharmony_%%%INIT_DB_LCAS
 
 
 --
--- TOC entry 3247 (class 0 OID 0)
+-- TOC entry 3276 (class 0 OID 0)
 -- Dependencies: 249
 -- Name: ucod_ahc; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9853,7 +10063,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ahc TO jsharmony_%%%INIT_DB_LCAS
 
 
 --
--- TOC entry 3248 (class 0 OID 0)
+-- TOC entry 3277 (class 0 OID 0)
 -- Dependencies: 250
 -- Name: ucod_country; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9865,7 +10075,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_country TO jsharmony_%%%INIT_DB_
 
 
 --
--- TOC entry 3249 (class 0 OID 0)
+-- TOC entry 3278 (class 0 OID 0)
 -- Dependencies: 251
 -- Name: ucod_d_scope; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9877,7 +10087,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_d_scope TO jsharmony_%%%INIT_DB_
 
 
 --
--- TOC entry 3250 (class 0 OID 0)
+-- TOC entry 3279 (class 0 OID 0)
 -- Dependencies: 288
 -- Name: ucod_gpp_process_v; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9890,7 +10100,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_gpp_process_v TO jsharmony_harp_
 
 
 --
--- TOC entry 3251 (class 0 OID 0)
+-- TOC entry 3280 (class 0 OID 0)
 -- Dependencies: 278
 -- Name: ucod_h; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9902,7 +10112,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_h TO jsharmony_%%%INIT_DB_LCASE%
 
 
 --
--- TOC entry 3253 (class 0 OID 0)
+-- TOC entry 3282 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: ucod_h_ucod_h_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9914,7 +10124,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ucod_h_ucod_h_id_seq TO jsharmony_%%%INIT_DB_LCA
 
 
 --
--- TOC entry 3254 (class 0 OID 0)
+-- TOC entry 3283 (class 0 OID 0)
 -- Dependencies: 252
 -- Name: ucod_n_scope; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9926,7 +10136,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_n_scope TO jsharmony_%%%INIT_DB_
 
 
 --
--- TOC entry 3255 (class 0 OID 0)
+-- TOC entry 3284 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: ucod_n_type; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9938,7 +10148,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_n_type TO jsharmony_%%%INIT_DB_L
 
 
 --
--- TOC entry 3256 (class 0 OID 0)
+-- TOC entry 3285 (class 0 OID 0)
 -- Dependencies: 254
 -- Name: ucod_ppd_type; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9950,7 +10160,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ppd_type TO jsharmony_%%%INIT_DB
 
 
 --
--- TOC entry 3257 (class 0 OID 0)
+-- TOC entry 3286 (class 0 OID 0)
 -- Dependencies: 287
 -- Name: ucod_ppp_process_v; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9963,7 +10173,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ppp_process_v TO jsharmony_harp_
 
 
 --
--- TOC entry 3258 (class 0 OID 0)
+-- TOC entry 3287 (class 0 OID 0)
 -- Dependencies: 255
 -- Name: ucod_rqst_atype; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9975,7 +10185,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_rqst_atype TO jsharmony_%%%INIT_
 
 
 --
--- TOC entry 3259 (class 0 OID 0)
+-- TOC entry 3288 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: ucod_rqst_source; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9987,7 +10197,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_rqst_source TO jsharmony_%%%INIT
 
 
 --
--- TOC entry 3260 (class 0 OID 0)
+-- TOC entry 3289 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: ucod_txt_type; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -9999,7 +10209,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_txt_type TO jsharmony_%%%INIT_DB
 
 
 --
--- TOC entry 3262 (class 0 OID 0)
+-- TOC entry 3291 (class 0 OID 0)
 -- Dependencies: 258
 -- Name: ucod_ucod_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10011,7 +10221,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ucod_ucod_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 
 
 --
--- TOC entry 3264 (class 0 OID 0)
+-- TOC entry 3293 (class 0 OID 0)
 -- Dependencies: 282
 -- Name: ucod_v_sts; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10023,7 +10233,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_v_sts TO jsharmony_%%%INIT_DB_LC
 
 
 --
--- TOC entry 3265 (class 0 OID 0)
+-- TOC entry 3294 (class 0 OID 0)
 -- Dependencies: 286
 -- Name: ucod_xpp_process_v; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10036,7 +10246,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_xpp_process_v TO jsharmony_harp_
 
 
 --
--- TOC entry 3266 (class 0 OID 0)
+-- TOC entry 3295 (class 0 OID 0)
 -- Dependencies: 283
 -- Name: v; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10048,7 +10258,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 
 
 --
--- TOC entry 3267 (class 0 OID 0)
+-- TOC entry 3296 (class 0 OID 0)
 -- Dependencies: 259
 -- Name: v_audl_raw; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10060,7 +10270,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_audl_raw TO jsharmony_%%%INIT_DB_LC
 
 
 --
--- TOC entry 3268 (class 0 OID 0)
+-- TOC entry 3297 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: v_cper_nostar; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10072,7 +10282,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_cper_nostar TO jsharmony_%%%INIT_DB
 
 
 --
--- TOC entry 3269 (class 0 OID 0)
+-- TOC entry 3298 (class 0 OID 0)
 -- Dependencies: 261
 -- Name: v_crmsel; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10084,7 +10294,43 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_crmsel TO jsharmony_%%%INIT_DB_LCAS
 
 
 --
--- TOC entry 3270 (class 0 OID 0)
+-- TOC entry 3299 (class 0 OID 0)
+-- Dependencies: 293
+-- Name: v_d_ext; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE v_d_ext FROM PUBLIC;
+REVOKE ALL ON TABLE v_d_ext FROM postgres;
+GRANT ALL ON TABLE v_d_ext TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_d_ext TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- TOC entry 3300 (class 0 OID 0)
+-- Dependencies: 294
+-- Name: v_d_x; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE v_d_x FROM PUBLIC;
+REVOKE ALL ON TABLE v_d_x FROM postgres;
+GRANT ALL ON TABLE v_d_x TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_d_x TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- TOC entry 3301 (class 0 OID 0)
+-- Dependencies: 292
+-- Name: v_dl; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE v_dl FROM PUBLIC;
+REVOKE ALL ON TABLE v_dl FROM postgres;
+GRANT ALL ON TABLE v_dl TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_dl TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- TOC entry 3302 (class 0 OID 0)
 -- Dependencies: 262
 -- Name: v_gppl; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10096,43 +10342,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_gppl TO jsharmony_%%%INIT_DB_LCASE%
 
 
 --
--- TOC entry 3271 (class 0 OID 0)
--- Dependencies: 263
--- Name: v_months; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON TABLE v_months FROM PUBLIC;
-REVOKE ALL ON TABLE v_months FROM postgres;
-GRANT ALL ON TABLE v_months TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_months TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- TOC entry 3272 (class 0 OID 0)
--- Dependencies: 264
--- Name: v_my_roles; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON TABLE v_my_roles FROM PUBLIC;
-REVOKE ALL ON TABLE v_my_roles FROM postgres;
-GRANT ALL ON TABLE v_my_roles TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_my_roles TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- TOC entry 3273 (class 0 OID 0)
--- Dependencies: 265
--- Name: v_mype; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON TABLE v_mype FROM PUBLIC;
-REVOKE ALL ON TABLE v_mype FROM postgres;
-GRANT ALL ON TABLE v_mype TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_mype TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- TOC entry 3274 (class 0 OID 0)
+-- TOC entry 3303 (class 0 OID 0)
 -- Dependencies: 266
 -- Name: xpp; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10144,7 +10354,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE xpp TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 3275 (class 0 OID 0)
+-- TOC entry 3304 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: v_pp; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10156,7 +10366,79 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_pp TO jsharmony_%%%INIT_DB_LCASE%%%
 
 
 --
--- TOC entry 3276 (class 0 OID 0)
+-- TOC entry 3305 (class 0 OID 0)
+-- Dependencies: 297
+-- Name: v_house; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE v_house FROM PUBLIC;
+REVOKE ALL ON TABLE v_house FROM postgres;
+GRANT ALL ON TABLE v_house TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_house TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- TOC entry 3306 (class 0 OID 0)
+-- Dependencies: 263
+-- Name: v_months; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE v_months FROM PUBLIC;
+REVOKE ALL ON TABLE v_months FROM postgres;
+GRANT ALL ON TABLE v_months TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_months TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- TOC entry 3307 (class 0 OID 0)
+-- Dependencies: 264
+-- Name: v_my_roles; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE v_my_roles FROM PUBLIC;
+REVOKE ALL ON TABLE v_my_roles FROM postgres;
+GRANT ALL ON TABLE v_my_roles TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_my_roles TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- TOC entry 3308 (class 0 OID 0)
+-- Dependencies: 265
+-- Name: v_mype; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE v_mype FROM PUBLIC;
+REVOKE ALL ON TABLE v_mype FROM postgres;
+GRANT ALL ON TABLE v_mype TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_mype TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- TOC entry 3309 (class 0 OID 0)
+-- Dependencies: 296
+-- Name: v_n_ext; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE v_n_ext FROM PUBLIC;
+REVOKE ALL ON TABLE v_n_ext FROM postgres;
+GRANT ALL ON TABLE v_n_ext TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_n_ext TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- TOC entry 3310 (class 0 OID 0)
+-- Dependencies: 295
+-- Name: v_nl; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE v_nl FROM PUBLIC;
+REVOKE ALL ON TABLE v_nl FROM postgres;
+GRANT ALL ON TABLE v_nl TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_nl TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- TOC entry 3311 (class 0 OID 0)
 -- Dependencies: 285
 -- Name: v_ppdl; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10169,7 +10451,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_ppdl TO jsharmony_harp_role_exec;
 
 
 --
--- TOC entry 3277 (class 0 OID 0)
+-- TOC entry 3312 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: v_pppl; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10182,7 +10464,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_pppl TO jsharmony_harp_role_exec;
 
 
 --
--- TOC entry 3278 (class 0 OID 0)
+-- TOC entry 3313 (class 0 OID 0)
 -- Dependencies: 269
 -- Name: v_srmsel; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10194,7 +10476,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_srmsel TO jsharmony_%%%INIT_DB_LCAS
 
 
 --
--- TOC entry 3280 (class 0 OID 0)
+-- TOC entry 3315 (class 0 OID 0)
 -- Dependencies: 284
 -- Name: v_v_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10206,7 +10488,7 @@ GRANT SELECT,UPDATE ON SEQUENCE v_v_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role
 
 
 --
--- TOC entry 3281 (class 0 OID 0)
+-- TOC entry 3316 (class 0 OID 0)
 -- Dependencies: 270
 -- Name: v_xppl; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10219,7 +10501,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_xppl TO jsharmony_harp_role_exec;
 
 
 --
--- TOC entry 3282 (class 0 OID 0)
+-- TOC entry 3317 (class 0 OID 0)
 -- Dependencies: 271
 -- Name: v_years; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10231,7 +10513,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_years TO jsharmony_%%%INIT_DB_LCASE
 
 
 --
--- TOC entry 3284 (class 0 OID 0)
+-- TOC entry 3319 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: xpp_xpp_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
@@ -10243,7 +10525,7 @@ GRANT SELECT,UPDATE ON SEQUENCE xpp_xpp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 
 --
--- TOC entry 2098 (class 826 OID 50147)
+-- TOC entry 2122 (class 826 OID 50147)
 -- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -10253,7 +10535,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT SELECT,UPDA
 
 
 --
--- TOC entry 2100 (class 826 OID 50148)
+-- TOC entry 2124 (class 826 OID 50148)
 -- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -10263,7 +10545,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT ALL ON FUNC
 
 
 --
--- TOC entry 2096 (class 826 OID 50144)
+-- TOC entry 2120 (class 826 OID 50144)
 -- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: jsharmony; Owner: postgres
 --
 
@@ -10272,7 +10554,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony REVOKE ALL ON TAB
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT SELECT,INSERT,DELETE,UPDATE ON TABLES  TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
--- Completed on 2017-10-10 11:14:05
+-- Completed on 2017-10-23 12:55:23
 
 --
 -- PostgreSQL database dump complete

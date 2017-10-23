@@ -5,7 +5,7 @@
 -- Dumped from database version 9.5.5
 -- Dumped by pg_dump version 9.5.1
 
--- Started on 2017-10-10 11:18:17
+-- Started on 2017-10-23 12:56:07
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -18,7 +18,7 @@ SET row_security = off;
 SET search_path = jsharmony, pg_catalog;
 
 --
--- TOC entry 2847 (class 0 OID 45574)
+-- TOC entry 2871 (class 0 OID 45574)
 -- Dependencies: 249
 -- Data for Name: ucod_ahc; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -29,7 +29,7 @@ INSERT INTO ucod_ahc (ucod_id, codseq, codeval, codetxt, codecode, codetdt, code
 
 
 --
--- TOC entry 2815 (class 0 OID 45250)
+-- TOC entry 2839 (class 0 OID 45250)
 -- Dependencies: 190
 -- Data for Name: cr; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -37,17 +37,12 @@ INSERT INTO ucod_ahc (ucod_id, codseq, codeval, codetxt, codecode, codetdt, code
 INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (1, 1, 'ACTIVE', 'CSYSADMIN', 'Administrator', NULL, NULL, NULL);
 INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (2, 2, 'ACTIVE', 'CX_B', 'Browse', NULL, NULL, NULL);
 INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (3, 3, 'ACTIVE', 'CX_X', 'Entry / Update', NULL, NULL, NULL);
-INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (12, 3, 'ACTIVE', 'CADMIN', 'Client Admin', NULL, NULL, NULL);
-INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (11, 2, 'ACTIVE', 'CMGR', 'Client Manager', NULL, NULL, NULL);
 INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (10, 1, 'ACTIVE', 'CUSER', 'Client User', NULL, NULL, NULL);
-INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (9, 1, 'ACTIVE', 'CL1', 'Client Level 1', NULL, NULL, NULL);
-INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (7, 4, 'ACTIVE', 'CINOUT', 'Checkin/Checkout', NULL, NULL, NULL);
-INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (6, 5, 'ACTIVE', 'CFULL', 'Internal Menus', NULL, NULL, NULL);
 INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (5, 0, 'ACTIVE', 'C*', 'All Users', NULL, NULL, NULL);
 
 
 --
--- TOC entry 2867 (class 0 OID 0)
+-- TOC entry 2891 (class 0 OID 0)
 -- Dependencies: 191
 -- Name: cr_cr_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -56,120 +51,62 @@ SELECT pg_catalog.setval('cr_cr_id_seq', 10, true);
 
 
 --
--- TOC entry 2836 (class 0 OID 45460)
+-- TOC entry 2860 (class 0 OID 45460)
 -- Dependencies: 231
 -- Data for Name: sm; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (19, 'S', 1700, 'ACTIVE', 170, 'ADMINISTRATION_USERS', NULL, 'System Users', NULL, NULL, 'PEL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (20, 'S', 1780, 'ACTIVE', 170, 'ADMINISTRATION_AUDITTRAIL', NULL, 'Audit Trail', NULL, NULL, 'AUDL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (21, 'S', 1781, 'ACTIVE', 170, 'ADMINISTRATION_CODETABLES', NULL, 'Code Tables', NULL, NULL, 'GCOD_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (22, 'S', 1782, 'ACTIVE', 170, 'ADMINISTRATION_CODE2TABLES', NULL, 'Code2 Tables', NULL, NULL, 'GCOD2_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (23, 'S', 1783, 'ACTIVE', 170, 'ADMINISTRATION_TEXTMAINTENANCE', NULL, 'Text Maint.', NULL, NULL, 'TXTL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (24, 'S', 1784, 'ACTIVE', 170, 'ADMINISTRATION_GPARAMETERS', NULL, 'Parameters', NULL, NULL, 'GPPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (25, 'S', 1785, 'ACTIVE', 170, 'ADMINISTRATION_HELPMAINTENANCE', NULL, 'Help Maint.', NULL, NULL, 'HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (8, 'S', 170, 'ACTIVE', 1, 'ADMINISTRATION', NULL, 'Administration', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (23, 'S', 1785, 'ACTIVE', 170, 'ADMINISTRATION_TEXTMAINTENANCE', NULL, 'Text Maint', NULL, NULL, 'TXTL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (21, 'S', 1783, 'ACTIVE', 170, 'ADMINISTRATION_CODETABLES', NULL, '1D Code Tables', NULL, NULL, 'GCOD_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (22, 'S', 1784, 'ACTIVE', 170, 'ADMINISTRATION_CODE2TABLES', NULL, '2D Code Tables', NULL, NULL, 'GCOD2_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (59, 'S', 1781, 'ACTIVE', 170, 'ADMINISTRATION_PPARAMETERS', NULL, 'User Settings', NULL, NULL, 'PPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (24, 'S', 1782, 'ACTIVE', 170, 'ADMINISTRATION_GPARAMETERS', NULL, 'System Settings', NULL, NULL, 'GPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (48, 'S', 14, 'ACTIVE', 10, 'DEV_X_GPPL', 22, 'System Settings', NULL, NULL, 'X_GPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (47, 'S', 13, 'ACTIVE', 10, 'DEV_X_PPDL', 21, 'Settings Definitions', NULL, NULL, 'X_PPDL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (62, 'S', 160, 'ACTIVE', 1, 'REPORTS', 2, 'Reports', NULL, NULL, 'REPORTS', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (8, 'S', 170, 'ACTIVE', 1, 'ADMINISTRATION', 3, 'Administration', NULL, NULL, 'ADMIN_OVERVIEW', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (44, 'S', 10, 'ACTIVE', 1, 'DEV', 4, 'Developer', NULL, NULL, 'DEV_OVERVIEW', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (3, 'C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (10, 'C', 200, 'ACTIVE', 2, 'C_DASHBOARD', NULL, 'Dashboard', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (38, 'C', 225, 'ACTIVE', 2, 'C_ORDERS', NULL, 'Orders', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (11, 'C', 230, 'ACTIVE', 2, 'C_EQUIPMENT', NULL, 'Equipment', NULL, NULL, 'EL_C_CLIENT', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (12, 'C', 260, 'ACTIVE', 2, 'C_REPORTS', NULL, 'Reports', NULL, NULL, 'REPORTS_CLIENT', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (13, 'C', 270, 'ACTIVE', 2, 'C_ADMINISTRATION', NULL, 'Administration', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (28, 'C', 2000, 'ACTIVE', 200, 'C_DASHBOARD_MAIN', NULL, 'Main', NULL, NULL, 'C_Q_DBDW', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (29, 'C', 2007, 'ACTIVE', 200, 'C_DASHBOARD_DOCUMENTS', NULL, 'Documents', NULL, NULL, 'DL_ALLCC', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (30, 'C', 2008, 'ACTIVE', 200, 'C_DASHBOARD_DOCUMENTS_ALL', NULL, 'Documents ALL', NULL, NULL, 'DL_ALLC', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (31, 'C', 2009, 'ACTIVE', 200, 'C_DASHBOARD_NOTES', NULL, 'Notes', NULL, NULL, 'N_ALL_WCSC', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (39, 'C', 2250, 'ACTIVE', 225, 'CLIENT_ORDERS_OL', NULL, 'Orders', NULL, NULL, 'OL_CLIENT', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (32, 'C', 2300, 'ACTIVE', 230, 'C_EQUIPMENT_ELA', NULL, 'Active Equipment', NULL, NULL, 'ELA_CLIENT', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (33, 'C', 2301, 'ACTIVE', 230, 'C_EQUIPMENT_ELC', NULL, 'Not Active Equipment', NULL, NULL, 'ELC_CLIENT', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (34, 'C', 2601, 'ACTIVE', 260, 'C_REPORTS_JOBI', NULL, 'Packing List', NULL, NULL, '_report/JOBI_CLIENT', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (35, 'C', 2700, 'ACTIVE', 270, 'C_ADMINISTRATION_USERS', NULL, 'Cust Users', NULL, NULL, 'CPEL_CLIENT', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (36, 'C', 2701, 'ACTIVE', 270, 'C_ADMINISTRATION_CONTACTS', NULL, 'Contacts', NULL, NULL, 'CTL_C_CLIENT', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (2, 'S', 1, 'ACTIVE', NULL, 'ADMIN', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (44, 'S', 10, 'ACTIVE', 1, 'DEV', NULL, 'Developer', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (54, 'S', 20, 'ACTIVE', 10, 'DEV_X_CRL', 12, 'CUser Roles', NULL, NULL, 'X_CRL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (45, 'S', 11, 'ACTIVE', 10, 'DEV_X_SRL', 11, 'User Roles', NULL, NULL, 'X_SRL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (46, 'S', 12, 'ACTIVE', 10, 'DEV_X_SML', 15, 'Menu Items', NULL, NULL, 'X_SML', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (47, 'S', 13, 'ACTIVE', 10, 'DEV_X_PPDL', 21, 'Parameter Definitions', NULL, NULL, 'X_PPDL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (48, 'S', 14, 'ACTIVE', 10, 'DEV_X_GPPL', 22, 'G Parameters', NULL, NULL, 'X_GPPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (49, 'S', 15, 'ACTIVE', 10, 'DEV_X_XPPL', 23, 'X Parameters', NULL, NULL, 'X_XPPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (50, 'S', 16, 'ACTIVE', 10, 'DEV_X_GCOD_HL', 31, 'Code List', NULL, NULL, 'X_GCOD_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (51, 'S', 17, 'ACTIVE', 10, 'DEV_X_GCOD2_HL', 32, 'Code2 List', NULL, NULL, 'X_GCOD2_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (52, 'S', 18, 'ACTIVE', 10, 'DEV_X_UCOD_HL', 33, 'System Code List', NULL, NULL, 'X_UCOD_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (53, 'S', 19, 'ACTIVE', 10, 'DEV_X_UCOD2_HL', 34, 'System Code2 List', NULL, NULL, 'X_UCOD2_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (57, 'S', 1795, 'ACTIVE', 170, 'ADMINISTRATION_LOG', NULL, 'Logs', NULL, NULL, 'LOG', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (58, 'S', 1796, 'ACTIVE', 170, 'ADMINISTRATION_RESTART_SYSTEM', NULL, 'Restart System', NULL, NULL, 'RESTART_SYSTEM', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (61, 'S', 3, 'ACTIVE', 1, 'DASHBOARD', 1, 'Dashboard', NULL, NULL, 'DASHBOARD', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (46, 'S', 12, 'ACTIVE', 10, 'DEV_X_SML', 11, 'Menu Items', NULL, NULL, 'X_SMLW', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (45, 'S', 11, 'ACTIVE', 10, 'DEV_X_SRL', 12, 'User Roles', NULL, NULL, 'X_SRL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (54, 'S', 20, 'ACTIVE', 10, 'DEV_X_CRL', 13, 'Client User Roles', NULL, NULL, 'X_CRL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (55, 'S', 21, 'ACTIVE', 10, 'DEV_X_TXTL', 41, 'Text Maint', NULL, NULL, 'X_TXTL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (56, 'S', 22, 'ACTIVE', 10, 'DEV_X_HPL', 42, 'Help Panels', NULL, NULL, 'X_HPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (25, 'S', 1786, 'ACTIVE', 170, 'ADMINISTRATION_HELPMAINTENANCE', NULL, 'Help Maint', NULL, NULL, 'HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (52, 'S', 18, 'ACTIVE', 10, 'DEV_X_UCOD_HL', 33, 'System 1D Codes', NULL, NULL, 'X_UCOD_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (53, 'S', 19, 'ACTIVE', 10, 'DEV_X_UCOD2_HL', 34, 'System 2D Codes', NULL, NULL, 'X_UCOD2_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (19, 'S', 1700, 'ACTIVE', 170, 'ADMINISTRATION_USERS', NULL, 'System Users', NULL, NULL, 'PEL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (20, 'S', 1787, 'ACTIVE', 170, 'ADMINISTRATION_AUDITTRAIL', NULL, 'Audit Trail', NULL, NULL, 'AUDL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (49, 'S', 15, 'ACTIVE', 10, 'DEV_X_XPPL', 23, 'Developer Settings', NULL, NULL, 'X_XPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (50, 'S', 16, 'ACTIVE', 10, 'DEV_X_GCOD_HL', 31, 'Admin 1D Codes', NULL, NULL, 'X_GCOD_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (51, 'S', 17, 'ACTIVE', 10, 'DEV_X_GCOD2_HL', 32, 'Admin 2D Codes', NULL, NULL, 'X_GCOD2_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (63, 'S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'Users', NULL, NULL, '_report/RPE', NULL, NULL, NULL);
 
 
 --
--- TOC entry 2817 (class 0 OID 45259)
+-- TOC entry 2841 (class 0 OID 45259)
 -- Dependencies: 192
 -- Data for Name: crm; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
 INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 22, 'CX_B');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (230, NULL, 23, 'CFULL');
 INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (270, NULL, 24, 'CSYSADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2000, NULL, 25, 'CX_B');
 INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2700, NULL, 26, 'CSYSADMIN');
 INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2701, NULL, 27, 'CSYSADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (260, NULL, 28, 'CX_B');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2601, NULL, 29, 'CX_B');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2300, NULL, 30, 'CFULL');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2301, NULL, 31, 'CFULL');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2007, NULL, 32, 'CX_B');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2008, NULL, 33, 'CX_B');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2009, NULL, 34, 'CX_B');
 INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 35, 'CX_X');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (260, NULL, 36, 'CX_X');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2000, NULL, 37, 'CX_X');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2007, NULL, 38, 'CX_X');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2008, NULL, 39, 'CX_X');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2009, NULL, 40, 'CX_X');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2601, NULL, 41, 'CX_X');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (270, NULL, 42, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2701, NULL, 43, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2700, NULL, 44, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (230, NULL, 45, 'CUSER');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2300, NULL, 46, 'CUSER');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2301, NULL, 47, 'CUSER');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (230, NULL, 48, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2300, NULL, 49, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2301, NULL, 50, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2300, NULL, 51, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2301, NULL, 52, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (230, NULL, 53, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 54, 'CL1');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (230, NULL, 55, 'CL1');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (260, NULL, 56, 'CL1');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2000, NULL, 57, 'CL1');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2300, NULL, 58, 'CL1');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2301, NULL, 59, 'CL1');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2601, NULL, 60, 'CL1');
 INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 61, 'CUSER');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2000, NULL, 62, 'CUSER');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 63, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (260, NULL, 64, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2000, NULL, 65, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2007, NULL, 66, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2008, NULL, 67, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2009, NULL, 68, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2601, NULL, 69, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 70, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (260, NULL, 71, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2000, NULL, 72, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2007, NULL, 73, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2008, NULL, 74, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2009, NULL, 75, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2601, NULL, 76, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (225, NULL, 77, 'CUSER');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (225, NULL, 78, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (225, NULL, 79, 'CADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2250, NULL, 80, 'CUSER');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2250, NULL, 81, 'CMGR');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2250, NULL, 82, 'CADMIN');
 
 
 --
--- TOC entry 2868 (class 0 OID 0)
+-- TOC entry 2892 (class 0 OID 0)
 -- Dependencies: 193
 -- Name: crm_crm_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -178,7 +115,7 @@ SELECT pg_catalog.setval('crm_crm_id_seq', 98, true);
 
 
 --
--- TOC entry 2819 (class 0 OID 45281)
+-- TOC entry 2843 (class 0 OID 45281)
 -- Dependencies: 196
 -- Data for Name: dual; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -187,7 +124,7 @@ INSERT INTO dual (dummy, dual_ident, dual_bigint, dual_varchar50) VALUES ('X', 1
 
 
 --
--- TOC entry 2869 (class 0 OID 0)
+-- TOC entry 2893 (class 0 OID 0)
 -- Dependencies: 197
 -- Name: dual_dual_ident_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -196,7 +133,7 @@ SELECT pg_catalog.setval('dual_dual_ident_seq', 1, true);
 
 
 --
--- TOC entry 2821 (class 0 OID 45286)
+-- TOC entry 2845 (class 0 OID 45286)
 -- Dependencies: 198
 -- Data for Name: gcod2_h; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -205,7 +142,7 @@ INSERT INTO gcod2_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, c
 
 
 --
--- TOC entry 2822 (class 0 OID 45296)
+-- TOC entry 2846 (class 0 OID 45296)
 -- Dependencies: 199
 -- Data for Name: gcod_h; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -213,7 +150,7 @@ INSERT INTO gcod2_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, c
 
 
 --
--- TOC entry 2852 (class 0 OID 45628)
+-- TOC entry 2876 (class 0 OID 45628)
 -- Dependencies: 254
 -- Data for Name: ucod_ppd_type; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -223,14 +160,12 @@ INSERT INTO ucod_ppd_type (ucod_id, codseq, codeval, codetxt, codecode, codetdt,
 
 
 --
--- TOC entry 2830 (class 0 OID 45370)
+-- TOC entry 2854 (class 0 OID 45370)
 -- Dependencies: 211
 -- Data for Name: ppd; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (1, 'EMAIL', 'NOTIF_ADMIN', 'Notifications Email - Administrative', 'C', NULL, '2017-06-18 17:14:20.453481', 'Upostgres', '2017-10-09 13:41:13.745435', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (2, 'EMAIL', 'NOTIF_DAMAGE', 'Notifications Email - Receive Damage', 'C', NULL, '2017-06-18 17:14:20.438448', 'Upostgres', '2017-10-09 13:41:16.249595', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (3, 'EMAIL', 'NOTIF_FIN', 'Notifications Email - Financial', 'C', NULL, '2017-06-18 17:14:20.359701', 'Upostgres', '2017-10-09 13:41:21.05726', 'Upostgres', NULL, true, false, false);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (17, 'USERS', 'HASH_SEED_S', 'Hash Seed System Users', 'C', NULL, '2017-06-18 17:14:20.484504', 'Upostgres', '2017-10-09 13:49:17.813327', 'Upostgres', NULL, false, false, true);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (5, 'HOUSE', 'ADDR', 'HOUSE Address', 'C', NULL, '2017-06-18 17:14:20.461487', 'Upostgres', '2017-10-09 13:41:26.073551', 'Upostgres', NULL, true, false, false);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (6, 'HOUSE', 'BPHONE', 'HOUSE Business Phone', 'C', NULL, '2017-06-18 17:14:20.430415', 'Upostgres', '2017-10-09 13:41:28.289216', 'Upostgres', NULL, true, false, false);
@@ -241,12 +176,10 @@ INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, 
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (43, 'SQL', 'DSCOPE_DCTGR', 'Code table - Document Types by Scope', 'C', NULL, '2017-06-18 17:14:20.500515', 'Upostgres', '2017-10-09 13:49:23.301571', 'Upostgres', NULL, false, false, true);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (44, 'SQL', 'GETCID', 'SQL Function GET_C_ID', 'C', NULL, '2017-06-18 17:14:20.50852', 'Upostgres', '2017-10-09 13:49:25.004825', 'Upostgres', NULL, false, false, true);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (45, 'SQL', 'GETEID', 'SQL Function GET_E_ID', 'C', NULL, '2017-06-18 17:14:20.516526', 'Upostgres', '2017-10-09 13:49:28.061435', 'Upostgres', NULL, false, false, true);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (15, 'SYSTEM', 'SRVDAYS', 'Number of days for service', 'N', NULL, '2017-06-18 17:14:20.389723', 'Upostgres', '2017-10-09 13:42:37.47251', 'Upostgres', NULL, true, false, false);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (13, 'HOUSE', 'ZIP', 'HOUSE ZIP', 'C', NULL, '2017-06-18 17:14:20.39805', 'Upostgres', '2017-10-09 13:42:44.904335', 'Upostgres', NULL, true, false, false);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (12, 'HOUSE', 'STATE', 'HOUSE State', 'C', NULL, '2017-06-18 17:14:20.406056', 'Upostgres', '2017-10-09 13:42:47.344881', 'Upostgres', NULL, true, false, false);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (11, 'HOUSE', 'NAME', 'HOUSE Name', 'C', NULL, '2017-06-18 17:14:20.381716', 'Upostgres', '2017-10-09 13:42:49.664742', 'Upostgres', NULL, true, false, false);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (18, 'DEVICEURL', 'PRINTBAR', 'Device URL - Bar Code Printer', 'C', NULL, '2017-06-18 17:14:20.492486', 'Upostgres', '2017-10-09 13:43:19.464581', 'Upostgres', NULL, true, true, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (19, 'DEVICEURL', 'PRINTORDER', 'Device URL - Order Printer', 'C', NULL, '2017-06-18 17:14:20.469492', 'Upostgres', '2017-10-09 13:43:21.448125', 'Upostgres', NULL, true, true, false);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (20, 'DEVICEURL', 'SCAN', 'Device URL - Document Scanner', 'C', NULL, '2017-06-18 17:14:20.476497', 'Upostgres', '2017-10-09 13:43:24.88003', 'Upostgres', NULL, true, true, false);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (4, 'EMAIL', 'NOTIF_SYS', 'Notifications Email - System', 'C', NULL, '2017-06-18 17:14:20.446428', 'Upostgres', '2017-10-09 13:49:05.17331', 'Upostgres', NULL, true, false, true);
 INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (14, 'SYSTEM', 'CLIENT_SYS_URL', 'Client Portal URL', 'C', NULL, '2017-06-18 17:14:20.523531', 'Upostgres', '2017-10-09 13:49:11.589409', 'Upostgres', NULL, false, false, true);
@@ -254,28 +187,25 @@ INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, 
 
 
 --
--- TOC entry 2823 (class 0 OID 45306)
+-- TOC entry 2847 (class 0 OID 45306)
 -- Dependencies: 200
 -- Data for Name: gpp; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (2, 'EMAIL', 'NOTIF_DAMAGE', 'apj@apharmony.com', '2017-06-18 17:14:20.536539', 'Upostgres', '2017-06-18 17:14:20.536539', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (3, 'EMAIL', 'NOTIF_FIN', 'asp@apharmony.com', '2017-06-18 17:14:20.555554', 'Upostgres', '2017-06-18 17:14:20.555554', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (4, 'HOUSE', 'ADDR', '5000 West Bloomingdale', '2017-06-18 17:14:20.563563', 'Upostgres', '2017-06-18 17:14:20.563563', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (5, 'HOUSE', 'BPHONE', '(773) 637-3131', '2017-06-18 17:14:20.570542', 'Upostgres', '2017-06-18 17:14:20.570542', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (7, 'HOUSE', 'CONTACT', 'Affordable Moving', '2017-06-18 17:14:20.578569', 'Upostgres', '2017-06-18 17:14:20.578569', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (8, 'HOUSE', 'EMAIL', 'info@affordablechicago.com', '2017-06-18 17:14:20.585575', 'Upostgres', '2017-06-18 17:14:20.585575', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (9, 'HOUSE', 'FAX', '(773) 637-3422', '2017-06-18 17:14:20.593579', 'Upostgres', '2017-06-18 17:14:20.593579', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (10, 'HOUSE', 'NAME', 'AFFORDABLE MOVING', '2017-06-18 17:14:20.600572', 'Upostgres', '2017-06-18 17:14:20.600572', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (12, 'HOUSE', 'ZIP', '60639', '2017-06-18 17:14:20.609592', 'Upostgres', '2017-06-18 17:14:20.609592', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (14, 'SYSTEM', 'SRVDAYS', '5', '2017-06-18 17:14:20.615596', 'Upostgres', '2017-06-18 17:14:20.615596', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (1, 'EMAIL', 'NOTIF_ADMIN', 'asp@apharmony.com', '2017-06-18 17:14:20.623602', 'Upostgres', '2017-06-18 17:14:20.623602', 'Upostgres');
 INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (11, 'HOUSE', 'STATE', 'IL', '2017-06-18 17:14:20.630721', 'Upostgres', '2017-06-18 17:14:20.630721', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (6, 'HOUSE', 'CITY', 'Chicago', '2017-06-18 17:14:20.637786', 'Upostgres', '2017-06-18 17:14:20.637786', 'Upostgres');
+INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (6, 'HOUSE', 'CITY', 'Anytown', '2017-06-18 17:14:20.637786', 'Upostgres', '2017-10-17 12:19:19.558109', 'S3');
+INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (7, 'HOUSE', 'CONTACT', 'John Contact', '2017-06-18 17:14:20.578569', 'Upostgres', '2017-10-17 12:21:24.106015', 'S3');
+INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (4, 'HOUSE', 'ADDR', '111 Main St', '2017-06-18 17:14:20.563563', 'Upostgres', '2017-10-17 12:21:34.45036', 'S3');
+INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (5, 'HOUSE', 'BPHONE', '(222) 222-2222', '2017-06-18 17:14:20.570542', 'Upostgres', '2017-10-17 12:21:38.902571', 'S3');
+INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (8, 'HOUSE', 'EMAIL', 'user@company.com', '2017-06-18 17:14:20.585575', 'Upostgres', '2017-10-17 12:21:52.189618', 'S3');
+INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (9, 'HOUSE', 'FAX', '(333) 333-3333', '2017-06-18 17:14:20.593579', 'Upostgres', '2017-10-17 12:21:57.446541', 'S3');
+INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (10, 'HOUSE', 'NAME', 'COMPANY NAME', '2017-06-18 17:14:20.600572', 'Upostgres', '2017-10-17 12:22:03.238268', 'S3');
+INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (1, 'EMAIL', 'NOTIF_ADMIN', 'user@company.com', '2017-06-18 17:14:20.623602', 'Upostgres', '2017-10-17 12:24:08.713884', 'S3');
+INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (12, 'HOUSE', 'ZIP', '11111', '2017-06-18 17:14:20.609592', 'Upostgres', '2017-10-18 11:52:07.997974', 'S3');
 
 
 --
--- TOC entry 2870 (class 0 OID 0)
+-- TOC entry 2894 (class 0 OID 0)
 -- Dependencies: 201
 -- Name: gpp_gpp_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -284,7 +214,7 @@ SELECT pg_catalog.setval('gpp_gpp_id_seq', 15, true);
 
 
 --
--- TOC entry 2827 (class 0 OID 45329)
+-- TOC entry 2851 (class 0 OID 45329)
 -- Dependencies: 204
 -- Data for Name: hp; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -307,88 +237,15 @@ INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (15, 'C', 'Customer');
 
 
 --
--- TOC entry 2825 (class 0 OID 45315)
+-- TOC entry 2849 (class 0 OID 45315)
 -- Dependencies: 202
 -- Data for Name: h; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (7, 'EL_C_REL', 'Items - Related', 'Item where the Customer is one of the following:
- - Controller
- - Designer
- - End Point
- - Bill To
- - Series Carrier
- - Series Shipper
- - Series Receiver
- - Series Bill To  
-', '2017-06-18 17:14:20.724847', 'Upostgres', '2017-06-18 17:14:20.724847', 'Upostgres', 6, true, true);
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (2, 'TOLSEL_SEL', 'Items Selector', 'ALL      - Order Items + All unassigned items
-ALL      - Order Items + All unassigned querried items
-ALL      - Order Items + All unassigned same controller (as order) items
-ALL      - Order Items + All unassigned candidate items:
-                    - same Designer as already selected items
-                    - same Endpoint as already selected items
-                    - same Receiver PO as already selected items
-                    - same Series as already selected items
-                    - same Assembly as already selected items', '2017-06-18 17:14:20.739857', 'Upostgres', '2017-06-18 17:14:20.739857', 'Upostgres', 7, true, true);
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (6, 'E_POPUP_E', 'New Item (E)', 'The following are copied from the originating Item:
-- Designer Customer,
-- Bill To Customer,
-- End Point Customer,
-- Receiver PO,
-- Designer PO', '2017-06-18 17:14:20.750872', 'Upostgres', '2017-06-18 17:14:20.750872', 'Upostgres', 9, true, true);
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (3, 'TO_H', 'Order - History', '- New Order
-- Order Status Change
-- Order Type Change
-- Order Scheduler Change
-- Job Date Change
-', '2017-06-18 17:14:20.757872', 'Upostgres', '2017-06-18 17:14:20.757872', 'Upostgres', 10, true, true);
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (8, 'TOL_C_REL', 'Orders - Related', 'Orders where the Customer is one of the following:
- - Controller,
- - Designer,
- - Reference,
- - Bill To,
- - Carrier,
- - Inspector', '2017-06-18 17:14:20.767979', 'Upostgres', '2017-06-18 17:14:20.767979', 'Upostgres', 11, true, true);
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (5, 'SQ_H', 'Series - History', '- New Series,
-- --- Item History of Deleted Items', '2017-06-18 17:14:20.774983', 'Upostgres', '2017-06-18 17:14:20.774983', 'Upostgres', 12, true, true);
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (41, NULL, 'New One', '<p>s+2 some more</p>
-', '2017-06-18 17:14:20.875311', 'Upostgres', '2017-06-18 17:14:20.875311', 'Upostgres', 1, true, true);
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (1, NULL, 'KEYS', '<p>Alt+S - Save<br />
-Alt+N - New<br />
-Alt+F - Filter<br />
-Alt+P - Print<br />
-<br />
-Alt+O - Open Order<br />
-Alt+I - Open Item</p>
-', '2017-06-18 17:14:20.847345', 'Upostgres', '2017-10-09 15:35:55.840043', 'Upostgres', 8, true, false);
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (9, 'E_O', 'Item - Overview', 'Statuses:
-
-INSPECTION
-Default when Item is created
-
-RECVRCALL - Receiver Call
-Set manually
-
-DESGBRCALL - Designer Call
-Set manually
-
-IN STORAGE
-Set Manually
-
-?????
-TO BE CONTINUED
-?????
-', '2017-06-18 17:14:20.710797', 'Upostgres', '2017-10-09 15:36:52.279429', 'Upostgres', 5, false, true);
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (4, 'E_H', 'Item - History', '<p>- New Item, - Delete Item, - Update Item Status, - Update Item Location, - Adding Item to Order, - Removing Item from Order,</p>
-', '2017-06-18 17:14:20.855351', 'Upostgres', '2017-10-09 15:36:52.283382', 'Upostgres', 4, false, false);
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (39, 'CT', 'Customer Contact *', 'Body of Customer Contact', '2017-06-18 17:14:20.862355', 'Upostgres', '2017-10-09 15:36:52.287433', 'Upostgres', 3, false, false);
-INSERT INTO h (h_id, hp_code, h_title, h_text, h_etstmp, h_eu, h_mtstmp, h_mu, h_seq, h_index_a, h_index_p) VALUES (40, 'C', 'Customer **', '<p>This is the Body of Customer Help</p>
-', '2017-06-18 17:14:20.86836', 'Upostgres', '2017-10-09 15:36:52.290383', 'Upostgres', 2, false, false);
 
 
 --
--- TOC entry 2871 (class 0 OID 0)
+-- TOC entry 2895 (class 0 OID 0)
 -- Dependencies: 203
 -- Name: h_h_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -397,7 +254,7 @@ SELECT pg_catalog.setval('h_h_id_seq', 41, true);
 
 
 --
--- TOC entry 2872 (class 0 OID 0)
+-- TOC entry 2896 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: hp_hp_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -406,7 +263,7 @@ SELECT pg_catalog.setval('hp_hp_id_seq', 15, true);
 
 
 --
--- TOC entry 2829 (class 0 OID 45349)
+-- TOC entry 2853 (class 0 OID 45349)
 -- Dependencies: 208
 -- Data for Name: numbers; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1413,7 +1270,7 @@ INSERT INTO numbers (n) VALUES (999);
 
 
 --
--- TOC entry 2873 (class 0 OID 0)
+-- TOC entry 2897 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: ppd_ppd_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -1422,7 +1279,7 @@ SELECT pg_catalog.setval('ppd_ppd_id_seq', 45, true);
 
 
 --
--- TOC entry 2832 (class 0 OID 45385)
+-- TOC entry 2856 (class 0 OID 45385)
 -- Dependencies: 213
 -- Data for Name: ppp; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1430,7 +1287,7 @@ SELECT pg_catalog.setval('ppd_ppd_id_seq', 45, true);
 
 
 --
--- TOC entry 2874 (class 0 OID 0)
+-- TOC entry 2898 (class 0 OID 0)
 -- Dependencies: 214
 -- Name: ppp_ppp_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -1439,7 +1296,7 @@ SELECT pg_catalog.setval('ppp_ppp_id_seq', 1, false);
 
 
 --
--- TOC entry 2834 (class 0 OID 45451)
+-- TOC entry 2858 (class 0 OID 45451)
 -- Dependencies: 229
 -- Data for Name: sf; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1448,7 +1305,7 @@ INSERT INTO sf (sf_id, sf_seq, sf_sts, sf_name, sf_desc, sf_snotes, sf_code, sf_
 
 
 --
--- TOC entry 2875 (class 0 OID 0)
+-- TOC entry 2899 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: sf_sf_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -1457,16 +1314,16 @@ SELECT pg_catalog.setval('sf_sf_id_seq', 2, true);
 
 
 --
--- TOC entry 2876 (class 0 OID 0)
+-- TOC entry 2900 (class 0 OID 0)
 -- Dependencies: 232
 -- Name: sm_sm_id_auto_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
 
-SELECT pg_catalog.setval('sm_sm_id_auto_seq', 54, true);
+SELECT pg_catalog.setval('sm_sm_id_auto_seq', 63, true);
 
 
 --
--- TOC entry 2838 (class 0 OID 45481)
+-- TOC entry 2862 (class 0 OID 45481)
 -- Dependencies: 237
 -- Data for Name: sr; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1480,7 +1337,7 @@ INSERT INTO sr (sr_id, sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_
 
 
 --
--- TOC entry 2877 (class 0 OID 0)
+-- TOC entry 2901 (class 0 OID 0)
 -- Dependencies: 238
 -- Name: sr_sr_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -1489,30 +1346,16 @@ SELECT pg_catalog.setval('sr_sr_id_seq', 16, true);
 
 
 --
--- TOC entry 2840 (class 0 OID 45490)
+-- TOC entry 2864 (class 0 OID 45490)
 -- Dependencies: 239
 -- Data for Name: srm; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2701, NULL, 74, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2700, NULL, 73, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2601, NULL, 72, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2301, NULL, 71, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2300, NULL, 70, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2009, NULL, 69, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2008, NULL, 68, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2007, NULL, 67, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2000, NULL, 66, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1785, NULL, 63, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1784, NULL, 62, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1783, NULL, 61, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (10, NULL, 180, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1781, NULL, 59, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1780, NULL, 58, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1700, NULL, 57, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (270, NULL, 51, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (260, NULL, 50, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (230, NULL, 49, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (200, NULL, 48, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (170, NULL, 46, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2, NULL, 41, 'SYSADMIN');
@@ -1521,7 +1364,6 @@ INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (12, NULL, 182, 'DEV
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (13, NULL, 183, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (14, NULL, 184, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (15, NULL, 185, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1782, NULL, 81, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (170, NULL, 186, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1700, NULL, 187, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (16, NULL, 188, 'DEV');
@@ -1529,19 +1371,33 @@ INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (17, NULL, 189, 'DEV
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (18, NULL, 190, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (19, NULL, 191, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (20, NULL, 192, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (21, NULL, 193, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (22, NULL, 194, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1786, NULL, 200, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1795, NULL, 201, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1796, NULL, 202, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (3, NULL, 204, '*');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1787, NULL, 58, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1785, NULL, 197, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1783, NULL, 59, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1784, NULL, 81, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1781, NULL, 199, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1782, NULL, 198, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1601, NULL, 205, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (160, NULL, 206, 'SYSADMIN');
 
 
 --
--- TOC entry 2878 (class 0 OID 0)
+-- TOC entry 2902 (class 0 OID 0)
 -- Dependencies: 240
 -- Name: srm_srm_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
 
-SELECT pg_catalog.setval('srm_srm_id_seq', 192, true);
+SELECT pg_catalog.setval('srm_srm_id_seq', 206, true);
 
 
 --
--- TOC entry 2855 (class 0 OID 45662)
+-- TOC entry 2879 (class 0 OID 45662)
 -- Dependencies: 257
 -- Data for Name: ucod_txt_type; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1551,39 +1407,12 @@ INSERT INTO ucod_txt_type (ucod_id, codseq, codeval, codetxt, codecode, codetdt,
 
 
 --
--- TOC entry 2842 (class 0 OID 45495)
+-- TOC entry 2866 (class 0 OID 45495)
 -- Dependencies: 241
 -- Data for Name: txt; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (4, 'EMAIL', 'UPCOMING_DUE', 'HTML', 'Upcoming Item Due', '<p>Dear <%-data.C[0].CT_NAME%>,<br />
-The following charges are due within the next 30 days.</p>
-
-<p>Please visit our website below, .<br />
-<a href="<%-data.C[0].PORTAL_URL%>"><%-data.C[0].PORTAL_URL%></a></p>
-
-<p>Thank you for your business.</p>
-
-<p>&nbsp;</p>
-', NULL, '<%-data.C[0].CT_NAME%> Customer Name
-<%-data.C[0].PORTAL_URL%> Portal URL
-<%=E.E_K%> Eq ID
-<%=E.ET_Name%> Eq Type
-<%=E.E_Name%> Eq Desc
-<%=moment.utc(E.E_CAL_NEXTDt).format(''MM/DD/YYYY'')%> Due Date
-<% _.each(data.C[0].E,function(E){ } %>  Eq Listing', '2017-06-18 17:14:24.00032', 'Upostgres', '2017-06-18 17:14:24.00032', 'Upostgres');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (6, 'EMAIL', 'RCVD_DAMAGE', 'HTML', 'STARTER - **DAMAGED** Item Received', '<p>Dear <%-data.C_NAME%>,</p>
-
-<p>We have received your request, however one or more pieces were received damaged. &nbsp;If the gage was already damaged and sent for repair, we will contact you to discuss options. &nbsp;Otherwise, you may need to contact the carrier if the package was insured. &nbsp;Please call us at (XXX) XXX-XXXX for more information.</p>
-
-<p>Job ID: <%-data.J_ID%></p>
-
-<p>Sincerely,<br />
-&nbsp;</p>
-', NULL, '<%-data.C_NAME%> Customer Name
-<%-data.J_ID%> Job ID
-<%-data.PORTAL_URL%> Portal URL', '2017-06-18 17:14:24.021371', 'Upostgres', '2017-06-18 17:14:24.021371', 'Upostgres');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (8, 'EMAIL', 'RESETPASS', 'HTML', 'STARTER Password Reset', '<p>Dear <%-data.PE_NAME%>,<br />
+INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (8, 'EMAIL', 'RESETPASS', 'HTML', 'Password Reset', '<p>Dear <%-data.PE_NAME%>,<br />
 <br />
 A password reset has been requested on your account. If you did not initiate the request, please contact us at <%-data.SUPPORT_EMAIL%> immediately.<br />
 <br />
@@ -1591,71 +1420,26 @@ Please follow the link below to reset your password:<br />
 <a href="<%-data.RESET_LINK%>"><%-data.RESET_LINK%></a></p>
 ', NULL, '<%-data.PE_NAME%> User Name
 <%-data.SUPPORT_EMAIL%> Support Email
-<%-data.RESET_LINK%> Reset Link', '2017-06-18 17:14:24.03848', 'Upostgres', '2017-06-18 17:14:24.03848', 'Upostgres');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (9, 'REPORT', 'QUOTE', 'HTML', NULL, '<p>XXX</p>
-', 'BCC', 'Quote Disclaimer', '2017-06-18 17:14:24.047547', 'Upostgres', '2017-06-18 17:14:24.047547', 'Upostgres');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (12, 'EMAIL', 'QRWINOTIF', 'HTML', 'AMBER - Deferred Inventory Query Notification - Query: #<%-data.QRWI_ID%>', '<p>Dear <%-data.PE_NAME%>,</p>
-
-<p>The following items defined in Query #<%-data.QRWI_ID%> were received after&nbsp;&nbsp;<%-data.QRWI_FROM_TSTMP_FMT%>&nbsp;:<br />
-<%-data.ITEM_LIST%><br />
-<br />
-Sincerely<br />
-Amber</p>
-', NULL, 'Deferred Inventory Query Notification', '2017-06-18 17:14:24.060532', 'Upostgres', '2017-06-18 17:14:24.060532', 'Upostgres');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (2, 'LABEL', 'TEMP', 'TEXT', NULL, 'ID#: %%%E_K%%%
-', NULL, 'Temporary Item Barcode
-%%%E_K%%% ItemID', '2017-06-18 17:14:24.067659', 'Upostgres', '2017-06-18 17:14:24.067659', 'Upostgres');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (3, 'LABEL', 'CAL', 'TEXT', NULL, 'ID#: %%%E_K%%%   By: %%%ECAL_BY%%%', NULL, 'Label
-%%%E_K%%% EquipID, %%%ECAL_BY%%% Cal. Tech, %%%ECAL_DT%%% Cal. Date, %%%NEXT_DT%%% Next Due Date', '2017-06-18 17:14:24.077616', 'Upostgres', '2017-06-18 17:14:24.077616', 'Upostgres');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (13, 'SMS', 'WELCOME', 'TEXT', 'Welcome', 'Welcome to BK.  Your account has been initialized.', NULL, NULL, '2017-06-18 17:14:24.085617', 'Upostgres', '2017-06-18 17:14:24.085617', 'Upostgres');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (11, 'CMS', 'AGREEMENT_DONE', 'HTML', 'STARTER Agreement Done', '<p>Thank you for completing sign-up.</p>
-', NULL, 'AMBER Agreement Done', '2017-06-18 17:14:24.096656', 'Upostgres', '2017-06-18 17:14:24.096656', 'Upostgres');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (5, 'EMAIL', 'RCVD', 'HTML', 'STARTER - Request Received', '<p>Dear <%-data.C_NAME%>,</p>
-
-<p>Thank you for your order. &nbsp;Your request has been received. &nbsp;Please visit our customer portal to keep track of order status:<br />
-<a href="<%-data.PORTAL_URL%>"><%-data.PORTAL_URL%></a></p>
-
-<p>Job ID: <%-data.J_ID%></p>
-
-<p>Sincerely,<br />
-&nbsp;</p>
-', NULL, '<%-data.C_NAME%> Customer Name
-<%-data.J_ID%> Job ID
-<%-data.PORTAL_URL%> Portal URL', '2017-06-18 17:14:24.109676', 'Upostgres', '2017-06-18 17:14:24.109676', 'Upostgres');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (10, 'CMS', 'AGREEMENT', 'HTML', 'STARTER Agreement', '<p>Agreement <strong>Body Regular</strong></p>
-
-<p><strong>Test Line 2</strong></p>
-
-<h2><strong>Test HHeading 1</strong></h2>
-', NULL, 'AMBER Agreement', '2017-06-18 17:14:24.117928', 'Upostgres', '2017-06-18 17:14:24.117928', 'Upostgres');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (7, 'EMAIL', 'SHIP', 'HTML', 'STARTER - Job Completed', '<p>Dear <%-data.C_NAME%>,</p>
-
-<p>Your work request has been completed and will be shipped shortly. &nbsp;Below is an overview. &nbsp;Please visit the customer portal for more information.<br />
-<a href="<%-data.PORTAL_URL%>"><%-data.PORTAL_URL%></a></p>
-
-<p>Job ID: <%-data.J_ID%></p>
-
-<p><%-data.SRVL%></p>
-
-<p>Sincerely,<br />
-&nbsp;</p>
-', NULL, '<%-data.C_NAME%> Customer Name
-<%-data.J_ID%> Job ID
-<%-data.SRVL%> Service List
-<%-data.PORTAL_URL%> Portal URL', '2017-06-18 17:14:24.131998', 'Upostgres', '2017-06-18 17:14:24.131998', 'Upostgres');
+<%-data.RESET_LINK%> Reset Link', '2017-06-18 17:14:24.03848', 'Upostgres', '2017-10-17 12:43:26.569018', 'S3');
+INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (10, 'CMS', 'AGREEMENT', 'HTML', 'Client Agreement', NULL, NULL, 'Client Agreement', '2017-06-18 17:14:24.117928', 'Upostgres', '2017-10-17 12:43:42.879619', 'S3');
+INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (11, 'CMS', 'AGREEMENT_DONE', 'HTML', 'Client Agreement Complete', '<p>Thank you for completing sign-up.</p>
+', NULL, 'Client Agreement Complete', '2017-06-18 17:14:24.096656', 'Upostgres', '2017-10-18 12:01:03.15238', 'S3');
+INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (13, 'SMS', 'WELCOME', 'TEXT', 'Welcome', 'Your account has been initialized.', NULL, 'SMS Welcome Message', '2017-06-18 17:14:24.085617', 'Upostgres', '2017-10-18 12:01:31.046944', 'S3');
+INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (14, 'CMS', 'DASHBOARD', 'HTML', 'Dashboard Message of the Day', '<p>Welcome to the jsHarmony System</p>
+', NULL, 'Dashboard Message of the Day', '2017-10-18 12:02:05.393644', 'S3', '2017-10-19 12:14:32.861784', 'S3');
 
 
 --
--- TOC entry 2879 (class 0 OID 0)
+-- TOC entry 2903 (class 0 OID 0)
 -- Dependencies: 242
 -- Name: txt_txt_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
 
-SELECT pg_catalog.setval('txt_txt_id_seq', 13, true);
+SELECT pg_catalog.setval('txt_txt_id_seq', 14, true);
 
 
 --
--- TOC entry 2844 (class 0 OID 45531)
+-- TOC entry 2868 (class 0 OID 45531)
 -- Dependencies: 246
 -- Data for Name: ucod2_country_state; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1697,13 +1481,13 @@ INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, 
 INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (242, NULL, 'MEXICO', 'QE', 'Queretaro', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (243, NULL, 'MEXICO', 'QR', 'Quintana Roo', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (244, NULL, 'MEXICO', 'SI', 'Sinaloa', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (245, NULL, 'MEXICO', 'SL', 'San Luis PotosÌ', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (245, NULL, 'MEXICO', 'SL', 'San Luis Potos√≠', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (246, NULL, 'MEXICO', 'SO', 'Sonora', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (247, NULL, 'MEXICO', 'TB', 'Tabasco', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (248, NULL, 'MEXICO', 'TL', 'Tlaxcala', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (249, NULL, 'MEXICO', 'TM', 'Tamaulipas', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (250, NULL, 'MEXICO', 'VE', 'Veracruz', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (251, NULL, 'MEXICO', 'YU', 'Yucat·n', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (251, NULL, 'MEXICO', 'YU', 'Yucat√°n', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (252, NULL, 'MEXICO', 'ZA', 'Zacatecas', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (253, NULL, 'USA', 'AK', 'Alaska', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (254, NULL, 'USA', 'AL', 'Alabama', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
@@ -1767,7 +1551,7 @@ INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, 
 
 
 --
--- TOC entry 2859 (class 0 OID 49401)
+-- TOC entry 2883 (class 0 OID 49401)
 -- Dependencies: 279
 -- Data for Name: ucod2_h; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1776,7 +1560,7 @@ INSERT INTO ucod2_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, c
 
 
 --
--- TOC entry 2880 (class 0 OID 0)
+-- TOC entry 2904 (class 0 OID 0)
 -- Dependencies: 281
 -- Name: ucod2_h_ucod2_h_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -1785,7 +1569,7 @@ SELECT pg_catalog.setval('ucod2_h_ucod2_h_id_seq', 6, true);
 
 
 --
--- TOC entry 2845 (class 0 OID 45554)
+-- TOC entry 2869 (class 0 OID 45554)
 -- Dependencies: 247
 -- Data for Name: ucod_ac; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1795,7 +1579,7 @@ INSERT INTO ucod_ac (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codet
 
 
 --
--- TOC entry 2846 (class 0 OID 45564)
+-- TOC entry 2870 (class 0 OID 45564)
 -- Dependencies: 248
 -- Data for Name: ucod_ac1; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1805,7 +1589,7 @@ INSERT INTO ucod_ac1 (ucod_id, codseq, codeval, codetxt, codecode, codetdt, code
 
 
 --
--- TOC entry 2848 (class 0 OID 45584)
+-- TOC entry 2872 (class 0 OID 45584)
 -- Dependencies: 250
 -- Data for Name: ucod_country; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1816,22 +1600,20 @@ INSERT INTO ucod_country (ucod_id, codseq, codeval, codetxt, codecode, codetdt, 
 
 
 --
--- TOC entry 2849 (class 0 OID 45594)
+-- TOC entry 2873 (class 0 OID 45594)
 -- Dependencies: 251
 -- Data for Name: ucod_d_scope; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
 INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (14, 2, 'C', 'Customer', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (15, 3, 'E', 'Item', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (16, 5, 'O', 'Order', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (17, 1, 'S', 'System', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (18, 7, 'SQ', 'Series', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (19, 8, 'TES', 'Estimate', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (20, 6, 'VEN', 'Vendor', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (16, 3, 'O', 'Order', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (20, 4, 'VEN', 'Vendor', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (3, 5, 'PE', 'User', NULL, NULL, NULL, '2017-10-19 17:56:29.139491', 'S3', '2017-10-19 17:56:29.139491', 'S3', NULL, NULL, NULL);
 
 
 --
--- TOC entry 2858 (class 0 OID 49377)
+-- TOC entry 2882 (class 0 OID 49377)
 -- Dependencies: 278
 -- Data for Name: ucod_h; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1851,34 +1633,29 @@ INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, co
 
 
 --
--- TOC entry 2881 (class 0 OID 0)
+-- TOC entry 2905 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: ucod_h_ucod_h_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
 
-SELECT pg_catalog.setval('ucod_h_ucod_h_id_seq', 13, true);
+SELECT pg_catalog.setval('ucod_h_ucod_h_id_seq', 14, true);
 
 
 --
--- TOC entry 2850 (class 0 OID 45608)
+-- TOC entry 2874 (class 0 OID 45608)
 -- Dependencies: 252
 -- Data for Name: ucod_n_scope; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
 INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (23, 2, 'C', 'Customer', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (24, 6, 'CT', 'Cust Contact', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (25, 4, 'DC', 'Damage Claim', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (26, 5, 'DI', 'Damage Issue', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (27, 3, 'E', 'Item', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (28, 7, 'O', 'Order', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
 INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (29, 1, 'S', 'System', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (30, 10, 'TES', 'Estimate', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (31, 8, 'VEN', 'Vendor', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (32, 9, 'VENCT', 'Vendor Contact', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (24, 3, 'CT', 'Cust Contact', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (31, 4, 'VEN', 'Vendor', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (4, 5, 'PE', 'User', NULL, NULL, NULL, '2017-10-19 17:56:55.452087', 'S3', '2017-10-19 17:56:55.452087', 'S3', NULL, NULL, NULL);
 
 
 --
--- TOC entry 2851 (class 0 OID 45618)
+-- TOC entry 2875 (class 0 OID 45618)
 -- Dependencies: 253
 -- Data for Name: ucod_n_type; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1889,7 +1666,7 @@ INSERT INTO ucod_n_type (ucod_id, codseq, codeval, codetxt, codecode, codetdt, c
 
 
 --
--- TOC entry 2853 (class 0 OID 45642)
+-- TOC entry 2877 (class 0 OID 45642)
 -- Dependencies: 255
 -- Data for Name: ucod_rqst_atype; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1899,7 +1676,7 @@ INSERT INTO ucod_rqst_atype (ucod_id, codseq, codeval, codetxt, codecode, codetd
 
 
 --
--- TOC entry 2854 (class 0 OID 45652)
+-- TOC entry 2878 (class 0 OID 45652)
 -- Dependencies: 256
 -- Data for Name: ucod_rqst_source; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1909,7 +1686,7 @@ INSERT INTO ucod_rqst_source (ucod_id, codseq, codeval, codetxt, codecode, codet
 
 
 --
--- TOC entry 2862 (class 0 OID 54226)
+-- TOC entry 2886 (class 0 OID 54226)
 -- Dependencies: 282
 -- Data for Name: ucod_v_sts; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
@@ -1919,22 +1696,22 @@ INSERT INTO ucod_v_sts (ucod_id, codseq, codeval, codetxt, codecode, codetdt, co
 
 
 --
--- TOC entry 2856 (class 0 OID 45707)
+-- TOC entry 2880 (class 0 OID 45707)
 -- Dependencies: 266
 -- Data for Name: xpp; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
 INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (2, 'USERS', 'HASH_SEED_C', 'w3vefSQ@aewfa@#V5awdfA@#Rdf2%V235wfAF@#%csdfsfvq235@EFSDFAV2352vswfAW@V#%@', '2017-06-18 17:14:25.282391', 'Upostgres', '2017-06-18 17:14:25.282391', 'Upostgres');
 INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (3, 'USERS', 'HASH_SEED_S', 'frtue5 i876h4567h*&IOJK*()9%UHJS$6agfghjdyszwetsbfg5&$&$TFB5763bergereg', '2017-06-18 17:14:25.297538', 'Upostgres', '2017-06-18 17:14:25.297538', 'Upostgres');
-INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (1, 'EMAIL', 'NOTIF_SYS', 'asp@apharmony.com', '2017-06-18 17:14:25.304602', 'Upostgres', '2017-06-18 17:14:25.304602', 'Upostgres');
 INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (13, 'SQL', 'DSCOPE_DCTGR', 'gcod2_d_scope_d_ctgr', '2017-06-18 17:14:25.311607', 'Upostgres', '2017-06-18 17:14:25.311607', 'Upostgres');
 INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (14, 'SQL', 'GETCID', 'public.get_c_id', '2017-06-18 17:14:25.317611', 'Upostgres', '2017-06-18 17:14:25.317611', 'Upostgres');
 INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (15, 'SQL', 'GETEID', 'public.get_e_id', '2017-06-18 17:14:25.324813', 'Upostgres', '2017-06-18 17:14:25.324813', 'Upostgres');
-INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (16, 'SYSTEM', 'CLIENT_SYS_URL', 'https://amber.apharmony.net', '2017-06-18 17:14:25.332819', 'Upostgres', '2017-06-18 17:14:25.332819', 'Upostgres');
+INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (16, 'SYSTEM', 'CLIENT_SYS_URL', 'https://localhost', '2017-06-18 17:14:25.332819', 'Upostgres', '2017-10-17 12:23:34.708185', 'S3');
+INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (1, 'EMAIL', 'NOTIF_SYS', 'user@company.com', '2017-06-18 17:14:25.304602', 'Upostgres', '2017-10-17 12:24:06.270302', 'S3');
 
 
 --
--- TOC entry 2882 (class 0 OID 0)
+-- TOC entry 2906 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: xpp_xpp_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
@@ -1942,7 +1719,7 @@ INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, x
 SELECT pg_catalog.setval('xpp_xpp_id_seq', 16, true);
 
 
--- Completed on 2017-10-10 11:18:19
+-- Completed on 2017-10-23 12:56:09
 
 --
 -- PostgreSQL database dump complete

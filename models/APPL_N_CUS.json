@@ -9,6 +9,7 @@
   },
    "GPE_NL_U": {
     "inherits": "NL_U",
+    "table":"jsharmony.V_NL",
     "roles": {"O_B":"B","O_X":"*"},
     "buttons":[{"link":"add:GPE_N","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"n_type"}}],
     "fields":[
@@ -17,6 +18,7 @@
   },
   "GPE_NL_S": {
     "inherits": "NL_S",
+    "table":"jsharmony.V_NL",
     "roles": {"O_B":"B","O_X":"*"},
     "fields":[
       {"name":"n_etstmp","link":"edit:GPE_NB"}
@@ -24,10 +26,24 @@
   },
    "GPE_N": {
     "inherits": "N",
+    "table":"jsharmony.V_N_EXT",
+    "title":"Note - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
+    "breadcrumbs":{
+      "sql": ["select pe_fname, pe_lname from jsharmony.PE ",
+              " where pe_id=coalesce(@n_scope_id,(select n_scope_id from jsharmony.n where n_id = @n_id))"],
+      "sql_params": ["n_scope_id","n_scope"]
+    },
     "roles": {"O_B":"B","O_X":"*"}
   },
    "GPE_NB": {
     "inherits": "NB",
+    "table":"jsharmony.V_N_EXT",
+    "title":"Note - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
+    "breadcrumbs":{
+      "sql": ["select pe_fname, pe_lname from jsharmony.PE ",
+              " where pe_id=coalesce(@n_scope_id,(select n_scope_id from jsharmony.n where n_id = @n_id))"],
+      "sql_params": ["n_scope_id","n_scope"]
+    },
     "roles": {"O_B":"B","O_X":"*"}
   }
 }

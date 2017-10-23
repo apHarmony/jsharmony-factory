@@ -19,7 +19,7 @@
   "GPE_D": {
     "inherits": "D",
     "table":"jsharmony.V_D_EXT",
-    "title":"Document - <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
+    "title":"Document - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
     "breadcrumbs":{
       "sql": ["select pe_fname, pe_lname from jsharmony.PE ",
               " where pe_id=coalesce(@d_scope_id,(select d_scope_id from jsharmony.d where d_id = @d_id))"],
