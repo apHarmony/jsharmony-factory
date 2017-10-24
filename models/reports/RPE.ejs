@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title></title>
+<script type="text/javascript" src="file:///<%=global.datadir%>../node_modules/jsharmony/public/js/main.js"></script>
+<script type="text/javascript" src="file:///<%=global.datadir%>../public/js/jquery-barcode.min.js"></script>
+<link href='file:///<%=global.datadir%>../fonts/DroidSans.ttf' rel='stylesheet' type='text/css' />
+<style type="text/css">
+* {
+  overflow:visible !important;
+  font-family: 'Droid Sans'; /*, arial, helvetica, sans-serif;*/
+}
+body { 
+  width:950px;
+}
+.pagebreak {
+  display: block;
+  page-break-before: always;
+}
+</style>
+</head>
+<body>
+<!-- <pre><%=JSON.stringify(data,null,4)%></pre> -->
+<table width="100%">
+<tr>
+<td colspan=5>
+<div id="report_header">
+  <br/>User Status:&nbsp; <%=data.PARAMS[0].pe_sts_txt%> <br />
+</div>
+</td>
+</tr>
+  <tr>
+    <td colspan=5><hr width="100%" /></td>
+  </tr>
+  <tr style="font-weight:bold;">
+    <td>Last Name</td>
+    <td>First Name</td>
+    <td>Status</td>
+    <td>Phone</td>
+    <td>Email</td>
+  </tr>
+  <tr>
+    <td colspan=5><hr width="100%" /></td>
+  </tr>
+<!-- For Each PE Record -->
+<% _.each(data.PE,function(PE,i){ %>
+  <tr>
+    <td>{{PE.pe_lname||''}}</td>
+    <td>{{PE.pe_fname||''}}</td>
+    <td>{{PE.pe_sts||''}}</td>
+    <td>{{ejsext.phone_format(PE.pe_bphone)||''}}</td>
+    <td>{{PE.pe_email||''}}</td>
+  </tr>
+  <tr>
+    <td colspan=5><hr width="100%" /></td>
+  </tr>
+
+<% }); %><!-- End C Loop -->
+</table>  
+Number of records:  {{data.PE.length}}
+</body>
+</html>

@@ -1,0 +1,44 @@
+{
+"comment":"RPE",
+  "layout": "exec",
+  "title": "User Listing",
+  "inherits": "TMPL_DEFAULT",
+  "access": "BIU",
+  "roles": {"RPT":"B"},
+  "topmenu":"reports",
+  "description": "User Listing",
+  "pagesettings":  {"orientation": "portrait"},
+  "fields": [
+    {"name":"pe_sts","type":"varchar","nl":1,"control":"dropdown_S","access": "B",
+     "lov": { "sql": "select CODEVal,CODETxt from jsharmony.UCOD_AHC where 1=1 %%%DATALOCKS%%% order by codseq", 
+              "datalock":{"C_ID":"client_C_ID"}, "blank": "(All)" },
+     "caption":"User Status","captionstyle": "width:90px;"},
+
+    {"nl": 1,"control":"button","value":"Run Report","controlstyle": "padding:3px 8px;margin-top:15px;margin-left:94px;",
+      "onclick": "XRunReport();"}
+  ],
+  "onload": "if(xform__report_INVOICE.Data.INV_ID){ XDisable($('#INV_ID.xelem_report_INVOICE')); }",
+  "pageheader" : ["<h3 style=\"font-size:14px;font-family:'Droid Sans';margin-top:0;padding-top:0;text-align:center;\">User Listing",
+  				  "<div style='float:left;width:30%;text-align:left;'><%=data.HOUSE[0].HOUSE_NAME%></div>",
+                  "<div style='float:right;width:30%;text-align:right;'><%=moment().format('MM/DD/YYYY hh:mma')%></div>",
+                  "<br/><hr width=\"100%\" />",
+                  "<div style='float:left;width:60%;text-align:left;'><%=data.HOUSE[0].HOUSE_BPHONE%> &nbsp; &nbsp; <%=data.HOUSE[0].HOUSE_FAX%> &nbsp; &nbsp; <%=data.HOUSE[0].HOUSE_EMAIL%></div>",
+                  "<div style='float:right;width:40%;text-align:right;'><%=data.HOUSE[0].HOUSE_FULL_ADDR%></div></h3>"
+                  ],
+  "headerheight": "1.7cm",
+  "pagefooter" : ["<hr/><h3 align='center' style=\"font-size:14px;font-family:'Droid Sans';\"><div style='float:left;'>001 USERS</div>              <div style='float:right;'> Page <%=pageNum%> / <%=numPages%></div></h3>"],
+  "reportdata" : {
+    "PARAMS":{
+      "sql":["select coalesce(codetxt,'(All)') pe_sts_txt ",
+             "  from jsharmony.dual ",
+             "  left outer join jsharmony.UCOD_AHC on codeval = @pe_sts"], "nodatalock": ["C_ID"] 
+    },
+    "PE":{
+      "sql":["select * from jsharmony.PE ",
+             " where pe_sts = coalesce(@pe_sts,pe_sts) ",
+             " order by pe_lname, pe_fname "], "nodatalock": ["C_ID"] 
+    },
+    "HOUSE": { "sql": ["select HOUSE_NAME \"HOUSE_NAME\",coalesce('Phone:  '||HOUSE_BPHONE,'') \"HOUSE_BPHONE\",coalesce('Fax:  '||HOUSE_FAX,'') \"HOUSE_FAX\",coalesce('Email:  '||HOUSE_EMAIL,'') \"HOUSE_EMAIL\", ",
+                       " HOUSE_FULL_ADDR \"HOUSE_FULL_ADDR\" from jsharmony.v_house"], "nodatalock": ["C_ID"] }
+  }
+}

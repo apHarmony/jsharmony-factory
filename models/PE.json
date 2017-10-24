@@ -128,11 +128,5 @@
     "fields":[
       {"name":"pe_photo","access":" "}
     ]
-  },
-  "PE_NEW": {
-    "inherits": "PE",
-    "title":"New System User",
-//    "popup":[1000,900],
-    "oninsert": "XExt.navTo(_BASEURL+'PEW?action=edit&pe_id='+urlkeys.pe_id); return false;"
   }
 }

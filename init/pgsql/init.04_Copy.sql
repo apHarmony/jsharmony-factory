@@ -5,7 +5,7 @@
 -- Dumped from database version 9.5.5
 -- Dumped by pg_dump version 9.5.1
 
--- Started on 2017-10-23 12:56:07
+-- Started on 2017-10-24 16:36:35
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -88,7 +88,7 @@ INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_s
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (49, 'S', 15, 'ACTIVE', 10, 'DEV_X_XPPL', 23, 'Developer Settings', NULL, NULL, 'X_XPPL', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (50, 'S', 16, 'ACTIVE', 10, 'DEV_X_GCOD_HL', 31, 'Admin 1D Codes', NULL, NULL, 'X_GCOD_HL', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (51, 'S', 17, 'ACTIVE', 10, 'DEV_X_GCOD2_HL', 32, 'Admin 2D Codes', NULL, NULL, 'X_GCOD2_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (63, 'S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'Users', NULL, NULL, '_report/RPE', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (63, 'S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL, NULL);
 
 
 --
@@ -1719,7 +1719,7 @@ INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, x
 SELECT pg_catalog.setval('xpp_xpp_id_seq', 16, true);
 
 
--- Completed on 2017-10-23 12:56:09
+-- Completed on 2017-10-24 16:36:36
 
 --
 -- PostgreSQL database dump complete

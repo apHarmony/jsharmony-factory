@@ -1,0 +1,23 @@
+{
+  "REPORTS":{
+    "comment":"REPORTS",
+    "layout":"form", 
+    "table":"",
+    "caption":[0,"Report","Reports"],
+    "title":"Reports",
+    "access":"B", 
+    "unbound": 1,
+    "roles": {"SYSADMIN": "B","*": "B","RPT": "B"},
+    "topmenu":"reports",
+    "fields":[
+      {"control":"html","value":"<div class=\"clear\" style=\"width:800px;\">Please select a report:</div>"},
+      {"control":"html","value":"<div id='xsubmenu_listing'></div>"}
+    ],
+    "oninit": "$('.xsubmenu:visible').children('a').not('.xsubmenu_more').each(function(){ $('<a href=\\'#\\'></a>').prop('href',this.href).text($(this).text()).appendTo('#xsubmenu_listing'); $('<br/>').appendTo('#xsubmenu_listing'); });"
+  },
+   "REPORTS_CLIENT": {
+    "inherits": "REPORTS",
+    "roles": {"CX_B":"B","CX_X":"B"},
+    "topmenu":"c_reports" 
+  }
+}

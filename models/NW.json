@@ -4,7 +4,6 @@
     "table":"S",
     "access":"B", 
     "unbound": 1,
-//    "roles": {"X_B":"B","X_X":"B"},
     "tabpos":"top",
     "tabs": {
       "User":{"target":"NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
@@ -20,7 +19,6 @@
   "NWUS": {
     "table":"S",
     "access":"B", 
-//    "roles": {"X_B":"B","X_X":"B","T_B":"B","T_X":"B"},
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
@@ -56,7 +54,6 @@
   "NWCSCB":{
     "table":"S",
     "access":"B", 
-//    "roles": {"CX_B":"B","CX_X":"B","CSYSADMIN":"B","CMGR":"B","CADMIN":"B"},
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,

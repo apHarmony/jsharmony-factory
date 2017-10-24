@@ -1,0 +1,21 @@
+{
+  "PE": {
+    "inherits":"PE_BASE",  
+    "fields":[
+      {"name":"pe_photo","access":"BIU"}
+    ]
+  },
+  "PEL": {
+    "inherits":"PEL_BASE",  
+    "buttons":[{"link":"add:PE_NEW"}],
+    "fields":[
+      {"name":"pe_id","link":"edit:PEW"},
+      {"name":"pe_name1","link":"edit:PEW"}
+    ]
+  },
+  "PE_NEW": {
+    "inherits": "PE",
+    "title":"New System User",
+    "oninsert": "XExt.navTo(_BASEURL+'PEW?action=edit&pe_id='+urlkeys.pe_id); return false;"
+  }
+}
