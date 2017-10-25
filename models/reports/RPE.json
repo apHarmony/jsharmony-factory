@@ -34,11 +34,13 @@
              "  left outer join jsharmony.UCOD_AHC on codeval = @pe_sts"], "nodatalock": ["C_ID"] 
     },
     "PE":{
-      "sql":["select * from jsharmony.PE ",
+      "sql":["select pe_id, pe_sts, pe_fname, pe_mname, pe_lname, pe_jtitle, pe_email, ",
+             "       pe_bphone, pe_cphone ",
+             "  from jsharmony.PE ",
              " where pe_sts = coalesce(@pe_sts,pe_sts) ",
              " order by pe_lname, pe_fname "], "nodatalock": ["C_ID"] 
     },
-    "HOUSE": { "sql": ["select HOUSE_NAME \"HOUSE_NAME\",coalesce('Phone:  '||HOUSE_BPHONE,'') \"HOUSE_BPHONE\",coalesce('Fax:  '||HOUSE_FAX,'') \"HOUSE_FAX\",coalesce('Email:  '||HOUSE_EMAIL,'') \"HOUSE_EMAIL\", ",
+    "HOUSE": { "sql": ["select HOUSE_NAME \"HOUSE_NAME\",coalesce('Phone:  '%%%CONCAT%%%HOUSE_BPHONE,'') \"HOUSE_BPHONE\",coalesce('Fax:  '%%%CONCAT%%%HOUSE_FAX,'') \"HOUSE_FAX\",coalesce('Email:  '%%%CONCAT%%%HOUSE_EMAIL,'') \"HOUSE_EMAIL\", ",
                        " HOUSE_FULL_ADDR \"HOUSE_FULL_ADDR\" from jsharmony.v_house"], "nodatalock": ["C_ID"] }
   }
 }

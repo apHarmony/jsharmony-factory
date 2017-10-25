@@ -11,3 +11,5 @@ values ('First','User','%%%INIT_DB_ADMIN_EMAIL%%%','%%%INIT_DB_ADMIN_PASS%%%','%
 insert into jsharmony.sper (pe_id, sr_name) values(1,'*');
 insert into jsharmony.sper (pe_id, sr_name) values(1,'DEV');
 insert into jsharmony.sper (pe_id, sr_name) values(1,'SYSADMIN');
+delete from jsharmony.aud_d;
+delete from jsharmony.aud_h;
