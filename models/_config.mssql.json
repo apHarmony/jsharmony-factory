@@ -28,7 +28,8 @@
     "client_id": "C_ID",
     "client_name": "C_Name",
     "client_agreement_tstmp": "C_ATstmp",
-    "client_overdue": "INV_OVERDUE"
+    "client_overdue": "INV_OVERDUE",
+    "client_overdue_ignore": "INV_OVERDUE_IGNORE"
   },
   "job_field_mapping": {
     "RQST_ID": "RQST_ID",

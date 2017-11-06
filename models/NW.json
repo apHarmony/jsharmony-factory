@@ -66,56 +66,5 @@
       {"name":"n_scope","type":"varchar","length":"8","access": "F"},
       {"name":"n_scope_id", "type": "bigint", "access": "F" }
     ]
-  },
-  "NL_U_BASE": {
-    "inherits": "NL",
-    "access":"BI", 
-    "title":"User Notes",
-    "caption":[0,"Note","User Notes"]
-  },
-  "NL_C_BASE": {
-    "inherits": "NL",
-    "access":"B", 
-    "title":"Customer Notes",
-    "caption":[0,"Note","Customer Notes"],
-    "buttons":[]
-  },
-  "NL_S_BASE": {
-    "inherits": "NL",
-    "access":"B", 
-    "title":"System Notes",
-    "caption":[0,"Note","System Notes"],
-    "buttons":[],
-    "fields": [
-      {"name": "n_eu_fmt", "access":""},
-      {"name":"n_etstmp", "link":"edit:NB"}
-    ]
-  },
-  "NL_CC_BASE": {
-    "inherits": "NL",
-    "access":"BI", 
-    "title":"Customer Notes",
-    "caption":[0,"Note","Customer Notes"]
-  },
-  "NL_CB_BASE": {
-    "inherits": "NL_C",
-    "fields": [
-      {"name":"n_etstmp", "link":"edit:NB"}
-    ]
-  },
-  "NL_U": {
-    "inherits": "NL_U_BASE"
-  },
-  "NL_C": {
-    "inherits": "NL_C_BASE"
-  },
-  "NL_S": {
-    "inherits": "NL_S_BASE"
-  },
-  "NL_CC": {
-    "inherits": "NL_CC_BASE"
-  },
-  "NL_CB": {
-    "inherits": "NL_CB_BASE"
   }
 }

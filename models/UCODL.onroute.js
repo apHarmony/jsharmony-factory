@@ -30,7 +30,7 @@ jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean 
     }
     //Set caption of codeattrib column
     jsh.AppSrv.getFieldByName(model.fields,'codeattrib').caption = rslt[0]['codeattribmean'];
-    if (!rslt[0]['codeattribMEAN']) { 
+    if (!rslt[0]['codeattribmean']) { 
       jsh.AppSrv.getFieldByName(model.fields,'codeattrib').access = 'B'; 
       jsh.AppSrv.getFieldByName(model.fields,'codeattrib').control = 'hidden'; 
     }
