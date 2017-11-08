@@ -224,10 +224,33 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
     //Add attachment??
     if (global.debug_params.no_job_email) return callback(null);
     var attachments = [];
-    if (job.EMAIL_ATTACH && tmppath) attachments.push({ filename: 'D' + (D_ID||'0') + '.pdf', content: fs.createReadStream(tmppath) });
-    if (job.EMAIL_D_ID) attachments.push({ filename: job.EMAIL_D_FileName, content: fs.createReadStream(global.datadir + '/D/D_FILE_' + job.EMAIL_D_ID) });
-    if (job.EMAIL_TXT_ATTRIB) Helper.SendTXTEmail('jobproc', thisapp.jsh, job.EMAIL_TXT_ATTRIB, job.EMAIL_TO, job.EMAIL_CC, job.EMAIL_BCC, attachments, dbdata, callback);
-    else Helper.SendBaseEmail('jobproc', thisapp.jsh, job.EMAIL_SUBJECT, job.EMAIL_TEXT, job.EMAIL_HTML, job.EMAIL_TO, job.EMAIL_CC, job.EMAIL_BCC, attachments, dbdata, callback);
+    async.waterfall([
+      function(cb){
+        if (job.EMAIL_ATTACH && tmppath){
+          fs.exists(tmppath, function(exists){
+            if(!exists) return cb(new Error('Report output does not exist'));
+            attachments.push({ filename: 'D' + (D_ID||'0') + '.pdf', content: fs.createReadStream(tmppath) });
+            return cb();
+          });
+        }
+        else return cb();
+      },
+      function(cb){
+        if (job.EMAIL_D_ID){
+          var email_d_id_path = global.datadir + '/D/D_FILE_' + job.EMAIL_D_ID;
+          fs.exists(email_d_id_path, function(exists){
+            if(!exists) return cb(new Error('Email D_ID does not exist'));
+            attachments.push({ filename: job.EMAIL_D_FileName, content: fs.createReadStream(email_d_id_path) });
+            return cb();
+          });
+        }
+        else return cb();
+      },
+      function(cb){
+        if (job.EMAIL_TXT_ATTRIB) Helper.SendTXTEmail('jobproc', thisapp.jsh, job.EMAIL_TXT_ATTRIB, job.EMAIL_TO, job.EMAIL_CC, job.EMAIL_BCC, attachments, dbdata, cb);
+        else Helper.SendBaseEmail('jobproc', thisapp.jsh, job.EMAIL_SUBJECT, job.EMAIL_TEXT, job.EMAIL_HTML, job.EMAIL_TO, job.EMAIL_CC, job.EMAIL_BCC, attachments, dbdata, cb);
+      }
+    ], callback);
   }
   var sendSMS = function (callback) {
     //Add attachment??
