@@ -50,7 +50,7 @@ function jsHarmonyFactory(adminConfig, clientConfig, onSettingsLoaded){
   this.app.use(express.static(path.join(__dirname, 'public')));
 
   if(clientConfig){
-    clientConfig = Helper.MergeConfig(jsHarmonyFactory.GetDefaultClientConfig(),clientConfig);
+    clientConfig = Helper.MergeConfig(jsHarmonyFactory.GetDefaultClientConfig(this.app.jsh),clientConfig);
     _this.clientConfig = clientConfig;
     this.app.get(/^\/client$/, function (req, res, next) { res.redirect('/client/'); });
     this.app.use('/client', cookieParser(global.clientcookiesalt, { path: '/client/' }));
@@ -62,7 +62,7 @@ function jsHarmonyFactory(adminConfig, clientConfig, onSettingsLoaded){
   }
 
   if(!adminConfig) adminConfig = {};
-  adminConfig = Helper.MergeConfig(jsHarmonyFactory.GetDefaultAdminConfig(),adminConfig);
+  adminConfig = Helper.MergeConfig(jsHarmonyFactory.GetDefaultAdminConfig(this.app.jsh),adminConfig);
   _this.adminConfig = adminConfig;
   this.app.use('/', cookieParser(global.admincookiesalt, { path: '/' }));
   this.app.all('/login', function (req, res, next) { req._override_basetemplate = 'public'; req._override_title = 'Login'; next(); });
@@ -74,7 +74,7 @@ function jsHarmonyFactory(adminConfig, clientConfig, onSettingsLoaded){
   jsHarmony.Init.addDefaultRoutes(this.app);
 }
 
-jsHarmonyFactory.GetDefaultAdminConfig = function(){
+jsHarmonyFactory.GetDefaultAdminConfig = function(jsh){
   /*************
    *** ADMIN ***
    *************/
@@ -97,7 +97,8 @@ jsHarmonyFactory.GetDefaultAdminConfig = function(){
     globalparams: {
       'barcode_server': global.barcode_settings.server,
       'scanner_server': global.scanner_settings.server,
-      'user_id': function (req) { return req.user_id; }
+      'user_id': function (req) { return req.user_id; },
+      'user_name': function (req) { return req.user_name; }
     },
     sqlparams: {
       "TSTMP": "TSTMP",
@@ -114,7 +115,7 @@ jsHarmonyFactory.GetDefaultAdminConfig = function(){
   return jshconfig_admin;
 }
 
-jsHarmonyFactory.GetDefaultClientConfig = function(){
+jsHarmonyFactory.GetDefaultClientConfig = function(jsh){
   /**************
    *** CLIENT ***
    **************/
@@ -134,30 +135,35 @@ jsHarmonyFactory.GetDefaultClientConfig = function(){
       getContextUser: function (user_info, jsh) { return 'C' + user_info[jsh.map.user_id]; },
       onAuthComplete: function (req, user_info, jsh) {
         req.gdata = {};
-        req.gdata.C_ID = user_info[jsh.map.client_id];
-        req.gdata.C_Name = user_info[jsh.map.client_name];
-        req.gdata.C_ATstmp = user_info[jsh.map.client_agreement_tstmp];
-        req.gdata.INV_OVERDUE = parseFloat(user_info[jsh.map.client_overdue]);
-        req.gdata.INV_OVERDUE_IGNORE = 0;
+        req.gdata[jsh.map.client_id] = user_info[jsh.map.client_id];
+        req.gdata[jsh.map.client_name] = user_info[jsh.map.client_name];
+        req.gdata[jsh.map.client_agreement_tstmp] = user_info[jsh.map.client_agreement_tstmp];
+        req.gdata[jsh.map.client_overdue] = parseFloat(user_info[jsh.map.client_overdue]);
+        req.gdata[jsh.map.client_overdue_ignore] = 0;
       },
     },
     menu: menu.bind(null, 'C'),
-    datalock: { 'C_ID': function (req) { return req.gdata.C_ID; } },
-    datalocktypes: { 'C_ID': { 'name': 'C_ID', 'type': 'bigint' } },
+    datalock: { /* jsh.map.client_id (below) */ },
+    datalocktypes: { /* jsh.map.client_id (below) */ },
     globalparams: {
-      'C_ID': function (req) { return req.gdata.C_ID; },
-      'C_Name': function (req) { return req.gdata.C_Name; },
+      'user_id': function (req) { return req.user_id; },
+      'user_name': function (req) { return req.user_name; },
+      'company_id': function (req) { return req.gdata[jsh.map.client_id]; },
+      'company_name': function (req) { return req.gdata[jsh.map.client_name]; },
       'barcode_server': global.barcode_settings.server
     },
     sqlparams: {
       "TSTMP": "TSTMP",
       "CUSER": "CUSER"
     }
-    //Need code to pull back C_ID from sql_auth
   };
-  var ignore_overdue = function (req, res, next) { req.gdata.INV_OVERDUE_IGNORE = 1; next(); };
+  jshconfig_client.globalparams[jsh.map.client_id] = function (req) { return req.gdata[jsh.map.client_id]; }
+  jshconfig_client.globalparams[jsh.map.client_name] = function (req) { return req.gdata[jsh.map.client_name]; }
+  jshconfig_client.datalock[jsh.map.client_id] = function (req) { return req.gdata[jsh.map.client_id]; };
+  jshconfig_client.datalocktypes[jsh.map.client_id] = { 'name': jsh.map.client_id, 'type': 'bigint' };
+  var ignore_overdue = function (req, res, next) { req.gdata[jsh.map.client_overdue_ignore] = 1; next(); };
   var ignore_overdue_transaction = function (req, res, next) {
-    if (req.gdata.INV_OVERDUE <= 0) { return next(); }
+    if (req.gdata[jsh.map.client_overdue] <= 0) { return next(); }
     if (!('data' in req.body)) { return next(); }
     var data = JSON.parse(req.body.data);
     if (!(data instanceof Array)) { return next(); }
@@ -167,7 +173,7 @@ jsHarmonyFactory.GetDefaultClientConfig = function(){
       if ((action.model == 'C_PA_CC') || (action.model == 'C_PACC_PACCI') || (action.model == 'C_PACC_INFO')) continue;
       overdue_transaction = false;
     }
-    if (overdue_transaction) req.gdata.INV_OVERDUE_IGNORE = 1;
+    if (overdue_transaction) req.gdata[jsh.map.client_overdue_ignore] = 1;
     next();
   };
   jshconfig_client.private_apps = [
@@ -180,8 +186,8 @@ jsHarmonyFactory.GetDefaultClientConfig = function(){
     {
       '/_d/_transaction/': ignore_overdue_transaction,
       '*': function (req, res, next) {
-        if (req.gdata.INV_OVERDUE_IGNORE > 0) return next();
-        if (req.gdata.INV_OVERDUE > 0) { console.log('Redirect-Payment'); return Helper.Redirect302(res, req.baseurl + 'C_PA_CC/'); }
+        if (req.gdata[jsh.map.client_overdue_ignore] > 0) return next();
+        if (req.gdata[jsh.map.client_overdue] > 0) { console.log('Redirect-Payment'); return Helper.Redirect302(res, req.baseurl + 'C_PA_CC/'); }
         next();
       }
     }

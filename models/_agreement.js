@@ -27,7 +27,8 @@ var crypto = require('crypto');
 exports = module.exports = {};
 
 exports.check = function (req, res, next) {
-  if (!req.gdata.C_ATstmp) {
+  var _this = this;
+  if (!req.gdata[_this.jsh.map.client_agreement_tstmp]) {
     return this.jsh.Redirect302(res, req.baseurl + 'agreement/');
   }
   next();
@@ -56,7 +57,7 @@ exports.form = function (req, res, next) {
   var verb = req.method.toLowerCase();
   if (verb !== 'get') return next();
   
-  if (req.gdata.C_ATstmp) { return _this.jsh.Redirect302(res, req.baseurl); }
+  if (req.gdata[_this.jsh.map.client_agreement_tstmp]) { return _this.jsh.Redirect302(res, req.baseurl); }
   
   req.bcrumb_override = '<a href="' + global.home_url + '/">Home</a> &gt; User Agreement';
   //Get cms_join_text from database
@@ -106,11 +107,11 @@ exports.sign = function (req, res, next) {
   //sql = "update C set C_ATstmp=getdate() where C_ID=@C_ID";
   sql = "agreement_sign";
   sql_ptypes.push(dbtypes.BigInt, dbtypes.VarChar(dbtypes.MAX));
-  sql_params['C_ID'] = req.gdata.C_ID;
+  sql_params['C_ID'] = req.gdata[jsh.map.client_id];
   sql_params['RQST_PARMS'] = JSON.stringify({
     'A_Name': P.A_Name,
     'A_DOB': P.A_DOB,
-    'C_ID': req.gdata.C_ID
+    'C_ID': req.gdata[jsh.map.client_id]
   });
   
   var fieldnames = _.keys(fields);

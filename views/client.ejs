@@ -24,7 +24,7 @@
 <div id="xhead">
   <% if(req.isAuthenticated){ %>
     <div id="xtoplinks"><img src="/images/toplinks_corner.png" id="xtoplinks_corner" alt="" title="" />
-      <b>Client Portal:</b>&nbsp; <%=(req.jshconfig.globalparams.C_Name(req)+' - '+req.user_name)%> &nbsp;|&nbsp; 
+      <b>Client Portal:</b>&nbsp; <%=(req.jshconfig.globalparams.company_name(req)+' - '+req.user_name)%> &nbsp;|&nbsp; 
       <a id="toplink_help" class="static" href="<%-req.baseurl%>HSHOWL/" onclick="XExt.popupForm('HSHOWL'); return false;">Help</a> &nbsp;|&nbsp; 
       <a href="/client/logout">Logout</a>
     </div>
