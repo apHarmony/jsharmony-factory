@@ -10,9 +10,9 @@
     "tabpos":"top",
     "tabpanelstyle": "min-width:1000px;",
     "popup":[1050,700],
-    "tabs":{
-      "SELECTOR":{"caption": "Menu Items Selector","target":"SRMSEL_SEL","bindings":{"sr_name":"sr_name"}}
-    },
+    "tabs":[
+      {"name":"SELECTOR","caption": "Menu Items Selector","target":"SRMSEL_SEL","bindings":{"sr_name":"sr_name"}}
+    ],
     "fields":[
       {"name":"sr_id","type":"bigint"},
       {"name":"sr_name","type":"varchar","length":16,"access":"BF","key":1}

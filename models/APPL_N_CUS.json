@@ -2,10 +2,10 @@
   "GPE_NWUS": {
     "inherits": "NWUS",
     "roles": {"O_B":"B","O_X":"*"},
-    "tabs": {
-      "User":{"target":"GPE_NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
-      "System":{"target":"GPE_NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
-    }
+    "tabs": [
+      {"name":"User","target":"GPE_NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
+      {"name":"System","target":"GPE_NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+    ]
   },
    "GPE_NL_U": {
     "inherits": "NL_U",

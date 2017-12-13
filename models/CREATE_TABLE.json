@@ -4,7 +4,7 @@
   "title": "Table Create",
   "onload":"$('#get_codeschema').text(XExt.UndefinedBlank(_GET['codeschema']));$('#get_codename').text(XExt.UndefinedBlank(_GET['codename']));$('#get_codemean').text(XExt.UndefinedBlank(_GET['codemean']));",
   "fields": [
-    {"name":"questione",
+    {"name":"question",
      "value":"Are you sure you want to create table <span id='get_codeschema'></span>.ucod_<span id='get_codename'></span> ? <br /> <span id='get_codemean'></span>"},
     {"name":"codeschema","type":"varchar","length":"16","access":"BU",
      "default": "js:XExt.UndefinedBlank(_GET['codeschema'])","control":"hidden"},
@@ -19,7 +19,7 @@
   "title": "UCOD Table Create",
   "sqlexec": "%%%PROC_RUN%%% jsharmony.create_ucod%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
   "fields": [
-    {"name":"questione",
+    {"name":"question",
      "value":"Are you sure you want to create table <span id='get_codeschema'></span>.ucod_<span id='get_codename'></span> ? <br /> <span id='get_codemean'></span>"}
   ]
  }, 
@@ -28,7 +28,7 @@
   "title": "UCOD2 Table Create",
   "sqlexec": "%%%PROC_RUN%%% jsharmony.create_ucod2%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
   "fields": [
-    {"name":"questione",
+    {"name":"question",
      "value":"Are you sure you want to create table <span id='get_codeschema'></span>.ucod2_<span id='get_codename'></span> ? <br /> <span id='get_codemean'></span>"}
   ]
  }, 
@@ -37,7 +37,7 @@
   "title": "GCOD Table Create",
   "sqlexec": "%%%PROC_RUN%%% jsharmony.create_gcod%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
   "fields": [
-    {"name":"questione",
+    {"name":"question",
      "value":"Are you sure you want to create table <span id='get_codeschema'></span>.gcod_<span id='get_codename'></span> ? <br /> <span id='get_codemean'></span>"}
   ]
  }, 
@@ -46,7 +46,7 @@
   "title": "GCOD2 Table Create",
   "sqlexec": "%%%PROC_RUN%%% jsharmony.create_gcod2%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
   "fields": [
-    {"name":"questione",
+    {"name":"question",
      "value":"Are you sure you want to create table <span id='get_codeschema'></span>.gcod2_<span id='get_codename'></span> ? <br /> <span id='get_codemean'></span>"}
   ]
  } 

@@ -7,11 +7,11 @@
     "caption": [ 0, "User", "Users" ],
     "topmenu": "administration",
 	"tabpos":"top",
-    "tabs":{
-      "General":{"target":"PE","bindings":{"pe_id":"pe_id"}},
-      "Documents":{"target":"GPE_DL","bindings":{"d_scope_id":"pe_id","d_scope":"'PE'"}},
-      "Notes":{"target":"GPE_NWUS","bindings":{"n_scope_id":"pe_id","n_scope":"'PE'"}}
-    },
+    "tabs":[
+      {"name":"General","target":"PE","bindings":{"pe_id":"pe_id"}},
+      {"name":"Documents","target":"GPE_DL","bindings":{"d_scope_id":"pe_id","d_scope":"'PE'"}},
+      {"name":"Notes","target":"GPE_NWUS","bindings":{"n_scope_id":"pe_id","n_scope":"'PE'"}}
+    ],
 	"popup":[1100,900],
 	"fields":[
       {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"client_PR_ID"}},
