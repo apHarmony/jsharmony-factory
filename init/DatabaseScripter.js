@@ -47,7 +47,9 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
     //Load database driver
     _this.db = new JSHdb();
     var path_models_sql = path.join(path.dirname(module.filename),'../models/sql/');
-    _this.sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
+    _this.sqlbase = {};
+    jsHarmony.LoadSQL(path.join(path.dirname(require.resolve('jsharmony')),'sql/'),global.dbconfig._driver.name,_this.sqlbase);
+    jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name,_this.sqlbase);
 	
     _this.db.Scalar('','select 1',[],{},function(err,rslt){
       if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your global.dbconfig in app.settings.js and try again by running:\r\nnpm run -s init-factory'); return reject(); }
@@ -116,8 +118,18 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
       async.eachSeries(bsql, function(sql, sql_cb){
         bi++;
         console.log(dbscript_name + ' ' + bi.toString());
-        _this.db.Scalar('',sql,[],{},function(err,rslt){
-          if(err){ console.log('\r\n'+sql); console.log('\r\nERROR: Error running database scripts: '+err.toString()); return cb(err); }
+        var dbfunc = _this.db.Scalar;
+        if(global.dbconfig._driver.name=='sqlite'){
+          dbfunc = _this.db.MultiRecordset;
+          //global.debug_params.db_error_sql_state = true;
+        }
+        dbfunc.call(_this.db,'',sql,[],{},function(err,rslt){
+          if(err){ 
+            if(global.dbconfig._driver.name!='sqlite') console.log('\r\n'+sql); 
+            console.log('\r\nERROR: Error running database scripts: '+err.toString()); 
+            return cb(err); 
+          }
+          if(rslt && rslt.length) console.log(rslt);
           return sql_cb();
         });
       }, cb);
@@ -140,10 +152,15 @@ DatabaseScripter.prototype.Run = function(scripttype, run_cb){
   });
 }
 
+DatabaseScripter.getDBType = function(){
+  return global.dbconfig._driver.name;
+}
+
 DatabaseScripter.getDBServer = function(){
   var dbtype = global.dbconfig._driver.name;
   if(dbtype=='pgsql') return global.dbconfig.host;
   else if(dbtype=='mssql') return global.dbconfig.server;
+  else if(dbtype=='sqlite') return '';
   else throw new Error('Database type not supported');
 }
 
@@ -163,6 +180,7 @@ DatabaseScripter.setDBName = function(val){
   if(!val){
     if(dbtype=='pgsql') global.dbconfig.database = 'postgres';
     else if(dbtype=='mssql') global.dbconfig.database = 'master';
+    else if(dbtype=='sqlite') global.dbconfig.database = ':memory:';
     else throw new Error('Database type not supported');
   }
   else global.dbconfig.database = val;

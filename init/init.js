@@ -20,6 +20,7 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 var DatabaseScripter = require('./DatabaseScripter.js');
 var JSHdb = require('jsharmony-db');
 var path = require('path');
+var _ = require('lodash');
 var jsHarmony = require('jsharmony');
 var Helper = require('jsharmony/Helper');
 var jsHarmonyFactory = require('../index');
@@ -52,6 +53,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   global._JSH_DBNAME = DatabaseScripter.getDBName();
   global._JSH_DBUSER = global.dbconfig.user;
   global._JSH_DBPASS = global.dbconfig.password;
+  global._JSH_DBTYPE = DatabaseScripter.getDBType();
   global._ADMIN_DBUSER = '';
   global._ADMIN_DBPASS = '';
 
@@ -69,6 +71,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
 
   //Get database information
   .then(function(){ return new Promise(function(login_resolve, login_reject){
+    if(_.includes(['sqlite'],global._JSH_DBTYPE)) return login_resolve();
 
     var try_login = function(){
 

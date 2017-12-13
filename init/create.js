@@ -20,8 +20,10 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 var DatabaseScripter = require('./DatabaseScripter.js');
 var JSHdb = require('jsharmony-db');
 var path = require('path');
+var _ = require('lodash');
 var jsHarmony = require('jsharmony');
 var Helper = require('jsharmony/Helper');
+var HelperFS = require('jsharmony/HelperFS');
 var jsHarmonyFactory = require('../index');
 var dbs = new DatabaseScripter();
 var wclib = require('jsharmony/WebConnect.js');
@@ -32,6 +34,7 @@ var DEFAULT_DB_SERVER = '___DB_SERVER___';
 var DEFAULT_DB_NAME = '___DB_NAME___';
 var DEFAULT_DB_USER = '___DB_USER___';
 var DEFAULT_DB_PASS = '___DB_PASS___';
+var DEFAULT_SQLITE_PATH = 'data/db/project.db';
 global._IS_WINDOWS = /^win/.test(process.platform);
 global._NSTART_CMD = global._IS_WINDOWS ? 'nstart.cmd' : 'nstart.sh';
 
@@ -70,6 +73,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   global._JSH_DBNAME = '';
   global._JSH_DBUSER = '';
   global._JSH_DBPASS = '';
+  global._JSH_DBTYPE = DatabaseScripter.getDBType();
   if(global._ORIG_DBSERVER) global._JSH_DBSERVER = global._ORIG_DBSERVER;
   if(global._ORIG_DBNAME) global._JSH_DBNAME = global._ORIG_DBNAME;
   if(global._ORIG_DBUSER) global._JSH_DBUSER = global._ORIG_DBUSER;
@@ -89,6 +93,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
 
   //Get database information
   .then(function(){ return new Promise(function(login_resolve, login_reject){
+    if(_.includes(['sqlite'],global._JSH_DBTYPE)) return login_resolve();
 
     var try_login = function(){
 
@@ -172,8 +177,36 @@ jsHarmonyFactory_Init.Run = function(run_cb){
 
   }); })
 
-  //Ask for the NEW database name
+  //Ask for the NEW database path, if applicable
   .then(xlib.getStringAsync(function(){
+    if(global._JSH_DBTYPE != 'sqlite') return false;
+    if(global._JSH_DBNAME){
+      console.log('NEW Database path: ' + global._JSH_DBNAME + '   (from app.settings.js)');
+      return false;
+    }
+    process.stdout.write('NEW database path ['+DEFAULT_SQLITE_PATH+']: ');
+  },function(rslt,retry){
+      if(!rslt) rslt = DEFAULT_SQLITE_PATH;
+      try{
+        var dbpath = path.resolve(rslt);
+        var dbfolder = path.dirname(dbpath);
+        HelperFS.createFolderRecursiveSync(dbfolder);
+        HelperFS.touchSync(dbpath);
+      }
+      catch(ex){
+        console.log(ex);
+        process.stdout.write('Error creating database.  Please enter a valid database path: '); 
+        retry();
+        return;
+      }
+      global._JSH_DBNAME = rslt;
+      DatabaseScripter.setDBName(global._JSH_DBNAME);
+      return true;
+  }))
+
+  //Ask for the NEW database name, if applicable
+  .then(xlib.getStringAsync(function(){
+    if(global._JSH_DBTYPE == 'sqlite') return false;
     if(global._JSH_DBNAME){
       console.log('NEW Database name: ' + global._JSH_DBNAME + '   (from app.settings.js)');
       return false;
@@ -199,20 +232,32 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   .then(function(){ return new Promise(function(resolve, reject){
     if(global._ORIG_DEFAULTS || true){
       var cursettings = fs.readFileSync(global.appbasepath+'/app.settings.js','utf8');
-      if(
-        ((cursettings.match(new RegExp(DEFAULT_DB_SERVER,'g')) || []).length==1) &&
-        ((cursettings.match(new RegExp(DEFAULT_DB_NAME,'g')) || []).length==1) &&
-        ((cursettings.match(new RegExp(DEFAULT_DB_USER,'g')) || []).length==1) &&
-        ((cursettings.match(new RegExp(DEFAULT_DB_PASS,'g')) || []).length==1)){
-        //One of each match in app.settings.js
-        console.log('Updating app.settings.js');
-        cursettings = cursettings.replace(DEFAULT_DB_SERVER, Helper.escapeJS(global._JSH_DBSERVER));
-        cursettings = cursettings.replace(DEFAULT_DB_NAME, Helper.escapeJS(global._JSH_DBNAME));
-        cursettings = cursettings.replace(DEFAULT_DB_USER, Helper.escapeJS(global._JSH_DBUSER));
-        cursettings = cursettings.replace(DEFAULT_DB_PASS, Helper.escapeJS(global._JSH_DBPASS));
-        fs.writeFileSync(global.appbasepath+'/app.settings.js', cursettings, 'utf8');
+      global._ORIG_DEFAULTS = false;
+
+      if(_.includes(['sqlite'],global._JSH_DBTYPE)){
+        if(
+          ((cursettings.match(new RegExp(DEFAULT_DB_NAME,'g')) || []).length==1)){
+          console.log('Updating app.settings.js');
+          cursettings = cursettings.replace(DEFAULT_DB_NAME, Helper.escapeJS(global._JSH_DBNAME));
+          fs.writeFileSync(global.appbasepath+'/app.settings.js', cursettings, 'utf8');
+          global._ORIG_DEFAULTS = true;
+        }
       }
-      else global._ORIG_DEFAULTS = false;
+      else if(_.includes(['pgsql','mssql'],global._JSH_DBTYPE)){
+        if(
+          ((cursettings.match(new RegExp(DEFAULT_DB_SERVER,'g')) || []).length==1) &&
+          ((cursettings.match(new RegExp(DEFAULT_DB_NAME,'g')) || []).length==1) &&
+          ((cursettings.match(new RegExp(DEFAULT_DB_USER,'g')) || []).length==1) &&
+          ((cursettings.match(new RegExp(DEFAULT_DB_PASS,'g')) || []).length==1)){
+          console.log('Updating app.settings.js');
+          cursettings = cursettings.replace(DEFAULT_DB_SERVER, Helper.escapeJS(global._JSH_DBSERVER));
+          cursettings = cursettings.replace(DEFAULT_DB_NAME, Helper.escapeJS(global._JSH_DBNAME));
+          cursettings = cursettings.replace(DEFAULT_DB_USER, Helper.escapeJS(global._JSH_DBUSER));
+          cursettings = cursettings.replace(DEFAULT_DB_PASS, Helper.escapeJS(global._JSH_DBPASS));
+          fs.writeFileSync(global.appbasepath+'/app.settings.js', cursettings, 'utf8');
+          global._ORIG_DEFAULTS = true;
+        }
+      }
     }
     DatabaseScripter.setDBName(global._JSH_DBNAME);
     db.Close(function(){
@@ -242,10 +287,10 @@ jsHarmonyFactory_Init.Run = function(run_cb){
       console.log('------------------------------------------------');
       console.log('Please update global.dbconfig in '+global.appbasepath+(global._IS_WINDOWS?'\\':'/')+'app.settings.js with the following database connection information:');
       console.log('------------------------------------------------');
-      console.log('SERVER: ' + global._JSH_DBSERVER);
+      if(_.includes(['pgsql','mssql'],global._JSH_DBTYPE)) console.log('SERVER: ' + global._JSH_DBSERVER);
       console.log('DATABASE: ' + global._JSH_DBNAME);
-      console.log('USER: ' + global._JSH_DBUSER);
-      console.log('PASSWORD: ' + global._JSH_DBPASS);
+      if(_.includes(['pgsql','mssql'],global._JSH_DBTYPE)) console.log('USER: ' + global._JSH_DBUSER);
+      if(_.includes(['pgsql','mssql'],global._JSH_DBTYPE)) console.log('PASSWORD: ' + global._JSH_DBPASS);
       console.log('------------------------------------------------');
     }
     else {

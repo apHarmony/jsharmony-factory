@@ -5,11 +5,11 @@
     "access":"B", 
     "unbound": 1,
     "tabpos":"top",
-    "tabs": {
-      "User":{"target":"NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
-      "Cust":{"target":"NL_C","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
-      "System":{"target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
-    },
+    "tabs": [
+      {"name":"User","target":"NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
+      {"name":"Cust","target":"NL_C","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
+      {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+    ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
 	  {"name":"n_scope","type":"varchar","length":"8","access": "F"},
@@ -22,10 +22,10 @@
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
-    "tabs": {
-      "User":{"target":"NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
-      "System":{"target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
-    },
+    "tabs": [
+      {"name":"User","target":"NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
+      {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+    ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
       {"name":"n_scope","type":"varchar","length":"8","access": "F"},
@@ -38,10 +38,10 @@
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
-    "tabs": {
-      "Cust":{"target":"NL_C","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
-      "System":{"target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
-    },
+    "tabs": [
+      {"name":"Cust","target":"NL_C","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
+      {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+    ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
       {"name":"n_scope","type":"varchar","length":"8","access": "F"},
@@ -54,10 +54,10 @@
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
-    "tabs": {
-      "Client":{"target":"NL_CC","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
-      "System":{"target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
-    },
+    "tabs": [
+      {"name":"Client","target":"NL_CC","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
+      {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+    ],
     "tabpanelstyle": "min-width:900px;",
       "fields":[
         {"name":"n_scope","type":"varchar","length":"8","access": "F"},
@@ -73,10 +73,10 @@
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
-    "tabs": {
-      "Client":{"target":"NL_CB","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
-      "System":{"target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
-    },
+    "tabs": [
+      {"name":"Client","target":"NL_CB","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
+      {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+    ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
       {"name":"n_scope","type":"varchar","length":"8","access": "F"},
