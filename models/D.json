@@ -77,7 +77,7 @@
       "validate": [ "Required" ]}
 	],
 	    "dberrors": [
-    [ "Record not found", "Information cannot be accessed because of payment status" ]
+    [ "Record not found", "You have no access to the document." ]
   ]
  },	
  "D": {
