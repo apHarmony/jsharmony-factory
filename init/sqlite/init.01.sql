@@ -2,12 +2,76 @@ pragma foreign_keys = ON;
 
 begin;
 
+
+/*********UCOD_AC*********/
+%%%create_ucod("ac","jsharmony_")%%%
+insert into jsharmony_ucod_ac (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL);
+insert into jsharmony_ucod_ac (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL);
+
+/*********UCOD_AC1*********/
+%%%create_ucod("ac1","jsharmony_")%%%
+insert into jsharmony_ucod_ac1 (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'A', 'Active', NULL, NULL);
+insert into jsharmony_ucod_ac1 (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Closed', NULL, NULL);
+
+/*********UCOD_AHC*********/
+%%%create_ucod("ahc","jsharmony_")%%%
+insert into jsharmony_ucod_ahc (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL);
+insert into jsharmony_ucod_ahc (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL);
+insert into jsharmony_ucod_ahc (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'HOLD', 'Hold', NULL, NULL);
+
 /*********UCOD_COUNTRY*********/
 %%%create_ucod("country","jsharmony_")%%%
-insert into jsharmony_ucod_country(codeval,codetxt) values ('USA','United States');
-insert into jsharmony_ucod_country(codeval,codetxt) values ('CANADA','Canada');
-insert into jsharmony_ucod_country(codeval,codetxt) values ('MEXICO','Mexico');
+insert into jsharmony_ucod_country(codseq,codeval,codetxt,codecode,codeattrib) values (NULL,'USA','United States',NULL,NULL);
+insert into jsharmony_ucod_country(codseq,codeval,codetxt,codecode,codeattrib) values (NULL,'CANADA','Canada',NULL,NULL);
+insert into jsharmony_ucod_country(codseq,codeval,codetxt,codecode,codeattrib) values (NULL,'MEXICO','Mexico',NULL,NULL);
 
+/*********UCOD_D_SCOPE*********/
+%%%create_ucod("d_scope","jsharmony_")%%%
+insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Customer', NULL, NULL);
+insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'S', 'System', NULL, NULL);
+insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'O', 'Order', NULL, NULL);
+insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL);
+insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (5, 'PE', 'User', NULL, NULL);
+
+
+/*********UCOD_N_SCOPE*********/
+%%%create_ucod("n_scope","jsharmony_")%%%
+insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Customer', NULL, NULL);
+insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'S', 'System', NULL, NULL);
+insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'CT', 'Cust Contact', NULL, NULL);
+insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL);
+insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (5, 'PE', 'User', NULL, NULL);
+
+/*********UCOD_N_TYPE*********/
+%%%create_ucod("n_type","jsharmony_")%%%
+insert into jsharmony_ucod_n_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Client', NULL, NULL);
+insert into jsharmony_ucod_n_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'S', 'System', NULL, NULL);
+insert into jsharmony_ucod_n_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'U', 'User', NULL, NULL);
+
+/*********UCOD_PPD_TYPE*********/
+%%%create_ucod("ppd_type","jsharmony_")%%%
+insert into jsharmony_ucod_ppd_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'C', 'Character', NULL, NULL);
+insert into jsharmony_ucod_ppd_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'N', 'Number', NULL, NULL);
+
+/*********UCOD_RQST_ATYPE*********/
+%%%create_ucod("rqst_atype","jsharmony_")%%%
+insert into jsharmony_ucod_rqst_atype (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'MESSAGE', 'Message', NULL, NULL);
+insert into jsharmony_ucod_rqst_atype (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'REPORT', 'Report Program', NULL, NULL);
+
+/*********UCOD_RQST_SOURCE*********/
+%%%create_ucod("rqst_source","jsharmony_")%%%
+insert into jsharmony_ucod_rqst_source (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'ADMIN', 'Administrator Interface', NULL, NULL);
+insert into jsharmony_ucod_rqst_source (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'CLIENT', 'Client Interface', NULL, NULL);
+
+/*********UCOD_TXT_TYPE*********/
+%%%create_ucod("txt_type","jsharmony_")%%%
+insert into jsharmony_ucod_txt_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'HTML', 'HTML', NULL, NULL);
+insert into jsharmony_ucod_txt_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'TEXT', 'Text', NULL, NULL);
+
+/*********UCOD_V_STS*********/
+%%%create_ucod("v_sts","jsharmony_")%%%
+insert into jsharmony_ucod_v_sts (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'ERROR', 'Error', NULL, NULL);
+insert into jsharmony_ucod_v_sts (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'OK', 'OK', NULL, NULL);
 
 /*********UCOD2_COUNTRY_STATE*********/
 %%%create_ucod2("country_state","jsharmony_")%%%
@@ -116,6 +180,70 @@ insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('US
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('USA','WV','West Virginia');
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('USA','WY','Wyoming');
 
+/***************AUD_H***************/
+CREATE TABLE jsharmony_aud_h (
+  aud_seq integer primary key autoincrement NOT NULL,
+  table_name text,
+  table_id integer NOT NULL,
+  aud_op text,
+  aud_u text,
+  db_k text NOT NULL DEFAULT '0',
+  aud_tstmp text NOT NULL,
+  c_id integer,
+  e_id integer,
+  ref_name text,
+  ref_id integer,
+  subj text
+);
+
+/***************AUD_D***************/
+CREATE TABLE jsharmony_aud_d
+(
+  aud_seq integer NOT NULL,
+  column_name text NOT NULL,
+  column_val text,
+  PRIMARY KEY (aud_seq, column_name),
+  FOREIGN KEY (aud_seq) REFERENCES jsharmony_aud_h(aud_seq)
+);
+
+
+/***************CPE***************/
+create table jsharmony_cpe (
+    pe_id integer primary key autoincrement NOT NULL,
+    c_id integer NOT NULL,
+    pe_sts text DEFAULT 'ACTIVE' NOT NULL,
+    pe_stsdt text,
+    pe_fname text NOT NULL,
+    pe_mname text,
+    pe_lname text NOT NULL,
+    pe_jtitle text,
+    pe_bphone text,
+    pe_cphone text,
+    pe_email text NOT NULL,
+    pe_etstmp text,
+    pe_eu text,
+    pe_mtstmp text,
+    pe_mu text,
+    pe_pw1 text,
+    pe_pw2 text,
+    pe_hash blob DEFAULT X'00' NOT NULL,
+    pe_ll_ip text,
+    pe_ll_tstmp text,
+    pe_snotes text,
+    FOREIGN KEY (pe_sts) REFERENCES jsharmony_ucod_ahc(codeval),
+    CHECK (COALESCE(pe_email,'')<>'')
+);
+create trigger insert_jsharmony_cpe after insert on jsharmony_cpe
+begin
+  update jsharmony_cpe set 
+    pe_stsdt  = datetime('now','localtime'),
+    pe_eu     = (select context from jsharmony_meta limit 1),
+    pe_etstmp = datetime('now','localtime'),
+    pe_mu     = (select context from jsharmony_meta limit 1),
+    pe_mtstmp = datetime('now','localtime')
+    where rowid = new.rowid\;
+end;
+
 /***************PE***************/
 create table jsharmony_pe (
     pe_id integer primary key autoincrement NOT NULL,
@@ -145,9 +273,12 @@ create table jsharmony_pe (
     pe_hash blob DEFAULT X'00' NOT NULL,
     pe_ll_ip text,
     pe_ll_tstmp text,
-    pe_snotes text
+    pe_snotes text,
+    FOREIGN KEY (pe_sts) REFERENCES jsharmony_ucod_ahc(codeval),
+    FOREIGN KEY (pe_country) REFERENCES jsharmony_ucod_country(codeval),
+    FOREIGN KEY (pe_country, pe_state) REFERENCES jsharmony_ucod2_country_state(codeval1,codeval2),
+    CHECK (COALESCE(pe_email,'')<>'')
 );
-
 create trigger insert_jsharmony_pe after insert on jsharmony_pe
 begin
   update jsharmony_pe set 
@@ -179,6 +310,122 @@ end;
 insert into jsharmony_pe (pe_fname,pe_lname,pe_email,pe_pw1,pe_pw2)
   values ('First','User','%%%INIT_DB_ADMIN_EMAIL%%%','%%%INIT_DB_ADMIN_PASS%%%','%%%INIT_DB_ADMIN_PASS%%%');
 
-select * from jsharmony_pe;
+  /***************PPD***************/
+CREATE TABLE jsharmony_ppd (
+  ppd_id integer primary key autoincrement NOT NULL,
+  ppd_process text NOT NULL,
+  ppd_attrib text NOT NULL,
+  ppd_desc text NOT NULL,
+  ppd_type text NOT NULL,
+  codename text,
+  ppd_etstmp text,
+  ppd_eu text,
+  ppd_mtstmp text,
+  ppd_mu text,
+  ppd_snotes text,
+  ppd_gpp integer NOT NULL DEFAULT 0,
+  ppd_ppp integer NOT NULL DEFAULT 0,
+  ppd_xpp integer NOT NULL DEFAULT 0,
+  FOREIGN KEY (ppd_type) REFERENCES jsharmony_ucod_ppd_type(codeval),
+  CONSTRAINT ppd_ppd_process_ppd_attrib_key UNIQUE (ppd_process, ppd_attrib)
+);
+create trigger insert_jsharmony_ppd after insert on jsharmony_ppd
+begin
+  update jsharmony_ppd set 
+    ppd_eu     = (select context from jsharmony_meta limit 1),
+    ppd_etstmp = datetime('now','localtime'),
+    ppd_mu     = (select context from jsharmony_meta limit 1),
+    ppd_mtstmp = datetime('now','localtime')
+    where rowid = new.rowid\;
+end;
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('EMAIL', 'NOTIF_ADMIN', 'Notifications Email - Administrative', 'C', NULL,  1, 0, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('USERS', 'HASH_SEED_S', 'Hash Seed System Users', 'C', NULL,  0, 0, 1);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'ADDR', 'HOUSE Address', 'C', NULL,  1, 0, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'BPHONE', 'HOUSE Business Phone', 'C', NULL,  1, 0, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'CITY', 'HOUSE City', 'C', NULL,  1, 0, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'CONTACT', 'HOUSE Contact', 'C', NULL,  1, 0, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'EMAIL', 'HOUSE Email', 'C', NULL,  1, 0, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'FAX', 'HOUSE Fax', 'C', NULL,  1, 0, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SQL', 'DSCOPE_DCTGR', 'Code table - Document Types by Scope', 'C', NULL,  0, 0, 1);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SQL', 'GETCID', 'SQL Function GET_C_ID', 'C', NULL,  0, 0, 1);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SQL', 'GETEID', 'SQL Function GET_E_ID', 'C', NULL,  0, 0, 1);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'ZIP', 'HOUSE ZIP', 'C', NULL,  1, 0, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'STATE', 'HOUSE State', 'C', NULL,  1, 0, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'NAME', 'HOUSE Name', 'C', NULL,  1, 0, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('DEVICEURL', 'PRINTBAR', 'Device URL - Bar Code Printer', 'C', NULL,  1, 1, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('DEVICEURL', 'SCAN', 'Device URL - Document Scanner', 'C', NULL,  1, 1, 0);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('EMAIL', 'NOTIF_SYS', 'Notifications Email - System', 'C', NULL,  1, 0, 1);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'Client Portal URL', 'C', NULL,  0, 0, 1);
+INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('USERS', 'HASH_SEED_C', 'Hash Seed Client Users', 'C', NULL,  0, 0, 1);
+
+/***************UCOD_H***************/
+CREATE TABLE jsharmony_ucod_h (
+    ucod_h_id  integer primary key autoincrement NOT NULL,
+    codename text NOT NULL,
+    codemean text,
+    codecodemean text,
+    cod_h_etstmp text,
+    cod_h_eu text,
+    cod_h_mtstmp text,
+    cod_h_mu text,
+    cod_snotes text,
+    codeattribmean text,
+    codeschema text,
+    CONSTRAINT unq_ucod_h UNIQUE (codename)
+);
+create trigger insert_jsharmony_ucod_h after insert on jsharmony_ucod_h
+begin
+  update jsharmony_ucod_h set 
+    cod_h_eu     = (select context from jsharmony_meta limit 1),
+    cod_h_etstmp = datetime('now','localtime'),
+    cod_h_mu     = (select context from jsharmony_meta limit 1),
+    cod_h_mtstmp = datetime('now','localtime')
+    where rowid = new.rowid\;
+end;
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('ac', 'ACTIVE-CLOSED', NULL, NULL, 'jsharmony');
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('ac1', 'ACTIVE-CLOSED 1 Character', NULL, NULL, 'jsharmony');
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('ahc', 'ACTIVE-HOLD-CLOSED', NULL, NULL, 'jsharmony');
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('country', 'Country', NULL, NULL, 'jsharmony');
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('d_scope', 'Document Scope', 'Client User Y/N', NULL, 'jsharmony');
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('n_scope', 'Note Scope', NULL, NULL, 'jsharmony');
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('n_type', 'Note Type', NULL, NULL, 'jsharmony');
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('ppd_type', 'Parameter Type', NULL, NULL, 'jsharmony');
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('rqst_atype', 'Request Action Type', NULL, NULL, 'jsharmony');
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('rqst_source', 'Request Source', NULL, NULL, 'jsharmony');
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('txt_type', 'Text Type', NULL, NULL, 'jsharmony');
+INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('v_sts', 'Version Status', NULL, NULL, 'jsharmony');
+
+/***************V***************/
+CREATE TABLE jsharmony_v (
+    v_id integer primary key NOT NULL,
+    v_comp text NOT NULL,
+    v_no_major integer DEFAULT 0 NOT NULL,
+    v_no_minor integer DEFAULT 0 NOT NULL,
+    v_no_build integer DEFAULT 0 NOT NULL,
+    v_no_rev integer DEFAULT 0 NOT NULL,
+    v_sts text DEFAULT 'OK' NOT NULL,
+    v_note text,
+    v_etstmp text,
+    v_eu text,
+    v_mtstmp text,
+    v_mu text,
+    v_snotes text,
+    FOREIGN KEY (v_sts) REFERENCES jsharmony_ucod_v_sts(codeval),
+    CONSTRAINT v_v_no_key UNIQUE (v_no_major, v_no_minor, v_no_build, v_no_rev)
+);
+create trigger insert_jsharmony_v after insert on jsharmony_v
+begin
+  update jsharmony_v set 
+    v_eu     = (select context from jsharmony_meta limit 1),
+    v_etstmp = datetime('now','localtime'),
+    v_mu     = (select context from jsharmony_meta limit 1),
+    v_mtstmp = datetime('now','localtime')
+    where rowid = new.rowid\;
+end;
+
+
+
+
+
 
 end;
