@@ -509,9 +509,17 @@ CREATE TABLE jsharmony_sm (
   UNIQUE (sm_id, sm_desc),
   UNIQUE (sm_name),
   CHECK (sm_utype in ('S', 'C')),
-  /* FOREIGN KEY (sm_id_parent) REFERENCES jsharmony_sm(sm_id), */
+  FOREIGN KEY (sm_id_parent) REFERENCES jsharmony_sm(sm_id),
   FOREIGN KEY (sm_sts) REFERENCES jsharmony_ucod_ahc(codeval)
 );
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1, 'ACTIVE', NULL, 'ADMIN', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 3, 'ACTIVE', 1, 'DASHBOARD', 1, 'Dashboard', NULL, NULL, 'DASHBOARD', NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 160, 'ACTIVE', 1, 'REPORTS', 2, 'Reports', NULL, NULL, 'REPORTS', NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 170, 'ACTIVE', 1, 'ADMINISTRATION', 3, 'Administration', NULL, NULL, 'ADMIN_OVERVIEW', NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 10, 'ACTIVE', 1, 'DEV', 4, 'Developer', NULL, NULL, 'DEV_OVERVIEW', NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 200, 'ACTIVE', 2, 'C_DASHBOARD', NULL, 'Dashboard', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 270, 'ACTIVE', 2, 'C_ADMINISTRATION', NULL, 'Administration', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1785, 'ACTIVE', 170, 'ADMINISTRATION_TEXTMAINTENANCE', NULL, 'Text Maint', NULL, NULL, 'TXTL', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1783, 'ACTIVE', 170, 'ADMINISTRATION_CODETABLES', NULL, '1D Code Tables', NULL, NULL, 'GCOD_HL', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1784, 'ACTIVE', 170, 'ADMINISTRATION_CODE2TABLES', NULL, '2D Code Tables', NULL, NULL, 'GCOD2_HL', NULL, NULL);
@@ -519,18 +527,10 @@ INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1782, 'ACTIVE', 170, 'ADMINISTRATION_GPARAMETERS', NULL, 'System Settings', NULL, NULL, 'GPPL', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 14, 'ACTIVE', 10, 'DEV_X_GPPL', 22, 'System Settings', NULL, NULL, 'X_GPPL', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 13, 'ACTIVE', 10, 'DEV_X_PPDL', 21, 'Settings Definitions', NULL, NULL, 'X_PPDL', NULL, NULL);
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 160, 'ACTIVE', 1, 'REPORTS', 2, 'Reports', NULL, NULL, 'REPORTS', NULL, NULL);
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 170, 'ACTIVE', 1, 'ADMINISTRATION', 3, 'Administration', NULL, NULL, 'ADMIN_OVERVIEW', NULL, NULL);
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 10, 'ACTIVE', 1, 'DEV', 4, 'Developer', NULL, NULL, 'DEV_OVERVIEW', NULL, NULL);
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 200, 'ACTIVE', 2, 'C_DASHBOARD', NULL, 'Dashboard', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 270, 'ACTIVE', 2, 'C_ADMINISTRATION', NULL, 'Administration', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 2700, 'ACTIVE', 270, 'C_ADMINISTRATION_USERS', NULL, 'Cust Users', NULL, NULL, 'CPEL_CLIENT', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 2701, 'ACTIVE', 270, 'C_ADMINISTRATION_CONTACTS', NULL, 'Contacts', NULL, NULL, 'CTL_C_CLIENT', NULL, NULL);
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1, 'ACTIVE', NULL, 'ADMIN', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1795, 'ACTIVE', 170, 'ADMINISTRATION_LOG', NULL, 'Logs', NULL, NULL, 'LOG', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1796, 'ACTIVE', 170, 'ADMINISTRATION_RESTART_SYSTEM', NULL, 'Restart System', NULL, NULL, 'RESTART_SYSTEM', NULL, NULL);
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 3, 'ACTIVE', 1, 'DASHBOARD', 1, 'Dashboard', NULL, NULL, 'DASHBOARD', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 12, 'ACTIVE', 10, 'DEV_X_SML', 11, 'Menu Items', NULL, NULL, 'X_SMLW', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 11, 'ACTIVE', 10, 'DEV_X_SRL', 12, 'User Roles', NULL, NULL, 'X_SRL', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 20, 'ACTIVE', 10, 'DEV_X_CRL', 13, 'Client User Roles', NULL, NULL, 'X_CRL', NULL, NULL);
