@@ -289,6 +289,10 @@ begin
     pe_mu     = (select context from jsharmony_meta limit 1),
     pe_mtstmp = datetime('now','localtime')
     where rowid = new.rowid\;
+
+  select case when ifnull(NEW.pe_pw1,'')<>ifnull(NEW.pe_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
+  select case when length(ifnull(NEW.pe_pw1,''))< 6 then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
+  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "jsharmony_pe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select PP_VAL from jsharmony.V_PP where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_S'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update jsharmony_pe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'\;
 end;
 
 create trigger update_jsharmony_pe after update on jsharmony_pe
@@ -296,16 +300,17 @@ begin
   select case when NEW.pe_stsdt is null then raise(FAIL,'pe_stsdt cannot be null') end\;
   select case when NEW.pe_id <> OLD.pe_id then raise(FAIL,'Cannot update identity') end\;
   --jsharmony_d exists error
-  --passwords different error
-  --passwords >= 6 characters error
-  --generate password hash
-
   update jsharmony_pe set
     pe_stsdt  = case when NEW.pe_sts<>OLD.pe_sts then datetime('now','localtime') else NEW.pe_stsdt end,
     pe_mu     = (select context from jsharmony_meta limit 1),
     pe_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
+    where rowid = new.rowid\; 
 end;
+
+insert into jsharmony_pe (pe_fname,pe_lname,pe_email,pe_pw1,pe_pw2)
+  values ('aa','bb','%%%INIT_DB_ADMIN_EMAIL%%%','testtest','testtest');
+
+select pe_pw1,pe_pw2,pe_hash from jsharmony_pe;
 
 insert into jsharmony_pe (pe_fname,pe_lname,pe_email,pe_pw1,pe_pw2)
   values ('First','User','%%%INIT_DB_ADMIN_EMAIL%%%','%%%INIT_DB_ADMIN_PASS%%%','%%%INIT_DB_ADMIN_PASS%%%');
