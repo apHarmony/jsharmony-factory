@@ -485,6 +485,108 @@ INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename
 INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'Client Portal URL', 'C', NULL,  0, 0, 1);
 INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('USERS', 'HASH_SEED_C', 'Hash Seed Client Users', 'C', NULL,  0, 0, 1);
 
+/***************RQ***************/
+CREATE TABLE jsharmony_rq (
+  rq_id integer primary key autoincrement NOT NULL,
+  rq_etstmp text,
+  rq_eu text,
+  rq_name text NOT NULL,
+  rq_message text NOT NULL,
+  rq_rslt text,
+  rq_rslt_tstmp text,
+  rq_rslt_u text,
+  rq_snotes text
+);
+create trigger insert_jsharmony_rq after insert on jsharmony_rq
+begin
+  update jsharmony_rq set 
+    rq_eu     = (select context from jsharmony_meta limit 1),
+    rq_etstmp = datetime('now','localtime')
+    where rowid = new.rowid\;
+end;
+
+/***************RQST***************/
+CREATE TABLE jsharmony_rqst (
+  rqst_id integer primary key autoincrement NOT NULL,
+  rqst_etstmp text,
+  rqst_eu text,
+  rqst_source text NOT NULL,
+  rqst_atype text NOT NULL,
+  rqst_aname text NOT NULL,
+  rqst_parms text,
+  rqst_ident text,
+  rqst_rslt text,
+  rqst_rslt_tstmp text,
+  rqst_rslt_u text,
+  rqst_snotes text,
+  FOREIGN KEY (rqst_atype) REFERENCES jsharmony_ucod_rqst_atype (codeval),
+  FOREIGN KEY (rqst_source) REFERENCES jsharmony_ucod_rqst_source (codeval)
+);
+create trigger insert_jsharmony_rqst after insert on jsharmony_rqst
+begin
+  update jsharmony_rqst set 
+    rqst_eu     = (select context from jsharmony_meta limit 1),
+    rqst_etstmp = datetime('now','localtime')
+    where rowid = new.rowid\;
+end;
+
+/***************RQST_D***************/
+CREATE TABLE jsharmony_rqst_d (
+  rqst_d_id integer primary key autoincrement NOT NULL,
+  rqst_id integer NOT NULL,
+  d_scope text,
+  d_scope_id integer,
+  d_ctgr text,
+  d_desc text,
+  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
+);
+
+/***************RQST_EMAIL***************/
+CREATE TABLE jsharmony_rqst_email (
+  rqst_email_id integer primary key autoincrement NOT NULL,
+  rqst_id integer NOT NULL,
+  email_txt_attrib text,
+  email_to text NOT NULL,
+  email_cc text,
+  email_bcc text,
+  email_attach integer,
+  email_subject text,
+  email_text text,
+  email_html text,
+  email_d_id integer,
+  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
+);
+
+/***************RQST_N***************/
+CREATE TABLE jsharmony_rqst_n (
+  rqst_n_id integer primary key autoincrement NOT NULL,
+  rqst_id integer NOT NULL,
+  n_scope text,
+  n_scope_id integer,
+  n_type text,
+  n_note text,
+  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
+);
+
+/***************RQST_RQ***************/
+CREATE TABLE jsharmony_rqst_rq (
+  rqst_rq_id integer primary key autoincrement NOT NULL,
+  rqst_id integer NOT NULL,
+  rq_name text NOT NULL,
+  rq_message text,
+  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
+);
+
+/***************RQST_SMS***************/
+CREATE TABLE jsharmony_rqst_sms (
+  rqst_sms_id integer primary key autoincrement NOT NULL,
+  rqst_id integer NOT NULL,
+  sms_txt_attrib text,
+  sms_to text NOT NULL,
+  sms_body text,
+  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
+);
+
 /***************SM***************/
 CREATE TABLE jsharmony_sm (
   sm_id_auto integer primary key autoincrement NOT NULL,
