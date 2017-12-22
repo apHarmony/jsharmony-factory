@@ -1,0 +1,44 @@
+{
+  "jobproc_jobcheck": [
+    "select RQST.RQST_ID,RQST_ATYPE,RQST_ANAME,RQST_PARMS,",
+    "RQST_D.D_SCOPE, RQST_D.D_SCOPE_ID, RQST_D.D_CTGR, RQST_D.D_Desc,",
+    "RQ_NAME,RQ_MESSAGE,",
+    "EMAIL_TXT_ATTRIB, EMAIL_TO, EMAIL_CC, EMAIL_BCC, EMAIL_ATTACH,EMAIL_SUBJECT,EMAIL_TEXT,EMAIL_HTML,EMAIL_D_ID,RQST_EMAIL_D.D_FileName as EMAIL_D_FileName,",
+    "N_SCOPE, N_SCOPE_ID, N_TYPE, N_Note,",
+    "SMS_TXT_ATTRIB,SMS_TO,SMS_BODY",
+    "from jsharmony.RQST",
+    "left outer join jsharmony.RQST_D on RQST_D.RQST_ID = RQST.RQST_ID",
+    "left outer join jsharmony.RQST_RQ on RQST_RQ.RQST_ID = RQST.RQST_ID",
+    "left outer join jsharmony.RQST_EMAIL on RQST_EMAIL.RQST_ID = RQST.RQST_ID",
+    "left outer join jsharmony.V_D_X RQST_EMAIL_D on RQST_EMAIL.EMAIL_D_ID = RQST_EMAIL_D.D_ID",
+    "left outer join jsharmony.RQST_N on RQST_N.RQST_ID = RQST.RQST_ID",
+    "left outer join jsharmony.RQST_SMS on RQST_SMS.RQST_ID = RQST.RQST_ID",
+    "where RQST_RSLT is null limit 1"
+  ],
+  "jobproc_saveD": [
+    "insert into D(D_SCOPE,D_SCOPE_ID,C_ID,D_STS,D_CTGR,D_Desc,D_EXT,D_SIZE,D_UU) values(@D_SCOPE,@D_SCOPE_ID, ",
+    "case @D_SCOPE when 'C' then @D_SCOPE_ID else null end, ",
+    "'A',@D_CTGR,@D_Desc, '.pdf',@D_SIZE, 'jobproc'); select d_id from jsharmony.d where rowid = last_insert_rowid();"
+  ],
+  "jobproc_saveRQ": "insert into jsharmony.RQ(RQ_NAME,RQ_MESSAGE) values(@RQ_NAME,'{}'); select rq_id from jsharmony.rq where rowid = last_insert_rowid();",
+  "jobproc_saveRQ_MESSAGE": "update jsharmony.RQ set RQ_MESSAGE = @RQ_MESSAGE where RQ_ID=@RQ_ID;",
+  "jobproc_saveN": "insert into jsharmony.N(N_SCOPE,N_SCOPE_ID,N_STS,N_TYPE,N_Note) values(@N_SCOPE,@N_SCOPE_ID,'A',@N_TYPE,@N_Note);",
+  "jobproc_jobresult": "update jsharmony.RQST set RQST_RSLT=@RQST_RSLT,RQST_RSLT_TStmp=public.myNOW(),RQST_SNotes=@RQST_SNotes where RQST_ID=@RQST_ID",
+  "jobproc_add_BEGIN": "do $$declare RQST_ID bigint; begin insert into jsharmony.RQST(RQST_SOURCE,RQST_ATYPE,RQST_ANAME,RQST_PARMS) values (@RQST_SOURCE,@RQST_ATYPE,@RQST_ANAME,@RQST_PARMS) returning RQST.RQST_ID jsharmony.into RQST_ID;",
+  "jobproc_add_RQST_D": "insert into jsharmony.RQST_D(RQST_ID,D_SCOPE,D_SCOPE_ID,D_CTGR,D_Desc) values (RQST_ID,@D_SCOPE,@D_SCOPE_ID,@D_CTGR,@D_Desc);",
+  "jobproc_add_RQST_RQ": "insert into jsharmony.RQST_RQ(RQST_ID,RQ_NAME,RQ_MESSAGE) values (RQST_ID,@RQ_NAME,@RQ_MESSAGE);",
+  "jobproc_add_RQST_EMAIL": "insert into jsharmony.RQST_EMAIL(RQST_ID,EMAIL_TXT_ATTRIB,EMAIL_TO,EMAIL_CC,EMAIL_BCC,EMAIL_ATTACH,EMAIL_SUBJECT,EMAIL_TEXT,EMAIL_HTML,EMAIL_D_ID) values (RQST_ID,@EMAIL_TXT_ATTRIB,@EMAIL_TO,@EMAIL_CC,@EMAIL_BCC,@EMAIL_ATTACH,@EMAIL_SUBJECT,@EMAIL_TEXT,@EMAIL_HTML,@EMAIL_D_ID);",
+  "jobproc_add_RQST_SMS": "insert into jsharmony.RQST_SMS(RQST_ID,SMS_TXT_ATTRIB,SMS_TO,SMS_BODY) values (RQST_ID,@SMS_TXT_ATTRIB,@SMS_TO,@SMS_BODY);",
+  "jobproc_add_RQST_N": "insert into jsharmony.RQST_N(RQST_ID,N_SCOPE,N_SCOPE_ID,N_TYPE,N_Note) values (RQST_ID,@N_SCOPE,@N_SCOPE_ID,@N_TYPE,@N_Note);",
+  "jobproc_add_END": " end$$;",
+  "jobproc_queueresult": "update jsharmony.RQ set RQ_RSLT=@RQ_RSLT,RQ_RSLT_TStmp=public.myNOW(),RQ_SNotes=@RQ_SNotes where RQ_ID=@RQ_ID",
+  "jobproc_queuecheck": "select RQ_ID, RQ_NAME, RQ_MESSAGE from jsharmony.RQ where RQ_NAME=@RQ_NAME and RQ_RSLT is null order by RQ_ID limit 1",
+  "jobproc_queuesubscribers": [
+    "WITH CTE AS (SELECT RQ_ID, RQ_NAME, RQ_MESSAGE,ROW_NUMBER() OVER (PARTITION BY RQ_NAME ORDER BY RQ_ID) as RN FROM jsharmony.RQ where RQ_RSLT is null)",
+    "select RQ_ID, RQ_NAME, RQ_MESSAGE",
+    "from CTE",
+    "where RN=1",
+    "order by RQ_ID"
+  ],
+  "jobproc_queuepop": "select RQ_ID from jsharmony.RQ where RQ_ID=@RQ_ID and RQ_NAME=@RQ_NAME and RQ_RSLT is null"
+}

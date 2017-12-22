@@ -422,7 +422,7 @@ begin
 
   select case when ifnull(NEW.pe_pw1,'')<>ifnull(NEW.pe_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
   select case when length(ifnull(NEW.pe_pw1,''))< 6 then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
-  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "jsharmony_pe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select PP_VAL from jsharmony.V_PP where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_S'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update jsharmony_pe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'\;
+  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "jsharmony_pe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select pp_val from jsharmony_v_pp where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_S'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update jsharmony_pe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'\;
 end;
 
 create trigger update_jsharmony_pe after update on jsharmony_pe
@@ -436,14 +436,6 @@ begin
     pe_mtstmp = datetime('now','localtime')
     where rowid = new.rowid\; 
 end;
-
-insert into jsharmony_pe (pe_fname,pe_lname,pe_email,pe_pw1,pe_pw2)
-  values ('aa','bb','%%%INIT_DB_ADMIN_EMAIL%%%','testtest','testtest');
-
-select pe_pw1,pe_pw2,pe_hash from jsharmony_pe;
-
-insert into jsharmony_pe (pe_fname,pe_lname,pe_email,pe_pw1,pe_pw2)
-  values ('First','User','%%%INIT_DB_ADMIN_EMAIL%%%','%%%INIT_DB_ADMIN_PASS%%%','%%%INIT_DB_ADMIN_PASS%%%');
 
   /***************PPD***************/
 CREATE TABLE jsharmony_ppd (
@@ -953,13 +945,13 @@ begin
     xpp_mtstmp = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
-INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES ('USERS', 'HASH_SEED_C', 'w3vefSQ@aewfa@#V5awdfA@#Rdf2%V235wfAF@#%csdfsfvq235@EFSDFAV2352vswfAW@V#%@', '2017-06-18 17:14:25.282391', 'Upostgres', '2017-06-18 17:14:25.282391', 'Upostgres');
-INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES ('USERS', 'HASH_SEED_S', 'frtue5 i876h4567h*&IOJK*()9%UHJS$6agfghjdyszwetsbfg5&$&$TFB5763bergereg', '2017-06-18 17:14:25.297538', 'Upostgres', '2017-06-18 17:14:25.297538', 'Upostgres');
-INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES ('SQL', 'DSCOPE_DCTGR', 'gcod2_d_scope_d_ctgr', '2017-06-18 17:14:25.311607', 'Upostgres', '2017-06-18 17:14:25.311607', 'Upostgres');
-INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES ('SQL', 'GETCID', 'public.get_c_id', '2017-06-18 17:14:25.317611', 'Upostgres', '2017-06-18 17:14:25.317611', 'Upostgres');
-INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES ('SQL', 'GETEID', 'public.get_e_id', '2017-06-18 17:14:25.324813', 'Upostgres', '2017-06-18 17:14:25.324813', 'Upostgres');
-INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'https://localhost', '2017-06-18 17:14:25.332819', 'Upostgres', '2017-10-17 12:23:34.708185', 'S3');
-INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES ('EMAIL', 'NOTIF_SYS', 'user@company.com', '2017-06-18 17:14:25.304602', 'Upostgres', '2017-10-17 12:24:06.270302', 'S3');
+INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('USERS', 'HASH_SEED_C', '');
+INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('USERS', 'HASH_SEED_S', '');
+INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'DSCOPE_DCTGR', 'gcod2_d_scope_d_ctgr');
+INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'GETCID', 'public.get_c_id');
+INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'GETEID', 'public.get_e_id');
+INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'https://localhost');
+INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('EMAIL', 'NOTIF_SYS', 'user@company.com');
 
 /***************NUMBERS***************/
 CREATE TABLE jsharmony_numbers (

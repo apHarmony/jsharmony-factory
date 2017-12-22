@@ -1,7 +1,7 @@
 {
   "TSTMP": "datetime('now','localtime')",
   "CUSER": "(select context from __jsharmony_meta)",
-  "SMS_SendTXTSMS": "select TXT_TVAL,TXT_VAL,TXT_BCC from jsharmony.TXT where TXT_PROCESS='SMS' and TXT_ATTRIB=@TXT_ATTRIB",
+  "SMS_SendTXTSMS": "select TXT_TVAL,TXT_VAL,TXT_BCC from jsharmony_txt where TXT_PROCESS='SMS' and TXT_ATTRIB=@TXT_ATTRIB",
   "CONCAT":"||",
   "FUN_PREFIX":"",
   "PROC_RUN":"select ",
