@@ -13,9 +13,3 @@ insert into jsharmony_sper (pe_id, sr_name) values(1,'DEV');
 insert into jsharmony_sper (pe_id, sr_name) values(1,'SYSADMIN');
 delete from jsharmony_aud_d;
 delete from jsharmony_aud_h;
-
-jsharmony.create_gcod('abc','def','');
-insert into abc_gcod_def(codseq,codeval,codetxt) values (1,'TEST','Test');
-insert into jsharmony_gcod_h(codeschema,codename,codemean) values ('abc','def','aaa');
---update abc_gcod_def set codeval = 'aaaa';
-update abc_gcod_def set codetxt = 'aaaa';
