@@ -34,7 +34,7 @@
 
       {"name":"sm_utype","type":"char","length":1,"access": "BIU","control":"dropdown","captionstyle": "text-align:right;width:120px;",
        "validate":["Required","RegEx:'/S|C/','be one of the following S-System, C-Customer'"],
-       "lov": { "sql": "select * from (values('S','Admin'),('C','Client')) as COD(CODEVal,CODETxt)" },
+       "lov": { "sql": "SM_UTYPE_LOV" },
        "controlstyle":"width:80px;","default":"S",
        "caption":"Menu Type","caption_ext":"User Type"},
       {"name":"sm_id","type":"bigint","access": "BIU","control": "textbox_VS","nl":1,

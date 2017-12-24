@@ -16,12 +16,15 @@ else if(params && params.post && params.post.codeschema) codeschema = params.pos
 var dbtypes = jsh.AppSrv.DB.types;
 jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean from jsharmony.GCOD_H where codename=@codename", [dbtypes.VarChar(16)], { 'codename': codename }, function (err, rslt) {
   if (err) { global.log(err); Helper.GenError(req, res, -99999, "An unexpected error has occurred"); return; }
-  if (rslt && rslt.length) {
+  if (rslt && rslt.length && rslt[0]) {
     //Set title
     model.title = 'TABLE - '+rslt[0]['codemean'];
     //Set table
     model.table = 'GCOD_'+codename;
-    if(codeschema) model.table = codeschema+'.'+model.table;
+    if(codeschema){ 
+      if(global.dbconfig._driver.name=='sqlite') model.table = codeschema+'_'+model.table;
+      else model.table = codeschema+'.'+model.table;
+    }
     //Set caption of codecode column
     jsh.AppSrv.getFieldByName(model.fields,'codecode').caption = rslt[0]['codecodemean'];
     if (!rslt[0]['codecodemean']) { 

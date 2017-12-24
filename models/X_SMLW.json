@@ -16,7 +16,7 @@
       {"name": "cur_sm_id_auto", "type": "bigint", "key": 1 },
       {"name": "sm_id_auto", "type": "bigint","access": "BF","caption": "","control": "tree","virtual": 1,
        "controlstyle": "float:left;margin-right:10px;height:400px;width:300px;",
-       "lov": { "sql": "select sm_id as CODEID,sm_id_parent as CODEParentID,sm_id_auto as CODEVal,sm_desc as CODETxt,'folder' as CODEIcon from jsharmony.sm where 1=1 %%%DATALOCKS%%% order by sm_utype desc,coalesce(SM.SM_Seq,SM.SM_ID),SM_Name,SM.SM_ID" },
+       "lov": { "sql": "X_SMLW_LOV" },
        "controlparams": {
           "expand_all": true,
           "item_context_menu": [

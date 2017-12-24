@@ -44,7 +44,6 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
   sqlparams['TOP_MENU'] = topmenu;
   jsh.AppSrv.ExecMultiRecordset(req._DBContext, menusql, [dbtypes.BigInt, dbtypes.VarChar(30), dbtypes.VarChar(30)], sqlparams, function (err, rslt) {
     if(err){ return Helper.GenError(req, res, -99999, "An unexpected database error has occurred: "+err.toString()); }
-    console.log(JSON.stringify(rslt,null,4));
     var xmenu = {};
     xmenu.MainMenu = [];
     xmenu.SubMenus = {};

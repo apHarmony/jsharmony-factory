@@ -2,6 +2,33 @@ pragma foreign_keys = ON;
 
 begin;
 
+
+/***************AUD_H***************/
+CREATE TABLE jsharmony_aud_h (
+  aud_seq integer primary key autoincrement NOT NULL,
+  table_name text,
+  table_id integer NOT NULL,
+  aud_op text,
+  aud_u text,
+  db_k text NOT NULL DEFAULT '0',
+  aud_tstmp text NOT NULL,
+  c_id integer,
+  e_id integer,
+  ref_name text,
+  ref_id integer,
+  subj text
+);
+
+/***************AUD_D***************/
+CREATE TABLE jsharmony_aud_d
+(
+  aud_seq integer NOT NULL,
+  column_name text NOT NULL,
+  column_val text,
+  PRIMARY KEY (aud_seq, column_name),
+  FOREIGN KEY (aud_seq) REFERENCES jsharmony_aud_h(aud_seq)
+);
+
 /*********DUAL*********/
 CREATE TABLE jsharmony_dual (
   dual_ident integer primary key NOT NULL,
@@ -10,30 +37,31 @@ CREATE TABLE jsharmony_dual (
   dual_text text
 );
 INSERT INTO jsharmony_dual (dummy, dual_ident, dual_integer, dual_text) VALUES ('X', 1, NULL, NULL);
+
 /*********UCOD_AC*********/
-%%%create_ucod("ac","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','ac','');
 insert into jsharmony_ucod_ac (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL);
 insert into jsharmony_ucod_ac (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL);
 
 /*********UCOD_AC1*********/
-%%%create_ucod("ac1","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','ac1','');
 insert into jsharmony_ucod_ac1 (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'A', 'Active', NULL, NULL);
 insert into jsharmony_ucod_ac1 (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Closed', NULL, NULL);
 
 /*********UCOD_AHC*********/
-%%%create_ucod("ahc","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','ahc','');
 insert into jsharmony_ucod_ahc (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL);
 insert into jsharmony_ucod_ahc (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL);
 insert into jsharmony_ucod_ahc (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'HOLD', 'Hold', NULL, NULL);
 
 /*********UCOD_COUNTRY*********/
-%%%create_ucod("country","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','country','');
 insert into jsharmony_ucod_country(codseq,codeval,codetxt,codecode,codeattrib) values (NULL,'USA','United States',NULL,NULL);
 insert into jsharmony_ucod_country(codseq,codeval,codetxt,codecode,codeattrib) values (NULL,'CANADA','Canada',NULL,NULL);
 insert into jsharmony_ucod_country(codseq,codeval,codetxt,codecode,codeattrib) values (NULL,'MEXICO','Mexico',NULL,NULL);
 
 /*********UCOD_D_SCOPE*********/
-%%%create_ucod("d_scope","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','d_scope','');
 insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Customer', NULL, NULL);
 insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'S', 'System', NULL, NULL);
 insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'O', 'Order', NULL, NULL);
@@ -42,7 +70,7 @@ insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattr
 
 
 /*********UCOD_N_SCOPE*********/
-%%%create_ucod("n_scope","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','n_scope','');
 insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Customer', NULL, NULL);
 insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'S', 'System', NULL, NULL);
 insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'CT', 'Cust Contact', NULL, NULL);
@@ -50,38 +78,38 @@ insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattr
 insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (5, 'PE', 'User', NULL, NULL);
 
 /*********UCOD_N_TYPE*********/
-%%%create_ucod("n_type","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','n_type','');
 insert into jsharmony_ucod_n_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Client', NULL, NULL);
 insert into jsharmony_ucod_n_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'S', 'System', NULL, NULL);
 insert into jsharmony_ucod_n_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'U', 'User', NULL, NULL);
 
 /*********UCOD_PPD_TYPE*********/
-%%%create_ucod("ppd_type","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','ppd_type','');
 insert into jsharmony_ucod_ppd_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'C', 'Character', NULL, NULL);
 insert into jsharmony_ucod_ppd_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'N', 'Number', NULL, NULL);
 
 /*********UCOD_RQST_ATYPE*********/
-%%%create_ucod("rqst_atype","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','rqst_atype','');
 insert into jsharmony_ucod_rqst_atype (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'MESSAGE', 'Message', NULL, NULL);
 insert into jsharmony_ucod_rqst_atype (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'REPORT', 'Report Program', NULL, NULL);
 
 /*********UCOD_RQST_SOURCE*********/
-%%%create_ucod("rqst_source","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','rqst_source','');
 insert into jsharmony_ucod_rqst_source (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'ADMIN', 'Administrator Interface', NULL, NULL);
 insert into jsharmony_ucod_rqst_source (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'CLIENT', 'Client Interface', NULL, NULL);
 
 /*********UCOD_TXT_TYPE*********/
-%%%create_ucod("txt_type","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','txt_type','');
 insert into jsharmony_ucod_txt_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'HTML', 'HTML', NULL, NULL);
 insert into jsharmony_ucod_txt_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'TEXT', 'Text', NULL, NULL);
 
 /*********UCOD_V_STS*********/
-%%%create_ucod("v_sts","jsharmony_")%%%
+jsharmony.create_ucod('jsharmony','v_sts','');
 insert into jsharmony_ucod_v_sts (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'ERROR', 'Error', NULL, NULL);
 insert into jsharmony_ucod_v_sts (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'OK', 'OK', NULL, NULL);
 
 /*********UCOD2_COUNTRY_STATE*********/
-%%%create_ucod2("country_state","jsharmony_")%%%
+jsharmony.create_ucod2('jsharmony','country_state','');
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('CANADA','AB','Alberta');
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('CANADA','BC','British Columbia');
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('CANADA','MB','Manitoba');
@@ -187,34 +215,8 @@ insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('US
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('USA','WV','West Virginia');
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('USA','WY','Wyoming');
 
-/*********UCOD2_D_SCOPE_D_CTGR*********/
-%%%create_ucod2("d_scope_d_ctgr","jsharmony_")%%%
-
-/***************AUD_H***************/
-CREATE TABLE jsharmony_aud_h (
-  aud_seq integer primary key autoincrement NOT NULL,
-  table_name text,
-  table_id integer NOT NULL,
-  aud_op text,
-  aud_u text,
-  db_k text NOT NULL DEFAULT '0',
-  aud_tstmp text NOT NULL,
-  c_id integer,
-  e_id integer,
-  ref_name text,
-  ref_id integer,
-  subj text
-);
-
-/***************AUD_D***************/
-CREATE TABLE jsharmony_aud_d
-(
-  aud_seq integer NOT NULL,
-  column_name text NOT NULL,
-  column_val text,
-  PRIMARY KEY (aud_seq, column_name),
-  FOREIGN KEY (aud_seq) REFERENCES jsharmony_aud_h(aud_seq)
-);
+/*********GCOD2_D_SCOPE_D_CTGR*********/
+jsharmony.create_gcod2('jsharmony','d_scope_d_ctgr','');
 
 /***************CPE***************/
 create table jsharmony_cpe (
@@ -294,7 +296,7 @@ CREATE TABLE jsharmony_d (
   d_synctstmp text,
   d_snotes text,
   d_id_main integer,
-  FOREIGN KEY (d_scope, d_ctgr) REFERENCES jsharmony_ucod2_d_scope_d_ctgr (codeval1, codeval2),
+  FOREIGN KEY (d_scope, d_ctgr) REFERENCES jsharmony_gcod2_d_scope_d_ctgr (codeval1, codeval2),
   FOREIGN KEY (d_scope) REFERENCES jsharmony_ucod_d_scope (codeval)
 );
 create trigger insert_jsharmony_d after insert on jsharmony_d
@@ -423,18 +425,44 @@ begin
   select case when ifnull(NEW.pe_pw1,'')<>ifnull(NEW.pe_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
   select case when length(ifnull(NEW.pe_pw1,''))< 6 then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
   update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "jsharmony_pe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select pp_val from jsharmony_v_pp where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_S'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update jsharmony_pe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'\;
+
+  %%%AUDIT_I("PE","new.PE_ID","PE_ID","null","null","null")%%%
+  update jsharmony_meta set aud_seq = null\;
 end;
 
-create trigger update_jsharmony_pe after update on jsharmony_pe
+create trigger delete_jsharmony_pe before delete on jsharmony_pe
+begin
+  %%%AUDIT_D_MULT("PE","old.PE_ID",["PE_ID","PE_STS","PE_FNAME","PE_MNAME","PE_LNAME","PE_JTITLE","PE_BPHONE","PE_CPHONE","PE_EMAIL","PE_LL_TSTMP"],"null","null","null")%%%
+  update jsharmony_meta set aud_seq = null\;
+end;
+
+create trigger update_jsharmony_pe before update on jsharmony_pe
 begin
   select case when NEW.pe_stsdt is null then raise(FAIL,'pe_stsdt cannot be null') end\;
-  select case when NEW.pe_id <> OLD.pe_id then raise(FAIL,'Cannot update identity') end\;
+  select case when NEW.pe_id <> OLD.pe_id then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+
+  select case when ifnull(NEW.pe_pw1,'')<>ifnull(NEW.pe_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
+  select case when (NEW.pe_pw1 is not null) and (length(ifnull(NEW.pe_pw1,''))< 6) then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
+
+  %%%AUDIT_U_MULT("PE","old.PE_ID",["PE_ID","PE_STS","PE_FNAME","PE_MNAME","PE_LNAME","PE_JTITLE","PE_BPHONE","PE_CPHONE","PE_EMAIL","PE_LL_TSTMP"],"null","null","null")%%%
+
+  %%%AUDIT_U_CUSTOM("PE","old.PE_ID","coalesce(NEW.pe_pw1,'') <> '' and coalesce(NEW.pe_pw1,'') <> coalesce(OLD.pe_pw1,'')","null","null","null")%%%
+  insert into jsharmony_aud_d(aud_seq,column_name,column_val)
+    select (select aud_seq from jsharmony_meta),'PE_PW1','*'
+    where (coalesce(NEW.pe_pw1,'') <> '' and coalesce(NEW.pe_pw1,'') <> coalesce(OLD.pe_pw1,''))\;
+
+
+  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "jsharmony_pe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select pp_val from jsharmony_v_pp where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_S'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update jsharmony_pe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'
+    where NEW.pe_pw1 is not null\;
+
   --jsharmony_d exists error
   update jsharmony_pe set
-    pe_stsdt  = case when NEW.pe_sts<>OLD.pe_sts then datetime('now','localtime') else NEW.pe_stsdt end,
+    pe_stsdt  = case when (%%%NONEQUAL("NEW.pe_sts","OLD.pe_sts")%%%) then datetime('now','localtime') else NEW.pe_stsdt end,
     pe_mu     = (select context from jsharmony_meta limit 1),
     pe_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\; 
+    where rowid = new.rowid and exists(select * from jsharmony_meta where aud_seq is not null)\; 
+
+  update jsharmony_meta set aud_seq = null\;
 end;
 
   /***************PPD***************/
@@ -456,7 +484,7 @@ CREATE TABLE jsharmony_ppd (
   FOREIGN KEY (ppd_type) REFERENCES jsharmony_ucod_ppd_type(codeval),
   UNIQUE (ppd_process, ppd_attrib)
 );
-create trigger insert_jsharmony_ppd after insert on jsharmony_ppd
+create trigger insert_jsharmony_ppd before insert on jsharmony_ppd
 begin
   update jsharmony_ppd set 
     ppd_eu     = (select context from jsharmony_meta limit 1),
@@ -1050,8 +1078,8 @@ end;
 INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('USERS', 'HASH_SEED_C', '');
 INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('USERS', 'HASH_SEED_S', '');
 INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'DSCOPE_DCTGR', 'gcod2_d_scope_d_ctgr');
-INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'GETCID', 'public.get_c_id');
-INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'GETEID', 'public.get_e_id');
+INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'GETCID', 'get_c_id');
+INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'GETEID', 'get_e_id');
 INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'https://localhost');
 INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('EMAIL', 'NOTIF_SYS', 'user@company.com');
 

@@ -23,7 +23,7 @@
   "jobproc_saveRQ": "insert into jsharmony.RQ(RQ_NAME,RQ_MESSAGE) values(@RQ_NAME,'{}'); select rq_id from jsharmony.rq where rowid = last_insert_rowid();",
   "jobproc_saveRQ_MESSAGE": "update jsharmony.RQ set RQ_MESSAGE = @RQ_MESSAGE where RQ_ID=@RQ_ID;",
   "jobproc_saveN": "insert into jsharmony.N(N_SCOPE,N_SCOPE_ID,N_STS,N_TYPE,N_Note) values(@N_SCOPE,@N_SCOPE_ID,'A',@N_TYPE,@N_Note);",
-  "jobproc_jobresult": "update jsharmony.RQST set RQST_RSLT=@RQST_RSLT,RQST_RSLT_TStmp=public.myNOW(),RQST_SNotes=@RQST_SNotes where RQST_ID=@RQST_ID",
+  "jobproc_jobresult": "update jsharmony.RQST set RQST_RSLT=@RQST_RSLT,RQST_RSLT_TStmp=datetime('now','localtime'),RQST_SNotes=@RQST_SNotes where RQST_ID=@RQST_ID",
   "jobproc_add_BEGIN": "do $$declare RQST_ID bigint; begin insert into jsharmony.RQST(RQST_SOURCE,RQST_ATYPE,RQST_ANAME,RQST_PARMS) values (@RQST_SOURCE,@RQST_ATYPE,@RQST_ANAME,@RQST_PARMS) returning RQST.RQST_ID jsharmony.into RQST_ID;",
   "jobproc_add_RQST_D": "insert into jsharmony.RQST_D(RQST_ID,D_SCOPE,D_SCOPE_ID,D_CTGR,D_Desc) values (RQST_ID,@D_SCOPE,@D_SCOPE_ID,@D_CTGR,@D_Desc);",
   "jobproc_add_RQST_RQ": "insert into jsharmony.RQST_RQ(RQST_ID,RQ_NAME,RQ_MESSAGE) values (RQST_ID,@RQ_NAME,@RQ_MESSAGE);",
@@ -31,7 +31,7 @@
   "jobproc_add_RQST_SMS": "insert into jsharmony.RQST_SMS(RQST_ID,SMS_TXT_ATTRIB,SMS_TO,SMS_BODY) values (RQST_ID,@SMS_TXT_ATTRIB,@SMS_TO,@SMS_BODY);",
   "jobproc_add_RQST_N": "insert into jsharmony.RQST_N(RQST_ID,N_SCOPE,N_SCOPE_ID,N_TYPE,N_Note) values (RQST_ID,@N_SCOPE,@N_SCOPE_ID,@N_TYPE,@N_Note);",
   "jobproc_add_END": " end$$;",
-  "jobproc_queueresult": "update jsharmony.RQ set RQ_RSLT=@RQ_RSLT,RQ_RSLT_TStmp=public.myNOW(),RQ_SNotes=@RQ_SNotes where RQ_ID=@RQ_ID",
+  "jobproc_queueresult": "update jsharmony.RQ set RQ_RSLT=@RQ_RSLT,RQ_RSLT_TStmp=datetime('now','localtime'),RQ_SNotes=@RQ_SNotes where RQ_ID=@RQ_ID",
   "jobproc_queuecheck": "select RQ_ID, RQ_NAME, RQ_MESSAGE from jsharmony.RQ where RQ_NAME=@RQ_NAME and RQ_RSLT is null order by RQ_ID limit 1",
   "jobproc_queuesubscribers": [
     "WITH CTE AS (SELECT RQ_ID, RQ_NAME, RQ_MESSAGE,ROW_NUMBER() OVER (PARTITION BY RQ_NAME ORDER BY RQ_ID) as RN FROM jsharmony.RQ where RQ_RSLT is null)",
