@@ -4,24 +4,24 @@
     "layout":"form", 
     "title":"Menu Items",
     "table":"",
-    "access":"B", 
+    "actions":"B", 
     "caption":[0,"Menu Item","Menu Items"],
     "sqlselect": "X_SMLW_TOP",
     "querystring": { "|action": "edit", "|cur_sm_id_auto": "0" },
-    "buttons": [{"link":"X_SML", "icon": "list", "text": "List View", "access": "B" }],
+    "buttons": [{"link":"X_SML", "icon": "list", "text": "List View", "actions": "B" }],
     "topmenu":"dev",
     "hide_system_buttons" : ["print","export"], 
     "fields":[
 	  { "control": "html", "value": "<div class=\"clear\" style=\"padding-bottom:15px;width:1000px;\"></div>" },
       {"name": "cur_sm_id_auto", "type": "bigint", "key": 1 },
-      {"name": "sm_id_auto", "type": "bigint","access": "BF","caption": "","control": "tree","virtual": 1,
+      {"name": "sm_id_auto", "type": "bigint","actions": "BF","caption": "","control": "tree","virtual": 1,
        "controlstyle": "float:left;margin-right:10px;height:400px;width:300px;",
        "lov": { "sql": "X_SMLW_LOV" },
        "controlparams": {
           "expand_all": true,
           "item_context_menu": [
-            { "icon": "add", "text": "Add Child Item", "action": "X_SMLW_item_insert(context_item);", "access": "IUD", "class": "add" },
-            { "icon": "delete", "text": "Delete", "action": "X_SMLW_item_delete(context_item);", "access": "IUD", "class": "delete" }
+            { "icon": "add", "text": "Add Child Item", "action": "X_SMLW_item_insert(context_item);", "actions": "IUD", "class": "add" },
+            { "icon": "delete", "text": "Delete", "action": "X_SMLW_item_delete(context_item);", "actions": "IUD", "class": "delete" }
           ]
         },
         "onchange": "X_SMLW_sm_id_onchange(obj,newval);"
@@ -33,7 +33,7 @@
         "target": "X_SML_EDIT",
         "bindings": { "sm_id_auto": "sm_id_auto" },
         "caption": "",
-        "access": "BIUD"
+        "actions": "BIUD"
       }
 	  ],
     "oninit": "X_SMLW_oninit();"
@@ -41,27 +41,27 @@
   "X_SMLW_INSERT": {
       "layout": "exec",
       "title": "Add Menu Item",
-      "access": "U",
+      "actions": "U",
       "dev": 1,
       "sqlexec": "X_SMLW_INSERT",
       "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
       "popup":[450,250],
       "fields": [
-        {"name":"sm_id_parent","type":"bigint","access":"U","control":"hidden"},
-        {"name":"sm_name","type":"varchar","length": 30,"access":"U","control":"hidden"},
-        {"name":"sm_desc","type":"varchar","length": 255,"access":"U","control":"hidden"}
+        {"name":"sm_id_parent","type":"bigint","actions":"U","control":"hidden"},
+        {"name":"sm_name","type":"varchar","length": 30,"actions":"U","control":"hidden"},
+        {"name":"sm_desc","type":"varchar","length": 255,"actions":"U","control":"hidden"}
       ]
   },
   "X_SMLW_DELETE": {
       "layout": "exec",
       "title": "Delete Menu Item",
-      "access": "U",
+      "actions": "U",
       "dev": 1,
       "sqlexec": ["delete from jsharmony.SM where sm_id_auto=@sm_id_auto"],
       "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
       "popup":[450,250],
       "fields": [
-        {"name":"sm_id_auto","type":"bigint","access":"U","control":"hidden"}
+        {"name":"sm_id_auto","type":"bigint","actions":"U","control":"hidden"}
       ]
   }
 }

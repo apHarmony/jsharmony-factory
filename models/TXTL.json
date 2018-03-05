@@ -2,23 +2,23 @@
   "TXTL": {
 	"title":"Text Maintenance",
 	"table":"jsharmony.txt",
-	"access":"B", 
+	"actions":"B", 
     "layout":"grid", 
 	"caption":[0,"Text","Text"],
 	"sort":["^txt_process","^txt_attrib"], 
 	"topmenu":"administration",
     "fields":[
       {"name":"txt_id","type":"bigint","key":1},
-      {"name":"txt_process","type":"varchar","length":"32","caption":"Process","access":"B","link":"edit:TXT"},
-      {"name":"txt_attrib","type":"varchar","length":"32","caption":"Attribute","access":"B","link":"edit:TXT"},
-      {"name":"txt_desc","type":"varchar","length":"255","caption":"Description","access":"B",
+      {"name":"txt_process","type":"varchar","length":"32","caption":"Process","actions":"B","link":"edit:TXT"},
+      {"name":"txt_attrib","type":"varchar","length":"32","caption":"Attribute","actions":"B","link":"edit:TXT"},
+      {"name":"txt_desc","type":"varchar","length":"255","caption":"Description","actions":"B",
        "controlstyle":"width:600px;","link":"edit:TXT"}
     ]
   },	
   "X_TXTL": {
     "inherits":"TXTL",
     "dev":1,
-    "access":"BI", 
+    "actions":"BI", 
     "topmenu":"dev",
     "buttons":[{"link":"add:X_TXT"}],
     "fields":[

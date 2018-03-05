@@ -2,14 +2,14 @@
   "CPE_CPER_BASE": {
     "layout":"multisel", 
 	"table":"jsharmony.V_CPER_NOSTAR",
-	"access":"BU",
+	"actions":"BU",
     "roles": {"CSYSADMIN":"*","CADMIN":"*"},
 	"samplerepeat":3,
 	"fields":[
-	  {"name":"pe_id","type":"bigint","access":"F","datalock":{"C_ID":"client_PE_ID"}},
+	  {"name":"pe_id","type":"bigint","actions":"F","datalock":{"C_ID":"client_PE_ID"}},
 	  {"name":"cper_id","type":"bigint","key":1,"datalock":{"C_ID":"client_CPER_ID"}},
 	  {"name":"cr_name","type":"varchar","length":"16","cellstyle":"width:300px;",
-       "caption":"Role","access":"B",
+       "caption":"Role","actions":"B",
        "lov": 
        { 
           "sql": "select cr_name as CODEVal, cr_desc as CODETxt,CR_SEQ as CODSeq from jsharmony.CR where cr_name<>'C*' %%%DATALOCKS%%%",

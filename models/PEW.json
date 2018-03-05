@@ -3,7 +3,7 @@
     "layout": "form", 
     "title": "System User - <#=data.pe_lname#>, <#=data.pe_fname#>",
     "table": "jsharmony.pe",
-    "access": "B", 
+    "actions": "B", 
     "caption": [ 0, "User", "Users" ],
     "topmenu": "administration",
 	"tabpos":"top",
@@ -15,8 +15,8 @@
 	"popup":[1100,900],
 	"fields":[
       {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"client_PR_ID"}},
-      {"name":"pe_fname","type":"varchar","access":"B"},
-      {"name":"pe_lname","type":"varchar","access":"B"}
+      {"name":"pe_fname","type":"varchar","actions":"B"},
+      {"name":"pe_lname","type":"varchar","actions":"B"}
 	]
   }
 }

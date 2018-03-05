@@ -2,7 +2,7 @@
   "GPPL": {
     "title":"System Settings",
     "table":"jsharmony.v_gppl",
-    "access":"BU", 
+    "actions":"BU", 
     "caption":[0,"Parameter","Parameters"],
     "layout":"grid", 
     "sort":["^gpp_process","^gpp_attrib"], 
@@ -13,17 +13,17 @@
     "validationlevel": "row",     "comment4":"cell, or row",
     "fields":[
       {"name":"gpp_id","type":"bigint","key":1},
-      {"name":"gpp_process","type":"varchar","length":32,"access": "B","comment": "dropdown_S",
+      {"name":"gpp_process","type":"varchar","length":32,"actions": "B","comment": "dropdown_S",
        "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_gpp_process_v order by codseq,codetxt","blank":1},"validate":["Required"],"control":"hidden",
        "caption":"Process","captionstyle":"width:120px;text-align:right;"},
-      {"name":"gpp_attrib","type":"varchar","length":16,"access": "B","comment": "dropdown_M",
+      {"name":"gpp_attrib","type":"varchar","length":16,"actions": "B","comment": "dropdown_M",
        "lov":{"sql2":"select CODEVal1 as CODEParent, CODEVal2 as CODEVal, CODETxt from jsharmony.ucod2_gpp_process_attrib_v order by codseq,codetxt",
        "blank": 1,"parent":"gpp_process"},"validate":["Required"],
        "caption":"Attribute","control":"hidden"},
-      {"name":"ppd_desc","type":"varchar","length":"255","caption":"Description","access":"B"},
-      {"name":"gpp_val","type":"varchar","length":"256","validate":["Required"],"access":"BU","control":"textbox_L",
+      {"name":"ppd_desc","type":"varchar","length":"255","caption":"Description","actions":"B"},
+      {"name":"gpp_val","type":"varchar","length":"256","validate":["Required"],"actions":"BU","control":"textbox_L",
        "caption":"Value"},
-      {"name":"gpp_info","type":"varchar","length":"500","access":"B","control":"textzoom",
+      {"name":"gpp_info","type":"varchar","length":"500","actions":"B","control":"textzoom",
        "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
        "controlstyle":"width:48px;display:none;"}
     ],
@@ -35,11 +35,11 @@
     "inherits":"GPPL",
     "dev":1,
     "title":"System (G) Settings",
-    "access":"BIUD", 
+    "actions":"BIUD", 
     "topmenu":"dev",
     "fields":[
-      {"name":"gpp_process","access": "BIU","control": "dropdown_S"},
-      {"name":"gpp_attrib","access": "BIU","control": "dropdown_M"},
+      {"name":"gpp_process","actions": "BIU","control": "dropdown_S"},
+      {"name":"gpp_attrib","actions": "BIU","control": "dropdown_M"},
       {"name":"gpp_val","control": "textbox_M"}
     ]     
   }

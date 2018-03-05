@@ -3,7 +3,7 @@
     "layout":"grid", 
     "title":"Customer Users",
 	"table":"jsharmony.CPE",
-	"access":"BI", 
+	"actions":"BI", 
     "roles": {"CSYSADMIN":"*","CADMIN":"*"},
 	"caption":[0,"Customer User","Customer Users"],
 	"sort":["^pe_name1"], 
@@ -12,16 +12,16 @@
     "buttons":[{"link":"add:CPE", "bindings":{"c_id":"c_id"}}],
 	"fields":[
 	  {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"client_PE_ID"}},
-      {"name":"c_id","type":"bigint","datalock":{"c_id":"client_C_ID"},"access":"F"},
-	  {"name":"pe_sts","type":"varchar","length":"50","caption":"Status","access":"B"},
-      {"name":"pe_name1","type":"varchar","length":"255","caption":"User","access":"B","link":"edit:CPE",
+      {"name":"c_id","type":"bigint","datalock":{"c_id":"client_C_ID"},"actions":"F"},
+	  {"name":"pe_sts","type":"varchar","length":"50","caption":"Status","actions":"B"},
+      {"name":"pe_name1","type":"varchar","length":"255","caption":"User","actions":"B","link":"edit:CPE",
        "sqlselect":"(jsharmony.get_cpe_name(pe_id))","sql_search":"(jsharmony.get_cpe_name(pe_id))",
        "sql_sort":"(jsharmony.get_cpe_name(pe_id))"},
-	  {"name":"pe_jtitle","type":"varchar","length":"35","caption":"Title","access":"B"},
-	  {"name":"pe_etstmp","type":"date","caption":"Entered","access":"B","format":"MMDDYY"},
-	  {"name":"pe_bphone","type":"varchar","length":"14","caption":"Phone","access":"B","format":"phone"},
-	  {"name":"pe_cphone","type":"varchar","length":"14","caption":"C Phone","access":"B","format":"phone"},
-	  {"name":"pe_email","type":"varchar","length":"255","caption":"EMail","access":"B"}
+	  {"name":"pe_jtitle","type":"varchar","length":"35","caption":"Title","actions":"B"},
+	  {"name":"pe_etstmp","type":"date","caption":"Entered","actions":"B","format":"MMDDYY"},
+	  {"name":"pe_bphone","type":"varchar","length":"14","caption":"Phone","actions":"B","format":"phone"},
+	  {"name":"pe_cphone","type":"varchar","length":"14","caption":"C Phone","actions":"B","format":"phone"},
+	  {"name":"pe_email","type":"varchar","length":"255","caption":"EMail","actions":"B"}
 	]
   },	
   "CPEL": {

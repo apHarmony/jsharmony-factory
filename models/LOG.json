@@ -3,7 +3,7 @@
     "comment":"LOG",
     "title":"Logs",
     "table":"",
-    "access":"B", 
+    "actions":"B", 
     "layout":"exec", 
     "topmenu":"Administration",
     "caption": [ "", "Request", "Requests" ],

@@ -2,7 +2,7 @@
  "POPUP_EXEC": {
   "layout": "exec",
   "title": "Popup Exec Title",
-  "access": "BU",
+  "actions": "BU",
   "roles": {"X_X":"*"},
   "topmenu":"dev",
   "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
@@ -16,7 +16,7 @@
     {"name":"NO","caption":"","control":"button","value":"No","controlstyle": "padding:3px 8px;margin-top:10px;",
      "onclick": "window.close();"},
     {"control":"html","value":"</center>"},
-    {"name":"RSLT","type":"bigint","access":"B","control":"hidden"}
+    {"name":"RSLT","type":"bigint","actions":"B","control":"hidden"}
   ]
  }
 }

@@ -4,7 +4,7 @@
     "layout": "form", 
     "title":"",
     "table": "jsharmony.sr",
-    "access": "B", 
+    "actions": "B", 
     "caption": [ 0, "Item", "Items" ],
     "topmenu": "dev",
     "tabpos":"top",
@@ -15,7 +15,7 @@
     ],
     "fields":[
       {"name":"sr_id","type":"bigint"},
-      {"name":"sr_name","type":"varchar","length":16,"access":"BF","key":1}
+      {"name":"sr_name","type":"varchar","length":16,"actions":"BF","key":1}
     ]
   }  
 }

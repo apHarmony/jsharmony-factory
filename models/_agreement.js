@@ -89,8 +89,8 @@ exports.sign = function (req, res, next) {
   var jsh = this.jsh;
   
   var fields = {
-    "A_Name": { "caption": "Signed Name", "access": "I", "type": "varchar", "length": 72, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
-    "A_DOB": { "caption": "Date of Birth", "access": "I", "type": "date", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_IsValidDOB()] }
+    "A_Name": { "caption": "Signed Name", "actions": "I", "type": "varchar", "length": 72, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
+    "A_DOB": { "caption": "Date of Birth", "actions": "I", "type": "date", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_IsValidDOB()] }
   }
   
   //Validate Parameters
@@ -140,8 +140,8 @@ exports.paymentresult = function (req, res, next) {
   var jsh = this.jsh;
   
   var fields = {
-    "payment_id": { "caption": "Invoice ID", "access": "B", "type": "bigint", "validators": [XValidate._v_Required(), XValidate._v_IsNumeric()] },
-    "fp_hash": { "caption": "Hash", "access": "B", "type": "varchar", "length": 50, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(50)] },
+    "payment_id": { "caption": "Invoice ID", "actions": "B", "type": "bigint", "validators": [XValidate._v_Required(), XValidate._v_IsNumeric()] },
+    "fp_hash": { "caption": "Hash", "actions": "B", "type": "varchar", "length": 50, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(50)] },
   }
   
   //Validate Parameters

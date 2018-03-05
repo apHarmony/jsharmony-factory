@@ -5,7 +5,7 @@
     "table":"",
     "caption":[0,"Report","Reports"],
     "title":"Reports",
-    "access":"B", 
+    "actions":"B", 
     "unbound": 1,
     "roles": {"SYSADMIN": "B","*": "B","RPT": "B"},
     "topmenu":"reports",

@@ -59,10 +59,10 @@ function _v_IsChecked() {
 
 function XFormStep1() { }
 XFormStep1.prototype.Fields = {
-  "A_Accept": { "caption": "E-signature", "access": "I", "validators": [XValidate._v_Required(), _v_IsChecked] },
-  "A_Date": { "caption": "Today's Date", "access": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate()] },
-  "A_Name": { "caption": "Signed Name", "access": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
-  "A_DOB": { "caption": "Date of Birth", "access": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_IsValidDOB(), XValidate._v_MinDOB(18)] }
+  "A_Accept": { "caption": "E-signature", "actions": "I", "validators": [XValidate._v_Required(), _v_IsChecked] },
+  "A_Date": { "caption": "Today's Date", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate()] },
+  "A_Name": { "caption": "Signed Name", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
+  "A_DOB": { "caption": "Date of Birth", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_IsValidDOB(), XValidate._v_MinDOB(18)] }
 }
 XFormStep1.prototype.GetValues = function () {
   var _this = this;

@@ -45,8 +45,8 @@ function X_SMLW_item_insert(context_item){
   if(XForm_GetChanges().length) return XExt.Alert('Please save changes before adding menu items.');
 
   var fields = {
-    "sm_name": { "caption": "Menu ID", "access": "BI", "type": "varchar", "length": 30, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(30)] },
-    "sm_desc": { "caption": "Display Name", "access": "BI", "type": "varchar", "length": 255, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(255)] },
+    "sm_name": { "caption": "Menu ID", "actions": "BI", "type": "varchar", "length": 30, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(30)] },
+    "sm_desc": { "caption": "Display Name", "actions": "BI", "type": "varchar", "length": 255, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(255)] },
   }
   var data = { 'sm_id_parent': window.xContentMenuItemData.id };
   var validate = new XValidate();

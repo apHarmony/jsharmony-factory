@@ -4,7 +4,7 @@
     "dev":1,
     "title":"",
     "table": "jsharmony.cr",
-    "access": "B", 
+    "actions": "B", 
     "caption": [ 0, "Item", "Items" ],
     "topmenu": "items",
     "tabpos":"top",
@@ -15,7 +15,7 @@
     ],
     "fields":[
       {"name":"cr_id","type":"bigint"},
-      {"name":"cr_name","type":"varchar","length":16,"access":"BF","key":1}
+      {"name":"cr_name","type":"varchar","length":16,"actions":"BF","key":1}
     ]
   }  
 }

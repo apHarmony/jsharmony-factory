@@ -376,6 +376,7 @@ begin
     n_mtstmp = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
+
 /***************PE***************/
 create table jsharmony_pe (
     pe_id integer primary key autoincrement NOT NULL,

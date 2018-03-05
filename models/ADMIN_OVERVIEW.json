@@ -4,7 +4,7 @@
   "table":"",
   "caption":[0,"Administration","Administration"],
   "title":"Administration",
-  "access":"B",
+  "actions":"B",
   "unbound": 1,
   "topmenu":"administration",
   "fields":[
