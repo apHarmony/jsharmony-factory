@@ -2125,3 +2125,26 @@ CREATE VIEW jsharmony_v_pp AS
 
 
 end;
+
+/***************V_HOUSE***************/
+CREATE VIEW jsharmony_v_house AS
+ SELECT name.pp_val AS house_name,
+    addr.pp_val AS house_addr,
+    city.pp_val AS house_city,
+    state.pp_val AS house_state,
+    zip.pp_val AS house_zip,
+    (((((((COALESCE(addr.pp_val, '')) || ', ') || (COALESCE(city.pp_val, ''))) || ' ') || (COALESCE(state.pp_val, ''))) || ' ') || (COALESCE(zip.pp_val, ''))) AS house_full_addr,
+    bphone.pp_val AS house_bphone,
+    fax.pp_val AS house_fax,
+    email.pp_val AS house_email,
+    contact.pp_val AS house_contact
+   FROM (((((((((jsharmony_dual
+     LEFT JOIN jsharmony_v_pp name ON ((((name.pp_process) = 'HOUSE') AND ((name.pp_attrib) = 'NAME'))))
+     LEFT JOIN jsharmony_v_pp addr ON ((((addr.pp_process) = 'HOUSE') AND ((addr.pp_attrib) = 'ADDR'))))
+     LEFT JOIN jsharmony_v_pp city ON ((((city.pp_process) = 'HOUSE') AND ((city.pp_attrib) = 'CITY'))))
+     LEFT JOIN jsharmony_v_pp state ON ((((state.pp_process) = 'HOUSE') AND ((state.pp_attrib) = 'STATE'))))
+     LEFT JOIN jsharmony_v_pp zip ON ((((zip.pp_process) = 'HOUSE') AND ((zip.pp_attrib) = 'ZIP'))))
+     LEFT JOIN jsharmony_v_pp bphone ON ((((bphone.pp_process) = 'HOUSE') AND ((bphone.pp_attrib) = 'BPHONE'))))
+     LEFT JOIN jsharmony_v_pp fax ON ((((fax.pp_process) = 'HOUSE') AND ((fax.pp_attrib) = 'FAX'))))
+     LEFT JOIN jsharmony_v_pp email ON ((((email.pp_process) = 'HOUSE') AND ((email.pp_attrib) = 'EMAIL'))))
+     LEFT JOIN jsharmony_v_pp contact ON ((((contact.pp_process) = 'HOUSE') AND ((contact.pp_attrib) = 'CONTACT'))));
