@@ -4,7 +4,7 @@
 	"actions":"BU",
 	"table":"jsharmony.spef",
 	"fields":[
-	  {"name":"pe_id","type":"bigint","actions":"F"},
+	  {"name":"pe_id","type":"bigint","foreignkey":1},
 	  {"name":"spef_id","type":"bigint","key":1},
 	  {"name":"sf_name","type":"varchar","length":"8","cellstyle":"width:300px;",
        "caption":"Function","actions":"B",

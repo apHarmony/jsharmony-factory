@@ -11,10 +11,10 @@
     "buttons":[{"link":"add:D","bindings":{"d_scope_id":"d_scope_id","d_scope":"d_scope"}}],
 	"fields":[
 	  {"name":"d_id","type":"bigint","key": 1,"datalock":{"C_ID":"client_D_ID"}},
-      {"name":"d_scope","type":"varchar","length":8,"actions":"F","datalock":{"C_ID":"client_D_SCOPE"}},
-      {"name":"d_scope_fmt","type":"varchar","length":8,"actions":"BF","datalock":{"C_ID":"client_D_SCOPE"},
+      {"name":"d_scope","type":"varchar","length":8,"foreignkey":1,"datalock":{"C_ID":"client_D_SCOPE"}},
+      {"name":"d_scope_fmt","type":"varchar","length":8,"foreignkey":1,"actions":"B","datalock":{"C_ID":"client_D_SCOPE"},
        "sqlselect":"(d_scope)","link":"edit:D","caption":"=","caption_ext":"Scope"},
-	  {"name":"d_scope_id","type":"bigint","actions":"F","datalock":{"C_ID":"client_D_SCOPE_ID"}},
+	  {"name":"d_scope_id","type":"bigint","foreignkey":1,"datalock":{"C_ID":"client_D_SCOPE_ID"}},
 	  {"name":"d_utstmp","type":"datetime","length":"7","format":"tstmp","caption":"Uploaded","actions":"B",
 	   "controlstyle": "width:100px;","link":"edit:D"},
 	  {"name":"d_sts","type":"varchar","length":8,"caption":"Status","actions":"B"},

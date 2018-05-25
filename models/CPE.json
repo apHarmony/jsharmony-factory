@@ -64,7 +64,7 @@
 	      "control":"label_S",
 		    "caption":"Last Login IP",
 		    "eol":1},
-	  {"name":"c_id","type":"bigint","datalock":{"c_id":"client_C_ID"},"actions":"BIF",
+	  {"name":"c_id","type":"bigint","datalock":{"c_id":"client_C_ID"},"foreignkey":1,"actions":"BI",
         "control": "hidden","default": "js:_GET['c_id']","caption": ""}
 	],
   "dberrors":[

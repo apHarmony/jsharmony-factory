@@ -12,7 +12,7 @@
     "buttons":[{"link":"add:CPE", "bindings":{"c_id":"c_id"}}],
 	"fields":[
 	  {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"client_PE_ID"}},
-      {"name":"c_id","type":"bigint","datalock":{"c_id":"client_C_ID"},"actions":"F"},
+      {"name":"c_id","type":"bigint","datalock":{"c_id":"client_C_ID"},"foreignkey":1},
 	  {"name":"pe_sts","type":"varchar","length":"50","caption":"Status","actions":"B"},
       {"name":"pe_name1","type":"varchar","length":"255","caption":"User","actions":"B","link":"edit:CPE",
        "sqlselect":"(jsharmony.get_cpe_name(pe_id))","sql_search":"(jsharmony.get_cpe_name(pe_id))",

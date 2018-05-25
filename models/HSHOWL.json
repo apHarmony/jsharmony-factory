@@ -14,7 +14,7 @@
 	"fields":[
 	  {"name":"h_id","type":"bigint","key": 1,"datalock":{"C_ID":"client_ALWAYS"}},
 	  {"name":"h_seq","type":"int","actions":"B","control":"hidden"},
-      {"name":"hp_code","type":"varchar","length":50,"actions":"F","datalock":{"C_ID":"client_ALWAYS"}},
+      {"name":"hp_code","type":"varchar","length":50,"foreignkey":1,"datalock":{"C_ID":"client_ALWAYS"}},
 	  {"name":"h_title","type":"varchar","length":"70","caption":"Help Module","controlstyle":"width:350px;","actions":"B","link":"edit:HSHOW","sample":"Test - General Information"}
 	],
     "oninit": "if('hp_code' in _GET) window['xform_'+XBase['HSHOWL']].Data['hp_code'] = _GET.hp_code;",

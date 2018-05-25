@@ -14,7 +14,7 @@
     "fields":[
 	  { "control": "html", "value": "<div class=\"clear\" style=\"padding-bottom:15px;width:1000px;\"></div>" },
       {"name": "cur_sm_id_auto", "type": "bigint", "key": 1 },
-      {"name": "sm_id_auto", "type": "bigint","actions": "BF","caption": "","control": "tree","virtual": 1,
+      {"name": "sm_id_auto", "type": "bigint","foreignkey":1,"actions": "B","caption": "","control": "tree","virtual": 1,
        "controlstyle": "float:left;margin-right:10px;height:400px;width:300px;",
        "lov": { "sql": "X_SMLW_LOV" },
        "controlparams": {
