@@ -2,10 +2,10 @@
   "NL_BASE": {
     "layout":"grid", 
     "table":"jsharmony.N",
-	"actions":"BI", 
-	"sort":["vn_etstmp"], 
-	"caption":[0,"Note","Notes"],
-	"buttons":[{"link":"add:N","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"n_type"}}],
+    "actions":"BI", 
+    "sort":["vn_etstmp"], 
+    "caption":[0,"Note","Notes"],
+    "buttons":[{"link":"add:N","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"n_type"}}],
     "fields":[
 	  {"name":"n_id","type":"bigint","key":1,"datalock":{"C_ID":"client_N_ID"}},
 	  {"name":"n_scope","type":"varchar","length":8,"foreignkey":1,"datalock":{"C_ID":"client_N_SCOPE"}},

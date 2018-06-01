@@ -12,7 +12,7 @@
        "caption":"Role","actions":"B",
        "lov": 
        { 
-          "sql": "select cr_name as CODEVal, cr_desc as CODETxt,CR_SEQ as CODSeq from jsharmony.CR where cr_name<>'C*' %%%DATALOCKS%%%",
+          "sql": "select cr_name as %%%jsh.map.codeval%%%, cr_desc as %%%jsh.map.codetxt%%%,CR_SEQ as %%%jsh.map.codeseq%%% from jsharmony.CR where cr_name<>'C*' %%%DATALOCKS%%%",
           "sql_params":["pe_id"], "datalock":{"C_ID":"client_ALWAYS"} 
        }
       }

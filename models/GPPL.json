@@ -17,7 +17,7 @@
        "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_gpp_process_v order by codseq,codetxt","blank":1},"validate":["Required"],"control":"hidden",
        "caption":"Process","captionstyle":"width:120px;text-align:right;"},
       {"name":"gpp_attrib","type":"varchar","length":16,"actions": "B","comment": "dropdown_M",
-       "lov":{"sql2":"select CODEVal1 as CODEParent, CODEVal2 as CODEVal, CODETxt from jsharmony.ucod2_gpp_process_attrib_v order by codseq,codetxt",
+       "lov":{"sql2":"select CODEVal1 as %%%jsh.map.codeparent%%%, CODEVal2 as %%%jsh.map.codeval%%%, %%%jsh.map.codetxt%%% from jsharmony.ucod2_gpp_process_attrib_v order by codseq,codetxt",
        "blank": 1,"parent":"gpp_process"},"validate":["Required"],
        "caption":"Attribute","control":"hidden"},
       {"name":"ppd_desc","type":"varchar","length":"255","caption":"Description","actions":"B"},

@@ -229,40 +229,40 @@
     "sql": ["(%%%A%%% is null and %%%B%%% is not null or %%%B%%% is null and %%%A%%% is not null or %%%A%%%<>%%%B%%%)"]
   },
   "AUDIT_I_EXT" : {
-    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ"],
+    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "sql": [
-      "insert into jsharmony_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,aud_u)",
-      "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,(select context from jsharmony_meta limit 1)",
+      "insert into jsharmony_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
+      "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
       "  where exists(select * from jsharmony_meta where aud_seq is null)\\\\\\;",
       "update jsharmony_meta set aud_seq = (select aud_seq from jsharmony_aud_h where rowid = last_insert_rowid())",
       "  where exists(select * from jsharmony_meta where aud_seq is null)\\\\\\;"
     ]
   },
   "AUDIT_I" : {
-    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ"],
+    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "sql": [
-      "insert into jsharmony_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,aud_u)",
-      "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,(select context from jsharmony_meta limit 1)",
+      "insert into jsharmony_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
+      "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
       "  where exists(select * from jsharmony_meta where aud_seq is null)\\;",
       "update jsharmony_meta set aud_seq = (select aud_seq from jsharmony_aud_h where rowid = last_insert_rowid())",
       "  where exists(select * from jsharmony_meta where aud_seq is null)\\;"
     ]
   },
   "AUDIT_U_MULT" : {
-    "params": ["TABLE","ID","COL_ARRAY","REF_NAME","REF_ID","SUBJ"],
+    "params": ["TABLE","ID","COL_ARRAY","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "exec": [
       "var rslt = '';",
       "for(var i=0;i<COL_ARRAY.length;i++){",
-      "  rslt += '%%%AUDIT_U('+JSON.stringify(TABLE)+','+JSON.stringify(ID)+','+JSON.stringify(COL_ARRAY[i])+','+JSON.stringify(REF_NAME)+','+JSON.stringify(REF_ID)+','+JSON.stringify(SUBJ)+')%%%\\r\\n';",
+      "  rslt += '%%%AUDIT_U('+JSON.stringify(TABLE)+','+JSON.stringify(ID)+','+JSON.stringify(COL_ARRAY[i])+','+JSON.stringify(REF_NAME)+','+JSON.stringify(REF_ID)+','+JSON.stringify(SUBJ)+','+JSON.stringify(C_ID)+','+JSON.stringify(E_ID)+')%%%\\r\\n';",
       "}",
       "return rslt;"
     ]
   },
   "AUDIT_U" : {
-    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ"],
+    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "sql": [
-      "insert into jsharmony_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,aud_u)",
-      "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,(select context from jsharmony_meta limit 1)",
+      "insert into jsharmony_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
+      "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
       "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%NONEQUAL(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
       "update jsharmony_meta set aud_seq = (select aud_seq from jsharmony_aud_h where rowid = last_insert_rowid())",
       "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%NONEQUAL(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
@@ -273,10 +273,10 @@
     ]
   },
   "AUDIT_U_CUSTOM" : {
-    "params": ["TABLE","ID","CONDITION","REF_NAME","REF_ID","SUBJ"],
+    "params": ["TABLE","ID","CONDITION","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "sql": [
       "insert into jsharmony_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,aud_u)",
-      "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,(select context from jsharmony_meta limit 1)",
+      "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
       "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%CONDITION%%%)\\;",
       "update jsharmony_meta set aud_seq = (select aud_seq from jsharmony_aud_h where rowid = last_insert_rowid())",
       "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%CONDITION%%%)\\;",
@@ -284,24 +284,26 @@
     ]
   },
   "AUDIT_D_MULT" : {
-    "params": ["TABLE","ID","COL_ARRAY","REF_NAME","REF_ID","SUBJ"],
+    "params": ["TABLE","ID","COL_ARRAY","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "exec": [
       "var rslt = '';",
       "for(var i=0;i<COL_ARRAY.length;i++){",
-      "  rslt += '%%%AUDIT_D('+JSON.stringify(TABLE)+','+JSON.stringify(ID)+','+JSON.stringify(COL_ARRAY[i])+','+JSON.stringify(REF_NAME)+','+JSON.stringify(REF_ID)+','+JSON.stringify(SUBJ)+')%%%\\r\\n';",
+      "  rslt += '%%%AUDIT_D('+JSON.stringify(TABLE)+','+JSON.stringify(ID)+','+JSON.stringify(COL_ARRAY[i])+','+JSON.stringify(REF_NAME)+','+JSON.stringify(REF_ID)+','+JSON.stringify(SUBJ)+','+JSON.stringify(C_ID)+','+JSON.stringify(E_ID)+')%%%\\r\\n';",
       "}",
       "return rslt;"
     ]
   },
   "AUDIT_D" : {
-    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ"],
+    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "sql": [
-      "insert into jsharmony_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,aud_u)",
+      "insert into jsharmony_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
       "  select ",
       "    '%%%TABLE%%%',%%%ID%%%,'D',datetime('now','localtime'),",
       "    (select ref_name from jsharmony_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
       "    (select ref_id from jsharmony_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
       "    (select subj from jsharmony_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
+      "    (select c_id from jsharmony_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
+      "    (select e_id from jsharmony_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
       "    (select context from jsharmony_meta limit 1)",
       "  where exists(select * from jsharmony_meta where aud_seq is null)\\;",
       "update jsharmony_meta set aud_seq = (select aud_seq from jsharmony_aud_h where rowid = last_insert_rowid())",
@@ -310,6 +312,25 @@
       "insert into jsharmony_aud_d(aud_seq,column_name,column_val)",
       "  select (select aud_seq from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%\\;",
       ""
+    ]
+  },
+  "jsharmony.getcid":{
+    "params": ["tabn","tabid"],
+    "sql": [
+      "(select null)"
+    ]
+  },
+  "jsharmony.geteid":{
+    "params": ["tabn","tabid"],
+    "sql": [
+      "(select null)"
+    ]
+  },
+  "jsharmony.dscope_dctgr":"jsharmony_gcod2_d_scope_d_ctgr",
+  "jsharmony.mycuser":{
+    "params": [],
+    "sql": [
+      "(select context from jsharmony_meta)"
     ]
   },
   "jsharmony.mycuser_fmt":{
@@ -323,10 +344,25 @@
       "end)"
     ]
   },
+  "jsharmony.mycuser_c_id":{
+    "params": [],
+    "sql": [
+      "(select (case substr(context,1,1)",
+      "  when 'C' then substr(context,2,1024)",
+      "  else null",
+      "end) from jsharmony_meta)"
+    ]
+  },
   "jsharmony.get_pe_name":{
     "params": ["id"],
     "sql": [
       "(select pe_lname||', '||pe_fname from jsharmony_pe get_pe_name_jsharmony_pe where get_pe_name_jsharmony_pe.pe_id = %%%id%%%)"
+    ]
+  },
+  "jsharmony.get_ppd_desc":{
+    "params": ["in_ppd_process","in_ppd_attrib"],
+    "sql": [
+      "(select ppd_desc from jsharmony_ppd get_ppd_desc_jsharmony_ppd where get_ppd_desc_jsharmony_ppd.ppd_process = %%%in_ppd_process%%% and get_ppd_desc_jsharmony_ppd.ppd_attrib = %%%in_ppd_attrib%%%)"
     ]
   },
   "jsharmony.get_cpe_name":{
@@ -349,6 +385,23 @@
       "        'Last Updated:  '||%%%mtstmp%%%||'  '||jsharmony.mycuser_fmt(%%%mu%%%)",
       ")"
     ]
+  },
+  "jsharmony.mype":{
+    "params": [],
+    "sql": [
+      "(case substr(jsharmony.mycuser(),1,1)",
+      "  when 'S' then cast(substr(jsharmony.mycuser(),2,1024) as int)",
+      "  else  null",
+      "end)"
+    ]
+  },
+  "jsharmony.mynow":{
+    "params": [],
+    "sql": "datetime('now','localtime')"
+  },
+  "jsharmony.mytodate":{
+    "params": ["dt"],
+    "sql": "date(%%%dt%%%)"
   },
   "concat":{
     "params": ["a","b"],

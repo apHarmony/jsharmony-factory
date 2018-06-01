@@ -8,7 +8,7 @@
 	  {"name":"spef_id","type":"bigint","key":1},
 	  {"name":"sf_name","type":"varchar","length":"8","cellstyle":"width:300px;",
        "caption":"Function","actions":"B",
-       "lov": { "sql": "select sf_name as CODEVal, sf_desc as CODETxt,SF_SEQ as CODSeq from jsharmony.SF" }
+       "lov": { "sql": "select sf_name as %%%jsh.map.codeval%%%, sf_desc as %%%jsh.map.codetxt%%%,SF_SEQ as %%%jsh.map.codeseq%%% from jsharmony.SF" }
        }
 	],
     "dberrors":[
