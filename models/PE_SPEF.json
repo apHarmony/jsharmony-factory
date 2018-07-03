@@ -1,7 +1,7 @@
 {
     "comment":"PE_SPEF",
     "layout":"multisel", 
-	"actions":"BU",
+	"actions":"BIU",
 	"table":"jsharmony.spef",
 	"fields":[
 	  {"name":"pe_id","type":"bigint","foreignkey":1},

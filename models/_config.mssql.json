@@ -71,6 +71,8 @@
     "codeid": "CODEID",
     "codeparent": "CODEParent",
     "codeseq": "CODESeq",
-    "codetype": "CODEType"
+    "codetype": "CODEType",
+
+    "client_id": "C_ID"
   }
 }

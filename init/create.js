@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var DatabaseScripter = require('./DatabaseScripter.js');
+var DatabaseScripter = require('../lib/DatabaseScripter.js');
 var JSHdb = require('jsharmony-db');
 var path = require('path');
 var _ = require('lodash');
@@ -25,7 +25,6 @@ var jsHarmony = require('jsharmony');
 var Helper = require('jsharmony/Helper');
 var HelperFS = require('jsharmony/HelperFS');
 var jsHarmonyFactory = require('../index');
-var dbs = new DatabaseScripter();
 var wclib = require('jsharmony/WebConnect.js');
 var wc = new wclib.WebConnect();
 var xlib = wclib.xlib;
@@ -46,9 +45,13 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   process.on('exit',function(){ process.exit(global.cliReturnCode); });
 
   if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
+  if(!global.modeldir) global.modeldir = [];
+  global.modeldir.unshift({ path: path.dirname(module.filename) + '/../models/', component: 'jsharmony-factory' });
+
   var db = new JSHdb();
   var path_models_sql = path.join(path.dirname(module.filename),'../models/sql/');
-  var sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
+  var sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name,'jsharmony-factory');
+  var dbs = new DatabaseScripter();
 
   global._ORIG_DBSERVER = DatabaseScripter.getDBServer();
   global._ORIG_DBNAME = DatabaseScripter.getDBName();
@@ -225,7 +228,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     console.log('===============================');
     console.log('Running CREATE Database Scripts');
     console.log('===============================');
-    dbs.Run('create',resolve);
+    dbs.Run(['*','init','create'],resolve);
   }); })
 
   //*** Update connection string in app.settings.js
@@ -271,7 +274,11 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     console.log('=============================');
     console.log('Running INIT Database Scriptss');
     console.log('=============================');
-    dbs.Run('init',resolve);
+    dbs.Run(['*','init','init'],function(){
+      dbs.Run(['*','restructure'],function(){
+        dbs.Run(['*','init_data'],resolve);
+      });
+    });
   }); })
 
   

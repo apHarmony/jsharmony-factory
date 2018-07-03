@@ -5838,7 +5838,7 @@ CREATE VIEW v_nl AS
     n.n_scope,
     n.n_scope_id,
     n.n_sts,
-    NULL::bigint AS c_id,
+    n.c_id,
     NULL::text AS c_name,
     NULL::text AS c_name_ext,
     n.e_id,

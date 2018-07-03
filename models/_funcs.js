@@ -37,7 +37,10 @@ exports.LOG_DOWNLOAD = function (req, res, next) {
   
   var Q = req.query;
   var P = {};
-  if (req.body && ('data' in req.body)) P = JSON.parse(req.body.data);
+  if (req.body && ('data' in req.body)){
+    try{ P = JSON.parse(req.body.data); }
+    catch(ex){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+  }
   var appsrv = this;
   var jsh = this.jsh;
   var dbtypes = appsrv.DB.types;
@@ -70,6 +73,77 @@ exports.LOG_DOWNLOAD = function (req, res, next) {
         if ('number' in err) { return Helper.GenError(req, res, err.number, err.message); }
         return Helper.GenError(req, res, -99999, err.message);
       }
+    });
+    return;
+  }
+  return next();
+}
+
+exports.DEV_DB_SCRIPTS = function (req, res, next) {
+
+  //Replace scripts with "..." and prune empty scripts
+  function clearScripts(node){
+    var rslt = {};
+    for(var key in node){
+      var val = node[key];
+      if(_.isString(val)){
+        if(val.trim()) rslt[key] = "...";
+      }
+      else{
+        var childScripts = clearScripts(val);
+        if(!_.isEmpty(childScripts)) rslt[key] = childScripts;
+      }
+    }
+    return rslt;
+  }
+
+  //-------------------------------------------------------
+
+  var verb = req.method.toLowerCase();
+  if (!req.body) req.body = {};
+  
+  var Q = req.query;
+  var P = {};
+  if (req.body && ('data' in req.body)){
+    try{ P = JSON.parse(req.body.data); }
+    catch(ex){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+  }
+  var appsrv = this;
+  var jsh = this.jsh;
+  var dbtypes = appsrv.DB.types;
+  var model = jsh.getModel(req, 'DEV_DB_SCRIPTS');
+  
+  if (!Helper.HasModelAccess(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
+
+  var dbscripter = 1;
+  
+  if (verb == 'get') {
+    res.end(JSON.stringify({ _success: 1, scripts: clearScripts(jsh.SQLScripts) }));
+    return;
+  }
+  else if (verb == 'post') {
+    if (!appsrv.ParamCheck('Q', Q, [])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+    if (!appsrv.ParamCheck('P', P, ['&scriptid','|runas_user','|runas_password'])) { return Helper.GenError(req, res, -4, 'Invalid Parameters'); }
+
+    var scriptid = P.scriptid;
+    if(!_.isArray(scriptid)) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+    for(var i=0;i<scriptid.length;i++){ if(!_.isString(scriptid[i])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; } }
+
+    //Run as user, if applicable
+    var constring = global.dbconfig;
+    if(P.runas_user){
+      constring = _.extend({}, constring);
+      constring.user = P.runas_user;
+      constring.password = P.runas_password;
+    }
+    var sqlbase = { SQL: [] };
+    sqlbase.SQL['DB'] = global.dbconfig.database;
+    sqlbase.SQL['DB_LCASE'] = global.dbconfig.database.toLowerCase();
+
+    appsrv.db.RunScripts(jsh, scriptid, { constring: constring, sqlbase: sqlbase }, function(err, rslt){
+      if(err){ err.sql = 'scriptid:'+scriptid; return jsh.AppSrv.AppDBError(req, res, err); }
+      res.end(JSON.stringify({ _success: 1, dbrslt: rslt }));
+      return;
     });
     return;
   }

@@ -1,7 +1,7 @@
 {
-    "comment":"PE_SPER",
-    "layout":"multisel", 
-	"actions":"BU",
+  "comment":"PE_SPER",
+  "layout":"multisel", 
+	"actions":"BIU",
 	"table":"jsharmony.sper",
 	"fields":[
 	  {"name":"pe_id","type":"bigint","foreignkey":1},
@@ -9,10 +9,10 @@
 	  {"name":"sr_name","type":"varchar","length":"8","cellstyle":"width:300px;",
        "caption":"Role","actions":"B",
        "lov": { "sql": "select sr_name as %%%jsh.map.codeval%%%, sr_desc as %%%jsh.map.codetxt%%%,SR_SEQ as %%%jsh.map.codeseq%%% from jsharmony.SR" }
-       }
+    }
 	],
-    "dberrors":[
-      ["fk_sper_pe","Cannot delete a user with selected role(s)."],
-      ["FK_SPER_PE","Cannot delete a user with selected role(s)."]
-    ]
+  "dberrors":[
+    ["fk_sper_pe","Cannot delete a user with selected role(s)."],
+    ["FK_SPER_PE","Cannot delete a user with selected role(s)."]
+  ]
 }

@@ -2,7 +2,8 @@
  "POPUP_EXEC": {
   "layout": "exec",
   "title": "Popup Exec Title",
-  "actions": "BU",
+  "actions": "BIU",
+  "dev":1,
   "roles": {"X_X":"*"},
   "topmenu":"dev",
   "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",

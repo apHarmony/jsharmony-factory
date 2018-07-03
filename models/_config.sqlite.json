@@ -72,14 +72,14 @@
     "codeid": "codeid",
     "codeparent": "codeparent",
     "codeseq": "codeseq",
-    "codetype": "codetype"
+    "codetype": "codetype",
+
+    "client_id": "c_id"
   },
   "schema_replacement": [
-    { "search_schema": "jsharmony[.](\\w*)", 
-      "replace_schema": [
-        { "search": "jsharmony[.]%%%TABLE%%%", "replace": "jsharmony_%%%TABLE%%%" },
-        { "search": "([^A-Za-z0-9_]+)%%%TABLE%%%[.]", "replace": "\\1jsharmony_%%%TABLE%%%." }
-      ]
+    { 
+      "search_schema": "jsharmony.",
+      "replace_schema": "jsharmony_"
     }
   ]
 }

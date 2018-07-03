@@ -17,14 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var DatabaseScripter = require('./DatabaseScripter.js');
+var DatabaseScripter = require('../lib/DatabaseScripter.js');
 var JSHdb = require('jsharmony-db');
 var path = require('path');
 var _ = require('lodash');
 var jsHarmony = require('jsharmony');
 var Helper = require('jsharmony/Helper');
 var jsHarmonyFactory = require('../index');
-var dbs = new DatabaseScripter();
 var wclib = require('jsharmony/WebConnect.js');
 var wc = new wclib.WebConnect();
 var xlib = wclib.xlib;
@@ -41,13 +40,17 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   process.on('exit',function(){ process.exit(global.cliReturnCode); });
 
   if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
+  if(!global.modeldir) global.modeldir = [];
+  global.modeldir.unshift({ path: path.dirname(module.filename) + '/../models/', component: 'jsharmony-factory' });
+
   if(!global.dbconfig){
     console.log('\r\nPlease configure global.dbconfig in '+global.appbasepath+(global._IS_WINDOWS?'\\':'/')+'app.settings.js before running init database operation');
     process.exit();
   }
   var db = new JSHdb();
   var path_models_sql = path.join(path.dirname(module.filename),'../models/sql/');
-  var sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name);
+  var sqlbase = jsHarmony.LoadSQL(path_models_sql,global.dbconfig._driver.name,'jsharmony-factory');
+  var dbs = new DatabaseScripter();
 
   global._JSH_DBSERVER = DatabaseScripter.getDBServer();
   global._JSH_DBNAME = DatabaseScripter.getDBName();
@@ -66,6 +69,13 @@ jsHarmonyFactory_Init.Run = function(run_cb){
       if(rslt && (rslt.toString()=="1")){
         resolve();
       }
+    });
+  }); })
+
+  .then(function(){ return new Promise(function(resolve, reject){
+    db.Close(function(){
+      console.log('Closed');
+      resolve();
     });
   }); })
 
@@ -142,11 +152,15 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     console.log('=============================');
     console.log('Running INIT Database Scripts');
     console.log('=============================');
-    dbs.Run('init',resolve);
+    dbs.Run(['*','init','init'],function(){
+      dbs.Run(['*','restructure'],function(){
+        dbs.Run(['*','init_data'],resolve);
+      });
+    });
   }); })
 
   //Callback
-  .then(function(){
+  .then(function(){ return new Promise(function(resolve, reject){
     console.log('');
     console.log('');
     console.log('');
@@ -162,8 +176,12 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     console.log('Password: '+global._JSH_ADMIN_PASS);
     console.log('');
     global.cliReturnCode = 0; //Success
-    if(run_cb) run_cb();
-  })
+
+    db.Close(function(){
+      if(run_cb) run_cb();
+      resolve();
+    });
+  }); })
 
   .catch(function(err){
     if(err) console.log(err);

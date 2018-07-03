@@ -58,6 +58,10 @@ function jsHarmonyFactory(adminConfig, clientConfig, onSettingsLoaded){
     this.app.all('/client/login/forgot_password', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
     this.app.all('/client/logout', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
     _this.clientRouter = jsHarmony.Init.Routes(this.app.jsh, clientConfig);
+    _this.clientRouter.get('*', function(req, res, next){
+      HelperFS.gen404(req, res);
+      return;
+    });
     this.app.use('/client', _this.clientRouter);
   }
 
@@ -109,7 +113,8 @@ jsHarmonyFactory.GetDefaultAdminConfig = function(jsh){
   }
   jshconfig_admin.private_apps = [
     {
-      '/_funcs/LOG_DOWNLOAD': adminfuncs.LOG_DOWNLOAD
+      '/_funcs/LOG_DOWNLOAD': adminfuncs.LOG_DOWNLOAD,
+      '/_funcs/DEV_DB_SCRIPTS': adminfuncs.DEV_DB_SCRIPTS
     }
   ];
   return jshconfig_admin;
@@ -257,7 +262,7 @@ jsHarmonyFactory.prototype.Run = function (cb) {
   else {
     if(_this.adminConfig && _this.adminConfig.auth && (typeof _this.adminConfig.auth.allow_insecure_http_logins === 'undefined'))
       _this.adminConfig.auth.allow_insecure_http_logins = true;
-    if(_this.clientConfig && _this.clientConfig.auth && (typeof _this.adminConfig.auth.allow_insecure_http_logins === 'undefined'))
+    if(_this.clientConfig && _this.clientConfig.auth && (typeof _this.clientConfig.auth.allow_insecure_http_logins === 'undefined'))
       _this.clientConfig.auth.allow_insecure_http_logins = true;
   }
   jsHarmony.Run(jshconfig,_this.app.jsh,_this.app,cb);

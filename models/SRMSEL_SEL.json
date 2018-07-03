@@ -23,7 +23,7 @@
     "oninit": "SRMSEL_SEL_oninit(xform);",
     "oncommit": "SRMSEL_SEL_oncommit();",
 	"fields":[
-	  {"name":"sr_name","type":"varchar","length":16,"actions":"FB","datalock":{"C_ID":"client_C_ID"},"control":"hidden","key":1,
+	  {"name":"sr_name","type":"varchar","length":16,"actions":"B","datalock":{"C_ID":"client_C_ID"},"control":"hidden","key":1,
 	   "caption":""},
       {"name":"srmsel_sel","type":"smallint","actions":"BU","caption":"Select","control":"checkbox",
        "controlparams":{"value_true":"1","value_false":"0","value_hidden":""},"captionstyle": "text-align:center;"},

@@ -1,7 +1,7 @@
 {
-  "DEV_DB": {
-    "comment":"DEV_DB",
-    "title":"Database Management",
+  "DEV_DB_SCRIPTS": {
+    "comment":"DEV_DB_SCRIPTS",
+    "title":"Database Scripts",
     "table":"",
     "actions":"B", 
     "layout":"exec", 
@@ -10,6 +10,6 @@
     "caption": [ "", "Database Management", "Database Management" ],
     "hide_system_buttons":["print","help"],
     "fields":[	  ],
-    "oninit": "DEV_DB_oninit(xform);"
+    "oninit": "DEV_DB_SCRIPTS_oninit(xform);"
 	}
 }

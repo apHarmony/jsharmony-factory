@@ -33,9 +33,9 @@ function jsHarmonyFactoryAPI(){
 
   if(!global.modeldir) global.modeldir = [];
   global.modeldir.unshift({ path: path.join(path.dirname(module.filename),'./models/'), component: 'jsharmony-factory' });
-  jsHarmony.LoadSQL(path.dirname(require.resolve('jsharmony'))+'/sql/', global.dbconfig._driver.name, this.sqlbase);
+  jsHarmony.LoadSQL(path.dirname(require.resolve('jsharmony'))+'/sql/', global.dbconfig._driver.name, 'jsharmony', this.sqlbase);
   for (var i = 0; i < global.modeldir.length; i++) {
-    jsHarmony.LoadSQL(global.modeldir[i].path + 'sql/', global.dbconfig._driver.name, this.sqlbase);
+    jsHarmony.LoadSQL(global.modeldir[i].path + 'sql/', global.dbconfig._driver.name, global.modeldir[i].component, this.sqlbase);
   }
   
 

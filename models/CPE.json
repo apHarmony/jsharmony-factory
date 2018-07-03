@@ -10,8 +10,8 @@
 	"fields":[
 	  {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"client_PE_ID"}},
 	  {"name":"pe_sts","type":"varchar","length":8,"actions":"BIU","control":"dropdown_S",
-       "lov": { "UCOD": "AHC", "blank": 1 }, "validate": ["Required"], "default": "ACTIVE",
-   	   "caption":"Status","captionstyle":"width:120px;text-align:right;"},
+      "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_ahc order by codseq,codetxt","nodatalock":["C_ID"]}, "validate": ["Required"], "default": "ACTIVE",
+   	   "caption":"Status","captionstyle":"width:120px;text-align:right;","datalock":{"C_ID":"client_ALWAYS"}},
 	  {"name":"pe_stsdt","type":"date","actions":"B","control":"textbox_mmddyy",
 	   "caption":"DT","captionstyle":"width:14px;text-align:right;"},
 	  {"name":"pe_jtitle","type":"varchar","length":35,"actions":"BIU",
@@ -64,8 +64,8 @@
 	      "control":"label_S",
 		    "caption":"Last Login IP",
 		    "eol":1},
-	  {"name":"c_id","type":"bigint","datalock":{"c_id":"client_C_ID"},"foreignkey":1,"actions":"BI",
-        "control": "hidden","default": "js:_GET['c_id']","caption": ""}
+	  {"name":"c_id","type":"bigint","datalock":{"C_ID":"client_C_ID"},"foreignkey":1,"actions":"BI",
+        "control": "hidden","default": "js:_GET[jshuimap.client_id]?_GET[jshuimap.client_id]:jsh_global.global_params[jshuimap.client_id]","caption": ""}
 	],
   "dberrors":[
     ["FK_CPER_CPE","Cannot delete a user with selected role(s)"],

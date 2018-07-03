@@ -36,10 +36,6 @@
     "C":{
       "sql":"select C_ID \"C_ID\" from C where C_ID=@C_ID %%%DATALOCKS%%%",
       "children":{
-        "CA":{
-         "bindings":{"C_ID":"C_ID"},
-         "sql":"select C_ID \"C_ID\",CA_ID from CA where C_ID in (select C_ID from C where C_ID=@C_ID %%%DATALOCKS%%%)"
-        },
         "NTYPE":{
           "bindings":{"C_ID":"C_ID"},
           "sql":"select distinct N.C_ID \"C_ID\",N_TYPE \"N_TYPE\" from jsharmony.N inner join C on C.C_ID=N.C_ID where N.C_ID=@C_ID %%%DATALOCKS%%%",

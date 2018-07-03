@@ -2,7 +2,7 @@
   "CPE_CPER_BASE": {
     "layout":"multisel", 
 	"table":"jsharmony.V_CPER_NOSTAR",
-	"actions":"BU",
+	"actions":"BIU",
     "roles": {"CSYSADMIN":"*","CADMIN":"*"},
 	"samplerepeat":3,
 	"fields":[
@@ -13,7 +13,7 @@
        "lov": 
        { 
           "sql": "select cr_name as %%%jsh.map.codeval%%%, cr_desc as %%%jsh.map.codetxt%%%,CR_SEQ as %%%jsh.map.codeseq%%% from jsharmony.CR where cr_name<>'C*' %%%DATALOCKS%%%",
-          "sql_params":["pe_id"], "datalock":{"C_ID":"client_ALWAYS"} 
+          "datalock":{"C_ID":"client_ALWAYS"} 
        }
       }
 	]

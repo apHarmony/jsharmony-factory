@@ -1,4 +1,14 @@
-Use "select '-----TABLE-----' as table_boundary;" between recordsets for Postgres<br/>
-<textarea id="DEV_DB_sql" style="width:800px;height:100px;white-space:nowrap;">select * from c;select * from cf</textarea><br/>
+<table width="800">
+  <tr>
+    <td>Use "select '-----TABLE-----' as table_boundary;" between recordsets for Postgres</td>
+    <td align="right">
+      Samples:
+      <select id="DEV_DB_samples">
+        <option value="">Please select...</option>
+      </select>
+    </td>
+  </tr>
+</table>
+<textarea id="DEV_DB_sql" style="width:800px;height:100px;white-space:nowrap;"></textarea><br/>
 <input type="button" onclick="DEV_DB_RunSQL();" value="Run SQL" /><br/>
 <pre id="DEV_DB_rslt" style="border:1px solid black;padding:10px 15px;margin-top:20px;width:800px;height:500px;overflow:scroll;"></pre>
