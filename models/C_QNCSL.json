@@ -4,7 +4,7 @@
 	"title":"Notifications",
 	"table":"jsharmony.v_nl",
 	"actions":"B", 
-  "roles": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"},
+  "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
 	"sort":["vn_dt","vn_id"], 
 	"caption":[0,"Note","System Notes"],
 	"topmenu":"c_dashboard",
@@ -12,10 +12,10 @@
   "rowlimit":10,
   "disableautoload": 1,
 	"fields":[
-	  {"name":"n_id","type":"bigint","key": 1,"datalock":{"C_ID":"client_N_ID"}},
-	  {"name":"c_id","type":"bigint","key": 1,"datalock":{"C_ID":"client_C_ID"}},
-	  {"name":"n_scope","type":"varchar","length":8,"foreignkey":1,"datalock":{"C_ID":"client_N_SCOPE"}},
-	  {"name":"n_type","type":"varchar","length":8,"foreignkey":1,"datalock":{"C_ID":"client_N_TYPE"}},
+	  {"name":"n_id","type":"bigint","key": 1,"datalock":{"C_ID":"N_ID"}},
+	  {"name":"c_id","type":"bigint","key": 1,"datalock":{"C_ID":"C_ID"}},
+	  {"name":"n_scope","type":"varchar","length":8,"foreignkey":1,"datalock":{"C_ID":"N_SCOPE"}},
+	  {"name":"n_type","type":"varchar","length":8,"foreignkey":1,"datalock":{"C_ID":"N_TYPE"}},
 	  {"name":"n_dt","type":"date","format":["date","MM/DD/YY"],"caption":"Posted","actions":"B"},
 	  {"name":"n_note","type":"varchar","length":"9999999","caption":"Note","actions":"B","controlstyle":"width:700px;"}
 	]

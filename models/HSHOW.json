@@ -10,7 +10,7 @@
 	"oninit": "window['xform_'+xform._id].Data.OnDBError = function(error){ if(error.Number==-1){ XExt.Alert('No help found for this screen',function(){ window.close(); }); return false; } }",
   	"onload": "$('#h_text_disp').html(window['xform_'+xform._id].Data.h_text);",
 	"fields":[
-	  {"name":"h_id","type":"bigint","key": 1,"datalock":{"C_ID":"client_ALWAYS"}},
+	  {"name":"h_id","type":"bigint","key": 1,"datalock":{"C_ID":"ALWAYS"}},
 	  {"name":"h_title","type":"varchar","length":70,"actions":"BIU",
 	      "control":"textbox_VL","sample":"Test - General Information","controlstyle":"background-color:#fff;border:0;font-size:23px;padding:0 0 10px 0;margin:0;",
 		  "caption":"","captionstyle":"width:60px;"},
@@ -24,17 +24,17 @@
     "inherits":"HSHOW",
     "fields":[
       {"name":"h_id","__REMOVE__":1},
-      {"name":"hp_code","type":"varchar","length":50,"key":1,"datalock":{"C_ID":"client_ALWAYS"}}
+      {"name":"hp_code","type":"varchar","length":50,"key":1,"datalock":{"C_ID":"ALWAYS"}}
     ]
   },
   "C_HSHOW": {
     "inherits": "HSHOW",
-    "roles": {"C*":"B"},
+    "roles": { "client": {"C*":"B"} },
     "sqlwhere":"(h_index_p=%%%TRUE%%%)"
   },
   "C_HSHOW_SINGLE": {
     "inherits":"HSHOW_SINGLE",
-    "roles": {"C*":"B"},
+    "roles": { "client": {"C*":"B"} },
     "sqlwhere":"(h_index_p=%%%TRUE%%%)"
   }
 }

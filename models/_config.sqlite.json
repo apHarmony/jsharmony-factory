@@ -72,9 +72,7 @@
     "codeid": "codeid",
     "codeparent": "codeparent",
     "codeseq": "codeseq",
-    "codetype": "codetype",
-
-    "client_id": "c_id"
+    "codetype": "codetype"
   },
   "schema_replacement": [
     { 

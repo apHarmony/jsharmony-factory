@@ -1,5 +1,5 @@
 {
-  "NWUCS": {
+  "NWUCS_BASE": {
     "layout":"form", 
     "table":"S",
     "actions":"B", 
@@ -15,7 +15,10 @@
 	  {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
       {"name":"n_scope_id", "type": "bigint","foreignkey":1}
     ]
-  },  
+  },
+  "NWUCS":{
+    "inherits":"NWUCS_BASE"
+  },
   "NWUS": {
     "table":"S",
     "actions":"B", 

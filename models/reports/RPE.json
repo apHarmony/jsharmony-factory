@@ -11,7 +11,7 @@
   "fields": [
     {"name":"pe_sts","type":"varchar","nl":1,"control":"dropdown_S","actions": "B",
      "lov": { "sql": "select CODEVal,CODETxt from jsharmony.UCOD_AHC where 1=1 %%%DATALOCKS%%% order by codseq", 
-              "datalock":{"C_ID":"client_C_ID"}, "blank": "(All)" },
+              "datalock":{"C_ID":"C_ID"}, "blank": "(All)" },
      "caption":"User Status","captionstyle": "width:90px;"},
 
     {"nl": 1,"control":"button","value":"Run Report","controlstyle": "padding:3px 8px;margin-top:15px;margin-left:94px;",

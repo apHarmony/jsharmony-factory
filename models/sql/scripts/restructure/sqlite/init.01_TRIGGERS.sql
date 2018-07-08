@@ -32,7 +32,7 @@ begin
   select case when new.d_scope<>'S' and new.d_scope_id is null then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
   select case when (jsharmony.mycuser_c_id() is not null) and 
     ((jsharmony.getcid(new.d_scope,new.d_scope_id)<>jsharmony.mycuser_c_id()) or
-     (new.d_scope_id not in ('C','E')))
+     (new.d_scope not in %%%CLIENT_SCOPE%%%))
     then raise(FAIL,'Application Error - Client User has no rights to perform this operation') end\;
   select case when not exists (select * from jsharmony_gcod2_d_scope_d_ctgr where codeval1=new.d_scope and codeval2=new.d_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
 end;
@@ -89,7 +89,7 @@ begin
   select case when new.n_scope<>'S' and new.n_scope_id is null then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
   select case when (jsharmony.mycuser_c_id() is not null) and 
     ((jsharmony.getcid(new.n_scope,new.n_scope_id)<>jsharmony.mycuser_c_id()) or
-     (new.n_scope_id not in ('C','E')))
+     (new.n_scope not in %%%CLIENT_SCOPE%%%))
     then raise(FAIL,'Application Error - Client User has no rights to perform this operation') end\;
 end;
 

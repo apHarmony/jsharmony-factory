@@ -338,6 +338,7 @@
       ""
     ]
   },
+  "CLIENT_SCOPE": "('C','E')",
   "jsharmony.getcid":{
     "params": ["tabn","tabid"],
     "sql": [
@@ -348,6 +349,12 @@
     "params": ["tabn","tabid"],
     "sql": [
       "(select null)"
+    ]
+  },
+  "jsharmony.mycuser_c_id":{
+    "params": [],
+    "sql": [
+      "(select jsharmony_cpe.c_id from jsharmony_cpe where jsharmony_cpe.pe_id=jsharmony.mycpe())"
     ]
   },
   "jsharmony.dscope_dctgr":"jsharmony_gcod2_d_scope_d_ctgr",
@@ -361,18 +368,18 @@
     "params": ["u"],
     "sql": [
       "(case substr(%%%u%%%,1,1)",
-      "  when 'S' then (select 'S-'||pe_lname||', '||pe_fname from jsharmony.pe where pe_id=substr(%%%u%%%,2,1024))",
-      "  when 'C' then (select 'C-'||pe_lname||', '||pe_fname from jsharmony.cpe where pe_id=substr(%%%u%%%,2,1024))",
+      "  when 'S' then (select mycuser_fmt_sname from (select pe_id mycuser_fmt_spe_id,'S-'||pe_lname||', '||pe_fname as mycuser_fmt_sname from jsharmony.pe) mycuser_fmt_stbl where mycuser_fmt_spe_id=substr(%%%u%%%,2,1024))",
+      "  when 'C' then (select mycuser_fmt_cname from (select pe_id mycuser_fmt_cpe_id,'C-'||pe_lname||', '||pe_fname as mycuser_fmt_cname from jsharmony.cpe) mycuser_fmt_ctbl where mycuser_fmt_cpe_id=substr(%%%u%%%,2,1024))",
       "  when 'U' then substr(%%%u%%%,2,2014)",
       "  else 'unknown'",
       "end)"
     ]
   },
-  "jsharmony.mycuser_c_id":{
+  "jsharmony.mycpe":{
     "params": [],
     "sql": [
       "(select (case substr(context,1,1)",
-      "  when 'C' then substr(context,2,1024)",
+      "  when 'C' then cast(substr(context,2,1024) as int)",
       "  else null",
       "end) from jsharmony_meta)"
     ]

@@ -14,7 +14,7 @@
     ],
 	"popup":[1100,900],
 	"fields":[
-      {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"client_PR_ID"}},
+      {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"PR_ID"}},
       {"name":"pe_fname","type":"varchar","actions":"B"},
       {"name":"pe_lname","type":"varchar","actions":"B"}
 	]

@@ -17,7 +17,7 @@
   },
    "REPORTS_CLIENT": {
     "inherits": "REPORTS",
-    "roles": {"CX_B":"B","CX_X":"B"},
+    "roles": { "client": {"CX_B":"B","CX_X":"B"} },
     "topmenu":"c_reports" 
   }
 }

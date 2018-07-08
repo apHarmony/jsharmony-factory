@@ -83,6 +83,7 @@ jsHarmonyFactory.GetDefaultAdminConfig = function(jsh){
    *** ADMIN ***
    *************/
   var jshconfig_admin = {
+    id: 'main',
     basetemplate: 'index',
     baseurl: '/',
     show_system_errors: true,
@@ -125,6 +126,7 @@ jsHarmonyFactory.GetDefaultClientConfig = function(jsh){
    *** CLIENT ***
    **************/
   var jshconfig_client = {
+    id: 'client',
     basetemplate: 'client',
     baseurl: '/client/',
     show_system_errors: false,
