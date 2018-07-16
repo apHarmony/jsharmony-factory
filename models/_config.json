@@ -19,6 +19,7 @@
         "D_ID": "D_ID in (select D_ID from jsharmony.D where jsharmony.D.C_ID=@datalock_c_id or D_SCOPE='S')",
         "D_SCOPE": "D_SCOPE in ('C','E')",
         "D_SCOPE_ID": "(((D_SCOPE = 'S' or D_SCOPE = 'C') and D_SCOPE_ID=@datalock_c_id) or (D_SCOPE='E' and D_SCOPE_ID in (select E_ID from E where E.C_ID=@datalock_c_id)))",
+        "D_CTGR": "1=1",
         "N_ID": "N_ID in (select N_ID from jsharmony.N where jsharmony.N.C_ID=@datalock_c_id)",
         "N_SCOPE": "N_SCOPE in ('C','E')",
         "N_SCOPE_ID": "((N_SCOPE = 'C' and N_SCOPE_ID=@datalock_c_id) or (N_SCOPE='E' and N_SCOPE_ID in (select E_ID from E where E.C_ID=@datalock_c_id)))",
