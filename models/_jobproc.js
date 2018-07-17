@@ -63,14 +63,14 @@ AppSrvJobProc.prototype.CheckJobQueue = function (onComplete) {
     for (var t in global.scheduled_tasks) {
       if (!(t in this.TaskHistory)) this.TaskHistory[t] = new Date(0);
       if (global.scheduled_tasks[t].when(curdt, this.TaskHistory[t])) {
-        global.log('Running Task ' + t);
+        global.log.info('Running Task ' + t);
         global.scheduled_tasks[t].action(this);
         this.TaskHistory[t] = curdt;
       }
     }
   }
   this.AppSrv.ExecRow('jobproc', "jobproc_jobcheck", [], {}, function (err, rslt) {
-    if (err != null) { global.log(err); return onComplete(null); }
+    if (err != null) { global.log.error(err); return onComplete(null); }
     if ((rslt != null) && (rslt.length == 1) && (rslt[0] != null)) {
       var job = map_db_rslt(_this, rslt[0]);
       return onComplete(job);
@@ -90,8 +90,8 @@ AppSrvJobProc.prototype.ExecJob = function (job, onComplete) {
   if (global.debug_params.sms_override) {
     if (job.SMS_TO) job.SMS_TO = global.debug_params.sms_override;
   }
-  global.log('Starting Job #' + job.RQST_ID);
-  if (global.debug_params.job_requests) global.log(job);
+  global.log.info('Starting Job #' + job.RQST_ID);
+  if (global.debug_params.job_requests) global.log.info(job);
   
   if (job.RQST_ATYPE == 'REPORT') return _this.ExecJob_REPORT(job, onComplete);
   else if (job.RQST_ATYPE == 'MESSAGE') return _this.ExecJob_MESSAGE(job, onComplete);
@@ -183,7 +183,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
     thisapp.db.Scalar('jobproc', "jobproc_saveD", 
       [dbtypes.VarChar(8), dbtypes.BigInt, dbtypes.VarChar(8), dbtypes.VarChar(255), dbtypes.BigInt], 
       { 'D_SCOPE': job.D_SCOPE, 'D_SCOPE_ID': job.D_SCOPE_ID, 'D_CTGR': job.D_CTGR, 'D_Desc': job.D_Desc, 'D_SIZE': fsize }, function (err, rslt) {
-      if ((err == null) && (rslt == null)) { global.log(err); err = Helper.NewError('Error inserting document', -99999); }
+      if ((err == null) && (rslt == null)) { global.log.error(err); err = Helper.NewError('Error inserting document', -99999); }
       if (err == null) D_ID = rslt;
       callback(err);
     });
@@ -195,11 +195,11 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
       rq_message_obj = JSON.parse(rq_message);
     }
     catch (ex) {
-      global.log('Error parsing RQ_MESSAGE: ' + rq_message_obj);
+      global.log.error('Error parsing RQ_MESSAGE: ' + rq_message_obj);
     }
     thisapp.db.Scalar('jobproc', "jobproc_saveRQ", 
       [dbtypes.VarChar(255)], { 'RQ_NAME': job.RQ_NAME }, function (err, rslt) {
-      if ((err == null) && (rslt == null)) { global.log(err); err = Helper.NewError('Error inserting remote queue request', -99999); }
+      if ((err == null) && (rslt == null)) { global.log.error(err); err = Helper.NewError('Error inserting remote queue request', -99999); }
       if (err == null) {
         RQ_ID = rslt;
         rq_message_obj.url = '/_dl/RQ/' + RQ_ID + '/RQ_FILE';
@@ -299,7 +299,7 @@ AppSrvJobProc.prototype.parseReportJobSQLData = function (model, sql_ptypes, sql
 }
 
 AppSrvJobProc.prototype.SetJobResult = function (job, RQST_RSLT, RQST_SNotes, onComplete) {
-  global.log('Completed Job #' + job.RQST_ID + ': ' + RQST_RSLT + (RQST_SNotes ? ' - ' + RQST_SNotes : ''));
+  global.log.info('Completed Job #' + job.RQST_ID + ': ' + RQST_RSLT + (RQST_SNotes ? ' - ' + RQST_SNotes : ''));
   var dbtypes = this.AppSrv.DB.types;
   this.AppSrv.ExecRow('jobproc', "jobproc_jobresult", [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], { 'RQST_RSLT': RQST_RSLT, 'RQST_SNotes': RQST_SNotes, 'RQST_ID': job.RQST_ID }, function (err, rslt) {
     onComplete();
@@ -417,10 +417,10 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
 };
 
 AppSrvJobProc.prototype.SetSubscriberQueueResult = function (RQ_ID, RQ_RSLT, RQ_SNotes, onComplete) {
-  global.log('Completed Queue Task #' + RQ_ID + ': ' + RQ_RSLT + (RQ_SNotes ? ' - ' + RQ_SNotes : ''));
+  global.log.info('Completed Queue Task #' + RQ_ID + ': ' + RQ_RSLT + (RQ_SNotes ? ' - ' + RQ_SNotes : ''));
   var dbtypes = this.AppSrv.DB.types;
   this.AppSrv.ExecRow('jobproc', "jobproc_queueresult", [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], { 'RQ_RSLT': RQ_RSLT, 'RQ_SNotes': RQ_SNotes, 'RQ_ID': RQ_ID }, function (err, rslt) {
-    if (err) { global.log(err); }
+    if (err) { global.log.error(err); }
     if (onComplete) onComplete();
   });
 }
@@ -430,10 +430,10 @@ AppSrvJobProc.prototype.SubscribeToQueue = function (req, res, queueid) {
   var _this = this;
   var dbtypes = this.AppSrv.DB.types;
   this.AppSrv.ExecRow('jobproc', "jobproc_queuecheck", [dbtypes.VarChar(255)], { 'RQ_NAME': queueid }, function (err, rslt) {
-    if (err != null) { global.log(err); return onComplete(null); }
+    if (err != null) { global.log.error(err); return onComplete(null); }
     if ((rslt != null) && (rslt.length == 1) && (rslt[0])) {
       var queuetask = map_db_rslt(_this, rslt[0]);
-      global.log('Notifying subscriber ' + queueid);
+      global.log.info('Notifying subscriber ' + queueid);
       var msg = JSON.stringify({ ID: queuetask.RQ_ID, MESSAGE: queuetask.RQ_MESSAGE });
       res.send(msg);
     }
@@ -447,7 +447,7 @@ AppSrvJobProc.prototype.CheckSubscriberQueue = function (onComplete) {
   var _this = this;
   if(_.isEmpty(_this.AppSrv.jsh.Config.queues)) return onComplete();
   this.AppSrv.ExecRecordset('jobproc', "jobproc_queuesubscribers", [], {}, function (err, rslt) {
-    if (err != null) { global.log(err); return onComplete(null); }
+    if (err != null) { global.log.error(err); return onComplete(null); }
     //Handle invalid queue
     //Update results
     if ((rslt != null) && (rslt.length == 1) && (rslt[0])) {
@@ -457,14 +457,14 @@ AppSrvJobProc.prototype.CheckSubscriberQueue = function (onComplete) {
           _this.SetSubscriberQueueResult(queuetask.RQ_ID, 'ERROR', 'Queue not set up in config', queue_cb);
         }
         else {
-          global.log('Message for queue ' + queuetask.RQ_NAME);
+          global.log.info('Message for queue ' + queuetask.RQ_NAME);
           var msg = JSON.stringify({ ID: queuetask.RQ_ID, MESSAGE: queuetask.RQ_MESSAGE });
           _this.AppSrv.SendQueue(queuetask.RQ_NAME, msg);
           queue_cb(null);
         }
       },
         function (err) {
-        if (err) global.log(err);
+        if (err) global.log.error(err);
         return onComplete(null);
       });
     }
@@ -489,8 +489,8 @@ AppSrvJobProc.prototype.PopQueue = function (req, res, queueid, queueresult, onC
 AppSrvJobProc.ExecuteSQL = function (sql){
   return function (jobproc){
     jobproc.AppSrv.ExecRecordset('jobproc', sql, [], { }, function (err, rslt) {
-      if (err) global.log('Error Running Task: '+err.toString());
-      if (rslt && rslt[0]) global.log('Task Result: '+JSON.stringify(rslt));
+      if (err) global.log.error('Error Running Task: '+err.toString());
+      if (rslt && rslt[0]) global.log.info('Task Result: '+JSON.stringify(rslt));
     });
   }
 }

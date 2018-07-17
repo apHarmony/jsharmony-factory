@@ -88,6 +88,8 @@ INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_s
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (50, 'S', 16, 'ACTIVE', 10, 'DEV_X_GCOD_HL', 31, 'Admin 1D Codes', NULL, NULL, 'X_GCOD_HL', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (51, 'S', 17, 'ACTIVE', 10, 'DEV_X_GCOD2_HL', 32, 'Admin 2D Codes', NULL, NULL, 'X_GCOD2_HL', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (63, 'S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (64, 'S', 23, 'ACTIVE', 10, 'DEV_DB', 43, 'DB SQL', NULL, NULL, 'DEV_DB', NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (65, 'S', 24, 'ACTIVE', 10, 'DEV_DB_SCRIPTS', 44, 'DB Scripts', NULL, NULL, 'DEV_DB_SCRIPTS', NULL, NULL);
 
 
 --
@@ -1317,7 +1319,7 @@ SELECT pg_catalog.setval('sf_sf_id_seq', 2, true);
 -- Name: sm_sm_id_auto_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
 
-SELECT pg_catalog.setval('sm_sm_id_auto_seq', 63, true);
+SELECT pg_catalog.setval('sm_sm_id_auto_seq', 65, true);
 
 
 --
@@ -1370,6 +1372,8 @@ INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (19, NULL, 191, 'DEV
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (20, NULL, 192, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (21, NULL, 193, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (22, NULL, 194, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (23, NULL, 195, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (24, NULL, 196, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1786, NULL, 200, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1795, NULL, 201, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1796, NULL, 202, 'SYSADMIN');
