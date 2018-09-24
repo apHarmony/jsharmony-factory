@@ -13,10 +13,10 @@
        "validate":["Required"],"caption":"Menu ID","captionstyle": "text-align:right;width:120px;"},
       {"name":"sm_desc","type":"varchar","length":"255","actions":"BIU","control": "textbox_M","nl":1,
        "validate":["Required"],"caption":"Display Name"},
-      {"name":"sm_cmd","type":"varchar","length":30,"actions": "BIU","control": "textbox_M","caption":"Model / Command","nl":1,
+      {"name":"sm_cmd","type":"varchar","length":255,"actions": "BIU","control": "textbox_M","caption":"Model / Command","nl":1,
        "popuplov": {
           "target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
-          "onpopup": "X_MODELS_ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
+          "onpopup": "jsh.App.X_MODELS.ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
           "popupiconstyle":"position:relative;top:5px;"
         }
        },

@@ -16,5 +16,6 @@
                    "  select (select max(sm_id)+1 from jsharmony.SM),sm_id,sm_utype,coalesce(sm_seq,sm_id)+1,@sm_name,@sm_desc,'ACTIVE' from jsharmony.SM where sm_id=@sm_id_parent;",
                    "select SCOPE_IDENTITY() sm_id_auto;"],
   "X_SMLW_LOV":"select sm_id as CODEID,sm_id_parent as CODEParentID,sm_id_auto as CODEVal,sm_desc as CODETxt,'folder' as CODEIcon from jsharmony.sm where 1=1 %%%DATALOCKS%%% order by sm_utype desc,coalesce(SM.SM_Seq,SM.SM_ID),SM_Name,SM.SM_ID",
-  "SM_UTYPE_LOV":"select * from (values('S','Admin'),('C','Client')) as COD(CODEVal,CODETxt)"
+  "SM_UTYPE_LOV":"select * from (values('S','Admin'),('C','Client')) as COD(CODEVal,CODETxt)",
+  "JSHARMONY_FACTORY_INSTALLED":"select case when isnull((select count(*) from information_schema.columns where table_name = 'dual' and table_schema='jsharmony'),0) > 0 then 1 else 0 end jsharmony_factory_installed"
 }

@@ -22,9 +22,9 @@ function CRMSEL_SEL_ForAllChildren(add_op) {
 	  CRMSEL_SEL_ops = [];
 	  //First, Select All Unchecked
 	  var jtbl = $('#xform' + XBase['CRMSEL_SEL'][0] + '.xtbl');
-	  var xform = window['xform_' + XBase['CRMSEL_SEL'][0]];
+	  var xform = jsh.App['xform_' + XBase['CRMSEL_SEL'][0]];
 	  CRMSEL_SEL_loadobj = 'CRMSEL_SELLOADER';
-	  window.xLoader.StartLoading(CRMSEL_SEL_loadobj);
+	  jsh.xLoader.StartLoading(CRMSEL_SEL_loadobj);
 	  
 	  function fselectall() {
 	    jtbl.find('input.checkbox.crmsel_sel').each(function () {
@@ -41,14 +41,14 @@ function CRMSEL_SEL_ForAllChildren(add_op) {
 }
 
 function CRMSEL_SEL_oninit(xform) {
-  window['xform_post_'+XBase['CRMSEL_SEL'][0]].GetReselectParams = function(){ 
+  jsh.App['xform_post_'+XBase['CRMSEL_SEL'][0]].GetReselectParams = function(){ 
 	  var rslt = this.GetKeys(); 
 	  rslt.sr_name = this.Data.new_sr_name; 
 	  return rslt; 
   };
   var old_onbeforeunload = window.onbeforeunload;
   window.onbeforeunload = function(){
-	  XForm_RefreshParent();
+	  jsh.XForm_RefreshParent();
 	  if(old_onbeforeunload) old_onbeforeunload();
   }
 }
@@ -56,7 +56,7 @@ function CRMSEL_SEL_oninit(xform) {
 function CRMSEL_SEL_oncommit(){
 	  if(!CRMSEL_SEL_loadobj){ $(document.activeElement).blur(); return; }
 	  if (CRMSEL_SEL_ops.length == 0) {
-	    window.xLoader.StopLoading(CRMSEL_SEL_loadobj);
+	    jsh.xLoader.StopLoading(CRMSEL_SEL_loadobj);
 	    XExt.Alert('Operation complete.',function(){
 	    	$('.save').first().focus().blur();
 	    });

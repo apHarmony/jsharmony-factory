@@ -45,7 +45,7 @@ exports.welcome = function (req, res, next) {
     function (cb) { HelperRender.getTXT(req, res, appsrv, 'agreement', 'CMS', 'AGREEMENT_DONE', function (rslt) { cms_welcome = rslt; cb(); }) },
     function (cb) {
       var params = {};
-      req.jshconfig.menu(req, res, _this.jsh, params, function () {
+      req.jshsite.menu(req, res, _this.jsh, params, function () {
         HelperRender.reqGet(req, res, _this.jsh, 'welcome', 'Welcome', { basetemplate: 'client', TopMenu: '', XMenu: params.XMenu, params: { cms_welcome: cms_welcome, req: req } }, cb);
       });
     }
@@ -59,7 +59,7 @@ exports.form = function (req, res, next) {
   
   if (req.gdata[_this.jsh.map.client_agreement_tstmp]) { return _this.jsh.Redirect302(res, req.baseurl); }
   
-  req.bcrumb_override = '<a href="' + global.home_url + '/">Home</a> &gt; User Agreement';
+  req.bcrumb_override = '<a href="' + _this.jsh.Config.home_url + '/">Home</a> &gt; User Agreement';
   //Get cms_join_text from database
   var cms_agreement = '';
   var COD_STATE = [];
@@ -175,7 +175,7 @@ exports.paymentresult = function (req, res, next) {
       if (rslt != null) {
         rslt.key = '';
         if (rslt.PE_ID) {
-          rslt.key = crypto.createHash('sha1').update(rslt.PE_ID + req.jshconfig.auth.salt + rslt.PE_LL_Tstmp).digest('hex');
+          rslt.key = crypto.createHash('sha1').update(rslt.PE_ID + req.jshsite.auth.salt + rslt.PE_LL_Tstmp).digest('hex');
         }
         rslt.NEW_CLIENT_ERROR = 0;
         if (!rslt.C_ID || !rslt.PE_ID || rslt.NEW_CLIENT_Result) rslt.NEW_CLIENT_ERROR = 1;

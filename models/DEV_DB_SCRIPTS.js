@@ -1,12 +1,44 @@
 function DEV_DB_SCRIPTS_oninit(xform) {
   XPost.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { }, function (rslt) { //On success
     if ('_success' in rslt) { 
+      DEV_DB_SCRIPTS_RenderDBListing(rslt.dbs);
+    }
+  });
+  $('#DEV_DB_SCRIPTS_db').change(function(){
+    var db = $('#DEV_DB_SCRIPTS_db').val();
+    if(!db) $('#DEV_DB_SCRIPTS_run').hide();
+    else DEV_DB_SCRIPTS_GetScripts(db);
+  });
+}
+
+function DEV_DB_SCRIPTS_RenderDBListing(dbs){
+  var jobj = $('#DEV_DB_SCRIPTS_db');
+  if(dbs.length > 1){
+    $('#DEV_DB_SCRIPTS_dbselect').show();
+    jobj.append($('<option>',{value:''}).text('Please select...'));
+  }
+  else {
+    $('#DEV_DB_SCRIPTS_dbselect').hide();
+    jobj.empty();
+  }
+  for(var i=0;i<dbs.length;i++){
+    var db = dbs[i];
+    jobj.append($('<option>',{value:db}).text(db));
+  }
+  if(dbs.length==1) DEV_DB_SCRIPTS_GetScripts(dbs[0]);
+}
+
+function DEV_DB_SCRIPTS_GetScripts(dbid){
+  XPost.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { db: dbid }, function (rslt) { //On success
+    if ('_success' in rslt) { 
       DEV_DB_SCRIPTS_RenderScripts(rslt.scripts);
     }
   });
 }
 
 function DEV_DB_SCRIPTS_RenderScripts(scripts){
+  $('#DEV_DB_SCRIPTS_run').show();
+  $('#DEV_DB_SCRIPTS_rslt').text('');
 
   function union(a,b){
     var rslt = {};
@@ -33,7 +65,8 @@ function DEV_DB_SCRIPTS_RenderScripts(scripts){
   allscripts = { "(All)": allscripts };
   jobj.children("ul").prepend(DEV_DB_SCRIPTS_RenderScriptsNode(allscripts).children());
   //Attach events
-  jobj.find('a').click(function(e){ e.preventDefault(); DEV_DB_SCRIPTS_RunScript(this); });
+  jobj.find('a.run').click(function(e){ e.preventDefault(); DEV_DB_SCRIPTS_ExecScript(this, 'run'); });
+  jobj.find('a.info').click(function(e){ e.preventDefault(); DEV_DB_SCRIPTS_ExecScript(this, 'read'); });
 }
 
 function DEV_DB_SCRIPTS_RenderScriptsNode(node){
@@ -41,11 +74,18 @@ function DEV_DB_SCRIPTS_RenderScriptsNode(node){
   for(var childname in node){
     if(_.isString(node[childname])) continue;
     var jchild = $('<li class="DEV_DB_SCRIPTS_node"></li>');
-    var jchildlink = $('<a></a>');
+    jchild.data('id',(childname=='(All)'?'*':childname));
+    //Link to run script
+    var jchildlink = $('<a class="run"></a>');
     jchildlink.text(childname);
     jchildlink.prop('href','#');
-    jchild.data('id',(childname=='(All)'?'*':childname));
     jchild.append(jchildlink);
+    //Link to read script
+    var jchildinfolink = $('<a class="info"></a>');
+    jchildinfolink.html('<img src="/images/icon_search.png" width="12" style="padding-left:8px;position:relative;top:2px;" />');
+    jchildinfolink.prop('href','#');
+    jchild.append(jchildinfolink);
+    //Children
     var childlist = DEV_DB_SCRIPTS_RenderScriptsNode(node[childname]);
     if(childlist.length) jchild.append(childlist);
     jlist.append(jchild);
@@ -54,7 +94,7 @@ function DEV_DB_SCRIPTS_RenderScriptsNode(node){
   return jlist;
 }
 
-function DEV_DB_SCRIPTS_RunScript(obj){
+function DEV_DB_SCRIPTS_ExecScript(obj, mode){
   var jobj = $(obj);
   $('#DEV_DB_SCRIPTS_rslt').text('');
 
@@ -68,7 +108,7 @@ function DEV_DB_SCRIPTS_RunScript(obj){
     parent = parent.parent().closest('li');
   }
 
-  var params = { scriptid: scriptid };
+  var params = { scriptid: scriptid, mode: mode, db: $('#DEV_DB_SCRIPTS_db').val() };
   var runas_user = $('#DEV_DB_SCRIPTS_user').val().trim();
   var runas_password = $('#DEV_DB_SCRIPTS_password').val();
   if(runas_user){
@@ -78,15 +118,20 @@ function DEV_DB_SCRIPTS_RunScript(obj){
 
   XPost.prototype.XExecutePost('../_funcs/DEV_DB_SCRIPTS', { data: JSON.stringify(params) }, function (rslt) { //On success
     if ('_success' in rslt) {
-      var txt = '';
-      if(rslt.dbrslt[0]) for(var i=0;i<rslt.dbrslt[0].length;i++){
-        txt += "Resultset " + (i+1).toString() + "\r\n" + "------------------------------------\r\n";
-        txt += JSON.stringify(rslt.dbrslt[0][i],null,4) + "\r\n\r\n";
+      if(mode=='read'){
+        $('#DEV_DB_SCRIPTS_rslt').text(params.scriptid+"\r\n-------------------------------\r\n"+rslt.src);
       }
-      txt += "\r\nOperation complete";
-      var endtm = Date.now();
-      txt += "\r\nTime: " + (endtm-starttm) + "ms";
-      $('#DEV_DB_SCRIPTS_rslt').text(txt);
+      else{
+        var txt = '';
+        if(rslt.dbrslt[0]) for(var i=0;i<rslt.dbrslt[0].length;i++){
+          txt += "Resultset " + (i+1).toString() + "\r\n" + "------------------------------------\r\n";
+          txt += JSON.stringify(rslt.dbrslt[0][i],null,4) + "\r\n\r\n";
+        }
+        txt += "\r\nOperation complete";
+        var endtm = Date.now();
+        txt += "\r\nTime: " + (endtm-starttm) + "ms";
+        $('#DEV_DB_SCRIPTS_rslt').text(txt);
+      }
     }
   });
 }

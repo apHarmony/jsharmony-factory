@@ -26,7 +26,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
     return onComplete();
   }
   var rootmenu = '';
-  var basetemplate = req.jshconfig.basetemplate;
+  var basetemplate = req.jshsite.basetemplate;
   if (basetemplate == 'index') rootmenu = 'ADMIN';
   else if (basetemplate == 'client') rootmenu = 'CLIENT';
 
@@ -54,7 +54,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
         
         if (menuitem[jsh.map.menu_command] && menuitem[jsh.map.menu_command].substr(0, 3) == 'js:') {
           link_url = '#';
-          link_onclick = menuitem[jsh.map.menu_command].substr(3) + ' return false;';
+          link_onclick = 'return '+req.jshsite.instance+'.XExt.JSEval('+JSON.stringify(menuitem[jsh.map.menu_command].substr(3)) + ')||false;';
         }
         else if (jsh.hasModel(req, menuitem[jsh.map.menu_command])) {
           var link_targetmodelid = jsh.parseLink(menuitem[jsh.map.menu_command]).modelid;
@@ -82,7 +82,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
         
         if (menuitem[jsh.map.menu_command] && menuitem[jsh.map.menu_command].substr(0, 3) == 'js:') {
           link_url = '#';
-          link_onclick = menuitem[jsh.map.menu_command].substr(3)+' return false;';
+          link_onclick = 'return '+req.jshsite.instance+'.XExt.JSEval('+JSON.stringify(menuitem[jsh.map.menu_command].substr(3)) + ')||false;';
         }
         else if (jsh.hasModel(req, menuitem[jsh.map.menu_command])) {
           var link_targetmodelid = jsh.parseLink(menuitem[jsh.map.menu_command]).modelid;

@@ -519,7 +519,7 @@ end;
 
 create trigger jsharmony_sper_before_insert before insert on jsharmony_sper
 begin
-  select case when (upper(new.sr_name)='DEV') and (not exists (select sr_name from jsharmony.V_MY_ROLES where SR_NAME='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
+  select case when (upper(new.sr_name)='DEV') and (jsharmony.mype() is not null) and (not exists (select sr_name from jsharmony.V_MY_ROLES where SR_NAME='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
 end;
 
 create trigger jsharmony_sper_after_insert after insert on jsharmony_sper
@@ -532,7 +532,7 @@ create trigger jsharmony_sper_before_update before update on jsharmony_sper
 begin
   select case when ifnull(old.sper_id,'')<>ifnull(NEW.sper_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
   select case when ifnull(old.pe_id,'')<>ifnull(NEW.pe_id,'') then raise(FAIL,'Application Error - User ID cannot be updated.') end\;
-  select case when (upper(new.sr_name)='DEV') and (not exists (select sr_name from jsharmony.V_MY_ROLES where SR_NAME='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
+  select case when (upper(new.sr_name)='DEV') and (jsharmony.mype() is not null) and (not exists (select sr_name from jsharmony.V_MY_ROLES where SR_NAME='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
 end;
 
 create trigger jsharmony_sper_after_update after update on jsharmony_sper
@@ -543,7 +543,7 @@ end;
 
 create trigger jsharmony_sper_delete before delete on jsharmony_sper
 begin
-  select case when (upper(old.sr_name)='DEV') and (not exists (select sr_name from jsharmony.V_MY_ROLES where SR_NAME='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
+  select case when (upper(old.sr_name)='DEV') and (jsharmony.mype() is not null) and (not exists (select sr_name from jsharmony.V_MY_ROLES where SR_NAME='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
   %%%AUDIT_D_MULT("jsharmony_sper","old.sper_id",["sper_id","pe_id","sr_name"])%%%
   update jsharmony_meta set aud_seq = null\;
 end;

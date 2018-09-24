@@ -76,7 +76,7 @@
               } 
             }
        },
-       "validate": ["Extension:Helper.SUPPORTED_IMAGES"]
+       "validate": ["Extension:jsh.Config.supported_images"]
       },
       {"name":"pe_unotes","type":"varchar","length":4096,"actions":"BIU","nl":1,
        "control":"textarea","controlstyle":"width:608px;height:45px;",

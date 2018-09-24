@@ -6,7 +6,7 @@
     "layout":"form", 
 	"topmenu":"administration",
     "breadcrumbs": { "parents": ["TXTL"] },
-    "onload": "if(window['xform_'+XBase['TXT']].Data.txt_type.toUpperCase()=='HTML'){ XExt.CKEditor('txt_val'); }",
+    "onload": "if(jsh.App['xform_'+XBase['TXT']].Data.txt_type.toUpperCase()=='HTML'){ XExt.CKEditor('txt_val'); }",
     "fields":[
       {"control":"html","value":"<script type='text/javascript' src='/js/ckeditor/ckeditor.js'></script>"},
       {"name":"txt_id","type":"bigint","key": 1},

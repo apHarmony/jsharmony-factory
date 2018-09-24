@@ -1,7 +1,9 @@
-function X_MODELS_ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete) {
-  var searchitems = [];
-  searchitems.push(new XSearch.SearchItem('model_component', 'jsharmony-factory', 'and', '<>'));
-  window['XForm' + popupmodelid + '_SetFilter'](searchitems, true);
-  window['XForm' + popupmodelid + '_FilterApply']();
-  onComplete();
+jsh.App.X_MODELS = {
+  ShowUserModels: function(popupmodelid, parentmodelid, fieldid, onComplete){
+    var searchitems = [];
+    searchitems.push(new jsh.XSearch.SearchItem('model_component', 'jsharmonyFactory', 'and', '<>'));
+    jsh.App['XForm' + popupmodelid + '_SetFilter'](searchitems, true);
+    jsh.App['XForm' + popupmodelid + '_FilterApply']();
+    onComplete();
+  }
 }

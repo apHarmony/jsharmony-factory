@@ -8,7 +8,7 @@
     "caption":[0,"Menu Item","Menu Items"],
     "sqlselect": "X_SMLW_TOP",
     "querystring": { "|action": "edit", "|cur_sm_id_auto": "0" },
-    "buttons": [{"link":"X_SML", "icon": "list", "text": "List View", "actions": "B" }],
+    "buttons": [{"link":"X_SML&", "icon": "list", "text": "List View", "actions": "B" }],
     "topmenu":"dev",
     "hide_system_buttons" : ["print","export"], 
     "fields":[
@@ -20,11 +20,11 @@
        "controlparams": {
           "expand_all": true,
           "item_context_menu": [
-            { "icon": "add", "text": "Add Child Item", "action": "X_SMLW_item_insert(context_item);", "actions": "IUD", "class": "add" },
-            { "icon": "delete", "text": "Delete", "action": "X_SMLW_item_delete(context_item);", "actions": "IUD", "class": "delete" }
+            { "icon": "add", "text": "Add Child Item", "command": "jsh.App.X_SMLW.item_insert(context_item);", "actions": "IUD", "class": "add" },
+            { "icon": "delete", "text": "Delete", "command": "jsh.App.X_SMLW.item_delete(context_item);", "actions": "IUD", "class": "delete" }
           ]
         },
-        "onchange": "X_SMLW_sm_id_onchange(obj,newval);"
+        "onchange": "jsh.App.X_SMLW.sm_id_onchange(obj,newval);"
       },
       {
         "name": "X_SML_EDIT",
@@ -36,7 +36,7 @@
         "actions": "BIUD"
       }
 	  ],
-    "oninit": "X_SMLW_oninit();"
+    "oninit": "jsh.App.X_SMLW.oninit();"
   },
   "X_SMLW_INSERT": {
       "layout": "exec",

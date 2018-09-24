@@ -7,8 +7,8 @@
     "layout":"form", 
 	"popup":[850,525],
 	"hide_system_buttons": ["help"],
-	"oninit": "window['xform_'+xform._id].Data.OnDBError = function(error){ if(error.Number==-1){ XExt.Alert('No help found for this screen',function(){ window.close(); }); return false; } }",
-  	"onload": "$('#h_text_disp').html(window['xform_'+xform._id].Data.h_text);",
+	"oninit": "jsh.App['xform_'+xform._id].Data.OnDBError = function(error){ if(error.Number==-1){ XExt.Alert('No help found for this screen',function(){ window.close(); }); return false; } }",
+  	"onload": "$('#h_text_disp').html(jsh.App['xform_'+xform._id].Data.h_text);",
 	"fields":[
 	  {"name":"h_id","type":"bigint","key": 1,"datalock":{"C_ID":"ALWAYS"}},
 	  {"name":"h_title","type":"varchar","length":70,"actions":"BIU",

@@ -18,14 +18,14 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 var jsHarmonyFactory = require('../index');
-global.appbasepath = __dirname;
+var jsh = new jsHarmonyFactory.Application({},{});
+jsh.Config.appbasepath = __dirname;
 
 describe('Basic Server',function(){
   it('Basic', function (done) {
     this.timeout(15000);
-    var jsf = new jsHarmonyFactory();
-    jsf.Run(function(servers){
-      for(var i=0;i<servers.length;i++) servers[i].close();
+    jsh.Run(function(servers){
+      jsh.Servers['default'].Close();
       done();
     });
   });

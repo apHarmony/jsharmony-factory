@@ -15,14 +15,14 @@ else if(params && params.post && params.post.codeschema) codeschema = params.pos
 //Check if code exists
 var dbtypes = jsh.AppSrv.DB.types;
 jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean from jsharmony.UCOD2_H where codename=@codename and coalesce(codeschema,'')=coalesce(@codeschema,'')", [dbtypes.VarChar(16),dbtypes.VarChar(16)], { 'codename': codename, 'codeschema': codeschema }, function (err, rslt) {
-  if (err) { global.log.error(err); Helper.GenError(req, res, -99999, "An unexpected error has occurred"); return; }
+  if (err) { jsh.Log.error(err); Helper.GenError(req, res, -99999, "An unexpected error has occurred"); return; }
   if (rslt && rslt.length && rslt[0]) {
     //Set title
     model.title = 'SYSTEM TABLE - '+rslt[0]['codemean']+' - '+codeschema;
     //Set table
     model.table = 'UCOD2_'+codename;
     if(codeschema){ 
-      if(global.dbconfig._driver.name=='sqlite') model.table = codeschema+'_'+model.table;
+      if(jsh.DBConfig['default']._driver.name=='sqlite') model.table = codeschema+'_'+model.table;
       else model.table = codeschema+'.'+model.table;
     }
     //Set caption of codecode column

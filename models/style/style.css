@@ -26,11 +26,11 @@ HEADER AND TOP BUTTONS
 body {
 	background-image:url('/images/top.png');
 }
-#xhead{
+.xhead{
 	width:100%;
 	height:117px;
 }
-#xtoplinks{
+.xtoplinks{
 	height:21px;
 	background-image:url('/images/toplinks.png');
 	color:#fff;
@@ -44,20 +44,20 @@ body {
 	right:0px;
   z-index:5;
 }
-#xtoplinks a{
+.xtoplinks a{
 	color:#fff;
 	text-decoration:none;
 }
-#xtoplinks a:hover{
+.xtoplinks a:hover{
 	text-decoration:underline;
 }
-#xtoplinks_corner{
+.xtoplinks_corner{
 	float:left;
 	top:0px;
   left:-18px;
 	position:absolute;
 }
-#xbrand_link{
+.xbrand_link{
 	display:block;
 	border:0;
 	text-decoration:none;
@@ -67,17 +67,17 @@ body {
 	width:86px;
 	height:54px;
 }
-#xlogo{
+.xlogo{
 	position:absolute;
 	top:0px;
 	left:0px;
 }
-#xlogoimg{
+.xlogoimg{
 	position:absolute;
 	left:0px;
   top:0px;
 }
-#xsublogo{
+.xsublogo{
   display:block;
   position:absolute;
 	top:0px;
@@ -87,7 +87,7 @@ body {
   color:white;
   vertical-align:top;
 }
-#xsubcaption {
+.xsubcaption {
   display:inline-block;
   position:relative;
   font-style:italic;
@@ -95,12 +95,12 @@ body {
   padding-left:4px;
   font-size:11px;
 }
-#xmenu {
+.xmenu {
 	padding-top:34px;
 	padding-left:370px;
   min-height:60px;
 }
-#xmenu a{
+.xmenu a{
 	font-family: 'PT Sans', arial, helvetica, sans-serif;
 	color:#ffffff;
 	text-decoration:none;
@@ -111,22 +111,22 @@ body {
 	margin-right:7px;
 	margin-left:7px;
 }
-#xmenu a:hover{
+.xmenu a:hover{
 	text-decoration:underline;
 }
-#xmenu a .bottom{
+.xmenu a .bottom{
 	display:none;
 }
-#xmenu a.selected{
+.xmenu a.selected{
 /*	color:#000000;*/
 	background-image:url('/images/menu_highlight_triangle.png');
 	background-repeat:no-repeat;
 	background-position:bottom center;
 }
-#xmenu a.selected:hover{
+.xmenu a.selected:hover{
 	text-decoration:none;
 }
-#xmenu a.selected .bottom{
+.xmenu a.selected .bottom{
 	background-image:url('/images/menu_highlight_bl.png');
 	width:6px;
 	height:10px;
@@ -135,7 +135,7 @@ body {
 	top:52px;
 	left:-6px;
 }
-#xmenu a#xmenu_more {
+.xmenu a.xmenu_more {
   display:none;
   position:absolute;
   right:0px;
@@ -145,25 +145,25 @@ body {
   background-repeat:repeat-y;
   margin-left:0px;
 }
-#xmenu_more_bg {
+.xmenu_more_bg {
   padding:43px 20px 18px 26px;
   background-image:url('/images/top.png');
   background-position-y:-5px;
   background-repeat:repeat-x;
 }
-a#xmenu_more img {
+a.xmenu_more img {
   position:relative;
   top:-1px;
   padding-left:4px;
 }
-#xmenuside {
+.xmenuside {
   display:none;
   position:absolute;
   top:84px;
   right:0px;
   z-index:9999;
 }
-#xmenuside a{
+.xmenuside a{
   background-image:url('/images/menu_side_bg.png');
   text-align:center;
   height:26px;
@@ -175,10 +175,10 @@ a#xmenu_more img {
 	text-decoration:none;
 	font-size:15px;
 }
-#xmenuside a:hover{
+.xmenuside a:hover{
   text-decoration:underline;
 }
-#xmenuside a.selected {
+.xmenuside a.selected {
   color:#000000;
 	background-image:url('/images/menu_highlight_bg.png');
   height:25px;
@@ -215,13 +215,13 @@ a#xmenu_more img {
   height:23px;
   z-index:2;
 }
-#xsubmenuside {
+.xsubmenuside {
   position:absolute;
   top:117px;
   right:0px;
   z-index:9998;
 }
-#xsubmenuside a {
+.xsubmenuside a {
   background-color:#eeeeee;
   text-align:left;
   font-family: 'PT Sans', arial, helvetica, sans-serif;
@@ -234,7 +234,7 @@ a#xmenu_more img {
   border-right:1px solid #777;
   border-left:1px solid #777;
 }
-#xsubmenuside a:hover {
+.xsubmenuside a:hover {
 	text-decoration:underline;
 }
 
@@ -345,8 +345,8 @@ PRINT STYLESHEET
 ================
 */
 @media print {
-  #xhead { height: 90px; }
-  #xmenu { display:none !important; }
+  .xhead { height: 90px; }
+  .xmenu { display:none !important; }
   .xsubmenu { display:none !important; }
-  #xtoplinks { display:none !important; }
+  .xtoplinks { display:none !important; }
 }
