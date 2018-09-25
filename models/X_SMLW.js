@@ -8,13 +8,13 @@ jsh.App.X_SMLW.oninit = function(){
     if(!_this.sm_id_auto) _this.sm_id_auto = jsh.App['xform_'+XBase['X_SMLW'][0]].Data.sm_id_auto;
     return _this.sm_id_auto;
   };
-  $('#sm_id_auto.tree').data('oncontextmenu','return '+jsh.getInstance()+'.App.X_SMLW.oncontextmenu(this, n);');
+  jsh.$root('.sm_id_auto.tree').data('oncontextmenu','return '+jsh.getInstance()+'.App.X_SMLW.oncontextmenu(this, n);');
 }
 
 jsh.App.X_SMLW.oncontextmenu = function(ctrl, n){
-  var menuid = '#_item_context_menu_sm_id_auto';
-  var menu_add = $(menuid).children('.add');
-  var menu_delete = $(menuid).children('.delete');
+  var menuid = '._item_context_menu_sm_id_auto';
+  var menu_add = jsh.$root(menuid).children('.add');
+  var menu_delete = jsh.$root(menuid).children('.delete');
   var jctrl = $(ctrl);
   var level = 0;
   var jpctrl = jctrl;
@@ -57,10 +57,10 @@ jsh.App.X_SMLW.item_insert = function(context_item){
   }
   var data = { 'sm_id_parent': jsh.xContentMenuItemData.id };
   var validate = new XValidate();
-  _.each(fields, function (val, key) { validate.AddControlValidator('#X_SMLW_InsertPopup .' + key, '_obj.' + key, val.caption, 'BI', val.validators); });
+  _.each(fields, function (val, key) { validate.AddControlValidator('.X_SMLW_InsertPopup .' + key, '_obj.' + key, val.caption, 'BI', val.validators); });
 
-  XExt.CustomPrompt('X_SMLW_InsertPopup','\
-    <div id="X_SMLW_InsertPopup" class="xdialogbox xpromptbox" style="width:360px;"> \
+  XExt.CustomPrompt('.X_SMLW_InsertPopup','\
+    <div class="X_SMLW_InsertPopup xdialogbox xpromptbox" style="width:360px;"> \
       <h3>Add Child Item</h3> \
       <div align="left" style="padding-top:15px;"> \
         <div style="width:100px;display:inline-block;margin-bottom:8px;text-align:right;">Menu ID:</div> <input type="text" class="sm_name" style="width:150px;" maxlength="30" /> (ex. ORDERS)<br/> \
@@ -69,9 +69,9 @@ jsh.App.X_SMLW.item_insert = function(context_item){
       </div> \
     </div> \
   ',function(){ //onInit
-    window.setTimeout(function(){$('#X_SMLW_InsertPopup .sm_name').focus();},1);
+    window.setTimeout(function(){jsh.$root('.X_SMLW_InsertPopup .sm_name').focus();},1);
   }, function (success) { //onAccept
-    _.each(fields, function (val, key) { data[key] = $('#X_SMLW_InsertPopup .' + key).val(); });
+    _.each(fields, function (val, key) { data[key] = jsh.$root('.X_SMLW_InsertPopup .' + key).val(); });
     if (!validate.ValidateControls('I', data, '')) return;
     XPost.prototype.XExecutePost('X_SMLW_INSERT', data, function (rslt) { //On success
       if ('_success' in rslt) { 
@@ -87,6 +87,7 @@ jsh.App.X_SMLW.item_insert = function(context_item){
 }
 
 jsh.App.X_SMLW.getSMbyValue = function(sm_id_auto){
+  var _this = this;
   if(!sm_id_auto) return null;
   var lov = jsh.App['xform_'+XBase["X_SMLW"]]._LOVs.sm_id_auto;
   for(var i=0;i<lov.length;i++){
@@ -96,7 +97,8 @@ jsh.App.X_SMLW.getSMbyValue = function(sm_id_auto){
 }
 
 jsh.App.X_SMLW.getSMbyID = function(sm_id){
-  if(!sm_id_auto) return null;
+  var _this = this;
+  if(!sm_id) return null;
   var lov = jsh.App['xform_'+XBase["X_SMLW"]]._LOVs.sm_id_auto;
   for(var i=0;i<lov.length;i++){
     if(lov[i][jsh.uimap.codeid]==sm_id.toString()) return lov[i];
@@ -113,6 +115,7 @@ jsh.App.X_SMLW.item_delete = function(context_item){
   var sm_parent = null;
   var has_children = false;
   if(sm){
+    if(!sm[jsh.uimap.codeparentid]) return XExt.Alert('Cannot delete root node');
     sm_parent = jsh.App.X_SMLW.getSMbyID(sm[jsh.uimap.codeparentid]);
     var lov = jsh.App['xform_'+XBase["X_SMLW"]]._LOVs.sm_id_auto;
     for(var i=0;i<lov.length;i++){
@@ -132,7 +135,7 @@ jsh.App.X_SMLW.item_delete = function(context_item){
     XPost.prototype.XExecutePost('X_SMLW_DELETE', { sm_id_auto: context_item }, function (rslt) { //On success
       if ('_success' in rslt) { 
         //Select parent
-        if(new_sm_id_auto) XExt.TreeSelectNode($('#sm_id_auto.tree'),new_sm_id_auto);
+        if(new_sm_id_auto) XExt.TreeSelectNode(jsh.$root('.sm_id_auto.tree'),new_sm_id_auto);
         jsh.XForm_Refresh(); 
       }
     });

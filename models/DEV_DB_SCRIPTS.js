@@ -4,21 +4,21 @@ function DEV_DB_SCRIPTS_oninit(xform) {
       DEV_DB_SCRIPTS_RenderDBListing(rslt.dbs);
     }
   });
-  $('#DEV_DB_SCRIPTS_db').change(function(){
-    var db = $('#DEV_DB_SCRIPTS_db').val();
-    if(!db) $('#DEV_DB_SCRIPTS_run').hide();
+  jsh.$root('.DEV_DB_SCRIPTS_db').change(function(){
+    var db = jsh.$root('.DEV_DB_SCRIPTS_db').val();
+    if(!db) jsh.$root('.DEV_DB_SCRIPTS_run').hide();
     else DEV_DB_SCRIPTS_GetScripts(db);
   });
 }
 
 function DEV_DB_SCRIPTS_RenderDBListing(dbs){
-  var jobj = $('#DEV_DB_SCRIPTS_db');
+  var jobj = jsh.$root('.DEV_DB_SCRIPTS_db');
   if(dbs.length > 1){
-    $('#DEV_DB_SCRIPTS_dbselect').show();
+    jsh.$root('.DEV_DB_SCRIPTS_dbselect').show();
     jobj.append($('<option>',{value:''}).text('Please select...'));
   }
   else {
-    $('#DEV_DB_SCRIPTS_dbselect').hide();
+    jsh.$root('.DEV_DB_SCRIPTS_dbselect').hide();
     jobj.empty();
   }
   for(var i=0;i<dbs.length;i++){
@@ -37,8 +37,8 @@ function DEV_DB_SCRIPTS_GetScripts(dbid){
 }
 
 function DEV_DB_SCRIPTS_RenderScripts(scripts){
-  $('#DEV_DB_SCRIPTS_run').show();
-  $('#DEV_DB_SCRIPTS_rslt').text('');
+  jsh.$root('.DEV_DB_SCRIPTS_run').show();
+  jsh.$root('.DEV_DB_SCRIPTS_rslt').text('');
 
   function union(a,b){
     var rslt = {};
@@ -51,7 +51,7 @@ function DEV_DB_SCRIPTS_RenderScripts(scripts){
 
   //--------------------
 
-  var jobj = $('#DEV_DB_SCRIPTS_listing');
+  var jobj = jsh.$root('.DEV_DB_SCRIPTS_listing');
   //Clear any existing content
   jobj.empty();
   //Render scripts tree
@@ -96,10 +96,10 @@ function DEV_DB_SCRIPTS_RenderScriptsNode(node){
 
 function DEV_DB_SCRIPTS_ExecScript(obj, mode){
   var jobj = $(obj);
-  $('#DEV_DB_SCRIPTS_rslt').text('');
+  jsh.$root('.DEV_DB_SCRIPTS_rslt').text('');
 
-  var sql = $('#DEV_DB_sql').val();
-  starttm = Date.now();
+  var sql = jsh.$root('.DEV_DB_sql').val();
+  var starttm = Date.now();
 
   var scriptid = [];
   var parent = jobj.parent().closest('li');
@@ -108,9 +108,9 @@ function DEV_DB_SCRIPTS_ExecScript(obj, mode){
     parent = parent.parent().closest('li');
   }
 
-  var params = { scriptid: scriptid, mode: mode, db: $('#DEV_DB_SCRIPTS_db').val() };
-  var runas_user = $('#DEV_DB_SCRIPTS_user').val().trim();
-  var runas_password = $('#DEV_DB_SCRIPTS_password').val();
+  var params = { scriptid: scriptid, mode: mode, db: jsh.$root('.DEV_DB_SCRIPTS_db').val() };
+  var runas_user = jsh.$root('.DEV_DB_SCRIPTS_user').val().trim();
+  var runas_password = jsh.$root('.DEV_DB_SCRIPTS_password').val();
   if(runas_user){
     params.runas_user = runas_user;
     params.runas_password = runas_password;
@@ -119,7 +119,7 @@ function DEV_DB_SCRIPTS_ExecScript(obj, mode){
   XPost.prototype.XExecutePost('../_funcs/DEV_DB_SCRIPTS', { data: JSON.stringify(params) }, function (rslt) { //On success
     if ('_success' in rslt) {
       if(mode=='read'){
-        $('#DEV_DB_SCRIPTS_rslt').text(params.scriptid+"\r\n-------------------------------\r\n"+rslt.src);
+        jsh.$root('.DEV_DB_SCRIPTS_rslt').text(params.scriptid+"\r\n-------------------------------\r\n"+rslt.src);
       }
       else{
         var txt = '';
@@ -130,7 +130,7 @@ function DEV_DB_SCRIPTS_ExecScript(obj, mode){
         txt += "\r\nOperation complete";
         var endtm = Date.now();
         txt += "\r\nTime: " + (endtm-starttm) + "ms";
-        $('#DEV_DB_SCRIPTS_rslt').text(txt);
+        jsh.$root('.DEV_DB_SCRIPTS_rslt').text(txt);
       }
     }
   });

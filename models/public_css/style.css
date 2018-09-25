@@ -23,16 +23,16 @@ HEADER AND TOP BUTTONS
 ======================
 */
 
-body {
-	background-image:url('/images/top.png');
+<%-(rootcss||'body')%> {
+	background-image:url('<%-req.jshsite.publicurl%>images/top.png');
 }
-.xhead{
+<%-rootcss%> .xhead{
 	width:100%;
 	height:117px;
 }
-.xtoplinks{
+<%-rootcss%> .xtoplinks{
 	height:21px;
-	background-image:url('/images/toplinks.png');
+	background-image:url('<%-req.jshsite.publicurl%>images/toplinks.png');
 	color:#fff;
 	font-size:12px;
 	padding-top:2px;
@@ -44,20 +44,20 @@ body {
 	right:0px;
   z-index:5;
 }
-.xtoplinks a{
+<%-rootcss%> .xtoplinks a{
 	color:#fff;
 	text-decoration:none;
 }
-.xtoplinks a:hover{
+<%-rootcss%> .xtoplinks a:hover{
 	text-decoration:underline;
 }
-.xtoplinks_corner{
+<%-rootcss%> .xtoplinks_corner{
 	float:left;
 	top:0px;
   left:-18px;
 	position:absolute;
 }
-.xbrand_link{
+<%-rootcss%> .xbrand_link{
 	display:block;
 	border:0;
 	text-decoration:none;
@@ -67,17 +67,17 @@ body {
 	width:86px;
 	height:54px;
 }
-.xlogo{
+<%-rootcss%> .xlogo{
 	position:absolute;
 	top:0px;
 	left:0px;
 }
-.xlogoimg{
+<%-rootcss%> .xlogoimg{
 	position:absolute;
 	left:0px;
   top:0px;
 }
-.xsublogo{
+<%-rootcss%> .xsublogo{
   display:block;
   position:absolute;
 	top:0px;
@@ -87,7 +87,7 @@ body {
   color:white;
   vertical-align:top;
 }
-.xsubcaption {
+<%-rootcss%> .xsubcaption {
   display:inline-block;
   position:relative;
   font-style:italic;
@@ -95,12 +95,12 @@ body {
   padding-left:4px;
   font-size:11px;
 }
-.xmenu {
+<%-rootcss%> .xmenu {
 	padding-top:34px;
 	padding-left:370px;
   min-height:60px;
 }
-.xmenu a{
+<%-rootcss%> .xmenu a{
 	font-family: 'PT Sans', arial, helvetica, sans-serif;
 	color:#ffffff;
 	text-decoration:none;
@@ -111,23 +111,23 @@ body {
 	margin-right:7px;
 	margin-left:7px;
 }
-.xmenu a:hover{
+<%-rootcss%> .xmenu a:hover{
 	text-decoration:underline;
 }
-.xmenu a .bottom{
+<%-rootcss%> .xmenu a .bottom{
 	display:none;
 }
-.xmenu a.selected{
+<%-rootcss%> .xmenu a.selected{
 /*	color:#000000;*/
-	background-image:url('/images/menu_highlight_triangle.png');
+	background-image:url('<%-req.jshsite.publicurl%>images/menu_highlight_triangle.png');
 	background-repeat:no-repeat;
 	background-position:bottom center;
 }
-.xmenu a.selected:hover{
+<%-rootcss%> .xmenu a.selected:hover{
 	text-decoration:none;
 }
-.xmenu a.selected .bottom{
-	background-image:url('/images/menu_highlight_bl.png');
+<%-rootcss%> .xmenu a.selected .bottom{
+	background-image:url('<%-req.jshsite.publicurl%>images/menu_highlight_bl.png');
 	width:6px;
 	height:10px;
 	display:block;
@@ -135,36 +135,36 @@ body {
 	top:52px;
 	left:-6px;
 }
-.xmenu a.xmenu_more {
+<%-rootcss%> .xmenu a.xmenu_more {
   display:none;
   position:absolute;
   right:0px;
   top:5px;
   padding:0 0 0 2px;
-  background-image:url('/images/menu_divider.png');
+  background-image:url('<%-req.jshsite.publicurl%>images/menu_divider.png');
   background-repeat:repeat-y;
   margin-left:0px;
 }
-.xmenu_more_bg {
+<%-rootcss%> .xmenu_more_bg {
   padding:43px 20px 18px 26px;
-  background-image:url('/images/top.png');
+  background-image:url('<%-req.jshsite.publicurl%>images/top.png');
   background-position-y:-5px;
   background-repeat:repeat-x;
 }
-a.xmenu_more img {
+<%-rootcss%> a.xmenu_more img {
   position:relative;
   top:-1px;
   padding-left:4px;
 }
-.xmenuside {
+<%-rootcss%> .xmenuside {
   display:none;
   position:absolute;
   top:84px;
   right:0px;
   z-index:9999;
 }
-.xmenuside a{
-  background-image:url('/images/menu_side_bg.png');
+<%-rootcss%> .xmenuside a{
+  background-image:url('<%-req.jshsite.publicurl%>images/menu_side_bg.png');
   text-align:center;
   height:26px;
   color:white;
@@ -175,35 +175,35 @@ a.xmenu_more img {
 	text-decoration:none;
 	font-size:15px;
 }
-.xmenuside a:hover{
+<%-rootcss%> .xmenuside a:hover{
   text-decoration:underline;
 }
-.xmenuside a.selected {
-  color:#000000;
-	background-image:url('/images/menu_highlight_bg.png');
+<%-rootcss%> .xmenuside a.selected {
+  color:#fff;
+	background-image:url('<%-req.jshsite.publicurl%>images/menu_highlight_bg.png');
   height:25px;
   padding-top:7px;
 }
 /* SUBMENU */
-.xsubmenu{
+<%-rootcss%> .xsubmenu{
 	padding-left:26px;
   position:relative;
 }
-.xsubmenu div { display:inline-block; }
-.xsubmenu .head{
+<%-rootcss%> .xsubmenu div { display:inline-block; }
+<%-rootcss%> .xsubmenu .head{
 	font-weight:bold;
 	padding-right:6px;
 }
-.xsubmenu a {
+<%-rootcss%> .xsubmenu a {
 	font-family: 'PT Sans', arial, helvetica, sans-serif;
 	color:#202020;
 	text-decoration:none;
   display:inline-block;
 }
-.xsubmenu a:hover {
+<%-rootcss%> .xsubmenu a:hover {
 	text-decoration:underline;
 }
-.xsubmenu .xsubmenu_more {
+<%-rootcss%> .xsubmenu .xsubmenu_more {
   position:absolute;
   display:block;
   top:-8px;
@@ -215,13 +215,13 @@ a.xmenu_more img {
   height:23px;
   z-index:2;
 }
-.xsubmenuside {
+<%-rootcss%> .xsubmenuside {
   position:absolute;
   top:117px;
   right:0px;
   z-index:9998;
 }
-.xsubmenuside a {
+<%-rootcss%> .xsubmenuside a {
   background-color:#eeeeee;
   text-align:left;
   font-family: 'PT Sans', arial, helvetica, sans-serif;
@@ -234,7 +234,7 @@ a.xmenu_more img {
   border-right:1px solid #777;
   border-left:1px solid #777;
 }
-.xsubmenuside a:hover {
+<%-rootcss%> .xsubmenuside a:hover {
 	text-decoration:underline;
 }
 
@@ -245,98 +245,99 @@ CUSTOM CONTROLS
 ===============
 */
 
-.xdate_mmddyy {
+<%-rootcss%> .xdate_mmddyy {
 	width:86px;
 }
-.xtstmp {
+<%-rootcss%> .xtstmp {
 	width:120px;
 }
-.xdropdown_VS {
+<%-rootcss%> .xdropdown_VS {
 	width:50px;
 }
-.xdropdown_S {
+<%-rootcss%> .xdropdown_S {
 	width:125px;
 }
-.xdropdown_M{
+<%-rootcss%> .xdropdown_M{
 	width:240px;
 }
-.xdropdown_L{
+<%-rootcss%> .xdropdown_L{
 	width:400px;
 }
-.xdropdown_VL{
+<%-rootcss%> .xdropdown_VL{
 	width:615px;
 }
 /*
 	width:597px;
 */	
-.xlabel_VS {
+<%-rootcss%> .xlabel_VS {
 	width:43px;
 }
-.xlabel_S {
+<%-rootcss%> .xlabel_S {
 	width:117px;
 }
-.xlabel_M {
+<%-rootcss%> .xlabel_M {
 	width:233px;
 }
-.xlabel_L {
+<%-rootcss%> .xlabel_L {
 	width:392px;
 }
-.xlabel_VL {
+<%-rootcss%> .xlabel_VL {
 	width:590px;
 }
-.xtextbox_VS {
+<%-rootcss%> .xtextbox_VS {
 	width:43px;
 }
-.xtextbox_S {
+<%-rootcss%> .xtextbox_S {
 	width:117px;
 }
-.xtextbox_M {
+<%-rootcss%> .xtextbox_M {
 	width:233px;
 }
-.xtextbox_L {
+<%-rootcss%> .xtextbox_L {
 	width:392px;
 }
-.xtextbox_VL {
+<%-rootcss%> .xtextbox_VL {
 	width:608px;
 }
 /*
 	width:590px;
 */	
-.xtextbox_email {
+<%-rootcss%> .xtextbox_email {
 	width:392px;
 }
-.xtextbox_decimal {
+<%-rootcss%> .xtextbox_decimal {
 	width:200px;
 }
-.xtextbox_mmddyy,.xtextbox_hhmmss {
+<%-rootcss%> .xtextbox_mmddyy,
+<%-rootcss%> .xtextbox_hhmmss {
 	width:80px;
 }
-.xtextbox_phone {
+<%-rootcss%> .xtextbox_phone {
 	width:117px;
 }
-.xtextbox_tstmp {
+<%-rootcss%> .xtextbox_tstmp {
 	width:105px;
 }
-.xtextbox_tstmp7 {
+<%-rootcss%> .xtextbox_tstmp7 {
 	width:185px;
 }
-.xtextbox_tstmp7z {
+<%-rootcss%> .xtextbox_tstmp7z {
 	width:220px;
 }
-.xtextarea_M {
+<%-rootcss%> .xtextarea_M {
 	width:590px;
 	height:120px;
 }
-.xtextarea_caption {
+<%-rootcss%> .xtextarea_caption {
 	vertical-align:top;
 	padding-top:4px;
 }
-.xcaption_2 {
+<%-rootcss%> .xcaption_2 {
 	width:120px;
 	text-align:right;
 }
 
-.xbody_HSHOW { margin-right:25px; }
+<%-rootcss%> .xbody_HSHOW { margin-right:25px; }
 
 
 /*
@@ -345,8 +346,8 @@ PRINT STYLESHEET
 ================
 */
 @media print {
-  .xhead { height: 90px; }
-  .xmenu { display:none !important; }
-  .xsubmenu { display:none !important; }
-  .xtoplinks { display:none !important; }
+  <%-rootcss%> .xhead { height: 90px; }
+  <%-rootcss%> .xmenu { display:none !important; }
+  <%-rootcss%> .xsubmenu { display:none !important; }
+  <%-rootcss%> .xtoplinks { display:none !important; }
 }

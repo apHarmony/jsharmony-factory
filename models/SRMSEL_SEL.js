@@ -21,7 +21,7 @@ function SRMSEL_SEL_ForAllChildren(add_op) {
 	  if (SRMSEL_SEL_loadobj) return;
 	  SRMSEL_SEL_ops = [];
 	  //First, Select All Unchecked
-	  var jtbl = $('#xform' + XBase['SRMSEL_SEL'][0] + '.xtbl');
+	  var jtbl = jsh.$root('.xform' + XBase['SRMSEL_SEL'][0] + '.xtbl');
 	  var xform = jsh.App['xform_' + XBase['SRMSEL_SEL'][0]];
 	  SRMSEL_SEL_loadobj = 'SRMSEL_SELLOADER';
 	  jsh.xLoader.StartLoading(SRMSEL_SEL_loadobj);
@@ -58,7 +58,7 @@ function SRMSEL_SEL_oncommit(){
 	  if (SRMSEL_SEL_ops.length == 0) {
 	    jsh.xLoader.StopLoading(SRMSEL_SEL_loadobj);
 	    XExt.Alert('Operation complete.',function(){
-	    	$('.save').first().focus().blur();
+	    	jsh.$root('.save').first().focus().blur();
 	    });
 	    SRMSEL_SEL_loadobj = '';
 	    return;

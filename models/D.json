@@ -31,7 +31,7 @@
 	   "caption":"Description","captionstyle":"width:120px;height:35px;vertical-align:top;padding-top:3px;text-align:right;"},
 
       {"name": "d_preview","control": "html",
-       "value": "<img id='D_IMG_viewer' style='max-width:100%;display:none;' />",
+       "value": "<img class='D_IMG_viewer' style='max-width:100%;display:none;' />",
        "caption": ""},
 
 	  {"name":"d_etstmp","type":"datetime","length":7,"actions":"B","nl":1,

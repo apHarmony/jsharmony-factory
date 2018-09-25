@@ -132,6 +132,7 @@ jsHarmonyFactory.prototype.GetDefaultAdminConfig = function(){
     id: 'main',
     basetemplate: 'index',
     baseurl: '/',
+    publicurl: '/',
     show_system_errors: true,
     auth: {
       salt: _this.Config.adminsalt,
@@ -177,6 +178,7 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
     id: 'client',
     basetemplate: 'client',
     baseurl: '/client/',
+    publicurl: '/',
     show_system_errors: false,
     auth: {
       salt: _this.Config.clientsalt,

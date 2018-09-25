@@ -11,6 +11,6 @@
       {"control":"button","value":"Download Logs","controlstyle": "padding:3px 8px;",
         "onclick": "LOG_Download();"}
 	  ],
-    "js": "function LOG_Download(){  $('#xfileproxy').prop('src', '/_funcs/LOG_DOWNLOAD'); }"
+    "js": "function LOG_Download(){  jsh.getFileProxy().prop('src', '/_funcs/LOG_DOWNLOAD'); }"
 	}
 }

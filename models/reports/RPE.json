@@ -17,7 +17,7 @@
     {"nl": 1,"control":"button","value":"Run Report","controlstyle": "padding:3px 8px;margin-top:15px;margin-left:94px;",
       "onclick": "XRunReport();"}
   ],
-  "onload": "if(xform__report_INVOICE.Data.INV_ID){ XDisable($('#INV_ID.xelem_report_INVOICE')); }",
+  "onload": "if(xform__report_INVOICE.Data.INV_ID){ XDisable(jsh.$root('.INV_ID.xelem_report_INVOICE')); }",
   "pageheader" : ["<h3 style=\"font-size:14px;font-family:'Droid Sans';margin-top:0;padding-top:0;text-align:center;\">User Listing",
   				  "<div style='float:left;width:30%;text-align:left;'><%=data.HOUSE[0].HOUSE_NAME%></div>",
                   "<div style='float:right;width:30%;text-align:right;'><%=moment().format('MM/DD/YYYY hh:mma')%></div>",

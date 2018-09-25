@@ -58,36 +58,36 @@ insert into ucod_c_sts(codseq,codeval,codetxt,codecode) values (1,'ACTIVE','Acti
 
 jsh.App.DEV_DB.oninit = function(xform) {
   var _this = this;
-  $('#DEV_DB_db').change(function(){
-    var db = $('#DEV_DB_db').val();
-    if(!db) $('#DEV_DB_run').hide();
+  jsh.$root('.DEV_DB_db').change(function(){
+    var db = jsh.$root('.DEV_DB_db').val();
+    if(!db) jsh.$root('.DEV_DB_run').hide();
     else jsh.App.DEV_DB.LoadScripts(db);
   });
-  var jSamples = $('#DEV_DB_samples');
+  var jSamples = jsh.$root('.DEV_DB_samples');
   jSamples.change(function(){
-    var db = $('#DEV_DB_db').val();
+    var db = jsh.$root('.DEV_DB_db').val();
     var dbtype = _this.DBs[db];
     var sampleName = jSamples.val();
     var samples = _this.samples[dbtype];
     if(!(sampleName in samples)){ return XExt.Alert('Sample not found: '+sampleName); }
     var sampleSQL = samples[sampleName];
-    $('#DEV_DB_sql').val(sampleSQL)
+    jsh.$root('.DEV_DB_sql').val(sampleSQL)
     jSamples.val('');
   });
-  $('#DEV_DB_runsql').click(function(){ jsh.App.DEV_DB.RunSQL(); });
-  $('#DEV_DB_runas_toggle').click(function(){ $('#DEV_DB_runas').toggle(); return false; });
+  jsh.$root('.DEV_DB_runsql').click(function(){ jsh.App.DEV_DB.RunSQL(); });
+  jsh.$root('.DEV_DB_runas_toggle').click(function(){ jsh.$root('.DEV_DB_runas').toggle(); return false; });
 
   jsh.App.DEV_DB.RenderDBListing(_.keys(_this.DBs));
 }
 
 jsh.App.DEV_DB.RenderDBListing = function(dbs){
-  var jobj = $('#DEV_DB_db');
+  var jobj = jsh.$root('.DEV_DB_db');
   if(dbs.length > 1){
-    $('#DEV_DB_dbselect').show();
+    jsh.$root('.DEV_DB_dbselect').show();
     jobj.append($('<option>',{value:''}).text('Please select...'));
   }
   else {
-    $('#DEV_DB_dbselect').hide();
+    jsh.$root('.DEV_DB_dbselect').hide();
     jobj.empty();
   }
   for(var i=0;i<dbs.length;i++){
@@ -99,9 +99,9 @@ jsh.App.DEV_DB.RenderDBListing = function(dbs){
 
 jsh.App.DEV_DB.LoadScripts = function(db){
   var _this = this;
-  $('#DEV_DB_run').show();
-  $('#DEV_DB_rslt').text('');
-  var jSamples = $('#DEV_DB_samples');
+  jsh.$root('.DEV_DB_run').show();
+  jsh.$root('.DEV_DB_rslt').text('');
+  var jSamples = jsh.$root('.DEV_DB_samples');
   jSamples.empty();
   jSamples.append($('<option>',{value:''}).text('Please select...'));
   var dbtype = _this.DBs[db];
@@ -114,21 +114,21 @@ jsh.App.DEV_DB.LoadScripts = function(db){
       jSamples.append(option);
     }
     if('Select' in samples){
-      $('#DEV_DB_sql').val(samples['Select'])
+      jsh.$root('.DEV_DB_sql').val(samples['Select'])
     }
   }
 }
 
 jsh.App.DEV_DB.RunSQL = function(){
   var _this = this;
-  var sql = $('#DEV_DB_sql').val();
-  var db = $('#DEV_DB_db').val();
+  var sql = jsh.$root('.DEV_DB_sql').val();
+  var db = jsh.$root('.DEV_DB_db').val();
   var dbtype = _this.DBs[db];
-  starttm = Date.now();
+  var starttm = Date.now();
   if(dbtype=='pgsql') sql = "select '-----TABLE-----' as table_boundary;"+sql;
   var params = { sql: sql, db: db };
-  var runas_user = $('#DEV_DB_user').val().trim();
-  var runas_password = $('#DEV_DB_password').val();
+  var runas_user = jsh.$root('.DEV_DB_user').val().trim();
+  var runas_password = jsh.$root('.DEV_DB_password').val();
   if(runas_user){
     params.runas_user = runas_user;
     params.runas_password = runas_password;
@@ -143,7 +143,7 @@ jsh.App.DEV_DB.RunSQL = function(){
       txt += "\r\nOperation complete";
       var endtm = Date.now();
       txt += "\r\nTime: " + (endtm-starttm) + "ms";
-      $('#DEV_DB_rslt').text(txt);
+      jsh.$root('.DEV_DB_rslt').text(txt);
     }
   });
 }
