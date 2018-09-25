@@ -1,17 +1,21 @@
-function DEV_DB_SCRIPTS_oninit(xform) {
+jsh.App.DEV_DB_SCRIPTS = { }
+
+jsh.App.DEV_DB_SCRIPTS.oninit = function(xform) {
+  var _this = this;
   XPost.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { }, function (rslt) { //On success
     if ('_success' in rslt) { 
-      DEV_DB_SCRIPTS_RenderDBListing(rslt.dbs);
+      _this.RenderDBListing(rslt.dbs);
     }
   });
   jsh.$root('.DEV_DB_SCRIPTS_db').change(function(){
     var db = jsh.$root('.DEV_DB_SCRIPTS_db').val();
     if(!db) jsh.$root('.DEV_DB_SCRIPTS_run').hide();
-    else DEV_DB_SCRIPTS_GetScripts(db);
+    else _this.GetScripts(db);
   });
 }
 
-function DEV_DB_SCRIPTS_RenderDBListing(dbs){
+jsh.App.DEV_DB_SCRIPTS.RenderDBListing = function(dbs){
+  var _this = this;
   var jobj = jsh.$root('.DEV_DB_SCRIPTS_db');
   if(dbs.length > 1){
     jsh.$root('.DEV_DB_SCRIPTS_dbselect').show();
@@ -25,18 +29,20 @@ function DEV_DB_SCRIPTS_RenderDBListing(dbs){
     var db = dbs[i];
     jobj.append($('<option>',{value:db}).text(db));
   }
-  if(dbs.length==1) DEV_DB_SCRIPTS_GetScripts(dbs[0]);
+  if(dbs.length==1) _this.GetScripts(dbs[0]);
 }
 
-function DEV_DB_SCRIPTS_GetScripts(dbid){
+jsh.App.DEV_DB_SCRIPTS.GetScripts = function(dbid){
+  var _this = this;
   XPost.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { db: dbid }, function (rslt) { //On success
     if ('_success' in rslt) { 
-      DEV_DB_SCRIPTS_RenderScripts(rslt.scripts);
+      _this.RenderScripts(rslt.scripts);
     }
   });
 }
 
-function DEV_DB_SCRIPTS_RenderScripts(scripts){
+jsh.App.DEV_DB_SCRIPTS.RenderScripts = function(scripts){
+  var _this = this;
   jsh.$root('.DEV_DB_SCRIPTS_run').show();
   jsh.$root('.DEV_DB_SCRIPTS_rslt').text('');
 
@@ -55,7 +61,7 @@ function DEV_DB_SCRIPTS_RenderScripts(scripts){
   //Clear any existing content
   jobj.empty();
   //Render scripts tree
-  jobj.append(DEV_DB_SCRIPTS_RenderScriptsNode(scripts));
+  jobj.append(_this.RenderScriptsNode(scripts));
   //Generate "All" tree
   var allscripts = null;
   for(var component in scripts){
@@ -63,13 +69,14 @@ function DEV_DB_SCRIPTS_RenderScripts(scripts){
     else allscripts = union(allscripts, scripts[component]);
   }
   allscripts = { "(All)": allscripts };
-  jobj.children("ul").prepend(DEV_DB_SCRIPTS_RenderScriptsNode(allscripts).children());
+  jobj.children("ul").prepend(_this.RenderScriptsNode(allscripts).children());
   //Attach events
-  jobj.find('a.run').click(function(e){ e.preventDefault(); DEV_DB_SCRIPTS_ExecScript(this, 'run'); });
-  jobj.find('a.info').click(function(e){ e.preventDefault(); DEV_DB_SCRIPTS_ExecScript(this, 'read'); });
+  jobj.find('a.run').click(function(e){ e.preventDefault(); _this.ExecScript(this, 'run'); });
+  jobj.find('a.info').click(function(e){ e.preventDefault(); _this.ExecScript(this, 'read'); });
 }
 
-function DEV_DB_SCRIPTS_RenderScriptsNode(node){
+jsh.App.DEV_DB_SCRIPTS.RenderScriptsNode = function(node){
+  var _this = this;
   var jlist = $('<ul></ul>');
   for(var childname in node){
     if(_.isString(node[childname])) continue;
@@ -86,7 +93,7 @@ function DEV_DB_SCRIPTS_RenderScriptsNode(node){
     jchildinfolink.prop('href','#');
     jchild.append(jchildinfolink);
     //Children
-    var childlist = DEV_DB_SCRIPTS_RenderScriptsNode(node[childname]);
+    var childlist = _this.RenderScriptsNode(node[childname]);
     if(childlist.length) jchild.append(childlist);
     jlist.append(jchild);
   }
@@ -94,7 +101,8 @@ function DEV_DB_SCRIPTS_RenderScriptsNode(node){
   return jlist;
 }
 
-function DEV_DB_SCRIPTS_ExecScript(obj, mode){
+jsh.App.DEV_DB_SCRIPTS.ExecScript = function(obj, mode){
+  var _this = this;
   var jobj = $(obj);
   jsh.$root('.DEV_DB_SCRIPTS_rslt').text('');
 

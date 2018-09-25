@@ -19,6 +19,7 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 
 var jsHarmonyConfig = require('jsHarmony/jsharmonyConfig');
 var path = require('path');
+var _ = require('lodash');
 
 function jsHarmonyFactoryConfig(){
   //jsHarmony Factory module path
@@ -96,6 +97,11 @@ function jsHarmonyFactoryConfig(){
     }
   };
   */
+
+  //Mapping of database fields for job processor
+  this.job_field_mapping = {};
+
+  this._validProperties = _.keys(this);
 }
 jsHarmonyFactoryConfig.prototype = new jsHarmonyConfig.Base();
 

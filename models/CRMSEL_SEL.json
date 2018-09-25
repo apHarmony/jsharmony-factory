@@ -17,11 +17,11 @@
     "validationlevel": "cell",        "comment4":"cell, or row",
     "hide_system_buttons" : ["export"],    
 	"buttons": [
-	    {"link":"js:CRMSEL_SEL_SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
-	    {"link":"js:CRMSEL_SEL_DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
+	    {"link":"js:jsh.App.CRMSEL_SEL.SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
+	    {"link":"js:jsh.App.CRMSEL_SEL.DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
 	],
-    "oninit": "CRMSEL_SEL_oninit(xform);",
-    "oncommit": "CRMSEL_SEL_oncommit();",
+    "oninit": "jsh.App.CRMSEL_SEL.oninit(xform);",
+    "oncommit": "jsh.App.CRMSEL_SEL.oncommit();",
 	"fields":[
 	  {"name":"cr_name","type":"varchar","length":16,"actions":"FB","datalock":{"C_ID":"C_ID"},"control":"hidden","key":1,
 	   "caption":""},

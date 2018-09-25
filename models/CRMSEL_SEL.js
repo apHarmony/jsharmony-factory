@@ -1,46 +1,10 @@
-var CRMSEL_SEL_loadobj = '';
-var CRMSEL_SEL_ops = [];
+jsh.App.CRMSEL_SEL = { }
 
-function CRMSEL_SEL_SelectAll(){
-	CRMSEL_SEL_ForAllChildren(function (obj) {
-    if ($(obj).is(':checked')) return;
-    if ($(obj).css('visibility').toLowerCase() == 'hidden') return;
-    CRMSEL_SEL_ops.push(function () { $(obj).trigger('click'); });
-  });
-}
+jsh.App.CRMSEL_SEL.loadobj = '';
+jsh.App.CRMSEL_SEL.ops = [];
 
-function CRMSEL_SEL_DeselectAll(){
-	CRMSEL_SEL_ForAllChildren(function (obj) {
-    if (!$(obj).is(':checked')) return;
-    if ($(obj).css('visibility').toLowerCase() == 'hidden') return;
-    CRMSEL_SEL_ops.push(function () { $(obj).trigger('click'); });
-  });
-}
-
-function CRMSEL_SEL_ForAllChildren(add_op) {
-	  if (CRMSEL_SEL_loadobj) return;
-	  CRMSEL_SEL_ops = [];
-	  //First, Select All Unchecked
-	  var jtbl = jsh.$root('.xform' + XBase['CRMSEL_SEL'][0] + '.xtbl');
-	  var xform = jsh.App['xform_' + XBase['CRMSEL_SEL'][0]];
-	  CRMSEL_SEL_loadobj = 'CRMSEL_SELLOADER';
-	  jsh.xLoader.StartLoading(CRMSEL_SEL_loadobj);
-	  
-	  function fselectall() {
-	    jtbl.find('input.checkbox.crmsel_sel').each(function () {
-	      add_op(this);
-	    });
-	    CRMSEL_SEL_oncommit();
-	  }
-	  
-	  function loadmore() {
-	    if (xform.EOF) { fselectall(); return; }
-	    xform.Load(xform.RowCount, undefined, loadmore);
-	  }
-	  loadmore();
-}
-
-function CRMSEL_SEL_oninit(xform) {
+jsh.App.CRMSEL_SEL.oninit = function(xform) {
+  var _this = this;
   jsh.App['xform_post_'+XBase['CRMSEL_SEL'][0]].GetReselectParams = function(){ 
 	  var rslt = this.GetKeys(); 
 	  rslt.sr_name = this.Data.new_sr_name; 
@@ -53,16 +17,59 @@ function CRMSEL_SEL_oninit(xform) {
   }
 }
 
-function CRMSEL_SEL_oncommit(){
-	  if(!CRMSEL_SEL_loadobj){ $(document.activeElement).blur(); return; }
-	  if (CRMSEL_SEL_ops.length == 0) {
-	    jsh.xLoader.StopLoading(CRMSEL_SEL_loadobj);
-	    XExt.Alert('Operation complete.',function(){
-	    	jsh.$root('.save').first().focus().blur();
-	    });
-	    CRMSEL_SEL_loadobj = '';
-	    return;
-	  }
-	  var op = CRMSEL_SEL_ops.shift();
-	  op();
+jsh.App.CRMSEL_SEL.oncommit = function(){
+  var _this = this;
+  if(!_this.loadobj){ $(document.activeElement).blur(); return; }
+  if (_this.ops.length == 0) {
+    jsh.xLoader.StopLoading(_this.loadobj);
+    XExt.Alert('Operation complete.',function(){
+      jsh.$root('.save').first().focus().blur();
+    });
+    _this.loadobj = '';
+    return;
+  }
+  var op = _this.ops.shift();
+  op();
+}
+
+jsh.App.CRMSEL_SEL.SelectAll = function(){
+  var _this = this;
+	_this.ForAllChildren(function (obj) {
+    if ($(obj).is(':checked')) return;
+    if ($(obj).css('visibility').toLowerCase() == 'hidden') return;
+    _this.ops.push(function () { $(obj).trigger('click'); });
+  });
+}
+
+jsh.App.CRMSEL_SEL.DeselectAll = function(){
+  var _this = this;
+	_this.ForAllChildren(function (obj) {
+    if (!$(obj).is(':checked')) return;
+    if ($(obj).css('visibility').toLowerCase() == 'hidden') return;
+    _this.ops.push(function () { $(obj).trigger('click'); });
+  });
+}
+
+jsh.App.CRMSEL_SEL.ForAllChildren = function(add_op) {
+  var _this = this;
+  if (_this.loadobj) return;
+  _this.ops = [];
+  //First, Select All Unchecked
+  var jtbl = jsh.$root('.xform' + XBase['CRMSEL_SEL'][0] + '.xtbl');
+  var xform = jsh.App['xform_' + XBase['CRMSEL_SEL'][0]];
+  _this.loadobj = 'CRMSEL_SELLOADER';
+  jsh.xLoader.StartLoading(_this.loadobj);
+  
+  function fselectall() {
+    jtbl.find('input.checkbox.crmsel_sel').each(function () {
+      add_op(this);
+    });
+    _this.oncommit();
+  }
+  
+  function loadmore() {
+    if (xform.EOF) { fselectall(); return; }
+    xform.Load(xform.RowCount, undefined, loadmore);
+  }
+  loadmore();
 }
