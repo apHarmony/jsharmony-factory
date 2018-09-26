@@ -175,7 +175,7 @@ begin
   update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "jsharmony_pe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select pp_val from jsharmony_v_pp where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_S'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update jsharmony_pe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'
     where NEW.pe_pw1 is not null\;
 
-  %%%AUDIT_U_MULT("PE","old.PE_ID",["PE_ID","PE_STS","PE_FNAME","PE_MNAME","PE_LNAME","PE_JTITLE","PE_BPHONE","PE_CPHONE","PE_EMAIL","PE_LL_TSTMP"],"null","null","null")%%%
+  %%%AUDIT_U_MULT("PE","old.PE_ID",["PE_ID","PE_STS","PE_FNAME","PE_MNAME","PE_LNAME","PE_JTITLE","PE_BPHONE","PE_CPHONE","PE_COUNTRY","PE_ADDR","PE_CITY","PE_STATE","PE_ZIP","PE_EMAIL","PE_STARTDT","PE_ENDDT","PE_UNOTES","PE_LL_TSTMP"],"null","null","null")%%%
 
   %%%AUDIT_U_CUSTOM("PE","old.PE_ID","coalesce(NEW.pe_pw1,'') <> '' and coalesce(NEW.pe_pw1,'') <> coalesce(OLD.pe_pw1,'')","null","null","null")%%%
   insert into jsharmony_aud_d(aud_seq,column_name,column_val)
@@ -193,7 +193,7 @@ end;
 
 create trigger jsharmony_pe_delete before delete on jsharmony_pe
 begin
-  %%%AUDIT_D_MULT("PE","old.PE_ID",["PE_ID","PE_STS","PE_FNAME","PE_MNAME","PE_LNAME","PE_JTITLE","PE_BPHONE","PE_CPHONE","PE_EMAIL","PE_LL_TSTMP"],"null","null","null")%%%
+  %%%AUDIT_D_MULT("PE","old.PE_ID",["PE_ID","PE_STS","PE_FNAME","PE_MNAME","PE_LNAME","PE_JTITLE","PE_BPHONE","PE_CPHONE","PE_COUNTRY","PE_ADDR","PE_CITY","PE_STATE","PE_ZIP","PE_EMAIL","PE_STARTDT","PE_ENDDT","PE_UNOTES","PE_LL_TSTMP"],"null","null","null")%%%
   update jsharmony_meta set aud_seq = null\;
 end;
 
