@@ -22,29 +22,28 @@ var jsHarmony = require('jsharmony');
 var jsHarmonyCodeGen = require('jsharmony/CodeGen');
 var JSHdb = require('jsharmony-db');
 var path = require('path');
+var _ = require('lodash');
 
-function jsHarmonyFactoryAPI(){
-  //Load Settings
-  if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
-
-  //Initialize DB Components
-  this.sqlbase = {};
-  this.db = new JSHdb();
-
-  if(!global.modeldir) global.modeldir = [];
-  global.modeldir.unshift({ path: path.join(path.dirname(module.filename),'./models/'), component: 'jsharmony-factory' });
-  jsHarmony.LoadSQL(path.dirname(require.resolve('jsharmony'))+'/sql/', global.dbconfig._driver.name, this.sqlbase);
-  for (var i = 0; i < global.modeldir.length; i++) {
-    jsHarmony.LoadSQL(global.modeldir[i].path + 'sql/', global.dbconfig._driver.name, this.sqlbase);
-  }
-  
-
-  this.codegen = new jsHarmonyCodeGen(this.db, this.sqlbase);
+function jsHarmonyFactoryAPI(options){
+  this.options = _.extend({ db: 'default' }, options);
+  if(!this.options.db) this.options.db = 'default';
+  //Load Config
+  this.jsh = new jsHarmonyFactory.Application();
+  this.jsh.Config.appbasepath = process.cwd();
+  this.jsh.Config.silentStart = true;
+}
+jsHarmonyFactoryAPI.prototype.Init = function(cb){
+  var _this = this;
+  _this.jsh.Init(function(){
+    _this.db = _this.jsh.DB[_this.options.db];
+    _this.codegen = new jsHarmonyCodeGen(_this.jsh);
+    if(cb) return cb();
+  });
 }
 //Execute DB Operation
 jsHarmonyFactoryAPI.prototype.dbTest = function(onComplete){
   this.db.Scalar('','select 1',[],{},function(err,rslt){
-    if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your global.dbconfig in app.settings.js and try again by running:\r\nnpm run -s init-factory'); return onComplete(err); }
+    if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your database config in app.config.js and try again by running:\r\nnpm run -s init-factory'); return onComplete(err); }
     if(rslt && (rslt.toString()=="1")){
       return onComplete();
     }

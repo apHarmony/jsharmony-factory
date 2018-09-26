@@ -1,14 +1,14 @@
 {
     "comment":"PE_SPEF",
     "layout":"multisel", 
-	"access":"BU",
+	"actions":"BIU",
 	"table":"jsharmony.spef",
 	"fields":[
-	  {"name":"pe_id","type":"bigint","access":"F"},
+	  {"name":"pe_id","type":"bigint","foreignkey":1},
 	  {"name":"spef_id","type":"bigint","key":1},
 	  {"name":"sf_name","type":"varchar","length":"8","cellstyle":"width:300px;",
-       "caption":"Function","access":"B",
-       "lov": { "sql": "select sf_name as CODEVal, sf_desc as CODETxt,SF_SEQ as CODSeq from jsharmony.SF" }
+       "caption":"Function","actions":"B",
+       "lov": { "sql": "select sf_name as %%%jsh.map.codeval%%%, sf_desc as %%%jsh.map.codetxt%%%,SF_SEQ as %%%jsh.map.codeseq%%% from jsharmony.SF" }
        }
 	],
     "dberrors":[

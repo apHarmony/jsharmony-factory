@@ -3,7 +3,7 @@
     "layout":"grid",
     "title":"Models",
     "table":"jsharmony:models",
-    "access":"B",
+    "actions":"B",
     "dev":1,
     "caption":[0,"Model","Models"],
     "sort":["vmodel_title"],
@@ -11,12 +11,12 @@
     "grid_expand_filter":1,
     "hide_system_buttons" : ["clear"],
     "fields":[
-      {"name":"model_id","type":"varchar","access":"FB","key":1,"caption":"Model ID"},
-      {"name":"model_title","type":"varchar","access":"B","caption":"Title"},
-      {"name":"model_layout","type":"varchar","access":"B","caption":"Layout"},
-      {"name":"model_table","type":"varchar","access":"B","caption":"Table"},
-      {"name":"model_component","type":"varchar","access":"B","caption":"Component"},
-      {"name":"model_parents","type":"varchar","access":"B","caption":"Parents"}
+      {"name":"model_id","type":"varchar","actions":"FB","key":1,"caption":"Model ID"},
+      {"name":"model_title","type":"varchar","actions":"B","caption":"Title"},
+      {"name":"model_layout","type":"varchar","actions":"B","caption":"Layout"},
+      {"name":"model_table","type":"varchar","actions":"B","caption":"Table"},
+      {"name":"model_component","type":"varchar","actions":"B","caption":"Component"},
+      {"name":"model_parents","type":"varchar","actions":"B","caption":"Parents"}
     ]
   }
 }  

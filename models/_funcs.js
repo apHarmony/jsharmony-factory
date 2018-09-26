@@ -37,7 +37,10 @@ exports.LOG_DOWNLOAD = function (req, res, next) {
   
   var Q = req.query;
   var P = {};
-  if (req.body && ('data' in req.body)) P = JSON.parse(req.body.data);
+  if (req.body && ('data' in req.body)){
+    try{ P = JSON.parse(req.body.data); }
+    catch(ex){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+  }
   var appsrv = this;
   var jsh = this.jsh;
   var dbtypes = appsrv.DB.types;
@@ -49,9 +52,9 @@ exports.LOG_DOWNLOAD = function (req, res, next) {
     var farr = [];
     async.waterfall([
       function (cb) {
-        fs.readdir(global.logdir, function (err, files) {
+        fs.readdir(jsh.Config.logdir, function (err, files) {
           if (err) return cb(err);
-          _.each(files, function (file) { farr.push({ src: global.logdir + file, dest: file }); });
+          _.each(files, function (file) { farr.push({ src: jsh.Config.logdir + file, dest: file }); });
           return cb(null);
         });
       },
@@ -71,6 +74,111 @@ exports.LOG_DOWNLOAD = function (req, res, next) {
         return Helper.GenError(req, res, -99999, err.message);
       }
     });
+    return;
+  }
+  return next();
+}
+
+exports.DEV_DB_SCRIPTS = function (req, res, next) {
+
+  //Replace scripts with "..." and prune empty scripts
+  function clearScripts(node){
+    var rslt = {};
+    for(var key in node){
+      var val = node[key];
+      if(_.isString(val)){
+        if(val.trim()) rslt[key] = "...";
+      }
+      else{
+        var childScripts = clearScripts(val);
+        if(!_.isEmpty(childScripts)) rslt[key] = childScripts;
+      }
+    }
+    return rslt;
+  }
+
+  //-------------------------------------------------------
+
+  var verb = req.method.toLowerCase();
+  if (!req.body) req.body = {};
+  
+  var Q = req.query;
+  var P = {};
+  if (req.body && ('data' in req.body)){
+    try{ P = JSON.parse(req.body.data); }
+    catch(ex){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+  }
+  var appsrv = this;
+  var jsh = this.jsh;
+  var dbtypes = appsrv.DB.types;
+  var model = jsh.getModel(req, 'DEV_DB_SCRIPTS');
+  
+  if (!Helper.HasModelAccess(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
+
+  var dbscripter = 1;
+  
+  if (verb == 'get') {
+    if (!appsrv.ParamCheck('Q', Q, ['|db'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+    var dbid = Q.db;
+
+    if(dbid){
+      if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Databse ID'); return; }
+      var sqlext = jsh.DB[dbid].getSQLExt();
+      res.end(JSON.stringify({ _success: 1, scripts: clearScripts(sqlext.Scripts) }));
+    }
+    else {
+      var dbs = [];
+      for(var dbid in jsh.DB) dbs.push(dbid);
+      res.end(JSON.stringify({ _success: 1, dbs: dbs }));
+    }
+    
+    return;
+  }
+  else if (verb == 'post') {
+    if (!appsrv.ParamCheck('Q', Q, [])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+    if (!appsrv.ParamCheck('P', P, ['&scriptid','&mode','&db','|runas_user','|runas_password'])) { return Helper.GenError(req, res, -4, 'Invalid Parameters'); }
+
+    var scriptid = P.scriptid;
+    if(!_.isArray(scriptid)) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+    for(var i=0;i<scriptid.length;i++){ if(!_.isString(scriptid[i])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; } }
+
+    var mode = P.mode;
+    if(!_.includes(['run','read'],mode)) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+
+    var dbid = P.db;
+    if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Database ID'); return; }
+    var db = jsh.DB[dbid];
+
+    //Run as user, if applicable
+    var dbconfig = jsh.DBConfig[dbid];
+    if(P.runas_user){
+      dbconfig = _.extend({}, dbconfig);
+      dbconfig.user = P.runas_user;
+      dbconfig.password = P.runas_password;
+    }
+    var sqlFuncs  = [];
+    sqlFuncs['DB'] = dbconfig.database;
+    sqlFuncs['DB_LCASE'] = dbconfig.database.toLowerCase();
+
+    if(mode=='run'){
+      db.RunScripts(jsh, scriptid, { dbconfig: dbconfig, sqlFuncs: sqlFuncs }, function(err, rslt){
+        if(err){ err.sql = 'scriptid:'+scriptid; return jsh.AppSrv.AppDBError(req, res, err); }
+        res.end(JSON.stringify({ _success: 1, dbrslt: rslt }));
+        return;
+      });
+    }
+    else if(mode=='read'){
+      var sqlsrc = '';
+      db.RunScripts(jsh, scriptid, { dbconfig: dbconfig, sqlFuncs: sqlFuncs, onSQL: function(dbscript_name, bi, sql){
+        sqlsrc += sql + "\r\n";
+        return false;
+      } }, function(err, rslt){
+        if(err){ err.sql = 'scriptid:'+scriptid; return jsh.AppSrv.AppDBError(req, res, err); }
+        res.end(JSON.stringify({ _success: 1, src: sqlsrc }));
+        return;
+      });
+    }
+
     return;
   }
   return next();

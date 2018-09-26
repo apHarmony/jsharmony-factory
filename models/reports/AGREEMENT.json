@@ -2,26 +2,26 @@
 "comment":"AGREEMENT",
   "layout": "exec",
   "title": "Customer Agreement",
-  "access": "B",
-  //"roles": {"CSYSADMIN":"BIUD","CADMIN":"BIUD"},
+  "actions": "B",
+  //"roles": { "client": {"CSYSADMIN":"*","CADMIN":"*"} },
   "topmenu":"reports",
   "description": "Generate Signed Customer Agreement",
   "template": "AGREEMENT.ejs",
   "inherits": "_report_TMPL_DEFAULT",
   "fields": [
-    {"name":"C_ID","type":"bigint","datalock":{"C_ID":"client_C_C_ID"},"nl":1,
-	      "control":"dropdown_L","access": "B",
-        "lov": { "sql": "agreement_COD_C_ID", "datalock":{"C_ID":"client_C_ID"}, "blank": 1 },
+    {"name":"C_ID","type":"bigint","datalock":{"C_ID":"C_C_ID"},"nl":1,
+	      "control":"dropdown_L","actions": "B",
+        "lov": { "sql": "agreement_COD_C_ID", "datalock":{"C_ID":"C_ID"}, "blank": 1 },
         "validate": [ "Required" ],
         "default": "js:XExt.UndefinedBlank(_GET['C_ID'])",
         "caption":"Company Name"},
     {"name": "A_Name","type": "varchar","length": 72,"nl": 1,
-      "control": "textbox","access": "B",
+      "control": "textbox","actions": "B",
       "validate": [ "Required" ],
       "caption": "Signed By"
     },
     {"name":"A_DOB","type":"date","nl": 1,
-	   "control":"date_mmddyy","access":"B",
+	   "control":"date_mmddyy","actions":"B",
      "validate": [ "Required" ],
 		 "caption":"Date of Birth","controlstyle":"width:80px;","captionstyle":"width:80px;"},
     {"nl": 1,"control":"button","value":"Run Report","controlstyle": "padding:3px 8px;",
@@ -36,10 +36,6 @@
     "C":{
       "sql":"select C_ID \"C_ID\" from C where C_ID=@C_ID %%%DATALOCKS%%%",
       "children":{
-        "CA":{
-         "bindings":{"C_ID":"C_ID"},
-         "sql":"select C_ID \"C_ID\",CA_ID from CA where C_ID in (select C_ID from C where C_ID=@C_ID %%%DATALOCKS%%%)"
-        },
         "NTYPE":{
           "bindings":{"C_ID":"C_ID"},
           "sql":"select distinct N.C_ID \"C_ID\",N_TYPE \"N_TYPE\" from jsharmony.N inner join C on C.C_ID=N.C_ID where N.C_ID=@C_ID %%%DATALOCKS%%%",

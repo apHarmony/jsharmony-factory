@@ -3,12 +3,13 @@
     "comment":"DEV_DB",
     "title":"Database Management",
     "table":"",
-    "access":"B", 
+    "actions":"B", 
     "layout":"exec", 
     "dev":1,
     "topmenu":"dev",
     "caption": [ "", "Database Management", "Database Management" ],
     "hide_system_buttons":["print","help"],
-	  "fields":[	  ]
+    "fields":[	  ],
+    "oninit": "jsh.App.DEV_DB.oninit(xform);"
 	}
 }

@@ -1,8 +1,8 @@
 {
-  "NWUCS": {
+  "NWUCS_BASE": {
     "layout":"form", 
     "table":"S",
-    "access":"B", 
+    "actions":"B", 
     "unbound": 1,
     "tabpos":"top",
     "tabs": [
@@ -12,13 +12,16 @@
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-	  {"name":"n_scope","type":"varchar","length":"8","access": "F"},
-      {"name":"n_scope_id", "type": "bigint","access": "F"}
+	  {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
+      {"name":"n_scope_id", "type": "bigint","foreignkey":1}
     ]
-  },  
+  },
+  "NWUCS":{
+    "inherits":"NWUCS_BASE"
+  },
   "NWUS": {
     "table":"S",
-    "access":"B", 
+    "actions":"B", 
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
@@ -28,13 +31,13 @@
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-      {"name":"n_scope","type":"varchar","length":"8","access": "F"},
-      {"name":"n_scope_id", "type": "bigint","access": "F" }
+      {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
+      {"name":"n_scope_id", "type": "bigint","foreignkey":1}
     ]
   }, 
   "NWCS": {
     "table":"S",
-    "access":"B", 
+    "actions":"B", 
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
@@ -44,13 +47,13 @@
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-      {"name":"n_scope","type":"varchar","length":"8","access": "F"},
-      {"name":"n_scope_id", "type": "bigint","access": "F" }
+      {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
+      {"name":"n_scope_id", "type": "bigint","foreignkey":1}
     ]
   }, 
   "NWCSC_BASE":{
     "table":"S",
-    "access":"B", 
+    "actions":"B", 
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
@@ -60,8 +63,8 @@
     ],
     "tabpanelstyle": "min-width:900px;",
       "fields":[
-        {"name":"n_scope","type":"varchar","length":"8","access": "F"},
-        {"name":"n_scope_id", "type": "bigint","access": "F" }
+        {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
+        {"name":"n_scope_id", "type": "bigint","foreignkey":1}
       ]
   },
   "NWCSC":{
@@ -69,7 +72,7 @@
   },
   "NWCSCB":{
     "table":"S",
-    "access":"B", 
+    "actions":"B", 
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
@@ -79,8 +82,8 @@
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-      {"name":"n_scope","type":"varchar","length":"8","access": "F"},
-      {"name":"n_scope_id", "type": "bigint", "access": "F" }
+      {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
+      {"name":"n_scope_id","type":"bigint","foreignkey":1 }
     ]
   }
 }

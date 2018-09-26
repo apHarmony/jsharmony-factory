@@ -8,8 +8,15 @@ values ('First','User','%%%INIT_DB_ADMIN_EMAIL%%%','%%%INIT_DB_ADMIN_PASS%%%','%
 insert into jsharmony.sper (pe_id, sr_name) values(1,'*');
 insert into jsharmony.sper (pe_id, sr_name) values(1,'DEV');
 insert into jsharmony.sper (pe_id, sr_name) values(1,'SYSADMIN');
+insert into jsharmony.sper (pe_id, sr_name) values(1,'DADMIN');
+insert into jsharmony.sper (pe_id, sr_name) values(1,'X_B');
+insert into jsharmony.sper (pe_id, sr_name) values(1,'X_X');
 GO
 delete from jsharmony.aud_d;
 delete from jsharmony.aud_h;
 GO
       
+insert into jsharmony.gcod2_d_scope_d_ctgr(codeval1, codeval2, codetxt) values ('PE','DOCUMENT','DOCUMENT');
+insert into jsharmony.gcod2_d_scope_d_ctgr(codeval1, codeval2, codetxt) values ('PE','IMAGE','IMAGE');
+insert into jsharmony.gcod2_d_scope_d_ctgr(codeval1, codeval2, codetxt) values ('PE','OTHER','OTHER');
+GO

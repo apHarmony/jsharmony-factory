@@ -2,7 +2,8 @@
  "POPUP_EXEC": {
   "layout": "exec",
   "title": "Popup Exec Title",
-  "access": "BU",
+  "actions": "BIU",
+  "dev":1,
   "roles": {"X_X":"*"},
   "topmenu":"dev",
   "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
@@ -12,11 +13,11 @@
     {"name":"question","nl": 1,"control":"html","caption":"",
      "value":"To be overwritten"},
     {"name":"YES","caption":"","nl": 1,"control":"button","value":"Yes","controlstyle": "padding:3px 8px;margin-top:10px;",
-     "onclick":"XRunDBFunc(function(){XForm_RefreshParent();window.close();});"},
+     "onclick":"XRunDBFunc(function(){jsh.XForm_RefreshParent();window.close();});"},
     {"name":"NO","caption":"","control":"button","value":"No","controlstyle": "padding:3px 8px;margin-top:10px;",
      "onclick": "window.close();"},
     {"control":"html","value":"</center>"},
-    {"name":"RSLT","type":"bigint","access":"B","control":"hidden"}
+    {"name":"RSLT","type":"bigint","actions":"B","control":"hidden"}
   ]
  }
 }

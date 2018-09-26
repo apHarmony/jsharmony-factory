@@ -67,10 +67,9 @@ INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_s
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (8, 'S', 170, 'ACTIVE', 1, 'ADMINISTRATION', 3, 'Administration', NULL, NULL, 'ADMIN_OVERVIEW', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (44, 'S', 10, 'ACTIVE', 1, 'DEV', 4, 'Developer', NULL, NULL, 'DEV_OVERVIEW', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (3, 'C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (10, 'C', 200, 'ACTIVE', 2, 'C_DASHBOARD', NULL, 'Dashboard', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (10, 'C', 200, 'ACTIVE', 2, 'C_DASHBOARD', NULL, 'Dashboard', NULL, NULL, 'C_DASHBOARD', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (13, 'C', 270, 'ACTIVE', 2, 'C_ADMINISTRATION', NULL, 'Administration', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (35, 'C', 2700, 'ACTIVE', 270, 'C_ADMINISTRATION_USERS', NULL, 'Cust Users', NULL, NULL, 'CPEL_CLIENT', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (36, 'C', 2701, 'ACTIVE', 270, 'C_ADMINISTRATION_CONTACTS', NULL, 'Contacts', NULL, NULL, 'CTL_C_CLIENT', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (2, 'S', 1, 'ACTIVE', NULL, 'ADMIN', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (57, 'S', 1795, 'ACTIVE', 170, 'ADMINISTRATION_LOG', NULL, 'Logs', NULL, NULL, 'LOG', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (58, 'S', 1796, 'ACTIVE', 170, 'ADMINISTRATION_RESTART_SYSTEM', NULL, 'Restart System', NULL, NULL, 'RESTART_SYSTEM', NULL, NULL, NULL);
@@ -89,6 +88,8 @@ INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_s
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (50, 'S', 16, 'ACTIVE', 10, 'DEV_X_GCOD_HL', 31, 'Admin 1D Codes', NULL, NULL, 'X_GCOD_HL', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (51, 'S', 17, 'ACTIVE', 10, 'DEV_X_GCOD2_HL', 32, 'Admin 2D Codes', NULL, NULL, 'X_GCOD2_HL', NULL, NULL, NULL);
 INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (63, 'S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (64, 'S', 23, 'ACTIVE', 10, 'DEV_DB', 43, 'DB SQL', NULL, NULL, 'DEV_DB', NULL, NULL);
+INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (65, 'S', 24, 'ACTIVE', 10, 'DEV_DB_SCRIPTS', 44, 'DB Scripts', NULL, NULL, 'DEV_DB_SCRIPTS', NULL, NULL);
 
 
 --
@@ -100,7 +101,6 @@ INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_s
 INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 22, 'CX_B');
 INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (270, NULL, 24, 'CSYSADMIN');
 INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2700, NULL, 26, 'CSYSADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2701, NULL, 27, 'CSYSADMIN');
 INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 35, 'CX_X');
 INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 61, 'CUSER');
 
@@ -1319,7 +1319,7 @@ SELECT pg_catalog.setval('sf_sf_id_seq', 2, true);
 -- Name: sm_sm_id_auto_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
 --
 
-SELECT pg_catalog.setval('sm_sm_id_auto_seq', 63, true);
+SELECT pg_catalog.setval('sm_sm_id_auto_seq', 65, true);
 
 
 --
@@ -1351,7 +1351,6 @@ SELECT pg_catalog.setval('sr_sr_id_seq', 16, true);
 -- Data for Name: srm; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2701, NULL, 74, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2700, NULL, 73, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (10, NULL, 180, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1700, NULL, 57, 'SYSADMIN');
@@ -1373,6 +1372,8 @@ INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (19, NULL, 191, 'DEV
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (20, NULL, 192, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (21, NULL, 193, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (22, NULL, 194, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (23, NULL, 195, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (24, NULL, 196, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1786, NULL, 200, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1795, NULL, 201, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1796, NULL, 202, 'SYSADMIN');
@@ -1425,7 +1426,9 @@ INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, t
 INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (11, 'CMS', 'AGREEMENT_DONE', 'HTML', 'Client Agreement Complete', '<p>Thank you for completing sign-up.</p>
 ', NULL, 'Client Agreement Complete', '2017-06-18 17:14:24.096656', 'Upostgres', '2017-10-18 12:01:03.15238', 'S3');
 INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (13, 'SMS', 'WELCOME', 'TEXT', 'Welcome', 'Your account has been initialized.', NULL, 'SMS Welcome Message', '2017-06-18 17:14:24.085617', 'Upostgres', '2017-10-18 12:01:31.046944', 'S3');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (14, 'CMS', 'DASHBOARD', 'HTML', 'Dashboard Message of the Day', '<p>Welcome to the jsHarmony System</p>
+INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (14, 'CMS', 'C_DASHBOARD', 'HTML', 'Client Dashboard Message of the Day', '<p>Welcome to the jsHarmony Client Portal</p>
+', NULL, 'Client Dashboard Message of the Day', '2017-10-18 12:02:05.393644', 'S3', '2017-10-19 12:14:32.861784', 'S3');
+INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (15, 'CMS', 'DASHBOARD', 'HTML', 'Dashboard Message of the Day', '<p>Welcome to the jsHarmony System</p>
 ', NULL, 'Dashboard Message of the Day', '2017-10-18 12:02:05.393644', 'S3', '2017-10-19 12:14:32.861784', 'S3');
 
 

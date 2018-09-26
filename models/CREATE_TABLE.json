@@ -2,15 +2,15 @@
  "POPUP_EXEC_CREATE_TABLE": {
   "inherits": "POPUP_EXEC",
   "title": "Table Create",
-  "onload":"$('#get_codeschema').text(XExt.UndefinedBlank(_GET['codeschema']));$('#get_codename').text(XExt.UndefinedBlank(_GET['codename']));$('#get_codemean').text(XExt.UndefinedBlank(_GET['codemean']));",
+  "onload":"jsh.$root('.get_codeschema').text(XExt.UndefinedBlank(_GET['codeschema']));jsh.$root('.get_codename').text(XExt.UndefinedBlank(_GET['codename']));jsh.$root('.get_codemean').text(XExt.UndefinedBlank(_GET['codemean']));",
   "fields": [
     {"name":"question",
-     "value":"Are you sure you want to create table <span id='get_codeschema'></span>.ucod_<span id='get_codename'></span> ? <br /> <span id='get_codemean'></span>"},
-    {"name":"codeschema","type":"varchar","length":"16","access":"BU",
+     "value":"Are you sure you want to create table <span class='get_codeschema'></span>.ucod_<span class='get_codename'></span> ? <br /> <span class='get_codemean'></span>"},
+    {"name":"codeschema","type":"varchar","length":"16","actions":"BU",
      "default": "js:XExt.UndefinedBlank(_GET['codeschema'])","control":"hidden"},
-    {"name":"codename","type":"varchar","length":"16","access":"BU",
+    {"name":"codename","type":"varchar","length":"16","actions":"BU",
      "default": "js:XExt.UndefinedBlank(_GET['codename'])","control":"hidden"},
-    {"name":"codemean","type":"varchar","length":"128","access":"BU",
+    {"name":"codemean","type":"varchar","length":"128","actions":"BU",
      "default": "js:XExt.UndefinedBlank(_GET['codemean'])","control":"hidden"}
   ]
  }, 
@@ -20,7 +20,7 @@
   "sqlexec": "%%%PROC_RUN%%% jsharmony.create_ucod%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
   "fields": [
     {"name":"question",
-     "value":"Are you sure you want to create table <span id='get_codeschema'></span>.ucod_<span id='get_codename'></span> ? <br /> <span id='get_codemean'></span>"}
+     "value":"Are you sure you want to create table <span class='get_codeschema'></span>.ucod_<span class='get_codename'></span> ? <br /> <span class='get_codemean'></span>"}
   ]
  }, 
  "POPUP_EXEC_CREATE_UCOD2": {
@@ -29,7 +29,7 @@
   "sqlexec": "%%%PROC_RUN%%% jsharmony.create_ucod2%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
   "fields": [
     {"name":"question",
-     "value":"Are you sure you want to create table <span id='get_codeschema'></span>.ucod2_<span id='get_codename'></span> ? <br /> <span id='get_codemean'></span>"}
+     "value":"Are you sure you want to create table <span class='get_codeschema'></span>.ucod2_<span class='get_codename'></span> ? <br /> <span class='get_codemean'></span>"}
   ]
  }, 
  "POPUP_EXEC_CREATE_GCOD": {
@@ -38,7 +38,7 @@
   "sqlexec": "%%%PROC_RUN%%% jsharmony.create_gcod%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
   "fields": [
     {"name":"question",
-     "value":"Are you sure you want to create table <span id='get_codeschema'></span>.gcod_<span id='get_codename'></span> ? <br /> <span id='get_codemean'></span>"}
+     "value":"Are you sure you want to create table <span class='get_codeschema'></span>.gcod_<span class='get_codename'></span> ? <br /> <span class='get_codemean'></span>"}
   ]
  }, 
  "POPUP_EXEC_CREATE_GCOD2": {
@@ -47,7 +47,7 @@
   "sqlexec": "%%%PROC_RUN%%% jsharmony.create_gcod2%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
   "fields": [
     {"name":"question",
-     "value":"Are you sure you want to create table <span id='get_codeschema'></span>.gcod2_<span id='get_codename'></span> ? <br /> <span id='get_codemean'></span>"}
+     "value":"Are you sure you want to create table <span class='get_codeschema'></span>.gcod2_<span class='get_codename'></span> ? <br /> <span class='get_codemean'></span>"}
   ]
  } 
 }

@@ -3,67 +3,62 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title><%=global.site_title%> - <%= title %></title>
+<title><%=jsh.Config.site_title%> - <%= title %></title>
 <link href='https://fonts.googleapis.com/css?family=Droid+Sans|Material+Icons|PT+Sans' rel='stylesheet' type='text/css' />
-<link rel="stylesheet" type="text/css" href="<%-req.baseurl%>system.css" />
-<script type="text/javascript"><%-req.getBaseJS()%></script>
-<script type="text/javascript" src="/js/main.js"></script>
-<% if(req.isAuthenticated){ %><script type="text/javascript" src="/js/browser.update.js"></script><% } %>
+<link rel="stylesheet" type="text/css" href="<%-req.baseurl%>application.css" />
+<script type="text/javascript" src="/js/jsHarmony.js"></script>
+<script type="text/javascript">var <%-req.jshsite.instance%> = new jsHarmony(<%-req.getJSClientParams()%>);</script>
 <script type="text/javascript" src="/js/site.js"></script>
-<script type="text/javascript" src="<%-req.baseurl%>system.js"></script>
-<script type="text/javascript" src="/jquery-ui/js/jquery-ui-1.10.3.custom-aspa.min.js"></script>
-<link rel="stylesheet" href="/jquery-ui/css/jquery-ui-1.10.3.custom.min.css" />
-<script type="text/javascript" src="/js/jquery.colorbox-min.js"></script>
-<link rel="stylesheet" href="/js/colorbox/colorbox.css" />
+<script type="text/javascript" src="<%-req.baseurl%>application.js"></script>
 </head>
 
 <body>
-<div id="xmain">
+<div class="xmain">
 
-<div id="xhead">
+<div class="xhead">
   <% if(req.isAuthenticated){ %>
-    <div id="xtoplinks"><img src="/images/toplinks_corner.png" id="xtoplinks_corner" alt="" title="" />
-      <b><%=global.site_title%>:</b>&nbsp; <%=req.user_name%> &nbsp;|&nbsp; 
-      <a id="toplink_help" class="static" href="<%-req.baseurl%>HSHOWL/" onclick="XExt.popupForm('HSHOWL'); return false;">Help</a> &nbsp;|&nbsp; 
+    <div class="xtoplinks"><img src="/images/toplinks_corner.png" class="xtoplinks_corner" alt="" title="" />
+      <b><%=jsh.Config.site_title%>:</b>&nbsp; <%=req.user_name%> &nbsp;|&nbsp; 
+      <a class="toplink_help" class="static" href="<%-req.baseurl%>HSHOWL/" onclick="<%=req.jshsite.instance%>.XExt.popupForm('HSHOWL'); return false;">Help</a> &nbsp;|&nbsp; 
       <a href="/logout">Logout</a>
     </div>
   <% } %>
-  <a id="xbrand_link" href="<%-ejsext.iif(req.isAuthenticated,'',global.home_url)%>/">&nbsp;</a>
-  <div id="xlogo">
-    <a id="xlogoimg" href="<%-ejsext.iif(req.isAuthenticated,'',global.home_url)%>/"><img src="/images/logo.png" alt="<%=global.site_title%>" title="<%=global.site_title%>" /></a>
-    <a id="xsublogo" href="<%-ejsext.iif(req.isAuthenticated,'',global.home_url)%>/"><img src="/images/portal_admin.png" /></a>
+  <a class="xbrand_link" href="<%-ejsext.iif(req.isAuthenticated,'',jsh.Config.home_url)%>/">&nbsp;</a>
+  <div class="xlogo">
+    <a class="xlogoimg" href="<%-ejsext.iif(req.isAuthenticated,'',jsh.Config.home_url)%>/"><img src="/images/logo.png" alt="<%=jsh.Config.site_title%>" title="<%=jsh.Config.site_title%>" /></a>
+    <a class="xsublogo" href="<%-ejsext.iif(req.isAuthenticated,'',jsh.Config.home_url)%>/"><img src="/images/portal_admin.png" /></a>
   </div>
   
   <%
   var xmenu_headings = {};
   if('MainMenu' in XMenu){
-    %><div id="xmenu"><%
+    %><div class="xmenu"><%
     	for(var i=0;i<XMenu.MainMenu.length;i++){ menu = XMenu.MainMenu[i];
     	  xmenu_headings[menu.ID] = menu.Title;
-    	  %><a href="<%-menu.Link%>" onclick="<%-menu.OnClick%>" id="menu_<%=menu.ID%>" class="<%-ejsext.iif(menu.Selected,'selected')%>"><%=menu.Title%><div class="bottom"></div></a><%
+    	  %><a href="<%-menu.Link%>" onclick="<%-ejsext.escapeHTML(menu.OnClick)%>" data-id="<%=menu.ID%>" class="menu_<%=menu.ID%> <%-ejsext.iif(menu.Selected,'selected')%>"><%=menu.Title%><div class="bottom"></div></a><%
       }
-    	%><a id="xmenu_more" href="#"><div id="xmenu_more_bg">Menu <img src="/images/arrow_right_white.png" /><div class="bottom"></div></div></a><%
+    	%><a class="xmenu_more" href="#"><div class="xmenu_more_bg">Menu <img src="/images/arrow_right_white.png" /><div class="bottom"></div></div></a><%
     %></div><%
-    %><div id="xmenuside"></div><%
+    %><div class="xmenuside"></div><%
   }
   if('SubMenus' in XMenu){
     for(var parentid in XMenu.SubMenus){ var submenu = XMenu.SubMenus[parentid];
       var parentname = '';
       if(parentid in xmenu_headings) parentname = xmenu_headings[parentid];
-      %><div id="xsubmenu_<%=parentid%>" style="display:none;" class="xsubmenu"><div class="head"><%=parentname%>:</div><%
+      %><div style="display:none;" class="xsubmenu xsubmenu_<%=parentid%>"><div class="head"><%=parentname%>:</div><%
       for(var i=0;i<submenu.length;i++){ menu = submenu[i];
-        %><a href="<%-menu.Link%>" onclick="<%-menu.OnClick%>"><%=menu.Title%></a><%-ejsext.iif(i<submenu.length-1,'<div>&nbsp;|&nbsp;</div>')%><%
+        %><a href="<%-menu.Link%>" onclick="<%-ejsext.escapeHTML(menu.OnClick)%>"><%=menu.Title%></a><%-ejsext.iif(i<submenu.length-1,'<div>&nbsp;|&nbsp;</div>')%><%
       }
       %><a class="xsubmenu_more" href="#">Menu &nbsp;&#9656;</a><%
       %></div><%
-      %><div id="xsubmenuside"></div><%
+      %><div class="xsubmenuside"></div><%
     }
   }
   %>
 </div>
 
-<div id="xbody"><%-ejsext.BreadCrumbs(req, jsh, modelid)%><% if(title){ %>
-<h1 style="display:inline-block;" id="xform_title"><%= title %></h1>
+<div class="xbody"><%-ejsext.BreadCrumbs(req, jsh, modelid)%><% if(title){ %>
+<h1 style="display:inline-block;" class="xform_title"><%= title %></h1>
 <% } %><%- body %>
 </div><!-- xbody -->
 

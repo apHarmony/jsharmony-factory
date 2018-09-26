@@ -25,66 +25,118 @@ var express = require('express');
 var os = require("os");
 var _ = require('lodash');
 var jsHarmony = require('jsharmony');
+var jsHarmonyModule = require('jsharmony/jsHarmonyModule');
+var jsHarmonySite = require('jsHarmony/jsHarmonySite');
+var jsHarmonyRouter = require('jsHarmony/jsHarmonyRouter');
 var HelperFS = jsHarmony.lib.HelperFS;
 var Helper = jsHarmony.lib.Helper;
 var cookieParser = require('cookie-parser');
+var jsHarmonyFactoryConfig = require('./jsharmonyFactoryConfig.js');
+var jsHarmonyFactoryMailer = require('./lib/Mailer.js');
+var jsHarmonyFactoryJobProc = require('./models/_jobproc.js');
 
 var agreement = require('./models/_agreement.js');
 var adminfuncs = require('./models/_funcs.js');
 var menu = require('./models/_menu.js');
 
-function jsHarmonyFactory(adminConfig, clientConfig, onSettingsLoaded){
+function jsHarmonyFactory(adminConfig, clientConfig){
   var _this = this;
+  _this.Config = new jsHarmonyFactoryConfig();
   _this.typename = 'jsHarmonyFactory';
-  var factorypath = path.dirname(module.filename);
+  _this.adminConfig = adminConfig||{};
+  _this.clientConfig = clientConfig;
 
-  if(!global.jsHarmonyFactorySettings_Loaded) jsHarmonyFactory.LoadSettings();
-  HelperFS.loadViews(factorypath + '/views', '');
-  if(!global.modeldir) global.modeldir = [];
-  global.modeldir.unshift({ path: factorypath + '/models/', component: 'jsharmony-factory' });
-  this.app = jsHarmony.App({'noroutes':1});
-  this.app.jsh.SetJobProc(global.JobProc);
-  this.VerifySettings();
-
-  global.mailer = require('./lib/Mailer.js');
-  this.app.use(express.static(path.join(__dirname, 'public')));
-
-  if(clientConfig){
-    clientConfig = Helper.MergeConfig(jsHarmonyFactory.GetDefaultClientConfig(this.app.jsh),clientConfig);
-    _this.clientConfig = clientConfig;
-    this.app.get(/^\/client$/, function (req, res, next) { res.redirect('/client/'); });
-    this.app.use('/client', cookieParser(global.clientcookiesalt, { path: '/client/' }));
-    this.app.all('/client/login', function (req, res, next) { req._override_basetemplate = 'public'; req._override_title = 'Customer Portal Login'; next(); });
-    this.app.all('/client/login/forgot_password', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
-    this.app.all('/client/logout', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
-    _this.clientRouter = jsHarmony.Init.Routes(this.app.jsh, clientConfig);
-    this.app.use('/client', _this.clientRouter);
-  }
-
-  if(!adminConfig) adminConfig = {};
-  adminConfig = Helper.MergeConfig(jsHarmonyFactory.GetDefaultAdminConfig(this.app.jsh),adminConfig);
-  _this.adminConfig = adminConfig;
-  this.app.use('/', cookieParser(global.admincookiesalt, { path: '/' }));
-  this.app.all('/login', function (req, res, next) { req._override_basetemplate = 'public'; req._override_title = 'Login'; next(); });
-  this.app.all('/login/forgot_password', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
-  this.app.all('/logout', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
-  _this.adminRouter = jsHarmony.Init.Routes(this.app.jsh, adminConfig);
-  this.app.use('/', _this.adminRouter);
-
-  jsHarmony.Init.addDefaultRoutes(this.app);
+  _this.adminRouter = null;
+  _this.clientRouter = null;
 }
 
-jsHarmonyFactory.GetDefaultAdminConfig = function(jsh){
+jsHarmonyFactory.prototype = new jsHarmonyModule();
+
+jsHarmonyFactory.Application = function(adminConfig, clientConfig){
+  return (new jsHarmonyFactory(adminConfig, clientConfig)).Application();
+}
+
+jsHarmonyFactory.prototype.Init = function(cb){
+  var _this = this;
+
+  _this.jsh.Mailer = jsHarmonyFactoryMailer(_this.Config.mailer_settings, _this.jsh.Log.info);
+  this.jsh.SetJobProc(new jsHarmonyFactoryJobProc(this, _this.jsh.DB['default']));
+
+  if(_this.clientConfig){
+    this.jsh.Sites['client'] = new jsHarmonySite(_this.GetDefaultClientConfig());
+    this.jsh.Sites['client'].Merge(_this.clientConfig);
+  }
+  this.jsh.Sites['admin'] = new jsHarmonySite(_this.GetDefaultAdminConfig());
+  this.jsh.Sites['admin'].Merge(_this.adminConfig);
+
+  _this.adminConfig = this.jsh.Sites['admin'];
+  _this.clientConfig = this.jsh.Sites['client'];
+
+  if(typeof _this.jsh.Config.server.https_port == 'undefined'){
+    if(_this.adminConfig && _this.adminConfig.auth && (typeof _this.adminConfig.auth.allow_insecure_http_logins === 'undefined'))
+      _this.adminConfig.auth.allow_insecure_http_logins = true;
+    if(_this.clientConfig && _this.clientConfig.auth && (typeof _this.clientConfig.auth.allow_insecure_http_logins === 'undefined'))
+      _this.clientConfig.auth.allow_insecure_http_logins = true;
+  }
+
+  _this.jsh.Config.server.add_default_routes = false;
+  this.jsh.CreateServer(_this.jsh.Config.server, function(server){
+    _this.jsh.Servers['default'] = server;
+
+    var app = _this.app = _this.jsh.Servers['default'].app;
+
+    _this.VerifyConfig();
+
+    app.use(express.static(path.join(__dirname, 'public')));
+
+    if(_this.clientConfig){
+      app.get(/^\/client$/, function (req, res, next) { res.redirect('/client/'); });
+      app.use('/client', cookieParser(_this.Config.clientcookiesalt, { path: '/client/' }));
+      app.all('/client/login', function (req, res, next) { req._override_basetemplate = 'public'; req._override_title = 'Customer Portal Login'; next(); });
+      app.all('/client/login/forgot_password', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
+      app.all('/client/logout', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
+      _this.clientRouter = jsHarmonyRouter(_this.jsh, 'client');
+      _this.clientRouter.get('*', function(req, res, next){
+        _this.jsh.Gen404(req, res);
+        return;
+      });
+      app.use('/client', _this.clientRouter);
+    }
+
+    app.use('/', cookieParser(_this.Config.admincookiesalt, { path: '/' }));
+    app.all('/login', function (req, res, next) { req._override_basetemplate = 'public'; req._override_title = 'Login'; next(); });
+    app.all('/login/forgot_password', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
+    app.all('/logout', function (req, res, next) { req._override_basetemplate = 'public'; next(); });
+    _this.adminRouter = jsHarmonyRouter(_this.jsh, 'admin');
+    app.use('/', _this.adminRouter);
+
+    _this.jsh.Servers['default'].addDefaultRoutes();
+
+    if(cb) return cb();
+
+  });
+}
+
+jsHarmonyFactory.prototype.Run = function(onServerReady){
+  this.jsh.Servers['default'].Run(onServerReady);
+  this.jsh.AppSrv.JobProc.Run();
+}
+
+jsHarmonyFactory.prototype.GetDefaultAdminConfig = function(){
+  var _this = this;
+  var jsh = this.jsh;
   /*************
    *** ADMIN ***
    *************/
   var jshconfig_admin = {
+    id: 'main',
     basetemplate: 'index',
     baseurl: '/',
+    publicurl: '/',
     show_system_errors: true,
     auth: {
-      salt: global.adminsalt,
-      supersalt: global.adminsalt,
+      salt: _this.Config.adminsalt,
+      supersalt: _this.Config.adminsalt,
       sql_auth: "admin_sql_auth",
       sql_login: "admin_sql_login",
       sql_superlogin: "admin_sql_superlogin",
@@ -95,8 +147,8 @@ jsHarmonyFactory.GetDefaultAdminConfig = function(jsh){
     },
     menu: menu.bind(null, 'S'),
     globalparams: {
-      'barcode_server': global.barcode_settings.server,
-      'scanner_server': global.scanner_settings.server,
+      'barcode_server': _this.Config.barcode_settings.server,
+      'scanner_server': _this.Config.scanner_settings.server,
       'user_id': function (req) { return req.user_id; },
       'user_name': function (req) { return req.user_name; }
     },
@@ -109,23 +161,28 @@ jsHarmonyFactory.GetDefaultAdminConfig = function(jsh){
   }
   jshconfig_admin.private_apps = [
     {
-      '/_funcs/LOG_DOWNLOAD': adminfuncs.LOG_DOWNLOAD
+      '/_funcs/LOG_DOWNLOAD': adminfuncs.LOG_DOWNLOAD,
+      '/_funcs/DEV_DB_SCRIPTS': adminfuncs.DEV_DB_SCRIPTS
     }
   ];
   return jshconfig_admin;
 }
 
-jsHarmonyFactory.GetDefaultClientConfig = function(jsh){
+jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
+  var _this = this;
+  var jsh = this.jsh;
   /**************
    *** CLIENT ***
    **************/
   var jshconfig_client = {
+    id: 'client',
     basetemplate: 'client',
     baseurl: '/client/',
+    publicurl: '/',
     show_system_errors: false,
     auth: {
-      salt: global.clientsalt,
-      supersalt: global.adminsalt,
+      salt: _this.Config.clientsalt,
+      supersalt: _this.Config.adminsalt,
       sql_auth: "client_sql_auth",
       sql_login: "client_sql_login",
       sql_superlogin: "client_sql_superlogin",
@@ -150,7 +207,7 @@ jsHarmonyFactory.GetDefaultClientConfig = function(jsh){
       'user_name': function (req) { return req.user_name; },
       'company_id': function (req) { return req.gdata[jsh.map.client_id]; },
       'company_name': function (req) { return req.gdata[jsh.map.client_name]; },
-      'barcode_server': global.barcode_settings.server
+      'barcode_server': _this.Config.barcode_settings.server
     },
     sqlparams: {
       "TSTMP": "TSTMP",
@@ -195,72 +252,14 @@ jsHarmonyFactory.GetDefaultClientConfig = function(jsh){
   return jshconfig_client;
 }
 
-jsHarmonyFactory.LoadSettings = function(custom_settings_path){
-  if(global.jsHarmonyFactorySettings_Loaded){ throw new Error('jsHarmonyFactory settings already loaded'); }
-
-  //Include appropriate settings file based on Path
-  if (!global.appbasepath) global.appbasepath = path.dirname(require.main.filename);
-  
-  //Create array of application path
-  var mpath = global.appbasepath;
-  var mbasename = '';
-  var patharr = [];
-  while (mbasename = path.basename(mpath)) {
-    patharr.unshift(mbasename);
-    mpath = path.dirname(mpath);
-  }
-  //Load Default Settings
-  require('./app.settings.default.js');
-  //Load app.settings.js
-  if (fs.existsSync(global.appbasepath + '/app.settings.js')) require(global.appbasepath + '/app.settings.js');
-  //Load settings based on Application Path
-  var local_settings_file = global.appbasepath + '/app.settings.' + patharr.join('_') + '.js';
-  if (fs.existsSync(local_settings_file)) require(local_settings_file);
-  //Load settings based on Hostname
-  var host_settings_file = global.appbasepath + '/app.settings.' + os.hostname().toLowerCase() + '.js';
-  if (fs.existsSync(host_settings_file)) require(host_settings_file);
-  //Load custom settings
-  if(custom_settings_path && fs.existsSync(custom_settings_path)) require(custom_settings_path);
-
-  if(!global.JobProc) global.JobProc = require('./models/_jobproc.js');
-  global.jsHarmonyFactorySettings_Loaded = true;
-}
-
-jsHarmonyFactory.prototype.VerifySettings = function(){
-  function verify_config(x, _caption) { if (!x || (_.isObject(x) && _.isEmpty(x))) { console.log('*** Missing app.settings.js setting: ' + _caption); return false; } return true; }
-  var good_config = true;
-  _.each(['clientsalt', 'clientcookiesalt', 'adminsalt', 'admincookiesalt', 'frontsalt'], function (val) { good_config &= verify_config(global[val], 'global.' + val); });
-  if (!global.home_url) global.home_url = '';
-  if ((typeof global.http_port === 'undefined') && (typeof global.https_port === 'undefined')) global.http_port = 0;
-  if (!good_config) { console.log('\r\n*** Invalid config, could not start server ***\r\n'); process.exit(1); }
-}
-
-jsHarmonyFactory.prototype.Run = function (cb) {
+jsHarmonyFactory.prototype.VerifyConfig = function(){
   var _this = this;
-  
-  var jshconfig = { server: {
-    request_timeout: global.request_timeout,
-  } };
-  if(typeof global.http_port !== 'undefined'){
-    _this.app.set('port', process.env.PORT || global.http_port);
-    jshconfig.server.http_port = _this.app.get('port');
-    jshconfig.server.http_ip = global.http_ip;
-  }
-  if(typeof global.https_port !== 'undefined'){
-    _this.app.set('tlsport', process.env.TLSPORT || global.https_port);
-    jshconfig.server.https_port = _this.app.get('tlsport');
-    jshconfig.server.https_ip = global.https_ip;
-    jshconfig.server.https_cert = global.https_cert;
-    jshconfig.server.https_key = global.https_key;
-    jshconfig.server.https_ca = global.https_ca;
-  }
-  else {
-    if(_this.adminConfig && _this.adminConfig.auth && (typeof _this.adminConfig.auth.allow_insecure_http_logins === 'undefined'))
-      _this.adminConfig.auth.allow_insecure_http_logins = true;
-    if(_this.clientConfig && _this.clientConfig.auth && (typeof _this.adminConfig.auth.allow_insecure_http_logins === 'undefined'))
-      _this.clientConfig.auth.allow_insecure_http_logins = true;
-  }
-  jsHarmony.Run(jshconfig,_this.app.jsh,_this.app,cb);
+  function verify_config(x, _caption) { if (!x || (_.isObject(x) && _.isEmpty(x))) { console.log('*** Missing app.config.js setting: ' + _caption); return false; } return true; }
+  var good_config = true;
+  var required_fields = ['adminsalt', 'admincookiesalt'];
+  if(_this.clientConfig) required_fields = required_fields.concat(['clientsalt', 'clientcookiesalt']);
+  _.each(required_fields, function (val) { good_config &= verify_config(_this.Config[val], "config.modules['jsHarmonyFactory']." + val); });
+  if (!good_config) { console.log('\r\n*** Invalid config, could not start server ***\r\n'); process.exit(1); }
 }
 
 exports = module.exports = jsHarmonyFactory;

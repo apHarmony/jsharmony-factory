@@ -3,7 +3,7 @@
     "title":"Help Panels",
     "dev":1,
     "table":"jsharmony.hp",
-    "access":"BIUD", 
+    "actions":"BIUD", 
     "caption":[0,"Help Panel","Help Panels"],
     "layout":"grid", 
     "sort":[{"hp_desc":"asc"}], 
@@ -14,12 +14,12 @@
     "validationlevel": "row",     "comment4":"cell, or row",
     "fields":[
       {"name":"hp_id","type":"bigint","key":1},
-      {"name":"hp_code","type":"varchar","length":50,"access": "BIU","control": "textbox_S",
+      {"name":"hp_code","type":"varchar","length":50,"actions": "BIU","control": "textbox_S",
        "controlstyle":"width:200px;", "caption":"Code",
        "popuplov": {"target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
-          "onpopup": "X_MODELS_ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
+          "onpopup": "jsh.App.X_MODELS.ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
           "popupiconstyle":"position:relative;top:5px;"}},
-      {"name":"hp_desc","type":"varchar","length":"50","validate":["Required","MaxLength:50"],"access":"BIU",
+      {"name":"hp_desc","type":"varchar","length":"50","validate":["Required","MaxLength:50"],"actions":"BIU",
        "control":"textbox_L", "caption":"Name"}
     ],
     "dberrors": [

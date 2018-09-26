@@ -2,25 +2,25 @@
   "NL_BASE": {
     "layout":"grid", 
     "table":"jsharmony.N",
-	"access":"BI", 
-	"sort":["vn_etstmp"], 
-	"caption":[0,"Note","Notes"],
-	"buttons":[{"link":"add:N","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"n_type"}}],
+    "actions":"BI", 
+    "sort":["vn_etstmp"], 
+    "caption":[0,"Note","Notes"],
+    "buttons":[{"link":"add:N","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"n_type"}}],
     "fields":[
-	  {"name":"n_id","type":"bigint","key":1,"datalock":{"C_ID":"client_N_ID"}},
-	  {"name":"n_scope","type":"varchar","length":8,"access":"F","datalock":{"C_ID":"client_N_SCOPE"}},
-	  {"name":"n_scope_id","type":"bigint","access":"F","datalock":{"C_ID":"client_ALWAYS"}},
-	  {"name":"n_etstmp","type":"datetime","length":"7","format":"tstmp","caption":"Posted","access":"B",
+	  {"name":"n_id","type":"bigint","key":1,"datalock":{"C_ID":"N_ID"}},
+	  {"name":"n_scope","type":"varchar","length":8,"foreignkey":1,"datalock":{"C_ID":"N_SCOPE"}},
+	  {"name":"n_scope_id","type":"bigint","foreignkey":1,"datalock":{"C_ID":"ALWAYS"}},
+	  {"name":"n_etstmp","type":"datetime","length":"7","format":"tstmp","caption":"Posted","actions":"B",
        "link":"edit:N"},
-	  {"name":"n_type","type":"varchar","length":8,"access":"F","datalock":{"C_ID":"client_N_TYPE"}},
-	  {"name":"n_sts","type":"varchar","length":8,"caption":"S","caption_ext":"Status","access":"B"},
-      {"name":"n_eu_fmt","type":"varchar","length":120,"caption":"Author","access":"B",
+	  {"name":"n_type","type":"varchar","length":8,"foreignkey":1,"datalock":{"C_ID":"N_TYPE"}},
+	  {"name":"n_sts","type":"varchar","length":8,"caption":"S","caption_ext":"Status","actions":"B"},
+      {"name":"n_eu_fmt","type":"varchar","length":120,"caption":"Author","actions":"B",
        "sqlselect":"(jsharmony.mycuser_fmt(n_eu))"},
-      {"name":"title_h","type":"varchar","length":8,"access":""},
-      {"name":"c_name_ext","type":"varchar","length":255,"access":""},
-      {"name":"e_name","type":"varchar","length":120,"access":""},
-	  {"name":"title_b","type":"varchar","length":8,"caption":"Record","access":""},
-	  {"name":"n_note","type":"varchar","length":"9999999","caption":"Note","access":"B","controlstyle":"width:540px;"}
+      {"name":"title_h","type":"varchar","length":8,"actions":""},
+      {"name":"c_name_ext","type":"varchar","length":255,"actions":""},
+      {"name":"e_name","type":"varchar","length":120,"actions":""},
+	  {"name":"title_b","type":"varchar","length":8,"caption":"Record","actions":""},
+	  {"name":"n_note","type":"varchar","length":"9999999","caption":"Note","actions":"B","controlstyle":"width:540px;"}
 	]
   },
   "NL": {
@@ -28,31 +28,31 @@
   },  
   "NL_U_BASE": {
     "inherits": "NL",
-    "access":"BI", 
+    "actions":"BI", 
     "title":"User Notes",
     "caption":[0,"Note","User Notes"]
   },
   "NL_C_BASE": {
     "inherits": "NL",
-    "access":"B", 
+    "actions":"B", 
     "title":"Customer Notes",
     "caption":[0,"Note","Customer Notes"],
     "buttons":[]
   },
   "NL_S_BASE": {
     "inherits": "NL",
-    "access":"B", 
+    "actions":"B", 
     "title":"System Notes",
     "caption":[0,"Note","System Notes"],
     "buttons":[],
     "fields": [
-      {"name": "n_eu_fmt", "access":""},
+      {"name": "n_eu_fmt", "actions":""},
       {"name":"n_etstmp", "link":"edit:NB"}
     ]
   },
   "NL_CC_BASE": {
     "inherits": "NL",
-    "access":"BI", 
+    "actions":"BI", 
     "title":"Customer Notes",
     "caption":[0,"Note","Customer Notes"]
   },

@@ -1,5 +1,5 @@
 <style type="text/css">
-#agreement_text{
+.agreement_text{
   text-align:justify;
   font-size:11px;
   line-height:15px; 
@@ -10,7 +10,7 @@
   border:1px solid black;
 }
 @media print {
-  #agreement_text {
+  .agreement_text {
     height:auto;
     overflow:visible;
     width:auto;
@@ -22,20 +22,24 @@
   <a href="#" onclick="window.print(); return false;"><img src="/images/icon_print.png" alt="Print" title="Print" />Print</a>
 </div>
 
-<div id="step1"><!-- step1 container -->
+<div class="step1"><!-- step1 container -->
 <script type="text/javascript" src="/js/agreement.form.js"></script>
-<div id="agreement_text">
+<script type="text/javascript">
+<%=req.jshsite.instance%>.App.Agreement = new jsHarmonyAgreement(<%=req.jshsite.instance%>);
+<%=req.jshsite.instance%>.App.Agreement.Init();
+</script>
+<div class="agreement_text">
 <%-cms_agreement%>
 </div>
 
 <table style="padding-left:9px;margin-top:20px;" cellpadding="2">
-  <tr><td colspan="2" style="padding-bottom:10px;"><input type="checkbox" name="A_Accept" id="A_Accept"> <label for="A_Accept">(E-signature) I accept the terms of this agreement, and verify that the information below is correct.</labe> </td></tr>
-  <tr><td style="width:200px;">Today's Date:</td><td><input type="text" name="A_Date" id="A_Date" style="width:100px;" maxlength="10" readonly="readonly" /></td></tr>
-  <tr><td>Signed Name:</td><td><input type="text" name="A_Name" id="A_Name" style="width:230px;" maxlength="72" /></td></tr>
-  <tr><td>Date of Birth:</td><td><input type="text" name="A_DOB" id="A_DOB" style="width:100px;" maxlength="10" /> (MM/DD/YYYY)</td></tr>
+  <tr><td colspan="2" style="padding-bottom:10px;"><input type="checkbox" name="A_Accept" class="A_Accept"> <label for="A_Accept">(E-signature) I accept the terms of this agreement, and verify that the information below is correct.</labe> </td></tr>
+  <tr><td style="width:200px;">Today's Date:</td><td><input type="text" name="A_Date" class="A_Date" style="width:100px;" maxlength="10" readonly="readonly" /></td></tr>
+  <tr><td>Signed Name:</td><td><input type="text" name="A_Name" class="A_Name" style="width:230px;" maxlength="72" /></td></tr>
+  <tr><td>Date of Birth:</td><td><input type="text" name="A_DOB" class="A_DOB" style="width:100px;" maxlength="10" /> (MM/DD/YYYY)</td></tr>
 </table>
 
-<a href="#"  onclick="step1_submit(); return false;" style="display:inline-block;background-color:#426cc2;color:#fff;padding:7px 25px;margin-top:15px;margin-left:220px;">Continue -></a>
+<a href="#"  onclick="<%=req.jshsite.instance%>.App.Agreement.step1_submit(); return false;" style="display:inline-block;background-color:#426cc2;color:#fff;padding:7px 25px;margin-top:15px;margin-left:220px;">Continue -></a>
 <div class="clear" style="margin-top:20px;"></div>
 
 </div><!-- step1 container -->

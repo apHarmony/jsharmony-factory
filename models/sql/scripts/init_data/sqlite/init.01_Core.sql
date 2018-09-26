@@ -1,115 +1,50 @@
-pragma foreign_keys = ON;
-
-begin;
-
-
-/***************AUD_H***************/
-CREATE TABLE jsharmony_aud_h (
-  aud_seq integer primary key autoincrement NOT NULL,
-  table_name text,
-  table_id integer NOT NULL,
-  aud_op text,
-  aud_u text,
-  db_k text NOT NULL DEFAULT '0',
-  aud_tstmp text NOT NULL,
-  c_id integer,
-  e_id integer,
-  ref_name text,
-  ref_id integer,
-  subj text
-);
-
-/***************AUD_D***************/
-CREATE TABLE jsharmony_aud_d
-(
-  aud_seq integer NOT NULL,
-  column_name text NOT NULL,
-  column_val text,
-  PRIMARY KEY (aud_seq, column_name),
-  FOREIGN KEY (aud_seq) REFERENCES jsharmony_aud_h(aud_seq)
-);
-
-/*********DUAL*********/
-CREATE TABLE jsharmony_dual (
-  dual_ident integer primary key NOT NULL,
-  dummy text NOT NULL,
-  dual_integer integer,
-  dual_text text
-);
 INSERT INTO jsharmony_dual (dummy, dual_ident, dual_integer, dual_text) VALUES ('X', 1, NULL, NULL);
 
-/*********UCOD_AC*********/
-jsharmony.create_ucod('jsharmony','ac','');
 insert into jsharmony_ucod_ac (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL);
 insert into jsharmony_ucod_ac (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL);
 
-/*********UCOD_AC1*********/
-jsharmony.create_ucod('jsharmony','ac1','');
 insert into jsharmony_ucod_ac1 (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'A', 'Active', NULL, NULL);
 insert into jsharmony_ucod_ac1 (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Closed', NULL, NULL);
 
-/*********UCOD_AHC*********/
-jsharmony.create_ucod('jsharmony','ahc','');
 insert into jsharmony_ucod_ahc (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL);
 insert into jsharmony_ucod_ahc (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL);
 insert into jsharmony_ucod_ahc (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'HOLD', 'Hold', NULL, NULL);
 
-/*********UCOD_COUNTRY*********/
-jsharmony.create_ucod('jsharmony','country','');
 insert into jsharmony_ucod_country(codseq,codeval,codetxt,codecode,codeattrib) values (NULL,'USA','United States',NULL,NULL);
 insert into jsharmony_ucod_country(codseq,codeval,codetxt,codecode,codeattrib) values (NULL,'CANADA','Canada',NULL,NULL);
 insert into jsharmony_ucod_country(codseq,codeval,codetxt,codecode,codeattrib) values (NULL,'MEXICO','Mexico',NULL,NULL);
 
-/*********UCOD_D_SCOPE*********/
-jsharmony.create_ucod('jsharmony','d_scope','');
 insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Customer', NULL, NULL);
 insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'S', 'System', NULL, NULL);
 insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'O', 'Order', NULL, NULL);
 insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL);
 insert into jsharmony_ucod_d_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (5, 'PE', 'User', NULL, NULL);
 
-
-/*********UCOD_N_SCOPE*********/
-jsharmony.create_ucod('jsharmony','n_scope','');
 insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Customer', NULL, NULL);
 insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'S', 'System', NULL, NULL);
 insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'CT', 'Cust Contact', NULL, NULL);
 insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL);
 insert into jsharmony_ucod_n_scope (codseq, codeval, codetxt, codecode, codeattrib) VALUES (5, 'PE', 'User', NULL, NULL);
 
-/*********UCOD_N_TYPE*********/
-jsharmony.create_ucod('jsharmony','n_type','');
 insert into jsharmony_ucod_n_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'C', 'Client', NULL, NULL);
 insert into jsharmony_ucod_n_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (3, 'S', 'System', NULL, NULL);
 insert into jsharmony_ucod_n_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'U', 'User', NULL, NULL);
 
-/*********UCOD_PPD_TYPE*********/
-jsharmony.create_ucod('jsharmony','ppd_type','');
 insert into jsharmony_ucod_ppd_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'C', 'Character', NULL, NULL);
 insert into jsharmony_ucod_ppd_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'N', 'Number', NULL, NULL);
 
-/*********UCOD_RQST_ATYPE*********/
-jsharmony.create_ucod('jsharmony','rqst_atype','');
 insert into jsharmony_ucod_rqst_atype (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'MESSAGE', 'Message', NULL, NULL);
 insert into jsharmony_ucod_rqst_atype (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'REPORT', 'Report Program', NULL, NULL);
 
-/*********UCOD_RQST_SOURCE*********/
-jsharmony.create_ucod('jsharmony','rqst_source','');
 insert into jsharmony_ucod_rqst_source (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'ADMIN', 'Administrator Interface', NULL, NULL);
 insert into jsharmony_ucod_rqst_source (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'CLIENT', 'Client Interface', NULL, NULL);
 
-/*********UCOD_TXT_TYPE*********/
-jsharmony.create_ucod('jsharmony','txt_type','');
 insert into jsharmony_ucod_txt_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'HTML', 'HTML', NULL, NULL);
 insert into jsharmony_ucod_txt_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'TEXT', 'Text', NULL, NULL);
 
-/*********UCOD_V_STS*********/
-jsharmony.create_ucod('jsharmony','v_sts','');
 insert into jsharmony_ucod_v_sts (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'ERROR', 'Error', NULL, NULL);
 insert into jsharmony_ucod_v_sts (codseq, codeval, codetxt, codecode, codeattrib) VALUES (1, 'OK', 'OK', NULL, NULL);
 
-/*********UCOD2_COUNTRY_STATE*********/
-jsharmony.create_ucod2('jsharmony','country_state','');
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('CANADA','AB','Alberta');
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('CANADA','BC','British Columbia');
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('CANADA','MB','Manitoba');
@@ -215,284 +150,12 @@ insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('US
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('USA','WV','West Virginia');
 insert into jsharmony_ucod2_country_state(codeval1,codeval2,codetxt) values ('USA','WY','Wyoming');
 
-/*********GCOD2_D_SCOPE_D_CTGR*********/
-jsharmony.create_gcod2('jsharmony','d_scope_d_ctgr','');
-
-/***************CPE***************/
-create table jsharmony_cpe (
-    pe_id integer primary key autoincrement NOT NULL,
-    c_id integer NOT NULL,
-    pe_sts text DEFAULT 'ACTIVE' NOT NULL,
-    pe_stsdt text,
-    pe_fname text NOT NULL,
-    pe_mname text,
-    pe_lname text NOT NULL,
-    pe_jtitle text,
-    pe_bphone text,
-    pe_cphone text,
-    pe_email text NOT NULL,
-    pe_etstmp text,
-    pe_eu text,
-    pe_mtstmp text,
-    pe_mu text,
-    pe_pw1 text,
-    pe_pw2 text,
-    pe_hash blob DEFAULT X'00' NOT NULL,
-    pe_ll_ip text,
-    pe_ll_tstmp text,
-    pe_snotes text,
-    FOREIGN KEY (pe_sts) REFERENCES jsharmony_ucod_ahc(codeval),
-    CHECK (COALESCE(pe_email,'')<>'')
-);
-create trigger insert_jsharmony_cpe after insert on jsharmony_cpe
-begin
-  update jsharmony_cpe set 
-    pe_stsdt  = datetime('now','localtime'),
-    pe_eu     = (select context from jsharmony_meta limit 1),
-    pe_etstmp = datetime('now','localtime'),
-    pe_mu     = (select context from jsharmony_meta limit 1),
-    pe_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
-
-/***************CR***************/
-CREATE TABLE jsharmony_cr (
-  cr_id integer primary key autoincrement NOT NULL,
-  cr_seq integer NOT NULL,
-  cr_sts text NOT NULL DEFAULT 'ACTIVE',
-  cr_name text NOT NULL,
-  cr_desc text NOT NULL,
-  cr_snotes text,
-  cr_code text,
-  cr_attrib text,
-  UNIQUE (cr_desc),
-  UNIQUE (cr_name),
-  FOREIGN KEY (cr_sts) REFERENCES jsharmony_ucod_ahc(codeval)
-);
 INSERT INTO jsharmony_cr (cr_seq, cr_sts, cr_name, cr_desc, cr_code, cr_attrib) VALUES (1, 'ACTIVE', 'CSYSADMIN', 'Administrator', NULL,NULL);
 INSERT INTO jsharmony_cr (cr_seq, cr_sts, cr_name, cr_desc, cr_code, cr_attrib) VALUES (2, 'ACTIVE', 'CX_B', 'Browse', NULL, NULL);
 INSERT INTO jsharmony_cr (cr_seq, cr_sts, cr_name, cr_desc, cr_code, cr_attrib) VALUES (3, 'ACTIVE', 'CX_X', 'Entry / Update', NULL, NULL);
 INSERT INTO jsharmony_cr (cr_seq, cr_sts, cr_name, cr_desc, cr_code, cr_attrib) VALUES (1, 'ACTIVE', 'CUSER', 'Client User', NULL, NULL);
 INSERT INTO jsharmony_cr (cr_seq, cr_sts, cr_name, cr_desc, cr_code, cr_attrib) VALUES (0, 'ACTIVE', 'C*', 'All Users', NULL, NULL);
 
-/***************D***************/
-CREATE TABLE jsharmony_d (
-  d_id integer primary key autoincrement NOT NULL,
-  d_scope text NOT NULL DEFAULT 'S',
-  d_scope_id integer NOT NULL DEFAULT 0,
-  c_id integer,
-  e_id integer,
-  d_sts text NOT NULL DEFAULT 'A',
-  d_ctgr text NOT NULL,
-  d_desc text,
-  d_ext text,
-  d_size integer,
-  d_etstmp text,
-  d_eu text,
-  d_mtstmp text,
-  d_mu text,
-  d_utstmp text,
-  d_uu text,
-  d_synctstmp text,
-  d_snotes text,
-  d_id_main integer,
-  FOREIGN KEY (d_scope, d_ctgr) REFERENCES jsharmony_gcod2_d_scope_d_ctgr (codeval1, codeval2),
-  FOREIGN KEY (d_scope) REFERENCES jsharmony_ucod_d_scope (codeval)
-);
-create trigger insert_jsharmony_d after insert on jsharmony_d
-begin
-  update jsharmony_d set 
-    d_eu     = (select context from jsharmony_meta limit 1),
-    d_etstmp = datetime('now','localtime'),
-    d_mu     = (select context from jsharmony_meta limit 1),
-    d_mtstmp = datetime('now','localtime'),
-    d_uu     = (select context from jsharmony_meta limit 1),
-    d_utstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
-
-/***************HP***************/
-CREATE TABLE jsharmony_hp (
-  hp_id integer primary key autoincrement NOT NULL,
-  hp_code text NOT NULL,
-  hp_desc text NOT NULL,
-  UNIQUE (hp_code),
-  UNIQUE (hp_desc)
-);
-
-/***************H***************/
-CREATE TABLE jsharmony_h (
-  h_id integer primary key autoincrement NOT NULL,
-  hp_code text,
-  h_title text NOT NULL,
-  h_text text NOT NULL,
-  h_etstmp text,
-  h_eu text,
-  h_mtstmp text,
-  h_mu text,
-  h_seq integer,
-  h_index_a integer NOT NULL DEFAULT 1,
-  h_index_p integer NOT NULL DEFAULT 1,
-  UNIQUE (h_title),
-  FOREIGN KEY (hp_code) REFERENCES jsharmony_hp (hp_code)
-);
-create trigger insert_jsharmony_h after insert on jsharmony_h
-begin
-  update jsharmony_h set 
-    h_eu     = (select context from jsharmony_meta limit 1),
-    h_etstmp = datetime('now','localtime'),
-    h_mu     = (select context from jsharmony_meta limit 1),
-    h_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
-
-/***************N***************/
-CREATE TABLE jsharmony_n (
-  n_id integer primary key autoincrement NOT NULL,
-  n_scope text NOT NULL DEFAULT 'S',
-  n_scope_id integer NOT NULL DEFAULT 0,
-  n_sts text NOT NULL DEFAULT 'A',
-  c_id integer,
-  e_id integer,
-  n_type text,
-  n_note text NOT NULL,
-  n_etstmp text,
-  n_eu text,
-  n_mtstmp text,
-  n_mu text,
-  n_synctstmp text,
-  n_snotes text,
-  n_id_main integer,
-  FOREIGN KEY (n_scope) REFERENCES jsharmony_ucod_n_scope (codeval),
-  FOREIGN KEY (n_sts) REFERENCES jsharmony_ucod_ac1 (codeval),
-  FOREIGN KEY (n_type) REFERENCES jsharmony_ucod_n_type (codeval) 
-);
-create trigger insert_jsharmony_n after insert on jsharmony_n
-begin
-  update jsharmony_n set 
-    n_eu     = (select context from jsharmony_meta limit 1),
-    n_etstmp = datetime('now','localtime'),
-    n_mu     = (select context from jsharmony_meta limit 1),
-    n_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
-/***************PE***************/
-create table jsharmony_pe (
-    pe_id integer primary key autoincrement NOT NULL,
-    pe_sts text DEFAULT 'ACTIVE' NOT NULL,
-    pe_stsdt text,
-    pe_fname text NOT NULL,
-    pe_mname text,
-    pe_lname text NOT NULL,
-    pe_jtitle text,
-    pe_bphone text,
-    pe_cphone text,
-    pe_country text DEFAULT 'USA' NOT NULL,
-    pe_addr text,
-    pe_city text,
-    pe_state text,
-    pe_zip text,
-    pe_email text NOT NULL,
-    pe_startdt text,
-    pe_enddt date,
-    pe_unotes text,
-    pe_etstmp text,
-    pe_eu text,
-    pe_mtstmp text,
-    pe_mu text,
-    pe_pw1 text,
-    pe_pw2 text,
-    pe_hash blob DEFAULT X'00' NOT NULL,
-    pe_ll_ip text,
-    pe_ll_tstmp text,
-    pe_snotes text,
-    FOREIGN KEY (pe_sts) REFERENCES jsharmony_ucod_ahc(codeval),
-    FOREIGN KEY (pe_country) REFERENCES jsharmony_ucod_country(codeval),
-    FOREIGN KEY (pe_country, pe_state) REFERENCES jsharmony_ucod2_country_state(codeval1,codeval2),
-    CHECK (COALESCE(pe_email,'')<>'')
-);
-create trigger insert_jsharmony_pe after insert on jsharmony_pe
-begin
-  update jsharmony_pe set 
-    pe_startdt = ifnull(NEW.pe_startdt,date('now','localtime')),
-    pe_stsdt  = datetime('now','localtime'),
-    pe_eu     = (select context from jsharmony_meta limit 1),
-    pe_etstmp = datetime('now','localtime'),
-    pe_mu     = (select context from jsharmony_meta limit 1),
-    pe_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-
-  select case when ifnull(NEW.pe_pw1,'')<>ifnull(NEW.pe_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
-  select case when length(ifnull(NEW.pe_pw1,''))< 6 then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
-  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "jsharmony_pe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select pp_val from jsharmony_v_pp where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_S'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update jsharmony_pe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'\;
-
-  %%%AUDIT_I("PE","new.PE_ID","PE_ID","null","null","null")%%%
-  update jsharmony_meta set aud_seq = null\;
-end;
-
-create trigger delete_jsharmony_pe before delete on jsharmony_pe
-begin
-  %%%AUDIT_D_MULT("PE","old.PE_ID",["PE_ID","PE_STS","PE_FNAME","PE_MNAME","PE_LNAME","PE_JTITLE","PE_BPHONE","PE_CPHONE","PE_EMAIL","PE_LL_TSTMP"],"null","null","null")%%%
-  update jsharmony_meta set aud_seq = null\;
-end;
-
-create trigger update_jsharmony_pe before update on jsharmony_pe
-begin
-  select case when NEW.pe_stsdt is null then raise(FAIL,'pe_stsdt cannot be null') end\;
-  select case when NEW.pe_id <> OLD.pe_id then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-
-  select case when ifnull(NEW.pe_pw1,'')<>ifnull(NEW.pe_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
-  select case when (NEW.pe_pw1 is not null) and (length(ifnull(NEW.pe_pw1,''))< 6) then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
-
-  %%%AUDIT_U_MULT("PE","old.PE_ID",["PE_ID","PE_STS","PE_FNAME","PE_MNAME","PE_LNAME","PE_JTITLE","PE_BPHONE","PE_CPHONE","PE_EMAIL","PE_LL_TSTMP"],"null","null","null")%%%
-
-  %%%AUDIT_U_CUSTOM("PE","old.PE_ID","coalesce(NEW.pe_pw1,'') <> '' and coalesce(NEW.pe_pw1,'') <> coalesce(OLD.pe_pw1,'')","null","null","null")%%%
-  insert into jsharmony_aud_d(aud_seq,column_name,column_val)
-    select (select aud_seq from jsharmony_meta),'PE_PW1','*'
-    where (coalesce(NEW.pe_pw1,'') <> '' and coalesce(NEW.pe_pw1,'') <> coalesce(OLD.pe_pw1,''))\;
-
-
-  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "jsharmony_pe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select pp_val from jsharmony_v_pp where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_S'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update jsharmony_pe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'
-    where NEW.pe_pw1 is not null\;
-
-  --jsharmony_d exists error
-  update jsharmony_pe set
-    pe_stsdt  = case when (%%%NONEQUAL("NEW.pe_sts","OLD.pe_sts")%%%) then datetime('now','localtime') else NEW.pe_stsdt end,
-    pe_mu     = (select context from jsharmony_meta limit 1),
-    pe_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid and exists(select * from jsharmony_meta where aud_seq is not null)\; 
-
-  update jsharmony_meta set aud_seq = null\;
-end;
-
-  /***************PPD***************/
-CREATE TABLE jsharmony_ppd (
-  ppd_id integer primary key autoincrement NOT NULL,
-  ppd_process text NOT NULL,
-  ppd_attrib text NOT NULL,
-  ppd_desc text NOT NULL,
-  ppd_type text NOT NULL,
-  codename text,
-  ppd_etstmp text,
-  ppd_eu text,
-  ppd_mtstmp text,
-  ppd_mu text,
-  ppd_snotes text,
-  ppd_gpp integer NOT NULL DEFAULT 0,
-  ppd_ppp integer NOT NULL DEFAULT 0,
-  ppd_xpp integer NOT NULL DEFAULT 0,
-  FOREIGN KEY (ppd_type) REFERENCES jsharmony_ucod_ppd_type(codeval),
-  UNIQUE (ppd_process, ppd_attrib)
-);
-create trigger insert_jsharmony_ppd before insert on jsharmony_ppd
-begin
-  update jsharmony_ppd set 
-    ppd_eu     = (select context from jsharmony_meta limit 1),
-    ppd_etstmp = datetime('now','localtime'),
-    ppd_mu     = (select context from jsharmony_meta limit 1),
-    ppd_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
 INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('EMAIL', 'NOTIF_ADMIN', 'Notifications Email - Administrative', 'C', NULL,  1, 0, 0);
 INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('USERS', 'HASH_SEED_S', 'Hash Seed System Users', 'C', NULL,  0, 0, 1);
 INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'ADDR', 'HOUSE Address', 'C', NULL,  1, 0, 0);
@@ -513,139 +176,13 @@ INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename
 INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'Client Portal URL', 'C', NULL,  0, 0, 1);
 INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('USERS', 'HASH_SEED_C', 'Hash Seed Client Users', 'C', NULL,  0, 0, 1);
 
-/***************RQ***************/
-CREATE TABLE jsharmony_rq (
-  rq_id integer primary key autoincrement NOT NULL,
-  rq_etstmp text,
-  rq_eu text,
-  rq_name text NOT NULL,
-  rq_message text NOT NULL,
-  rq_rslt text,
-  rq_rslt_tstmp text,
-  rq_rslt_u text,
-  rq_snotes text
-);
-create trigger insert_jsharmony_rq after insert on jsharmony_rq
-begin
-  update jsharmony_rq set 
-    rq_eu     = (select context from jsharmony_meta limit 1),
-    rq_etstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
-
-/***************RQST***************/
-CREATE TABLE jsharmony_rqst (
-  rqst_id integer primary key autoincrement NOT NULL,
-  rqst_etstmp text,
-  rqst_eu text,
-  rqst_source text NOT NULL,
-  rqst_atype text NOT NULL,
-  rqst_aname text NOT NULL,
-  rqst_parms text,
-  rqst_ident text,
-  rqst_rslt text,
-  rqst_rslt_tstmp text,
-  rqst_rslt_u text,
-  rqst_snotes text,
-  FOREIGN KEY (rqst_atype) REFERENCES jsharmony_ucod_rqst_atype (codeval),
-  FOREIGN KEY (rqst_source) REFERENCES jsharmony_ucod_rqst_source (codeval)
-);
-create trigger insert_jsharmony_rqst after insert on jsharmony_rqst
-begin
-  update jsharmony_rqst set 
-    rqst_eu     = (select context from jsharmony_meta limit 1),
-    rqst_etstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
-
-/***************RQST_D***************/
-CREATE TABLE jsharmony_rqst_d (
-  rqst_d_id integer primary key autoincrement NOT NULL,
-  rqst_id integer NOT NULL,
-  d_scope text,
-  d_scope_id integer,
-  d_ctgr text,
-  d_desc text,
-  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
-);
-
-/***************RQST_EMAIL***************/
-CREATE TABLE jsharmony_rqst_email (
-  rqst_email_id integer primary key autoincrement NOT NULL,
-  rqst_id integer NOT NULL,
-  email_txt_attrib text,
-  email_to text NOT NULL,
-  email_cc text,
-  email_bcc text,
-  email_attach integer,
-  email_subject text,
-  email_text text,
-  email_html text,
-  email_d_id integer,
-  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
-);
-
-/***************RQST_N***************/
-CREATE TABLE jsharmony_rqst_n (
-  rqst_n_id integer primary key autoincrement NOT NULL,
-  rqst_id integer NOT NULL,
-  n_scope text,
-  n_scope_id integer,
-  n_type text,
-  n_note text,
-  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
-);
-
-/***************RQST_RQ***************/
-CREATE TABLE jsharmony_rqst_rq (
-  rqst_rq_id integer primary key autoincrement NOT NULL,
-  rqst_id integer NOT NULL,
-  rq_name text NOT NULL,
-  rq_message text,
-  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
-);
-
-/***************RQST_SMS***************/
-CREATE TABLE jsharmony_rqst_sms (
-  rqst_sms_id integer primary key autoincrement NOT NULL,
-  rqst_id integer NOT NULL,
-  sms_txt_attrib text,
-  sms_to text NOT NULL,
-  sms_body text,
-  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
-);
-
-/***************SM***************/
-CREATE TABLE jsharmony_sm (
-  sm_id_auto integer primary key autoincrement NOT NULL,
-  sm_utype text NOT NULL DEFAULT 'S',
-  sm_id integert NOT NULL,
-  sm_sts text NOT NULL DEFAULT 'ACTIVE',
-  sm_id_parent integer,
-  sm_name text NOT NULL,
-  sm_seq integer,
-  sm_desc text NOT NULL,
-  sm_descl text,
-  sm_descvl text,
-  sm_cmd text,
-  sm_image text,
-  sm_snotes text,
-  sm_subcmd text,
-  UNIQUE (sm_id),
-  UNIQUE (sm_id_parent, sm_desc),
-  UNIQUE (sm_id, sm_desc),
-  UNIQUE (sm_name),
-  CHECK (sm_utype in ('S', 'C')),
-  FOREIGN KEY (sm_id_parent) REFERENCES jsharmony_sm(sm_id),
-  FOREIGN KEY (sm_sts) REFERENCES jsharmony_ucod_ahc(codeval)
-);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1, 'ACTIVE', NULL, 'ADMIN', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 3, 'ACTIVE', 1, 'DASHBOARD', 1, 'Dashboard', NULL, NULL, 'DASHBOARD', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 160, 'ACTIVE', 1, 'REPORTS', 2, 'Reports', NULL, NULL, 'REPORTS', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 170, 'ACTIVE', 1, 'ADMINISTRATION', 3, 'Administration', NULL, NULL, 'ADMIN_OVERVIEW', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 10, 'ACTIVE', 1, 'DEV', 4, 'Developer', NULL, NULL, 'DEV_OVERVIEW', NULL, NULL);
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 200, 'ACTIVE', 2, 'C_DASHBOARD', NULL, 'Dashboard', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 200, 'ACTIVE', 2, 'C_DASHBOARD', NULL, 'Dashboard', NULL, NULL, 'C_DASHBOARD', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 270, 'ACTIVE', 2, 'C_ADMINISTRATION', NULL, 'Administration', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1785, 'ACTIVE', 170, 'ADMINISTRATION_TEXTMAINTENANCE', NULL, 'Text Maint', NULL, NULL, 'TXTL', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1783, 'ACTIVE', 170, 'ADMINISTRATION_CODETABLES', NULL, '1D Code Tables', NULL, NULL, 'GCOD_HL', NULL, NULL);
@@ -655,7 +192,6 @@ INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 14, 'ACTIVE', 10, 'DEV_X_GPPL', 22, 'System Settings', NULL, NULL, 'X_GPPL', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 13, 'ACTIVE', 10, 'DEV_X_PPDL', 21, 'Settings Definitions', NULL, NULL, 'X_PPDL', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 2700, 'ACTIVE', 270, 'C_ADMINISTRATION_USERS', NULL, 'Cust Users', NULL, NULL, 'CPEL_CLIENT', NULL, NULL);
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 2701, 'ACTIVE', 270, 'C_ADMINISTRATION_CONTACTS', NULL, 'Contacts', NULL, NULL, 'CTL_C_CLIENT', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1795, 'ACTIVE', 170, 'ADMINISTRATION_LOG', NULL, 'Logs', NULL, NULL, 'LOG', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1796, 'ACTIVE', 170, 'ADMINISTRATION_RESTART_SYSTEM', NULL, 'Restart System', NULL, NULL, 'RESTART_SYSTEM', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 12, 'ACTIVE', 10, 'DEV_X_SML', 11, 'Menu Items', NULL, NULL, 'X_SMLW', NULL, NULL);
@@ -672,21 +208,9 @@ INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 16, 'ACTIVE', 10, 'DEV_X_GCOD_HL', 31, 'Admin 1D Codes', NULL, NULL, 'X_GCOD_HL', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 17, 'ACTIVE', 10, 'DEV_X_GCOD2_HL', 32, 'Admin 2D Codes', NULL, NULL, 'X_GCOD2_HL', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 23, 'ACTIVE', 10, 'DEV_DB', 43, 'DB SQL', NULL, NULL, 'DEV_DB', NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 24, 'ACTIVE', 10, 'DEV_DB_SCRIPTS', 44, 'DB Scripts', NULL, NULL, 'DEV_DB_SCRIPTS', NULL, NULL);
 
-/***************SR***************/
-CREATE TABLE jsharmony_sr (
-  sr_id integer primary key autoincrement NOT NULL,
-  sr_seq integer NOT NULL,
-  sr_sts text NOT NULL DEFAULT 'ACTIVE',
-  sr_name text NOT NULL,
-  sr_desc text NOT NULL,
-  sr_snotes text,
-  sr_code text,
-  sr_attrib text,
-  UNIQUE (sr_desc),
-  UNIQUE (sr_name),
-  FOREIGN KEY (sr_sts) REFERENCES jsharmony_ucod_ahc(codeval)
-);
 INSERT INTO jsharmony_sr (sr_seq, sr_sts, sr_name, sr_desc, sr_code, sr_attrib) VALUES (0, 'ACTIVE', '*', 'All Users', NULL, NULL);
 INSERT INTO jsharmony_sr (sr_seq, sr_sts, sr_name, sr_desc, sr_code, sr_attrib) VALUES (97, 'ACTIVE', 'DADMIN', 'Data Administration', NULL, NULL);
 INSERT INTO jsharmony_sr (sr_seq, sr_sts, sr_name, sr_desc, sr_code, sr_attrib) VALUES (98, 'ACTIVE', 'SYSADMIN', 'System Administration', NULL, NULL);
@@ -694,48 +218,8 @@ INSERT INTO jsharmony_sr (sr_seq, sr_sts, sr_name, sr_desc, sr_code, sr_attrib) 
 INSERT INTO jsharmony_sr (sr_seq, sr_sts, sr_name, sr_desc, sr_code, sr_attrib) VALUES (91, 'ACTIVE', 'X_B', 'General Browse', NULL, NULL);
 INSERT INTO jsharmony_sr (sr_seq, sr_sts, sr_name, sr_desc, sr_code, sr_attrib) VALUES (92, 'ACTIVE', 'X_X', 'General BIUD', NULL, NULL);
 
-/***************SF***************/
-CREATE TABLE jsharmony_sf (
-  sf_id integer primary key autoincrement NOT NULL,
-  sf_seq integer NOT NULL,
-  sf_sts text NOT NULL DEFAULT 'ACTIVE',
-  sf_name text NOT NULL,
-  sf_desc text NOT NULL,
-  sf_snotes text,
-  sf_code text,
-  sf_attrib text,
-  UNIQUE (sf_desc),
-  UNIQUE (sf_name),
-  FOREIGN KEY (sf_sts) REFERENCES jsharmony_ucod_ahc(codeval)
-);
 INSERT INTO jsharmony_sf (sf_seq, sf_sts, sf_name, sf_desc, sf_code, sf_attrib) VALUES (1, 'ACTIVE', 'TBD', 'TBD', NULL, NULL);
 
-/***************TXT***************/
-CREATE TABLE jsharmony_txt (
-  txt_id integer primary key autoincrement NOT NULL,
-  txt_process text NOT NULL,
-  txt_attrib text NOT NULL,
-  txt_type text NOT NULL DEFAULT 'TEXT',
-  txt_tval text,
-  txt_val text,
-  txt_bcc text,
-  txt_desc text,
-  txt_etstmp text,
-  txt_eu text,
-  txt_mtstmp text,
-  txt_mu text,
-  UNIQUE (txt_process, txt_attrib),
-  FOREIGN KEY (txt_type) REFERENCES jsharmony_ucod_txt_type (codeval)
-);
-create trigger insert_jsharmony_txt after insert on jsharmony_txt
-begin
-  update jsharmony_txt set 
-    txt_eu     = (select context from jsharmony_meta limit 1),
-    txt_etstmp = datetime('now','localtime'),
-    txt_mu     = (select context from jsharmony_meta limit 1),
-    txt_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
 INSERT INTO jsharmony_txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc) VALUES ('EMAIL', 'RESETPASS', 'HTML', 'Password Reset', '<p>Dear <%-data.PE_NAME%>,<br />
 <br />
 A password reset has been requested on your account. If you did not initiate the request, please contact us at <%-data.SUPPORT_EMAIL%> immediately.<br />
@@ -749,112 +233,19 @@ INSERT INTO jsharmony_txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val,
 INSERT INTO jsharmony_txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc) VALUES ('CMS', 'AGREEMENT_DONE', 'HTML', 'Client Agreement Complete', '<p>Thank you for completing sign-up.</p>
 ', NULL, 'Client Agreement Complete');
 INSERT INTO jsharmony_txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc) VALUES ('SMS', 'WELCOME', 'TEXT', 'Welcome', 'Your account has been initialized.', NULL, 'SMS Welcome Message');
+INSERT INTO jsharmony_txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc) VALUES ('CMS', 'C_DASHBOARD', 'HTML', 'Client Dashboard Message of the Day', '<p>Welcome to the jsHarmony Client Portal</p>
+', NULL, 'Client Dashboard Message of the Day');
 INSERT INTO jsharmony_txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc) VALUES ('CMS', 'DASHBOARD', 'HTML', 'Dashboard Message of the Day', '<p>Welcome to the jsHarmony System</p>
 ', NULL, 'Dashboard Message of the Day');
 
-
-/***************CPER***************/
-CREATE TABLE jsharmony_cper (
-  cper_id integer primary key autoincrement NOT NULL,
-  pe_id integer NOT NULL,
-  cr_name text NOT NULL,
-  cper_snotes text,
-  UNIQUE (pe_id, cr_name),
-  FOREIGN KEY (pe_id) REFERENCES jsharmony_cpe(pe_id),
-  FOREIGN KEY (cr_name) REFERENCES jsharmony_cr(cr_name)
-);
-
-/***************CRM***************/
-CREATE TABLE jsharmony_crm (
-  crm_id integer primary key autoincrement NOT NULL,
-  sm_id integer NOT NULL,
-  cr_name text NOT NULL,
-  crm_snotes text,
-  UNIQUE (cr_name, sm_id),
-  FOREIGN KEY (sm_id) REFERENCES jsharmony_sm(sm_id),
-  FOREIGN KEY (cr_name) REFERENCES jsharmony_cr(cr_name)
-);
 INSERT INTO jsharmony_crm (sm_id, crm_snotes, cr_name) VALUES (200, NULL, 'CX_B');
 INSERT INTO jsharmony_crm (sm_id, crm_snotes, cr_name) VALUES (270, NULL, 'CSYSADMIN');
 INSERT INTO jsharmony_crm (sm_id, crm_snotes, cr_name) VALUES (2700, NULL, 'CSYSADMIN');
-INSERT INTO jsharmony_crm (sm_id, crm_snotes, cr_name) VALUES (2701, NULL, 'CSYSADMIN');
 INSERT INTO jsharmony_crm (sm_id, crm_snotes, cr_name) VALUES (200, NULL, 'CX_X');
 INSERT INTO jsharmony_crm (sm_id, crm_snotes, cr_name) VALUES (200, NULL, 'CUSER');
 
-/***************GCOD_H***************/
-CREATE TABLE jsharmony_gcod_h (
-    gcod_h_id  integer primary key autoincrement NOT NULL,
-    codename text NOT NULL,
-    codemean text,
-    codecodemean text,
-    cod_h_etstmp text,
-    cod_h_eu text,
-    cod_h_mtstmp text,
-    cod_h_mu text,
-    cod_snotes text,
-    codeattribmean text,
-    codeschema text,
-    UNIQUE (codeschema, codename)
-);
-create trigger insert_jsharmony_gcod_h after insert on jsharmony_gcod_h
-begin
-  update jsharmony_gcod_h set 
-    cod_h_eu     = (select context from jsharmony_meta limit 1),
-    cod_h_etstmp = datetime('now','localtime'),
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
-
-
-/***************GCOD2_H***************/
-CREATE TABLE jsharmony_gcod2_h (
-    gcod2_h_id  integer primary key autoincrement NOT NULL,
-    codename text NOT NULL,
-    codemean text,
-    codecodemean text,
-    cod_h_etstmp text,
-    cod_h_eu text,
-    cod_h_mtstmp text,
-    cod_h_mu text,
-    cod_snotes text,
-    codeattribmean text,
-    codeschema text,
-    UNIQUE (codeschema, codename)
-);
-create trigger insert_jsharmony_gcod2_h after insert on jsharmony_gcod2_h
-begin
-  update jsharmony_gcod2_h set 
-    cod_h_eu     = (select context from jsharmony_meta limit 1),
-    cod_h_etstmp = datetime('now','localtime'),
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
 INSERT INTO jsharmony_gcod2_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('d_scope_d_ctgr', 'Scope - Documents', NULL, NULL, 'jsharmony');
 
-/***************GPP***************/
-CREATE TABLE jsharmony_gpp (
-  gpp_id integer primary key autoincrement NOT NULL,
-  gpp_process text NULL,
-  gpp_attrib text NOT NULL,
-  gpp_val text,
-  gpp_etstmp txt,
-  gpp_eu text,
-  gpp_mtstmp text,
-  gpp_mu text,
-  UNIQUE (gpp_process, gpp_attrib),
-  FOREIGN KEY (gpp_process, gpp_attrib) REFERENCES jsharmony_ppd(ppd_process, ppd_attrib)
-);
-create trigger insert_jsharmony_gpp after insert on jsharmony_gpp
-begin
-  update jsharmony_gpp set 
-    gpp_eu     = (select context from jsharmony_meta limit 1),
-    gpp_etstmp = datetime('now','localtime'),
-    gpp_mu     = (select context from jsharmony_meta limit 1),
-    gpp_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
 INSERT INTO jsharmony_gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'STATE', 'IL');
 INSERT INTO jsharmony_gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'CITY', 'Anytown');
 INSERT INTO jsharmony_gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'CONTACT', 'John Contact');
@@ -866,67 +257,6 @@ INSERT INTO jsharmony_gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'N
 INSERT INTO jsharmony_gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('EMAIL', 'NOTIF_ADMIN', 'user@company.com');
 INSERT INTO jsharmony_gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'ZIP', '11111');
 
-
-/***************PPP***************/
-CREATE TABLE jsharmony_ppp (
-  ppp_id integer primary key autoincrement NOT NULL,
-  pe_id integer NOT NULL,
-  ppp_process text NULL,
-  ppp_attrib text NOT NULL,
-  ppp_val text,
-  ppp_etstmp txt,
-  ppp_eu text,
-  ppp_mtstmp text,
-  ppp_mu text,
-  UNIQUE (ppp_process, ppp_attrib),
-  FOREIGN KEY (ppp_process, ppp_attrib) REFERENCES jsharmony_ppd(ppd_process, ppd_attrib)
-              ON UPDATE NO ACTION ON DELETE CASCADE,
-  FOREIGN KEY (pe_id) REFERENCES jsharmony_pe(pe_id)
-              ON UPDATE NO ACTION ON DELETE CASCADE
-);
-create trigger insert_jsharmony_ppp after insert on jsharmony_ppp
-begin
-  update jsharmony_ppp set 
-    ppp_eu     = (select context from jsharmony_meta limit 1),
-    ppp_etstmp = datetime('now','localtime'),
-    ppp_mu     = (select context from jsharmony_meta limit 1),
-    ppp_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
-
-/***************SPEF***************/
-CREATE TABLE jsharmony_spef (
-  spef_id integer primary key autoincrement NOT NULL,
-  pe_id integer NOT NULL,
-  sf_name text NOT NULL,
-  spef_snotes text,
-  UNIQUE (pe_id, sf_name),
-  FOREIGN KEY (pe_id) REFERENCES jsharmony_pe(pe_id),
-  FOREIGN KEY (sf_name) REFERENCES jsharmony_sf(sf_name)
-);
-
-/***************SPER***************/
-CREATE TABLE jsharmony_sper (
-  sper_id integer primary key autoincrement NOT NULL,
-  pe_id integer NOT NULL,
-  sr_name text NOT NULL,
-  sper_snotes text,
-  UNIQUE (pe_id, sr_name),
-  FOREIGN KEY (pe_id) REFERENCES jsharmony_pe(pe_id),
-  FOREIGN KEY (sr_name) REFERENCES jsharmony_sr(sr_name)
-);
-
-/***************SRM***************/
-CREATE TABLE jsharmony_srm (
-  srm_id integer primary key autoincrement NOT NULL,
-  sm_id integer NOT NULL,
-  sr_name text NOT NULL,
-  srm_snotes text,
-  UNIQUE (sr_name, sm_id),
-  FOREIGN KEY (sm_id) REFERENCES jsharmony_sm(sm_id),
-  FOREIGN KEY (sr_name) REFERENCES jsharmony_sr(sr_name)
-);
-INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (2701, 'SYSADMIN');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (2700, 'SYSADMIN');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (10, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (1700, 'SYSADMIN');
@@ -948,6 +278,8 @@ INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (19, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (20, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (21, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (22, 'DEV');
+INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (23, 'DEV');
+INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (24, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (1786, 'SYSADMIN');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (1795, 'SYSADMIN');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (1796, 'SYSADMIN');
@@ -961,30 +293,6 @@ INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (1782, 'SYSADMIN');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (1601, 'SYSADMIN');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (160, 'SYSADMIN');
 
-/***************UCOD_H***************/
-CREATE TABLE jsharmony_ucod_h (
-    ucod_h_id  integer primary key autoincrement NOT NULL,
-    codename text NOT NULL,
-    codemean text,
-    codecodemean text,
-    cod_h_etstmp text,
-    cod_h_eu text,
-    cod_h_mtstmp text,
-    cod_h_mu text,
-    cod_snotes text,
-    codeattribmean text,
-    codeschema text,
-    UNIQUE (codeschema, codename)
-);
-create trigger insert_jsharmony_ucod_h after insert on jsharmony_ucod_h
-begin
-  update jsharmony_ucod_h set 
-    cod_h_eu     = (select context from jsharmony_meta limit 1),
-    cod_h_etstmp = datetime('now','localtime'),
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
 INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('ac', 'ACTIVE-CLOSED', NULL, NULL, 'jsharmony');
 INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('ac1', 'ACTIVE-CLOSED 1 Character', NULL, NULL, 'jsharmony');
 INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('ahc', 'ACTIVE-HOLD-CLOSED', NULL, NULL, 'jsharmony');
@@ -998,96 +306,16 @@ INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, 
 INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('txt_type', 'Text Type', NULL, NULL, 'jsharmony');
 INSERT INTO jsharmony_ucod_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('v_sts', 'Version Status', NULL, NULL, 'jsharmony');
 
-
-/***************UCOD2_H***************/
-CREATE TABLE jsharmony_ucod2_h (
-    ucod2_h_id  integer primary key autoincrement NOT NULL,
-    codename text NOT NULL,
-    codemean text,
-    codecodemean text,
-    cod_h_etstmp text,
-    cod_h_eu text,
-    cod_h_mtstmp text,
-    cod_h_mu text,
-    cod_snotes text,
-    codeattribmean text,
-    codeschema text,
-    UNIQUE (codeschema, codename)
-);
-create trigger insert_jsharmony_ucod2_h after insert on jsharmony_ucod2_h
-begin
-  update jsharmony_ucod2_h set 
-    cod_h_eu     = (select context from jsharmony_meta limit 1),
-    cod_h_etstmp = datetime('now','localtime'),
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
 INSERT INTO jsharmony_ucod2_h (codename, codemean, codecodemean, codeattribmean, codeschema) VALUES ('country_state', 'Country - States', NULL, NULL, 'jsharmony');
 
-/***************V***************/
-CREATE TABLE jsharmony_v (
-    v_id integer primary key autoincrement NOT NULL,
-    v_comp text NOT NULL,
-    v_no_major integer DEFAULT 0 NOT NULL,
-    v_no_minor integer DEFAULT 0 NOT NULL,
-    v_no_build integer DEFAULT 0 NOT NULL,
-    v_no_rev integer DEFAULT 0 NOT NULL,
-    v_sts text DEFAULT 'OK' NOT NULL,
-    v_note text,
-    v_etstmp text,
-    v_eu text,
-    v_mtstmp text,
-    v_mu text,
-    v_snotes text,
-    UNIQUE (v_no_major, v_no_minor, v_no_build, v_no_rev),
-    FOREIGN KEY (v_sts) REFERENCES jsharmony_ucod_v_sts(codeval)
-);
-create trigger insert_jsharmony_v after insert on jsharmony_v
-begin
-  update jsharmony_v set 
-    v_eu     = (select context from jsharmony_meta limit 1),
-    v_etstmp = datetime('now','localtime'),
-    v_mu     = (select context from jsharmony_meta limit 1),
-    v_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
-
-/***************XPP***************/
-CREATE TABLE jsharmony_xpp (
-  xpp_id integer primary key autoincrement NOT NULL,
-  xpp_process text NULL,
-  xpp_attrib text NOT NULL,
-  xpp_val text,
-  xpp_etstmp txt,
-  xpp_eu text,
-  xpp_mtstmp text,
-  xpp_mu text,
-  UNIQUE (xpp_process, xpp_attrib),
-  FOREIGN KEY (xpp_process, xpp_attrib) REFERENCES jsharmony_ppd(ppd_process, ppd_attrib)
-);
-create trigger insert_jsharmony_xpp after insert on jsharmony_xpp
-begin
-  update jsharmony_xpp set 
-    xpp_eu     = (select context from jsharmony_meta limit 1),
-    xpp_etstmp = datetime('now','localtime'),
-    xpp_mu     = (select context from jsharmony_meta limit 1),
-    xpp_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
-INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('USERS', 'HASH_SEED_C', '');
-INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('USERS', 'HASH_SEED_S', '');
+INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('USERS', 'HASH_SEED_C', 'NOT CONFIGURED');
+INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('USERS', 'HASH_SEED_S', 'NOT CONFIGURED');
 INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'DSCOPE_DCTGR', 'gcod2_d_scope_d_ctgr');
 INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'GETCID', 'get_c_id');
 INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'GETEID', 'get_e_id');
 INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'https://localhost');
 INSERT INTO jsharmony_xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('EMAIL', 'NOTIF_SYS', 'user@company.com');
 
-/***************NUMBERS***************/
-CREATE TABLE jsharmony_numbers (
-  n integr NOT NULL,
-  PRIMARY KEY (n)
-);
 INSERT INTO jsharmony_numbers (n) VALUES (1);
 INSERT INTO jsharmony_numbers (n) VALUES (2);
 INSERT INTO jsharmony_numbers (n) VALUES (3);
@@ -2087,40 +1315,3 @@ INSERT INTO jsharmony_numbers (n) VALUES (996);
 INSERT INTO jsharmony_numbers (n) VALUES (997);
 INSERT INTO jsharmony_numbers (n) VALUES (998);
 INSERT INTO jsharmony_numbers (n) VALUES (999);
-
-/***************VIEWS***************/
-
-/***************V_PPP***************/
-CREATE VIEW jsharmony_v_pp AS 
- SELECT ppd.ppd_process AS pp_process,
-        ppd.ppd_attrib AS pp_attrib,
-        CASE
-            WHEN ppp.ppp_val IS NULL OR ppp.ppp_val = '' THEN
-            CASE
-                WHEN gpp.gpp_val IS NULL OR gpp.gpp_val = '' THEN xpp.xpp_val
-                ELSE gpp.gpp_val
-            END
-            ELSE ppp.ppp_val
-        END AS pp_val,
-    ppp.pe_id
-   FROM jsharmony_ppd ppd
-     LEFT JOIN jsharmony_xpp xpp ON ppd.ppd_process = xpp.xpp_process AND ppd.ppd_attrib = xpp.xpp_attrib
-     LEFT JOIN jsharmony_gpp gpp ON ppd.ppd_process = gpp.gpp_process AND ppd.ppd_attrib = gpp.gpp_attrib
-     LEFT JOIN ( SELECT ppp_1.pe_id,
-                        ppp_1.ppp_process,
-                        ppp_1.ppp_attrib,
-                        ppp_1.ppp_val
-                   FROM jsharmony_ppp ppp_1
-                  UNION
-                 SELECT NULL AS pe_id,
-                        ppp_null.ppp_process,
-                        ppp_null.ppp_attrib,
-                        NULL AS ppp_val
-                   FROM jsharmony_ppp ppp_null) ppp ON ppd.ppd_process = ppp.ppp_process AND ppd.ppd_attrib = ppp.ppp_attrib;
-
-
-
-
-
-
-end;
