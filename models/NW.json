@@ -57,6 +57,9 @@
     "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
+    "roles":{
+      "client":{ }
+    },
     "tabs": [
       {"name":"Client","target":"NL_CC","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
       {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
