@@ -210,6 +210,7 @@ INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 23, 'ACTIVE', 10, 'DEV_DB', 43, 'DB SQL', NULL, NULL, 'DEV_DB', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 24, 'ACTIVE', 10, 'DEV_DB_SCRIPTS', 44, 'DB Scripts', NULL, NULL, 'DEV_DB_SCRIPTS', NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 25, 'ACTIVE', 10, 'DEV_MODELS', 45, 'Model Viewer', NULL, NULL, 'DEV_MODELS', NULL, NULL);
 
 INSERT INTO jsharmony_sr (sr_seq, sr_sts, sr_name, sr_desc, sr_code, sr_attrib) VALUES (0, 'ACTIVE', '*', 'All Users', NULL, NULL);
 INSERT INTO jsharmony_sr (sr_seq, sr_sts, sr_name, sr_desc, sr_code, sr_attrib) VALUES (97, 'ACTIVE', 'DADMIN', 'Data Administration', NULL, NULL);
@@ -280,6 +281,7 @@ INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (21, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (22, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (23, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (24, 'DEV');
+INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (25, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (1786, 'SYSADMIN');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (1795, 'SYSADMIN');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (1796, 'SYSADMIN');

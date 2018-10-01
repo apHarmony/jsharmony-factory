@@ -61,6 +61,7 @@ INSERT INTO [jsharmony].[SM] ([SM_ID_AUTO], [SM_UTYPE], [SM_ID], [SM_STS], [SM_I
 INSERT INTO [jsharmony].[SM] ([SM_ID_AUTO], [SM_UTYPE], [SM_ID], [SM_STS], [SM_ID_Parent], [SM_Name], [SM_Seq], [SM_DESC], [SM_DESCL], [SM_DESCVL], [SM_Cmd], [SM_Image], [SM_SNotes], [SM_SubCmd]) VALUES (149, N'S', 1601, N'ACTIVE', 160, N'REPORT_USERS', NULL, N'User Listing', NULL, NULL, N'_report/RPE', NULL, NULL, NULL)
 INSERT INTO [jsharmony].[SM] ([SM_ID_AUTO], [SM_UTYPE], [SM_ID], [SM_STS], [SM_ID_Parent], [SM_Name], [SM_Seq], [SM_DESC], [SM_DESCL], [SM_DESCVL], [SM_Cmd], [SM_Image], [SM_SNotes], [SM_SubCmd]) VALUES (150, N'S', 23, N'ACTIVE', 10, N'DEV_DB', 43, N'DB SQL', NULL, NULL, N'DEV_DB', NULL, NULL);
 INSERT INTO [jsharmony].[SM] ([SM_ID_AUTO], [SM_UTYPE], [SM_ID], [SM_STS], [SM_ID_Parent], [SM_Name], [SM_Seq], [SM_DESC], [SM_DESCL], [SM_DESCVL], [SM_Cmd], [SM_Image], [SM_SNotes], [SM_SubCmd]) VALUES (151, N'S', 24, N'ACTIVE', 10, N'DEV_DB_SCRIPTS', 44, N'DB Scripts', NULL, NULL, N'DEV_DB_SCRIPTS', NULL, NULL);
+INSERT INTO [jsharmony].[SM] ([SM_ID_AUTO], [SM_UTYPE], [SM_ID], [SM_STS], [SM_ID_Parent], [SM_Name], [SM_Seq], [SM_DESC], [SM_DESCL], [SM_DESCVL], [SM_Cmd], [SM_Image], [SM_SNotes], [SM_SubCmd]) VALUES (152, N'S', 25, N'ACTIVE', 10, N'DEV_MODELS', 45, N'Model Viewer', NULL, NULL, N'DEV_MODELS', NULL, NULL);
 SET IDENTITY_INSERT [jsharmony].[SM] OFF
 SET IDENTITY_INSERT [jsharmony].[SF] ON
 INSERT INTO [jsharmony].[SF] ([SF_Name], [SF_ID], [SF_SEQ], [SF_STS], [SF_Desc], [SF_CODE], [SF_ATTRIB], [SF_SNotes]) VALUES (N'TBD', 1, 1, N'ACTIVE', N'TBD', NULL, NULL, NULL)
@@ -149,6 +150,7 @@ INSERT INTO [jsharmony].[SRM] ([SR_NAME], [SM_ID], [SRM_SNotes], [SRM_ID]) VALUE
 INSERT INTO [jsharmony].[SRM] ([SR_NAME], [SM_ID], [SRM_SNotes], [SRM_ID]) VALUES (N'DEV', 22, NULL, 1903)
 INSERT INTO [jsharmony].[SRM] ([SR_NAME], [SM_ID], [SRM_SNotes], [SRM_ID]) VALUES (N'DEV', 23, NULL, 1911)
 INSERT INTO [jsharmony].[SRM] ([SR_NAME], [SM_ID], [SRM_SNotes], [SRM_ID]) VALUES (N'DEV', 24, NULL, 1912)
+INSERT INTO [jsharmony].[SRM] ([SR_NAME], [SM_ID], [SRM_SNotes], [SRM_ID]) VALUES (N'DEV', 25, NULL, 1913)
 INSERT INTO [jsharmony].[SRM] ([SR_NAME], [SM_ID], [SRM_SNotes], [SRM_ID]) VALUES (N'DEV', 170, NULL, 1895)
 INSERT INTO [jsharmony].[SRM] ([SR_NAME], [SM_ID], [SRM_SNotes], [SRM_ID]) VALUES (N'DEV', 1700, NULL, 1898)
 INSERT INTO [jsharmony].[SRM] ([SR_NAME], [SM_ID], [SRM_SNotes], [SRM_ID]) VALUES (N'SYSADMIN', 1, NULL, 1527)
