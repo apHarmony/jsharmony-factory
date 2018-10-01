@@ -7,7 +7,7 @@
     "caption":[0,"Menu Item","Menu Items"],
     "layout":"grid", 
     "sort":[{"sm_utype":"desc"},{"sm_id_parent":"asc"},{"sm_seq":"asc"},{"sm_name":"asc"}], 
-    "buttons": [{"link":"X_SMLW", "icon": "design", "text": "Tree View", "actions": "B" }],
+    "buttons": [{"link":"X_SMLW&", "icon": "design", "text": "Tree View", "actions": "B" }],
     "topmenu":"dev",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
