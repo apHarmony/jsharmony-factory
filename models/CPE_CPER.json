@@ -3,17 +3,17 @@
     "layout":"multisel", 
     "table":"jsharmony.V_CPER_NOSTAR",
     "actions":"BIU",
-    "roles": {
-      "main": { "SYSADMIN":"*" },
-      "client": {"CSYSADMIN":"*","CADMIN":"*"} 
-    },
     "fields":[
       {"name":"pe_id","type":"bigint","foreignkey":1,"datalock":{"C_ID":"PE_ID"}},
       {"name":"cper_id","type":"bigint","key":1,"datalock":{"C_ID":"CPER_ID"}},
       {"name":"cr_name","type":"varchar","length":"16","cellstyle":"width:300px;",
         "caption":"Role","actions":"B",
         "lov": { 
-          "sql": "select cr_name as %%%jsh.map.codeval%%%, cr_desc as %%%jsh.map.codetxt%%%,CR_SEQ as %%%jsh.map.codeseq%%% from jsharmony.CR where cr_name<>'C*' %%%DATALOCKS%%%",
+          "sql": ["select cr_name as %%%jsh.map.codeval%%%, ",
+                  "       cr_desc as %%%jsh.map.codetxt%%%, ",
+                  "       cr_seq as %%%jsh.map.codeseq%%% ",
+                  "  from jsharmony.CR ",
+                  " where cr_name<>'C*' %%%DATALOCKS%%%"],
           "datalock":{"C_ID":"ALWAYS"} 
         }
       }

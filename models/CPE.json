@@ -4,10 +4,6 @@
     "title":"Customer User",
     "table":"jsharmony.CPE",
     "actions":"BIUD", 
-    "roles": {
-      "main": { "SYSADMIN":"*" },
-      "client": {"CSYSADMIN":"*","CADMIN":"*"}
-    },
     "caption": [ "", "Customer User", "Customer Users" ],
     "popup":[850,650],
     "fields":[
