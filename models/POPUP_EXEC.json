@@ -13,7 +13,7 @@
     {"name":"question","nl": 1,"control":"html","caption":"",
      "value":"To be overwritten"},
     {"name":"YES","caption":"","nl": 1,"control":"button","value":"Yes","controlstyle": "padding:3px 8px;margin-top:10px;",
-     "onclick":"XRunDBFunc(function(){jsh.XForm_RefreshParent();window.close();});"},
+     "onclick":"jsh.XRunDBFunc(function(){jsh.XForm_RefreshParent();window.close();});"},
     {"name":"NO","caption":"","control":"button","value":"No","controlstyle": "padding:3px 8px;margin-top:10px;",
      "onclick": "window.close();"},
     {"control":"html","value":"</center>"},

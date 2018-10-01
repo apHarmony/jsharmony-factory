@@ -11,6 +11,7 @@
       {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
     ],
     "tabpanelstyle": "min-width:900px;",
+    "title": "",
     "fields":[
 	  {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
       {"name":"n_scope_id", "type": "bigint","foreignkey":1}
