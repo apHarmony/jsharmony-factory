@@ -87,7 +87,7 @@ jsHarmonyFactory.prototype.Init = function(cb){
 
     _this.VerifyConfig();
 
-    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(jsHarmonyRouter.PublicRoot(path.join(__dirname, 'public')));
 
     if(_this.clientConfig){
       app.get(/^\/client$/, function (req, res, next) { res.redirect('/client/'); });

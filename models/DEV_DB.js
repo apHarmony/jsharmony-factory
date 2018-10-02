@@ -4,7 +4,8 @@ jsh.App.DEV_DB.DBs = {};  //Populated onroute
 
 jsh.App.DEV_DB.samples = {};
 jsh.App.DEV_DB.samples.mssql = {
-  "Select": "select * from c;select * from cf",
+  "Select": "select * from c;\r\n\
+select * from cf;",
   "List Tables": "",
   "List Views": "",
   "List Stored Procedures": "",
@@ -15,18 +16,39 @@ jsh.App.DEV_DB.samples.mssql = {
   "Create UCOD": "",
 };
 jsh.App.DEV_DB.samples.pgsql = {
-  "Select": "select * from c;select * from cf",
-  "List Tables": "",
-  "List Views": "",
-  "List Stored Procedures": "",
-  "Describe Table": "select column_name, data_type, character_maximum_length from INFORMATION_SCHEMA.COLUMNS where table_name = 'xxxxx';",
-  "Create Table": "",
-  "Create View": "",
+  "Select": "select * from c;\r\n\
+select '-----TABLE-----' as table_boundary;\r\n\
+select * from cf;",
+  "List Tables": "select table_schema||'.'||table_name as table from information_schema.tables where table_type='BASE TABLE' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
+  "List Views": "select table_schema||'.'||table_name as view from information_schema.tables where table_type='VIEW' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
+  "List Stored Procedures": "SELECT nspname||'.'||proname as proc from pg_catalog.pg_namespace n inner join pg_catalog.pg_proc p on pronamespace = n.oid where nspname not in ('information_schema','pg_catalog') order by nspname,proname",
+  "Describe Table": "select column_name, data_type, character_maximum_length from INFORMATION_SCHEMA.COLUMNS where table_schema = 'public' and table_name = 'xxxxx';",
+  "Drop / Create Table": "drop table if exists c;\r\n\
+create table public.c (\
+  c_id bigserial primary key not null,\r\n\
+  c_sts character varying(8) NOT NULL references public.ucod_c_sts(codeval),\r\n\
+  c_atstmp timestamp without time zone DEFAULT mynow() NOT NULL,\r\n\
+  c_name character varying(255) NOT NULL UNIQUE,\r\n\
+  c_ein bytea DEFAULT '\\x00'::bytea NOT NULL,\r\n\
+  c_einhash bytea DEFAULT '\\x00'::bytea NOT NULL,\r\n\
+  c_doc_ext character varying(16),\r\n\
+  c_doc_size bigint,\r\n\
+  c_doc_utstmp timestamp without time zone,\r\n\
+  c_doc_uu character varying(20),\r\n\
+  foreign key (c_sts) references public.ucod_c_sts(codeval)\r\n\
+);\r\n\
+insert into c(c_id,c_sts,c_name) values (1,'ACTIVE','ACME Industries');",
+  "Drop / Create View": "drop view if exists v_c;\r\n\
+  create view v_c as\r\n\
+  select c_id,c_sts,c_name,ucod_c_sts.codetxt as c_sts_txt,c_einhash\r\n\
+    from public.c\r\n\
+    left outer join public.ucod_c_sts on c.c_sts = ucod_c_sts.codeval;",
   "Create Stored Procedure": "",
   "Create UCOD": "",
 };
 jsh.App.DEV_DB.samples.sqlite = {
-  "Select": "select * from c;select * from cf",
+  "Select": "select * from c;\r\n\
+select * from cf;",
   "List Tables": "SELECT name FROM sqlite_master WHERE type='table' order by name;",
   "List Views": "SELECT name FROM sqlite_master WHERE type='view' order by name;",
   "Describe Table": "PRAGMA table_info(xxxxx);",
@@ -100,7 +122,7 @@ jsh.App.DEV_DB.RenderDBListing = function(dbs){
 jsh.App.DEV_DB.LoadScripts = function(db){
   var _this = this;
   jsh.$root('.DEV_DB_run').show();
-  jsh.$root('.DEV_DB_rslt').text('');
+  jsh.$root('.DEV_DB_rslt').html('');
   var jSamples = jsh.$root('.DEV_DB_samples');
   jSamples.empty();
   jSamples.append($('<option>',{value:''}).text('Please select...'));
@@ -135,15 +157,50 @@ jsh.App.DEV_DB.RunSQL = function(){
   }
   XPost.prototype.XExecutePost('../_db/exec', params, function (rslt) { //On success
     if ('_success' in rslt) { 
+      console.log(rslt);
+      var str = '';
+      if(rslt.dbrslt && rslt.dbrslt.length){
+        for(var i=0;i<rslt.dbrslt.length;i++){
+          var dbrslt = rslt.dbrslt[i];
+          str += '<h1>Resultset '+(i+1)+'</h1>';
+          if(dbrslt.length){
+            str += '<table border=1>';
+            var headers = _.keys(dbrslt[0]);
+            str += '<tr>';
+            for(var j=0;j<headers.length;j++){
+              str += '<th>' + XExt.escapeHTMLBR(headers[j]) + '</th>';
+            }
+            str += '</tr>';
+            for(var j=0;j<dbrslt.length;j++){
+              var row = dbrslt[j];
+              str += '<tr>';
+              for(var col in row){
+                var escval = XExt.escapeHTMLBR(row[col])||'';
+                if((escval.indexOf(' ')<0)||(escval.length < 50)) escval = '<span style="white-space:nowrap;">'+escval+'</span>';
+                str += '<td style="font-family:monospace;">' + escval + '</td>';
+              }
+              str += '</tr>';
+            }
+            str += '</table>';
+          }
+          else str += '<div>Empty</div>';
+          str += '<div style="height:50px;"></div>';
+        }
+      }
+      //Raw output
+      /*
       var txt = '';
       if(rslt.dbrslt[0]) for(var i=0;i<rslt.dbrslt[0].length;i++){
         txt += "Resultset " + (i+1).toString() + "\r\n" + "------------------------------------\r\n";
         txt += JSON.stringify(rslt.dbrslt[0][i],null,4) + "\r\n\r\n";
       }
-      txt += "\r\nOperation complete";
+      txt += '';
+      str = '<pre>'+XExt.escapeHTMLBR(txt)+'</pre>';
+      */
+      str += "<div style='font-weight:bold'>Operation complete</div>";
       var endtm = Date.now();
-      txt += "\r\nTime: " + (endtm-starttm) + "ms";
-      jsh.$root('.DEV_DB_rslt').text(txt);
+      str += "<div style='font-weight:bold'>Time: " + (endtm-starttm) + "ms</div>";
+      jsh.$root('.DEV_DB_rslt').html(str);
     }
   });
 }
