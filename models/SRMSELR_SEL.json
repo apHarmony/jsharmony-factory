@@ -1,0 +1,46 @@
+{
+  "SRMSELR_SEL": {
+    "layout":"grid", 
+	  "title": "Roles for Menu Item S<#=data.sm_id#> - <#=bcrumbs.sm_desc#>",
+	  "table":"jsharmony.V_SRMSEL",
+	  "actions":"BU", 
+    "breadcrumbs":{
+      "sql": ["select sm_desc from jsharmony.SM ",
+              " where sm_id=@sm_id"],
+      "sql_params": ["sm_id","sm_id"]
+    },
+	  "caption":[0,"Item","Items"],
+    "sort":[{"sr_seq":"asc"},{"sr_name":"asc"}], 
+	  "topmenu":"dev",
+    "grid_expand_filter": 1,
+    "nogridadd":1,
+    "rowlimit":500,
+    "grid_rowcount":1,
+    "reselectafteredit": "row",      "comment1":"row, or blank",
+    "newrowposition": "last",        "comment2":"first or last",
+    "commitlevel": "cell",            "comment3":"cell, row, page, or none",
+    "validationlevel": "cell",        "comment4":"cell, or row",
+    "hide_system_buttons" : ["export"],    
+	  "buttons": [
+	    {"link":"js:jsh.App.SRMSELR_SEL.SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
+	    {"link":"js:jsh.App.SRMSELR_SEL.DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
+	  ],
+    "oninit": "jsh.App.SRMSELR_SEL.oninit(xform);",
+    "oncommit": "jsh.App.SRMSELR_SEL.oncommit();",
+	  "fields":[
+      {"name":"srmsel_sel","type":"smallint","actions":"BU","caption":"Select","control":"checkbox",
+       "controlparams":{"value_true":"1","value_false":"0","value_hidden":""},"captionstyle": "text-align:center;"},
+      {"name":"sr_name","type":"varchar","length":16,"actions":"B","datalock":{"C_ID":"C_ID"},"control":"label","key":1,
+       "caption":""},
+      {"name":"new_sm_id","type":"bigint","actions":"BU","control":"hidden","captionstyle":"display:none;","cellstyle":"display:none;",
+       "sqlselect":"@sm_id"},
+      {"name":"sm_id","type":"bigint","actions": "B","control": "hidden","key":1},
+      {"name":"sr_seq","type":"int","actions": "B","control": "label",
+       "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
+       "sql_sort":"(coalesce(coalesce(sr_seq,sr_id),0))::int",
+       "caption":"Seq","captionstyle": "text-align:right;"},
+      {"name":"sr_desc","type":"varchar","length":"255","actions":"B","control": "label",
+       "validate":["Required"],"caption":"Description"}
+	  ]
+  }	
+}

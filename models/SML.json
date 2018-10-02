@@ -42,7 +42,13 @@
        },
       {"name":"sm_sts","type":"varchar","length":8,"actions": "BIU","control": "dropdown_S",
        "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
-       "controlstyle":"width:70px;","caption":"Status"}
+       "controlstyle":"width:70px;","caption":"Status"},
+      {"name":"privs","control": "html","disable_sort":"1","disable_search":1,"disable_search_all":1,
+       "value": ["<a href='<#=((data[j]['sm_utype']=='S')?'X_SRMSELR_HW':'X_CRMSELR_HW')#>?action=edit&amp;sm_id=<#=data[j]['sm_id']#>'",
+                 " class=\"privs_link xform_ctrl xelemX_SML xform_label uneditable\"",
+                 " onclick=\"window.open(<#=instance#>.$(this).attr('href'),'_blank','width=1200,height=700,resizable=1,scrollbars=1');return false;\"",
+                 "><#-((data[j]['sm_id_auto'])?'<img src=\"/images/icon_edit.png\" class=\"xicon\">':'')#></a>"],
+       "caption": "Role Access"}
     ],
     "dberrors": [
       [ "UNQ_SM_SM_ID", "Duplicate ID" ],
