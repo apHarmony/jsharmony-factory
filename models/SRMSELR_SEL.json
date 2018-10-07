@@ -37,7 +37,7 @@
       {"name":"sm_id","type":"bigint","actions": "B","control": "hidden","key":1},
       {"name":"sr_seq","type":"int","actions": "B","control": "label",
        "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
-       "sql_sort":"(coalesce(coalesce(sr_seq,sr_id),0))::int",
+       "sql_sort":"(coalesce(coalesce(sr_seq,sr_id),0))",
        "caption":"Seq","captionstyle": "text-align:right;"},
       {"name":"sr_desc","type":"varchar","length":"255","actions":"B","control": "label",
        "validate":["Required"],"caption":"Description"}

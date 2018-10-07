@@ -170,7 +170,7 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
     if (err != null) { return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete); }
     if (dbdata == null) dbdata = {};
     thisapp.rptsrv.MergeReportData(dbdata, model.reportdata, null);
-    thisapp.rptsrv.phqueue.push({ modelid: modelid, params: sql_params, data: dbdata }, function (err, tmppath, dispose) {
+    thisapp.rptsrv.browserqueue.push({ modelid: modelid, params: sql_params, data: dbdata }, function (err, tmppath, dispose) {
       /* Report Done */ 
       fs.stat(tmppath, function (err, stat) {
         if (err != null) return _this.SetJobResult(job, 'ERROR', 'Report file not found: '+err.toString(), onComplete);

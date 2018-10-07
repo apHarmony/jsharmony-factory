@@ -26,12 +26,12 @@ var os = require("os");
 var _ = require('lodash');
 var jsHarmony = require('jsharmony');
 var jsHarmonyModule = require('jsharmony/jsHarmonyModule');
-var jsHarmonySite = require('jsHarmony/jsHarmonySite');
-var jsHarmonyRouter = require('jsHarmony/jsHarmonyRouter');
+var jsHarmonySite = require('jsharmony/jsHarmonySite');
+var jsHarmonyRouter = require('jsharmony/jsHarmonyRouter');
 var HelperFS = jsHarmony.lib.HelperFS;
 var Helper = jsHarmony.lib.Helper;
 var cookieParser = require('cookie-parser');
-var jsHarmonyFactoryConfig = require('./jsharmonyFactoryConfig.js');
+var jsHarmonyFactoryConfig = require('./jsHarmonyFactoryConfig.js');
 var jsHarmonyFactoryMailer = require('./lib/Mailer.js');
 var jsHarmonyFactoryJobProc = require('./models/_jobproc.js');
 
