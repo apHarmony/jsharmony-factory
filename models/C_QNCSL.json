@@ -1,7 +1,7 @@
 {
   "comment":"C_QNCSL - List of System Notes with Client Scope - One Client  ",
   "layout":"grid", 
-	"title":"Notifications",
+	"title":"Notifications1",
 	"table":"jsharmony.v_nl",
 	"actions":"B", 
   "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
@@ -13,7 +13,6 @@
   "disableautoload": 1,
 	"fields":[
 	  {"name":"n_id","type":"bigint","key": 1,"datalock":{"C_ID":"N_ID"}},
-	  {"name":"c_id","type":"bigint","key": 1,"datalock":{"C_ID":"C_ID"}},
 	  {"name":"n_scope","type":"varchar","length":8,"foreignkey":1,"datalock":{"C_ID":"N_SCOPE"}},
 	  {"name":"n_type","type":"varchar","length":8,"foreignkey":1,"datalock":{"C_ID":"N_TYPE"}},
 	  {"name":"n_dt","type":"date","format":["date","MM/DD/YY"],"caption":"Posted","actions":"B"},

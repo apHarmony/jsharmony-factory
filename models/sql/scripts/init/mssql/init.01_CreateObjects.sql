@@ -1,23 +1,29 @@
-/****** Object:  DatabaseRole [jsharmony_role_dev]    Script Date: 10/25/2017 7:00:06 AM ******/
-CREATE ROLE [jsharmony_role_dev]
-GO
-/****** Object:  DatabaseRole [jsharmony_role_exec]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  DatabaseRole [jsharmony_role_exec]    Script Date: 10/8/2018 5:22:50 PM ******/
 CREATE ROLE [jsharmony_role_exec]
 GO
-ALTER ROLE [db_datareader] ADD MEMBER [jsharmony_role_dev]
-GO
-ALTER ROLE [db_datawriter] ADD MEMBER [jsharmony_role_dev]
+/****** Object:  DatabaseRole [jsharmony_role_dev]    Script Date: 10/8/2018 5:22:50 PM ******/
+CREATE ROLE [jsharmony_role_dev]
 GO
 ALTER ROLE [db_datareader] ADD MEMBER [jsharmony_role_exec]
 GO
 ALTER ROLE [db_datawriter] ADD MEMBER [jsharmony_role_exec]
 GO
-/****** Object:  Schema [jsharmony]    Script Date: 10/25/2017 7:00:06 AM ******/
+ALTER ROLE [db_datareader] ADD MEMBER [jsharmony_role_dev]
+GO
+ALTER ROLE [db_datawriter] ADD MEMBER [jsharmony_role_dev]
+GO
+GRANT CREATE TABLE TO [jsharmony_role_dev] AS [dbo]
+GO
+GRANT VIEW ANY COLUMN ENCRYPTION KEY DEFINITION TO [public] AS [dbo]
+GO
+GRANT VIEW ANY COLUMN MASTER KEY DEFINITION TO [public] AS [dbo]
+GO
+/****** Object:  Schema [jsharmony]    Script Date: 10/8/2018 5:22:51 PM ******/
 CREATE SCHEMA [jsharmony]
 GO
 GRANT ALTER ON SCHEMA::[jsharmony] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[audit_info]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[audit_info]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -36,7 +42,7 @@ BEGIN
 
   SET @rslt =  'INFO'+char(13)+char(10)+ 
                '         Entered:  '+jsharmony.mymmddyyhhmi(@ETSTMP)+'  '+jsharmony.mycuser_fmt(@EU)+
-         char(13)+char(10)+ 
+			   char(13)+char(10)+ 
                'Last Updated:  '+jsharmony.mymmddyyhhmi(@MTSTMP)+'  '+jsharmony.mycuser_fmt(@MU); 
 
   RETURN @rslt
@@ -46,7 +52,7 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[audit_info] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[CHECK_PP]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[CHECK_PP]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -58,11 +64,11 @@ GO
 
 CREATE FUNCTION [jsharmony].[CHECK_PP]
 (
-  @in_table nvarchar(3),
-  @in_process nvarchar(32),
-  @in_attrib nvarchar(16),
-  @in_val nvarchar(256)
-) 
+	@in_table nvarchar(3),
+	@in_process nvarchar(32),
+	@in_attrib nvarchar(16),
+	@in_val nvarchar(256)
+)	
 RETURNS NVARCHAR(MAX)  
 AS 
 BEGIN
@@ -131,7 +137,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[EXISTS_D]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[EXISTS_D]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -147,9 +153,9 @@ GO
 
 CREATE FUNCTION [jsharmony].[EXISTS_D]
 (
-  @tbl nvarchar(MAX),
-  @id bigint
-) 
+	@tbl nvarchar(MAX),
+	@id bigint
+)	
 RETURNS bit  
 AS 
 BEGIN
@@ -158,7 +164,7 @@ DECLARE @rslt BIT = 0
   select top(1) @rslt=1
     from jsharmony.D
    where D_SCOPE = @tbl
-     and D_SCOPE_ID = @id;   
+     and D_SCOPE_ID = @id;	 
 
 return(isnull(@rslt,0))
   
@@ -174,7 +180,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[EXISTS_N]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[EXISTS_N]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -189,9 +195,9 @@ GO
 
 CREATE FUNCTION [jsharmony].[EXISTS_N]
 (
-  @tbl nvarchar(MAX),
-  @id bigint
-) 
+	@tbl nvarchar(MAX),
+	@id bigint
+)	
 RETURNS bit  
 AS 
 BEGIN
@@ -200,7 +206,7 @@ DECLARE @rslt BIT = 0
   select top(1) @rslt=1
     from jsharmony.N
    where N_SCOPE = @tbl
-     and N_SCOPE_ID = @id;   
+     and N_SCOPE_ID = @id;	 
 
 return(isnull(@rslt,0))
   
@@ -215,7 +221,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[GET_CPE_NAME]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[GET_CPE_NAME]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -225,8 +231,8 @@ GO
 
 CREATE FUNCTION [jsharmony].[GET_CPE_NAME]
 (
-  @in_PE_ID BIGINT
-) 
+	@in_PE_ID BIGINT
+)	
 RETURNS NVARCHAR(MAX)  
 AS 
 BEGIN
@@ -244,7 +250,7 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[GET_CPE_NAME] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[GET_PE_NAME]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[GET_PE_NAME]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -253,8 +259,8 @@ GO
 
 CREATE FUNCTION [jsharmony].[GET_PE_NAME]
 (
-  @in_PE_ID BIGINT
-) 
+	@in_PE_ID BIGINT
+)	
 RETURNS NVARCHAR(MAX)  
 AS 
 BEGIN
@@ -271,7 +277,7 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[GET_PE_NAME] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[GET_PPD_DESC]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[GET_PPD_DESC]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -281,9 +287,9 @@ GO
 
 CREATE FUNCTION [jsharmony].[GET_PPD_DESC]
 (
-  @in_PPD_PROCESS NVARCHAR(MAX),
-  @in_PPD_ATTRIB NVARCHAR(MAX)
-) 
+	@in_PPD_PROCESS NVARCHAR(MAX),
+	@in_PPD_ATTRIB NVARCHAR(MAX)
+)	
 RETURNS NVARCHAR(MAX)  
 AS 
 BEGIN
@@ -302,7 +308,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myCUSER]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -312,7 +318,7 @@ GO
 
 
 CREATE FUNCTION [jsharmony].[myCUSER]
-()  
+()	
 RETURNS varchar(20)   
 AS 
 BEGIN
@@ -331,7 +337,7 @@ GRANT REFERENCES ON [jsharmony].[myCUSER] TO [jsharmony_role_dev] AS [dbo]
 GO
 GRANT EXECUTE ON [jsharmony].[myCUSER] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_DO]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -343,7 +349,7 @@ GO
 
 
 CREATE FUNCTION [jsharmony].[myCUSER_DO]
-()  
+()	
 RETURNS varchar(20)   
 AS 
 BEGIN
@@ -356,10 +362,10 @@ DECLARE @pe_id BIGINT=-1;
   IF ((@an IS NOT NULL) AND (@an <> 'DBAPP')) 
   BEGIN 
     SELECT @pe_id=pe_id
-    FROM jsharmony.PE
+	  FROM jsharmony.PE
      WHERE PE_Email = @an;
-  
-  SET @rslt = CASE WHEN @pe_id=(-1) THEN @an ELSE 'P'+CONVERT(VARCHAR(30),@pe_id) END
+	
+	SET @rslt = CASE WHEN @pe_id=(-1) THEN @an ELSE 'P'+CONVERT(VARCHAR(30),@pe_id) END
   END 
   return (@rslt)
 END
@@ -369,7 +375,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_FMT]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_FMT]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -380,7 +386,7 @@ GO
 
 
 CREATE FUNCTION [jsharmony].[myCUSER_FMT]
-(@USER VARCHAR(20)) 
+(@USER VARCHAR(20))	
 RETURNS nvarchar(120)   
 AS 
 BEGIN
@@ -400,7 +406,7 @@ GRANT REFERENCES ON [jsharmony].[myCUSER_FMT] TO [jsharmony_role_dev] AS [dbo]
 GO
 GRANT EXECUTE ON [jsharmony].[myCUSER_FMT] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_FMT_DO]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_FMT_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -412,7 +418,7 @@ GO
 
 
 CREATE FUNCTION [jsharmony].[myCUSER_FMT_DO]
-(@USER VARCHAR(20)) 
+(@USER VARCHAR(20))	
 RETURNS nvarchar(120)   
 AS 
 BEGIN
@@ -426,14 +432,14 @@ DECLARE @rslt nvarchar(255)
   begin
     set @rslt = @USER;
     select @rslt = 'S-'+isnull(PE_Name,'')
-   from jsharmony.PE
+	 from jsharmony.PE
     where convert(varchar(50),PE_ID)=substring(@USER,2,1024);
   end
   else if (substring(@USER,1,1)='C' and isnumeric(substring(@USER,2,1024))=1)
   begin
     set @rslt = @USER;
     select @rslt = 'C-'+isnull(PE_Name,'')
-   from jsharmony.CPE
+	 from jsharmony.CPE
     where convert(varchar(50),PE_ID)=substring(@USER,2,1024);
   end
 
@@ -446,7 +452,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myHASH]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myHASH]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -461,7 +467,7 @@ GO
 CREATE FUNCTION [jsharmony].[myHASH]
 (@TYPE CHAR(1),
  @PE_ID bigint,
- @PW nvarchar(255)) 
+ @PW nvarchar(255))	
 RETURNS varbinary(200)   
 AS 
 BEGIN
@@ -472,21 +478,21 @@ DECLARE @v varchar(255)
   if (@TYPE = 'S')
   BEGIN
     select @seed = PP_VAL
-    from jsharmony.V_PP
+	  from jsharmony.V_PP
      where PP_PROCESS = 'USERS'
-     and PP_ATTRIB = 'HASH_SEED_S';
+	   and PP_ATTRIB = 'HASH_SEED_S';
   END
   else if (@TYPE = 'C')
   BEGIN
     select @seed = PP_VAL
-    from jsharmony.V_PP
+	  from jsharmony.V_PP
      where PP_PROCESS = 'USERS'
-     and PP_ATTRIB = 'HASH_SEED_C';
+	   and PP_ATTRIB = 'HASH_SEED_C';
   END
 
   if (@seed is not null
       and isnull(@PE_ID,0) > 0
-    and isnull(@PW,'') <> '')
+	  and isnull(@PW,'') <> '')
   begin
     select @v = (convert(varchar(50),@PE_ID)+@PW+@seed)
     select @rslt = hashbytes('sha1',@v)
@@ -502,7 +508,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myMMDDYYHHMI]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myMMDDYYHHMI]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -515,11 +521,11 @@ CREATE FUNCTION [jsharmony].[myMMDDYYHHMI] (@X DATETIME2(7))
 RETURNS varchar(140)
 AS
 BEGIN
-  RETURN convert(varchar(50),@X,1)+' '+substring(convert(varchar(50),@X,14),1,5)
+	RETURN convert(varchar(50),@X,1)+' '+substring(convert(varchar(50),@X,14),1,5)
 END
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myNOW]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myNOW]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -549,7 +555,7 @@ GRANT REFERENCES ON [jsharmony].[myNOW] TO [jsharmony_role_dev] AS [dbo]
 GO
 GRANT EXECUTE ON [jsharmony].[myNOW] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myNOW_DO]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myNOW_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -575,7 +581,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myPE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myPE]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -586,7 +592,7 @@ GO
 
 
 CREATE FUNCTION [jsharmony].[myPE]
-()  
+()	
 RETURNS bigint   
 AS 
 BEGIN
@@ -602,14 +608,14 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myPE_DO]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myPE_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE FUNCTION [jsharmony].[myPE_DO]
-()  
+()	
 RETURNS bigint   
 AS 
 BEGIN
@@ -622,13 +628,68 @@ DECLARE @pe_id BIGINT=-1;
   IF ((@an IS NOT NULL) AND (@an <> 'DBAPP')) 
   BEGIN
     if substring(@an,1,1) = 'S' and isnumeric(substring(@an,2,100))<>0
-    set @rslt = convert(bigint,substring(@an,2,100)) 
+	  set @rslt = convert(bigint,substring(@an,2,100)) 
   END 
   return (@rslt);
 END
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myTODATE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myPEC]    Script Date: 10/8/2018 5:22:51 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+
+
+CREATE FUNCTION [jsharmony].[myPEC]
+()	
+RETURNS bigint   
+AS 
+BEGIN
+DECLARE @rslt bigint
+
+  SET @rslt = jsharmony.myPEC_DO()
+
+  return (@rslt)
+
+END
+
+
+
+
+GO
+/****** Object:  UserDefinedFunction [jsharmony].[myPEC_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE FUNCTION [jsharmony].[myPEC_DO]
+()	
+RETURNS bigint   
+AS 
+BEGIN
+DECLARE @rslt bigint
+DECLARE @an varchar(255)
+DECLARE @pe_id BIGINT=-1;
+
+  SET @rslt = NULL
+  SET @an = LTRIM(RTRIM(REPLACE(ISNULL(CONVERT(VARCHAR(128), CONTEXT_INFO()), APP_NAME()),CHAR(0),'')))
+  IF ((@an IS NOT NULL) AND (@an <> 'DBAPP')) 
+  BEGIN
+    if substring(@an,1,1) = 'C' and isnumeric(substring(@an,2,100))<>0
+	  set @rslt = convert(bigint,substring(@an,2,100)) 
+  END 
+  return (@rslt);
+END
+
+GO
+/****** Object:  UserDefinedFunction [jsharmony].[myTODATE]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -641,8 +702,8 @@ CREATE FUNCTION [jsharmony].[myTODATE] (@X DATETIME2(7))
 RETURNS date
 AS
 BEGIN
-  
-  RETURN DATEADD(day, DATEDIFF(day, 0, @X), 0)
+	
+	RETURN DATEADD(day, DATEDIFF(day, 0, @X), 0)
 
 
 END
@@ -650,7 +711,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myTODAY]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myTODAY]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -663,7 +724,7 @@ CREATE FUNCTION [jsharmony].[myTODAY] ()
 RETURNS date
 AS
 BEGIN
-  RETURN (jsharmony.myTODAY_DO())
+	RETURN (jsharmony.myTODAY_DO())
 END
 
 
@@ -671,7 +732,7 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[myTODAY] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myTODAY_DO]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[myTODAY_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -684,8 +745,8 @@ CREATE FUNCTION [jsharmony].[myTODAY_DO] ()
 RETURNS date
 AS
 BEGIN
-  
-  RETURN DATEADD(day, DATEDIFF(day, 0, jsharmony.myNOW()), 0)
+	
+	RETURN DATEADD(day, DATEDIFF(day, 0, jsharmony.myNOW()), 0)
 
 
 END
@@ -693,7 +754,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALC]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALC]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -706,9 +767,9 @@ GO
 
 CREATE FUNCTION [jsharmony].[NONEQUALC]
 (
-  @in1 nvarchar(MAX),
-  @in2 nvarchar(MAX)
-) 
+	@in1 nvarchar(MAX),
+	@in2 nvarchar(MAX)
+)	
 RETURNS bit  
 AS 
 BEGIN
@@ -730,7 +791,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALD]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALD]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -745,9 +806,9 @@ GO
 
 CREATE FUNCTION [jsharmony].[NONEQUALD]
 (
-  @in1 DATETIME2(7),
-  @in2 DATETIME2(7)
-) 
+	@in1 DATETIME2(7),
+	@in2 DATETIME2(7)
+)	
 RETURNS bit  
 AS 
 BEGIN
@@ -778,7 +839,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALN]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALN]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -790,9 +851,9 @@ GO
 
 CREATE FUNCTION [jsharmony].[NONEQUALN]
 (
-  @in1 numeric(30,10),
-  @in2 numeric(30,10)
-) 
+	@in1 numeric(30,10),
+	@in2 numeric(30,10)
+)	
 RETURNS bit  
 AS 
 BEGIN
@@ -815,7 +876,7 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[TABLE_TYPE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  UserDefinedFunction [jsharmony].[TABLE_TYPE]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -826,9 +887,9 @@ GO
 
 CREATE FUNCTION [jsharmony].[TABLE_TYPE]
 (
-  @in_schema varchar(max),
-  @in_name varchar(max)
-) 
+	@in_schema varchar(max),
+	@in_name varchar(max)
+)	
 RETURNS VARCHAR(max)  
 AS 
 BEGIN
@@ -838,7 +899,7 @@ DECLARE @rslt VARCHAR(MAX) = NULL
     from information_schema.tables
    where table_schema = coalesce(@in_schema,'dbo')
      and table_name = @in_name; 
-  
+	
   RETURN (@rslt)
 
 END
@@ -848,34 +909,34 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[TABLE_TYPE] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  Table [jsharmony].[PPD]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[PPD]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[PPD](
-  [PPD_PROCESS] [nvarchar](32) NOT NULL,
-  [PPD_ATTRIB] [nvarchar](16) NOT NULL,
-  [PPD_DESC] [nvarchar](255) NOT NULL,
-  [PPD_TYPE] [nvarchar](8) NOT NULL,
-  [CODENAME] [nvarchar](16) NULL,
-  [PPD_GPP] [bit] NOT NULL,
-  [PPD_PPP] [bit] NOT NULL,
-  [PPD_XPP] [bit] NOT NULL,
-  [PPD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [PPD_ETstmp] [datetime2](7) NOT NULL,
-  [PPD_EU] [nvarchar](20) NOT NULL,
-  [PPD_MTstmp] [datetime2](7) NOT NULL,
-  [PPD_MU] [nvarchar](20) NOT NULL,
-  [PPD_SNotes] [nvarchar](max) NULL,
+	[PPD_PROCESS] [nvarchar](32) NOT NULL,
+	[PPD_ATTRIB] [nvarchar](16) NOT NULL,
+	[PPD_DESC] [nvarchar](255) NOT NULL,
+	[PPD_TYPE] [nvarchar](8) NOT NULL,
+	[CODENAME] [nvarchar](16) NULL,
+	[PPD_GPP] [bit] NOT NULL,
+	[PPD_PPP] [bit] NOT NULL,
+	[PPD_XPP] [bit] NOT NULL,
+	[PPD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[PPD_ETstmp] [datetime2](7) NOT NULL,
+	[PPD_EU] [nvarchar](20) NOT NULL,
+	[PPD_MTstmp] [datetime2](7) NOT NULL,
+	[PPD_MU] [nvarchar](20) NOT NULL,
+	[PPD_SNotes] [nvarchar](max) NULL,
  CONSTRAINT [PK_PPD] PRIMARY KEY CLUSTERED 
 (
-  [PPD_PROCESS] ASC,
-  [PPD_ATTRIB] ASC
+	[PPD_PROCESS] ASC,
+	[PPD_ATTRIB] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[UCOD_PPP_PROCESS_V]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[UCOD_PPP_PROCESS_V]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -895,47 +956,47 @@ SELECT distinct
  where PPD_PPP = 1
 
 GO
-/****** Object:  Table [jsharmony].[AUD_H]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[AUD_H]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[AUD_H](
-  [AUD_SEQ] [bigint] IDENTITY(1,1) NOT NULL,
-  [TABLE_NAME] [varchar](32) NOT NULL,
-  [TABLE_ID] [bigint] NOT NULL,
-  [AUD_OP] [char](10) NOT NULL,
-  [AUD_U] [nvarchar](20) NOT NULL,
-  [DB_K] [char](1) NOT NULL,
-  [AUD_Tstmp] [datetime2](7) NOT NULL,
-  [C_ID] [bigint] NULL,
-  [E_ID] [bigint] NULL,
-  [REF_NAME] [varchar](32) NULL,
-  [REF_ID] [bigint] NULL,
-  [SUBJ] [nvarchar](255) NULL,
+	[AUD_SEQ] [bigint] IDENTITY(1,1) NOT NULL,
+	[TABLE_NAME] [varchar](32) NOT NULL,
+	[TABLE_ID] [bigint] NOT NULL,
+	[AUD_OP] [char](10) NOT NULL,
+	[AUD_U] [nvarchar](20) NOT NULL,
+	[DB_K] [char](1) NOT NULL,
+	[AUD_Tstmp] [datetime2](7) NOT NULL,
+	[C_ID] [bigint] NULL,
+	[E_ID] [bigint] NULL,
+	[REF_NAME] [varchar](32) NULL,
+	[REF_ID] [bigint] NULL,
+	[SUBJ] [nvarchar](255) NULL,
  CONSTRAINT [PK_AUD_H] PRIMARY KEY CLUSTERED 
 (
-  [AUD_SEQ] ASC
+	[AUD_SEQ] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[AUD_D]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[AUD_D]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[AUD_D](
-  [AUD_SEQ] [bigint] NOT NULL,
-  [COLUMN_NAME] [varchar](30) NOT NULL,
-  [COLUMN_VAL] [nvarchar](max) NULL,
+	[AUD_SEQ] [bigint] NOT NULL,
+	[COLUMN_NAME] [varchar](30) NOT NULL,
+	[COLUMN_VAL] [nvarchar](max) NULL,
  CONSTRAINT [PK_AUD_D] PRIMARY KEY CLUSTERED 
 (
-  [AUD_SEQ] ASC,
-  [COLUMN_NAME] ASC
+	[AUD_SEQ] ASC,
+	[COLUMN_NAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_AUDL_RAW]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_AUDL_RAW]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -960,14 +1021,14 @@ SELECT        AUD_H.AUD_SEQ,
               AUD_H.TABLE_ID,
               AUD_H.AUD_OP,
               AUD_H.AUD_U,
-        jsharmony.myCUSER_FMT(AUD_H.AUD_U) PE_Name,
-        AUD_H.DB_K,
-        AUD_H.AUD_Tstmp,
-        AUD_H.REF_NAME,
-        AUD_H.REF_ID,
-        AUD_H.SUBJ,
+			  jsharmony.myCUSER_FMT(AUD_H.AUD_U) PE_Name,
+			  AUD_H.DB_K,
+			  AUD_H.AUD_Tstmp,
+			  AUD_H.REF_NAME,
+			  AUD_H.REF_ID,
+			  AUD_H.SUBJ,
               AUD_D.COLUMN_NAME, 
-        AUD_D.COLUMN_VAL
+			  AUD_D.COLUMN_VAL
 FROM          jsharmony.AUD_H 
 LEFT OUTER JOIN jsharmony.AUD_D ON AUD_H.AUD_SEQ = AUD_D.AUD_SEQ
 
@@ -978,7 +1039,7 @@ LEFT OUTER JOIN jsharmony.AUD_D ON AUD_H.AUD_SEQ = AUD_D.AUD_SEQ
 
 
 GO
-/****** Object:  View [jsharmony].[UCOD_XPP_PROCESS_V]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[UCOD_XPP_PROCESS_V]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -998,7 +1059,7 @@ SELECT distinct
  where PPD_XPP = 1
 
 GO
-/****** Object:  View [jsharmony].[UCOD2_GPP_PROCESS_ATTRIB_V]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[UCOD2_GPP_PROCESS_ATTRIB_V]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1022,7 +1083,7 @@ SELECT NULL CODSEQ
   FROM jsharmony.PPD
  WHERE PPD_GPP = 1
 GO
-/****** Object:  View [jsharmony].[UCOD2_PPP_PROCESS_ATTRIB_V]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[UCOD2_PPP_PROCESS_ATTRIB_V]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1048,7 +1109,7 @@ SELECT NULL CODSEQ
  WHERE PPD_PPP = 1
 
 GO
-/****** Object:  View [jsharmony].[UCOD2_XPP_PROCESS_ATTRIB_V]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[UCOD2_XPP_PROCESS_ATTRIB_V]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1074,28 +1135,28 @@ SELECT NULL CODSEQ
  WHERE PPD_XPP = 1
 
 GO
-/****** Object:  Table [jsharmony].[SPER]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[SPER]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[SPER](
-  [PE_ID] [bigint] NOT NULL,
-  [SPER_SNotes] [nvarchar](255) NULL,
-  [SPER_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [SR_NAME] [nvarchar](16) NOT NULL,
+	[PE_ID] [bigint] NOT NULL,
+	[SPER_SNotes] [nvarchar](255) NULL,
+	[SPER_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[SR_NAME] [nvarchar](16) NOT NULL,
  CONSTRAINT [PK_SPER] PRIMARY KEY CLUSTERED 
 (
-  [PE_ID] ASC,
-  [SR_NAME] ASC
+	[PE_ID] ASC,
+	[SR_NAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SPER] UNIQUE NONCLUSTERED 
 (
-  [SPER_ID] ASC
+	[SPER_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_MY_ROLES]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_MY_ROLES]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1110,20 +1171,20 @@ select SPER.SR_NAME
 
 
 GO
-/****** Object:  Table [jsharmony].[NUMBERS]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[NUMBERS]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[NUMBERS](
-  [N] [smallint] NOT NULL,
+	[N] [smallint] NOT NULL,
  CONSTRAINT [PK_NUMBERS] PRIMARY KEY CLUSTERED 
 (
-  [N] ASC
+	[N] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_MONTHS]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_MONTHS]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1147,7 +1208,7 @@ select N,
 
 
 GO
-/****** Object:  View [jsharmony].[V_YEARS]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_YEARS]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1166,72 +1227,72 @@ select datepart(year,sysdatetime())+N-1 year,
 
 
 GO
-/****** Object:  Table [jsharmony].[PPP]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[PPP]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[PPP](
-  [PE_ID] [bigint] NOT NULL,
-  [PPP_PROCESS] [nvarchar](32) NOT NULL,
-  [PPP_ATTRIB] [nvarchar](16) NOT NULL,
-  [PPP_VAL] [varchar](256) NULL,
-  [PPP_ETstmp] [datetime2](7) NOT NULL,
-  [PPP_EU] [nvarchar](20) NOT NULL,
-  [PPP_MTstmp] [datetime2](7) NOT NULL,
-  [PPP_MU] [nvarchar](20) NOT NULL,
-  [PPP_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[PE_ID] [bigint] NOT NULL,
+	[PPP_PROCESS] [nvarchar](32) NOT NULL,
+	[PPP_ATTRIB] [nvarchar](16) NOT NULL,
+	[PPP_VAL] [varchar](256) NULL,
+	[PPP_ETstmp] [datetime2](7) NOT NULL,
+	[PPP_EU] [nvarchar](20) NOT NULL,
+	[PPP_MTstmp] [datetime2](7) NOT NULL,
+	[PPP_MU] [nvarchar](20) NOT NULL,
+	[PPP_ID] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_PPP] PRIMARY KEY CLUSTERED 
 (
-  [PE_ID] ASC,
-  [PPP_PROCESS] ASC,
-  [PPP_ATTRIB] ASC
+	[PE_ID] ASC,
+	[PPP_PROCESS] ASC,
+	[PPP_ATTRIB] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[GPP]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[GPP]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[GPP](
-  [GPP_PROCESS] [nvarchar](32) NOT NULL,
-  [GPP_ATTRIB] [nvarchar](16) NOT NULL,
-  [GPP_VAL] [varchar](256) NULL,
-  [GPP_ETstmp] [datetime2](7) NOT NULL,
-  [GPP_EU] [nvarchar](20) NOT NULL,
-  [GPP_MTstmp] [datetime2](7) NOT NULL,
-  [GPP_MU] [nvarchar](20) NOT NULL,
-  [GPP_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[GPP_PROCESS] [nvarchar](32) NOT NULL,
+	[GPP_ATTRIB] [nvarchar](16) NOT NULL,
+	[GPP_VAL] [varchar](256) NULL,
+	[GPP_ETstmp] [datetime2](7) NOT NULL,
+	[GPP_EU] [nvarchar](20) NOT NULL,
+	[GPP_MTstmp] [datetime2](7) NOT NULL,
+	[GPP_MU] [nvarchar](20) NOT NULL,
+	[GPP_ID] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_GPP] PRIMARY KEY CLUSTERED 
 (
-  [GPP_PROCESS] ASC,
-  [GPP_ATTRIB] ASC
+	[GPP_PROCESS] ASC,
+	[GPP_ATTRIB] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[XPP]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[XPP]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[XPP](
-  [XPP_PROCESS] [nvarchar](32) NOT NULL,
-  [XPP_ATTRIB] [nvarchar](16) NOT NULL,
-  [XPP_VAL] [varchar](256) NOT NULL,
-  [XPP_ETstmp] [datetime2](7) NOT NULL,
-  [XPP_EU] [nvarchar](20) NOT NULL,
-  [XPP_MTstmp] [datetime2](7) NOT NULL,
-  [XPP_MU] [nvarchar](20) NOT NULL,
-  [XPP_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[XPP_PROCESS] [nvarchar](32) NOT NULL,
+	[XPP_ATTRIB] [nvarchar](16) NOT NULL,
+	[XPP_VAL] [varchar](256) NOT NULL,
+	[XPP_ETstmp] [datetime2](7) NOT NULL,
+	[XPP_EU] [nvarchar](20) NOT NULL,
+	[XPP_MTstmp] [datetime2](7) NOT NULL,
+	[XPP_MU] [nvarchar](20) NOT NULL,
+	[XPP_ID] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_XPP] PRIMARY KEY CLUSTERED 
 (
-  [XPP_PROCESS] ASC,
-  [XPP_ATTRIB] ASC
+	[XPP_PROCESS] ASC,
+	[XPP_ATTRIB] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_PP]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_PP]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1243,16 +1304,16 @@ GO
 CREATE VIEW [jsharmony].[V_PP] AS
  SELECT PPD.PPD_PROCESS AS PP_PROCESS, 
         PPD.PPD_ATTRIB AS PP_ATTRIB, 
-    CASE WHEN PPP_VAL IS NULL OR PPP_VAL = '' 
-         THEN CASE WHEN GPP_VAL IS NULL OR GPP_VAL = '' 
-                 THEN XPP_VAL 
-             ELSE GPP_VAL END 
-       ELSE PPP_VAL END AS PP_VAL, 
-    CASE WHEN PPP_VAL IS NULL OR PPP_VAL = '' 
-         THEN CASE WHEN GPP_VAL IS NULL OR GPP_VAL = '' 
-                 THEN 'XPP' 
-             ELSE 'GPP' END 
-       ELSE convert(varchar,PPP.PE_ID) END AS PP_SOURCE 
+		CASE WHEN PPP_VAL IS NULL OR PPP_VAL = '' 
+		     THEN CASE WHEN GPP_VAL IS NULL OR GPP_VAL = '' 
+			           THEN XPP_VAL 
+					   ELSE GPP_VAL END 
+			 ELSE PPP_VAL END AS PP_VAL, 
+		CASE WHEN PPP_VAL IS NULL OR PPP_VAL = '' 
+		     THEN CASE WHEN GPP_VAL IS NULL OR GPP_VAL = '' 
+			           THEN 'XPP' 
+					   ELSE 'GPP' END 
+			 ELSE convert(varchar,PPP.PE_ID) END AS PP_SOURCE 
    FROM jsharmony.PPD 
    LEFT OUTER JOIN jsharmony.XPP ON PPD.PPD_PROCESS = XPP.XPP_PROCESS AND PPD.PPD_ATTRIB = XPP.XPP_ATTRIB 
    LEFT OUTER JOIN jsharmony.GPP ON PPD.PPD_PROCESS = GPP.GPP_PROCESS AND PPD.PPD_ATTRIB = GPP.GPP_ATTRIB 
@@ -1262,39 +1323,39 @@ CREATE VIEW [jsharmony].[V_PP] AS
 
 
 GO
-/****** Object:  Table [jsharmony].[D]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[D]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[D](
-  [D_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [D_SCOPE] [nvarchar](8) NOT NULL,
-  [D_SCOPE_ID] [bigint] NOT NULL,
-  [C_ID] [bigint] NULL,
-  [E_ID] [bigint] NULL,
-  [D_STS] [nvarchar](8) NOT NULL,
-  [D_CTGR] [nvarchar](8) NOT NULL,
-  [D_Desc] [nvarchar](255) NULL,
-  [D_EXT] [nvarchar](16) NULL,
-  [D_SIZE] [bigint] NULL,
-  [D_FileName]  AS (('D'+CONVERT([varchar](50),[D_ID],(0)))+isnull([D_EXT],'')) PERSISTED,
-  [D_ETstmp] [datetime2](7) NOT NULL,
-  [D_EU] [nvarchar](20) NOT NULL,
-  [D_MTstmp] [datetime2](7) NOT NULL,
-  [D_MU] [nvarchar](20) NOT NULL,
-  [D_UTstmp] [datetime2](7) NOT NULL,
-  [D_UU] [nvarchar](20) NOT NULL,
-  [D_SYNCTstmp] [datetime2](7) NULL,
-  [D_SNotes] [nvarchar](255) NULL,
-  [D_ID_MAIN] [bigint] NULL,
+	[D_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[D_SCOPE] [nvarchar](8) NOT NULL,
+	[D_SCOPE_ID] [bigint] NOT NULL,
+	[C_ID] [bigint] NULL,
+	[E_ID] [bigint] NULL,
+	[D_STS] [nvarchar](8) NOT NULL,
+	[D_CTGR] [nvarchar](8) NOT NULL,
+	[D_Desc] [nvarchar](255) NULL,
+	[D_EXT] [nvarchar](16) NULL,
+	[D_SIZE] [bigint] NULL,
+	[D_FileName]  AS (('D'+CONVERT([varchar](50),[D_ID],(0)))+isnull([D_EXT],'')) PERSISTED,
+	[D_ETstmp] [datetime2](7) NOT NULL,
+	[D_EU] [nvarchar](20) NOT NULL,
+	[D_MTstmp] [datetime2](7) NOT NULL,
+	[D_MU] [nvarchar](20) NOT NULL,
+	[D_UTstmp] [datetime2](7) NOT NULL,
+	[D_UU] [nvarchar](20) NOT NULL,
+	[D_SYNCTstmp] [datetime2](7) NULL,
+	[D_SNotes] [nvarchar](255) NULL,
+	[D_ID_MAIN] [bigint] NULL,
  CONSTRAINT [PK_D] PRIMARY KEY CLUSTERED 
 (
-  [D_ID] ASC
+	[D_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_D_X]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_D_X]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1323,23 +1384,23 @@ SELECT D_ID
       ,D_ID_MAIN
   FROM jsharmony.D
 GO
-/****** Object:  Table [jsharmony].[DUAL]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[DUAL]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[DUAL](
-  [DUMMY] [nvarchar](1) NOT NULL,
-  [DUAL_IDENT] [bigint] IDENTITY(1,1) NOT NULL,
-  [DUAL_BIGINT] [bigint] NULL,
-  [DUAL_NVARCHAR50] [nvarchar](50) NULL,
+	[DUMMY] [nvarchar](1) NOT NULL,
+	[DUAL_IDENT] [bigint] IDENTITY(1,1) NOT NULL,
+	[DUAL_BIGINT] [bigint] NULL,
+	[DUAL_NVARCHAR50] [nvarchar](50) NULL,
  CONSTRAINT [PK_DUAL] PRIMARY KEY CLUSTERED 
 (
-  [DUAL_IDENT] ASC
+	[DUAL_IDENT] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_HOUSE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_HOUSE]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1349,18 +1410,19 @@ GO
 
 
 
-create view [jsharmony].[V_HOUSE] as
+
+CREATE view [jsharmony].[V_HOUSE] as
 select NAME.PP_VAL HOUSE_NAME,
        ADDR.PP_VAL HOUSE_ADDR,
-     CITY.PP_VAL HOUSE_CITY,
-     [STATE].PP_VAL HOUSE_STATE,
-     ZIP.PP_VAL HOUSE_ZIP,
+	   CITY.PP_VAL HOUSE_CITY,
+	   [STATE].PP_VAL HOUSE_STATE,
+	   ZIP.PP_VAL HOUSE_ZIP,
        isnull(ADDR.PP_VAL,'')+', '+isnull(CITY.PP_VAL,'')+' '+isnull([STATE].PP_VAL,'')+' '+isnull(ZIP.PP_VAL,'') HOUSE_FULL_ADDR,
-     BPHONE.PP_VAL HOUSE_BPHONE,
-     FAX.PP_VAL HOUSE_FAX,
-     EMAIL.PP_VAL HOUSE_EMAIL,
-     CONTACT.PP_VAL HOUSE_CONTACT
-  from dual
+	   BPHONE.PP_VAL HOUSE_BPHONE,
+	   FAX.PP_VAL HOUSE_FAX,
+	   EMAIL.PP_VAL HOUSE_EMAIL,
+	   CONTACT.PP_VAL HOUSE_CONTACT
+  from jsharmony.dual
  left outer join jsharmony.V_PP NAME on NAME.PP_PROCESS='HOUSE' and NAME.PP_ATTRIB='NAME'
  left outer join jsharmony.V_PP ADDR on ADDR.PP_PROCESS='HOUSE' and ADDR.PP_ATTRIB='ADDR'
  left outer join jsharmony.V_PP CITY on CITY.PP_PROCESS='HOUSE' and CITY.PP_ATTRIB='CITY'
@@ -1375,99 +1437,100 @@ select NAME.PP_VAL HOUSE_NAME,
 
 
 GO
-/****** Object:  Table [jsharmony].[CRM]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[CRM]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[CRM](
-  [SM_ID] [bigint] NOT NULL,
-  [CRM_SNotes] [nvarchar](255) NULL,
-  [CRM_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CR_NAME] [nvarchar](16) NOT NULL,
+	[SM_ID] [bigint] NOT NULL,
+	[CRM_SNotes] [nvarchar](255) NULL,
+	[CRM_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CR_NAME] [nvarchar](16) NOT NULL,
  CONSTRAINT [PK_CRM] PRIMARY KEY CLUSTERED 
 (
-  [CR_NAME] ASC,
-  [SM_ID] ASC
+	[CR_NAME] ASC,
+	[SM_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_CRM] UNIQUE NONCLUSTERED 
 (
-  [CRM_ID] ASC
+	[CRM_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[CR]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[CR]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[CR](
-  [CR_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CR_SEQ] [smallint] NULL,
-  [CR_STS] [nvarchar](8) NOT NULL,
-  [CR_Name] [nvarchar](16) NOT NULL,
-  [CR_Desc] [nvarchar](255) NOT NULL,
-  [CR_CODE] [nvarchar](50) NULL,
-  [CR_ATTRIB] [nvarchar](50) NULL,
-  [CR_SNotes] [nvarchar](255) NULL,
+	[CR_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CR_SEQ] [smallint] NULL,
+	[CR_STS] [nvarchar](8) NOT NULL,
+	[CR_Name] [nvarchar](16) NOT NULL,
+	[CR_Desc] [nvarchar](255) NOT NULL,
+	[CR_CODE] [nvarchar](50) NULL,
+	[CR_ATTRIB] [nvarchar](50) NULL,
+	[CR_SNotes] [nvarchar](255) NULL,
  CONSTRAINT [PK_CR] PRIMARY KEY CLUSTERED 
 (
-  [CR_Name] ASC
+	[CR_Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_CR_CR_Desc] UNIQUE NONCLUSTERED 
 (
-  [CR_Desc] ASC
+	[CR_Desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_CR_CR_ID] UNIQUE NONCLUSTERED 
 (
-  [CR_ID] ASC
+	[CR_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[SM]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[SM]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[SM](
-  [SM_ID_AUTO] [bigint] IDENTITY(1,1) NOT NULL,
-  [SM_UTYPE] [char](1) NOT NULL,
-  [SM_ID] [bigint] NOT NULL,
-  [SM_STS] [nvarchar](8) NOT NULL,
-  [SM_ID_Parent] [bigint] NULL,
-  [SM_Name] [nvarchar](30) NOT NULL,
-  [SM_Seq] [int] NULL,
-  [SM_DESC] [nvarchar](255) NOT NULL,
-  [SM_DESCL] [nvarchar](max) NULL,
-  [SM_DESCVL] [nvarchar](max) NULL,
-  [SM_Cmd] [varchar](255) NULL,
-  [SM_Image] [nvarchar](255) NULL,
-  [SM_SNotes] [nvarchar](255) NULL,
-  [SM_SubCmd] [varchar](255) NULL,
+	[SM_ID_AUTO] [bigint] IDENTITY(1,1) NOT NULL,
+	[SM_UTYPE] [char](1) NOT NULL,
+	[SM_ID] [bigint] NOT NULL,
+	[SM_STS] [nvarchar](8) NOT NULL,
+	[SM_ID_Parent] [bigint] NULL,
+	[SM_Name] [nvarchar](30) NOT NULL,
+	[SM_Seq] [int] NULL,
+	[SM_DESC] [nvarchar](255) NOT NULL,
+	[SM_DESCL] [nvarchar](max) NULL,
+	[SM_DESCVL] [nvarchar](max) NULL,
+	[SM_Cmd] [varchar](255) NULL,
+	[SM_Image] [nvarchar](255) NULL,
+	[SM_SNotes] [nvarchar](255) NULL,
+	[SM_SubCmd] [varchar](255) NULL,
  CONSTRAINT [PK_SM] PRIMARY KEY CLUSTERED 
 (
-  [SM_ID_AUTO] ASC
+	[SM_ID_AUTO] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SM_SM_DESC] UNIQUE NONCLUSTERED 
 (
-  [SM_ID_Parent] ASC,
-  [SM_DESC] ASC
+	[SM_ID_Parent] ASC,
+	[SM_DESC] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SM_SM_ID] UNIQUE NONCLUSTERED 
 (
-  [SM_ID] ASC
+	[SM_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SM_SM_NAME] UNIQUE NONCLUSTERED 
 (
-  [SM_Name] ASC
+	[SM_Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_CRMSEL]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_CRMSEL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1476,41 +1539,50 @@ CREATE VIEW [jsharmony].[V_CRMSEL]
 AS
 SELECT jsharmony.CRM.CRM_ID, 
        ISNULL(jsharmony.DUAL.DUAL_NVARCHAR50, '') AS NEW_CR_NAME, 
-     CASE WHEN CRM.CRM_ID IS NULL 
-          THEN 0 
-      ELSE 1 END AS CRMSEL_SEL, 
-     M.CR_Name, 
-     M.SM_ID_AUTO, 
-     M.SM_UTYPE, 
+	   DUAL.DUAL_BIGINT AS NEW_SM_ID,
+	   CASE WHEN CRM.CRM_ID IS NULL 
+	        THEN 0 
+			ELSE 1 END AS CRMSEL_SEL, 
+	   M.CR_ID, 
+	   M.CR_SEQ, 
+	   M.CR_STS, 
+	   M.CR_Name, 
+	   M.CR_Desc, 
+	   M.SM_ID_AUTO, 
+	   M.SM_UTYPE, 
        M.SM_ID, 
-     M.SM_STS, 
-     M.SM_ID_Parent, 
-     M.SM_Name, 
-     M.SM_Seq, 
-     M.SM_DESC, 
-     M.SM_DESCL, 
-     M.SM_DESCVL, 
-     M.SM_Cmd, 
-     M.SM_Image, 
-     M.SM_SNotes,
-     M.SM_SubCmd
-  FROM (SELECT jsharmony.CR.CR_Name, 
+	   M.SM_STS, 
+	   M.SM_ID_Parent, 
+	   M.SM_Name, 
+	   M.SM_Seq, 
+	   M.SM_DESC, 
+	   M.SM_DESCL, 
+	   M.SM_DESCVL, 
+	   M.SM_Cmd, 
+	   M.SM_Image, 
+	   M.SM_SNotes,
+	   M.SM_SubCmd
+  FROM (SELECT jsharmony.CR.CR_ID,
+               jsharmony.CR.CR_SEQ, 
+               jsharmony.CR.CR_STS, 
+               jsharmony.CR.CR_Name, 
+               jsharmony.CR.CR_Desc, 
                jsharmony.SM.SM_ID_AUTO, 
-         jsharmony.SM.SM_UTYPE, 
-         jsharmony.SM.SM_ID, 
-         jsharmony.SM.SM_STS, 
-         jsharmony.SM.SM_ID_Parent, 
-         jsharmony.SM.SM_Name, 
+			   jsharmony.SM.SM_UTYPE, 
+			   jsharmony.SM.SM_ID, 
+			   jsharmony.SM.SM_STS, 
+			   jsharmony.SM.SM_ID_Parent, 
+			   jsharmony.SM.SM_Name, 
                jsharmony.SM.SM_Seq, 
-         jsharmony.SM.SM_DESC, 
-         jsharmony.SM.SM_DESCL, 
-         jsharmony.SM.SM_DESCVL, 
-         jsharmony.SM.SM_Cmd, 
-         jsharmony.SM.SM_Image, 
-         jsharmony.SM.SM_SNotes, 
+			   jsharmony.SM.SM_DESC, 
+			   jsharmony.SM.SM_DESCL, 
+			   jsharmony.SM.SM_DESCVL, 
+			   jsharmony.SM.SM_Cmd, 
+			   jsharmony.SM.SM_Image, 
+			   jsharmony.SM.SM_SNotes, 
                jsharmony.SM.SM_SubCmd
           FROM jsharmony.CR 
-      LEFT OUTER JOIN jsharmony.SM ON jsharmony.SM.SM_UTYPE = 'C') AS M 
+		  LEFT OUTER JOIN jsharmony.SM ON jsharmony.SM.SM_UTYPE = 'C') AS M 
  INNER JOIN jsharmony.DUAL ON 1 = 1 
   LEFT OUTER JOIN jsharmony.CRM ON jsharmony.CRM.CR_NAME = M.CR_Name AND jsharmony.CRM.SM_ID = M.SM_ID;
 
@@ -1518,28 +1590,28 @@ SELECT jsharmony.CRM.CRM_ID,
 
 
 GO
-/****** Object:  Table [jsharmony].[CPER]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[CPER]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[CPER](
-  [PE_ID] [bigint] NOT NULL,
-  [CPER_SNotes] [nvarchar](255) NULL,
-  [CPER_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CR_NAME] [nvarchar](16) NOT NULL,
+	[PE_ID] [bigint] NOT NULL,
+	[CPER_SNotes] [nvarchar](255) NULL,
+	[CPER_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CR_NAME] [nvarchar](16) NOT NULL,
  CONSTRAINT [PK_CPER] PRIMARY KEY CLUSTERED 
 (
-  [PE_ID] ASC,
-  [CR_NAME] ASC
+	[PE_ID] ASC,
+	[CR_NAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_CPER] UNIQUE NONCLUSTERED 
 (
-  [CPER_ID] ASC
+	[CPER_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_CPER_NOSTAR]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_CPER_NOSTAR]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1552,107 +1624,117 @@ select *
  where CR_NAME <> 'C*';
 
 GO
-/****** Object:  Table [jsharmony].[SR]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[SR]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[SR](
-  [SR_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [SR_SEQ] [smallint] NOT NULL,
-  [SR_STS] [nvarchar](8) NOT NULL,
-  [SR_Name] [nvarchar](16) NOT NULL,
-  [SR_Desc] [nvarchar](255) NOT NULL,
-  [SR_CODE] [nvarchar](50) NULL,
-  [SR_ATTRIB] [nvarchar](50) NULL,
-  [SR_SNotes] [nvarchar](255) NULL,
+	[SR_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[SR_SEQ] [smallint] NOT NULL,
+	[SR_STS] [nvarchar](8) NOT NULL,
+	[SR_Name] [nvarchar](16) NOT NULL,
+	[SR_Desc] [nvarchar](255) NOT NULL,
+	[SR_CODE] [nvarchar](50) NULL,
+	[SR_ATTRIB] [nvarchar](50) NULL,
+	[SR_SNotes] [nvarchar](255) NULL,
  CONSTRAINT [PK_SR] PRIMARY KEY CLUSTERED 
 (
-  [SR_Name] ASC
+	[SR_Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SR_SR_Desc] UNIQUE NONCLUSTERED 
 (
-  [SR_Desc] ASC
+	[SR_Desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SR_SR_ID] UNIQUE NONCLUSTERED 
 (
-  [SR_ID] ASC
+	[SR_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[SRM]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[SRM]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[SRM](
-  [SM_ID] [bigint] NOT NULL,
-  [SRM_SNotes] [nvarchar](255) NULL,
-  [SRM_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [SR_NAME] [nvarchar](16) NOT NULL,
+	[SM_ID] [bigint] NOT NULL,
+	[SRM_SNotes] [nvarchar](255) NULL,
+	[SRM_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[SR_NAME] [nvarchar](16) NOT NULL,
  CONSTRAINT [PK_SRM] PRIMARY KEY CLUSTERED 
 (
-  [SR_NAME] ASC,
-  [SM_ID] ASC
+	[SR_NAME] ASC,
+	[SM_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SRM] UNIQUE NONCLUSTERED 
 (
-  [SRM_ID] ASC
+	[SRM_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_SRMSEL]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_SRMSEL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE VIEW [jsharmony].[V_SRMSEL]
 AS
 SELECT jsharmony.SRM.SRM_ID, 
        ISNULL(jsharmony.DUAL.DUAL_NVARCHAR50, '') AS NEW_SR_NAME, 
-     CASE WHEN SRM.SRM_ID IS NULL 
-          THEN 0 
-      ELSE 1 END AS SRMSEL_SEL, 
-     M.SR_Name, 
-     M.SM_ID_AUTO, 
-     M.SM_UTYPE, 
+	   DUAL.DUAL_BIGINT AS NEW_SM_ID,
+	   CASE WHEN SRM.SRM_ID IS NULL 
+	        THEN 0 
+			ELSE 1 END AS SRMSEL_SEL, 
+	   M.SR_ID, 
+       M.SR_SEQ, 
+       M.SR_STS, 
+       M.SR_Name, 
+       M.SR_Desc, 
+	   M.SM_ID_AUTO, 
+	   M.SM_UTYPE, 
        M.SM_ID, 
-     M.SM_STS, 
-     M.SM_ID_Parent, 
-     M.SM_Name, 
-     M.SM_Seq, 
-     M.SM_DESC, 
-     M.SM_DESCL, 
-     M.SM_DESCVL, 
-     M.SM_Cmd, 
-     M.SM_Image, 
-     M.SM_SNotes,
-     M.SM_SubCmd
-  FROM (SELECT jsharmony.SR.SR_Name, 
+	   M.SM_STS, 
+	   M.SM_ID_Parent, 
+	   M.SM_Name, 
+	   M.SM_Seq, 
+	   M.SM_DESC, 
+	   M.SM_DESCL, 
+	   M.SM_DESCVL, 
+	   M.SM_Cmd, 
+	   M.SM_Image, 
+	   M.SM_SNotes,
+	   M.SM_SubCmd
+  FROM (SELECT jsharmony.SR.SR_ID, 
+               jsharmony.SR.SR_SEQ, 
+               jsharmony.SR.SR_STS, 
+               jsharmony.SR.SR_Name, 
+               jsharmony.SR.SR_Desc, 
                jsharmony.SM.SM_ID_AUTO, 
-         jsharmony.SM.SM_UTYPE, 
-         jsharmony.SM.SM_ID, 
-         jsharmony.SM.SM_STS, 
-         jsharmony.SM.SM_ID_Parent, 
-         jsharmony.SM.SM_Name, 
+			   jsharmony.SM.SM_UTYPE, 
+			   jsharmony.SM.SM_ID, 
+			   jsharmony.SM.SM_STS, 
+			   jsharmony.SM.SM_ID_Parent, 
+			   jsharmony.SM.SM_Name, 
                jsharmony.SM.SM_Seq, 
-         jsharmony.SM.SM_DESC, 
-         jsharmony.SM.SM_DESCL, 
-         jsharmony.SM.SM_DESCVL, 
-         jsharmony.SM.SM_Cmd, 
-         jsharmony.SM.SM_Image, 
-         jsharmony.SM.SM_SNotes, 
+			   jsharmony.SM.SM_DESC, 
+			   jsharmony.SM.SM_DESCL, 
+			   jsharmony.SM.SM_DESCVL, 
+			   jsharmony.SM.SM_Cmd, 
+			   jsharmony.SM.SM_Image, 
+			   jsharmony.SM.SM_SNotes, 
                jsharmony.SM.SM_SubCmd
           FROM jsharmony.SR 
-      LEFT OUTER JOIN jsharmony.SM ON jsharmony.SM.SM_UTYPE = 'S') AS M 
+		  LEFT OUTER JOIN jsharmony.SM ON jsharmony.SM.SM_UTYPE = 'S') AS M 
  INNER JOIN jsharmony.DUAL ON 1 = 1 
   LEFT OUTER JOIN jsharmony.SRM ON jsharmony.SRM.SR_NAME = M.SR_Name AND jsharmony.SRM.SM_ID = M.SM_ID;
 
 
 GO
-/****** Object:  View [jsharmony].[V_GPPL]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_GPPL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1694,7 +1776,7 @@ GO
 CREATE VIEW [jsharmony].[V_GPPL] AS
 SELECT jsharmony.GPP.*,
        jsharmony.get_PPD_DESC(GPP_PROCESS, GPP_ATTRIB) PPD_DESC,
-     jsharmony.audit_info(GPP_ETstmp, GPP_EU, GPP_MTstmp, GPP_MU) GPP_INFO
+	   jsharmony.audit_info(GPP_ETstmp, GPP_EU, GPP_MTstmp, GPP_MU) GPP_INFO
 
 
 
@@ -1722,7 +1804,7 @@ SELECT jsharmony.GPP.*,
 
 
 GO
-/****** Object:  View [jsharmony].[V_PPPL]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_PPPL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1764,7 +1846,7 @@ GO
 CREATE VIEW [jsharmony].[V_PPPL] AS
 SELECT PPP.*,
        jsharmony.get_PPD_DESC(PPP_PROCESS, PPP_ATTRIB) PPD_DESC,
-     jsharmony.audit_info(PPP_ETstmp, PPP_EU, PPP_MTstmp, PPP_MU) PPP_INFO
+	   jsharmony.audit_info(PPP_ETstmp, PPP_EU, PPP_MTstmp, PPP_MU) PPP_INFO
   FROM jsharmony.PPP
 
 
@@ -1784,7 +1866,7 @@ SELECT PPP.*,
 
 
 GO
-/****** Object:  View [jsharmony].[V_XPPL]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_XPPL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1826,7 +1908,7 @@ GO
 CREATE VIEW [jsharmony].[V_XPPL] AS
 SELECT XPP.*,
        jsharmony.get_PPD_DESC(XPP_PROCESS, XPP_ATTRIB) PPD_DESC,
-     jsharmony.audit_info(XPP_ETstmp, XPP_EU, XPP_MTstmp, XPP_MU) XPP_INFO
+	   jsharmony.audit_info(XPP_ETstmp, XPP_EU, XPP_MTstmp, XPP_MU) XPP_INFO
 
 
 
@@ -1854,7 +1936,7 @@ SELECT XPP.*,
 
 
 GO
-/****** Object:  View [jsharmony].[V_PPDL]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_PPDL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1895,7 +1977,7 @@ GO
 
 CREATE VIEW [jsharmony].[V_PPDL] AS
 SELECT PPD.*,
-     jsharmony.audit_info(PPD_ETstmp, PPD_EU, PPD_MTstmp, PPD_MU) PPD_INFO
+	   jsharmony.audit_info(PPD_ETstmp, PPD_EU, PPD_MTstmp, PPD_MU) PPD_INFO
 
 
 
@@ -1923,7 +2005,7 @@ SELECT PPD.*,
 
 
 GO
-/****** Object:  View [jsharmony].[UCOD_GPP_PROCESS_V]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[UCOD_GPP_PROCESS_V]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1941,7 +2023,7 @@ SELECT distinct
   FROM jsharmony.PPD
  where PPD_GPP = 1
 GO
-/****** Object:  View [jsharmony].[V_MYPE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  View [jsharmony].[V_MYPE]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1950,7 +2032,7 @@ GO
 create view [jsharmony].[V_MYPE] as
 select jsharmony.myPE() MYPE
 GO
-/****** Object:  Table [jsharmony].[CPE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[CPE]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1958,118 +2040,118 @@ GO
 SET ARITHABORT ON
 GO
 CREATE TABLE [jsharmony].[CPE](
-  [PE_ID] [bigint] IDENTITY(200001,1) NOT NULL,
-  [C_ID] [bigint] NOT NULL,
-  [PE_STS] [nvarchar](8) NOT NULL,
-  [PE_STSDt] [date] NOT NULL,
-  [PE_FName] [nvarchar](35) NOT NULL,
-  [PE_MName] [nvarchar](35) NULL,
-  [PE_LName] [nvarchar](35) NOT NULL,
-  [PE_JTitle] [nvarchar](35) NULL,
-  [PE_BPhone] [nvarchar](30) NULL,
-  [PE_CPhone] [nvarchar](30) NULL,
-  [PE_Email] [nvarchar](255) NOT NULL,
-  [PE_ETstmp] [datetime2](7) NOT NULL,
-  [PE_EU] [nvarchar](20) NOT NULL,
-  [PE_MTstmp] [datetime2](7) NOT NULL,
-  [PE_MU] [nvarchar](20) NOT NULL,
-  [PE_PW1] [nvarchar](255) NULL,
-  [PE_PW2] [nvarchar](255) NULL,
-  [PE_Hash] [varbinary](200) NOT NULL,
-  [PE_LL_IP] [nvarchar](255) NULL,
-  [PE_LL_Tstmp] [datetime2](7) NULL,
-  [PE_SNotes] [nvarchar](255) NULL,
-  [PE_Name]  AS (([PE_LName]+', ')+[PE_FName]) PERSISTED NOT NULL,
-  [PE_UNQ_PE_Email]  AS (case when [PE_STS]='ACTIVE' then case when isnull([PE_Email],'')='' then 'E'+CONVERT([varchar](50),[PE_ID],(0)) else 'S'+[PE_Email] end else 'E'+CONVERT([varchar](50),[PE_ID],(0)) end) PERSISTED,
+	[PE_ID] [bigint] IDENTITY(200001,1) NOT NULL,
+	[C_ID] [bigint] NOT NULL,
+	[PE_STS] [nvarchar](8) NOT NULL,
+	[PE_STSDt] [date] NOT NULL,
+	[PE_FName] [nvarchar](35) NOT NULL,
+	[PE_MName] [nvarchar](35) NULL,
+	[PE_LName] [nvarchar](35) NOT NULL,
+	[PE_JTitle] [nvarchar](35) NULL,
+	[PE_BPhone] [nvarchar](30) NULL,
+	[PE_CPhone] [nvarchar](30) NULL,
+	[PE_Email] [nvarchar](255) NOT NULL,
+	[PE_ETstmp] [datetime2](7) NOT NULL,
+	[PE_EU] [nvarchar](20) NOT NULL,
+	[PE_MTstmp] [datetime2](7) NOT NULL,
+	[PE_MU] [nvarchar](20) NOT NULL,
+	[PE_PW1] [nvarchar](255) NULL,
+	[PE_PW2] [nvarchar](255) NULL,
+	[PE_Hash] [varbinary](200) NOT NULL,
+	[PE_LL_IP] [nvarchar](255) NULL,
+	[PE_LL_Tstmp] [datetime2](7) NULL,
+	[PE_SNotes] [nvarchar](255) NULL,
+	[PE_Name]  AS (([PE_LName]+', ')+[PE_FName]) PERSISTED NOT NULL,
+	[PE_UNQ_PE_Email]  AS (case when [PE_STS]='ACTIVE' then case when isnull([PE_Email],'')='' then 'E'+CONVERT([varchar](50),[PE_ID],(0)) else 'S'+[PE_Email] end else 'E'+CONVERT([varchar](50),[PE_ID],(0)) end) PERSISTED,
  CONSTRAINT [PK_CPE] PRIMARY KEY CLUSTERED 
 (
-  [PE_ID] ASC
+	[PE_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_CPE_PE_Email] UNIQUE NONCLUSTERED 
 (
-  [PE_UNQ_PE_Email] ASC
+	[PE_UNQ_PE_Email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[GCOD_H]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[GCOD_H]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[GCOD_H](
-  [CODENAME] [nvarchar](16) NOT NULL,
-  [CODEMEAN] [nvarchar](128) NULL,
-  [CODECODEMEAN] [nvarchar](128) NULL,
-  [CODEATTRIBMEAN] [nvarchar](128) NULL,
-  [COD_H_ETstmp] [datetime2](7) NULL,
-  [COD_H_EU] [nvarchar](20) NULL,
-  [COD_H_MTstmp] [datetime2](7) NULL,
-  [COD_H_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [CODESCHEMA] [nvarchar](16) NULL,
+	[CODENAME] [nvarchar](16) NOT NULL,
+	[CODEMEAN] [nvarchar](128) NULL,
+	[CODECODEMEAN] [nvarchar](128) NULL,
+	[CODEATTRIBMEAN] [nvarchar](128) NULL,
+	[COD_H_ETstmp] [datetime2](7) NULL,
+	[COD_H_EU] [nvarchar](20) NULL,
+	[COD_H_MTstmp] [datetime2](7) NULL,
+	[COD_H_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[CODESCHEMA] [nvarchar](16) NULL,
  CONSTRAINT [PK_GCOD_H] PRIMARY KEY CLUSTERED 
 (
-  [CODENAME] ASC
+	[CODENAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[GCOD2_D_SCOPE_D_CTGR]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[GCOD2_D_SCOPE_D_CTGR]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR](
-  [GCOD2_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL1] [nvarchar](8) NOT NULL,
-  [CODEVAL2] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [COD_EU_FMT]  AS ([jsharmony].[myCUSER_FMT]([COD_EU])),
-  [COD_MU_FMT]  AS ([jsharmony].[myCUSER_FMT]([COD_MU])),
+	[GCOD2_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL1] [nvarchar](8) NOT NULL,
+	[CODEVAL2] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[COD_EU_FMT]  AS ([jsharmony].[myCUSER_FMT]([COD_EU])),
+	[COD_MU_FMT]  AS ([jsharmony].[myCUSER_FMT]([COD_MU])),
  CONSTRAINT [PK_GCOD2_D_SCOPE_D_CTGR] PRIMARY KEY CLUSTERED 
 (
-  [GCOD2_ID] ASC
+	[GCOD2_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_GCOD2_D_SCOPE_D_CTGR] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL1] ASC,
-  [CODEVAL2] ASC
+	[CODEVAL1] ASC,
+	[CODEVAL2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[GCOD2_H]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[GCOD2_H]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[GCOD2_H](
-  [CODENAME] [nvarchar](16) NOT NULL,
-  [CODEMEAN] [nvarchar](128) NULL,
-  [CODECODEMEAN] [nvarchar](128) NULL,
-  [CODEATTRIBMEAN] [nvarchar](128) NULL,
-  [COD_H_ETstmp] [datetime2](7) NULL,
-  [COD_H_EU] [nvarchar](20) NULL,
-  [COD_H_MTstmp] [datetime2](7) NULL,
-  [COD_H_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [CODESCHEMA] [nvarchar](16) NULL,
+	[CODENAME] [nvarchar](16) NOT NULL,
+	[CODEMEAN] [nvarchar](128) NULL,
+	[CODECODEMEAN] [nvarchar](128) NULL,
+	[CODEATTRIBMEAN] [nvarchar](128) NULL,
+	[COD_H_ETstmp] [datetime2](7) NULL,
+	[COD_H_EU] [nvarchar](20) NULL,
+	[COD_H_MTstmp] [datetime2](7) NULL,
+	[COD_H_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[CODESCHEMA] [nvarchar](16) NULL,
  CONSTRAINT [PK_GCOD2_H] PRIMARY KEY CLUSTERED 
 (
-  [CODENAME] ASC
+	[CODENAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[H]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[H]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2077,83 +2159,83 @@ GO
 SET ARITHABORT ON
 GO
 CREATE TABLE [jsharmony].[H](
-  [H_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [HP_CODE] [varchar](50) NULL,
-  [H_Title] [nvarchar](70) NOT NULL,
-  [H_Text] [nvarchar](max) NOT NULL,
-  [H_ETstmp] [datetime2](7) NOT NULL,
-  [H_EU] [nvarchar](20) NOT NULL,
-  [H_MTstmp] [datetime2](7) NOT NULL,
-  [H_MU] [nvarchar](20) NOT NULL,
-  [H_UNIQUE]  AS (case when [HP_CODE] IS NOT NULL then 'X'+[HP_CODE] else 'Y'+CONVERT([varchar](50),[H_ID],(0)) end) PERSISTED,
-  [H_SEQ] [int] NULL,
-  [H_INDEX_A] [bit] NOT NULL,
-  [H_INDEX_P] [bit] NOT NULL,
+	[H_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[HP_CODE] [varchar](50) NULL,
+	[H_Title] [nvarchar](70) NOT NULL,
+	[H_Text] [nvarchar](max) NOT NULL,
+	[H_ETstmp] [datetime2](7) NOT NULL,
+	[H_EU] [nvarchar](20) NOT NULL,
+	[H_MTstmp] [datetime2](7) NOT NULL,
+	[H_MU] [nvarchar](20) NOT NULL,
+	[H_UNIQUE]  AS (case when [HP_CODE] IS NOT NULL then 'X'+[HP_CODE] else 'Y'+CONVERT([varchar](50),[H_ID],(0)) end) PERSISTED,
+	[H_SEQ] [int] NULL,
+	[H_INDEX_A] [bit] NOT NULL,
+	[H_INDEX_P] [bit] NOT NULL,
  CONSTRAINT [PK_H] PRIMARY KEY CLUSTERED 
 (
-  [H_ID] ASC
+	[H_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_H_H_Title] UNIQUE NONCLUSTERED 
 (
-  [H_Title] ASC
+	[H_Title] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_H_H_UNIQUE] UNIQUE NONCLUSTERED 
 (
-  [H_UNIQUE] ASC
+	[H_UNIQUE] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[HP]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[HP]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[HP](
-  [HP_CODE] [varchar](50) NOT NULL,
-  [HP_Desc] [nvarchar](50) NOT NULL,
-  [HP_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[HP_CODE] [varchar](50) NOT NULL,
+	[HP_Desc] [nvarchar](50) NOT NULL,
+	[HP_ID] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_HP] PRIMARY KEY CLUSTERED 
 (
-  [HP_CODE] ASC
+	[HP_CODE] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_HP_HP_Desc] UNIQUE NONCLUSTERED 
 (
-  [HP_Desc] ASC
+	[HP_Desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_HP_HP_ID] UNIQUE NONCLUSTERED 
 (
-  [HP_ID] ASC
+	[HP_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[N]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[N]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[N](
-  [N_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [N_SCOPE] [nvarchar](8) NOT NULL,
-  [N_SCOPE_ID] [bigint] NOT NULL,
-  [N_STS] [nvarchar](8) NOT NULL,
-  [C_ID] [bigint] NULL,
-  [E_ID] [bigint] NULL,
-  [N_TYPE] [nvarchar](8) NULL,
-  [N_Note] [nvarchar](max) NOT NULL,
-  [N_ETstmp] [datetime2](7) NOT NULL,
-  [N_EU] [nvarchar](20) NOT NULL,
-  [N_MTstmp] [datetime2](7) NOT NULL,
-  [N_MU] [nvarchar](20) NOT NULL,
-  [N_SYNCTstmp] [datetime2](7) NULL,
-  [N_Snotes] [nvarchar](255) NULL,
-  [N_ID_MAIN] [bigint] NULL,
+	[N_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[N_SCOPE] [nvarchar](8) NOT NULL,
+	[N_SCOPE_ID] [bigint] NOT NULL,
+	[N_STS] [nvarchar](8) NOT NULL,
+	[C_ID] [bigint] NULL,
+	[E_ID] [bigint] NULL,
+	[N_TYPE] [nvarchar](8) NULL,
+	[N_Note] [nvarchar](max) NOT NULL,
+	[N_ETstmp] [datetime2](7) NOT NULL,
+	[N_EU] [nvarchar](20) NOT NULL,
+	[N_MTstmp] [datetime2](7) NOT NULL,
+	[N_MU] [nvarchar](20) NOT NULL,
+	[N_SYNCTstmp] [datetime2](7) NULL,
+	[N_Snotes] [nvarchar](255) NULL,
+	[N_ID_MAIN] [bigint] NULL,
  CONSTRAINT [PK_N] PRIMARY KEY CLUSTERED 
 (
-  [N_ID] ASC
+	[N_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[PE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[PE]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2161,761 +2243,798 @@ GO
 SET ARITHABORT ON
 GO
 CREATE TABLE [jsharmony].[PE](
-  [PE_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [PE_STS] [nvarchar](8) NOT NULL,
-  [PE_STSDt] [date] NOT NULL,
-  [PE_FName] [nvarchar](35) NOT NULL,
-  [PE_MName] [nvarchar](35) NULL,
-  [PE_LName] [nvarchar](35) NOT NULL,
-  [PE_JTitle] [nvarchar](35) NULL,
-  [PE_BPhone] [nvarchar](30) NULL,
-  [PE_CPhone] [nvarchar](30) NULL,
-  [PE_COUNTRY] [nvarchar](8) NOT NULL,
-  [PE_ADDR] [nvarchar](200) NULL,
-  [PE_CITY] [nvarchar](50) NULL,
-  [PE_STATE] [nvarchar](8) NULL,
-  [PE_ZIP] [nvarchar](20) NULL,
-  [PE_EMAIL] [nvarchar](255) NOT NULL,
-  [PE_STARTDT] [date] NOT NULL,
-  [PE_ENDDT] [date] NULL,
-  [PE_UNOTES] [nvarchar](4000) NULL,
-  [PE_ETstmp] [datetime2](7) NOT NULL,
-  [PE_EU] [nvarchar](20) NOT NULL,
-  [PE_MTstmp] [datetime2](7) NOT NULL,
-  [PE_MU] [nvarchar](20) NOT NULL,
-  [PE_PW1] [nvarchar](255) NULL,
-  [PE_PW2] [nvarchar](255) NULL,
-  [PE_Hash] [varbinary](200) NOT NULL,
-  [PE_LL_IP] [nvarchar](255) NULL,
-  [PE_LL_Tstmp] [datetime2](7) NULL,
-  [PE_SNotes] [nvarchar](255) NULL,
-  [PE_Name]  AS (([PE_LName]+', ')+[PE_FName]) PERSISTED NOT NULL,
-  [PE_Initials]  AS ((isnull(substring([PE_FName],(1),(1)),'')+isnull(substring([PE_MName],(1),(1)),''))+isnull(substring([PE_LName],(1),(1)),'')) PERSISTED NOT NULL,
-  [PE_UNQ_PE_Email]  AS (case when [PE_STS]='ACTIVE' then case when isnull([PE_Email],'')='' then 'E'+CONVERT([varchar](50),[PE_ID],(0)) else 'S'+[PE_Email] end else 'E'+CONVERT([varchar](50),[PE_ID],(0)) end) PERSISTED,
+	[PE_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[PE_STS] [nvarchar](8) NOT NULL,
+	[PE_STSDt] [date] NOT NULL,
+	[PE_FName] [nvarchar](35) NOT NULL,
+	[PE_MName] [nvarchar](35) NULL,
+	[PE_LName] [nvarchar](35) NOT NULL,
+	[PE_JTitle] [nvarchar](35) NULL,
+	[PE_BPhone] [nvarchar](30) NULL,
+	[PE_CPhone] [nvarchar](30) NULL,
+	[PE_COUNTRY] [nvarchar](8) NOT NULL,
+	[PE_ADDR] [nvarchar](200) NULL,
+	[PE_CITY] [nvarchar](50) NULL,
+	[PE_STATE] [nvarchar](8) NULL,
+	[PE_ZIP] [nvarchar](20) NULL,
+	[PE_EMAIL] [nvarchar](255) NOT NULL,
+	[PE_STARTDT] [date] NOT NULL,
+	[PE_ENDDT] [date] NULL,
+	[PE_UNOTES] [nvarchar](4000) NULL,
+	[PE_ETstmp] [datetime2](7) NOT NULL,
+	[PE_EU] [nvarchar](20) NOT NULL,
+	[PE_MTstmp] [datetime2](7) NOT NULL,
+	[PE_MU] [nvarchar](20) NOT NULL,
+	[PE_PW1] [nvarchar](255) NULL,
+	[PE_PW2] [nvarchar](255) NULL,
+	[PE_Hash] [varbinary](200) NOT NULL,
+	[PE_LL_IP] [nvarchar](255) NULL,
+	[PE_LL_Tstmp] [datetime2](7) NULL,
+	[PE_SNotes] [nvarchar](255) NULL,
+	[PE_Name]  AS (([PE_LName]+', ')+[PE_FName]) PERSISTED NOT NULL,
+	[PE_Initials]  AS ((isnull(substring([PE_FName],(1),(1)),'')+isnull(substring([PE_MName],(1),(1)),''))+isnull(substring([PE_LName],(1),(1)),'')) PERSISTED NOT NULL,
+	[PE_UNQ_PE_Email]  AS (case when [PE_STS]='ACTIVE' then case when isnull([PE_Email],'')='' then 'E'+CONVERT([varchar](50),[PE_ID],(0)) else 'S'+[PE_Email] end else 'E'+CONVERT([varchar](50),[PE_ID],(0)) end) PERSISTED,
  CONSTRAINT [PK_PE] PRIMARY KEY CLUSTERED 
 (
-  [PE_ID] ASC
+	[PE_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_PE_PE_Email] UNIQUE NONCLUSTERED 
 (
-  [PE_UNQ_PE_Email] ASC
+	[PE_UNQ_PE_Email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQ]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[RQ]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[RQ](
-  [RQ_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [RQ_ETstmp] [datetime2](7) NOT NULL,
-  [RQ_EU] [nvarchar](20) NOT NULL,
-  [RQ_NAME] [nvarchar](255) NOT NULL,
-  [RQ_MESSAGE] [nvarchar](max) NOT NULL,
-  [RQ_RSLT] [nvarchar](8) NULL,
-  [RQ_RSLT_TStmp] [datetime2](7) NULL,
-  [RQ_RSLT_U] [nvarchar](20) NULL,
-  [RQ_SNotes] [nvarchar](max) NULL,
+	[RQ_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[RQ_ETstmp] [datetime2](7) NOT NULL,
+	[RQ_EU] [nvarchar](20) NOT NULL,
+	[RQ_NAME] [nvarchar](255) NOT NULL,
+	[RQ_MESSAGE] [nvarchar](max) NOT NULL,
+	[RQ_RSLT] [nvarchar](8) NULL,
+	[RQ_RSLT_TStmp] [datetime2](7) NULL,
+	[RQ_RSLT_U] [nvarchar](20) NULL,
+	[RQ_SNotes] [nvarchar](max) NULL,
  CONSTRAINT [PK_RQ] PRIMARY KEY CLUSTERED 
 (
-  [RQ_ID] ASC
+	[RQ_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[RQST]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[RQST](
-  [RQST_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [RQST_ETstmp] [datetime2](7) NOT NULL,
-  [RQST_EU] [nvarchar](20) NOT NULL,
-  [RQST_SOURCE] [nvarchar](8) NOT NULL,
-  [RQST_ATYPE] [nvarchar](8) NOT NULL,
-  [RQST_ANAME] [nvarchar](50) NOT NULL,
-  [RQST_PARMS] [nvarchar](max) NULL,
-  [RQST_IDENT] [nvarchar](255) NULL,
-  [RQST_RSLT] [nvarchar](8) NULL,
-  [RQST_RSLT_TStmp] [datetime2](7) NULL,
-  [RQST_RSLT_U] [nvarchar](20) NULL,
-  [RQST_SNotes] [nvarchar](max) NULL,
+	[RQST_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[RQST_ETstmp] [datetime2](7) NOT NULL,
+	[RQST_EU] [nvarchar](20) NOT NULL,
+	[RQST_SOURCE] [nvarchar](8) NOT NULL,
+	[RQST_ATYPE] [nvarchar](8) NOT NULL,
+	[RQST_ANAME] [nvarchar](50) NOT NULL,
+	[RQST_PARMS] [nvarchar](max) NULL,
+	[RQST_IDENT] [nvarchar](255) NULL,
+	[RQST_RSLT] [nvarchar](8) NULL,
+	[RQST_RSLT_TStmp] [datetime2](7) NULL,
+	[RQST_RSLT_U] [nvarchar](20) NULL,
+	[RQST_SNotes] [nvarchar](max) NULL,
  CONSTRAINT [PK_RQST] PRIMARY KEY CLUSTERED 
 (
-  [RQST_ID] ASC
+	[RQST_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST_D]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[RQST_D]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[RQST_D](
-  [RQST_D_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [RQST_ID] [bigint] NOT NULL,
-  [D_SCOPE] [nvarchar](8) NULL,
-  [D_SCOPE_ID] [bigint] NULL,
-  [D_CTGR] [nvarchar](8) NULL,
-  [D_Desc] [nvarchar](255) NULL,
+	[RQST_D_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[RQST_ID] [bigint] NOT NULL,
+	[D_SCOPE] [nvarchar](8) NULL,
+	[D_SCOPE_ID] [bigint] NULL,
+	[D_CTGR] [nvarchar](8) NULL,
+	[D_Desc] [nvarchar](255) NULL,
  CONSTRAINT [PK_RQST_D] PRIMARY KEY CLUSTERED 
 (
-  [RQST_D_ID] ASC
+	[RQST_D_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST_EMAIL]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[RQST_EMAIL]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[RQST_EMAIL](
-  [RQST_EMAIL_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [RQST_ID] [bigint] NOT NULL,
-  [EMAIL_TXT_ATTRIB] [nvarchar](32) NULL,
-  [EMAIL_TO] [nvarchar](255) NOT NULL,
-  [EMAIL_CC] [nvarchar](255) NULL,
-  [EMAIL_BCC] [nvarchar](255) NULL,
-  [EMAIL_ATTACH] [smallint] NULL,
-  [EMAIL_SUBJECT] [nvarchar](500) NULL,
-  [EMAIL_TEXT] [ntext] NULL,
-  [EMAIL_HTML] [ntext] NULL,
-  [EMAIL_D_ID] [bigint] NULL,
+	[RQST_EMAIL_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[RQST_ID] [bigint] NOT NULL,
+	[EMAIL_TXT_ATTRIB] [nvarchar](32) NULL,
+	[EMAIL_TO] [nvarchar](255) NOT NULL,
+	[EMAIL_CC] [nvarchar](255) NULL,
+	[EMAIL_BCC] [nvarchar](255) NULL,
+	[EMAIL_ATTACH] [smallint] NULL,
+	[EMAIL_SUBJECT] [nvarchar](500) NULL,
+	[EMAIL_TEXT] [ntext] NULL,
+	[EMAIL_HTML] [ntext] NULL,
+	[EMAIL_D_ID] [bigint] NULL,
  CONSTRAINT [PK_RQST_EMAIL] PRIMARY KEY CLUSTERED 
 (
-  [RQST_EMAIL_ID] ASC
+	[RQST_EMAIL_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST_N]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[RQST_N]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[RQST_N](
-  [RQST_N_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [RQST_ID] [bigint] NOT NULL,
-  [N_SCOPE] [nvarchar](8) NULL,
-  [N_SCOPE_ID] [bigint] NULL,
-  [N_TYPE] [nvarchar](8) NULL,
-  [N_Note] [nvarchar](max) NULL,
+	[RQST_N_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[RQST_ID] [bigint] NOT NULL,
+	[N_SCOPE] [nvarchar](8) NULL,
+	[N_SCOPE_ID] [bigint] NULL,
+	[N_TYPE] [nvarchar](8) NULL,
+	[N_Note] [nvarchar](max) NULL,
  CONSTRAINT [PK_RQST_N] PRIMARY KEY CLUSTERED 
 (
-  [RQST_N_ID] ASC
+	[RQST_N_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST_RQ]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[RQST_RQ]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[RQST_RQ](
-  [RQST_RQ_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [RQST_ID] [bigint] NOT NULL,
-  [RQ_NAME] [nvarchar](255) NOT NULL,
-  [RQ_MESSAGE] [nvarchar](max) NULL,
+	[RQST_RQ_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[RQST_ID] [bigint] NOT NULL,
+	[RQ_NAME] [nvarchar](255) NOT NULL,
+	[RQ_MESSAGE] [nvarchar](max) NULL,
  CONSTRAINT [PK_RQST_RQ] PRIMARY KEY CLUSTERED 
 (
-  [RQST_RQ_ID] ASC
+	[RQST_RQ_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST_SMS]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[RQST_SMS]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[RQST_SMS](
-  [RQST_SMS_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [RQST_ID] [bigint] NOT NULL,
-  [SMS_TXT_ATTRIB] [nvarchar](32) NULL,
-  [SMS_TO] [nvarchar](255) NOT NULL,
-  [SMS_BODY] [ntext] NULL,
+	[RQST_SMS_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[RQST_ID] [bigint] NOT NULL,
+	[SMS_TXT_ATTRIB] [nvarchar](32) NULL,
+	[SMS_TO] [nvarchar](255) NOT NULL,
+	[SMS_BODY] [ntext] NULL,
  CONSTRAINT [PK_RQST_SMS] PRIMARY KEY CLUSTERED 
 (
-  [RQST_SMS_ID] ASC
+	[RQST_SMS_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[SCRIPT]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[SCRIPT]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[SCRIPT](
-  [SCRIPT_NAME] [nvarchar](32) NOT NULL,
-  [SCRIPT_TXT] [nvarchar](max) NULL,
+	[SCRIPT_NAME] [nvarchar](32) NOT NULL,
+	[SCRIPT_TXT] [nvarchar](max) NULL,
  CONSTRAINT [PK_SCRIPT] PRIMARY KEY CLUSTERED 
 (
-  [SCRIPT_NAME] ASC
+	[SCRIPT_NAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[SF]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[SF]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[SF](
-  [SF_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [SF_SEQ] [smallint] NOT NULL,
-  [SF_STS] [nvarchar](8) NOT NULL,
-  [SF_Name] [nvarchar](16) NOT NULL,
-  [SF_Desc] [nvarchar](255) NOT NULL,
-  [SF_CODE] [nvarchar](50) NULL,
-  [SF_ATTRIB] [nvarchar](50) NULL,
-  [SF_SNotes] [nvarchar](255) NULL,
+	[SF_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[SF_SEQ] [smallint] NOT NULL,
+	[SF_STS] [nvarchar](8) NOT NULL,
+	[SF_Name] [nvarchar](16) NOT NULL,
+	[SF_Desc] [nvarchar](255) NOT NULL,
+	[SF_CODE] [nvarchar](50) NULL,
+	[SF_ATTRIB] [nvarchar](50) NULL,
+	[SF_SNotes] [nvarchar](255) NULL,
  CONSTRAINT [PK_SF] PRIMARY KEY CLUSTERED 
 (
-  [SF_Name] ASC
+	[SF_Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SF_SF_CODE_SF_NAME] UNIQUE NONCLUSTERED 
 (
-  [SF_CODE] ASC,
-  [SF_Name] ASC
+	[SF_CODE] ASC,
+	[SF_Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SF_SF_Desc] UNIQUE NONCLUSTERED 
 (
-  [SF_Desc] ASC
+	[SF_Desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SF_SF_ID] UNIQUE NONCLUSTERED 
 (
-  [SF_ID] ASC
+	[SF_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[SPEF]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[SPEF]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[SPEF](
-  [PE_ID] [bigint] NOT NULL,
-  [SPEF_SNotes] [nvarchar](255) NULL,
-  [SPEF_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [SF_NAME] [nvarchar](16) NOT NULL,
+	[PE_ID] [bigint] NOT NULL,
+	[SPEF_SNotes] [nvarchar](255) NULL,
+	[SPEF_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[SF_NAME] [nvarchar](16) NOT NULL,
  CONSTRAINT [PK_SPEF] PRIMARY KEY CLUSTERED 
 (
-  [PE_ID] ASC,
-  [SF_NAME] ASC
+	[PE_ID] ASC,
+	[SF_NAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SPEF] UNIQUE NONCLUSTERED 
 (
-  [SPEF_ID] ASC
+	[SPEF_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[TXT]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[TXT]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[TXT](
-  [TXT_PROCESS] [nvarchar](32) NOT NULL,
-  [TXT_ATTRIB] [nvarchar](32) NOT NULL,
-  [TXT_TYPE] [nvarchar](8) NOT NULL,
-  [TXT_TVAL] [nvarchar](max) NULL,
-  [TXT_VAL] [nvarchar](max) NULL,
-  [TXT_BCC] [nvarchar](255) NULL,
-  [TXT_Desc] [nvarchar](255) NULL,
-  [TXT_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [TXT_ETstmp] [datetime2](7) NOT NULL,
-  [TXT_EU] [varchar](64) NOT NULL,
-  [TXT_MTstmp] [datetime2](7) NOT NULL,
-  [TXT_MU] [varchar](64) NOT NULL,
+	[TXT_PROCESS] [nvarchar](32) NOT NULL,
+	[TXT_ATTRIB] [nvarchar](32) NOT NULL,
+	[TXT_TYPE] [nvarchar](8) NOT NULL,
+	[TXT_TVAL] [nvarchar](max) NULL,
+	[TXT_VAL] [nvarchar](max) NULL,
+	[TXT_BCC] [nvarchar](255) NULL,
+	[TXT_Desc] [nvarchar](255) NULL,
+	[TXT_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[TXT_ETstmp] [datetime2](7) NOT NULL,
+	[TXT_EU] [varchar](64) NOT NULL,
+	[TXT_MTstmp] [datetime2](7) NOT NULL,
+	[TXT_MU] [varchar](64) NOT NULL,
  CONSTRAINT [PK_TXT] PRIMARY KEY CLUSTERED 
 (
-  [TXT_ID] ASC
+	[TXT_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_TXT] UNIQUE NONCLUSTERED 
 (
-  [TXT_PROCESS] ASC,
-  [TXT_ATTRIB] ASC
+	[TXT_PROCESS] ASC,
+	[TXT_ATTRIB] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_AC]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_AC]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_AC](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_AC] PRIMARY KEY CLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [IX_UCOD_AC] UNIQUE NONCLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_AC1]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_AC1]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_AC1](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_AC1] PRIMARY KEY CLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [IX_UCOD_AC1] UNIQUE NONCLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_AHC]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_AHC]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_AHC](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_AHC] PRIMARY KEY CLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [IX_UCOD_AHC] UNIQUE NONCLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_COUNTRY]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_COUNTRY]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_COUNTRY](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_COUNTRY] PRIMARY KEY CLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [IX_UCOD_COUNTRY] UNIQUE NONCLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_D_SCOPE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_D_SCOPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_D_SCOPE](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_SCOPE] PRIMARY KEY CLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [IX_UCOD_SCOPE] UNIQUE NONCLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_H]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_H]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_H](
-  [CODENAME] [nvarchar](16) NOT NULL,
-  [CODEMEAN] [nvarchar](128) NULL,
-  [CODECODEMEAN] [nvarchar](128) NULL,
-  [CODEATTRIBMEAN] [nvarchar](128) NULL,
-  [COD_H_CODECODE_DESC] [nvarchar](150) NULL,
-  [COD_H_ETstmp] [datetime2](7) NULL,
-  [COD_H_EU] [nvarchar](20) NULL,
-  [COD_H_MTstmp] [datetime2](7) NULL,
-  [COD_H_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [CODESCHEMA] [nvarchar](16) NULL,
-  [UCOD_H_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODENAME] [nvarchar](16) NOT NULL,
+	[CODEMEAN] [nvarchar](128) NULL,
+	[CODECODEMEAN] [nvarchar](128) NULL,
+	[CODEATTRIBMEAN] [nvarchar](128) NULL,
+	[COD_H_CODECODE_DESC] [nvarchar](150) NULL,
+	[COD_H_ETstmp] [datetime2](7) NULL,
+	[COD_H_EU] [nvarchar](20) NULL,
+	[COD_H_MTstmp] [datetime2](7) NULL,
+	[COD_H_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[CODESCHEMA] [nvarchar](16) NULL,
+	[UCOD_H_ID] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_UCOD_H] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_H_ID] ASC
+	[UCOD_H_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_H] UNIQUE NONCLUSTERED 
 (
-  [CODESCHEMA] ASC,
-  [CODENAME] ASC
+	[CODESCHEMA] ASC,
+	[CODENAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_N_SCOPE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_N_SCOPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_N_SCOPE](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCON_SCOPE] PRIMARY KEY CLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [IX_UCON_SCOPE] UNIQUE NONCLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_N_TYPE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_N_TYPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_N_TYPE](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_N_TYPE] PRIMARY KEY CLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [IX_UCOD_N_TYPE] UNIQUE NONCLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_PPD_TYPE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_PPD_TYPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_PPD_TYPE](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_PPD_TYPE] PRIMARY KEY CLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [IX_UCOD_PPD_TYPE] UNIQUE NONCLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_RQST_ATYPE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_RQST_ATYPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_RQST_ATYPE](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_RQST_ATYPE] PRIMARY KEY CLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [IX_UCOD_RQST_ATYPE] UNIQUE NONCLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_RQST_SOURCE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_RQST_SOURCE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_RQST_SOURCE](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_RQST_SOURCE] PRIMARY KEY CLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [IX_UCOD_RQST_SOURCE] UNIQUE NONCLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_TXT_TYPE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_TXT_TYPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_TXT_TYPE](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_TXT_TYPE] PRIMARY KEY CLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [IX_UCOD_TXT_TYPE] UNIQUE NONCLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_V_STS]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD_V_STS]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD_V_STS](
-  [UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
+	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_V_STS] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_ID] ASC
+	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_V_STS_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+	[CODETXT] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_V_STS_CODEVAL] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+	[CODEVAL] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD2_COUNTRY_STATE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD2_COUNTRY_STATE]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD2_COUNTRY_STATE](
-  [UCOD2_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [CODSEQ] [smallint] NULL,
-  [CODEVAL1] [nvarchar](8) NOT NULL,
-  [CODEVAL2] [nvarchar](8) NOT NULL,
-  [CODETXT] [nvarchar](50) NULL,
-  [CODECODE] [nvarchar](50) NULL,
-  [CODEATTRIB] [nvarchar](50) NULL,
-  [CODETDT] [datetime2](7) NULL,
-  [CODETCM] [nvarchar](50) NULL,
-  [COD_ETstmp] [datetime2](7) NULL,
-  [COD_EU] [nvarchar](20) NULL,
-  [COD_MTstmp] [datetime2](7) NULL,
-  [COD_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [COD_Notes] [nvarchar](255) NULL,
+	[UCOD2_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODSEQ] [smallint] NULL,
+	[CODEVAL1] [nvarchar](8) NOT NULL,
+	[CODEVAL2] [nvarchar](8) NOT NULL,
+	[CODETXT] [nvarchar](50) NULL,
+	[CODECODE] [nvarchar](50) NULL,
+	[CODEATTRIB] [nvarchar](50) NULL,
+	[CODETDT] [datetime2](7) NULL,
+	[CODETCM] [nvarchar](50) NULL,
+	[COD_ETstmp] [datetime2](7) NULL,
+	[COD_EU] [nvarchar](20) NULL,
+	[COD_MTstmp] [datetime2](7) NULL,
+	[COD_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[COD_Notes] [nvarchar](255) NULL,
  CONSTRAINT [PK_UCOD2_COUNTRY_STATE] PRIMARY KEY CLUSTERED 
 (
-  [UCOD2_ID] ASC
+	[UCOD2_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD2_COUNTRY_STATE] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL1] ASC,
-  [CODEVAL2] ASC
+	[CODEVAL1] ASC,
+	[CODEVAL2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD2_H]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[UCOD2_H]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[UCOD2_H](
-  [CODENAME] [nvarchar](16) NOT NULL,
-  [CODEMEAN] [nvarchar](128) NULL,
-  [CODECODEMEAN] [nvarchar](128) NULL,
-  [CODEATTRIBMEAN] [nvarchar](128) NULL,
-  [COD_H_ETstmp] [datetime2](7) NULL,
-  [COD_H_EU] [nvarchar](20) NULL,
-  [COD_H_MTstmp] [datetime2](7) NULL,
-  [COD_H_MU] [nvarchar](20) NULL,
-  [COD_SNotes] [nvarchar](255) NULL,
-  [CODESCHEMA] [nvarchar](16) NULL,
-  [UCOD2_H_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CODENAME] [nvarchar](16) NOT NULL,
+	[CODEMEAN] [nvarchar](128) NULL,
+	[CODECODEMEAN] [nvarchar](128) NULL,
+	[CODEATTRIBMEAN] [nvarchar](128) NULL,
+	[COD_H_ETstmp] [datetime2](7) NULL,
+	[COD_H_EU] [nvarchar](20) NULL,
+	[COD_H_MTstmp] [datetime2](7) NULL,
+	[COD_H_MU] [nvarchar](20) NULL,
+	[COD_SNotes] [nvarchar](255) NULL,
+	[CODESCHEMA] [nvarchar](16) NULL,
+	[UCOD2_H_ID] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_UCOD2_H] PRIMARY KEY CLUSTERED 
 (
-  [UCOD2_H_ID] ASC
+	[UCOD2_H_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD2_H] UNIQUE NONCLUSTERED 
 (
-  [CODESCHEMA] ASC,
-  [CODENAME] ASC
+	[CODESCHEMA] ASC,
+	[CODENAME] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[V]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Table [jsharmony].[V]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[V](
-  [V_ID] [bigint] IDENTITY(1,1) NOT NULL,
-  [V_COMP] [nvarchar](50) NOT NULL,
-  [V_NO_MAJOR] [int] NOT NULL,
-  [V_NO_MINOR] [int] NOT NULL,
-  [V_NO_BUILD] [int] NOT NULL,
-  [V_NO_REV] [int] NOT NULL,
-  [V_STS] [nvarchar](8) NOT NULL,
-  [V_NOTE] [nvarchar](max) NULL,
-  [V_ETstmp] [datetime2](7) NOT NULL,
-  [V_EU] [nvarchar](20) NOT NULL,
-  [V_MTstmp] [datetime2](7) NOT NULL,
-  [V_MU] [nvarchar](20) NOT NULL,
-  [V_SNotes] [nvarchar](255) NULL,
+	[V_ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[V_COMP] [nvarchar](50) NOT NULL,
+	[V_NO_MAJOR] [int] NOT NULL,
+	[V_NO_MINOR] [int] NOT NULL,
+	[V_NO_BUILD] [int] NOT NULL,
+	[V_NO_REV] [int] NOT NULL,
+	[V_STS] [nvarchar](8) NOT NULL,
+	[V_NOTE] [nvarchar](max) NULL,
+	[V_ETstmp] [datetime2](7) NOT NULL,
+	[V_EU] [nvarchar](20) NOT NULL,
+	[V_MTstmp] [datetime2](7) NOT NULL,
+	[V_MU] [nvarchar](20) NOT NULL,
+	[V_SNotes] [nvarchar](255) NULL,
  CONSTRAINT [UNQ_V] PRIMARY KEY CLUSTERED 
 (
-  [V_NO_MAJOR] ASC,
-  [V_NO_MINOR] ASC,
-  [V_NO_BUILD] ASC,
-  [V_NO_REV] ASC
+	[V_NO_MAJOR] ASC,
+	[V_NO_MINOR] ASC,
+	[V_NO_BUILD] ASC,
+	[V_NO_REV] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Index [IX_CPE_C_ID]    Script Date: 10/8/2018 5:22:57 PM ******/
+CREATE NONCLUSTERED INDEX [IX_CPE_C_ID] ON [jsharmony].[CPE]
+(
+	[C_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_D_C_ID]    Script Date: 10/8/2018 5:22:57 PM ******/
+CREATE NONCLUSTERED INDEX [IX_D_C_ID] ON [jsharmony].[D]
+(
+	[C_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_D_SCOPE]    Script Date: 10/8/2018 5:22:57 PM ******/
+CREATE NONCLUSTERED INDEX [IX_D_SCOPE] ON [jsharmony].[D]
+(
+	[D_SCOPE] ASC,
+	[D_SCOPE_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_H]    Script Date: 10/8/2018 5:22:57 PM ******/
+CREATE NONCLUSTERED INDEX [IX_H] ON [jsharmony].[H]
+(
+	[HP_CODE] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_RQ_RQ_NAME]    Script Date: 10/8/2018 5:22:57 PM ******/
+CREATE NONCLUSTERED INDEX [IX_RQ_RQ_NAME] ON [jsharmony].[RQ]
+(
+	[RQ_NAME] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 ALTER TABLE [jsharmony].[AUD_H] ADD  CONSTRAINT [DF_AUD_H_DB_K]  DEFAULT ('0') FOR [DB_K]
 GO
@@ -3452,7 +3571,7 @@ ALTER TABLE [jsharmony].[SM]  WITH CHECK ADD  CONSTRAINT [CK_SM_SM_UTYPE] CHECK 
 GO
 ALTER TABLE [jsharmony].[SM] CHECK CONSTRAINT [CK_SM_SM_UTYPE]
 GO
-/****** Object:  StoredProcedure [jsharmony].[AUDH]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[AUDH]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3460,17 +3579,17 @@ GO
 
 CREATE PROCEDURE  [jsharmony].[AUDH]
 (
-  @op           nvarchar(max),
-  @tname        NVARCHAR(MAX),
-  @tid          bigint,
-  @u            NVARCHAR(MAX),
-  @tstmp        DATETIME2(7),
-  @ref_name     varchar(32) = NULL,
-  @ref_id       bigint = NULL,
-  @subj         nvarchar(255) = NULL,
-  @cid          bigint = NULL, 
-  @eid          bigint = NULL 
-) 
+	@op           nvarchar(max),
+	@tname        NVARCHAR(MAX),
+	@tid          bigint,
+	@u            NVARCHAR(MAX),
+	@tstmp        DATETIME2(7),
+	@ref_name     varchar(32) = NULL,
+	@ref_id       bigint = NULL,
+	@subj         nvarchar(255) = NULL,
+	@cid          bigint = NULL, 
+	@eid          bigint = NULL 
+)	
 as
 BEGIN
   DECLARE @MY_AUD_SEQ BIGINT=0
@@ -3493,98 +3612,98 @@ BEGIN
   BEGIN TRY  
 
     SELECT @GETCID = PP_VAL
-    FROM jsharmony.V_PP
+	  FROM jsharmony.V_PP
      where PP_PROCESS = 'SQL'
-     and PP_ATTRIB = 'GETCID';
+	   and PP_ATTRIB = 'GETCID';
 
     SELECT @GETEID = PP_VAL
-    FROM jsharmony.V_PP
+	  FROM jsharmony.V_PP
      where PP_PROCESS = 'SQL'
-     and PP_ATTRIB = 'GETEID';
+	   and PP_ATTRIB = 'GETEID';
 
     SET @MYUSER = CASE WHEN @u IS NULL THEN jsharmony.myCUSER() ELSE @u END
 
     if (@OP = 'D')
-  begin
-    select top(1)
-         @WK_C_ID = C_ID,
-           @WK_E_ID = E_ID,
-           @WK_REF_NAME = REF_NAME,
-           @WK_REF_ID = REF_ID,
-           @WK_SUBJ = SUBJ
-      from jsharmony.AUD_H
+	begin
+		select top(1)
+			   @WK_C_ID = C_ID,
+		       @WK_E_ID = E_ID,
+		       @WK_REF_NAME = REF_NAME,
+		       @WK_REF_ID = REF_ID,
+		       @WK_SUBJ = SUBJ
+		  from jsharmony.AUD_H
          where TABLE_NAME = @tname
-       and TABLE_ID = @tid
-       and AUD_OP = 'I'
+		   and TABLE_ID = @tid
+		   and AUD_OP = 'I'
          order by AUD_SEQ desc; 
          if @@ROWCOUNT = 0
-     begin
+		 begin
 
            if (@cid is null and @tname <> 'C')
-       begin  
-           SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
-           EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
-           SET @C_ID = @MY_C_ID
+		   begin	
+	         SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
+	         EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
+	         SET @C_ID = @MY_C_ID
            end
 
            if (@eid is null and @tname <> 'E')
-       begin  
-           SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
-           EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
-           SET @E_ID = @MY_E_ID
-       end
+		   begin	
+	         SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
+	         EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
+	         SET @E_ID = @MY_E_ID
+		   end
 
-       select @WK_C_ID = case when @cid is not null then @cid
-                              when @tname = 'C' then @tid 
-                    else @C_ID end,  
-              @WK_E_ID = case when @eid is not null then @eid
-                              when @tname  = 'E' then @tid 
-                  else @E_ID end, 
-              @WK_REF_NAME = @ref_name,
-              @WK_REF_ID = @ref_id,
-              @WK_SUBJ = @subj;
-     end
-  end
+		   select @WK_C_ID = case when @cid is not null then @cid
+		                          when @tname = 'C' then @tid 
+							      else @C_ID end,  
+		          @WK_E_ID = case when @eid is not null then @eid
+		                          when @tname  = 'E' then @tid 
+								  else @E_ID end, 
+		          @WK_REF_NAME = @ref_name,
+		          @WK_REF_ID = @ref_id,
+		          @WK_SUBJ = @subj;
+		 end
+	end
     ELSE
-  begin
+	begin
 
         if (@cid is null and @tname <> 'C')
-    begin 
-        SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
-        EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
-        SET @C_ID = @MY_C_ID
+		begin	
+	      SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
+	      EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
+	      SET @C_ID = @MY_C_ID
         end
 
         if (@eid is null and @tname <> 'E')
-    begin 
-        SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
-        EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
-        SET @E_ID = @MY_E_ID
-    end
+		begin	
+	      SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
+	      EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
+	      SET @E_ID = @MY_E_ID
+		end
 
-    SET @WK_C_ID = case when @cid is not null then @cid
-                        when @tname = 'C' then @tid 
-              else @C_ID end;  
-    SET @WK_E_ID = case when @eid is not null then @eid
-                        when @tname = 'E' then @tid 
-              else @E_ID end; 
-    SET @WK_REF_NAME = @ref_name;
-    SET @WK_REF_ID = @ref_id;
-    SET @WK_SUBJ = @subj;
-  end
+		SET @WK_C_ID = case when @cid is not null then @cid
+		                    when @tname = 'C' then @tid 
+							else @C_ID end;  
+		SET @WK_E_ID = case when @eid is not null then @eid
+		                    when @tname = 'E' then @tid 
+							else @E_ID end; 
+		SET @WK_REF_NAME = @ref_name;
+		SET @WK_REF_ID = @ref_id;
+		SET @WK_SUBJ = @subj;
+	end
 
     INSERT INTO jsharmony.AUD_H 
-                    (TABLE_NAME, TABLE_ID, AUD_OP, AUD_U, AUD_Tstmp, C_ID, E_ID, REF_NAME, REF_ID, SUBJ) 
+	                  (TABLE_NAME, TABLE_ID, AUD_OP, AUD_U, AUD_Tstmp, C_ID, E_ID, REF_NAME, REF_ID, SUBJ) 
                VALUES (@tname, 
-                 @tid, 
-             @op, 
-             @MYUSER, 
-             @tstmp, 
-             isnull(@cid, @WK_C_ID), 
-             isnull(@eid, @WK_E_ID),
-             @WK_REF_NAME,
-             @WK_REF_ID,
-             @WK_SUBJ)
+			           @tid, 
+					   @op, 
+					   @MYUSER, 
+					   @tstmp, 
+					   isnull(@cid, @WK_C_ID), 
+					   isnull(@eid, @WK_E_ID),
+					   @WK_REF_NAME,
+					   @WK_REF_ID,
+					   @WK_SUBJ)
     SET @MY_AUD_SEQ = SCOPE_IDENTITY() 
     
   END TRY
@@ -3613,7 +3732,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[AUDH_BASE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[AUDH_BASE]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3621,15 +3740,15 @@ GO
 
 CREATE PROCEDURE  [jsharmony].[AUDH_BASE]
 (
-  @op           nvarchar(max),
-  @tname        NVARCHAR(MAX),
-  @tid          bigint,
-  @u            NVARCHAR(MAX),
-  @tstmp        DATETIME2(7),
-  @ref_name     varchar(32) = NULL,
-  @ref_id       bigint = NULL,
-  @subj         nvarchar(255) = NULL
-) 
+	@op           nvarchar(max),
+	@tname        NVARCHAR(MAX),
+	@tid          bigint,
+	@u            NVARCHAR(MAX),
+	@tstmp        DATETIME2(7),
+	@ref_name     varchar(32) = NULL,
+	@ref_id       bigint = NULL,
+	@subj         nvarchar(255) = NULL
+)	
 as
 BEGIN
   DECLARE @MY_AUD_SEQ BIGINT=0
@@ -3643,40 +3762,40 @@ BEGIN
     SET @MYUSER = CASE WHEN @u IS NULL THEN jsharmony.myCUSER() ELSE @u END
 
     if (@OP = 'D')
-  begin
-    select top(1)
-           @WK_REF_NAME = REF_NAME,
-           @WK_REF_ID = REF_ID,
-           @WK_SUBJ = SUBJ
-      from jsharmony.AUD_H
+	begin
+		select top(1)
+		       @WK_REF_NAME = REF_NAME,
+		       @WK_REF_ID = REF_ID,
+		       @WK_SUBJ = SUBJ
+		  from jsharmony.AUD_H
          where TABLE_NAME = @tname
-       and TABLE_ID = @tid
-       and AUD_OP = 'I'
+		   and TABLE_ID = @tid
+		   and AUD_OP = 'I'
          order by AUD_SEQ desc; 
          if @@ROWCOUNT = 0
-     begin
-       select @WK_REF_NAME = @ref_name,
-              @WK_REF_ID = @ref_id,
-              @WK_SUBJ = @subj;
-     end
-  end
+		 begin
+		   select @WK_REF_NAME = @ref_name,
+		          @WK_REF_ID = @ref_id,
+		          @WK_SUBJ = @subj;
+		 end
+	end
     ELSE
-  begin
-    SET @WK_REF_NAME = @ref_name;
-    SET @WK_REF_ID = @ref_id;
-    SET @WK_SUBJ = @subj;
-  end
+	begin
+		SET @WK_REF_NAME = @ref_name;
+		SET @WK_REF_ID = @ref_id;
+		SET @WK_SUBJ = @subj;
+	end
 
     INSERT INTO jsharmony.AUD_H 
-                    (TABLE_NAME, TABLE_ID, AUD_OP, AUD_U, AUD_Tstmp, REF_NAME, REF_ID, SUBJ) 
+	                  (TABLE_NAME, TABLE_ID, AUD_OP, AUD_U, AUD_Tstmp, REF_NAME, REF_ID, SUBJ) 
                VALUES (@tname, 
-                 @tid, 
-             @op, 
-             @MYUSER, 
-             @tstmp, 
-             @WK_REF_NAME,
-             @WK_REF_ID,
-             @WK_SUBJ)
+			           @tid, 
+					   @op, 
+					   @MYUSER, 
+					   @tstmp, 
+					   @WK_REF_NAME,
+					   @WK_REF_ID,
+					   @WK_SUBJ)
     SET @MY_AUD_SEQ = SCOPE_IDENTITY() 
     
   END TRY
@@ -3705,7 +3824,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3717,20 +3836,20 @@ GO
 
 CREATE PROCEDURE  [jsharmony].[CHECK_CODE]
 (
-  @in_tblname nvarchar(255),
-  @in_codeval nvarchar(8)
-) 
+	@in_tblname nvarchar(255),
+	@in_codeval nvarchar(8)
+)	
 as
 BEGIN
 
-DECLARE @return_value int
+DECLARE	@return_value int
 
 BEGIN TRY
-EXEC  @return_value = [jsharmony].[CHECK_CODE_P]
-    @in_tblname = @in_tblname,
-    @in_codeval = @in_codeval
-END TRY 
-BEGIN CATCH 
+EXEC	@return_value = [jsharmony].[CHECK_CODE_P]
+		@in_tblname = @in_tblname,
+		@in_codeval = @in_codeval
+END TRY	
+BEGIN CATCH	
 SELECT @return_value = -1
 END CATCH
 
@@ -3742,7 +3861,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE_P]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE_P]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3755,9 +3874,9 @@ GO
 
 CREATE PROCEDURE  [jsharmony].[CHECK_CODE_P]
 (
-  @in_tblname nvarchar(255),
-  @in_codeval nvarchar(8)
-) 
+	@in_tblname nvarchar(255),
+	@in_codeval nvarchar(8)
+)	
 as
 BEGIN
 
@@ -3767,12 +3886,12 @@ BEGIN
   SELECT @rslt = 0
   SELECT top(1)
          @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + table_name + '] where codeval = ''' + 
-                 isnull(@in_codeval,'') + ''''
+		             isnull(@in_codeval,'') + ''''
     from information_schema.tables
    where table_name = @in_tblname
    order by (case table_schema when 'jsharmony' then 1 else 2 end),table_schema;
 
-  exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output  
+  exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output 	
       
   return (@rslt)
 
@@ -3785,7 +3904,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE2]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE2]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3796,22 +3915,22 @@ GO
 
 CREATE PROCEDURE  [jsharmony].[CHECK_CODE2]
 (
-  @in_tblname nvarchar(255),
-  @in_codeval1 nvarchar(8),
-  @in_codeval2 nvarchar(8)
-) 
+	@in_tblname nvarchar(255),
+	@in_codeval1 nvarchar(8),
+	@in_codeval2 nvarchar(8)
+)	
 as
 BEGIN
 
-DECLARE @return_value int
+DECLARE	@return_value int
 
 BEGIN TRY
-EXEC  @return_value = [jsharmony].[CHECK_CODE2_P]
-    @in_tblname = @in_tblname,
-    @in_codeval1 = @in_codeval1,
-    @in_codeval2 = @in_codeval2
-END TRY 
-BEGIN CATCH 
+EXEC	@return_value = [jsharmony].[CHECK_CODE2_P]
+		@in_tblname = @in_tblname,
+		@in_codeval1 = @in_codeval1,
+		@in_codeval2 = @in_codeval2
+END TRY	
+BEGIN CATCH	
 SELECT @return_value = -1
 END CATCH
 
@@ -3822,7 +3941,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE2_P]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE2_P]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3834,10 +3953,10 @@ GO
 
 CREATE PROCEDURE  [jsharmony].[CHECK_CODE2_P]
 (
-  @in_tblname nvarchar(255),
-  @in_codeval1 nvarchar(8),
-  @in_codeval2 nvarchar(8)
-) 
+	@in_tblname nvarchar(255),
+	@in_codeval1 nvarchar(8),
+	@in_codeval2 nvarchar(8)
+)	
 as
 BEGIN
 
@@ -3847,12 +3966,12 @@ BEGIN
   SELECT @rslt = 0
   SELECT top(1)
          @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + table_name + '] where codeval1 = ''' + 
-                 isnull(@in_codeval1,'') + ''' and codeval2 = ''' + isnull(@in_codeval2,'') +  ''''
+		             isnull(@in_codeval1,'') + ''' and codeval2 = ''' + isnull(@in_codeval2,'') +  ''''
     from information_schema.tables
    where table_name = @in_tblname
    order by (case table_schema when 'jsharmony' then 1 else 2 end),table_schema;
 
-  exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output  
+  exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output 	
       
   return (@rslt)
 
@@ -3864,7 +3983,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_FOREIGN]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_FOREIGN]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3874,20 +3993,20 @@ GO
 
 CREATE PROCEDURE  [jsharmony].[CHECK_FOREIGN]
 (
-  @in_tblname nvarchar(16),
-  @in_tblid bigint
-) 
+	@in_tblname nvarchar(16),
+	@in_tblid bigint
+)	
 as
 BEGIN
 
-DECLARE @return_value int
+DECLARE	@return_value int
 
 BEGIN TRY
-EXEC  @return_value = [jsharmony].[CHECK_FOREIGN_P]
-    @in_tblname = @in_tblname,
-    @in_tblid = @in_tblid
-END TRY 
-BEGIN CATCH 
+EXEC	@return_value = [jsharmony].[CHECK_FOREIGN_P]
+		@in_tblname = @in_tblname,
+		@in_tblid = @in_tblid
+END TRY	
+BEGIN CATCH	
 SELECT @return_value = -1
 END CATCH
 
@@ -3897,7 +4016,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_FOREIGN_P]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[CHECK_FOREIGN_P]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3908,9 +4027,9 @@ GO
 
 CREATE PROCEDURE  [jsharmony].[CHECK_FOREIGN_P]
 (
-  @in_tblname nvarchar(16),
-  @in_tblid bigint
-) 
+	@in_tblname nvarchar(16),
+	@in_tblid bigint
+)	
 as
 BEGIN
 
@@ -3925,7 +4044,7 @@ BEGIN
    where table_name = @in_tblname
    order by (case table_schema when 'jsharmony' then 1 else 2 end),table_schema;
 
-  exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output  
+  exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output 	
       
   return (@rslt)
 
@@ -3936,17 +4055,17 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_gcod]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[create_gcod]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE  [jsharmony].[create_gcod]
 (
-  @in_codeschema nvarchar(max),
-  @in_codename   nvarchar(max),
-  @in_codemean   nvarchar(max)
-) 
+	@in_codeschema nvarchar(max),
+	@in_codename   nvarchar(max),
+	@in_codemean   nvarchar(max)
+)	
 as
 BEGIN
 
@@ -3986,17 +4105,17 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[create_gcod] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_gcod2]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[create_gcod2]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE  [jsharmony].[create_gcod2]
 (
-  @in_codeschema nvarchar(max),
-  @in_codename   nvarchar(max),
-  @in_codemean   nvarchar(max)
-) 
+	@in_codeschema nvarchar(max),
+	@in_codename   nvarchar(max),
+	@in_codemean   nvarchar(max)
+)	
 as
 BEGIN
 
@@ -4036,17 +4155,17 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[create_gcod2] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_ucod]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[create_ucod]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE  [jsharmony].[create_ucod]
 (
-  @in_codeschema nvarchar(max),
-  @in_codename   nvarchar(max),
-  @in_codemean   nvarchar(max)
-) 
+	@in_codeschema nvarchar(max),
+	@in_codename   nvarchar(max),
+	@in_codemean   nvarchar(max)
+)	
 as
 BEGIN
 
@@ -4075,17 +4194,17 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[create_ucod] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_ucod2]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[create_ucod2]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 create PROCEDURE  [jsharmony].[create_ucod2]
 (
-  @in_codeschema nvarchar(max),
-  @in_codename   nvarchar(max),
-  @in_codemean   nvarchar(max)
-) 
+	@in_codeschema nvarchar(max),
+	@in_codename   nvarchar(max),
+	@in_codemean   nvarchar(max)
+)	
 as
 BEGIN
 
@@ -4114,7 +4233,7 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[create_ucod2] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[ZZ-FILEDEBUG]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  StoredProcedure [jsharmony].[ZZ-FILEDEBUG]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4126,11 +4245,11 @@ GO
 /*@ SEND DEBUGGING INFO TO TEXT FILE @*/
 CREATE PROCEDURE  [jsharmony].[ZZ-FILEDEBUG]
 (
-  @in_type nvarchar(MAX),
-  @in_object nvarchar(MAX),
-  @in_loc nvarchar(MAX),
-  @in_txt nvarchar(MAX)
-) 
+	@in_type nvarchar(MAX),
+	@in_object nvarchar(MAX),
+	@in_loc nvarchar(MAX),
+	@in_txt nvarchar(MAX)
+)	
 as
 BEGIN
   -- SET NOCOUNT ON added to prevent extra result sets from
@@ -4164,10 +4283,10 @@ BEGIN
 /*
           INSERT INTO ZZ_LOG (LOG_PLACE, LOG_VALUE)
            VALUES('Q_UPDATE',
-                 ' TP=' + @TP + 
-                 ' D_QT_TNAME=' + @D_QT_TNAME + 
-               ' D_Q_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_Q_ID),'null'))) +
-               ' D_CT_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_CT_ID),'null'))) );
+		             ' TP=' + @TP + 
+		             ' D_QT_TNAME=' + @D_QT_TNAME + 
+			         ' D_Q_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_Q_ID),'null'))) +
+			         ' D_CT_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_CT_ID),'null'))) );
 */
 END
 
@@ -4187,7 +4306,7 @@ END
 
 
 GO
-/****** Object:  Trigger [jsharmony].[CPE_IUD]    Script Date: 10/25/2017 7:00:06 AM ******/
+/****** Object:  Trigger [jsharmony].[CPE_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4205,18 +4324,18 @@ BEGIN
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_CPE_IUD CURSOR LOCAL FOR
      SELECT  d.PE_ID, i.PE_ID,
-           d.C_ID, i.C_ID,
-           d.PE_STS, i.PE_STS,
-           d.PE_FName, i.PE_FName,
-       d.PE_MName, i.PE_MName,
-       d.PE_LName, i.PE_LName,
+	         d.C_ID, i.C_ID,
+	         d.PE_STS, i.PE_STS,
+	         d.PE_FName, i.PE_FName,
+			 d.PE_MName, i.PE_MName,
+			 d.PE_LName, i.PE_LName,
              d.PE_JTitle, i.PE_JTitle,
              d.PE_BPhone, i.PE_BPhone,
              d.PE_CPhone, i.PE_CPhone,
              d.PE_Email, i.PE_Email,
              d.PE_PW1, i.PE_PW1,
              d.PE_PW2, i.PE_PW2,
-       d.PE_LL_Tstmp, i.PE_LL_Tstmp
+			 d.PE_LL_Tstmp, i.PE_LL_Tstmp
        FROM deleted d FULL OUTER JOIN inserted i
                        ON i.PE_ID = d.PE_ID;
   DECLARE @D_PE_ID bigint
@@ -4263,10 +4382,10 @@ BEGIN
   DECLARE @UPDATE_PW CHAR(1)
 
   DECLARE @return_value int,
-      @out_msg nvarchar(max),
-      @out_rslt nvarchar(255),
-      @hash varbinary(200),
-      @M nvarchar(max)
+		  @out_msg nvarchar(max),
+		  @out_rslt nvarchar(255),
+		  @hash varbinary(200),
+		  @M nvarchar(max)
 
   if exists (select * from inserted)
     if exists (select * from deleted)
@@ -4275,7 +4394,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -4308,8 +4427,8 @@ BEGIN
              @D_C_ID, @I_C_ID,
              @D_PE_STS, @I_PE_STS,
              @D_PE_FName, @I_PE_FName,
-       @D_PE_MName, @I_PE_MName,
-       @D_PE_LName, @I_PE_LName,
+			 @D_PE_MName, @I_PE_MName,
+			 @D_PE_LName, @I_PE_LName,
              @D_PE_JTitle, @I_PE_JTitle,
              @D_PE_BPhone, @I_PE_BPhone,
              @D_PE_CPhone, @I_PE_CPhone,
@@ -4324,59 +4443,59 @@ BEGIN
     SET @M = NULL
     SET @hash = NULL
 
-  SET @NEWPW = NUll;
+	SET @NEWPW = NUll;
     SET @UPDATE_PW = 'N'
 
-  SET @WK_C_ID = ISNULL(@I_C_ID,@D_C_ID)
+	SET @WK_C_ID = ISNULL(@I_C_ID,@D_C_ID)
 
     IF (@TP='I' or @TP='U')
-  BEGIN
-    if (jsharmony.NONEQUALC(@I_PE_PW1, @I_PE_PW2) > 0)
+	BEGIN
+	  if (jsharmony.NONEQUALC(@I_PE_PW1, @I_PE_PW2) > 0)
         SET @M = 'Application Error - New Password and Repeat Password are different'
-    else if ((@TP='I' or isnull(@I_PE_PW1,'')>'') and len(ltrim(rtrim(isnull(@I_PE_PW1,'')))) < 6)
+	  else if ((@TP='I' or isnull(@I_PE_PW1,'')>'') and len(ltrim(rtrim(isnull(@I_PE_PW1,'')))) < 6)
         SET @M = 'Application Error - Password length - at least 6 characters required'
 
       IF (@M is not null)
-    BEGIN
+	  BEGIN
         CLOSE CUR_CPE_IUD
         DEALLOCATE CUR_CPE_IUD
         raiserror(@M,16,1)
         ROLLBACK TRANSACTION
         return
       END
-    ELSE
-      SET @NEWPW = ltrim(rtrim(@I_PE_PW1))
-  END
+	  ELSE
+	    SET @NEWPW = ltrim(rtrim(@I_PE_PW1))
+	END
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - BEGIN ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - BEGIN ******/
+	/******************************************/
 
 
     IF (@TP='I' 
-      OR 
-    @TP='U' AND jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
-  BEGIN
-    EXEC  @C = [jsharmony].[CHECK_FOREIGN]
-        @in_tblname ='C',
-        @in_tblid = @I_C_ID
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_CPE_IUD
-      DEALLOCATE CUR_CPE_IUD
-      SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-  END   
+	    OR 
+		@TP='U' AND jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
+	BEGIN
+		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
+	     	@in_tblname ='C',
+		    @in_tblid = @I_C_ID
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_CPE_IUD
+			DEALLOCATE CUR_CPE_IUD
+			SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	END   
 
     IF (@TP='I')
-  BEGIN
+	BEGIN
 
-    set @hash = jsharmony.myHASH('C', @I_PE_ID, @NEWPW);
+	  set @hash = jsharmony.myHASH('C', @I_PE_ID, @NEWPW);
 
-    if (@hash is null)
+	  if (@hash is null)
       BEGIN
         CLOSE CUR_CPE_IUD
         DEALLOCATE CUR_CPE_IUD
@@ -4387,42 +4506,42 @@ BEGIN
       END
 
       UPDATE jsharmony.CPE
-       SET PE_STSDt = @CURDTTM,
-         PE_ETstmp = @CURDTTM,
-       PE_EU = @MYUSER,
-         PE_MTstmp = @CURDTTM,
-       PE_MU = @MYUSER,
-       PE_Hash = @hash,
-       PE_PW1 = NULL,
-       PE_PW2 = NULL
+	     SET PE_STSDt = @CURDTTM,
+		     PE_ETstmp = @CURDTTM,
+			 PE_EU = @MYUSER,
+		     PE_MTstmp = @CURDTTM,
+			 PE_MU = @MYUSER,
+			 PE_Hash = @hash,
+			 PE_PW1 = NULL,
+			 PE_PW2 = NULL
        WHERE CPE.PE_ID = @I_PE_ID;
 
       INSERT INTO jsharmony.CPER (PE_ID, CR_NAME)
-               VALUES(@I_PE_ID, 'C*');
+	             VALUES(@I_PE_ID, 'C*');
 
     END  
 
     SET @WK_SUBJ = ISNULL(@I_PE_LNAME,'')+', '+ISNULL(@I_PE_FNAME,'') 
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - END   ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - END   ******/
+	/******************************************/
 
     SET @MY_AUD_SEQ = 0
-  IF (@TP='I' OR @TP='D')
-  BEGIN  
-    SET @WK_PE_ID = ISNULL(@D_PE_ID,@I_PE_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH @TP, 'CPE', @WK_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-  END
+	IF (@TP='I' OR @TP='D')
+	BEGIN  
+	  SET @WK_PE_ID = ISNULL(@D_PE_ID,@I_PE_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH @TP, 'CPE', @WK_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+	END
  
     IF @TP='U' OR @TP='D'
-  BEGIN
+	BEGIN
 
       IF (@TP = 'D' AND @D_C_ID IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALC(@D_C_ID, @I_C_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'C_ID', @D_C_ID)
       END
 
@@ -4430,7 +4549,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_STS', @D_PE_STS)
       END
 
@@ -4438,7 +4557,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_FName, @I_PE_FName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_FName', @D_PE_FName)
       END
 
@@ -4446,7 +4565,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_MName, @I_PE_MName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_MName', @D_PE_MName)
       END
 
@@ -4454,7 +4573,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_LName, @I_PE_LName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_LName', @D_PE_LName)
       END
 
@@ -4462,7 +4581,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_JTitle, @I_PE_JTitle) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_JTitle', @D_PE_JTitle)
       END
 
@@ -4470,7 +4589,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_BPhone, @I_PE_BPhone) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_BPhone', @D_PE_BPhone)
       END
 
@@ -4478,7 +4597,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_CPhone, @I_PE_CPhone) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_CPhone', @D_PE_CPhone)
       END
 
@@ -4486,7 +4605,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_Email, @I_PE_Email) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_Email', @D_PE_Email)
       END
 
@@ -4494,61 +4613,61 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALD(@D_PE_LL_TSTMP, @I_PE_LL_TSTMP) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_LL_TSTMP', @D_PE_LL_TSTMP)
       END
 
-    IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
-    BEGIN
-    set @hash = jsharmony.myHASH('C', @I_PE_ID, @NEWPW);
+	  IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
+	  BEGIN
+		set @hash = jsharmony.myHASH('C', @I_PE_ID, @NEWPW);
 
-    if (@hash is null)
-    BEGIN
-      CLOSE CUR_CPE_IUD
-      DEALLOCATE CUR_CPE_IUD
-      SET @M = 'Application Error - Incorrect Password'
-      raiserror(@M,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END
+		if (@hash is null)
+		BEGIN
+			CLOSE CUR_CPE_IUD
+			DEALLOCATE CUR_CPE_IUD
+			SET @M = 'Application Error - Incorrect Password'
+			raiserror(@M,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END
 
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_PW', '*')
 
-      SET @UPDATE_PW = 'Y'
-    END
+	    SET @UPDATE_PW = 'Y'
+	  END
 
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-  /******************************************/
-  /****** SPECIAL BACK ACTION - BEGIN  ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL BACK ACTION - BEGIN  ******/
+	/******************************************/
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
-  BEGIN
+	BEGIN
       UPDATE jsharmony.CPE
-       SET PE_STSDt = CASE WHEN jsharmony.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0 THEN @CURDTTM ELSE PE_STSDt END,
-         PE_MTstmp = @CURDTTM,
-       PE_MU = @MYUSER,
-       PE_Hash = case @UPDATE_PW when 'Y' then @hash else PE_Hash end,
-       PE_PW1 = NULL,
-       PE_PW2 = NULL
+	     SET PE_STSDt = CASE WHEN jsharmony.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0 THEN @CURDTTM ELSE PE_STSDt END,
+		     PE_MTstmp = @CURDTTM,
+			 PE_MU = @MYUSER,
+			 PE_Hash = case @UPDATE_PW when 'Y' then @hash else PE_Hash end,
+			 PE_PW1 = NULL,
+			 PE_PW2 = NULL
        WHERE CPE.PE_ID = @I_PE_ID;
     END  
     ELSE IF (@TP='U' AND (@I_PE_PW1 is not null or @I_PE_PW2 is not null))
-  BEGIN
+	BEGIN
       UPDATE jsharmony.CPE
-       SET PE_PW1 = NULL,
-       PE_PW2 = NULL
+	     SET PE_PW1 = NULL,
+			 PE_PW2 = NULL
        WHERE CPE.PE_ID = @I_PE_ID;
     END  
 
-  /*****************************************/
-  /****** SPECIAL BACK ACTION - END   ******/
-  /*****************************************/
+	/*****************************************/
+	/****** SPECIAL BACK ACTION - END   ******/
+	/*****************************************/
 
 
 
@@ -4558,8 +4677,8 @@ BEGIN
              @D_C_ID, @I_C_ID,
              @D_PE_STS, @I_PE_STS,
              @D_PE_FName, @I_PE_FName,
-       @D_PE_MName, @I_PE_MName,
-       @D_PE_LName, @I_PE_LName,
+			 @D_PE_MName, @I_PE_MName,
+			 @D_PE_LName, @I_PE_LName,
              @D_PE_JTitle, @I_PE_JTitle,
              @D_PE_BPhone, @I_PE_BPhone,
              @D_PE_CPhone, @I_PE_CPhone,
@@ -4582,7 +4701,7 @@ END
 GO
 ALTER TABLE [jsharmony].[CPE] ENABLE TRIGGER [CPE_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[CPER_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[CPER_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4600,8 +4719,8 @@ BEGIN
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_CPER_IUD CURSOR LOCAL FOR
      SELECT  d.CPER_ID, i.CPER_ID,
-           d.PE_ID, i.PE_ID,
-           d.CR_NAME, i.CR_NAME
+	         d.PE_ID, i.PE_ID,
+	         d.CR_NAME, i.CR_NAME
        FROM deleted d FULL OUTER JOIN inserted i
                        ON i.CPER_ID = d.CPER_ID;
   DECLARE @D_CPER_ID bigint
@@ -4634,7 +4753,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -4671,18 +4790,18 @@ BEGIN
   BEGIN
       
     SET @xloc = 'TP=' + ISNULL(@TP,'null')
-  SET @xtxt = 'I_CPER_ID=' + LTRIM(ISNULL(STR(@I_CPER_ID),'null')) +
-              ' D_CPER_ID=' + LTRIM(ISNULL(STR(@D_CPER_ID),'null')) 
+	SET @xtxt = 'I_CPER_ID=' + LTRIM(ISNULL(STR(@I_CPER_ID),'null')) +
+	            ' D_CPER_ID=' + LTRIM(ISNULL(STR(@D_CPER_ID),'null')) 
     /*
     EXEC [jsharmony].[ZZ-FILEDEBUG] 'TRIGGER','CPER_IUD',@xloc, @xtxt
-  */
+	*/
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - BEGIN ******/
-  /******************************************/
-  
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - BEGIN ******/
+	/******************************************/
+	
     SELECT @WK_SUBJ = isnull(PE_LNAME,'')+', '+isnull(PE_FNAME,'')
-    FROM jsharmony.CPE
+	  FROM jsharmony.CPE
      WHERE PE_ID = @I_PE_ID; 
 
 
@@ -4691,58 +4810,58 @@ BEGIN
   BUT COULD BE SKIPPED
 
     IF @I_CR_NAME IS NOT NULL
-     AND
-     @I_PE_ID IS NOT NULL
+	   AND
+	   @I_PE_ID IS NOT NULL
     BEGIN
 
-    IF EXISTS (select 1
-                 from CF
+	  IF EXISTS (select 1
+	               from CF
                   inner join jsharmony.CPE on CPE.C_ID = CF.C_ID
                   where CPE.PE_ID = @I_PE_ID
-            and CF.CF_TYPE = 'LVL2')
+				    and CF.CF_TYPE = 'LVL2')
       BEGIN
-      IF @I_CR_NAME not in ('C*','CUSER','CMGR','CADMIN')
+	    IF @I_CR_NAME not in ('C*','CUSER','CMGR','CADMIN')
         BEGIN
           EXEC [jsharmony].[ZZ-FILEDEBUG] 'TRIGGER','CPER_IUD','ERR', 'Invalid Role'
           raiserror('Role not compatible with LVL2',16,1)
           ROLLBACK TRANSACTION
           return
         END
-    END
-    ELSE
-    BEGIN
-      IF @I_CR_NAME not in ('C*','CL1')
+	  END
+	  ELSE
+	  BEGIN
+	    IF @I_CR_NAME not in ('C*','CL1')
         BEGIN
           EXEC [jsharmony].[ZZ-FILEDEBUG] 'TRIGGER','CPER_IUD','ERR', 'Invalid Role'
           raiserror('Role not compatible with LVL1',16,1)
           ROLLBACK TRANSACTION
           return
         END
-    END
+	  END
 
-  END
+	END
 */
 
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - END   ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - END   ******/
+	/******************************************/
 
     SET @MY_AUD_SEQ = 0
-  IF (@TP='I' OR @TP='D')
-  BEGIN  
-    SET @WK_CPER_ID = ISNULL(@D_CPER_ID,@I_CPER_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH @TP, 'CPER', @WK_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-  END
+	IF (@TP='I' OR @TP='D')
+	BEGIN  
+	  SET @WK_CPER_ID = ISNULL(@D_CPER_ID,@I_CPER_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH @TP, 'CPER', @WK_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+	END
 
     IF @TP='U' OR @TP='D'
-  BEGIN
+	BEGIN
 
       IF (@TP = 'D' AND @D_PE_ID IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALN(@D_PE_ID, @I_PE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPER', @I_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPER', @I_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_ID', @D_PE_ID)
       END
 
@@ -4750,19 +4869,19 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_CR_NAME, @I_CR_NAME) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPER', @I_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPER', @I_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CR_NAME', @D_CR_NAME)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
-  /******************************************/
-  /****** SPECIAL BACK ACTION - BEGIN  ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL BACK ACTION - BEGIN  ******/
+	/******************************************/
 
-  /*****************************************/
-  /****** SPECIAL BACK ACTION - END   ******/
-  /*****************************************/
+	/*****************************************/
+	/****** SPECIAL BACK ACTION - END   ******/
+	/*****************************************/
             
     FETCH NEXT FROM CUR_CPER_IUD
           INTO @D_CPER_ID, @I_CPER_ID,
@@ -4780,7 +4899,7 @@ END
 GO
 ALTER TABLE [jsharmony].[CPER] ENABLE TRIGGER [CPER_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[D_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[D_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4799,16 +4918,16 @@ BEGIN
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_D_IUD CURSOR LOCAL FOR
      SELECT  d.D_ID, i.D_ID,
-           d.D_SCOPE, i.D_SCOPE,
-           d.D_SCOPE_ID, i.D_SCOPE_ID,
-           d.D_STS, i.D_STS,
-       d.D_CTGR, i.D_CTGR,
-       d.D_Desc, i.D_Desc,
-       d.D_UTSTMP, i.D_UTSTMP,
-       d.D_UU, i.D_UU,
-       d.D_SYNCTSTMP, i.D_SYNCTSTMP,
-       d.C_ID, i.C_ID,
-       d.E_ID, i.E_ID
+	         d.D_SCOPE, i.D_SCOPE,
+	         d.D_SCOPE_ID, i.D_SCOPE_ID,
+	         d.D_STS, i.D_STS,
+			 d.D_CTGR, i.D_CTGR,
+			 d.D_Desc, i.D_Desc,
+			 d.D_UTSTMP, i.D_UTSTMP,
+			 d.D_UU, i.D_UU,
+			 d.D_SYNCTSTMP, i.D_SYNCTSTMP,
+			 d.C_ID, i.C_ID,
+			 d.E_ID, i.E_ID
        FROM deleted d FULL OUTER JOIN inserted i
                        ON i.D_ID = d.D_ID;
   DECLARE @D_D_ID bigint
@@ -4863,8 +4982,8 @@ BEGIN
   DECLARE @DB_OUT datetime2(7)
 
   DECLARE @return_value int,
-      @out_msg nvarchar(max),
-      @out_rslt nvarchar(255)
+		  @out_msg nvarchar(max),
+		  @out_rslt nvarchar(255)
 
   if exists (select * from inserted)
     if exists (select * from deleted)
@@ -4873,7 +4992,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -4908,9 +5027,9 @@ BEGIN
   END
 
   SELECT @DSCOPE_DCTGR = PP_VAL
-  FROM jsharmony.V_PP
+	FROM jsharmony.V_PP
    where PP_PROCESS = 'SQL'
-   and PP_ATTRIB = 'DSCOPE_DCTGR';
+	 and PP_ATTRIB = 'DSCOPE_DCTGR';
   IF (@TP='I' OR @TP='U') AND @DSCOPE_DCTGR IS NULL
   BEGIN
     raiserror('DSCOPE_DCTGR parameter not set',16,1)
@@ -4919,14 +5038,14 @@ BEGIN
   END
 
   SELECT @GETCID = PP_VAL
-  FROM jsharmony.V_PP
+	FROM jsharmony.V_PP
    where PP_PROCESS = 'SQL'
-   and PP_ATTRIB = 'GETCID';
+	 and PP_ATTRIB = 'GETCID';
 
   SELECT @GETEID = PP_VAL
-  FROM jsharmony.V_PP
+	FROM jsharmony.V_PP
    where PP_PROCESS = 'SQL'
-   and PP_ATTRIB = 'GETEID';
+	 and PP_ATTRIB = 'GETEID';
 
   
   OPEN CUR_D_IUD
@@ -4935,239 +5054,239 @@ BEGIN
              @D_D_SCOPE, @I_D_SCOPE,
              @D_D_SCOPE_ID, @I_D_SCOPE_ID,
              @D_D_STS, @I_D_STS,
-       @D_D_CTGR, @I_D_CTGR,
-       @D_D_Desc, @I_D_Desc,
-       @D_D_UTstmp, @I_D_UTstmp,
-       @D_D_UU, @I_D_UU,
-       @D_D_SYNCTstmp, @I_D_SYNCTstmp,
-       @D_C_ID, @I_C_ID,
-       @D_E_ID, @I_E_ID
+			 @D_D_CTGR, @I_D_CTGR,
+			 @D_D_Desc, @I_D_Desc,
+			 @D_D_UTstmp, @I_D_UTstmp,
+			 @D_D_UU, @I_D_UU,
+			 @D_D_SYNCTstmp, @I_D_SYNCTstmp,
+			 @D_C_ID, @I_C_ID,
+			 @D_E_ID, @I_E_ID
 
   WHILE (@@Fetch_Status = 0)
   BEGIN
-    
+	  
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - BEGIN ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - BEGIN ******/
+	/******************************************/
 
  
     IF (@TP='I' 
-      OR 
-    @TP='U' AND (jsharmony.nonequalc(@D_D_SCOPE, @I_D_SCOPE)>0
-                 OR
-           jsharmony.nonequaln(@D_D_SCOPE_ID, @I_D_SCOPE_ID)>0))
-  BEGIN
-    IF @I_D_SCOPE = 'S' AND @I_D_SCOPE_ID <> 0
-       OR
-       @I_D_SCOPE <> 'S' AND @I_D_SCOPE_ID is NULL
-    BEGIN
-      CLOSE CUR_D_IUD
-      DEALLOCATE CUR_D_IUD
-      SET @M = 'SCOPE ID INCONSISTENT WITH SCOPE'
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-  END   
+	    OR 
+		@TP='U' AND (jsharmony.nonequalc(@D_D_SCOPE, @I_D_SCOPE)>0
+		             OR
+					 jsharmony.nonequaln(@D_D_SCOPE_ID, @I_D_SCOPE_ID)>0))
+	BEGIN
+		IF @I_D_SCOPE = 'S' AND @I_D_SCOPE_ID <> 0
+		   OR
+		   @I_D_SCOPE <> 'S' AND @I_D_SCOPE_ID is NULL
+		BEGIN
+			CLOSE CUR_D_IUD
+			DEALLOCATE CUR_D_IUD
+			SET @M = 'SCOPE ID INCONSISTENT WITH SCOPE'
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	END   
  
     IF (@TP='I' OR @TP='U')
-  BEGIN
-    EXEC  @C = [jsharmony].[CHECK_FOREIGN]
-        @in_tblname = @I_D_SCOPE,
-        @in_tblid = @I_D_SCOPE_ID
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_D_IUD
-      DEALLOCATE CUR_D_IUD
-      SET @M = 'Table ' + @I_D_SCOPE + ' does not contain record ' + CONVERT(NVARCHAR(MAX),@I_D_SCOPE_ID)
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-  END   
+	BEGIN
+		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
+	     	@in_tblname = @I_D_SCOPE,
+		    @in_tblid = @I_D_SCOPE_ID
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_D_IUD
+			DEALLOCATE CUR_D_IUD
+			SET @M = 'Table ' + @I_D_SCOPE + ' does not contain record ' + CONVERT(NVARCHAR(MAX),@I_D_SCOPE_ID)
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	END   
 
 
  
     IF (@TP='I' OR @TP='U')
-  BEGIN
-      SET @DSCOPE_DCTGR = isnull(@DSCOPE_DCTGR,'')
-    EXEC  @C = [jsharmony].[CHECK_CODE2]
-        @in_tblname = @DSCOPE_DCTGR,
-        @in_codeval1 = @I_D_SCOPE,
-        @in_codeval2 = @I_D_CTGR
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_D_IUD
-      DEALLOCATE CUR_D_IUD
-      SET @M = 'Document Type not allowed for selected Scope'
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-  END   
+	BEGIN
+	    SET @DSCOPE_DCTGR = isnull(@DSCOPE_DCTGR,'')
+		EXEC	@C = [jsharmony].[CHECK_CODE2]
+	     	@in_tblname = @DSCOPE_DCTGR,
+		    @in_codeval1 = @I_D_SCOPE,
+		    @in_codeval2 = @I_D_CTGR
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_D_IUD
+			DEALLOCATE CUR_D_IUD
+			SET @M = 'Document Type not allowed for selected Scope'
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	END   
 
 
     SET @CPE_USER = 0
-  SET @USER_C_ID = NULL   
+	SET @USER_C_ID = NULL	  
     IF SUBSTRING(@MYUSER,1,1) = 'C'
-  BEGIN
-    SELECT @USER_C_ID = C_ID
-      FROM jsharmony.CPE
+	BEGIN
+	  SELECT @USER_C_ID = C_ID
+	    FROM jsharmony.CPE
        WHERE substring(@MYUSER,2,1024)=convert(varchar, PE_ID);   
-    
-    IF @USER_C_ID is not null
-      SET @CPE_USER = 1
-  END
+	  
+	  IF @USER_C_ID is not null
+	    SET @CPE_USER = 1
+	END
 
-  SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + isnull(isnull(@I_D_SCOPE,@D_D_SCOPE),'') + ''',' +
-                      isnull(convert(nvarchar,isnull(@I_D_SCOPE_ID,@D_D_SCOPE_ID)),'') + ')'
-  EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
-  SET @C_ID = @MY_C_ID
+	SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + isnull(isnull(@I_D_SCOPE,@D_D_SCOPE),'') + ''',' +
+	                    isnull(convert(nvarchar,isnull(@I_D_SCOPE_ID,@D_D_SCOPE_ID)),'') + ')'
+	EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
+	SET @C_ID = @MY_C_ID
 
-  SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + isnull(isnull(@I_D_SCOPE,@D_D_SCOPE),'') + ''',' +
-                      isnull(convert(nvarchar,isnull(@I_D_SCOPE_ID,@D_D_SCOPE_ID)),'') + ')'
-  EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
-  SET @E_ID = @MY_E_ID
+	SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + isnull(isnull(@I_D_SCOPE,@D_D_SCOPE),'') + ''',' +
+	                    isnull(convert(nvarchar,isnull(@I_D_SCOPE_ID,@D_D_SCOPE_ID)),'') + ')'
+	EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
+	SET @E_ID = @MY_E_ID
 
 
 
 
 
     IF (@CPE_USER = 1)
-  BEGIN
+	BEGIN
 
-    IF @USER_C_ID <> isnull(@C_ID,0)
-       OR
+	  IF @USER_C_ID <> isnull(@C_ID,0)
+	     OR
          isnull(@I_D_SCOPE,@D_D_SCOPE) not in 
-                  (select CODEVAL
-               from jsharmony.UCOD_D_SCOPE
+		              (select CODEVAL
+					     from jsharmony.UCOD_D_SCOPE
                         where CODECODE = 'Y')
-    BEGIN
-    CLOSE CUR_D_IUD
-    DEALLOCATE CUR_D_IUD
-    SET @M = 'Application Error - Client User has no rights to perform this operation'
-    raiserror(@M ,16,1)
-    ROLLBACK TRANSACTION
-      return
-    END 
+	  BEGIN
+		CLOSE CUR_D_IUD
+		DEALLOCATE CUR_D_IUD
+		SET @M = 'Application Error - Client User has no rights to perform this operation'
+		raiserror(@M ,16,1)
+		ROLLBACK TRANSACTION
+	    return
+	  END 
 
     END
 
     IF (@TP='I')
-  BEGIN
+	BEGIN
 
       IF @C_ID is not null
-    BEGIN
-    EXEC  @C = [jsharmony].[CHECK_FOREIGN]
-        @in_tblname ='C',
-        @in_tblid = @C_ID
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_D_IUD
-      DEALLOCATE CUR_D_IUD
-      SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@C_ID)
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-    END   
+	  BEGIN
+		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
+	     	@in_tblname ='C',
+		    @in_tblid = @C_ID
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_D_IUD
+			DEALLOCATE CUR_D_IUD
+			SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@C_ID)
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	  END   
 
       IF @E_ID is not null
-    BEGIN
-    EXEC  @C = [jsharmony].[CHECK_FOREIGN]
-        @in_tblname ='E',
-        @in_tblid = @E_ID
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_D_IUD
-      DEALLOCATE CUR_D_IUD
-      SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@E_ID)
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-    END   
+	  BEGIN
+		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
+	     	@in_tblname ='E',
+		    @in_tblid = @E_ID
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_D_IUD
+			DEALLOCATE CUR_D_IUD
+			SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@E_ID)
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	  END   
 
-    IF (@I_D_SYNCTSTMP is null)
+	  IF (@I_D_SYNCTSTMP is null)
         UPDATE jsharmony.D
-       SET C_ID = @C_ID,
-         E_ID = @E_ID,
-         D_ETstmp = @CURDTTM,
-       D_EU = @MYUSER,
-         D_MTstmp = @CURDTTM,
-       D_MU = @MYUSER
+	     SET C_ID = @C_ID,
+		     E_ID = @E_ID,
+		     D_ETstmp = @CURDTTM,
+			 D_EU = @MYUSER,
+		     D_MTstmp = @CURDTTM,
+			 D_MU = @MYUSER
          WHERE D.D_ID = @I_D_ID;
     END  
 
     IF (@TP='U')
-  BEGIN
+	BEGIN
 
       IF @I_C_ID is not null
-       and
-     jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0
-    BEGIN
-    EXEC  @C = [jsharmony].[CHECK_FOREIGN]
-        @in_tblname ='C',
-        @in_tblid = @I_C_ID
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_D_IUD
-      DEALLOCATE CUR_D_IUD
-      SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-    END   
+	     and
+		 jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0
+	  BEGIN
+		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
+	     	@in_tblname ='C',
+		    @in_tblid = @I_C_ID
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_D_IUD
+			DEALLOCATE CUR_D_IUD
+			SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	  END   
 
       IF @I_E_ID is not null
-       and
-     jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0
-    BEGIN
-    EXEC  @C = [jsharmony].[CHECK_FOREIGN]
-        @in_tblname ='E',
-        @in_tblid = @I_E_ID
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_D_IUD
-      DEALLOCATE CUR_D_IUD
-      SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@I_E_ID)
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
+	     and
+		 jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0
+	  BEGIN
+		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
+	     	@in_tblname ='E',
+		    @in_tblid = @I_E_ID
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_D_IUD
+			DEALLOCATE CUR_D_IUD
+			SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@I_E_ID)
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	  END
+	     
     END
-       
-    END
 
 
 
 
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - END   ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - END   ******/
+	/******************************************/
 
 
     SET @MY_AUD_SEQ = 0
-  IF (@TP='I' OR @TP='D')
-  BEGIN  
-    SET @WK_D_ID = ISNULL(@D_D_ID,@I_D_ID)
-    SET @WK_REF_NAME = ISNULL(@D_D_SCOPE,@I_D_SCOPE)
-    SET @WK_REF_ID = ISNULL(@D_D_SCOPE_ID,@I_D_SCOPE_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH @TP, 'D', @WK_D_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default, @C_ID, @E_ID
-  END
+	IF (@TP='I' OR @TP='D')
+	BEGIN  
+	  SET @WK_D_ID = ISNULL(@D_D_ID,@I_D_ID)
+	  SET @WK_REF_NAME = ISNULL(@D_D_SCOPE,@I_D_SCOPE)
+	  SET @WK_REF_ID = ISNULL(@D_D_SCOPE_ID,@I_D_SCOPE_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH @TP, 'D', @WK_D_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default, @C_ID, @E_ID
+	END
 
  
     IF @TP='U' OR @TP='D'
-  BEGIN
+	BEGIN
 
       IF (@TP = 'D' AND @D_D_SCOPE IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALC(@D_D_SCOPE, @I_D_SCOPE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_SCOPE', @D_D_SCOPE)
       END
 
@@ -5175,7 +5294,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_D_SCOPE_ID, @I_D_SCOPE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_SCOPE_ID', @D_D_SCOPE_ID)
       END
 
@@ -5183,7 +5302,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_D_STS, @I_D_STS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_STS', @D_D_STS)
       END
 
@@ -5191,7 +5310,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_D_CTGR, @I_D_CTGR) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_CTGR', @D_D_CTGR)
       END
 
@@ -5199,7 +5318,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_D_Desc, @I_D_Desc) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_Desc', @D_D_Desc)
       END
 
@@ -5207,7 +5326,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALD(@D_D_UTSTMP, @I_D_UTSTMP) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_UTSTMP', @D_D_UTSTMP)
       END
 
@@ -5215,7 +5334,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_D_UU, @I_D_UU) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_UU', @D_D_UU)
       END
 
@@ -5223,7 +5342,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'C_ID', @D_C_ID)
       END
 
@@ -5231,7 +5350,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'E_ID', @D_E_ID)
       END
 
@@ -5239,23 +5358,23 @@ BEGIN
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-  /******************************************/
-  /****** SPECIAL BACK ACTION - BEGIN  ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL BACK ACTION - BEGIN  ******/
+	/******************************************/
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
-  BEGIN
-    if (jsharmony.NONEQUALD(@D_D_SYNCTstmp, @I_D_SYNCTstmp) <= 0)
+	BEGIN
+ 	  if (jsharmony.NONEQUALD(@D_D_SYNCTstmp, @I_D_SYNCTstmp) <= 0)
         UPDATE jsharmony.D
-       SET D_MTstmp = @CURDTTM,
-       D_MU = @MYUSER,
-       D_SYNCTstmp = NULL
+	     SET D_MTstmp = @CURDTTM,
+			 D_MU = @MYUSER,
+			 D_SYNCTstmp = NULL
          WHERE D.D_ID = @I_D_ID;
     END  
 
-  /*****************************************/
-  /****** SPECIAL BACK ACTION - END   ******/
-  /*****************************************/
+	/*****************************************/
+	/****** SPECIAL BACK ACTION - END   ******/
+	/*****************************************/
 
 
 
@@ -5265,13 +5384,13 @@ BEGIN
              @D_D_SCOPE,  @I_D_SCOPE,
              @D_D_SCOPE_ID, @I_D_SCOPE_ID,
              @D_D_STS, @I_D_STS,
-       @D_D_CTGR, @I_D_CTGR,
-       @D_D_Desc, @I_D_Desc,
-       @D_D_UTstmp, @I_D_UTstmp,
-       @D_D_UU, @I_D_UU,
-       @D_D_SYNCTstmp, @I_D_SYNCTstmp,
-       @D_C_ID, @I_C_ID,
-       @D_E_ID, @I_E_ID
+			 @D_D_CTGR, @I_D_CTGR,
+			 @D_D_Desc, @I_D_Desc,
+			 @D_D_UTstmp, @I_D_UTstmp,
+			 @D_D_UU, @I_D_UU,
+			 @D_D_SYNCTstmp, @I_D_SYNCTstmp,
+			 @D_C_ID, @I_C_ID,
+			 @D_E_ID, @I_E_ID
 
   END
   CLOSE CUR_D_IUD
@@ -5284,7 +5403,7 @@ END
 GO
 ALTER TABLE [jsharmony].[D] ENABLE TRIGGER [D_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[GCOD2_D_SCOPE_D_CTGR_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[GCOD2_D_SCOPE_D_CTGR_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5303,14 +5422,14 @@ BEGIN
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_GCOD2_D_SCOPE_D_CTGR_IUD CURSOR LOCAL FOR
      SELECT  d.GCOD2_ID, i.GCOD2_ID,
-           d.CODSEQ, i.CODSEQ,
-           d.CODETDT, i.CODETDT,
-           d.CODEVAL1, i.CODEVAL1,
-           d.CODEVAL2, i.CODEVAL2,
-           d.CODETXT, i.CODETXT,
-           d.CODECODE, i.CODECODE,
-           d.CODEATTRIB, i.CODEATTRIB,
-           d.CODETCM, i.CODETCM
+	         d.CODSEQ, i.CODSEQ,
+	         d.CODETDT, i.CODETDT,
+	         d.CODEVAL1, i.CODEVAL1,
+	         d.CODEVAL2, i.CODEVAL2,
+	         d.CODETXT, i.CODETXT,
+	         d.CODECODE, i.CODECODE,
+	         d.CODEATTRIB, i.CODEATTRIB,
+	         d.CODETCM, i.CODETCM
        FROM deleted d FULL OUTER JOIN inserted i
                        ON i.GCOD2_ID = d.GCOD2_ID;
   DECLARE @D_GCOD2_ID bigint
@@ -5345,8 +5464,8 @@ BEGIN
   DECLARE @WK_GCOD2_ID BIGINT
 
   DECLARE @return_value int,
-      @out_msg nvarchar(max),
-      @out_rslt nvarchar(255)
+		  @out_msg nvarchar(max),
+		  @out_rslt nvarchar(255)
 
 
   if exists (select * from inserted)
@@ -5356,7 +5475,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -5407,41 +5526,41 @@ BEGIN
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - BEGIN ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - BEGIN ******/
+	/******************************************/
 
     IF (@TP='I')
-  BEGIN
+	BEGIN
       UPDATE jsharmony.GCOD2_D_SCOPE_D_CTGR
-       SET COD_ETstmp = @CURDTTM,
-       COD_EU = @MYUSER,
-         COD_MTstmp = @CURDTTM,
-       COD_MU = @MYUSER
+	     SET COD_ETstmp = @CURDTTM,
+			 COD_EU = @MYUSER,
+		     COD_MTstmp = @CURDTTM,
+			 COD_MU = @MYUSER
        WHERE GCOD2_D_SCOPE_D_CTGR.GCOD2_ID = @I_GCOD2_ID;
     END  
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - END   ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - END   ******/
+	/******************************************/
 
 
     SET @MY_AUD_SEQ = 0
-  IF (@TP='I' OR @TP='D')
-  BEGIN  
-    SET @WK_GCOD2_ID = ISNULL(@D_GCOD2_ID,@I_GCOD2_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'GCOD2_D_SCOPE_D_CTGR', @WK_GCOD2_ID, @MYUSER, @CURDTTM
-  END
+	IF (@TP='I' OR @TP='D')
+	BEGIN  
+	  SET @WK_GCOD2_ID = ISNULL(@D_GCOD2_ID,@I_GCOD2_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'GCOD2_D_SCOPE_D_CTGR', @WK_GCOD2_ID, @MYUSER, @CURDTTM
+	END
 
  
     IF @TP='U' OR @TP='D'
-  BEGIN
+	BEGIN
 
       IF (@TP = 'D' AND @D_CODSEQ IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALN(@D_CODSEQ, @I_CODSEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODSEQ', @D_CODSEQ)
       END
 
@@ -5449,7 +5568,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALD(@D_CODETDT, @I_CODETDT) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODETDT', @D_CODETDT)
       END
 
@@ -5457,7 +5576,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_CODEVAL1, @I_CODEVAL1) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODEVAL1', @D_CODEVAL1)
       END
 
@@ -5465,7 +5584,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_CODEVAL2, @I_CODEVAL2) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODEVAL2', @D_CODEVAL2)
       END
 
@@ -5473,7 +5592,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_CODETXT, @I_CODETXT) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODETXT', @D_CODETXT)
       END
 
@@ -5481,7 +5600,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_CODECODE, @I_CODECODE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODECODE', @D_CODECODE)
       END
 
@@ -5489,7 +5608,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_CODEATTRIB, @I_CODEATTRIB) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODEATTRIB', @D_CODEATTRIB)
       END
 
@@ -5497,28 +5616,28 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_CODETCM, @I_CODETCM) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODETCM', @D_CODETCM)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-  /******************************************/
-  /****** SPECIAL BACK ACTION - BEGIN  ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL BACK ACTION - BEGIN  ******/
+	/******************************************/
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
-  BEGIN
+	BEGIN
       UPDATE jsharmony.GCOD2_D_SCOPE_D_CTGR
-       SET COD_MTstmp = @CURDTTM,
-       COD_MU = @MYUSER
+	     SET COD_MTstmp = @CURDTTM,
+			 COD_MU = @MYUSER
        WHERE GCOD2_D_SCOPE_D_CTGR.GCOD2_ID = @I_GCOD2_ID;
     END  
 
-  /*****************************************/
-  /****** SPECIAL BACK ACTION - END   ******/
-  /*****************************************/
+	/*****************************************/
+	/****** SPECIAL BACK ACTION - END   ******/
+	/*****************************************/
 
 
 
@@ -5546,7 +5665,7 @@ END
 GO
 ALTER TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR] ENABLE TRIGGER [GCOD2_D_SCOPE_D_CTGR_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[GPP_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[GPP_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5595,7 +5714,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     else
       return
   
@@ -5608,7 +5727,7 @@ BEGIN
   IF @TP = 'U' AND UPDATE(GPP_ID)
   BEGIN
     raiserror('Cannot update identity',16,1)
-  ROLLBACK TRANSACTION
+	ROLLBACK TRANSACTION
     return
   END
 
@@ -5636,13 +5755,13 @@ BEGIN
         IF @ERRTXT IS NOT null  
         BEGIN
           raiserror(@ERRTXT,16,1)
-        ROLLBACK TRANSACTION
+	      ROLLBACK TRANSACTION
           return
         END
       END
 
-    SET @WK_ID = ISNULL(@I_GPP_ID,@D_GPP_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'GPP', @WK_ID, @MYUSER, @CURDTTM
+	  SET @WK_ID = ISNULL(@I_GPP_ID,@D_GPP_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'GPP', @WK_ID, @MYUSER, @CURDTTM
 
       FETCH NEXT FROM CUR_GPP_I INTO @I_GPP_ID, 
                                      @I_GPP_PROCESS, 
@@ -5679,7 +5798,7 @@ BEGIN
           IF @ERRTXT IS NOT null  
           BEGIN
             raiserror(@ERRTXT,16,1)
-          ROLLBACK TRANSACTION
+	        ROLLBACK TRANSACTION
             return
           END
         END
@@ -5687,8 +5806,8 @@ BEGIN
 
       END
 
-    SET @WK_ID = ISNULL(@I_GPP_ID,@D_GPP_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'GPP', @WK_ID, @MYUSER, @CURDTTM
+	  SET @WK_ID = ISNULL(@I_GPP_ID,@D_GPP_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'GPP', @WK_ID, @MYUSER, @CURDTTM
             
       FETCH NEXT FROM CUR_GPP_DU
             INTO @D_GPP_ID, @I_GPP_ID,
@@ -5707,7 +5826,7 @@ END
 GO
 ALTER TABLE [jsharmony].[GPP] ENABLE TRIGGER [GPP_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[H_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[H_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5726,12 +5845,12 @@ BEGIN
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_H_IUD CURSOR LOCAL FOR
      SELECT  d.H_ID, i.H_ID,
-           d.HP_CODE, i.HP_CODE,
-           d.H_TITLE, i.H_TITLE,
-           d.H_TEXT, i.H_TEXT,
-           d.H_SEQ, i.H_SEQ,
-           d.H_INDEX_A, i.H_INDEX_A,
-           d.H_INDEX_P, i.H_INDEX_P
+	         d.HP_CODE, i.HP_CODE,
+	         d.H_TITLE, i.H_TITLE,
+	         d.H_TEXT, i.H_TEXT,
+	         d.H_SEQ, i.H_SEQ,
+	         d.H_INDEX_A, i.H_INDEX_A,
+	         d.H_INDEX_P, i.H_INDEX_P
        FROM deleted d FULL OUTER JOIN inserted i
                        ON i.H_ID = d.H_ID;
   DECLARE @D_H_ID bigint
@@ -5763,8 +5882,8 @@ BEGIN
   DECLARE @CPE_USER BIT
 
   DECLARE @return_value int,
-      @out_msg nvarchar(max),
-      @out_rslt nvarchar(255)
+		  @out_msg nvarchar(max),
+		  @out_rslt nvarchar(255)
 
 
   if exists (select * from inserted)
@@ -5774,7 +5893,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -5815,41 +5934,41 @@ BEGIN
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - BEGIN ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - BEGIN ******/
+	/******************************************/
 
     IF (@TP='I')
-  BEGIN
+	BEGIN
       UPDATE jsharmony.H
-       SET H_ETstmp = @CURDTTM,
-       H_EU = @MYUSER,
-         H_MTstmp = @CURDTTM,
-       H_MU = @MYUSER
+	     SET H_ETstmp = @CURDTTM,
+			 H_EU = @MYUSER,
+		     H_MTstmp = @CURDTTM,
+			 H_MU = @MYUSER
        WHERE H.H_ID = @I_H_ID;
     END  
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - END   ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - END   ******/
+	/******************************************/
 
 
     SET @MY_AUD_SEQ = 0
-  IF (@TP='I' OR @TP='D')
-  BEGIN  
-    SET @WK_H_ID = ISNULL(@D_H_ID,@I_H_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'H', @WK_H_ID, @MYUSER, @CURDTTM
-  END
+	IF (@TP='I' OR @TP='D')
+	BEGIN  
+	  SET @WK_H_ID = ISNULL(@D_H_ID,@I_H_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'H', @WK_H_ID, @MYUSER, @CURDTTM
+	END
 
  
     IF @TP='U' OR @TP='D'
-  BEGIN
+	BEGIN
 
       IF (@TP = 'D' AND @D_HP_CODE IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALC(@D_HP_CODE, @I_HP_CODE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'HP_CODE', @D_HP_CODE)
       END
 
@@ -5857,7 +5976,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_H_TITLE, @I_H_TITLE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'H_TITLE', @D_H_TITLE)
       END
 
@@ -5865,7 +5984,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_H_TEXT, @I_H_TEXT) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'H_TEXT', @D_H_TEXT)
       END
 
@@ -5873,7 +5992,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_H_SEQ, @I_H_SEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'H_SEQ', @D_H_SEQ)
       END
 
@@ -5881,7 +6000,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_H_INDEX_A, @I_H_INDEX_A) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'H_INDEX_A', @D_H_INDEX_A)
       END
 
@@ -5889,28 +6008,28 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_H_INDEX_P, @I_H_INDEX_P) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'H_INDEX_P', @D_H_INDEX_P)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-  /******************************************/
-  /****** SPECIAL BACK ACTION - BEGIN  ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL BACK ACTION - BEGIN  ******/
+	/******************************************/
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
-  BEGIN
+	BEGIN
       UPDATE jsharmony.H
-       SET H_MTstmp = @CURDTTM,
-       H_MU = @MYUSER
+	     SET H_MTstmp = @CURDTTM,
+			 H_MU = @MYUSER
        WHERE H.H_ID = @I_H_ID;
     END  
 
-  /*****************************************/
-  /****** SPECIAL BACK ACTION - END   ******/
-  /*****************************************/
+	/*****************************************/
+	/****** SPECIAL BACK ACTION - END   ******/
+	/*****************************************/
 
 
 
@@ -5935,7 +6054,7 @@ END
 GO
 ALTER TABLE [jsharmony].[H] ENABLE TRIGGER [H_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[N_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[N_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5954,13 +6073,13 @@ BEGIN
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_N_IUD CURSOR LOCAL FOR
      SELECT  d.N_ID, i.N_ID,
-           d.N_SCOPE, i.N_SCOPE,
-           d.N_SCOPE_ID, i.N_SCOPE_ID,
-           d.N_STS, i.N_STS,
-       d.N_TYPE, i.N_TYPE,
-       d.N_Note, i.N_Note,
-       d.C_ID, i.C_ID,
-       d.E_ID, i.E_ID
+	         d.N_SCOPE, i.N_SCOPE,
+	         d.N_SCOPE_ID, i.N_SCOPE_ID,
+	         d.N_STS, i.N_STS,
+			 d.N_TYPE, i.N_TYPE,
+			 d.N_Note, i.N_Note,
+			 d.C_ID, i.C_ID,
+			 d.E_ID, i.E_ID
        FROM deleted d FULL OUTER JOIN inserted i
                        ON i.N_ID = d.N_ID;
   DECLARE @D_N_ID bigint
@@ -6008,8 +6127,8 @@ BEGIN
   DECLARE @DB_OUT datetime2(7)
 
   DECLARE @return_value int,
-      @out_msg nvarchar(max),
-      @out_rslt nvarchar(255)
+		  @out_msg nvarchar(max),
+		  @out_rslt nvarchar(255)
 
 
   if exists (select * from inserted)
@@ -6019,7 +6138,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -6062,14 +6181,14 @@ BEGIN
   END
 
   SELECT @GETCID = PP_VAL
-  FROM jsharmony.V_PP
+	FROM jsharmony.V_PP
    where PP_PROCESS = 'SQL'
-   and PP_ATTRIB = 'GETCID';
+	 and PP_ATTRIB = 'GETCID';
 
   SELECT @GETEID = PP_VAL
-  FROM jsharmony.V_PP
+	FROM jsharmony.V_PP
    where PP_PROCESS = 'SQL'
-   and PP_ATTRIB = 'GETEID';
+	 and PP_ATTRIB = 'GETEID';
   
   OPEN CUR_N_IUD
   FETCH NEXT FROM CUR_N_IUD
@@ -6077,205 +6196,205 @@ BEGIN
              @D_N_SCOPE, @I_N_SCOPE,
              @D_N_SCOPE_ID, @I_N_SCOPE_ID,
              @D_N_STS, @I_N_STS,
-       @D_N_TYPE, @I_N_TYPE,
-       @D_N_Note, @I_N_Note,
-       @D_C_ID, @I_C_ID,
-       @D_E_ID, @I_E_ID
+			 @D_N_TYPE, @I_N_TYPE,
+			 @D_N_Note, @I_N_Note,
+			 @D_C_ID, @I_C_ID,
+			 @D_E_ID, @I_E_ID
 
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - BEGIN ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - BEGIN ******/
+	/******************************************/
  
     IF (@TP='I' 
-      OR 
-    @TP='U' AND (jsharmony.nonequalc(@D_N_SCOPE, @I_N_SCOPE)>0
-                 OR
-           jsharmony.nonequaln(@D_N_SCOPE_ID, @I_N_SCOPE_ID)>0))
-  BEGIN
-    IF @I_N_SCOPE = 'S' AND @I_N_SCOPE_ID <> 0
-       OR
-       @I_N_SCOPE <> 'S' AND @I_N_SCOPE_ID is NULL
-    BEGIN
-      CLOSE CUR_N_IUD
-      DEALLOCATE CUR_N_IUD
-      SET @M = 'SCOPE ID INCONSISTENT WITH SCOPE'
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-  END   
+	    OR 
+		@TP='U' AND (jsharmony.nonequalc(@D_N_SCOPE, @I_N_SCOPE)>0
+		             OR
+					 jsharmony.nonequaln(@D_N_SCOPE_ID, @I_N_SCOPE_ID)>0))
+	BEGIN
+		IF @I_N_SCOPE = 'S' AND @I_N_SCOPE_ID <> 0
+		   OR
+		   @I_N_SCOPE <> 'S' AND @I_N_SCOPE_ID is NULL
+		BEGIN
+			CLOSE CUR_N_IUD
+			DEALLOCATE CUR_N_IUD
+			SET @M = 'SCOPE ID INCONSISTENT WITH SCOPE'
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	END   
  
     IF (@TP='I' OR @TP='U')
-  BEGIN
-    EXEC @C = [jsharmony].[CHECK_FOREIGN]
-         @in_tblname = @I_N_SCOPE,
-         @in_tblid = @I_N_SCOPE_ID
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_N_IUD
-      DEALLOCATE CUR_N_IUD
-      SET @M = 'Table ' + @I_N_SCOPE + ' does not contain record ' + CONVERT(NVARCHAR(MAX),@I_N_SCOPE_ID)
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-  END   
+	BEGIN
+		EXEC @C = [jsharmony].[CHECK_FOREIGN]
+	     	 @in_tblname = @I_N_SCOPE,
+		     @in_tblid = @I_N_SCOPE_ID
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_N_IUD
+			DEALLOCATE CUR_N_IUD
+			SET @M = 'Table ' + @I_N_SCOPE + ' does not contain record ' + CONVERT(NVARCHAR(MAX),@I_N_SCOPE_ID)
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	END   
 
     SET @CPE_USER = 0
-  SET @USER_C_ID = NULL   
+	SET @USER_C_ID = NULL	  
     IF SUBSTRING(@MYUSER,1,1) = 'C'
-  BEGIN
-    SELECT @USER_C_ID = C_ID
-      FROM jsharmony.CPE
+	BEGIN
+	  SELECT @USER_C_ID = C_ID
+	    FROM jsharmony.CPE
        WHERE substring(@MYUSER,2,1024)=convert(varchar, PE_ID);   
-    
-    IF @USER_C_ID is not null
-      SET @CPE_USER = 1
-  END
+	  
+	  IF @USER_C_ID is not null
+	    SET @CPE_USER = 1
+	END
 
-  SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + isnull(isnull(@I_N_SCOPE,@D_N_SCOPE),'') + ''',' +
-                      isnull(convert(nvarchar,isnull(@I_N_SCOPE_ID,@D_N_SCOPE_ID)),'') + ')'
-  EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
-  SET @C_ID = @MY_C_ID
+	SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + isnull(isnull(@I_N_SCOPE,@D_N_SCOPE),'') + ''',' +
+	                    isnull(convert(nvarchar,isnull(@I_N_SCOPE_ID,@D_N_SCOPE_ID)),'') + ')'
+	EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
+	SET @C_ID = @MY_C_ID
 
-  SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + isnull(isnull(@I_N_SCOPE,@D_N_SCOPE),'') + ''',' +
-                      isnull(convert(nvarchar,isnull(@I_N_SCOPE_ID,@D_N_SCOPE_ID)),'') + ')'
-  EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
-  SET @E_ID = @MY_E_ID
+	SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + isnull(isnull(@I_N_SCOPE,@D_N_SCOPE),'') + ''',' +
+	                    isnull(convert(nvarchar,isnull(@I_N_SCOPE_ID,@D_N_SCOPE_ID)),'') + ')'
+	EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
+	SET @E_ID = @MY_E_ID
 
 
     IF (@CPE_USER = 1)
-  BEGIN
+	BEGIN
 
-    IF @USER_C_ID <> isnull(@C_ID,0)
-       OR
+	  IF @USER_C_ID <> isnull(@C_ID,0)
+	     OR
          isnull(@I_N_SCOPE, @D_N_SCOPE) not in ('C','CT','E','J','SRV')
-     OR
-     isnull(@I_N_TYPE, @D_N_TYPE) not in ('C','S')
-    BEGIN
-    CLOSE CUR_N_IUD
-    DEALLOCATE CUR_N_IUD
-    SET @M = 'Application Error - Customer User has no rights to perform this operation'
-    raiserror(@M ,16,1)
-    ROLLBACK TRANSACTION
-      return
-    END 
+		 OR
+		 isnull(@I_N_TYPE, @D_N_TYPE) not in ('C','S')
+	  BEGIN
+		CLOSE CUR_N_IUD
+		DEALLOCATE CUR_N_IUD
+		SET @M = 'Application Error - Customer User has no rights to perform this operation'
+		raiserror(@M ,16,1)
+		ROLLBACK TRANSACTION
+	    return
+	  END 
 
     END
 
 
     IF (@TP='I')
-  BEGIN
+	BEGIN
 
       IF @C_ID is not null
-    BEGIN
-    EXEC  @C = [jsharmony].[CHECK_FOREIGN]
-        @in_tblname ='C',
-        @in_tblid = @C_ID
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_N_IUD
-      DEALLOCATE CUR_N_IUD
-      SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@C_ID)
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-    END   
+	  BEGIN
+		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
+	     	@in_tblname ='C',
+		    @in_tblid = @C_ID
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_N_IUD
+			DEALLOCATE CUR_N_IUD
+			SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@C_ID)
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	  END   
 
       IF @E_ID is not null
-    BEGIN
-    EXEC  @C = [jsharmony].[CHECK_FOREIGN]
-        @in_tblname ='E',
-        @in_tblid = @E_ID
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_N_IUD
-      DEALLOCATE CUR_N_IUD
-      SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@E_ID)
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-    END   
+	  BEGIN
+		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
+	     	@in_tblname ='E',
+		    @in_tblid = @E_ID
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_N_IUD
+			DEALLOCATE CUR_N_IUD
+			SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@E_ID)
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	  END   
 
         UPDATE jsharmony.N
-       SET C_ID = @C_ID,
-         E_ID = @E_ID,
-         N_ETstmp = @CURDTTM,
-       N_EU = @MYUSER,
-         N_MTstmp = @CURDTTM,
-       N_MU = @MYUSER
+	     SET C_ID = @C_ID,
+		     E_ID = @E_ID,
+		     N_ETstmp = @CURDTTM,
+			 N_EU = @MYUSER,
+		     N_MTstmp = @CURDTTM,
+			 N_MU = @MYUSER
          WHERE N.N_ID = @I_N_ID;
     END  
 
     IF (@TP='U')
-  BEGIN
+	BEGIN
 
       IF @I_C_ID is not null
-       and
-     jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0
-    BEGIN
-    EXEC  @C = [jsharmony].[CHECK_FOREIGN]
-        @in_tblname ='C',
-        @in_tblid = @I_C_ID
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_N_IUD
-      DEALLOCATE CUR_N_IUD
-      SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-    END   
+	     and
+		 jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0
+	  BEGIN
+		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
+	     	@in_tblname ='C',
+		    @in_tblid = @I_C_ID
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_N_IUD
+			DEALLOCATE CUR_N_IUD
+			SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	  END   
 
       IF @I_E_ID is not null
-       and
-     jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0
-    BEGIN
-    EXEC  @C = [jsharmony].[CHECK_FOREIGN]
-        @in_tblname ='E',
-        @in_tblid = @I_E_ID
-    IF @C <= 0
-    BEGIN
-      CLOSE CUR_N_IUD
-      DEALLOCATE CUR_N_IUD
-      SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@I_E_ID)
-      raiserror(@M ,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END 
-    END
-       
+	     and
+		 jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0
+	  BEGIN
+		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
+	     	@in_tblname ='E',
+		    @in_tblid = @I_E_ID
+		IF @C <= 0
+		BEGIN
+			CLOSE CUR_N_IUD
+			DEALLOCATE CUR_N_IUD
+			SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@I_E_ID)
+			raiserror(@M ,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END 
+	  END
+	     
     END
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - END   ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - END   ******/
+	/******************************************/
 
 
     SET @MY_AUD_SEQ = 0
-  IF (@TP='I' OR @TP='D')
-  BEGIN  
-    SET @WK_N_ID = ISNULL(@D_N_ID,@I_N_ID)
-    SET @WK_REF_NAME = ISNULL(@D_N_SCOPE,@I_N_SCOPE)
-    SET @WK_REF_ID = ISNULL(@D_N_SCOPE_ID,@I_N_SCOPE_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH @TP, 'N', @WK_N_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default, @C_ID, @E_ID
-  END
+	IF (@TP='I' OR @TP='D')
+	BEGIN  
+	  SET @WK_N_ID = ISNULL(@D_N_ID,@I_N_ID)
+	  SET @WK_REF_NAME = ISNULL(@D_N_SCOPE,@I_N_SCOPE)
+	  SET @WK_REF_ID = ISNULL(@D_N_SCOPE_ID,@I_N_SCOPE_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH @TP, 'N', @WK_N_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default, @C_ID, @E_ID
+	END
 
  
     IF @TP='U' OR @TP='D'
-  BEGIN
+	BEGIN
 
       IF (@TP = 'D' AND @D_N_SCOPE IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALC(@D_N_SCOPE, @I_N_SCOPE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_SCOPE', @D_N_SCOPE)
       END
 
@@ -6283,7 +6402,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_N_SCOPE_ID, @I_N_SCOPE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_SCOPE_ID', @D_N_SCOPE_ID)
       END
 
@@ -6291,7 +6410,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_N_STS, @I_N_STS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_STS', @D_N_STS)
       END
 
@@ -6299,7 +6418,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_N_TYPE, @I_N_TYPE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_TYPE', @D_N_TYPE)
       END
 
@@ -6307,15 +6426,15 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_N_Note, @I_N_Note) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_Note', @D_N_Note)
       END
 
-    IF (@TP = 'D' AND @D_C_ID IS NOT NULL OR
+	  IF (@TP = 'D' AND @D_C_ID IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'C_ID', @D_C_ID)
       END
 
@@ -6323,7 +6442,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'E_ID', @D_E_ID)
       END
 
@@ -6331,21 +6450,21 @@ BEGIN
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-  /******************************************/
-  /****** SPECIAL BACK ACTION - BEGIN  ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL BACK ACTION - BEGIN  ******/
+	/******************************************/
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
-  BEGIN
+	BEGIN
         UPDATE jsharmony.N
-       SET N_MTstmp = @CURDTTM,
-       N_MU = @MYUSER
+	     SET N_MTstmp = @CURDTTM,
+			 N_MU = @MYUSER
          WHERE N.N_ID = @I_N_ID;
     END  
 
-  /*****************************************/
-  /****** SPECIAL BACK ACTION - END   ******/
-  /*****************************************/
+	/*****************************************/
+	/****** SPECIAL BACK ACTION - END   ******/
+	/*****************************************/
 
 
 
@@ -6355,10 +6474,10 @@ BEGIN
              @D_N_SCOPE,  @I_N_SCOPE,
              @D_N_SCOPE_ID, @I_N_SCOPE_ID,
              @D_N_STS, @I_N_STS,
-       @D_N_TYPE, @I_N_TYPE,
-       @D_N_Note, @I_N_Note,
-       @D_C_ID, @I_C_ID,
-       @D_E_ID, @I_E_ID
+			 @D_N_TYPE, @I_N_TYPE,
+			 @D_N_Note, @I_N_Note,
+			 @D_C_ID, @I_C_ID,
+			 @D_E_ID, @I_E_ID
 
   END
   CLOSE CUR_N_IUD
@@ -6371,7 +6490,7 @@ END
 GO
 ALTER TABLE [jsharmony].[N] ENABLE TRIGGER [N_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[PE_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[PE_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6391,17 +6510,17 @@ BEGIN
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_PE_IUD CURSOR LOCAL FOR
      SELECT  d.PE_ID, i.PE_ID,
-           d.PE_STS, i.PE_STS,
-           d.PE_FName, i.PE_FName,
-       d.PE_MName, i.PE_MName,
-       d.PE_LName, i.PE_LName,
+	         d.PE_STS, i.PE_STS,
+	         d.PE_FName, i.PE_FName,
+			 d.PE_MName, i.PE_MName,
+			 d.PE_LName, i.PE_LName,
              d.PE_JTitle, i.PE_JTitle,
              d.PE_BPhone, i.PE_BPhone,
              d.PE_CPhone, i.PE_CPhone,
              d.PE_Email, i.PE_Email,
              d.PE_PW1, i.PE_PW1,
              d.PE_PW2, i.PE_PW2,
-       d.PE_LL_Tstmp, i.PE_LL_Tstmp
+			 d.PE_LL_Tstmp, i.PE_LL_Tstmp
        FROM deleted d FULL OUTER JOIN inserted i
                        ON i.PE_ID = d.PE_ID;
   DECLARE @D_PE_ID bigint
@@ -6445,10 +6564,10 @@ BEGIN
   DECLARE @UPDATE_PW CHAR(1)
 
   DECLARE @return_value int,
-      @out_msg nvarchar(max),
-      @out_rslt nvarchar(255),
-      @hash varbinary(200),
-      @M nvarchar(max)
+		  @out_msg nvarchar(max),
+		  @out_rslt nvarchar(255),
+		  @hash varbinary(200),
+		  @M nvarchar(max)
 
   /*
   EXEC [jsharmony].[ZZ-FILEDEBUG] 'TRIGGER','PE_IUD','START', ''
@@ -6461,7 +6580,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -6485,8 +6604,8 @@ BEGIN
         INTO @D_PE_ID, @I_PE_ID,
              @D_PE_STS, @I_PE_STS,
              @D_PE_FName, @I_PE_FName,
-       @D_PE_MName, @I_PE_MName,
-       @D_PE_LName, @I_PE_LName,
+			 @D_PE_MName, @I_PE_MName,
+			 @D_PE_LName, @I_PE_LName,
              @D_PE_JTitle, @I_PE_JTitle,
              @D_PE_BPhone, @I_PE_BPhone,
              @D_PE_CPhone, @I_PE_CPhone,
@@ -6498,56 +6617,56 @@ BEGIN
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
-  IF (@TP = 'D')
-  BEGIN
-    
-    if (jsharmony.EXISTS_D('PE', @D_PE_ID) > 0)
+	IF (@TP = 'D')
+	BEGIN
+	  
+	  if (jsharmony.EXISTS_D('PE', @D_PE_ID) > 0)
       begin
-    CLOSE CUR_PE_IUD
-    DEALLOCATE CUR_PE_IUD
-    SET @M = 'Application Error - User cannot be deleted if Documents are present.'
-    raiserror(@M ,16,1)
-    ROLLBACK TRANSACTION
-    return
-    end
+		CLOSE CUR_PE_IUD
+		DEALLOCATE CUR_PE_IUD
+		SET @M = 'Application Error - User cannot be deleted if Documents are present.'
+		raiserror(@M ,16,1)
+		ROLLBACK TRANSACTION
+		return
+	  end
 
     END
 
     SET @M = NULL
     SET @hash = NULL
 
-  SET @NEWPW = NUll;
+	SET @NEWPW = NUll;
     SET @UPDATE_PW = 'N'
 
     IF (@TP='I' or @TP='U')
-  BEGIN
-    if (jsharmony.NONEQUALC(@I_PE_PW1, @I_PE_PW2) > 0)
+	BEGIN
+	  if (jsharmony.NONEQUALC(@I_PE_PW1, @I_PE_PW2) > 0)
         SET @M = 'Application Error - New Password and Repeat Password are different'
-    else if ((@TP='I' or isnull(@I_PE_PW1,'')>'') and len(ltrim(rtrim(isnull(@I_PE_PW1,'')))) < 6)
+	  else if ((@TP='I' or isnull(@I_PE_PW1,'')>'') and len(ltrim(rtrim(isnull(@I_PE_PW1,'')))) < 6)
         SET @M = 'Application Error - Password length - at least 6 characters required'
 
      IF (@M is not null)
-    BEGIN
+	  BEGIN
         CLOSE CUR_PE_IUD
         DEALLOCATE CUR_PE_IUD
         raiserror(@M,16,1)
         ROLLBACK TRANSACTION
         return
       END
-    ELSE
-      SET @NEWPW = ltrim(rtrim(@I_PE_PW1))
-  END
+	  ELSE
+	    SET @NEWPW = ltrim(rtrim(@I_PE_PW1))
+	END
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - BEGIN ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - BEGIN ******/
+	/******************************************/
 
     IF (@TP='I')
-  BEGIN
+	BEGIN
 
-    set @hash = jsharmony.myHASH('S', @I_PE_ID, @NEWPW);
+	  set @hash = jsharmony.myHASH('S', @I_PE_ID, @NEWPW);
 
-    if (@hash is null)
+	  if (@hash is null)
       BEGIN
         CLOSE CUR_PE_IUD
         DEALLOCATE CUR_PE_IUD
@@ -6558,39 +6677,39 @@ BEGIN
       END
 
       UPDATE jsharmony.PE
-       SET PE_STSDt = @CURDTTM,
-         PE_ETstmp = @CURDTTM,
-       PE_EU = @MYUSER,
-         PE_MTstmp = @CURDTTM,
-       PE_MU = @MYUSER,
-       PE_Hash = @hash,
-       PE_PW1 = NULL,
-       PE_PW2 = NULL
+	     SET PE_STSDt = @CURDTTM,
+		     PE_ETstmp = @CURDTTM,
+			 PE_EU = @MYUSER,
+		     PE_MTstmp = @CURDTTM,
+			 PE_MU = @MYUSER,
+			 PE_Hash = @hash,
+			 PE_PW1 = NULL,
+			 PE_PW2 = NULL
        WHERE PE.PE_ID = @I_PE_ID;
 
     END  
 
     SET @WK_SUBJ = ISNULL(@I_PE_LNAME,'')+', '+ISNULL(@I_PE_FNAME,'') 
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - END   ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - END   ******/
+	/******************************************/
 
     SET @MY_AUD_SEQ = 0
-  IF (@TP='I' OR @TP='D')
-  BEGIN
-    SET @WK_PE_ID =  ISNULL(@D_PE_ID,@I_PE_ID) 
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'PE', @WK_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-  END
+	IF (@TP='I' OR @TP='D')
+	BEGIN
+	  SET @WK_PE_ID =  ISNULL(@D_PE_ID,@I_PE_ID) 
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'PE', @WK_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+	END
  
     IF @TP='U' OR @TP='D'
-  BEGIN
+	BEGIN
 
       IF (@TP = 'D' AND @D_PE_STS IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_STS', @D_PE_STS)
       END
 
@@ -6598,7 +6717,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_FName, @I_PE_FName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_FName', @D_PE_FName)
       END
 
@@ -6606,7 +6725,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_MName, @I_PE_MName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_MName', @D_PE_MName)
       END
 
@@ -6614,7 +6733,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_LName, @I_PE_LName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_LName', @D_PE_LName)
       END
 
@@ -6622,7 +6741,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_JTitle, @I_PE_JTitle) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_JTitle', @D_PE_JTitle)
       END
 
@@ -6630,7 +6749,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_BPhone, @I_PE_BPhone) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_BPhone', @D_PE_BPhone)
       END
 
@@ -6638,7 +6757,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_CPhone, @I_PE_CPhone) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_CPhone', @D_PE_CPhone)
       END
 
@@ -6646,7 +6765,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_Email, @I_PE_Email) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_Email', @D_PE_Email)
       END
 
@@ -6654,61 +6773,61 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALD(@D_PE_LL_TSTMP, @I_PE_LL_TSTMP) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_LL_TSTMP', @D_PE_LL_TSTMP)
       END
 
-    IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
-    BEGIN
-    set @hash = jsharmony.myHASH('S', @I_PE_ID, @NEWPW);
+	  IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
+	  BEGIN
+		set @hash = jsharmony.myHASH('S', @I_PE_ID, @NEWPW);
 
-    if (@hash is null)
-    BEGIN
-      CLOSE CUR_PE_IUD
-      DEALLOCATE CUR_PE_IUD
-      SET @M = 'Application Error - Incorrect Password'
-      raiserror(@M,16,1)
-      ROLLBACK TRANSACTION
-      return
-    END
+		if (@hash is null)
+		BEGIN
+			CLOSE CUR_PE_IUD
+			DEALLOCATE CUR_PE_IUD
+			SET @M = 'Application Error - Incorrect Password'
+			raiserror(@M,16,1)
+			ROLLBACK TRANSACTION
+			return
+		END
 
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_PW', '*')
 
-      SET @UPDATE_PW = 'Y'
-    END
+	    SET @UPDATE_PW = 'Y'
+	  END
 
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-  /******************************************/
-  /****** SPECIAL BACK ACTION - BEGIN  ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL BACK ACTION - BEGIN  ******/
+	/******************************************/
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
-  BEGIN
+	BEGIN
       UPDATE jsharmony.PE
-       SET PE_STSDt = CASE WHEN jsharmony.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0 THEN @CURDTTM ELSE PE_STSDt END,
-         PE_MTstmp = @CURDTTM,
-       PE_MU = @MYUSER,
-       PE_Hash = case @UPDATE_PW when 'Y' then @hash else PE_Hash end,
-       PE_PW1 = NULL,
-       PE_PW2 = NULL
+	     SET PE_STSDt = CASE WHEN jsharmony.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0 THEN @CURDTTM ELSE PE_STSDt END,
+		     PE_MTstmp = @CURDTTM,
+			 PE_MU = @MYUSER,
+			 PE_Hash = case @UPDATE_PW when 'Y' then @hash else PE_Hash end,
+			 PE_PW1 = NULL,
+			 PE_PW2 = NULL
        WHERE PE.PE_ID = @I_PE_ID;
     END  
     ELSE IF (@TP='U' AND (@I_PE_PW1 is not null or @I_PE_PW2 is not null))
-  BEGIN
+	BEGIN
       UPDATE jsharmony.PE
-       SET PE_PW1 = NULL,
-       PE_PW2 = NULL
+	     SET PE_PW1 = NULL,
+			 PE_PW2 = NULL
        WHERE PE.PE_ID = @I_PE_ID;
     END  
 
-  /*****************************************/
-  /****** SPECIAL BACK ACTION - END   ******/
-  /*****************************************/
+	/*****************************************/
+	/****** SPECIAL BACK ACTION - END   ******/
+	/*****************************************/
 
 
 
@@ -6717,8 +6836,8 @@ BEGIN
         INTO @D_PE_ID, @I_PE_ID,
              @D_PE_STS, @I_PE_STS,
              @D_PE_FName, @I_PE_FName,
-       @D_PE_MName, @I_PE_MName,
-       @D_PE_LName, @I_PE_LName,
+			 @D_PE_MName, @I_PE_MName,
+			 @D_PE_LName, @I_PE_LName,
              @D_PE_JTitle, @I_PE_JTitle,
              @D_PE_BPhone, @I_PE_BPhone,
              @D_PE_CPhone, @I_PE_CPhone,
@@ -6741,7 +6860,7 @@ END
 GO
 ALTER TABLE [jsharmony].[PE] ENABLE TRIGGER [PE_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[PPD_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[PPD_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6765,7 +6884,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     else
       return
   
@@ -6808,7 +6927,7 @@ END
 GO
 ALTER TABLE [jsharmony].[PPD] ENABLE TRIGGER [PPD_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[PPP_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[PPP_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6857,7 +6976,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     else
       return
   
@@ -6870,7 +6989,7 @@ BEGIN
   IF @TP = 'U' AND UPDATE(PPP_ID)
   BEGIN
     raiserror('Cannot update identity',16,1)
-  ROLLBACK TRANSACTION
+	ROLLBACK TRANSACTION
     return
   END
 
@@ -6900,13 +7019,13 @@ BEGIN
           CLOSE CUR_PPP_I
           DEALLOCATE CUR_PPP_I
           raiserror(@ERRTXT,16,1)
-        ROLLBACK TRANSACTION
+	      ROLLBACK TRANSACTION
           return
         END
       END
 
-    SET @WK_ID = ISNULL(@I_PPP_ID,@D_PPP_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'PPP', @WK_ID, @MYUSER, @CURDTTM
+	  SET @WK_ID = ISNULL(@I_PPP_ID,@D_PPP_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'PPP', @WK_ID, @MYUSER, @CURDTTM
 
       FETCH NEXT FROM CUR_PPP_I INTO @I_PPP_ID, 
                                      @I_PPP_PROCESS, 
@@ -6946,14 +7065,14 @@ BEGIN
             CLOSE CUR_PPP_DU
             DEALLOCATE CUR_PPP_DU
             raiserror(@ERRTXT,16,1)
-          ROLLBACK TRANSACTION
+	        ROLLBACK TRANSACTION
             return
           END
         END
       END
 
-    SET @WK_ID = ISNULL(@I_PPP_ID,@D_PPP_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'PPP', @WK_ID, @MYUSER, @CURDTTM
+	  SET @WK_ID = ISNULL(@I_PPP_ID,@D_PPP_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'PPP', @WK_ID, @MYUSER, @CURDTTM
             
       FETCH NEXT FROM CUR_PPP_DU
             INTO @D_PPP_ID, @I_PPP_ID,
@@ -6972,7 +7091,7 @@ END
 GO
 ALTER TABLE [jsharmony].[PPP] ENABLE TRIGGER [PPP_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[SPEF_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[SPEF_IUD]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6990,8 +7109,8 @@ BEGIN
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_SPEF_IUD CURSOR LOCAL FOR
      SELECT  d.SPEF_ID, i.SPEF_ID,
-           d.PE_ID, i.PE_ID,
-           d.SF_NAME, i.SF_NAME
+	         d.PE_ID, i.PE_ID,
+	         d.SF_NAME, i.SF_NAME
        FROM deleted d FULL OUTER JOIN inserted i
                        ON i.SPEF_ID = d.SPEF_ID;
   DECLARE @D_SPEF_ID bigint
@@ -7024,7 +7143,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -7061,39 +7180,39 @@ BEGIN
   BEGIN
       
     SET @xloc = 'TP=' + ISNULL(@TP,'null')
-  SET @xtxt = 'I_SPEF_ID=' + LTRIM(ISNULL(STR(@I_SPEF_ID),'null')) +
-              ' D_SPEF_ID=' + LTRIM(ISNULL(STR(@D_SPEF_ID),'null')) 
+	SET @xtxt = 'I_SPEF_ID=' + LTRIM(ISNULL(STR(@I_SPEF_ID),'null')) +
+	            ' D_SPEF_ID=' + LTRIM(ISNULL(STR(@D_SPEF_ID),'null')) 
     /* 
-  EXEC [jsharmony].[ZZ-FILEDEBUG] 'TRIGGER','SPEF_IUD',@xloc, @xtxt 
-  */
+	EXEC [jsharmony].[ZZ-FILEDEBUG] 'TRIGGER','SPEF_IUD',@xloc, @xtxt 
+	*/
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - BEGIN ******/
-  /******************************************/
-  
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - BEGIN ******/
+	/******************************************/
+	
     SELECT @WK_SUBJ = isnull(PE_LNAME,'')+', '+isnull(PE_FNAME,'')
-    FROM jsharmony.PE
+	  FROM jsharmony.PE
      WHERE PE_ID = @I_PE_ID; 
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - END   ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - END   ******/
+	/******************************************/
 
     SET @MY_AUD_SEQ = 0
-  IF (@TP='I' OR @TP='D')
-  BEGIN  
-    SET @WK_SPEF_ID = ISNULL(@D_SPEF_ID,@I_SPEF_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'SPEF', @WK_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-  END
+	IF (@TP='I' OR @TP='D')
+	BEGIN  
+	  SET @WK_SPEF_ID = ISNULL(@D_SPEF_ID,@I_SPEF_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'SPEF', @WK_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+	END
 
     IF @TP='U' OR @TP='D'
-  BEGIN
+	BEGIN
 
       IF (@TP = 'D' AND @D_PE_ID IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALN(@D_PE_ID, @I_PE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPEF', @I_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPEF', @I_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_ID', @D_PE_ID)
       END
 
@@ -7101,19 +7220,19 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_SF_NAME, @I_SF_NAME) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPEF', @I_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPEF', @I_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'SF_NAME', @D_SF_NAME)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
-  /******************************************/
-  /****** SPECIAL BACK ACTION - BEGIN  ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL BACK ACTION - BEGIN  ******/
+	/******************************************/
 
-  /*****************************************/
-  /****** SPECIAL BACK ACTION - END   ******/
-  /*****************************************/
+	/*****************************************/
+	/****** SPECIAL BACK ACTION - END   ******/
+	/*****************************************/
             
     FETCH NEXT FROM CUR_SPEF_IUD
           INTO @D_SPEF_ID, @I_SPEF_ID,
@@ -7131,7 +7250,7 @@ END
 GO
 ALTER TABLE [jsharmony].[SPEF] ENABLE TRIGGER [SPEF_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[SPER_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[SPER_IUD]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7149,8 +7268,8 @@ BEGIN
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_SPER_IUD CURSOR LOCAL FOR
      SELECT  d.SPER_ID, i.SPER_ID,
-           d.PE_ID, i.PE_ID,
-           d.SR_NAME, i.SR_NAME
+	         d.PE_ID, i.PE_ID,
+	         d.SR_NAME, i.SR_NAME
        FROM deleted d FULL OUTER JOIN inserted i
                        ON i.SPER_ID = d.SPER_ID;
   DECLARE @D_SPER_ID bigint
@@ -7185,7 +7304,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -7222,23 +7341,23 @@ BEGIN
   BEGIN
       
     SET @xloc = 'TP=' + ISNULL(@TP,'null')
-  SET @xtxt = 'I_SPER_ID=' + LTRIM(ISNULL(STR(@I_SPER_ID),'null')) +
-              ' D_SPER_ID=' + LTRIM(ISNULL(STR(@D_SPER_ID),'null')) 
+	SET @xtxt = 'I_SPER_ID=' + LTRIM(ISNULL(STR(@I_SPER_ID),'null')) +
+	            ' D_SPER_ID=' + LTRIM(ISNULL(STR(@D_SPER_ID),'null')) 
     /*
     EXEC [jsharmony].[ZZ-FILEDEBUG] 'TRIGGER','SPER_IUD',@xloc, @xtxt
-  */
+	*/
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - BEGIN ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - BEGIN ******/
+	/******************************************/
 
-  IF @MY_PE_ID is not null
-  BEGIN
-    IF isnull(@I_PE_ID, @D_PE_ID) <> @MY_PE_ID
-    BEGIN
-      /* NOT ME */
+	IF @MY_PE_ID is not null
+	BEGIN
+	  IF isnull(@I_PE_ID, @D_PE_ID) <> @MY_PE_ID
+	  BEGIN
+	    /* NOT ME */
         IF (case when @TP = 'D' then @D_SR_NAME else @I_SR_NAME end) = 'DEV' 
-      BEGIN
+	    BEGIN
           IF not exists (select sr_name
                            from jsharmony.V_MY_ROLES
                           where SR_NAME = 'DEV') 
@@ -7247,45 +7366,45 @@ BEGIN
             raiserror('Application Error - Only Developer can maintain Developer Role(1).',16,1)
             ROLLBACK TRANSACTION
             return
-        END
-      END
+	      END
+	    END
       END
       ELSE 
-    BEGIN
-      /* ME */
+	  BEGIN
+	    /* ME */
         IF @TP <> 'D' and @I_SR_NAME = 'DEV' 
-      BEGIN
+	    BEGIN
           EXEC [jsharmony].[ZZ-FILEDEBUG] 'TRIGGER','SPER_IUD','ERR', 'Only Developer can maintain Developer Role(2)'
           raiserror('Application Error - Only Developer can maintain Developer Role(2).',16,1)
           ROLLBACK TRANSACTION
           return
+	    END
       END
-      END
-  END
+	END
 
     SELECT @WK_SUBJ = isnull(PE_LNAME,'')+', '+isnull(PE_FNAME,'')
-    FROM jsharmony.PE
+	  FROM jsharmony.PE
      WHERE PE_ID = @I_PE_ID; 
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - END   ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - END   ******/
+	/******************************************/
 
     SET @MY_AUD_SEQ = 0
-  IF (@TP='I' OR @TP='D')
-  BEGIN  
-    SET @WK_SPER_ID = ISNULL(@D_SPER_ID,@I_SPER_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'SPER', @WK_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-  END
+	IF (@TP='I' OR @TP='D')
+	BEGIN  
+	  SET @WK_SPER_ID = ISNULL(@D_SPER_ID,@I_SPER_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'SPER', @WK_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+	END
 
     IF @TP='U' OR @TP='D'
-  BEGIN
+	BEGIN
 
       IF (@TP = 'D' AND @D_PE_ID IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALN(@D_PE_ID, @I_PE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPER', @I_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPER', @I_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_ID', @D_PE_ID)
       END
 
@@ -7293,19 +7412,19 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_SR_NAME, @I_SR_NAME) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPER', @I_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPER', @I_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'SR_NAME', @D_SR_NAME)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
-  /******************************************/
-  /****** SPECIAL BACK ACTION - BEGIN  ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL BACK ACTION - BEGIN  ******/
+	/******************************************/
 
-  /*****************************************/
-  /****** SPECIAL BACK ACTION - END   ******/
-  /*****************************************/
+	/*****************************************/
+	/****** SPECIAL BACK ACTION - END   ******/
+	/*****************************************/
             
     FETCH NEXT FROM CUR_SPER_IUD
           INTO @D_SPER_ID, @I_SPER_ID,
@@ -7325,7 +7444,7 @@ END
 GO
 ALTER TABLE [jsharmony].[SPER] ENABLE TRIGGER [SPER_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[TXT_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[TXT_IUD]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7345,11 +7464,11 @@ BEGIN
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_TXT_IUD CURSOR LOCAL FOR
      SELECT  d.TXT_ID, i.TXT_ID,
-           d.TXT_PROCESS, i.TXT_PROCESS,
-           d.TXT_ATTRIB, i.TXT_ATTRIB,
-           d.TXT_TYPE, i.TXT_TYPE,
-       d.TXT_TVAL, i.TXT_TVAL,
-       d.TXT_VAL, i.TXT_VAL,
+	         d.TXT_PROCESS, i.TXT_PROCESS,
+	         d.TXT_ATTRIB, i.TXT_ATTRIB,
+	         d.TXT_TYPE, i.TXT_TYPE,
+			 d.TXT_TVAL, i.TXT_TVAL,
+			 d.TXT_VAL, i.TXT_VAL,
              d.TXT_BCC, i.TXT_BCC,
              d.TXT_DESC, i.TXT_DESC
        FROM deleted d FULL OUTER JOIN inserted i
@@ -7384,8 +7503,8 @@ BEGIN
   DECLARE @M NVARCHAR(MAX)
 
   DECLARE @return_value int,
-      @out_msg nvarchar(max),
-      @out_rslt nvarchar(255)
+		  @out_msg nvarchar(max),
+		  @out_rslt nvarchar(255)
 
   if exists (select * from inserted)
     if exists (select * from deleted)
@@ -7394,7 +7513,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -7420,49 +7539,49 @@ BEGIN
              @D_TXT_PROCESS, @I_TXT_PROCESS,
              @D_TXT_ATTRIB, @I_TXT_ATTRIB,
              @D_TXT_TYPE, @I_TXT_TYPE,
-       @D_TXT_TVAL, @I_TXT_TVAL,
-       @D_TXT_VAL, @I_TXT_VAL,
+			 @D_TXT_TVAL, @I_TXT_TVAL,
+			 @D_TXT_VAL, @I_TXT_VAL,
              @D_TXT_BCC, @I_TXT_BCC,
              @D_TXT_DESC, @I_TXT_DESC
 
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - BEGIN ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - BEGIN ******/
+	/******************************************/
 
     IF (@TP='I')
-  BEGIN
+	BEGIN
       UPDATE jsharmony.TXT
-       SET TXT_ETstmp = @CURDTTM,
-       TXT_EU = @MYUSER,
-         TXT_MTstmp = @CURDTTM,
-       TXT_MU = @MYUSER
+	     SET TXT_ETstmp = @CURDTTM,
+			 TXT_EU = @MYUSER,
+		     TXT_MTstmp = @CURDTTM,
+			 TXT_MU = @MYUSER
        WHERE TXT.TXT_ID = @I_TXT_ID;
     END  
 
-  /******************************************/
-  /****** SPECIAL FRONT ACTION - END   ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - END   ******/
+	/******************************************/
 
 
     SET @MY_AUD_SEQ = 0
-  IF (@TP='I' OR @TP='D')
-  BEGIN  
-    SET @WK_TXT_ID = ISNULL(@D_TXT_ID,@I_TXT_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'TXT', @WK_TXT_ID, @MYUSER, @CURDTTM
-  END
+	IF (@TP='I' OR @TP='D')
+	BEGIN  
+	  SET @WK_TXT_ID = ISNULL(@D_TXT_ID,@I_TXT_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'TXT', @WK_TXT_ID, @MYUSER, @CURDTTM
+	END
 
  
     IF @TP='U' OR @TP='D'
-  BEGIN
+	BEGIN
 
       IF (@TP = 'D' AND @D_TXT_PROCESS IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_PROCESS, @I_TXT_PROCESS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_PROCESS', @D_TXT_PROCESS)
       END
 
@@ -7470,15 +7589,15 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_ATTRIB, @I_TXT_ATTRIB) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_ATTRIB', @D_TXT_ATTRIB)
       END
-    
+	  
       IF (@TP = 'D' AND @D_TXT_TYPE IS NOT NULL OR
           @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_TYPE, @I_TXT_TYPE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_TYPE', @D_TXT_TYPE)
       END
 
@@ -7486,7 +7605,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_TVAL, @I_TXT_TVAL) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_TVAL', @D_TXT_TVAL)
       END
 
@@ -7494,7 +7613,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_VAL, @I_TXT_VAL) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_VAL', @D_TXT_VAL)
       END
 
@@ -7502,7 +7621,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_BCC, @I_TXT_BCC) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_BCC', @D_TXT_BCC)
       END
 
@@ -7510,7 +7629,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_DESC, @I_TXT_DESC) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-      EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_DESC', @D_TXT_DESC)
       END
 
@@ -7518,21 +7637,21 @@ BEGIN
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-  /******************************************/
-  /****** SPECIAL BACK ACTION - BEGIN  ******/
-  /******************************************/
+	/******************************************/
+	/****** SPECIAL BACK ACTION - BEGIN  ******/
+	/******************************************/
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
-  BEGIN
+	BEGIN
       UPDATE jsharmony.TXT
-       SET TXT_MTstmp = @CURDTTM,
-       TXT_MU = @MYUSER
+	     SET TXT_MTstmp = @CURDTTM,
+			 TXT_MU = @MYUSER
        WHERE TXT.TXT_ID = @I_TXT_ID;
     END  
 
-  /*****************************************/
-  /****** SPECIAL BACK ACTION - END   ******/
-  /*****************************************/
+	/*****************************************/
+	/****** SPECIAL BACK ACTION - END   ******/
+	/*****************************************/
 
 
 
@@ -7542,8 +7661,8 @@ BEGIN
              @D_TXT_PROCESS,  @I_TXT_PROCESS,
              @D_TXT_ATTRIB, @I_TXT_ATTRIB,
              @D_TXT_TYPE, @I_TXT_TYPE,
-       @D_TXT_TVAL, @I_TXT_TVAL,
-       @D_TXT_VAL, @I_TXT_VAL,
+			 @D_TXT_TVAL, @I_TXT_TVAL,
+			 @D_TXT_VAL, @I_TXT_VAL,
              @D_TXT_BCC, @I_TXT_BCC,
              @D_TXT_DESC, @I_TXT_DESC
 
@@ -7566,7 +7685,7 @@ END
 GO
 ALTER TABLE [jsharmony].[TXT] ENABLE TRIGGER [TXT_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[XPP_IUD]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[XPP_IUD]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7615,7 +7734,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-    set @TP = 'D'
+	  set @TP = 'D'
     else
       return
   
@@ -7628,7 +7747,7 @@ BEGIN
   IF @TP = 'U' AND UPDATE(XPP_ID)
   BEGIN
     raiserror('Cannot update identity',16,1)
-  ROLLBACK TRANSACTION
+	ROLLBACK TRANSACTION
     return
   END
 
@@ -7657,12 +7776,12 @@ BEGIN
         CLOSE CUR_XPP_I
         DEALLOCATE CUR_XPP_I
         raiserror(@ERRTXT,16,1)
-      ROLLBACK TRANSACTION
+	    ROLLBACK TRANSACTION
         return
       END
 
-    SET @WK_ID = ISNULL(@I_XPP_ID,@D_XPP_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'XPP', @WK_ID, @MYUSER, @CURDTTM
+	  SET @WK_ID = ISNULL(@I_XPP_ID,@D_XPP_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'XPP', @WK_ID, @MYUSER, @CURDTTM
 
       FETCH NEXT FROM CUR_XPP_I INTO @I_XPP_ID, 
                                      @I_XPP_PROCESS, 
@@ -7701,13 +7820,13 @@ BEGIN
           CLOSE CUR_XPP_DU
           DEALLOCATE CUR_XPP_DU
           raiserror(@ERRTXT,16,1)
-        ROLLBACK TRANSACTION
+	      ROLLBACK TRANSACTION
           return
         END
       END
 
-    SET @WK_ID = ISNULL(@I_XPP_ID,@D_XPP_ID)
-    EXEC  @MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'XPP', @WK_ID, @MYUSER, @CURDTTM
+	  SET @WK_ID = ISNULL(@I_XPP_ID,@D_XPP_ID)
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'XPP', @WK_ID, @MYUSER, @CURDTTM
             
       FETCH NEXT FROM CUR_XPP_DU
             INTO @D_XPP_ID, @I_XPP_ID,
@@ -7726,7 +7845,7 @@ END
 GO
 ALTER TABLE [jsharmony].[XPP] ENABLE TRIGGER [XPP_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[V_CRMSEL_IUD_INSTEADOF_UPDATE]    Script Date: 10/25/2017 7:00:07 AM ******/
+/****** Object:  Trigger [jsharmony].[V_CRMSEL_IUD_INSTEADOF_UPDATE]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7746,32 +7865,42 @@ begin
   set @I = 1
 
     delete from jsharmony.CRM
-   where CRM_ID in (
-     select i.CRM_ID
-       from inserted i
+	 where CRM_ID in (
+	   select i.CRM_ID
+	     from inserted i
         inner join deleted d on d.SM_ID=i.SM_ID
         where jsharmony.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
-      and isnull(i.CRMSEL_SEL,0) = 0);
+		  and isnull(i.CRMSEL_SEL,0) = 0);
 
-   
+	 
     insert into jsharmony.CRM (CR_NAME, SM_ID)
-     select i.NEW_CR_NAME, i.SM_ID
-       from inserted i
+	   select i.NEW_CR_NAME, i.SM_ID
+	     from inserted i
         inner join deleted d on d.SM_ID=i.SM_ID
         where jsharmony.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
-      and isnull(i.CRMSEL_SEL,0) = 1;
-   
+		  and isnull(i.CRMSEL_SEL,0) = 1
+		  and isnull(i.NEW_CR_NAME,'')<>'';
+	 
+    insert into jsharmony.CRM (CR_NAME, SM_ID)
+	   select i.CR_NAME, i.NEW_SM_ID
+	     from inserted i
+        inner join deleted d on d.SM_ID=i.SM_ID
+        where jsharmony.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
+		  and isnull(i.CRMSEL_SEL,0) = 1
+		  and isnull(i.NEW_CR_NAME,'')='';
+	 
   END
 end
 
 
 
 GO
-/****** Object:  Trigger [jsharmony].[V_SRMSEL_IUD_INSTEADOF_UPDATE]    Script Date: 10/25/2017 7:00:08 AM ******/
+/****** Object:  Trigger [jsharmony].[V_SRMSEL_IUD_INSTEADOF_UPDATE]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -7786,21 +7915,30 @@ begin
   set @I = 1
 
     delete from jsharmony.SRM
-   where SRM_ID in (
-     select i.SRM_ID
-       from inserted i
+	 where SRM_ID in (
+	   select i.SRM_ID
+	     from inserted i
         inner join deleted d on d.SM_ID=i.SM_ID
         where jsharmony.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
-      and isnull(i.SRMSEL_SEL,0) = 0);
+		  and isnull(i.SRMSEL_SEL,0) = 0);
 
-   
+	 
     insert into jsharmony.SRM (SR_NAME, SM_ID)
-     select i.NEW_SR_NAME, i.SM_ID
-       from inserted i
+	   select i.NEW_SR_NAME, i.SM_ID
+	     from inserted i
         inner join deleted d on d.SM_ID=i.SM_ID
         where jsharmony.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
-      and isnull(i.SRMSEL_SEL,0) = 1;
-   
+		  and isnull(i.SRMSEL_SEL,0) = 1
+		  and isnull(i.NEW_SR_NAME,'')<>'';
+	 
+    insert into jsharmony.SRM (SR_NAME, SM_ID)
+	   select i.SR_NAME, i.NEW_SM_ID
+	     from inserted i
+        inner join deleted d on d.SM_ID=i.SM_ID
+        where jsharmony.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
+		  and isnull(i.SRMSEL_SEL,0) = 1
+		  and isnull(i.NEW_SR_NAME,'')='';
+	 
   END
 end
 
@@ -8324,7 +8462,11 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last 
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_UU'
 GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Synchronization Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SYNCTstmp'
+GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SNotes'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Main ID (Synchronization)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_ID_MAIN'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Documents (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D'
 GO
@@ -8662,7 +8804,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel ID'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'HP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_ID'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Scope - UCOD_N_SCOPE' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_SCOPE'
 GO
@@ -10415,3 +10557,4 @@ End
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPaneCount', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'VIEW',@level1name=N'V_SRMSEL'
 GO
+

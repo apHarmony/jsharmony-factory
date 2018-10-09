@@ -5,6 +5,10 @@
     "actions":"BIUD", 
     "layout":"form", 
     "caption": [ "", "Note", "Notes" ],
+    "roles": {
+      "main":{"X_B":"B","X_X":"*"},
+      "client": {"CX_B":"B","CX_X":"*","CSYSADMIN":"*"}
+    },
 	  "popup":[800,300],
 	  "fields":[
 	    {"name":"n_id","type":"bigint","key": 1,"datalock":{"C_ID":"N_ID"}},
