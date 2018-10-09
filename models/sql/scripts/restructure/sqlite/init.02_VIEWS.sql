@@ -196,6 +196,9 @@ CREATE VIEW jsharmony_v_crmsel AS
             ELSE 1
         END AS crmsel_sel,
     m.cr_name,
+    m.cr_seq,
+    m.cr_desc,
+    m.cr_id,
     m.sm_id_auto,
     m.sm_utype,
     m.sm_id,
@@ -211,6 +214,9 @@ CREATE VIEW jsharmony_v_crmsel AS
     m.sm_snotes,
     m.sm_subcmd
    FROM ((( SELECT cr.cr_name,
+            cr.cr_seq,
+            cr.cr_desc,
+            cr.cr_id,
             sm.sm_id_auto,
             sm.sm_utype,
             sm.sm_id,
@@ -563,6 +569,9 @@ CREATE VIEW jsharmony_v_srmsel AS
             ELSE 1
         END AS srmsel_sel,
     m.sr_name,
+    m.sr_seq,
+    m.sr_desc,
+    m.sr_id,
     m.sm_id_auto,
     m.sm_utype,
     m.sm_id,
@@ -578,6 +587,9 @@ CREATE VIEW jsharmony_v_srmsel AS
     m.sm_snotes,
     m.sm_subcmd
    FROM ((( SELECT sr.sr_name,
+            sr.sr_seq,
+            sr.sr_desc,
+            sr.sr_id,
             sm.sm_id_auto,
             sm.sm_utype,
             sm.sm_id,

@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var jsHarmonyConfig = require('jsHarmony/jsharmonyConfig');
+var jsHarmonyConfig = require('jsharmony/jsHarmonyConfig');
 var path = require('path');
 var _ = require('lodash');
 
