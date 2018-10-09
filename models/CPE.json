@@ -5,6 +5,10 @@
     "table":"jsharmony.CPE",
     "actions":"BIUD", 
     "caption": [ "", "Customer User", "Customer Users" ],
+    "roles": {
+      "main": { "SYSADMIN":"*" },
+      "client": {"CSYSADMIN":"*"}
+    },
     "popup":[850,650],
     "fields":[
       {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"PE_ID"}},

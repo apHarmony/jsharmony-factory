@@ -44,6 +44,10 @@
     "actions":"B", 
     "title":"System Notes",
     "caption":[0,"Note","System Notes"],
+    "roles": {
+      "main":{"X_B":"B","X_X":"B"},
+      "client":{"CX_B":"B","CX_X":"B","CSYSADMIN":"B"}
+    },
     "buttons":[],
     "fields": [
       {"name": "n_eu_fmt", "actions":""},
@@ -54,7 +58,10 @@
     "inherits": "NL",
     "actions":"BI", 
     "title":"Customer Notes",
-    "caption":[0,"Note","Customer Notes"]
+    "caption":[0,"Note","Customer Notes"],
+    "roles": {
+      "client": {"CX_B":"B","CX_X":"*","CSYSADMIN":"*"}
+    }
   },
   "NL_CB_BASE": {
     "inherits": "NL_C",
