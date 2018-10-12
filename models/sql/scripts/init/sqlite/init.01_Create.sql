@@ -107,6 +107,8 @@ create table jsharmony_cpe (
     CHECK (COALESCE(pe_email,'')<>'')
 );
 
+create index idx_jsharmony_cpe_c_id on jsharmony_cpe(c_id);
+
 /***************CR***************/
 CREATE TABLE jsharmony_cr (
   cr_id integer primary key autoincrement NOT NULL,

@@ -219,6 +219,9 @@ begin
 
   %%%AUDIT_I("CPE","new.pe_id","pe_id","null","null","(select coalesce(new.pe_lname,'')||', '||coalesce(new.pe_fname,''))","new.c_id")%%%
   update jsharmony_meta set aud_seq = null\;
+
+  insert into jsharmony_cper(pe_id, cr_name) values(new.pe_id, 'C*')\;
+
 end;
 
 create trigger jsharmony_cpe_before_update before update on jsharmony_cpe

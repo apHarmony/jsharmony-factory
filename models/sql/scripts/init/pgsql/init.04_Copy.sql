@@ -1,12 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 9.5.5
--- Dumped by pg_dump version 9.5.1
-
--- Started on 2017-10-24 16:36:35
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -17,257 +8,123 @@ SET row_security = off;
 
 SET search_path = jsharmony, pg_catalog;
 
---
--- TOC entry 2871 (class 0 OID 45574)
--- Dependencies: 249
--- Data for Name: ucod_ahc; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO ucod_ahc (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (4, 1, 'ACTIVE', 'Active', NULL, NULL, NULL, '2017-05-07 11:33:38.277997', 'Upostgres', '2017-05-07 11:33:38.277997', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_ahc (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (5, 3, 'CLOSED', 'Closed', NULL, NULL, NULL, '2017-05-07 11:33:38.277997', 'Upostgres', '2017-05-07 11:33:38.277997', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_ahc (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (6, 2, 'HOLD', 'Hold', NULL, NULL, NULL, '2017-05-07 11:33:38.277997', 'Upostgres', '2017-05-07 11:33:38.277997', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_ahc (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_ahc (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_ahc (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (2, 'HOLD', 'Hold', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2839 (class 0 OID 45250)
--- Dependencies: 190
--- Data for Name: cr; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (1, 1, 'ACTIVE', 'CSYSADMIN', 'Administrator', NULL, NULL, NULL);
-INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (2, 2, 'ACTIVE', 'CX_B', 'Browse', NULL, NULL, NULL);
-INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (3, 3, 'ACTIVE', 'CX_X', 'Entry / Update', NULL, NULL, NULL);
-INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (10, 1, 'ACTIVE', 'CUSER', 'Client User', NULL, NULL, NULL);
-INSERT INTO cr (cr_id, cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (5, 0, 'ACTIVE', 'C*', 'All Users', NULL, NULL, NULL);
+INSERT INTO cr (cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (1, 'ACTIVE', 'CSYSADMIN', 'Administrator', NULL, NULL, NULL);
+INSERT INTO cr (cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (2, 'ACTIVE', 'CX_B', 'Browse', NULL, NULL, NULL);
+INSERT INTO cr (cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (3, 'ACTIVE', 'CX_X', 'Entry / Update', NULL, NULL, NULL);
+INSERT INTO cr (cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (1, 'ACTIVE', 'CUSER', 'Client User', NULL, NULL, NULL);
+INSERT INTO cr (cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib) VALUES (0, 'ACTIVE', 'C*', 'All Users', NULL, NULL, NULL);
 
 
---
--- TOC entry 2891 (class 0 OID 0)
--- Dependencies: 191
--- Name: cr_cr_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
 
-SELECT pg_catalog.setval('cr_cr_id_seq', 10, true);
-
-
---
--- TOC entry 2860 (class 0 OID 45460)
--- Dependencies: 231
--- Data for Name: sm; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (23, 'S', 1785, 'ACTIVE', 170, 'ADMINISTRATION_TEXTMAINTENANCE', NULL, 'Text Maint', NULL, NULL, 'TXTL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (21, 'S', 1783, 'ACTIVE', 170, 'ADMINISTRATION_CODETABLES', NULL, '1D Code Tables', NULL, NULL, 'GCOD_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (22, 'S', 1784, 'ACTIVE', 170, 'ADMINISTRATION_CODE2TABLES', NULL, '2D Code Tables', NULL, NULL, 'GCOD2_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (59, 'S', 1781, 'ACTIVE', 170, 'ADMINISTRATION_PPARAMETERS', NULL, 'User Settings', NULL, NULL, 'PPPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (24, 'S', 1782, 'ACTIVE', 170, 'ADMINISTRATION_GPARAMETERS', NULL, 'System Settings', NULL, NULL, 'GPPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (48, 'S', 14, 'ACTIVE', 10, 'DEV_X_GPPL', 22, 'System Settings', NULL, NULL, 'X_GPPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (47, 'S', 13, 'ACTIVE', 10, 'DEV_X_PPDL', 21, 'Settings Definitions', NULL, NULL, 'X_PPDL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (62, 'S', 160, 'ACTIVE', 1, 'REPORTS', 2, 'Reports', NULL, NULL, 'REPORTS', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (8, 'S', 170, 'ACTIVE', 1, 'ADMINISTRATION', 3, 'Administration', NULL, NULL, 'ADMIN_OVERVIEW', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (44, 'S', 10, 'ACTIVE', 1, 'DEV', 4, 'Developer', NULL, NULL, 'DEV_OVERVIEW', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (3, 'C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (10, 'C', 200, 'ACTIVE', 2, 'C_DASHBOARD', NULL, 'Dashboard', NULL, NULL, 'C_DASHBOARD', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (13, 'C', 270, 'ACTIVE', 2, 'C_ADMINISTRATION', NULL, 'Administration', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (35, 'C', 2700, 'ACTIVE', 270, 'C_ADMINISTRATION_USERS', NULL, 'Cust Users', NULL, NULL, 'CPEL_CLIENT', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (2, 'S', 1, 'ACTIVE', NULL, 'ADMIN', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (57, 'S', 1795, 'ACTIVE', 170, 'ADMINISTRATION_LOG', NULL, 'Logs', NULL, NULL, 'LOG', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (58, 'S', 1796, 'ACTIVE', 170, 'ADMINISTRATION_RESTART_SYSTEM', NULL, 'Restart System', NULL, NULL, 'RESTART_SYSTEM', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (61, 'S', 3, 'ACTIVE', 1, 'DASHBOARD', 1, 'Dashboard', NULL, NULL, 'DASHBOARD', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (46, 'S', 12, 'ACTIVE', 10, 'DEV_X_SML', 11, 'Menu Items', NULL, NULL, 'X_SMLW', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (45, 'S', 11, 'ACTIVE', 10, 'DEV_X_SRL', 12, 'User Roles', NULL, NULL, 'X_SRL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (54, 'S', 20, 'ACTIVE', 10, 'DEV_X_CRL', 13, 'Client User Roles', NULL, NULL, 'X_CRL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (55, 'S', 21, 'ACTIVE', 10, 'DEV_X_TXTL', 41, 'Text Maint', NULL, NULL, 'X_TXTL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (56, 'S', 22, 'ACTIVE', 10, 'DEV_X_HPL', 42, 'Help Panels', NULL, NULL, 'X_HPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (25, 'S', 1786, 'ACTIVE', 170, 'ADMINISTRATION_HELPMAINTENANCE', NULL, 'Help Maint', NULL, NULL, 'HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (52, 'S', 18, 'ACTIVE', 10, 'DEV_X_UCOD_HL', 33, 'System 1D Codes', NULL, NULL, 'X_UCOD_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (53, 'S', 19, 'ACTIVE', 10, 'DEV_X_UCOD2_HL', 34, 'System 2D Codes', NULL, NULL, 'X_UCOD2_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (19, 'S', 1700, 'ACTIVE', 170, 'ADMINISTRATION_USERS', NULL, 'System Users', NULL, NULL, 'PEL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (20, 'S', 1787, 'ACTIVE', 170, 'ADMINISTRATION_AUDITTRAIL', NULL, 'Audit Trail', NULL, NULL, 'AUDL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (49, 'S', 15, 'ACTIVE', 10, 'DEV_X_XPPL', 23, 'Developer Settings', NULL, NULL, 'X_XPPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (50, 'S', 16, 'ACTIVE', 10, 'DEV_X_GCOD_HL', 31, 'Admin 1D Codes', NULL, NULL, 'X_GCOD_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (51, 'S', 17, 'ACTIVE', 10, 'DEV_X_GCOD2_HL', 32, 'Admin 2D Codes', NULL, NULL, 'X_GCOD2_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (63, 'S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (64, 'S', 23, 'ACTIVE', 10, 'DEV_DB', 43, 'DB SQL', NULL, NULL, 'DEV_DB', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (65, 'S', 24, 'ACTIVE', 10, 'DEV_DB_SCRIPTS', 44, 'DB Scripts', NULL, NULL, 'DEV_DB_SCRIPTS', NULL, NULL, NULL);
-INSERT INTO sm (sm_id_auto, sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES (66, 'S', 25, 'ACTIVE', 10, 'DEV_MODELS', 45, 'Model Viewer', NULL, NULL, 'DEV_MODELS', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1785, 'ACTIVE', 170, 'ADMINISTRATION_TEXTMAINTENANCE', NULL, 'Text Maint', NULL, NULL, 'TXTL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1783, 'ACTIVE', 170, 'ADMINISTRATION_CODETABLES', NULL, '1D Code Tables', NULL, NULL, 'GCOD_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1784, 'ACTIVE', 170, 'ADMINISTRATION_CODE2TABLES', NULL, '2D Code Tables', NULL, NULL, 'GCOD2_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1781, 'ACTIVE', 170, 'ADMINISTRATION_PPARAMETERS', NULL, 'User Settings', NULL, NULL, 'PPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1782, 'ACTIVE', 170, 'ADMINISTRATION_GPARAMETERS', NULL, 'System Settings', NULL, NULL, 'GPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 14, 'ACTIVE', 10, 'DEV_X_GPPL', 22, 'System Settings', NULL, NULL, 'X_GPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 13, 'ACTIVE', 10, 'DEV_X_PPDL', 21, 'Settings Definitions', NULL, NULL, 'X_PPDL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 160, 'ACTIVE', 1, 'REPORTS', 2, 'Reports', NULL, NULL, 'REPORTS', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 170, 'ACTIVE', 1, 'ADMINISTRATION', 3, 'Administration', NULL, NULL, 'ADMIN_OVERVIEW', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 10, 'ACTIVE', 1, 'DEV', 4, 'Developer', NULL, NULL, 'DEV_OVERVIEW', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('C', 200, 'ACTIVE', 2, 'C_DASHBOARD', NULL, 'Dashboard', NULL, NULL, 'C_DASHBOARD', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('C', 270, 'ACTIVE', 2, 'C_ADMINISTRATION', NULL, 'Administration', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('C', 2700, 'ACTIVE', 270, 'C_ADMINISTRATION_USERS', NULL, 'Cust Users', NULL, NULL, 'CPEL_CLIENT', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1, 'ACTIVE', NULL, 'ADMIN', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1795, 'ACTIVE', 170, 'ADMINISTRATION_LOG', NULL, 'Logs', NULL, NULL, 'LOG', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1796, 'ACTIVE', 170, 'ADMINISTRATION_RESTART_SYSTEM', NULL, 'Restart System', NULL, NULL, 'RESTART_SYSTEM', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 3, 'ACTIVE', 1, 'DASHBOARD', 1, 'Dashboard', NULL, NULL, 'DASHBOARD', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 12, 'ACTIVE', 10, 'DEV_X_SML', 11, 'Menu Items', NULL, NULL, 'X_SMLW', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 11, 'ACTIVE', 10, 'DEV_X_SRL', 12, 'User Roles', NULL, NULL, 'X_SRL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 20, 'ACTIVE', 10, 'DEV_X_CRL', 13, 'Client User Roles', NULL, NULL, 'X_CRL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 21, 'ACTIVE', 10, 'DEV_X_TXTL', 41, 'Text Maint', NULL, NULL, 'X_TXTL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 22, 'ACTIVE', 10, 'DEV_X_HPL', 42, 'Help Panels', NULL, NULL, 'X_HPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1786, 'ACTIVE', 170, 'ADMINISTRATION_HELPMAINTENANCE', NULL, 'Help Maint', NULL, NULL, 'HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 18, 'ACTIVE', 10, 'DEV_X_UCOD_HL', 33, 'System 1D Codes', NULL, NULL, 'X_UCOD_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 19, 'ACTIVE', 10, 'DEV_X_UCOD2_HL', 34, 'System 2D Codes', NULL, NULL, 'X_UCOD2_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1700, 'ACTIVE', 170, 'ADMINISTRATION_USERS', NULL, 'System Users', NULL, NULL, 'PEL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1787, 'ACTIVE', 170, 'ADMINISTRATION_AUDITTRAIL', NULL, 'Audit Trail', NULL, NULL, 'AUDL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 15, 'ACTIVE', 10, 'DEV_X_XPPL', 23, 'Developer Settings', NULL, NULL, 'X_XPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 16, 'ACTIVE', 10, 'DEV_X_GCOD_HL', 31, 'Admin 1D Codes', NULL, NULL, 'X_GCOD_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 17, 'ACTIVE', 10, 'DEV_X_GCOD2_HL', 32, 'Admin 2D Codes', NULL, NULL, 'X_GCOD2_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 23, 'ACTIVE', 10, 'DEV_DB', 43, 'DB SQL', NULL, NULL, 'DEV_DB', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 24, 'ACTIVE', 10, 'DEV_DB_SCRIPTS', 44, 'DB Scripts', NULL, NULL, 'DEV_DB_SCRIPTS', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 25, 'ACTIVE', 10, 'DEV_MODELS', 45, 'Model Viewer', NULL, NULL, 'DEV_MODELS', NULL, NULL, NULL);
 
 
---
--- TOC entry 2841 (class 0 OID 45259)
--- Dependencies: 192
--- Data for Name: crm; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 22, 'CX_B');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (270, NULL, 24, 'CSYSADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (2700, NULL, 26, 'CSYSADMIN');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 35, 'CX_X');
-INSERT INTO crm (sm_id, crm_snotes, crm_id, cr_name) VALUES (200, NULL, 61, 'CUSER');
+INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (200, NULL, 'CX_B');
+INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (270, NULL, 'CSYSADMIN');
+INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (2700, NULL, 'CSYSADMIN');
+INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (200, NULL, 'CX_X');
+INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (200, NULL, 'CUSER');
 
 
---
--- TOC entry 2892 (class 0 OID 0)
--- Dependencies: 193
--- Name: crm_crm_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
-
-SELECT pg_catalog.setval('crm_crm_id_seq', 98, true);
-
-
---
--- TOC entry 2843 (class 0 OID 45281)
--- Dependencies: 196
--- Data for Name: dual; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
 INSERT INTO dual (dummy, dual_ident, dual_bigint, dual_varchar50) VALUES ('X', 1, NULL, NULL);
 
 
---
--- TOC entry 2893 (class 0 OID 0)
--- Dependencies: 197
--- Name: dual_dual_ident_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
 
-SELECT pg_catalog.setval('dual_dual_ident_seq', 1, true);
-
-
---
--- TOC entry 2845 (class 0 OID 45286)
--- Dependencies: 198
--- Data for Name: gcod2_h; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO gcod2_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema) VALUES ('d_scope_d_ctgr', 'Scope - Documents', NULL, '2017-06-25 17:05:26.57816', 'Upostgres', '2017-06-25 17:05:26.57816', 'Upostgres', NULL, NULL, 'jsharmony');
-
-
---
--- TOC entry 2846 (class 0 OID 45296)
--- Dependencies: 199
--- Data for Name: gcod_h; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
+INSERT INTO gcod2_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('d_scope_d_ctgr', 'Scope - Documents', NULL, NULL, NULL, 'jsharmony');
 
 
 
---
--- TOC entry 2876 (class 0 OID 45628)
--- Dependencies: 254
--- Data for Name: ucod_ppd_type; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO ucod_ppd_type (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (10, NULL, 'C', 'Character', NULL, NULL, NULL, '2017-05-07 11:35:39.061553', 'Upostgres', '2017-05-07 11:35:39.061553', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_ppd_type (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (11, NULL, 'N', 'Number', NULL, NULL, NULL, '2017-05-07 11:35:39.061553', 'Upostgres', '2017-05-07 11:35:39.061553', 'Upostgres', NULL, NULL, NULL);
-
-
---
--- TOC entry 2854 (class 0 OID 45370)
--- Dependencies: 211
--- Data for Name: ppd; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (1, 'EMAIL', 'NOTIF_ADMIN', 'Notifications Email - Administrative', 'C', NULL, '2017-06-18 17:14:20.453481', 'Upostgres', '2017-10-09 13:41:13.745435', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (17, 'USERS', 'HASH_SEED_S', 'Hash Seed System Users', 'C', NULL, '2017-06-18 17:14:20.484504', 'Upostgres', '2017-10-09 13:49:17.813327', 'Upostgres', NULL, false, false, true);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (5, 'HOUSE', 'ADDR', 'HOUSE Address', 'C', NULL, '2017-06-18 17:14:20.461487', 'Upostgres', '2017-10-09 13:41:26.073551', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (6, 'HOUSE', 'BPHONE', 'HOUSE Business Phone', 'C', NULL, '2017-06-18 17:14:20.430415', 'Upostgres', '2017-10-09 13:41:28.289216', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (7, 'HOUSE', 'CITY', 'HOUSE City', 'C', NULL, '2017-06-18 17:14:20.366705', 'Upostgres', '2017-10-09 13:41:30.481529', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (8, 'HOUSE', 'CONTACT', 'HOUSE Contact', 'C', NULL, '2017-06-18 17:14:20.422437', 'Upostgres', '2017-10-09 13:41:32.536936', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (9, 'HOUSE', 'EMAIL', 'HOUSE Email', 'C', NULL, '2017-06-18 17:14:20.374711', 'Upostgres', '2017-10-09 13:41:34.760944', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (10, 'HOUSE', 'FAX', 'HOUSE Fax', 'C', NULL, '2017-06-18 17:14:20.414061', 'Upostgres', '2017-10-09 13:41:55.976851', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (43, 'SQL', 'DSCOPE_DCTGR', 'Code table - Document Types by Scope', 'C', NULL, '2017-06-18 17:14:20.500515', 'Upostgres', '2017-10-09 13:49:23.301571', 'Upostgres', NULL, false, false, true);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (44, 'SQL', 'GETCID', 'SQL Function GET_C_ID', 'C', NULL, '2017-06-18 17:14:20.50852', 'Upostgres', '2017-10-09 13:49:25.004825', 'Upostgres', NULL, false, false, true);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (45, 'SQL', 'GETEID', 'SQL Function GET_E_ID', 'C', NULL, '2017-06-18 17:14:20.516526', 'Upostgres', '2017-10-09 13:49:28.061435', 'Upostgres', NULL, false, false, true);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (13, 'HOUSE', 'ZIP', 'HOUSE ZIP', 'C', NULL, '2017-06-18 17:14:20.39805', 'Upostgres', '2017-10-09 13:42:44.904335', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (12, 'HOUSE', 'STATE', 'HOUSE State', 'C', NULL, '2017-06-18 17:14:20.406056', 'Upostgres', '2017-10-09 13:42:47.344881', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (11, 'HOUSE', 'NAME', 'HOUSE Name', 'C', NULL, '2017-06-18 17:14:20.381716', 'Upostgres', '2017-10-09 13:42:49.664742', 'Upostgres', NULL, true, false, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (18, 'DEVICEURL', 'PRINTBAR', 'Device URL - Bar Code Printer', 'C', NULL, '2017-06-18 17:14:20.492486', 'Upostgres', '2017-10-09 13:43:19.464581', 'Upostgres', NULL, true, true, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (20, 'DEVICEURL', 'SCAN', 'Device URL - Document Scanner', 'C', NULL, '2017-06-18 17:14:20.476497', 'Upostgres', '2017-10-09 13:43:24.88003', 'Upostgres', NULL, true, true, false);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (4, 'EMAIL', 'NOTIF_SYS', 'Notifications Email - System', 'C', NULL, '2017-06-18 17:14:20.446428', 'Upostgres', '2017-10-09 13:49:05.17331', 'Upostgres', NULL, true, false, true);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (14, 'SYSTEM', 'CLIENT_SYS_URL', 'Client Portal URL', 'C', NULL, '2017-06-18 17:14:20.523531', 'Upostgres', '2017-10-09 13:49:11.589409', 'Upostgres', NULL, false, false, true);
-INSERT INTO ppd (ppd_id, ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES (16, 'USERS', 'HASH_SEED_C', 'Hash Seed Client Users', 'C', NULL, '2017-06-18 17:14:20.340713', 'Upostgres', '2017-10-09 13:49:15.349373', 'Upostgres', NULL, false, false, true);
-
-
---
--- TOC entry 2847 (class 0 OID 45306)
--- Dependencies: 200
--- Data for Name: gpp; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (11, 'HOUSE', 'STATE', 'IL', '2017-06-18 17:14:20.630721', 'Upostgres', '2017-06-18 17:14:20.630721', 'Upostgres');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (6, 'HOUSE', 'CITY', 'Anytown', '2017-06-18 17:14:20.637786', 'Upostgres', '2017-10-17 12:19:19.558109', 'S3');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (7, 'HOUSE', 'CONTACT', 'John Contact', '2017-06-18 17:14:20.578569', 'Upostgres', '2017-10-17 12:21:24.106015', 'S3');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (4, 'HOUSE', 'ADDR', '111 Main St', '2017-06-18 17:14:20.563563', 'Upostgres', '2017-10-17 12:21:34.45036', 'S3');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (5, 'HOUSE', 'BPHONE', '(222) 222-2222', '2017-06-18 17:14:20.570542', 'Upostgres', '2017-10-17 12:21:38.902571', 'S3');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (8, 'HOUSE', 'EMAIL', 'user@company.com', '2017-06-18 17:14:20.585575', 'Upostgres', '2017-10-17 12:21:52.189618', 'S3');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (9, 'HOUSE', 'FAX', '(333) 333-3333', '2017-06-18 17:14:20.593579', 'Upostgres', '2017-10-17 12:21:57.446541', 'S3');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (10, 'HOUSE', 'NAME', 'COMPANY NAME', '2017-06-18 17:14:20.600572', 'Upostgres', '2017-10-17 12:22:03.238268', 'S3');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (1, 'EMAIL', 'NOTIF_ADMIN', 'user@company.com', '2017-06-18 17:14:20.623602', 'Upostgres', '2017-10-17 12:24:08.713884', 'S3');
-INSERT INTO gpp (gpp_id, gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu) VALUES (12, 'HOUSE', 'ZIP', '11111', '2017-06-18 17:14:20.609592', 'Upostgres', '2017-10-18 11:52:07.997974', 'S3');
-
-
---
--- TOC entry 2894 (class 0 OID 0)
--- Dependencies: 201
--- Name: gpp_gpp_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
-
-SELECT pg_catalog.setval('gpp_gpp_id_seq', 15, true);
-
-
---
--- TOC entry 2851 (class 0 OID 45329)
--- Dependencies: 204
--- Data for Name: hp; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (1, 'E_B', 'Item - Charges');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (2, 'E_H', 'Item - History');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (3, 'E_O', 'Item - Overview');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (4, 'EL_C_REL', 'Items - Related');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (5, 'TOLSEL_SEL', 'Items Selector');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (6, 'E_POPUP_E', 'New Item (from E)');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (7, 'E_POPUP_SQ', 'New Item (from SQ)');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (8, 'TO_H', 'Order History');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (9, 'TOL_C_REL', 'Orders - Related');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (10, 'SQ_A', 'Series - Assemblies');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (11, 'SQ_B', 'Series - Charges');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (12, 'SQ_H', 'Series - History');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (13, 'SQ_O', 'Series - Overview');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (14, 'CT', 'Customer Contact');
-INSERT INTO hp (hp_id, hp_code, hp_desc) VALUES (15, 'C', 'Customer');
-
-
---
--- TOC entry 2849 (class 0 OID 45315)
--- Dependencies: 202
--- Data for Name: h; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
 
 
---
--- TOC entry 2895 (class 0 OID 0)
--- Dependencies: 203
--- Name: h_h_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
-
-SELECT pg_catalog.setval('h_h_id_seq', 41, true);
+INSERT INTO ucod_ppd_type (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'C', 'Character', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_ppd_type (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'N', 'Number', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2896 (class 0 OID 0)
--- Dependencies: 205
--- Name: hp_hp_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
 
-SELECT pg_catalog.setval('hp_hp_id_seq', 15, true);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('EMAIL', 'NOTIF_ADMIN', 'Notifications Email - Administrative', 'C', NULL, NULL, true, false, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('USERS', 'HASH_SEED_S', 'Hash Seed System Users', 'C', NULL, NULL, false, false, true);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'ADDR', 'HOUSE Address', 'C', NULL, NULL, true, false, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'BPHONE', 'HOUSE Business Phone', 'C', NULL, NULL, true, false, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'CITY', 'HOUSE City', 'C', NULL, NULL, true, false, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'CONTACT', 'HOUSE Contact', 'C', NULL, NULL, true, false, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'EMAIL', 'HOUSE Email', 'C', NULL, NULL, true, false, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'FAX', 'HOUSE Fax', 'C', NULL, NULL, true, false, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SQL', 'DSCOPE_DCTGR', 'Code table - Document Types by Scope', 'C', NULL, NULL, false, false, true);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SQL', 'GETCID', 'SQL Function GET_C_ID', 'C', NULL, NULL, false, false, true);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SQL', 'GETEID', 'SQL Function GET_E_ID', 'C', NULL, NULL, false, false, true);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'ZIP', 'HOUSE ZIP', 'C', NULL, NULL, true, false, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'STATE', 'HOUSE State', 'C', NULL, NULL, true, false, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('HOUSE', 'NAME', 'HOUSE Name', 'C', NULL, NULL, true, false, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('DEVICEURL', 'PRINTBAR', 'Device URL - Bar Code Printer', 'C', NULL, NULL, true, true, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('DEVICEURL', 'SCAN', 'Device URL - Document Scanner', 'C', NULL, NULL, true, true, false);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('EMAIL', 'NOTIF_SYS', 'Notifications Email - System', 'C', NULL, NULL, true, false, true);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'Client Portal URL', 'C', NULL, NULL, false, false, true);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SYSTEM', 'SYS_URL', 'System URL', 'C', NULL, NULL, false, false, true);
+INSERT INTO ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_snotes, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('USERS', 'HASH_SEED_C', 'Hash Seed Client Users', 'C', NULL, NULL, false, false, true);
 
 
---
--- TOC entry 2853 (class 0 OID 45349)
--- Dependencies: 208
--- Data for Name: numbers; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
+
+INSERT INTO gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'STATE', 'IL');
+INSERT INTO gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'CITY', 'Anytown');
+INSERT INTO gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'CONTACT', 'John Contact');
+INSERT INTO gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'ADDR', '111 Main St');
+INSERT INTO gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'BPHONE', '(222) 222-2222');
+INSERT INTO gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'EMAIL', 'user@company.com');
+INSERT INTO gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'FAX', '(333) 333-3333');
+INSERT INTO gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'NAME', 'COMPANY NAME');
+INSERT INTO gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('EMAIL', 'NOTIF_ADMIN', 'user@company.com');
+INSERT INTO gpp (gpp_process, gpp_attrib, gpp_val) VALUES ('HOUSE', 'ZIP', '11111');
+
+
+
+INSERT INTO hp (hp_code, hp_desc) VALUES ('CT', 'Customer Contact');
+INSERT INTO hp (hp_code, hp_desc) VALUES ('C', 'Customer');
+
+
 
 INSERT INTO numbers (n) VALUES (1);
 INSERT INTO numbers (n) VALUES (2);
@@ -1270,152 +1127,65 @@ INSERT INTO numbers (n) VALUES (998);
 INSERT INTO numbers (n) VALUES (999);
 
 
---
--- TOC entry 2897 (class 0 OID 0)
--- Dependencies: 212
--- Name: ppd_ppd_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
 
-SELECT pg_catalog.setval('ppd_ppd_id_seq', 45, true);
-
-
---
--- TOC entry 2856 (class 0 OID 45385)
--- Dependencies: 213
--- Data for Name: ppp; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
+INSERT INTO sf (sf_seq, sf_sts, sf_name, sf_desc, sf_snotes, sf_code, sf_attrib) VALUES (1, 'ACTIVE', 'TBD', 'TBD', NULL, NULL, NULL);
 
 
 
---
--- TOC entry 2898 (class 0 OID 0)
--- Dependencies: 214
--- Name: ppp_ppp_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
-
-SELECT pg_catalog.setval('ppp_ppp_id_seq', 1, false);
-
-
---
--- TOC entry 2858 (class 0 OID 45451)
--- Dependencies: 229
--- Data for Name: sf; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO sf (sf_id, sf_seq, sf_sts, sf_name, sf_desc, sf_snotes, sf_code, sf_attrib) VALUES (1, 1, 'ACTIVE', 'TBD', 'TBD', NULL, NULL, NULL);
+INSERT INTO sr (sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (0, 'ACTIVE', '*', 'All Users', NULL, NULL, NULL);
+INSERT INTO sr (sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (97, 'ACTIVE', 'DADMIN', 'Data Administration', NULL, NULL, NULL);
+INSERT INTO sr (sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (98, 'ACTIVE', 'SYSADMIN', 'System Administration', NULL, NULL, NULL);
+INSERT INTO sr (sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (99, 'ACTIVE', 'DEV', 'Developer', NULL, NULL, NULL);
+INSERT INTO sr (sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (91, 'ACTIVE', 'X_B', 'General Browse', NULL, NULL, NULL);
+INSERT INTO sr (sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (92, 'ACTIVE', 'X_X', 'General BIUD', NULL, NULL, NULL);
 
 
---
--- TOC entry 2899 (class 0 OID 0)
--- Dependencies: 230
--- Name: sf_sf_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
 
-SELECT pg_catalog.setval('sf_sf_id_seq', 2, true);
-
-
---
--- TOC entry 2900 (class 0 OID 0)
--- Dependencies: 232
--- Name: sm_sm_id_auto_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
-
-SELECT pg_catalog.setval('sm_sm_id_auto_seq', 65, true);
-
-
---
--- TOC entry 2862 (class 0 OID 45481)
--- Dependencies: 237
--- Data for Name: sr; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO sr (sr_id, sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (11, 0, 'ACTIVE', '*', 'All Users', NULL, NULL, NULL);
-INSERT INTO sr (sr_id, sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (4, 97, 'ACTIVE', 'DADMIN', 'Data Administration', NULL, NULL, NULL);
-INSERT INTO sr (sr_id, sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (1, 98, 'ACTIVE', 'SYSADMIN', 'System Administration', NULL, NULL, NULL);
-INSERT INTO sr (sr_id, sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (16, 99, 'ACTIVE', 'DEV', 'Developer', NULL, NULL, NULL);
-INSERT INTO sr (sr_id, sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (7, 91, 'ACTIVE', 'X_B', 'General Browse', NULL, NULL, NULL);
-INSERT INTO sr (sr_id, sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (10, 92, 'ACTIVE', 'X_X', 'General BIUD', NULL, NULL, NULL);
-
-
---
--- TOC entry 2901 (class 0 OID 0)
--- Dependencies: 238
--- Name: sr_sr_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
-
-SELECT pg_catalog.setval('sr_sr_id_seq', 16, true);
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (2700, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (10, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1700, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (270, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (200, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (170, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (2, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (11, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (12, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (13, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (14, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (15, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (170, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1700, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (16, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (17, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (18, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (19, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (20, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (21, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (22, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (23, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (24, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (25, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1786, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1795, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1796, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (3, NULL, '*');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1787, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1785, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1783, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1784, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1781, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1782, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1601, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (160, NULL, 'SYSADMIN');
 
 
---
--- TOC entry 2864 (class 0 OID 45490)
--- Dependencies: 239
--- Data for Name: srm; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2700, NULL, 73, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (10, NULL, 180, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1700, NULL, 57, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (270, NULL, 51, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (200, NULL, 48, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (170, NULL, 46, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (2, NULL, 41, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (11, NULL, 181, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (12, NULL, 182, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (13, NULL, 183, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (14, NULL, 184, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (15, NULL, 185, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (170, NULL, 186, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1700, NULL, 187, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (16, NULL, 188, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (17, NULL, 189, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (18, NULL, 190, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (19, NULL, 191, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (20, NULL, 192, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (21, NULL, 193, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (22, NULL, 194, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (23, NULL, 195, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (24, NULL, 196, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (25, NULL, 203, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1786, NULL, 200, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1795, NULL, 201, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1796, NULL, 202, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (3, NULL, 204, '*');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1787, NULL, 58, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1785, NULL, 197, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1783, NULL, 59, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1784, NULL, 81, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1781, NULL, 199, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1782, NULL, 198, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (1601, NULL, 205, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, srm_id, sr_name) VALUES (160, NULL, 206, 'SYSADMIN');
+INSERT INTO ucod_txt_type (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (2, 'HTML', 'HTML', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_txt_type (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (1, 'TEXT', 'Text', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2902 (class 0 OID 0)
--- Dependencies: 240
--- Name: srm_srm_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
 
-SELECT pg_catalog.setval('srm_srm_id_seq', 206, true);
-
-
---
--- TOC entry 2879 (class 0 OID 45662)
--- Dependencies: 257
--- Data for Name: ucod_txt_type; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO ucod_txt_type (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (12, 2, 'HTML', 'HTML', NULL, NULL, NULL, '2017-05-09 14:38:25.667012', 'Upostgres', '2017-05-09 14:38:25.667012', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_txt_type (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (13, 1, 'TEXT', 'Text', NULL, NULL, NULL, '2017-05-09 14:38:25.667012', 'Upostgres', '2017-05-09 14:38:25.667012', 'Upostgres', NULL, NULL, NULL);
-
-
---
--- TOC entry 2866 (class 0 OID 45495)
--- Dependencies: 241
--- Data for Name: txt; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (8, 'EMAIL', 'RESETPASS', 'HTML', 'Password Reset', '<p>Dear <%-data.PE_NAME%>,<br />
+INSERT INTO txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc) VALUES ('EMAIL', 'RESETPASS', 'HTML', 'Password Reset', '<p>Dear <%-data.PE_NAME%>,<br />
 <br />
 A password reset has been requested on your account. If you did not initiate the request, please contact us at <%-data.SUPPORT_EMAIL%> immediately.<br />
 <br />
@@ -1423,310 +1193,202 @@ Please follow the link below to reset your password:<br />
 <a href="<%-data.RESET_LINK%>"><%-data.RESET_LINK%></a></p>
 ', NULL, '<%-data.PE_NAME%> User Name
 <%-data.SUPPORT_EMAIL%> Support Email
-<%-data.RESET_LINK%> Reset Link', '2017-06-18 17:14:24.03848', 'Upostgres', '2017-10-17 12:43:26.569018', 'S3');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (10, 'CMS', 'AGREEMENT', 'HTML', 'Client Agreement', NULL, NULL, 'Client Agreement', '2017-06-18 17:14:24.117928', 'Upostgres', '2017-10-17 12:43:42.879619', 'S3');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (11, 'CMS', 'AGREEMENT_DONE', 'HTML', 'Client Agreement Complete', '<p>Thank you for completing sign-up.</p>
-', NULL, 'Client Agreement Complete', '2017-06-18 17:14:24.096656', 'Upostgres', '2017-10-18 12:01:03.15238', 'S3');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (13, 'SMS', 'WELCOME', 'TEXT', 'Welcome', 'Your account has been initialized.', NULL, 'SMS Welcome Message', '2017-06-18 17:14:24.085617', 'Upostgres', '2017-10-18 12:01:31.046944', 'S3');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (14, 'CMS', 'C_DASHBOARD', 'HTML', 'Client Dashboard Message of the Day', '<p>Welcome to the jsHarmony Client Portal</p>
-', NULL, 'Client Dashboard Message of the Day', '2017-10-18 12:02:05.393644', 'S3', '2017-10-19 12:14:32.861784', 'S3');
-INSERT INTO txt (txt_id, txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc, txt_etstmp, txt_eu, txt_mtstmp, txt_mu) VALUES (15, 'CMS', 'DASHBOARD', 'HTML', 'Dashboard Message of the Day', '<p>Welcome to the jsHarmony System</p>
-', NULL, 'Dashboard Message of the Day', '2017-10-18 12:02:05.393644', 'S3', '2017-10-19 12:14:32.861784', 'S3');
+<%-data.RESET_LINK%> Reset Link');
+INSERT INTO txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc) VALUES ('CMS', 'AGREEMENT', 'HTML', 'Client Agreement', NULL, NULL, 'Client Agreement');
+INSERT INTO txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc) VALUES ('CMS', 'AGREEMENT_DONE', 'HTML', 'Client Agreement Complete', '<p>Thank you for completing sign-up.</p>
+', NULL, 'Client Agreement Complete');
+INSERT INTO txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc) VALUES ('SMS', 'WELCOME', 'TEXT', 'Welcome', 'Your account has been initialized.', NULL, 'SMS Welcome Message');
+INSERT INTO txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc) VALUES ('CMS', 'C_DASHBOARD', 'HTML', 'Client Dashboard Message of the Day', '<p>Welcome to the jsHarmony Client Portal</p>
+', NULL, 'Client Dashboard Message of the Day');
+INSERT INTO txt (txt_process, txt_attrib, txt_type, txt_tval, txt_val, txt_bcc, txt_desc) VALUES ('CMS', 'DASHBOARD', 'HTML', 'Dashboard Message of the Day', '<p>Welcome to the jsHarmony System</p>
+', NULL, 'Dashboard Message of the Day');
 
 
---
--- TOC entry 2903 (class 0 OID 0)
--- Dependencies: 242
--- Name: txt_txt_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
 
-SELECT pg_catalog.setval('txt_txt_id_seq', 14, true);
-
-
---
--- TOC entry 2868 (class 0 OID 45531)
--- Dependencies: 246
--- Data for Name: ucod2_country_state; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (208, NULL, 'CANADA', 'AB', 'Alberta', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (209, NULL, 'CANADA', 'BC', 'British Columbia', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (210, NULL, 'CANADA', 'MB', 'Manitoba', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (211, NULL, 'CANADA', 'NB', 'New Brunswick', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (212, NULL, 'CANADA', 'NL', 'Newfoundland and Labrador', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (213, NULL, 'CANADA', 'NS', 'Nova Scotia', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (214, NULL, 'CANADA', 'NT', 'Northwest Territories', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (215, NULL, 'CANADA', 'NU', 'Nunavut', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (216, NULL, 'CANADA', 'ON', 'Ontario', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (217, NULL, 'CANADA', 'PE', 'Prince Edward Island', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (218, NULL, 'CANADA', 'QC', 'Quebec', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (219, NULL, 'CANADA', 'SK', 'Saskatchewan', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (220, NULL, 'CANADA', 'YT', 'Yukon', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (221, NULL, 'MEXICO', 'AG', 'Aguascalientes', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (222, NULL, 'MEXICO', 'BN', 'Baja California', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (223, NULL, 'MEXICO', 'BS', 'Baja California Sur', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (224, NULL, 'MEXICO', 'CA', 'Coahuila', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (225, NULL, 'MEXICO', 'CH', 'Chihuahua', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (226, NULL, 'MEXICO', 'CL', 'Colima', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (227, NULL, 'MEXICO', 'CM', 'Compeche', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (228, NULL, 'MEXICO', 'CP', 'Chiapas', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (229, NULL, 'MEXICO', 'DF', 'Federal District', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (230, NULL, 'MEXICO', 'DU', 'Durango', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (231, NULL, 'MEXICO', 'GR', 'Guerrero', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (232, NULL, 'MEXICO', 'GT', 'Guanajuato', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (233, NULL, 'MEXICO', 'HI', 'Hidalgo', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (234, NULL, 'MEXICO', 'JA', 'Jalisco', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (235, NULL, 'MEXICO', 'MC', 'Michoacan', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (236, NULL, 'MEXICO', 'MR', 'Morelos', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (237, NULL, 'MEXICO', 'MX', 'Mexico', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (238, NULL, 'MEXICO', 'NA', 'Nayarit', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (239, NULL, 'MEXICO', 'NL', 'Nuevo Leon', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (240, NULL, 'MEXICO', 'OA', 'Oaxaca', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (241, NULL, 'MEXICO', 'PU', 'Puebla', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (242, NULL, 'MEXICO', 'QE', 'Queretaro', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (243, NULL, 'MEXICO', 'QR', 'Quintana Roo', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (244, NULL, 'MEXICO', 'SI', 'Sinaloa', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (245, NULL, 'MEXICO', 'SL', 'San Luis Potos√≠', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (246, NULL, 'MEXICO', 'SO', 'Sonora', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (247, NULL, 'MEXICO', 'TB', 'Tabasco', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (248, NULL, 'MEXICO', 'TL', 'Tlaxcala', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (249, NULL, 'MEXICO', 'TM', 'Tamaulipas', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (250, NULL, 'MEXICO', 'VE', 'Veracruz', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (251, NULL, 'MEXICO', 'YU', 'Yucat√°n', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (252, NULL, 'MEXICO', 'ZA', 'Zacatecas', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (253, NULL, 'USA', 'AK', 'Alaska', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (254, NULL, 'USA', 'AL', 'Alabama', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (255, NULL, 'USA', 'AR', 'Arkansas', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (256, NULL, 'USA', 'AS', 'American Samoa', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (257, NULL, 'USA', 'AZ', 'Arizona', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (258, NULL, 'USA', 'CA', 'California', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (259, NULL, 'USA', 'CO', 'Colorado', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (260, NULL, 'USA', 'CT', 'Connecticut', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (261, NULL, 'USA', 'DC', 'District of Columbia', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (262, NULL, 'USA', 'DE', 'Delaware', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (263, NULL, 'USA', 'FL', 'Florida', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (264, NULL, 'USA', 'FM', 'Federated States of Micronesia', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (265, NULL, 'USA', 'GA', 'Georgia', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (266, NULL, 'USA', 'GU', 'Guam', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (267, NULL, 'USA', 'HI', 'Hawaii', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (268, NULL, 'USA', 'IA', 'Iowa', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (269, NULL, 'USA', 'ID', 'Idaho', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (270, NULL, 'USA', 'IL', 'Illinois', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (271, NULL, 'USA', 'IN', 'Indiana', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (272, NULL, 'USA', 'KS', 'Kansas', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (273, NULL, 'USA', 'KY', 'Kentucky', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (274, NULL, 'USA', 'LA', 'Louisiana', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (275, NULL, 'USA', 'MA', 'Massachusetts', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (276, NULL, 'USA', 'MD', 'Maryland', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (277, NULL, 'USA', 'ME', 'Maine', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (278, NULL, 'USA', 'MH', 'Marshall Islands', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (279, NULL, 'USA', 'MI', 'Michigan', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (280, NULL, 'USA', 'MN', 'Minnesota', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (281, NULL, 'USA', 'MO', 'Missouri', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (282, NULL, 'USA', 'MP', 'Northern Mariana Islands', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (283, NULL, 'USA', 'MS', 'Mississippi', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (284, NULL, 'USA', 'MT', 'Montana', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (285, NULL, 'USA', 'NC', 'North Carolina', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (286, NULL, 'USA', 'ND', 'North Dakota', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (287, NULL, 'USA', 'NE', 'Nebraska', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (288, NULL, 'USA', 'NH', 'New Hampshire', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (289, NULL, 'USA', 'NJ', 'New Jersey', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (290, NULL, 'USA', 'NM', 'New Mexico', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (291, NULL, 'USA', 'NV', 'Nevada', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (292, NULL, 'USA', 'NY', 'New York', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (293, NULL, 'USA', 'OH', 'Ohio', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (294, NULL, 'USA', 'OK', 'Oklahoma', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (295, NULL, 'USA', 'OR', 'Oregon', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (296, NULL, 'USA', 'PA', 'Pennsylvania', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (297, NULL, 'USA', 'PR', 'Puerto Rico', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (298, NULL, 'USA', 'PW', 'Palau', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (299, NULL, 'USA', 'RI', 'Rhode Island', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (300, NULL, 'USA', 'SC', 'South Carolina', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (301, NULL, 'USA', 'SD', 'South Dakota', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (302, NULL, 'USA', 'TN', 'Tennessee', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (303, NULL, 'USA', 'TX', 'Texas', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (304, NULL, 'USA', 'UT', 'Utah', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (305, NULL, 'USA', 'VA', 'Virginia', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (306, NULL, 'USA', 'VI', 'Virgin Islands', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (307, NULL, 'USA', 'VT', 'Vermont', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (308, NULL, 'USA', 'WA', 'Washington', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (309, NULL, 'USA', 'WI', 'Wisconsin', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (310, NULL, 'USA', 'WV', 'West Virginia', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod2_country_state (ucod2_id, codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (311, NULL, 'USA', 'WY', 'Wyoming', NULL, NULL, NULL, '2017-06-16 18:29:20.155246', 'Upostgres', '2017-06-16 18:29:20.155246', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'AB', 'Alberta', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'BC', 'British Columbia', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'MB', 'Manitoba', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'NB', 'New Brunswick', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'NL', 'Newfoundland and Labrador', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'NS', 'Nova Scotia', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'NT', 'Northwest Territories', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'NU', 'Nunavut', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'ON', 'Ontario', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'PE', 'Prince Edward Island', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'QC', 'Quebec', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'SK', 'Saskatchewan', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'YT', 'Yukon', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'AG', 'Aguascalientes', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'BN', 'Baja California', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'BS', 'Baja California Sur', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'CA', 'Coahuila', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'CH', 'Chihuahua', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'CL', 'Colima', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'CM', 'Compeche', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'CP', 'Chiapas', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'DF', 'Federal District', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'DU', 'Durango', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'GR', 'Guerrero', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'GT', 'Guanajuato', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'HI', 'Hidalgo', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'JA', 'Jalisco', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'MC', 'Michoacan', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'MR', 'Morelos', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'MX', 'Mexico', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'NA', 'Nayarit', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'NL', 'Nuevo Leon', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'OA', 'Oaxaca', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'PU', 'Puebla', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'QE', 'Queretaro', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'QR', 'Quintana Roo', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'SI', 'Sinaloa', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'SL', 'San Luis PotosÌ', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'SO', 'Sonora', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'TB', 'Tabasco', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'TL', 'Tlaxcala', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'TM', 'Tamaulipas', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'VE', 'Veracruz', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'YU', 'Yucat·n', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'ZA', 'Zacatecas', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'AK', 'Alaska', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'AL', 'Alabama', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'AR', 'Arkansas', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'AS', 'American Samoa', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'AZ', 'Arizona', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'CA', 'California', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'CO', 'Colorado', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'CT', 'Connecticut', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'DC', 'District of Columbia', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'DE', 'Delaware', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'FL', 'Florida', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'FM', 'Federated States of Micronesia', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'GA', 'Georgia', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'GU', 'Guam', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'HI', 'Hawaii', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'IA', 'Iowa', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'ID', 'Idaho', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'IL', 'Illinois', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'IN', 'Indiana', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'KS', 'Kansas', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'KY', 'Kentucky', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'LA', 'Louisiana', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'MA', 'Massachusetts', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'MD', 'Maryland', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'ME', 'Maine', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'MH', 'Marshall Islands', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'MI', 'Michigan', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'MN', 'Minnesota', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'MO', 'Missouri', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'MP', 'Northern Mariana Islands', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'MS', 'Mississippi', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'MT', 'Montana', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'NC', 'North Carolina', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'ND', 'North Dakota', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'NE', 'Nebraska', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'NH', 'New Hampshire', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'NJ', 'New Jersey', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'NM', 'New Mexico', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'NV', 'Nevada', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'NY', 'New York', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'OH', 'Ohio', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'OK', 'Oklahoma', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'OR', 'Oregon', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'PA', 'Pennsylvania', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'PR', 'Puerto Rico', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'PW', 'Palau', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'RI', 'Rhode Island', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'SC', 'South Carolina', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'SD', 'South Dakota', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'TN', 'Tennessee', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'TX', 'Texas', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'UT', 'Utah', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'VA', 'Virginia', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'VI', 'Virgin Islands', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'VT', 'Vermont', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'WA', 'Washington', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'WI', 'Wisconsin', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'WV', 'West Virginia', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'WY', 'Wyoming', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2883 (class 0 OID 49401)
--- Dependencies: 279
--- Data for Name: ucod2_h; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO ucod2_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod2_h_id) VALUES ('country_state', 'Country - States', NULL, '2017-06-25 17:04:39.531136', 'Upostgres', '2017-06-25 17:04:39.531136', 'Upostgres', NULL, NULL, 'jsharmony', 1);
+INSERT INTO ucod2_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('country_state', 'Country - States', NULL, NULL, NULL, 'jsharmony');
 
 
---
--- TOC entry 2904 (class 0 OID 0)
--- Dependencies: 281
--- Name: ucod2_h_ucod2_h_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
-
-SELECT pg_catalog.setval('ucod2_h_ucod2_h_id_seq', 6, true);
 
 
---
--- TOC entry 2869 (class 0 OID 45554)
--- Dependencies: 247
--- Data for Name: ucod_ac; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO ucod_ac (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (1, 1, 'ACTIVE', 'Active', NULL, NULL, NULL, '2017-05-07 11:33:24.301842', 'Upostgres', '2017-05-07 11:33:24.301842', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_ac (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (2, 3, 'CLOSED', 'Closed', NULL, NULL, NULL, '2017-05-07 11:33:24.301842', 'Upostgres', '2017-05-07 11:33:24.301842', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_ac (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_ac (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2870 (class 0 OID 45564)
--- Dependencies: 248
--- Data for Name: ucod_ac1; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO ucod_ac1 (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (21, 1, 'A', 'Active', NULL, NULL, NULL, '2017-05-28 15:34:21.71573', 'Upostgres', '2017-05-28 15:34:21.71573', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_ac1 (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (22, 2, 'C', 'Closed', NULL, NULL, NULL, '2017-05-28 15:34:21.71573', 'Upostgres', '2017-05-28 15:34:21.71573', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_ac1 (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (1, 'A', 'Active', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_ac1 (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (2, 'C', 'Closed', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2872 (class 0 OID 45584)
--- Dependencies: 250
--- Data for Name: ucod_country; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO ucod_country (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (7, NULL, 'CANADA', 'CANADA', NULL, NULL, NULL, '2017-05-07 11:35:04.926156', 'Upostgres', '2017-05-07 11:35:04.926156', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_country (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (8, NULL, 'MEXICO', 'MEXICO', NULL, NULL, NULL, '2017-05-07 11:35:04.926156', 'Upostgres', '2017-05-07 11:35:04.926156', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_country (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (9, NULL, 'USA', 'USA', NULL, NULL, NULL, '2017-05-07 11:35:04.926156', 'Upostgres', '2017-05-07 11:35:04.926156', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_country (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CANADA', 'CANADA', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_country (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MEXICO', 'MEXICO', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_country (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'USA', 'USA', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2873 (class 0 OID 45594)
--- Dependencies: 251
--- Data for Name: ucod_d_scope; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (14, 2, 'C', 'Customer', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (17, 1, 'S', 'System', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (16, 3, 'O', 'Order', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (20, 4, 'VEN', 'Vendor', NULL, NULL, NULL, '2017-05-28 15:33:29.230786', 'Upostgres', '2017-05-28 15:33:29.230786', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_d_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (3, 5, 'PE', 'User', NULL, NULL, NULL, '2017-10-19 17:56:29.139491', 'S3', '2017-10-19 17:56:29.139491', 'S3', NULL, NULL, NULL);
+INSERT INTO ucod_d_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (2, 'C', 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_d_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (1, 'S', 'System', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_d_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (3, 'O', 'Order', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_d_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_d_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (5, 'PE', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2882 (class 0 OID 49377)
--- Dependencies: 278
--- Data for Name: ucod_h; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('ac', 'ACTIVE-CLOSED', NULL, '2017-06-25 17:04:39.48901', 'Upostgres', '2017-06-25 17:04:39.48901', 'Upostgres', NULL, NULL, 'jsharmony', 1);
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('ac1', 'ACTIVE-CLOSED 1 Character', NULL, '2017-06-25 17:04:39.48901', 'Upostgres', '2017-06-25 17:04:39.48901', 'Upostgres', NULL, NULL, 'jsharmony', 3);
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('ahc', 'ACTIVE-HOLD-CLOSED', NULL, '2017-06-25 17:04:39.48901', 'Upostgres', '2017-06-25 17:04:39.48901', 'Upostgres', NULL, NULL, 'jsharmony', 10);
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('country', 'Country', NULL, '2017-06-25 17:04:39.48901', 'Upostgres', '2017-06-25 17:04:39.48901', 'Upostgres', NULL, NULL, 'jsharmony', 2);
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('d_scope', 'Document Scope', 'Client User Y/N', '2017-06-25 17:04:39.48901', 'Upostgres', '2017-06-25 17:04:39.48901', 'Upostgres', NULL, NULL, 'jsharmony', 9);
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('n_scope', 'Note Scope', NULL, '2017-06-25 17:04:39.48901', 'Upostgres', '2017-06-25 17:04:39.48901', 'Upostgres', NULL, NULL, 'jsharmony', 11);
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('n_type', 'Note Type', NULL, '2017-06-25 17:04:39.48901', 'Upostgres', '2017-06-25 17:04:39.48901', 'Upostgres', NULL, NULL, 'jsharmony', 8);
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('ppd_type', 'Parameter Type', NULL, '2017-06-25 17:04:39.48901', 'Upostgres', '2017-06-25 17:04:39.48901', 'Upostgres', NULL, NULL, 'jsharmony', 7);
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('rqst_atype', 'Request Action Type', NULL, '2017-06-25 17:04:39.48901', 'Upostgres', '2017-06-25 17:04:39.48901', 'Upostgres', NULL, NULL, 'jsharmony', 4);
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('rqst_source', 'Request Source', NULL, '2017-06-25 17:04:39.48901', 'Upostgres', '2017-06-25 17:04:39.48901', 'Upostgres', NULL, NULL, 'jsharmony', 5);
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('txt_type', 'Text Type', NULL, '2017-06-25 17:04:39.48901', 'Upostgres', '2017-06-25 17:04:39.48901', 'Upostgres', NULL, NULL, 'jsharmony', 6);
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_h_etstmp, cod_h_eu, cod_h_mtstmp, cod_h_mu, cod_snotes, codeattribmean, codeschema, ucod_h_id) VALUES ('v_sts', 'Version Status', NULL, '2017-07-10 19:01:52.825199', 'Upostgres', '2017-07-10 19:01:52.825199', 'Upostgres', NULL, NULL, 'jsharmony', 13);
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ac', 'ACTIVE-CLOSED', NULL, NULL, NULL, 'jsharmony');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ac1', 'ACTIVE-CLOSED 1 Character', NULL, NULL, NULL, 'jsharmony');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ahc', 'ACTIVE-HOLD-CLOSED', NULL, NULL, NULL, 'jsharmony');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('country', 'Country', NULL, NULL, NULL, 'jsharmony');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('d_scope', 'Document Scope', 'Client User Y/N', NULL, NULL, 'jsharmony');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('n_scope', 'Note Scope', NULL, NULL, NULL, 'jsharmony');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('n_type', 'Note Type', NULL, NULL, NULL, 'jsharmony');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ppd_type', 'Parameter Type', NULL, NULL, NULL, 'jsharmony');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('rqst_atype', 'Request Action Type', NULL, NULL, NULL, 'jsharmony');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('rqst_source', 'Request Source', NULL, NULL, NULL, 'jsharmony');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('txt_type', 'Text Type', NULL, NULL, NULL, 'jsharmony');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('v_sts', 'Version Status', NULL, NULL, NULL, 'jsharmony');
 
 
---
--- TOC entry 2905 (class 0 OID 0)
--- Dependencies: 280
--- Name: ucod_h_ucod_h_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
 
-SELECT pg_catalog.setval('ucod_h_ucod_h_id_seq', 14, true);
-
-
---
--- TOC entry 2874 (class 0 OID 45608)
--- Dependencies: 252
--- Data for Name: ucod_n_scope; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
-
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (23, 2, 'C', 'Customer', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (29, 1, 'S', 'System', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (24, 3, 'CT', 'Cust Contact', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (31, 4, 'VEN', 'Vendor', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (4, 5, 'PE', 'User', NULL, NULL, NULL, '2017-10-19 17:56:55.452087', 'S3', '2017-10-19 17:56:55.452087', 'S3', NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (2, 'C', 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (1, 'S', 'System', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (3, 'CT', 'Cust Contact', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (5, 'PE', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2875 (class 0 OID 45618)
--- Dependencies: 253
--- Data for Name: ucod_n_type; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO ucod_n_type (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (33, 2, 'C', 'Client', NULL, NULL, NULL, '2017-05-28 15:36:58.576763', 'Upostgres', '2017-05-28 15:36:58.576763', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_type (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (34, 3, 'S', 'System', NULL, NULL, NULL, '2017-05-28 15:36:58.576763', 'Upostgres', '2017-05-28 15:36:58.576763', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_type (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (35, 1, 'U', 'User', NULL, NULL, NULL, '2017-05-28 15:36:58.576763', 'Upostgres', '2017-05-28 15:36:58.576763', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_n_type (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (2, 'C', 'Client', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_n_type (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (3, 'S', 'System', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_n_type (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (1, 'U', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2877 (class 0 OID 45642)
--- Dependencies: 255
--- Data for Name: ucod_rqst_atype; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO ucod_rqst_atype (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (36, NULL, 'MESSAGE', 'Message', NULL, NULL, NULL, '2017-05-28 15:38:23.35886', 'Upostgres', '2017-05-28 15:38:23.35886', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_rqst_atype (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (37, NULL, 'REPORT', 'Report Program', NULL, NULL, NULL, '2017-05-28 15:38:23.35886', 'Upostgres', '2017-05-28 15:38:23.35886', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_rqst_atype (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MESSAGE', 'Message', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_rqst_atype (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'REPORT', 'Report Program', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2878 (class 0 OID 45652)
--- Dependencies: 256
--- Data for Name: ucod_rqst_source; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO ucod_rqst_source (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (38, NULL, 'ADMIN', 'Administrator Interface', NULL, NULL, NULL, '2017-05-28 15:38:41.42154', 'Upostgres', '2017-05-28 15:38:41.42154', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_rqst_source (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (39, NULL, 'CLIENT', 'Client Interface', NULL, NULL, NULL, '2017-05-28 15:38:41.42154', 'Upostgres', '2017-05-28 15:38:41.42154', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_rqst_source (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'ADMIN', 'Administrator Interface', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_rqst_source (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CLIENT', 'Client Interface', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2886 (class 0 OID 54226)
--- Dependencies: 282
--- Data for Name: ucod_v_sts; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO ucod_v_sts (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (1, 2, 'ERROR', 'Error', NULL, NULL, NULL, '2017-07-10 19:03:54.540163', 'S3', '2017-07-10 19:03:54.540163', 'S3', NULL, NULL, NULL);
-INSERT INTO ucod_v_sts (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (2, 1, 'OK', 'OK', NULL, NULL, NULL, '2017-07-10 19:04:04.470394', 'S3', '2017-07-10 19:04:04.470394', 'S3', NULL, NULL, NULL);
+INSERT INTO ucod_v_sts (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (2, 'ERROR', 'Error', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_v_sts (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (1, 'OK', 'OK', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- TOC entry 2880 (class 0 OID 45707)
--- Dependencies: 266
--- Data for Name: xpp; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
---
 
-INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (2, 'USERS', 'HASH_SEED_C', 'w3vefSQ@aewfa@#V5awdfA@#Rdf2%V235wfAF@#%csdfsfvq235@EFSDFAV2352vswfAW@V#%@', '2017-06-18 17:14:25.282391', 'Upostgres', '2017-06-18 17:14:25.282391', 'Upostgres');
-INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (3, 'USERS', 'HASH_SEED_S', 'frtue5 i876h4567h*&IOJK*()9%UHJS$6agfghjdyszwetsbfg5&$&$TFB5763bergereg', '2017-06-18 17:14:25.297538', 'Upostgres', '2017-06-18 17:14:25.297538', 'Upostgres');
-INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (13, 'SQL', 'DSCOPE_DCTGR', 'gcod2_d_scope_d_ctgr', '2017-06-18 17:14:25.311607', 'Upostgres', '2017-06-18 17:14:25.311607', 'Upostgres');
-INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (14, 'SQL', 'GETCID', 'public.get_c_id', '2017-06-18 17:14:25.317611', 'Upostgres', '2017-06-18 17:14:25.317611', 'Upostgres');
-INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (15, 'SQL', 'GETEID', 'public.get_e_id', '2017-06-18 17:14:25.324813', 'Upostgres', '2017-06-18 17:14:25.324813', 'Upostgres');
-INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (16, 'SYSTEM', 'CLIENT_SYS_URL', 'https://localhost', '2017-06-18 17:14:25.332819', 'Upostgres', '2017-10-17 12:23:34.708185', 'S3');
-INSERT INTO xpp (xpp_id, xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu) VALUES (1, 'EMAIL', 'NOTIF_SYS', 'user@company.com', '2017-06-18 17:14:25.304602', 'Upostgres', '2017-10-17 12:24:06.270302', 'S3');
-
-
---
--- TOC entry 2906 (class 0 OID 0)
--- Dependencies: 272
--- Name: xpp_xpp_id_seq; Type: SEQUENCE SET; Schema: jsharmony; Owner: postgres
---
-
-SELECT pg_catalog.setval('xpp_xpp_id_seq', 16, true);
-
-
--- Completed on 2017-10-24 16:36:36
-
---
--- PostgreSQL database dump complete
---
-
+INSERT INTO xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('USERS', 'HASH_SEED_C', 'AAA');
+INSERT INTO xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('USERS', 'HASH_SEED_S', 'BBB');
+INSERT INTO xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'DSCOPE_DCTGR', 'gcod2_d_scope_d_ctgr');
+INSERT INTO xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'GETCID', 'public.get_c_id');
+INSERT INTO xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SQL', 'GETEID', 'public.get_e_id');
+INSERT INTO xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'https://localhost');
+INSERT INTO xpp (xpp_process, xpp_attrib, xpp_val) VALUES ('EMAIL', 'NOTIF_SYS', 'user@company.com');
