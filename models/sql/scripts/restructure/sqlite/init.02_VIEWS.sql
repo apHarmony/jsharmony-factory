@@ -191,12 +191,14 @@ end;
 CREATE VIEW jsharmony_v_crmsel AS
  SELECT crm.crm_id,
     COALESCE(dual.dual_text, '') AS new_cr_name,
+    dual.dual_integer AS new_sm_id,
         CASE
             WHEN (crm.crm_id IS NULL) THEN 0
             ELSE 1
         END AS crmsel_sel,
     m.cr_name,
     m.cr_seq,
+    m.cr_sts,
     m.cr_desc,
     m.cr_id,
     m.sm_id_auto,
@@ -215,6 +217,7 @@ CREATE VIEW jsharmony_v_crmsel AS
     m.sm_subcmd
    FROM ((( SELECT cr.cr_name,
             cr.cr_seq,
+            cr.cr_sts,
             cr.cr_desc,
             cr.cr_id,
             sm.sm_id_auto,
@@ -240,7 +243,9 @@ create trigger jsharmony_v_crmsel_update instead of update on jsharmony_v_crmsel
 begin
   delete from jsharmony_crm where crm_id=new.crm_id and (%%%NONEQUAL("NEW.crmsel_sel","OLD.crmsel_sel")%%%) and coalesce(new.crmsel_sel,0)=0\;
   insert into jsharmony_crm (cr_name, sm_id)
-    select new.new_cr_name, new.sm_id where (%%%NONEQUAL("NEW.crmsel_sel","OLD.crmsel_sel")%%%) and coalesce(new.crmsel_sel,0)=1\;
+    select new.new_cr_name, new.sm_id where (%%%NONEQUAL("NEW.crmsel_sel","OLD.crmsel_sel")%%%) and coalesce(new.crmsel_sel,0)=1 and coalesce(new.new_cr_name,'')<>''\;
+  insert into jsharmony_crm (cr_name, sm_id)
+    select new.cr_name, new.new_sm_id where (%%%NONEQUAL("NEW.crmsel_sel","OLD.crmsel_sel")%%%) and coalesce(new.crmsel_sel,0)=1 and coalesce(new.new_cr_name,'')=''\;
   update jsharmony_meta set extra_changes=extra_changes+1
     where (%%%NONEQUAL("NEW.crmsel_sel","OLD.crmsel_sel")%%%)\;
 end;
@@ -564,12 +569,14 @@ end;
 CREATE VIEW jsharmony_v_srmsel AS
  SELECT srm.srm_id,
     COALESCE(dual.dual_text, '') AS new_sr_name,
+    dual.dual_integer AS new_sm_id,
         CASE
             WHEN (srm.srm_id IS NULL) THEN 0
             ELSE 1
         END AS srmsel_sel,
     m.sr_name,
     m.sr_seq,
+    m.sr_sts,
     m.sr_desc,
     m.sr_id,
     m.sm_id_auto,
@@ -588,6 +595,7 @@ CREATE VIEW jsharmony_v_srmsel AS
     m.sm_subcmd
    FROM ((( SELECT sr.sr_name,
             sr.sr_seq,
+            sr.sr_sts,
             sr.sr_desc,
             sr.sr_id,
             sm.sm_id_auto,
@@ -613,7 +621,9 @@ create trigger jsharmony_v_srmsel_update instead of update on jsharmony_v_srmsel
 begin
   delete from jsharmony_srm where srm_id=new.srm_id and (%%%NONEQUAL("NEW.srmsel_sel","OLD.srmsel_sel")%%%) and coalesce(new.srmsel_sel,0)=0\;
   insert into jsharmony_srm (sr_name, sm_id)
-    select new.new_sr_name, new.sm_id where (%%%NONEQUAL("NEW.srmsel_sel","OLD.srmsel_sel")%%%) and coalesce(new.srmsel_sel,0)=1\;
+    select new.new_sr_name, new.sm_id where (%%%NONEQUAL("NEW.srmsel_sel","OLD.srmsel_sel")%%%) and coalesce(new.srmsel_sel,0)=1 and coalesce(new.new_sr_name,'')<>''\;
+  insert into jsharmony_srm (sr_name, sm_id)
+    select new.sr_name, new.new_sm_id where (%%%NONEQUAL("NEW.srmsel_sel","OLD.srmsel_sel")%%%) and coalesce(new.srmsel_sel,0)=1 and coalesce(new.new_sr_name,'')=''\;
   update jsharmony_meta set extra_changes=extra_changes+1
     where (%%%NONEQUAL("NEW.srmsel_sel","OLD.srmsel_sel")%%%)\;
 end;

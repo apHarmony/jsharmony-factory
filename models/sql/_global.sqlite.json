@@ -425,6 +425,15 @@
       "end)"
     ]
   },
+  "jsharmony.mypec":{
+    "params": [],
+    "sql": [
+      "(case substr(jsharmony.mycuser(),1,1)",
+      "  when 'C' then cast(substr(jsharmony.mycuser(),2,1024) as int)",
+      "  else  null",
+      "end)"
+    ]
+  },
   "jsharmony.mynow":{
     "params": [],
     "sql": "datetime('now','localtime')"

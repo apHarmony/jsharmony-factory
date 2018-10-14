@@ -1,7 +1,5 @@
-/****** Object:  DatabaseRole [jsharmony_role_exec]    Script Date: 10/8/2018 5:22:50 PM ******/
 CREATE ROLE [jsharmony_role_exec]
 GO
-/****** Object:  DatabaseRole [jsharmony_role_dev]    Script Date: 10/8/2018 5:22:50 PM ******/
 CREATE ROLE [jsharmony_role_dev]
 GO
 ALTER ROLE [db_datareader] ADD MEMBER [jsharmony_role_exec]
@@ -18,16 +16,15 @@ GRANT VIEW ANY COLUMN ENCRYPTION KEY DEFINITION TO [public] AS [dbo]
 GO
 GRANT VIEW ANY COLUMN MASTER KEY DEFINITION TO [public] AS [dbo]
 GO
-/****** Object:  Schema [jsharmony]    Script Date: 10/8/2018 5:22:51 PM ******/
 CREATE SCHEMA [jsharmony]
 GO
 GRANT ALTER ON SCHEMA::[jsharmony] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[audit_info]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE FUNCTION [jsharmony].[audit_info] 
@@ -52,11 +49,11 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[audit_info] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[CHECK_PP]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -137,11 +134,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[EXISTS_D]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -180,11 +177,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[EXISTS_N]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -221,11 +218,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[GET_CPE_NAME]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -250,11 +247,11 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[GET_CPE_NAME] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[GET_PE_NAME]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE FUNCTION [jsharmony].[GET_PE_NAME]
@@ -277,11 +274,11 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[GET_PE_NAME] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[GET_PPD_DESC]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -308,11 +305,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -337,11 +334,11 @@ GRANT REFERENCES ON [jsharmony].[myCUSER] TO [jsharmony_role_dev] AS [dbo]
 GO
 GRANT EXECUTE ON [jsharmony].[myCUSER] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -375,11 +372,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_FMT]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -406,11 +403,11 @@ GRANT REFERENCES ON [jsharmony].[myCUSER_FMT] TO [jsharmony_role_dev] AS [dbo]
 GO
 GRANT EXECUTE ON [jsharmony].[myCUSER_FMT] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myCUSER_FMT_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -452,11 +449,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myHASH]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -508,11 +505,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myMMDDYYHHMI]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -525,11 +522,11 @@ BEGIN
 END
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myNOW]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -555,11 +552,11 @@ GRANT REFERENCES ON [jsharmony].[myNOW] TO [jsharmony_role_dev] AS [dbo]
 GO
 GRANT EXECUTE ON [jsharmony].[myNOW] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myNOW_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -581,11 +578,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myPE]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -608,11 +605,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myPE_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE FUNCTION [jsharmony].[myPE_DO]
 ()	
@@ -634,11 +631,11 @@ DECLARE @pe_id BIGINT=-1;
 END
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myPEC]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -662,11 +659,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myPEC_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE FUNCTION [jsharmony].[myPEC_DO]
@@ -689,11 +686,11 @@ DECLARE @pe_id BIGINT=-1;
 END
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myTODATE]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -711,11 +708,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myTODAY]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -732,11 +729,11 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[myTODAY] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[myTODAY_DO]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -754,11 +751,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALC]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -791,11 +788,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALD]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -839,11 +836,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[NONEQUALN]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -876,11 +873,11 @@ END
 
 
 GO
-/****** Object:  UserDefinedFunction [jsharmony].[TABLE_TYPE]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -909,7 +906,6 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[TABLE_TYPE] TO [jsharmony_role_exec] AS [dbo]
 GO
-/****** Object:  Table [jsharmony].[PPD]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -936,11 +932,11 @@ CREATE TABLE [jsharmony].[PPD](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[UCOD_PPP_PROCESS_V]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
@@ -956,7 +952,6 @@ SELECT distinct
  where PPD_PPP = 1
 
 GO
-/****** Object:  Table [jsharmony].[AUD_H]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -980,7 +975,6 @@ CREATE TABLE [jsharmony].[AUD_H](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[AUD_D]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -996,11 +990,11 @@ CREATE TABLE [jsharmony].[AUD_D](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_AUDL_RAW]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1039,11 +1033,11 @@ LEFT OUTER JOIN jsharmony.AUD_D ON AUD_H.AUD_SEQ = AUD_D.AUD_SEQ
 
 
 GO
-/****** Object:  View [jsharmony].[UCOD_XPP_PROCESS_V]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
@@ -1059,11 +1053,11 @@ SELECT distinct
  where PPD_XPP = 1
 
 GO
-/****** Object:  View [jsharmony].[UCOD2_GPP_PROCESS_ATTRIB_V]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 /****** Script for SelectTopNRows command from SSMS  ******/
 create view [jsharmony].[UCOD2_GPP_PROCESS_ATTRIB_V] as
@@ -1083,11 +1077,11 @@ SELECT NULL CODSEQ
   FROM jsharmony.PPD
  WHERE PPD_GPP = 1
 GO
-/****** Object:  View [jsharmony].[UCOD2_PPP_PROCESS_ATTRIB_V]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
@@ -1109,11 +1103,11 @@ SELECT NULL CODSEQ
  WHERE PPD_PPP = 1
 
 GO
-/****** Object:  View [jsharmony].[UCOD2_XPP_PROCESS_ATTRIB_V]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
@@ -1135,7 +1129,6 @@ SELECT NULL CODSEQ
  WHERE PPD_XPP = 1
 
 GO
-/****** Object:  Table [jsharmony].[SPER]    Script Date: 10/8/2018 5:22:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1156,11 +1149,11 @@ CREATE TABLE [jsharmony].[SPER](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_MY_ROLES]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1171,7 +1164,6 @@ select SPER.SR_NAME
 
 
 GO
-/****** Object:  Table [jsharmony].[NUMBERS]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1184,11 +1176,11 @@ CREATE TABLE [jsharmony].[NUMBERS](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_MONTHS]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1208,11 +1200,11 @@ select N,
 
 
 GO
-/****** Object:  View [jsharmony].[V_YEARS]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1227,7 +1219,6 @@ select datepart(year,sysdatetime())+N-1 year,
 
 
 GO
-/****** Object:  Table [jsharmony].[PPP]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1250,7 +1241,6 @@ CREATE TABLE [jsharmony].[PPP](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[GPP]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1271,7 +1261,6 @@ CREATE TABLE [jsharmony].[GPP](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[XPP]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1292,11 +1281,11 @@ CREATE TABLE [jsharmony].[XPP](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_PP]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1323,7 +1312,6 @@ CREATE VIEW [jsharmony].[V_PP] AS
 
 
 GO
-/****** Object:  Table [jsharmony].[D]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1355,11 +1343,11 @@ CREATE TABLE [jsharmony].[D](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_D_X]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 /****** Script for SelectTopNRows command from SSMS  ******/
 create view [jsharmony].[V_D_X] as
 SELECT D_ID
@@ -1384,7 +1372,6 @@ SELECT D_ID
       ,D_ID_MAIN
   FROM jsharmony.D
 GO
-/****** Object:  Table [jsharmony].[DUAL]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1400,11 +1387,11 @@ CREATE TABLE [jsharmony].[DUAL](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_HOUSE]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1437,7 +1424,6 @@ select NAME.PP_VAL HOUSE_NAME,
 
 
 GO
-/****** Object:  Table [jsharmony].[CRM]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1458,7 +1444,6 @@ CREATE TABLE [jsharmony].[CRM](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[CR]    Script Date: 10/8/2018 5:22:52 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1486,7 +1471,6 @@ CREATE TABLE [jsharmony].[CR](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[SM]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1525,11 +1509,11 @@ CREATE TABLE [jsharmony].[SM](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_CRMSEL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1590,7 +1574,6 @@ SELECT jsharmony.CRM.CRM_ID,
 
 
 GO
-/****** Object:  Table [jsharmony].[CPER]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1611,11 +1594,11 @@ CREATE TABLE [jsharmony].[CPER](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_CPER_NOSTAR]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE view [jsharmony].[V_CPER_NOSTAR] as
@@ -1624,7 +1607,6 @@ select *
  where CR_NAME <> 'C*';
 
 GO
-/****** Object:  Table [jsharmony].[SR]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1652,7 +1634,6 @@ CREATE TABLE [jsharmony].[SR](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[SRM]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1673,11 +1654,11 @@ CREATE TABLE [jsharmony].[SRM](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [jsharmony].[V_SRMSEL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1734,11 +1715,11 @@ SELECT jsharmony.SRM.SRM_ID,
 
 
 GO
-/****** Object:  View [jsharmony].[V_GPPL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1804,11 +1785,11 @@ SELECT jsharmony.GPP.*,
 
 
 GO
-/****** Object:  View [jsharmony].[V_PPPL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1866,11 +1847,11 @@ SELECT PPP.*,
 
 
 GO
-/****** Object:  View [jsharmony].[V_XPPL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -1936,11 +1917,11 @@ SELECT XPP.*,
 
 
 GO
-/****** Object:  View [jsharmony].[V_PPDL]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -2005,11 +1986,11 @@ SELECT PPD.*,
 
 
 GO
-/****** Object:  View [jsharmony].[UCOD_GPP_PROCESS_V]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 /****** Script for SelectTopNRows command from SSMS  ******/
 create view [jsharmony].[UCOD_GPP_PROCESS_V] as
@@ -2023,16 +2004,15 @@ SELECT distinct
   FROM jsharmony.PPD
  where PPD_GPP = 1
 GO
-/****** Object:  View [jsharmony].[V_MYPE]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
 create view [jsharmony].[V_MYPE] as
 select jsharmony.myPE() MYPE
 GO
-/****** Object:  Table [jsharmony].[CPE]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2073,7 +2053,6 @@ CREATE TABLE [jsharmony].[CPE](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[GCOD_H]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2095,7 +2074,6 @@ CREATE TABLE [jsharmony].[GCOD_H](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[GCOD2_D_SCOPE_D_CTGR]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2129,7 +2107,6 @@ CREATE TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[GCOD2_H]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2151,7 +2128,6 @@ CREATE TABLE [jsharmony].[GCOD2_H](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[H]    Script Date: 10/8/2018 5:22:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2185,7 +2161,6 @@ CREATE TABLE [jsharmony].[H](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[HP]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2208,7 +2183,6 @@ CREATE TABLE [jsharmony].[HP](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[N]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2235,7 +2209,6 @@ CREATE TABLE [jsharmony].[N](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[PE]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2284,7 +2257,6 @@ CREATE TABLE [jsharmony].[PE](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQ]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2305,7 +2277,6 @@ CREATE TABLE [jsharmony].[RQ](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2329,7 +2300,6 @@ CREATE TABLE [jsharmony].[RQST](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST_D]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2347,7 +2317,6 @@ CREATE TABLE [jsharmony].[RQST_D](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST_EMAIL]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2370,7 +2339,6 @@ CREATE TABLE [jsharmony].[RQST_EMAIL](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST_N]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2388,7 +2356,6 @@ CREATE TABLE [jsharmony].[RQST_N](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST_RQ]    Script Date: 10/8/2018 5:22:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2404,7 +2371,6 @@ CREATE TABLE [jsharmony].[RQST_RQ](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[RQST_SMS]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2421,7 +2387,6 @@ CREATE TABLE [jsharmony].[RQST_SMS](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[SCRIPT]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2435,7 +2400,6 @@ CREATE TABLE [jsharmony].[SCRIPT](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[SF]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2468,7 +2432,6 @@ CREATE TABLE [jsharmony].[SF](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[SPEF]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2489,7 +2452,6 @@ CREATE TABLE [jsharmony].[SPEF](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[TXT]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2518,7 +2480,6 @@ CREATE TABLE [jsharmony].[TXT](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_AC]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2548,7 +2509,6 @@ CREATE TABLE [jsharmony].[UCOD_AC](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_AC1]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2578,7 +2538,6 @@ CREATE TABLE [jsharmony].[UCOD_AC1](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_AHC]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2608,7 +2567,6 @@ CREATE TABLE [jsharmony].[UCOD_AHC](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_COUNTRY]    Script Date: 10/8/2018 5:22:55 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2638,7 +2596,6 @@ CREATE TABLE [jsharmony].[UCOD_COUNTRY](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_D_SCOPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2668,7 +2625,6 @@ CREATE TABLE [jsharmony].[UCOD_D_SCOPE](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_H]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2697,7 +2653,6 @@ CREATE TABLE [jsharmony].[UCOD_H](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_N_SCOPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2727,7 +2682,6 @@ CREATE TABLE [jsharmony].[UCOD_N_SCOPE](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_N_TYPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2757,7 +2711,6 @@ CREATE TABLE [jsharmony].[UCOD_N_TYPE](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_PPD_TYPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2787,7 +2740,6 @@ CREATE TABLE [jsharmony].[UCOD_PPD_TYPE](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_RQST_ATYPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2817,7 +2769,6 @@ CREATE TABLE [jsharmony].[UCOD_RQST_ATYPE](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_RQST_SOURCE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2847,7 +2798,6 @@ CREATE TABLE [jsharmony].[UCOD_RQST_SOURCE](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_TXT_TYPE]    Script Date: 10/8/2018 5:22:56 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2877,7 +2827,6 @@ CREATE TABLE [jsharmony].[UCOD_TXT_TYPE](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD_V_STS]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2911,7 +2860,6 @@ CREATE TABLE [jsharmony].[UCOD_V_STS](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD2_COUNTRY_STATE]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2943,7 +2891,6 @@ CREATE TABLE [jsharmony].[UCOD2_COUNTRY_STATE](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[UCOD2_H]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2971,7 +2918,6 @@ CREATE TABLE [jsharmony].[UCOD2_H](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [jsharmony].[V]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2999,13 +2945,11 @@ CREATE TABLE [jsharmony].[V](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Index [IX_CPE_C_ID]    Script Date: 10/8/2018 5:22:57 PM ******/
 CREATE NONCLUSTERED INDEX [IX_CPE_C_ID] ON [jsharmony].[CPE]
 (
 	[C_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-/****** Object:  Index [IX_D_C_ID]    Script Date: 10/8/2018 5:22:57 PM ******/
 CREATE NONCLUSTERED INDEX [IX_D_C_ID] ON [jsharmony].[D]
 (
 	[C_ID] ASC
@@ -3013,7 +2957,6 @@ CREATE NONCLUSTERED INDEX [IX_D_C_ID] ON [jsharmony].[D]
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [IX_D_SCOPE]    Script Date: 10/8/2018 5:22:57 PM ******/
 CREATE NONCLUSTERED INDEX [IX_D_SCOPE] ON [jsharmony].[D]
 (
 	[D_SCOPE] ASC,
@@ -3022,7 +2965,6 @@ CREATE NONCLUSTERED INDEX [IX_D_SCOPE] ON [jsharmony].[D]
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [IX_H]    Script Date: 10/8/2018 5:22:57 PM ******/
 CREATE NONCLUSTERED INDEX [IX_H] ON [jsharmony].[H]
 (
 	[HP_CODE] ASC
@@ -3030,7 +2972,6 @@ CREATE NONCLUSTERED INDEX [IX_H] ON [jsharmony].[H]
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [IX_RQ_RQ_NAME]    Script Date: 10/8/2018 5:22:57 PM ******/
 CREATE NONCLUSTERED INDEX [IX_RQ_RQ_NAME] ON [jsharmony].[RQ]
 (
 	[RQ_NAME] ASC
@@ -3571,11 +3512,11 @@ ALTER TABLE [jsharmony].[SM]  WITH CHECK ADD  CONSTRAINT [CK_SM_SM_UTYPE] CHECK 
 GO
 ALTER TABLE [jsharmony].[SM] CHECK CONSTRAINT [CK_SM_SM_UTYPE]
 GO
-/****** Object:  StoredProcedure [jsharmony].[AUDH]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE  [jsharmony].[AUDH]
 (
@@ -3732,11 +3673,11 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[AUDH_BASE]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE  [jsharmony].[AUDH_BASE]
 (
@@ -3824,11 +3765,11 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -3861,11 +3802,11 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE_P]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -3904,11 +3845,11 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE2]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -3941,11 +3882,11 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_CODE2_P]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -3983,11 +3924,11 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_FOREIGN]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -4016,11 +3957,11 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[CHECK_FOREIGN_P]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -4055,11 +3996,11 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_gcod]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE  [jsharmony].[create_gcod]
 (
 	@in_codeschema nvarchar(max),
@@ -4105,11 +4046,11 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[create_gcod] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_gcod2]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE  [jsharmony].[create_gcod2]
 (
 	@in_codeschema nvarchar(max),
@@ -4155,11 +4096,11 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[create_gcod2] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_ucod]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE  [jsharmony].[create_ucod]
 (
 	@in_codeschema nvarchar(max),
@@ -4194,11 +4135,11 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[create_ucod] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[create_ucod2]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 create PROCEDURE  [jsharmony].[create_ucod2]
 (
 	@in_codeschema nvarchar(max),
@@ -4233,11 +4174,11 @@ END
 GO
 GRANT EXECUTE ON [jsharmony].[create_ucod2] TO [jsharmony_role_dev] AS [dbo]
 GO
-/****** Object:  StoredProcedure [jsharmony].[ZZ-FILEDEBUG]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -4306,11 +4247,11 @@ END
 
 
 GO
-/****** Object:  Trigger [jsharmony].[CPE_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE trigger [jsharmony].[CPE_IUD] on [jsharmony].[CPE]
 for insert, update, delete
 AS
@@ -4701,11 +4642,11 @@ END
 GO
 ALTER TABLE [jsharmony].[CPE] ENABLE TRIGGER [CPE_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[CPER_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE trigger [jsharmony].[CPER_IUD] on [jsharmony].[CPER]
 for insert, update, delete
 AS
@@ -4899,11 +4840,11 @@ END
 GO
 ALTER TABLE [jsharmony].[CPER] ENABLE TRIGGER [CPER_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[D_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE trigger [jsharmony].[D_IUD] on [jsharmony].[D]
 for insert, update, delete
@@ -5403,11 +5344,11 @@ END
 GO
 ALTER TABLE [jsharmony].[D] ENABLE TRIGGER [D_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[GCOD2_D_SCOPE_D_CTGR_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE trigger [jsharmony].[GCOD2_D_SCOPE_D_CTGR_IUD] on [jsharmony].[GCOD2_D_SCOPE_D_CTGR]
 for insert, update, delete
 AS
@@ -5665,11 +5606,11 @@ END
 GO
 ALTER TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR] ENABLE TRIGGER [GCOD2_D_SCOPE_D_CTGR_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[GPP_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE trigger [jsharmony].[GPP_IUD] on [jsharmony].[GPP]
 for insert, update, delete
@@ -5826,11 +5767,11 @@ END
 GO
 ALTER TABLE [jsharmony].[GPP] ENABLE TRIGGER [GPP_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[H_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE trigger [jsharmony].[H_IUD] on [jsharmony].[H]
 for insert, update, delete
 AS
@@ -6054,11 +5995,11 @@ END
 GO
 ALTER TABLE [jsharmony].[H] ENABLE TRIGGER [H_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[N_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE trigger [jsharmony].[N_IUD] on [jsharmony].[N]
 for insert, update, delete
@@ -6490,11 +6431,11 @@ END
 GO
 ALTER TABLE [jsharmony].[N] ENABLE TRIGGER [N_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[PE_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE trigger [jsharmony].[PE_IUD] on [jsharmony].[PE]
@@ -6860,11 +6801,11 @@ END
 GO
 ALTER TABLE [jsharmony].[PE] ENABLE TRIGGER [PE_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[PPD_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -6927,11 +6868,11 @@ END
 GO
 ALTER TABLE [jsharmony].[PPD] ENABLE TRIGGER [PPD_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[PPP_IUD]    Script Date: 10/8/2018 5:22:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE trigger [jsharmony].[PPP_IUD] on [jsharmony].[PPP]
 for insert, update, delete
@@ -7091,11 +7032,11 @@ END
 GO
 ALTER TABLE [jsharmony].[PPP] ENABLE TRIGGER [PPP_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[SPEF_IUD]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE trigger [jsharmony].[SPEF_IUD] on [jsharmony].[SPEF]
 for insert, update, delete
 AS
@@ -7250,11 +7191,11 @@ END
 GO
 ALTER TABLE [jsharmony].[SPEF] ENABLE TRIGGER [SPEF_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[SPER_IUD]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE trigger [jsharmony].[SPER_IUD] on [jsharmony].[SPER]
 for insert, update, delete
 AS
@@ -7444,11 +7385,11 @@ END
 GO
 ALTER TABLE [jsharmony].[SPER] ENABLE TRIGGER [SPER_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[TXT_IUD]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE trigger [jsharmony].[TXT_IUD] on [jsharmony].[TXT]
 for insert, update, delete
@@ -7685,11 +7626,11 @@ END
 GO
 ALTER TABLE [jsharmony].[TXT] ENABLE TRIGGER [TXT_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[XPP_IUD]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE trigger [jsharmony].[XPP_IUD] on [jsharmony].[XPP]
 for insert, update, delete
@@ -7845,11 +7786,11 @@ END
 GO
 ALTER TABLE [jsharmony].[XPP] ENABLE TRIGGER [XPP_IUD]
 GO
-/****** Object:  Trigger [jsharmony].[V_CRMSEL_IUD_INSTEADOF_UPDATE]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -7895,11 +7836,11 @@ end
 
 
 GO
-/****** Object:  Trigger [jsharmony].[V_SRMSEL_IUD_INSTEADOF_UPDATE]    Script Date: 10/8/2018 5:22:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -7986,29 +7927,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail De
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetForeThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetGridlinesThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DefaultView', @value=0x02 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Detail (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Filter', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_FilterOnLoad', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_HideNewField', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderBy', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOn', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TableMaxRecords', @value=10000 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ThemeFontIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TotalsRow', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
@@ -8104,41 +8023,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Reference ID' 
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Subject' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'SUBJ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AlternateBackThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetForeThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetGridlinesThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DefaultView', @value=0x02 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Filter', @value=N'(CT_ID="200011")' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_FilterOnLoad', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_HideNewField', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_LinkChildFields', @value=N'AUD_SEQ' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_LinkMasterFields', @value=N'AUD_SEQ' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderBy', @value=N'[AUD_H].[AUD_SEQ] DESC, [AUD_H].[TABLE_NO], [AUD_H].[AUD_OP], [AUD_H].[TABLE_NAME]' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOn', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOnLoad', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Orientation', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_SubdatasheetName', @value=N'dbo.AUD_D' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TableMaxRecords', @value=1000000 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ThemeFontIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TotalsRow', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
 GO
 EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'IMD' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
@@ -8388,35 +8273,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role Sy
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AlternateBackThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetForeThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetGridlinesThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DefaultView', @value=0x02 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer - Roles (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Filter', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_FilterOnLoad', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_HideNewField', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderBy', @value=N'[CR].[CR_Name]' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOn', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOnLoad', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Orientation', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TableMaxRecords', @value=10000 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ThemeFontIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TotalsRow', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CRM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
@@ -8574,35 +8431,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Sy
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AlternateBackThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetForeThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetGridlinesThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DefaultView', @value=0x02 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Filter', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_FilterOnLoad', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_HideNewField', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderBy', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOn', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOnLoad', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Orientation', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TableMaxRecords', @value=10000 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ThemeFontIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TotalsRow', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'GCOD2_ID'
 GO
@@ -8732,35 +8561,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Sy
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AlternateBackThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetForeThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetGridlinesThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DefaultView', @value=0x02 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes 2 Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Filter', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_FilterOnLoad', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_HideNewField', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderBy', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOn', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOnLoad', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Orientation', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TableMaxRecords', @value=10000 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ThemeFontIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TotalsRow', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GPP Process Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GPP', @level2type=N'COLUMN',@level2name=N'GPP_PROCESS'
 GO
@@ -8834,43 +8635,9 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Notes (CONTROL
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Table (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'NUMBERS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'IMD' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
-GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
-GO
-EXEC sys.sp_addextendedproperty @name=N'TRIGGER', @value=N'Referential Integrity back to AC' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
-GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STS'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STS'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STS'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STS'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STS'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STS'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Status ACTIVE, HOLD, CLOSED - UCOD_AHC' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STS'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STS'
-GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STS'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
@@ -9019,8 +8786,6 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPP', @level2type=N'COLUMN',@level2name=N'PPP_ATTRIB'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Attribute (Parameter) value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPP', @level2type=N'COLUMN',@level2name=N'PPP_VAL'
-GO
-EXEC sys.sp_addextendedproperty @name=N'ASPA_Title', @value=N'Personal Process Parameters' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPP'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters - Personal (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPP'
 GO
@@ -9300,37 +9065,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Syst
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'ASPA_Title', @value=N'Security - Menu Items' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AlternateBackThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetForeThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetGridlinesThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DefaultView', @value=0x02 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Filter', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_FilterOnLoad', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_HideNewField', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderBy', @value=N'[SM].[SMG_Name]' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOn', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOnLoad', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Orientation', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TableMaxRecords', @value=10000 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ThemeFontIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TotalsRow', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPEF', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
@@ -9339,8 +9074,6 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Function ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPEF', @level2type=N'COLUMN',@level2name=N'SPEF_ID'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPEF', @level2type=N'COLUMN',@level2name=N'SF_NAME'
-GO
-EXEC sys.sp_addextendedproperty @name=N'ASPA_Title', @value=N'Security - Personnel Functions' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPEF'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Personnel Functions (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPEF'
 GO
@@ -9351,8 +9084,6 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Role ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPER', @level2type=N'COLUMN',@level2name=N'SPER_ID'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPER', @level2type=N'COLUMN',@level2name=N'SR_NAME'
-GO
-EXEC sys.sp_addextendedproperty @name=N'ASPA_Title', @value=N'Security - Personnel Roles' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPER'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Personnel Roles (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPER'
 GO
@@ -9444,37 +9175,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role System No
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'ASPA_Title', @value=N'Security - Roles' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AlternateBackThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetForeThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetGridlinesThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DefaultView', @value=0x02 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Roles (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Filter', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_FilterOnLoad', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_HideNewField', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderBy', @value=N'[SR].[SR_Name]' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOn', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOnLoad', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Orientation', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TableMaxRecords', @value=10000 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ThemeFontIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TotalsRow', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SRM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
@@ -9630,39 +9331,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Last Modif
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'ASPA_Title', @value=N'String Process Parameters (EMAILS, etc)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AlternateBackThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetForeThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetGridlinesThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DefaultView', @value=0x02 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'String Process Parameters (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Filter', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_FilterOnLoad', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_HideNewField', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderBy', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOn', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOnLoad', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Orientation', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_RowHeight', @value=315 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TableMaxRecords', @value=10000 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ThemeFontIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TotalsRow', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
@@ -9892,37 +9561,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Sy
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'ASPA_Title', @value=N'System Codes Header' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AlternateBackThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetForeThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetGridlinesThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DefaultView', @value=0x02 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Filter', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_FilterOnLoad', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_HideNewField', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderBy', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOn', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOnLoad', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Orientation', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TableMaxRecords', @value=10000 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ThemeFontIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TotalsRow', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
@@ -10234,35 +9873,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Sy
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AlternateBackThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetForeThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetGridlinesThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DefaultView', @value=0x02 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Filter', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_FilterOnLoad', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_HideNewField', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderBy', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOn', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOnLoad', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Orientation', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TableMaxRecords', @value=10000 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ThemeFontIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TotalsRow', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version ID (internal)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_ID'
 GO
@@ -10394,167 +10005,5 @@ EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'ASPA_Title', @value=N'Installation Process Parameters' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AlternateBackThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetForeThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DatasheetGridlinesThemeColorIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DefaultView', @value=0x02 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters - System (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Filter', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_FilterOnLoad', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_HideNewField', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderBy', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOn', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_OrderByOnLoad', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Orientation', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TableMaxRecords', @value=10000 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ThemeFontIndex', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TotalsRow', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPane1', @value=N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[40] 4[20] 2[20] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "M"
-            Begin Extent = 
-               Top = 6
-               Left = 38
-               Bottom = 136
-               Right = 208
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "DUAL"
-            Begin Extent = 
-               Top = 6
-               Left = 246
-               Bottom = 136
-               Right = 445
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "SRM (jsharmony)"
-            Begin Extent = 
-               Top = 138
-               Left = 38
-               Bottom = 268
-               Right = 208
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1170
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
-         GroupBy = 1350
-         Filter = 1350
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'VIEW',@level1name=N'V_SRMSEL'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPaneCount', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'VIEW',@level1name=N'V_SRMSEL'
-GO
-
