@@ -246,7 +246,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     //Create Database
     .then(function(){ return new Promise(function(resolve, reject){
       if(!scriptConfig._JSH_DBUSER) scriptConfig._JSH_DBUSER = 'jsharmony_'+scriptConfig._JSH_DBNAME.toLowerCase()+'_user';
-      if(!scriptConfig._JSH_DBPASS) scriptConfig._JSH_DBPASS = xlib.getSalt(16);
+      if(!scriptConfig._JSH_DBPASS) scriptConfig._JSH_DBPASS = xlib.genDBPassword(16);
       console.log('');
       console.log('===============================');
       console.log('Running CREATE Database Scripts');

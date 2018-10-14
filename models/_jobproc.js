@@ -123,62 +123,24 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
   var _this = this;
   var thisapp = this.AppSrv;
   if (job.RQST_ATYPE != 'REPORT') return _this.SetJobResult(job, 'ERROR', 'RQST_ATYPE not REPORT', onComplete);
-  
+
   //Process Report ID (make sure it's in the system)
   var reportid = job.RQST_ANAME;
   var modelid = '_report_' + reportid;
   if (!thisapp.jsh.hasModel(undefined, modelid)) return _this.SetJobResult(job, 'ERROR', 'Report not found in collection', onComplete);
-  var model = thisapp.jsh.getModel(undefined, modelid);
   
-  //Process Parameters (validate)
   var rparams = {};
   if (job.RQST_PARMS) rparams = JSON.parse(job.RQST_PARMS);
-  var fieldlist = thisapp.getFieldNames(null, model.fields, 'B');
-  _.map(fieldlist, function (field) { if (!(field in rparams)) rparams[field] = ''; });
-  if (!thisapp.ParamCheck('rparams', rparams, _.map(fieldlist, function (field) { return '&' + field; }))) { return _this.SetJobResult(job, 'ERROR', 'Invalid Parameters', onComplete); }
-  
-  var sql_ptypes = [];
-  var sql_params = {};
-  var verrors = {};
-  
-  var fields = thisapp.getFieldsByName(model.fields, fieldlist);
-  if (fields.length == 0) return onComplete(null, {});
-  for (var i = 0; i < fields.length; i++) {
-    var field = fields[i];
-    var fname = field.name;
-    if (fname in rparams) {
-      var dbtype = thisapp.getDBType(field);
-      sql_ptypes.push(dbtype);
-      sql_params[fname] = thisapp.DeformatParam(field, rparams[fname], verrors);
-    }
-    else return _this.SetJobResult(job, 'ERROR', 'Missing parameter ' + fname, onComplete);
-  }
-  verrors = _.merge(verrors, model.xvalidate.Validate('B', sql_params));
-  if (!_.isEmpty(verrors)) { return _this.SetJobResult(job, 'ERROR', verrors[''].join('\n'), onComplete); }
-  
-  var dbtasks = {};
-  try{
-    this.parseReportJobSQLData(model, sql_ptypes, sql_params, verrors, dbtasks, model.reportdata);
-  }
-  catch(err){
-    if(_this.jsh.Config.debug_params.report_debug) console.log(err);
-    return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete);
-  }
-  
-  _this.db.ExecTasks(dbtasks, function (err, dbdata) {
-    if(err && _this.jsh.Config.debug_params.report_debug) console.log(err);
-    if (err != null) { return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete); }
-    if (dbdata == null) dbdata = {};
-    thisapp.rptsrv.MergeReportData(dbdata, model.reportdata, null);
-    thisapp.rptsrv.browserqueue.push({ modelid: modelid, params: sql_params, data: dbdata }, function (err, tmppath, dispose) {
-      /* Report Done */ 
-      fs.stat(tmppath, function (err, stat) {
-        if (err != null) return _this.SetJobResult(job, 'ERROR', 'Report file not found: '+err.toString(), onComplete);
-        var fsize = stat.size;
-        if (fsize > _this.jsh.Config.max_filesize) return _this.SetJobResult(job, 'ERROR', 'Report file size exceeds system maximum file size', function () { dispose(onComplete); });
-        //Report is available at tmppath
-        _this.processJobResult(job, dbdata, tmppath, fsize, function () { dispose(onComplete); });
-      });
+
+  thisapp.rptsrv.queueReport(undefined, undefined, modelid, rparams, {}, { db: _this.db, dbcontext: 'jobproc', errorHandler: function(num, txt){ return _this.SetJobResult(job, 'ERROR', txt, onComplete); } }, function (err, tmppath, dispose, dbdata) {
+    if (err) return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete);
+    /* Report Done */ 
+    fs.stat(tmppath, function (err, stat) {
+      if (err != null) return _this.SetJobResult(job, 'ERROR', 'Report file not found: '+err.toString(), onComplete);
+      var fsize = stat.size;
+      if (fsize > _this.jsh.Config.max_filesize) return _this.SetJobResult(job, 'ERROR', 'Report file size exceeds system maximum file size', function () { dispose(onComplete); });
+      //Report is available at tmppath
+      _this.processJobResult(job, dbdata, tmppath, fsize, function () { dispose(onComplete); });
     });
   });
 }
@@ -287,28 +249,6 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
     if(err && _this.jsh.Config.debug_params.report_debug) console.log(err);
     if (err) return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete);
     else return _this.SetJobResult(job, 'OK', null, onComplete);
-  });
-}
-
-AppSrvJobProc.prototype.parseReportJobSQLData = function (model, sql_ptypes, sql_params, verrors, dbtasks, rdata) {
-  var thisapp = this.AppSrv;
-  var _this = this;
-  _.each(rdata, function (dparams, dname) {
-    if (!('sql' in dparams)) throw new Error(dname + ' missing sql');
-    
-    var sql = _this.db.sql.parseReportSQLData(thisapp.jsh, dname, dparams, true, []);
-
-    if(sql.indexOf('%%%DATALOCKS%%%')>=0) throw new Error('Cannot use %%%DATALOCKS%%% in Job Queue Reports');
-    
-    dbtasks[dname] = function (callback) {
-      _this.db.Recordset('jobproc', sql, sql_ptypes, sql_params, function (err, rslt) {
-        if ((err == null) && (rslt == null)) err = Helper.NewError('Record not found', -1);
-        if (err != null) { err.model = model; err.sql = sql; }
-        callback(err, rslt);
-      });
-    }
-    
-    if ('children' in dparams) _this.parseReportJobSQLData(model, sql_ptypes, sql_params, verrors, dbtasks, dparams.children);
   });
 }
 
