@@ -1652,11 +1652,11 @@ SELECT pg_catalog.setval('ucod_h_ucod_h_id_seq', 14, true);
 -- Data for Name: ucod_n_scope; Type: TABLE DATA; Schema: jsharmony; Owner: postgres
 --
 
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (23, 2, 'C', 'Customer', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (29, 1, 'S', 'System', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (24, 3, 'CT', 'Cust Contact', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (31, 4, 'VEN', 'Vendor', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
-INSERT INTO ucod_n_scope (ucod_id, codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (4, 5, 'PE', 'User', NULL, NULL, NULL, '2017-10-19 17:56:55.452087', 'S3', '2017-10-19 17:56:55.452087', 'S3', NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (1, 'S', 'System', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (2, 'C', 'Customer', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (3, 'CT', 'Cust Contact', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL, NULL, '2017-05-28 15:36:02.435529', 'Upostgres', '2017-05-28 15:36:02.435529', 'Upostgres', NULL, NULL, NULL);
+INSERT INTO ucod_n_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_etstmp, cod_eu, cod_mtstmp, cod_mu, cod_snotes, cod_notes, codeattrib) VALUES (5, 'PE', 'User', NULL, NULL, NULL, '2017-10-19 17:56:55.452087', 'S3', '2017-10-19 17:56:55.452087', 'S3', NULL, NULL, NULL);
 
 
 --

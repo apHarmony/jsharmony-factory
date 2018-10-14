@@ -57,6 +57,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   jsh = new jsHarmonyFactory.Application();
   jsh.Config.appbasepath = process.cwd();
   jsh.Config.silentStart = true;
+  jsh.Config.interactive = true;
   jsh.Init(function(){
 
     process.on('exit',function(){ process.exit(cliReturnCode); });
@@ -91,7 +92,6 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   
     .then(function(){ return new Promise(function(resolve, reject){
       db.Close(function(){
-        console.log('Closed');
         resolve();
       });
     }); })
@@ -102,9 +102,9 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   
       var try_login = function(){
   
-        console.log('\r\n=======================================');
-        console.log('Please enter database admin information');
-        console.log('=======================================');
+        console.log('\r\n===================================');
+        console.log('Please enter a database admin login');
+        console.log('===================================');
   
         Promise.resolve()
   
@@ -136,18 +136,22 @@ jsHarmonyFactory_Init.Run = function(run_cb){
         //Check if user has sysadmin access
         .then(function(){ return new Promise(function(resolve, reject){
           db.Close(function(){
+            db.setSilent(true);
             db.Scalar('',db.ParseSQLFuncs('init_sysadmin_access', dbs.getSQLFuncs()),[],{},function(err,rslt){
-              if(!err && rslt && (rslt.toString()=="1")){
-                console.log('\r\n');
-                return resolve();
-              }
-              if(err){ console.log('Error checking for db admin access: '+err); }
-              //Log in
-              if(!err) console.log('> User does not have db admin access');
-  
-              jsh.DBConfig['default'].user = '';
-              jsh.DBConfig['default'].password = '';
-              try_login();
+              db.setSilent(false);
+              db.Close(function(){
+                if(!err && rslt && (rslt.toString()=="1")){
+                  console.log('\r\n');
+                  return resolve();
+                }
+                if(err){ console.log('User does not have db admin access ('+err + ')'); }
+                //Log in
+                if(!err) console.log('> User does not have db admin access');
+    
+                jsh.DBConfig['default'].user = '';
+                jsh.DBConfig['default'].password = '';
+                try_login();
+              });
             });
           });
         }); })

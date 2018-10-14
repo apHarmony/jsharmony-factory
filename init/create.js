@@ -71,6 +71,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
   jsh = new jsHarmonyFactory.Application();
   jsh.Config.appbasepath = process.cwd();
   jsh.Config.silentStart = true;
+  jsh.Config.interactive = true;
   jsh.Init(function(){
 
     var db = jsh.DB['default'];
@@ -116,16 +117,16 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     scriptConfig._JSH_ADMIN_PASS = '';
   
     Promise.resolve()
-  
+
     //Get database information
     .then(function(){ return new Promise(function(login_resolve, login_reject){
       if(_.includes(['sqlite'],scriptConfig._JSH_DBTYPE)) return login_resolve();
   
       var try_login = function(){
   
-        console.log('\r\n=======================================');
-        console.log('Please enter database admin information');
-        console.log('=======================================');
+        console.log('\r\n===================================');
+        console.log('Please enter a database admin login');
+        console.log('===================================');
   
         Promise.resolve()
   
@@ -146,7 +147,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
           dbs.setDBName('');
           resolve();
         }); })
-  
+
         //Ask for the database admin user
         .then(xlib.getStringAsync(function(){
           if(jsh.DBConfig['default'].user){
@@ -171,22 +172,25 @@ jsHarmonyFactory_Create.Run = function(run_cb){
             return true;
         },'*'))
   
-  
         //Check if user has sysadmin access
         .then(function(){ return new Promise(function(resolve, reject){
           db.Close(function(){
+            db.setSilent(true);
             db.Scalar('',db.ParseSQLFuncs('init_sysadmin_access', dbs.getSQLFuncs()),[],{},function(err,rslt){
-              if(!err && rslt && (rslt.toString()=="1")){
-                console.log('\r\n');
-                return resolve();
-              }
-              if(err){ console.log('Error checking for db admin access: '+err); }
-              //Log in
-              if(!err) console.log('> User does not have db admin access');
+              db.setSilent(false);
+              db.Close(function(){
+                if(!err && rslt && (rslt.toString()=="1")){
+                  console.log('\r\n');
+                  return resolve();
+                }
+                if(err){ console.log('User does not have db admin access ('+err + ')'); }
+                //Log in
+                if(!err) console.log('> User does not have db admin access');
   
-              jsh.DBConfig['default'].user = '';
-              jsh.DBConfig['default'].password = '';
-              try_login();
+                jsh.DBConfig['default'].user = '';
+                jsh.DBConfig['default'].password = '';
+                return reject();
+              });
             });
           });
         }); })
@@ -195,14 +199,19 @@ jsHarmonyFactory_Create.Run = function(run_cb){
           scriptConfig._JSH_DBSERVER = dbs.getDBServer();
           scriptConfig._ADMIN_DBUSER = jsh.DBConfig['default'].user;
           scriptConfig._ADMIN_DBPASS = jsh.DBConfig['default'].password;
-          login_resolve();
+          return login_resolve();
+        })
+
+        .catch(function(err){
+          if(err) console.log(err);
+          else try_login();
         });
   
       }; //END try_login
       try_login();
   
     }); })
-  
+
     //Ask for the NEW database path, if applicable
     .then(xlib.getStringAsync(function(){
       if(scriptConfig._JSH_DBTYPE != 'sqlite') return false;
@@ -343,10 +352,14 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     }); })
   
     //Callback
-    .then(function(){
+    .then(function(){ return new Promise(function(resolve, reject){
       cliReturnCode = 0; //Success
-      if(run_cb) run_cb();
-    })
+
+      db.Close(function(){
+        if(run_cb) run_cb();
+        resolve();
+      });
+    }); })
   
     .catch(function(err){
       if(err) console.log(err);
