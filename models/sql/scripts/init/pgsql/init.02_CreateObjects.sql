@@ -1835,10 +1835,18 @@ ALTER FUNCTION jsharmony.h_iud() OWNER TO postgres;
 -- Name: mycuser(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION mycuser() RETURNS text
-    LANGUAGE sql
-    AS $$select case when current_setting('sessionvars.appuser')='unknown' then 'U'||current_user::text else current_setting('sessionvars.appuser') end;$$;
-
+CREATE FUNCTION jsharmony.mycuser() RETURNS text
+    LANGUAGE plpgsql
+    AS $$
+BEGIN 
+  case 
+    when current_setting('sessionvars.appuser')='unknown' then return 'U'||current_user::text;
+    else return current_setting('sessionvars.appuser');
+  end case;
+EXCEPTION
+  WHEN others then
+    return 'U'||current_user::text;
+END;$$;
 
 ALTER FUNCTION jsharmony.mycuser() OWNER TO postgres;
 
