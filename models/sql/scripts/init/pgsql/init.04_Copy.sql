@@ -1,10 +1,8 @@
 SET statement_timeout = 0;
-SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET row_security = off;
 
 SET search_path = jsharmony, pg_catalog;
 
@@ -23,47 +21,56 @@ INSERT INTO cr (cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib)
 
 
 
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1785, 'ACTIVE', 170, 'ADMINISTRATION_TEXTMAINTENANCE', NULL, 'Text Maint', NULL, NULL, 'TXTL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1783, 'ACTIVE', 170, 'ADMINISTRATION_CODETABLES', NULL, '1D Code Tables', NULL, NULL, 'GCOD_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1784, 'ACTIVE', 170, 'ADMINISTRATION_CODE2TABLES', NULL, '2D Code Tables', NULL, NULL, 'GCOD2_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1781, 'ACTIVE', 170, 'ADMINISTRATION_PPARAMETERS', NULL, 'User Settings', NULL, NULL, 'PPPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1782, 'ACTIVE', 170, 'ADMINISTRATION_GPARAMETERS', NULL, 'System Settings', NULL, NULL, 'GPPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 14, 'ACTIVE', 10, 'DEV_X_GPPL', 22, 'System Settings', NULL, NULL, 'X_GPPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 13, 'ACTIVE', 10, 'DEV_X_PPDL', 21, 'Settings Definitions', NULL, NULL, 'X_PPDL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1, 'ACTIVE', NULL, 'ADMIN', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 3, 'ACTIVE', 1, 'DASHBOARD', 1, 'Dashboard', NULL, NULL, 'DASHBOARD', NULL, NULL, NULL);
 INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 160, 'ACTIVE', 1, 'REPORTS', 2, 'Reports', NULL, NULL, 'REPORTS', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 170, 'ACTIVE', 1, 'ADMINISTRATION', 3, 'Administration', NULL, NULL, 'ADMIN_OVERVIEW', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 10, 'ACTIVE', 1, 'DEV', 4, 'Developer', NULL, NULL, 'DEV_OVERVIEW', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 800, 'ACTIVE', 1, 'ADMINISTRATION', 80000, 'Administration', NULL, NULL, 'ADMIN_OVERVIEW', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 900, 'ACTIVE', 1, 'DEV', 90000, 'Developer', NULL, NULL, 'DEV_OVERVIEW', NULL, NULL, NULL);
+
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL, NULL);
+
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90012, 'ACTIVE', 900, 'DEV_X_SML', 90011, 'Menu Items', NULL, NULL, 'X_SMLW', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90011, 'ACTIVE', 900, 'DEV_X_SRL', 90012, 'User Roles', NULL, NULL, 'X_SRL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90020, 'ACTIVE', 900, 'DEV_X_CRL', 90013, 'Client User Roles', NULL, NULL, 'X_CRL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90013, 'ACTIVE', 900, 'DEV_X_PPDL', 90021, 'Settings Definitions', NULL, NULL, 'X_PPDL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90014, 'ACTIVE', 900, 'DEV_X_GPPL', 90022, 'System Settings', NULL, NULL, 'X_GPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90015, 'ACTIVE', 900, 'DEV_X_XPPL', 90023, 'Developer Settings', NULL, NULL, 'X_XPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90016, 'ACTIVE', 900, 'DEV_X_GCOD_HL', 90031, 'Admin 1D Codes', NULL, NULL, 'X_GCOD_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90017, 'ACTIVE', 900, 'DEV_X_GCOD2_HL', 90032, 'Admin 2D Codes', NULL, NULL, 'X_GCOD2_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90018, 'ACTIVE', 900, 'DEV_X_UCOD_HL', 90033, 'System 1D Codes', NULL, NULL, 'X_UCOD_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90019, 'ACTIVE', 900, 'DEV_X_UCOD2_HL', 90034, 'System 2D Codes', NULL, NULL, 'X_UCOD2_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90021, 'ACTIVE', 900, 'DEV_X_TXTL', 90041, 'Text Maint', NULL, NULL, 'X_TXTL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90022, 'ACTIVE', 900, 'DEV_X_HPL', 90042, 'Help Panels', NULL, NULL, 'X_HPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90023, 'ACTIVE', 900, 'DEV_DB', 90043, 'DB SQL', NULL, NULL, 'DEV_DB', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90024, 'ACTIVE', 900, 'DEV_DB_SCRIPTS', 90044, 'DB Scripts', NULL, NULL, 'DEV_DB_SCRIPTS', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90025, 'ACTIVE', 900, 'DEV_MODELS', 90045, 'Model Viewer', NULL, NULL, 'DEV_MODELS', NULL, NULL, NULL);
+
+
+
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 80000, 'ACTIVE', 800, 'ADMINISTRATION_USERS', NULL, 'System Users', NULL, NULL, 'PEL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 80081, 'ACTIVE', 800, 'ADMINISTRATION_PPARAMETERS', NULL, 'User Settings', NULL, NULL, 'PPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 80082, 'ACTIVE', 800, 'ADMINISTRATION_GPARAMETERS', NULL, 'System Settings', NULL, NULL, 'GPPL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 80083, 'ACTIVE', 800, 'ADMINISTRATION_CODETABLES', NULL, '1D Code Tables', NULL, NULL, 'GCOD_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 80084, 'ACTIVE', 800, 'ADMINISTRATION_CODE2TABLES', NULL, '2D Code Tables', NULL, NULL, 'GCOD2_HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 80085, 'ACTIVE', 800, 'ADMINISTRATION_TEXTMAINTENANCE', NULL, 'Text Maint', NULL, NULL, 'TXTL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 80086, 'ACTIVE', 800, 'ADMINISTRATION_HELPMAINTENANCE', NULL, 'Help Maint', NULL, NULL, 'HL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 80087, 'ACTIVE', 800, 'ADMINISTRATION_AUDITTRAIL', NULL, 'Audit Trail', NULL, NULL, 'AUDL', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 80095, 'ACTIVE', 800, 'ADMINISTRATION_LOG', NULL, 'Logs', NULL, NULL, 'LOG', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 80096, 'ACTIVE', 800, 'ADMINISTRATION_RESTART_SYSTEM', NULL, 'Restart System', NULL, NULL, 'RESTART_SYSTEM', NULL, NULL, NULL);
+
+
+
 INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('C', 200, 'ACTIVE', 2, 'C_DASHBOARD', NULL, 'Dashboard', NULL, NULL, 'C_DASHBOARD', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('C', 270, 'ACTIVE', 2, 'C_ADMINISTRATION', NULL, 'Administration', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('C', 2700, 'ACTIVE', 270, 'C_ADMINISTRATION_USERS', NULL, 'Cust Users', NULL, NULL, 'CPEL_CLIENT', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1, 'ACTIVE', NULL, 'ADMIN', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1795, 'ACTIVE', 170, 'ADMINISTRATION_LOG', NULL, 'Logs', NULL, NULL, 'LOG', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1796, 'ACTIVE', 170, 'ADMINISTRATION_RESTART_SYSTEM', NULL, 'Restart System', NULL, NULL, 'RESTART_SYSTEM', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 3, 'ACTIVE', 1, 'DASHBOARD', 1, 'Dashboard', NULL, NULL, 'DASHBOARD', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 12, 'ACTIVE', 10, 'DEV_X_SML', 11, 'Menu Items', NULL, NULL, 'X_SMLW', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 11, 'ACTIVE', 10, 'DEV_X_SRL', 12, 'User Roles', NULL, NULL, 'X_SRL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 20, 'ACTIVE', 10, 'DEV_X_CRL', 13, 'Client User Roles', NULL, NULL, 'X_CRL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 21, 'ACTIVE', 10, 'DEV_X_TXTL', 41, 'Text Maint', NULL, NULL, 'X_TXTL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 22, 'ACTIVE', 10, 'DEV_X_HPL', 42, 'Help Panels', NULL, NULL, 'X_HPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1786, 'ACTIVE', 170, 'ADMINISTRATION_HELPMAINTENANCE', NULL, 'Help Maint', NULL, NULL, 'HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 18, 'ACTIVE', 10, 'DEV_X_UCOD_HL', 33, 'System 1D Codes', NULL, NULL, 'X_UCOD_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 19, 'ACTIVE', 10, 'DEV_X_UCOD2_HL', 34, 'System 2D Codes', NULL, NULL, 'X_UCOD2_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1700, 'ACTIVE', 170, 'ADMINISTRATION_USERS', NULL, 'System Users', NULL, NULL, 'PEL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1787, 'ACTIVE', 170, 'ADMINISTRATION_AUDITTRAIL', NULL, 'Audit Trail', NULL, NULL, 'AUDL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 15, 'ACTIVE', 10, 'DEV_X_XPPL', 23, 'Developer Settings', NULL, NULL, 'X_XPPL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 16, 'ACTIVE', 10, 'DEV_X_GCOD_HL', 31, 'Admin 1D Codes', NULL, NULL, 'X_GCOD_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 17, 'ACTIVE', 10, 'DEV_X_GCOD2_HL', 32, 'Admin 2D Codes', NULL, NULL, 'X_GCOD2_HL', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 23, 'ACTIVE', 10, 'DEV_DB', 43, 'DB SQL', NULL, NULL, 'DEV_DB', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 24, 'ACTIVE', 10, 'DEV_DB_SCRIPTS', 44, 'DB Scripts', NULL, NULL, 'DEV_DB_SCRIPTS', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 25, 'ACTIVE', 10, 'DEV_MODELS', 45, 'Model Viewer', NULL, NULL, 'DEV_MODELS', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('C', 2800, 'ACTIVE', 2, 'C_ADMINISTRATION', 280000, 'Administration', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('C', 280000, 'ACTIVE', 2800, 'C_ADMINISTRATION_USERS', NULL, 'Cust Users', NULL, NULL, 'CPEL_CLIENT', NULL, NULL, NULL);
 
 
 
 INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (200, NULL, 'CX_B');
-INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (270, NULL, 'CSYSADMIN');
-INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (2700, NULL, 'CSYSADMIN');
+INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (2800, NULL, 'CSYSADMIN');
+INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (280000, NULL, 'CSYSADMIN');
 INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (200, NULL, 'CX_X');
 INSERT INTO crm (sm_id, crm_snotes, cr_name) VALUES (200, NULL, 'CUSER');
 
@@ -1140,44 +1147,46 @@ INSERT INTO sr (sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib)
 INSERT INTO sr (sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, sr_attrib) VALUES (92, 'ACTIVE', 'X_X', 'General BIUD', NULL, NULL, NULL);
 
 
-
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (2700, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (10, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1700, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (270, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (200, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (170, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (2, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (11, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (12, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (13, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (14, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (15, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (170, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1700, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (16, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (17, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (18, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (19, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (20, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (21, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (22, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (23, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (24, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (25, NULL, 'DEV');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1786, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1795, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1796, NULL, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (3, NULL, '*');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1787, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1785, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1783, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1784, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1781, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1782, NULL, 'SYSADMIN');
-INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1601, NULL, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (160, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (800, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (800, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (900, NULL, 'DEV');
 
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (1601, NULL, 'SYSADMIN');
+
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (80000, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (80000, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (80086, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (80095, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (80096, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (80087, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (80085, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (80083, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (80084, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (80081, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (80082, NULL, 'SYSADMIN');
+
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90011, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90012, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90013, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90014, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90015, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90016, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90017, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90018, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90019, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90020, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90021, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90022, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90023, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90024, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90025, NULL, 'DEV');
+
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (2, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (200, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (2800, NULL, 'SYSADMIN');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (280000, NULL, 'SYSADMIN');
 
 
 INSERT INTO ucod_txt_type (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (2, 'HTML', 'HTML', NULL, NULL, NULL, NULL, NULL, NULL);
