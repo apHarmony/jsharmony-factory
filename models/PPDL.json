@@ -2,7 +2,7 @@
   "X_PPDL": {
     "title":"Settings Definitions",
     "dev":1,
-    "table":"jsharmony.v_ppdl",
+    "table":"jsharmony.ppd",
     "actions":"BIUD", 
     "caption":[0,"Parameter","Parameters"],
     "layout":"grid", 
@@ -35,6 +35,7 @@
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"User","default":"0"},
       {"name":"ppd_info","type":"varchar","length":"500","actions":"B","control":"textzoom",
        "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
+       "sqlselect":"jsharmony.audit_info(ppd.ppd_etstmp, ppd.ppd_eu, ppd.ppd_mtstmp, ppd.ppd_mu)",
        "controlstyle":"width:48px;display:none;"}
     ],
     "dberrors": [

@@ -2,7 +2,7 @@
   "X_XPPL": {
     "title":"Developer (X) Settings",
     "dev":1,
-    "table":"jsharmony.v_xppl",
+    "table":"jsharmony.xpp",
     "actions":"BIUD", 
     "caption":[0,"Parameter","Parameters"],
     "layout":"grid", 
@@ -22,11 +22,13 @@
        "lov":{"sql2":"select CODEVal1 as %%%jsh.map.codeparent%%%, CODEVal2 as %%%jsh.map.codeval%%%, %%%jsh.map.codetxt%%% from jsharmony.ucod2_xpp_process_attrib_v order by codseq,codetxt",
        "blank": 1,"parent":"xpp_process"},"validate":["Required"],
        "caption":"Attribute"},
-      {"name":"ppd_desc","type":"varchar","length":"255","caption":"Description","actions":"B"},
+      {"name":"ppd_desc","type":"varchar","length":"255","caption":"Description","actions":"B",
+       "sqlselect":"jsharmony.get_ppd_desc(xpp.xpp_process, xpp.xpp_attrib)"},
       {"name":"xpp_val","type":"varchar","length":"256","validate":["Required"],"actions":"BIU","control":"textbox_M",
        "caption":"Value"},
       {"name":"xpp_info","type":"varchar","length":"500","actions":"B","control":"textzoom",
        "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
+       "sqlselect":"jsharmony.audit_info(xpp.xpp_etstmp, xpp.xpp_eu, xpp.xpp_mtstmp, xpp.xpp_mu)",
        "controlstyle":"width:48px;display:none;"}
     ],
     "dberrors": [
