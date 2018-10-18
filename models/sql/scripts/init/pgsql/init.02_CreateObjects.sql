@@ -6273,6 +6273,37 @@ CREATE VIEW v_cper_nostar AS
 
 ALTER TABLE v_cper_nostar OWNER TO postgres;
 
+-- Rule: v_cper_nostar_delete ON jsharmony.v_cper_nostar
+
+CREATE OR REPLACE RULE v_cper_nostar_delete AS
+    ON DELETE TO jsharmony.v_cper_nostar DO INSTEAD  DELETE FROM jsharmony.cper
+  WHERE cper.cper_id = old.cper_id
+  RETURNING cper.pe_id,
+    cper.cper_snotes,
+    cper.cper_id,
+    cper.cr_name;
+
+-- Rule: v_cper_nostar_insert ON jsharmony.v_cper_nostar
+
+CREATE OR REPLACE RULE v_cper_nostar_insert AS
+    ON INSERT TO jsharmony.v_cper_nostar DO INSTEAD  INSERT INTO jsharmony.cper (pe_id, cper_snotes, cr_name)
+  VALUES (new.pe_id, new.cper_snotes, new.cr_name)
+  RETURNING cper.pe_id,
+    cper.cper_snotes,
+    cper.cper_id,
+    cper.cr_name;
+
+-- Rule: v_cper_nostar_update ON jsharmony.v_cper_nostar
+
+CREATE OR REPLACE RULE v_cper_nostar_update AS
+    ON UPDATE TO jsharmony.v_cper_nostar DO INSTEAD  UPDATE jsharmony.cper SET pe_id = new.pe_id, cper_snotes = new.cper_snotes, cr_name = new.cr_name
+  WHERE cper.cper_id = old.cper_id
+  RETURNING cper.pe_id,
+    cper.cper_snotes,
+    cper.cper_id,
+    cper.cr_name;
+
+
 --
 -- Name: v_crmsel; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
