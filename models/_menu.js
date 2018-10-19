@@ -27,7 +27,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
   }
   var rootmenu = '';
   var basetemplate = req.jshsite.basetemplate;
-  if (basetemplate == 'index') rootmenu = 'ADMIN';
+  if (basetemplate == 'index') rootmenu = 'MAIN';
   else if (basetemplate == 'client') rootmenu = 'CLIENT';
 
   if (rootmenu == '') { onComplete(); return; }
@@ -35,7 +35,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
   var topmenu = '';
   if ('TopMenu' in params) topmenu = params.TopMenu;
   
-  var menusql = "menu_admin";
+  var menusql = "menu_main";
   if (type == 'C') menusql = "menu_client";
   
   var sqlparams = {};

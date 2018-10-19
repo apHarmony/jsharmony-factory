@@ -21,7 +21,7 @@
        "sql_search":"(select hp_desc from jsharmony.hp where hp.hp_code = h.hp_code)"},
       {"name":"h_seq","type":"int","caption":"Seq","actions":"BU","control":"textbox_VS"},
       {"name":"h_index_a","type":"boolean","actions":"BU","control":"checkbox",
-       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Admin"},
+       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Main System"},
       {"name":"h_index_p","type":"boolean","actions":"BU","control":"checkbox",
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Portal"},
 	  {"name":"h_mtstmp","type":"datetime","length":"7","format":"tstmp","caption":"Last Update","actions":"B"}

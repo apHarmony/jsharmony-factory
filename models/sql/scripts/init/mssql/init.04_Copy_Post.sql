@@ -1,4 +1,4 @@
-update jsharmony.xpp set XPP_VAL = '%%%INIT_DB_HASH_ADMIN%%%'
+update jsharmony.xpp set XPP_VAL = '%%%INIT_DB_HASH_MAIN%%%'
 where xpp_process='USERS' and xpp_attrib='HASH_SEED_S';
 update jsharmony.xpp set XPP_VAL = '%%%INIT_DB_HASH_CLIENT%%%'
 where xpp_process='USERS' and xpp_attrib='HASH_SEED_C';

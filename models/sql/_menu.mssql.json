@@ -1,5 +1,5 @@
 {
-  "menu_admin": [
+  "menu_main": [
     "select distinct SM.SM_Name,SM.SM_DESC,",
     "  case when ((SM.SM_Cmd is null) or (SM.SM_Cmd = '')) then (",
     "  /*Get first child if parent SM_Cmd is blank*/",

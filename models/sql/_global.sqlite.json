@@ -16,7 +16,7 @@
                   "  select (select max(sm_id)+1 from jsharmony.SM),sm_id,sm_utype,coalesce(sm_seq,sm_id)+1,@sm_name,@sm_desc,'ACTIVE' from jsharmony.SM where sm_id=@sm_id_parent;",
                   "select sm_id_auto from jsharmony_sm where rowid=last_insert_rowid();"],
   "X_SMLW_LOV":"select sm_id as codeid,sm_id_parent as codeparentid,sm_id_auto as codeval,sm_desc as codetxt,'folder' as codeicon from jsharmony.sm where 1=1 %%%DATALOCKS%%% order by sm_utype desc,coalesce(SM.SM_Seq,SM.SM_ID),SM_Name,SM.SM_ID",
-  "SM_UTYPE_LOV":"select 'S' as CODEVal,'Admin' as CODETxt union all select 'C','Client'",
+  "SM_UTYPE_LOV":"select 'S' as CODEVal,'Main' as CODETxt union all select 'C','Client'",
   "JSHARMONY_FACTORY_INSTALLED":"select case when ifnull((SELECT count(*)FROM sqlite_master WHERE name='jsharmony_dual' and type='table'),0) > 0 then 1 else 0 end jsharmony_factory_installed",
   "JSEXEC_STR": {
     "params": [],

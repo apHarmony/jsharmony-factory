@@ -21,7 +21,7 @@ INSERT INTO cr (cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, cr_attrib)
 
 
 
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1, 'ACTIVE', NULL, 'ADMIN', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1, 'ACTIVE', NULL, 'MAIN', NULL, 'Main System', NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 3, 'ACTIVE', 1, 'DASHBOARD', 1, 'Dashboard', NULL, NULL, 'DASHBOARD', NULL, NULL, NULL);
 INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 160, 'ACTIVE', 1, 'REPORTS', 2, 'Reports', NULL, NULL, 'REPORTS', NULL, NULL, NULL);
@@ -1384,7 +1384,7 @@ INSERT INTO ucod_rqst_atype (codseq, codeval, codetxt, codecode, codetdt, codetc
 
 
 
-INSERT INTO ucod_rqst_source (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'ADMIN', 'Administrator Interface', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ucod_rqst_source (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'MAIN', 'Main Interface', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO ucod_rqst_source (codseq, codeval, codetxt, codecode, codetdt, codetcm, cod_snotes, cod_notes, codeattrib) VALUES (NULL, 'CLIENT', 'Client Interface', NULL, NULL, NULL, NULL, NULL, NULL);
 
 

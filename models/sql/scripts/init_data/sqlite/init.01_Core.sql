@@ -36,7 +36,7 @@ insert into jsharmony_ucod_ppd_type (codseq, codeval, codetxt, codecode, codeatt
 insert into jsharmony_ucod_rqst_atype (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'MESSAGE', 'Message', NULL, NULL);
 insert into jsharmony_ucod_rqst_atype (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'REPORT', 'Report Program', NULL, NULL);
 
-insert into jsharmony_ucod_rqst_source (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'ADMIN', 'Administrator Interface', NULL, NULL);
+insert into jsharmony_ucod_rqst_source (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'MAIN', 'Main Interface', NULL, NULL);
 insert into jsharmony_ucod_rqst_source (codseq, codeval, codetxt, codecode, codeattrib) VALUES (NULL, 'CLIENT', 'Client Interface', NULL, NULL);
 
 insert into jsharmony_ucod_txt_type (codseq, codeval, codetxt, codecode, codeattrib) VALUES (2, 'HTML', 'HTML', NULL, NULL);
@@ -177,7 +177,7 @@ INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename
 INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('SYSTEM', 'SYS_URL', 'System URL', 'C', NULL,  0, 0, 1);
 INSERT INTO jsharmony_ppd (ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp) VALUES ('USERS', 'HASH_SEED_C', 'Hash Seed Client Users', 'C', NULL,  0, 0, 1);
 
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1, 'ACTIVE', NULL, 'ADMIN', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 1, 'ACTIVE', NULL, 'MAIN', NULL, 'Main System', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 3, 'ACTIVE', 1, 'DASHBOARD', 1, 'Dashboard', NULL, NULL, 'DASHBOARD', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 160, 'ACTIVE', 1, 'REPORTS', 2, 'Reports', NULL, NULL, 'REPORTS', NULL, NULL);

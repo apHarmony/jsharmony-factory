@@ -28,10 +28,10 @@ function jsHarmonyFactoryConfig(){
   this.clientsalt = '';   //REQUIRED: Use a 60+ mixed character string
   //Cookie salt for client site
   this.clientcookiesalt = '';   //REQUIRED: Use a 60+ mixed character string
-  //Password salt for admin site
-  this.adminsalt = '';   //REQUIRED: Use a 60+ mixed character string
-  //Cookie site for admin site
-  this.admincookiesalt = '';   //REQUIRED: Use a 60+ mixed character string
+  //Password salt for main site
+  this.mainsalt = '';   //REQUIRED: Use a 60+ mixed character string
+  //Cookie site for main site
+  this.maincookiesalt = '';   //REQUIRED: Use a 60+ mixed character string
   //Barcode integration settings
   this.barcode_settings = { server: 'https://localhost:3101' };
   //Scanner integration settings
@@ -42,28 +42,6 @@ function jsHarmonyFactoryConfig(){
     ACCOUNT_SID: '',          //Twilio Account SID
     AUTH_TOKEN: ''            //Twilio Auth Token
   },
-  //Mailer settings
-  this.mailer_settings = {
-    //SMTP
-    type: 'smtp',
-    host: 'mail.company.com',
-    port: 465,
-    auth: {
-      user: 'donotreply@company.com',
-      pass: ''
-    },
-    secure: true,
-    debug: false,
-    tls: { rejectUnauthorized: false },
-    maxConnections: 5,  //Max parallel SMTP connections
-    maxMessages: 10     //Messages sent per SMTP connection
-
-    //Amazon SES
-    //type: 'ses',
-    //accessKeyId: "xxx",
-    //secretAccessKey: "xxx",
-    //rateLimit: 10 // Messages per second
-  };
 
   //Debug settings
   this.debug_params = {

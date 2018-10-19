@@ -7,13 +7,13 @@
   "client_sql_superlogin": "select PE.pe_id,pe_hash from jsharmony.PE inner join jsharmony.SPER on SPER.PE_ID = PE.PE_ID and SPER.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email)",
   "client_sql_loginsuccess": "update jsharmony.CPE set PE_LL_IP=@pe_ll_ip,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id; select changes() xrowcount;",
   "client_sql_passwordreset": "update jsharmony.CPE set PE_HASH=@pe_hash,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id; select changes() xrowcount;",
-  "admin_sql_auth": [
+  "main_sql_auth": [
     "select pe_id,pe_hash,pe_sts,pe_fname,pe_lname,PE_LL_Tstmp,PE_Email from jsharmony.PE where lower(PE_Email)=lower(@pe_email);",
     "select sper.sr_name from jsharmony.SR inner join jsharmony.SPER on SPER.SR_Name=SR.SR_Name inner join jsharmony.PE on PE.PE_ID=SPER.PE_ID where SR_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email) and PE_STS='ACTIVE';"
   ],
-  "admin_sql_login": "select pe_id,pe_hash,pe_sts from jsharmony.PE where lower(PE_Email)=lower(@pe_email)",
-  "admin_sql_superlogin": "select PE.pe_id,pe_hash from jsharmony.PE inner join jsharmony.SPER on SPER.PE_ID = PE.PE_ID and SPER.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email)",
-  "admin_sql_loginsuccess": "update jsharmony.PE set PE_LL_IP=@pe_ll_ip,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id; select changes() xrowcount;",
-  "admin_sql_passwordreset": "update jsharmony.PE set PE_HASH=@pe_hash,PE_LL_IP=@pe_ll_ip,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id; select changes() xrowcount;",
-  "admin_sql_check_email": "select PE_Email from jsharmony.PE where PE_ID=@pe_id"
+  "main_sql_login": "select pe_id,pe_hash,pe_sts from jsharmony.PE where lower(PE_Email)=lower(@pe_email)",
+  "main_sql_superlogin": "select PE.pe_id,pe_hash from jsharmony.PE inner join jsharmony.SPER on SPER.PE_ID = PE.PE_ID and SPER.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email)",
+  "main_sql_loginsuccess": "update jsharmony.PE set PE_LL_IP=@pe_ll_ip,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id; select changes() xrowcount;",
+  "main_sql_passwordreset": "update jsharmony.PE set PE_HASH=@pe_hash,PE_LL_IP=@pe_ll_ip,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id; select changes() xrowcount;",
+  "main_sql_check_email": "select PE_Email from jsharmony.PE where PE_ID=@pe_id"
 }

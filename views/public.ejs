@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><%=jsh.Config.site_title%> - <%= title %></title>
+<title><%=jsh.Config.app_name%> - <%= title %></title>
 <link rel="stylesheet" type="text/css" href="/application.css" />
 <link href='https://fonts.googleapis.com/css?family=Droid+Sans|Material+Icons|PT+Sans' rel='stylesheet' type='text/css' />
 <script type="text/javascript" src="/js/jsHarmony.js"></script>
@@ -35,12 +35,12 @@ body {
 
 <div class="xhead">
   <div class="xtoplinks"><img src="/images/toplinks_corner.png" class="xtoplinks_corner" alt="" title="" />
-    <a href="<%-jsh.Config.home_url%>/">Home</a> &nbsp;|&nbsp; 
+    <a href="<%-req.jshsite.home_url%>/">Home</a> &nbsp;|&nbsp; 
     <a href="/client/">Login</a>
   </div>
-  <a class="xbrand_link" href="<%-jsh.Config.home_url%>/">&nbsp;</a>
+  <a class="xbrand_link" href="<%-req.jshsite.home_url%>/">&nbsp;</a>
   <div class="xlogo">
-    <a class="xlogoimg" href="<%-jsh.Config.home_url%>/"><img src="/images/logo.png" alt="<%=jsh.Config.site_title%>" title="<%=jsh.Config.site_title%>" /></a>
+    <a class="xlogoimg" href="<%-req.jshsite.home_url%>/"><img src="/images/logo.png" alt="<%=jsh.Config.app_name%>" title="<%=jsh.Config.app_name%>" /></a>
   </div>
   
   <div class="xmenu">
