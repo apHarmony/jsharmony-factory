@@ -12,10 +12,10 @@ ALTER ROLE [db_datawriter] ADD MEMBER [jsharmony_role_dev]
 GO
 GRANT CREATE TABLE TO [jsharmony_role_dev] AS [dbo]
 GO
+/*
 GRANT VIEW ANY COLUMN ENCRYPTION KEY DEFINITION TO [public] AS [dbo]
-GO
 GRANT VIEW ANY COLUMN MASTER KEY DEFINITION TO [public] AS [dbo]
-GO
+*/
 CREATE SCHEMA [jsharmony]
 GO
 GRANT ALTER ON SCHEMA::[jsharmony] TO [jsharmony_role_dev] AS [dbo]
