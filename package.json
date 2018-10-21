@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/apHarmony/jsharmony-factory",
   "devDependencies": {
-    "mocha": "^2.2.5",
+    "mocha": "^5.2.0",
     "jsharmony-db-pgsql": "^1.1.0"
   },
   "dependencies": {
