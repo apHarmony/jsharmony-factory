@@ -186,6 +186,7 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
    *** CLIENT ***
    **************/
   var jshconfig_client = {
+    home_url: '/client/',
     basetemplate: 'client',
     baseurl: '/client/',
     publicurl: '/',
