@@ -135,7 +135,7 @@ jsHarmonyFactory.prototype.Init = function(cb){
 
 jsHarmonyFactory.prototype.Run = function(onComplete){
   this.jsh.Servers['default'].Run(onComplete);
-  this.jsh.AppSrv.JobProc.Run();
+  if(this.Config.auto_start_job_processor) this.jsh.AppSrv.JobProc.Run();
 }
 
 jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){

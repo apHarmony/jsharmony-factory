@@ -51,6 +51,7 @@ function jsHarmonyFactoryConfig(){
     no_job_email: false,                      //Disable sending EMAILS from JOB
     no_job_sms: false,                        //Disable sending SMS messages from JOB
     disable_job_processor: false,             //Disable Job Processor
+    auto_start_job_processor: true,           //Auto-start Job Processor
   };
 
   //Excel integration token timeout
