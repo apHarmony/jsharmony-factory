@@ -20,8 +20,7 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 
 var fs = require('fs');
 var path = require('path');
-var debug = require('debug')('jsharmony');
-var express = require('express');
+var express = require('jsHarmony/node_modules/express');
 var os = require("os");
 var _ = require('lodash');
 var jsHarmony = require('jsharmony');
@@ -135,7 +134,7 @@ jsHarmonyFactory.prototype.Init = function(cb){
 
 jsHarmonyFactory.prototype.Run = function(onComplete){
   this.jsh.Servers['default'].Run(onComplete);
-  this.jsh.AppSrv.JobProc.Run();
+  if(this.Config.auto_start_job_processor) this.jsh.AppSrv.JobProc.Run();
 }
 
 jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){

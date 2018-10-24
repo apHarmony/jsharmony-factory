@@ -137,14 +137,14 @@ jsHarmonyFactory_Init.Run = function(run_cb){
         .then(function(){ return new Promise(function(resolve, reject){
           db.Close(function(){
             db.setSilent(true);
-            db.Scalar('',db.ParseSQLFuncs('init_sysadmin_access', dbs.getSQLFuncs()),[],{},function(err,rslt){
+            db.Scalar('',db.ParseSQLFuncs(db.ParseSQL('init_sysadmin_access'), dbs.getSQLFuncs()),[],{},function(err,rslt){
               db.setSilent(false);
               db.Close(function(){
                 if(!err && rslt && (rslt.toString()=="1")){
                   console.log('\r\n');
                   return resolve();
                 }
-                if(err){ console.log('User does not have db admin access ('+err + ')'); }
+                if(err){ console.log('Could not log in, or user does not have db admin access ('+err + ')'); }
                 //Log in
                 if(!err) console.log('> User does not have db admin access');
     

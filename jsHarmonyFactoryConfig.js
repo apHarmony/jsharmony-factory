@@ -59,7 +59,9 @@ function jsHarmonyFactoryConfig(){
   this.JobCheckDelay = 60000;
   //Job Processor sleep time after last job item executed - Default 5000
   this.JobSleepDelay = 5000;
-  
+
+  //Auto-start Job Processor
+  this.auto_start_job_processor = true;
   //Enable scheduled tasks
   this.enable_scheduler = 1;
   //Scheduled task definition

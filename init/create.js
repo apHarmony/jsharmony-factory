@@ -62,6 +62,8 @@ var scriptConfig = {
   _JSH_ADMIN_EMAIL: '',
   _JSH_ADMIN_PASS: '',
 
+  DB_USER_EXISTS: false,
+
   sqlFuncs: [],
 };
 
@@ -176,14 +178,14 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         .then(function(){ return new Promise(function(resolve, reject){
           db.Close(function(){
             db.setSilent(true);
-            db.Scalar('',db.ParseSQLFuncs('init_sysadmin_access', dbs.getSQLFuncs()),[],{},function(err,rslt){
+            db.Scalar('',db.ParseSQLFuncs(db.ParseSQL('init_sysadmin_access'), dbs.getSQLFuncs()),[],{},function(err,rslt){
               db.setSilent(false);
               db.Close(function(){
                 if(!err && rslt && (rslt.toString()=="1")){
                   console.log('\r\n');
                   return resolve();
                 }
-                if(err){ console.log('User does not have db admin access ('+err + ')'); }
+                if(err){ console.log('Could not log in, or user does not have db admin access ('+err + ')'); }
                 //Log in
                 if(!err) console.log('> User does not have db admin access');
   
@@ -251,11 +253,26 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         if(rslt){ scriptConfig._JSH_DBNAME = rslt; return true; }
         else{ process.stdout.write('Invalid entry.  Please enter a valid database name: '); retry(); }
     }))
-  
-    //Create Database
+
+    //Check if the database user already exists
     .then(function(){ return new Promise(function(resolve, reject){
       if(!scriptConfig._JSH_DBUSER) scriptConfig._JSH_DBUSER = 'jsharmony_'+scriptConfig._JSH_DBNAME.toLowerCase()+'_user';
       if(!scriptConfig._JSH_DBPASS) scriptConfig._JSH_DBPASS = xlib.genDBPassword(16);
+      if(scriptConfig._JSH_DBTYPE == 'sqlite') return false;
+      
+      db.Scalar('',db.ParseSQLFuncs(db.ParseSQL('init_db_user_exists'), dbs.getSQLFuncs()),[],{},function(err,rslt){
+        db.Close(function(){
+          if(!err && rslt && (rslt.toString()=="1")){
+            scriptConfig._JSH_DBPASS = '';
+            scriptConfig.DB_USER_EXISTS = true;
+          }
+          return resolve();
+        });
+      });
+    }); })
+  
+    //Create Database
+    .then(function(){ return new Promise(function(resolve, reject){
       console.log('');
       console.log('===============================');
       console.log('Running CREATE Database Scripts');
@@ -319,7 +336,8 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         ((scriptConfig._ORIG_DBSERVER != scriptConfig._JSH_DBSERVER) ||
         (scriptConfig._ORIG_DBNAME != scriptConfig._JSH_DBNAME) ||
         (scriptConfig._ORIG_DBUSER != scriptConfig._JSH_DBUSER) ||
-        (scriptConfig._ORIG_DBPASS != scriptConfig._JSH_DBPASS))
+        ((scriptConfig._ORIG_DBPASS != scriptConfig._JSH_DBPASS) && !scriptConfig.DB_USER_EXISTS) ||
+        (!scriptConfig._ORIG_DBPASS && scriptConfig.DB_USER_EXISTS))
       ){
         //*** If did not update app.config.js, show results and tell user to update app.config.js on their own 
         console.log('');
@@ -329,7 +347,8 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE)) console.log('SERVER: ' + scriptConfig._JSH_DBSERVER);
         console.log('DATABASE: ' + scriptConfig._JSH_DBNAME);
         if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE)) console.log('USER: ' + scriptConfig._JSH_DBUSER);
-        if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE)) console.log('PASSWORD: ' + scriptConfig._JSH_DBPASS);
+        if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE) && !scriptConfig.DB_USER_EXISTS) console.log('PASSWORD: ' + scriptConfig._JSH_DBPASS);
+        if(scriptConfig.DB_USER_EXISTS) console.log('DATABASE USER '+scriptConfig._JSH_DBUSER+' ALREADY EXISTED - PLEASE BE SURE TO ENTER THE PASSWORD IN app.config.js');
         console.log('------------------------------------------------');
       }
       else {
@@ -341,6 +360,13 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         console.log('** Please verify the configuration in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js');
         console.log('** Be sure to configure ports and HTTPS for security');
         console.log('');
+        if(scriptConfig.DB_USER_EXISTS){
+          console.log('------------------------------------------------');
+          console.log('DATABASE USER '+scriptConfig._JSH_DBUSER+' ALREADY EXISTED');
+          console.log('PLEASE BE SURE TO ENTER THE PASSWORD IN '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js');
+          console.log('------------------------------------------------');
+          console.log('');
+        }
       }
       console.log('Then start the server by running '+(scriptConfig._IS_WINDOWS?'':'./')+scriptConfig._NSTART_CMD);
       console.log('');
