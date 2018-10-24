@@ -2013,6 +2013,8 @@ GO
 create view [jsharmony].[V_MYPE] as
 select jsharmony.myPE() MYPE
 GO
+
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -10007,3 +10009,86 @@ EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters - System (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
 GO
+
+
+
+/****** Object:  View [jsharmony].[V_DL]    Script Date: 10/24/2018 12:14:05 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/****** Script for SelectTopNRows command from SSMS  ******/
+CREATE VIEW [jsharmony].[V_DL] AS
+SELECT D.D_ID
+      ,D.D_SCOPE
+      ,D.D_SCOPE_ID
+      ,D.C_ID
+      ,D.E_ID
+      ,D.D_STS
+      ,D.D_CTGR
+	  ,GDD.CODETXT D_CTGR_TXT
+      ,D.D_Desc
+      ,D.D_EXT
+      ,D.D_SIZE
+      ,D.D_FileName
+      ,D.D_ETstmp
+      ,D.D_EU
+      ,jsharmony.myCUSER_FMT(D_EU) D_EU_FMT
+      ,D.D_MTstmp
+      ,D.D_MU
+      ,jsharmony.myCUSER_FMT(D_MU) D_MU_FMT
+      ,D.D_UTstmp
+      ,D.D_UU
+      ,jsharmony.myCUSER_FMT(D_UU) D_UU_FMT
+      ,D.D_Snotes
+	  ,DUAL.DUAL_NVARCHAR50 TITLE_H
+	  ,DUAL.DUAL_NVARCHAR50 TITLE_B
+  FROM jsharmony.D
+  INNER JOIN jsharmony.DUAL on 1=1
+  LEFT OUTER JOIN  jsharmony.GCOD2_D_SCOPE_D_CTGR GDD ON GDD.CODEVAL1 = D.D_SCOPE
+                                             AND GDD.CODEVAL2 = D.D_CTGR   
+
+GO
+
+
+/****** Object:  View [dbo].[V_NL]    Script Date: 10/24/2018 12:27:37 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/****** Script for SelectTopNRows command from SSMS  ******/
+CREATE VIEW [jsharmony].[V_NL] as
+SELECT N.N_ID
+      ,N.N_SCOPE
+      ,N.N_SCOPE_ID
+	  ,N_STS
+      ,N.C_ID
+	  ,DUAL.DUAL_NVARCHAR50 C_Name
+	  ,DUAL.DUAL_NVARCHAR50 C_Name_EXT
+      ,N.E_ID
+	  ,DUAL.DUAL_NVARCHAR50 E_Name
+      ,N.N_TYPE
+      ,N.N_Note
+      ,jsharmony.myTODATE(N.N_ETstmp) N_Dt
+      ,N.N_ETstmp
+      ,jsharmony.myMMDDYYHHMI(N.N_ETstmp) N_ETstmp_FMT
+      ,N.N_EU
+      ,jsharmony.myCUSER_FMT(N.N_EU) N_EU_FMT
+      ,N.N_MTstmp
+      ,jsharmony.myMMDDYYHHMI(N.N_MTstmp) N_MTstmp_FMT
+      ,N.N_MU
+      ,jsharmony.myCUSER_FMT(N.N_MU) N_MU_FMT
+      ,N.N_Snotes
+	  ,DUAL.DUAL_NVARCHAR50 TITLE_H
+	  ,DUAL.DUAL_NVARCHAR50 TITLE_B
+  FROM jsharmony.N
+  INNER JOIN jsharmony.DUAL ON 1=1
+
+GO
+
