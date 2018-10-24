@@ -2968,6 +2968,43 @@ $$;
 ALTER FUNCTION jsharmony.sanit(x text) OWNER TO postgres;
 
 --
+-- Name: sanit_json(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+--
+
+CREATE FUNCTION sanit_json(x text) RETURNS text
+    LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
+    AS $$
+DECLARE
+  y text =  NULL;
+BEGIN
+
+  y := x;
+
+  y := replace(y, chr(x'5C'::int), '\'); /* Back Slash */
+
+  y := replace(y, chr(x'08'::int), '\b'); /* Backspace */
+  y := replace(y, chr(x'0C'::int), '\f'); /* Form Feed */
+  y := replace(y, chr(x'0A'::int), '\n'); /* New Line */
+  y := replace(y, chr(x'0D'::int), '\r'); /* Carriage Return */
+  y := replace(y, chr(x'09'::int), '\t'); /* Tab */
+  y := replace(y, chr(x'22'::int), '\"'); /* Double Quote */
+/*
+  y := replace(y, chr(x'27'::int), ' '); /* Single Quote */
+*/  
+  y := replace(y, chr(x'2F'::int), '\/'); /* Forward Slash */
+
+/*  
+  y := replace(replace(replace(x,'"',' '),'''',' '),E'\n',' ');
+*/  
+
+  RETURN y;
+END;
+$$;
+
+
+ALTER FUNCTION jsharmony.sanit_json(x text) OWNER TO postgres;
+
+--
 -- Name: spef_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -9502,6 +9539,17 @@ REVOKE ALL ON FUNCTION sanit(x text) FROM postgres;
 GRANT ALL ON FUNCTION sanit(x text) TO postgres;
 GRANT ALL ON FUNCTION sanit(x text) TO PUBLIC;
 GRANT ALL ON FUNCTION sanit(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: sanit_json(text); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION sanit_json(x text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION sanit_json(x text) FROM postgres;
+GRANT ALL ON FUNCTION sanit_json(x text) TO postgres;
+GRANT ALL ON FUNCTION sanit_json(x text) TO PUBLIC;
+GRANT ALL ON FUNCTION sanit_json(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
