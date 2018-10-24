@@ -8,5 +8,6 @@
                             "  ('create database','create table','create view','create procedure','create function','create default',",
                             "   'create type','create schema','create synonym','create role',",
                             "   'select','insert','update','delete','execute')",
-                            ") PERMS"]
+                            ") PERMS"],
+  "init_db_user_exists":"select 1 from sys.server_principals where name = '%%%INIT_DB_USER%%%'"
 }
