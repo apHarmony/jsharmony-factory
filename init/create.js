@@ -258,7 +258,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     .then(function(){ return new Promise(function(resolve, reject){
       if(!scriptConfig._JSH_DBUSER) scriptConfig._JSH_DBUSER = 'jsharmony_'+scriptConfig._JSH_DBNAME.toLowerCase()+'_user';
       if(!scriptConfig._JSH_DBPASS) scriptConfig._JSH_DBPASS = xlib.genDBPassword(16);
-      if(scriptConfig._JSH_DBTYPE == 'sqlite') return false;
+      if(scriptConfig._JSH_DBTYPE == 'sqlite') return resolve();
       
       db.Scalar('',db.ParseSQLFuncs(db.ParseSQL('init_db_user_exists'), dbs.getSQLFuncs()),[],{},function(err,rslt){
         db.Close(function(){
