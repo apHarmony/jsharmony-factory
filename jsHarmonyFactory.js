@@ -20,7 +20,7 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 
 var fs = require('fs');
 var path = require('path');
-var express = require('jsHarmony/node_modules/express');
+var express = require('jsharmony/lib/express');
 var os = require("os");
 var _ = require('lodash');
 var jsHarmony = require('jsharmony');
