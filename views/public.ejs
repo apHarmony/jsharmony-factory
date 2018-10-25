@@ -50,9 +50,9 @@ body {
 </div>
 
 <div class="xbody">
-<%-ejsext.BreadCrumbs(req, jsh, modelid)%>
+<%-ejsext.BreadCrumbs(req, jsh, modelid)%><% if(title){ %>
 <h1 style="display:inline-block;" class="xform_title"><%= title %></h1>
-<%- body %>
+<% } %><%- body %>
 </div><!-- xbody -->
 
 <div class="clear"></div>
