@@ -18,7 +18,7 @@
   },
   "GPE_D": {
     "inherits": "D",
-    "table":"jsharmony.V_D_EXT",
+    "table":"jsharmony.D",
     "title":"Document - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
     "breadcrumbs":{
       "sql": ["select pe_fname, pe_lname from jsharmony.PE ",

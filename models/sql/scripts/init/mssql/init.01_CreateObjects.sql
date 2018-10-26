@@ -48,6 +48,7 @@ END
 
 GO
 GRANT EXECUTE ON [jsharmony].[audit_info] TO [jsharmony_role_exec] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[audit_info] TO [jsharmony_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -128,24 +129,45 @@ DECLARE @ppd_xpp BIT
 
 END
 
+GO
 
 
 
 
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [jsharmony].[D_FILENAME]
+(
+	@in_D_ID bigint,
+	@in_D_EXT NVARCHAR(MAX)
+)	
+RETURNS NVARCHAR(MAX)  
+AS 
+BEGIN
+DECLARE @rslt NVARCHAR(MAX) = NULL
+
+  SELECT @rslt = ('D'+CONVERT([varchar](50),@in_D_ID,(0)))+isnull(@in_D_EXT,'');
+
+  RETURN (@rslt)
+
+END
 
 GO
+
+GRANT EXECUTE ON jsharmony.D_FILENAME TO jsharmony_role_exec;
+GO
+GRANT EXECUTE ON jsharmony.D_FILENAME TO jsharmony_role_dev;
+GO
+
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
-
-
-
-
-
-
-
 
 
 CREATE FUNCTION [jsharmony].[EXISTS_D]
@@ -300,6 +322,10 @@ DECLARE @rslt NVARCHAR(MAX) = NULL
   RETURN (@rslt)
 
 END
+GRANT EXECUTE ON [jsharmony].[GET_PE_NAME] TO [jsharmony_role_exec] AS [dbo]
+GO
+GRANT EXECUTE ON [jsharmony].[GET_PE_NAME] TO [jsharmony_role_dev] AS [dbo]
+GO
 
 
 

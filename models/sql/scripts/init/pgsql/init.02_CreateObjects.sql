@@ -1216,6 +1216,27 @@ $_$;
 
 ALTER FUNCTION jsharmony.d_iud() OWNER TO postgres;
 
+
+-- Function: jsharmony.d_filename(bigint, text)
+
+CREATE OR REPLACE FUNCTION jsharmony.d_filename(
+    d_id bigint,
+    d_ext text)
+  RETURNS text AS
+$BODY$
+DECLARE
+    rslt    text = NULL;
+BEGIN
+  rslt = 'D'::text || d_id::character varying::text || COALESCE(d_ext, ''::character varying);
+  
+  RETURN rslt;
+END;$BODY$
+  LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER
+  COST 10;
+
+ALTER FUNCTION jsharmony.d_filename(bigint, text) OWNER TO postgres;
+
+
 --
 -- Name: digest(bytea, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
@@ -8960,6 +8981,7 @@ REVOKE ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id
 GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO postgres;
 GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO PUBLIC;
 GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -8971,6 +8993,7 @@ REVOKE ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_tab
 GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO postgres;
 GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO PUBLIC;
 GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -8982,6 +9005,7 @@ REVOKE ALL ON FUNCTION audit_info(timestamp without time zone, character varying
 GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO postgres;
 GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO PUBLIC;
 GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -8993,6 +9017,7 @@ REVOKE ALL ON FUNCTION check_code(in_tblname character varying, in_codeval chara
 GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO postgres;
 GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO PUBLIC;
 GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9004,6 +9029,7 @@ REVOKE ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 cha
 GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO postgres;
 GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO PUBLIC;
 GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9015,6 +9041,7 @@ REVOKE ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 c
 GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO postgres;
 GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO PUBLIC;
 GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9026,6 +9053,7 @@ REVOKE ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval cha
 GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO postgres;
 GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO PUBLIC;
 GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9037,6 +9065,7 @@ REVOKE ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigi
 GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO postgres;
 GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO PUBLIC;
 GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9048,6 +9077,7 @@ REVOKE ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bi
 GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO postgres;
 GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO PUBLIC;
 GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9059,6 +9089,7 @@ REVOKE ALL ON FUNCTION check_pp(in_table character varying, in_process character
 GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO postgres;
 GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO PUBLIC;
 GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9070,6 +9101,7 @@ REVOKE ALL ON FUNCTION cpe_iud() FROM postgres;
 GRANT ALL ON FUNCTION cpe_iud() TO postgres;
 GRANT ALL ON FUNCTION cpe_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION cpe_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION cpe_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9081,6 +9113,7 @@ REVOKE ALL ON FUNCTION cpe_iud_after_insert() FROM postgres;
 GRANT ALL ON FUNCTION cpe_iud_after_insert() TO postgres;
 GRANT ALL ON FUNCTION cpe_iud_after_insert() TO PUBLIC;
 GRANT ALL ON FUNCTION cpe_iud_after_insert() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION cpe_iud_after_insert() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9092,6 +9125,7 @@ REVOKE ALL ON FUNCTION cper_iud() FROM postgres;
 GRANT ALL ON FUNCTION cper_iud() TO postgres;
 GRANT ALL ON FUNCTION cper_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION cper_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION cper_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9143,6 +9177,16 @@ REVOKE ALL ON FUNCTION d_iud() FROM postgres;
 GRANT ALL ON FUNCTION d_iud() TO postgres;
 GRANT ALL ON FUNCTION d_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION d_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION d_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+
+REVOKE ALL ON FUNCTION jsharmony.d_filename(bigint, text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION jsharmony.d_filename(bigint, text) FROM postgres;
+GRANT ALL ON FUNCTION jsharmony.d_filename(bigint, text) TO postgres;
+GRANT ALL ON FUNCTION jsharmony.d_filename(bigint, text) TO PUBLIC;
+GRANT ALL ON FUNCTION jsharmony.d_filename(bigint, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION jsharmony.d_filename(bigint, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9154,6 +9198,7 @@ REVOKE ALL ON FUNCTION digest(bytea, text) FROM postgres;
 GRANT ALL ON FUNCTION digest(bytea, text) TO postgres;
 GRANT ALL ON FUNCTION digest(bytea, text) TO PUBLIC;
 GRANT ALL ON FUNCTION digest(bytea, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION digest(bytea, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9165,6 +9210,7 @@ REVOKE ALL ON FUNCTION digest(text, text) FROM postgres;
 GRANT ALL ON FUNCTION digest(text, text) TO postgres;
 GRANT ALL ON FUNCTION digest(text, text) TO PUBLIC;
 GRANT ALL ON FUNCTION digest(text, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION digest(text, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9176,6 +9222,7 @@ REVOKE ALL ON FUNCTION gcod2_iud() FROM postgres;
 GRANT ALL ON FUNCTION gcod2_iud() TO postgres;
 GRANT ALL ON FUNCTION gcod2_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION gcod2_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION gcod2_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9187,6 +9234,7 @@ REVOKE ALL ON FUNCTION gcod_iud() FROM postgres;
 GRANT ALL ON FUNCTION gcod_iud() TO postgres;
 GRANT ALL ON FUNCTION gcod_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION gcod_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION gcod_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9198,6 +9246,7 @@ REVOKE ALL ON FUNCTION get_cpe_name(in_pe_id bigint) FROM postgres;
 GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO postgres;
 GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO PUBLIC;
 GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9209,6 +9258,7 @@ REVOKE ALL ON FUNCTION get_pe_name(in_pe_id bigint) FROM postgres;
 GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO postgres;
 GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO PUBLIC;
 GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9220,6 +9270,7 @@ REVOKE ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_att
 GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO postgres;
 GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO PUBLIC;
 GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9231,6 +9282,7 @@ REVOKE ALL ON FUNCTION good_email(x text) FROM postgres;
 GRANT ALL ON FUNCTION good_email(x text) TO postgres;
 GRANT ALL ON FUNCTION good_email(x text) TO PUBLIC;
 GRANT ALL ON FUNCTION good_email(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION good_email(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9242,6 +9294,7 @@ REVOKE ALL ON FUNCTION gpp_iud() FROM postgres;
 GRANT ALL ON FUNCTION gpp_iud() TO postgres;
 GRANT ALL ON FUNCTION gpp_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION gpp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION gpp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9253,6 +9306,7 @@ REVOKE ALL ON FUNCTION h_iud() FROM postgres;
 GRANT ALL ON FUNCTION h_iud() TO postgres;
 GRANT ALL ON FUNCTION h_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION h_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION h_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9264,6 +9318,7 @@ REVOKE ALL ON FUNCTION mycuser() FROM postgres;
 GRANT ALL ON FUNCTION mycuser() TO postgres;
 GRANT ALL ON FUNCTION mycuser() TO PUBLIC;
 GRANT ALL ON FUNCTION mycuser() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mycuser() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9275,6 +9330,7 @@ REVOKE ALL ON FUNCTION mycuser_email(u text) FROM postgres;
 GRANT ALL ON FUNCTION mycuser_email(u text) TO postgres;
 GRANT ALL ON FUNCTION mycuser_email(u text) TO PUBLIC;
 GRANT ALL ON FUNCTION mycuser_email(u text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mycuser_email(u text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9286,6 +9342,7 @@ REVOKE ALL ON FUNCTION mycuser_fmt(u text) FROM postgres;
 GRANT ALL ON FUNCTION mycuser_fmt(u text) TO postgres;
 GRANT ALL ON FUNCTION mycuser_fmt(u text) TO PUBLIC;
 GRANT ALL ON FUNCTION mycuser_fmt(u text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mycuser_fmt(u text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9297,6 +9354,7 @@ REVOKE ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw chara
 GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO postgres;
 GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO PUBLIC;
 GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9308,6 +9366,7 @@ REVOKE ALL ON FUNCTION myisnumeric(text) FROM postgres;
 GRANT ALL ON FUNCTION myisnumeric(text) TO postgres;
 GRANT ALL ON FUNCTION myisnumeric(text) TO PUBLIC;
 GRANT ALL ON FUNCTION myisnumeric(text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION myisnumeric(text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9319,6 +9378,7 @@ REVOKE ALL ON FUNCTION mymmddyy(timestamp without time zone) FROM postgres;
 GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO postgres;
 GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO PUBLIC;
 GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9330,6 +9390,7 @@ REVOKE ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) FROM postgres;
 GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO postgres;
 GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO PUBLIC;
 GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9341,6 +9402,7 @@ REVOKE ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) FROM postgres
 GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO postgres;
 GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO PUBLIC;
 GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9352,6 +9414,7 @@ REVOKE ALL ON FUNCTION mynow() FROM postgres;
 GRANT ALL ON FUNCTION mynow() TO postgres;
 GRANT ALL ON FUNCTION mynow() TO PUBLIC;
 GRANT ALL ON FUNCTION mynow() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mynow() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9363,6 +9426,7 @@ REVOKE ALL ON FUNCTION mype() FROM postgres;
 GRANT ALL ON FUNCTION mype() TO postgres;
 GRANT ALL ON FUNCTION mype() TO PUBLIC;
 GRANT ALL ON FUNCTION mype() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mype() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9374,6 +9438,7 @@ REVOKE ALL ON FUNCTION mypec() FROM postgres;
 GRANT ALL ON FUNCTION mypec() TO postgres;
 GRANT ALL ON FUNCTION mypec() TO PUBLIC;
 GRANT ALL ON FUNCTION mypec() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mypec() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9385,6 +9450,7 @@ REVOKE ALL ON FUNCTION mytodate(timestamp without time zone) FROM postgres;
 GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO postgres;
 GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO PUBLIC;
 GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9396,6 +9462,7 @@ REVOKE ALL ON FUNCTION mytoday() FROM postgres;
 GRANT ALL ON FUNCTION mytoday() TO postgres;
 GRANT ALL ON FUNCTION mytoday() TO PUBLIC;
 GRANT ALL ON FUNCTION mytoday() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mytoday() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9407,6 +9474,7 @@ REVOKE ALL ON FUNCTION n_iud() FROM postgres;
 GRANT ALL ON FUNCTION n_iud() TO postgres;
 GRANT ALL ON FUNCTION n_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION n_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION n_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9418,6 +9486,7 @@ REVOKE ALL ON FUNCTION nonequal(x1 bit, x2 bit) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO PUBLIC;
 GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9429,6 +9498,7 @@ REVOKE ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO PUBLIC;
 GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9440,6 +9510,7 @@ REVOKE ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO PUBLIC;
 GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9451,6 +9522,7 @@ REVOKE ALL ON FUNCTION nonequal(x1 integer, x2 integer) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO PUBLIC;
 GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9462,6 +9534,7 @@ REVOKE ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO PUBLIC;
 GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9473,6 +9546,7 @@ REVOKE ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO PUBLIC;
 GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9484,6 +9558,7 @@ REVOKE ALL ON FUNCTION nonequal(x1 text, x2 text) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO PUBLIC;
 GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9495,6 +9570,7 @@ REVOKE ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp wit
 GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO PUBLIC;
 GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9506,6 +9582,7 @@ REVOKE ALL ON FUNCTION pe_iud() FROM postgres;
 GRANT ALL ON FUNCTION pe_iud() TO postgres;
 GRANT ALL ON FUNCTION pe_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION pe_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION pe_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9517,6 +9594,7 @@ REVOKE ALL ON FUNCTION ppd_iud() FROM postgres;
 GRANT ALL ON FUNCTION ppd_iud() TO postgres;
 GRANT ALL ON FUNCTION ppd_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION ppd_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION ppd_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9528,6 +9606,7 @@ REVOKE ALL ON FUNCTION ppp_iud() FROM postgres;
 GRANT ALL ON FUNCTION ppp_iud() TO postgres;
 GRANT ALL ON FUNCTION ppp_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION ppp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION ppp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9539,6 +9618,7 @@ REVOKE ALL ON FUNCTION sanit(x text) FROM postgres;
 GRANT ALL ON FUNCTION sanit(x text) TO postgres;
 GRANT ALL ON FUNCTION sanit(x text) TO PUBLIC;
 GRANT ALL ON FUNCTION sanit(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION sanit(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9550,6 +9630,7 @@ REVOKE ALL ON FUNCTION sanit_json(x text) FROM postgres;
 GRANT ALL ON FUNCTION sanit_json(x text) TO postgres;
 GRANT ALL ON FUNCTION sanit_json(x text) TO PUBLIC;
 GRANT ALL ON FUNCTION sanit_json(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION sanit_json(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9561,6 +9642,7 @@ REVOKE ALL ON FUNCTION spef_iud() FROM postgres;
 GRANT ALL ON FUNCTION spef_iud() TO postgres;
 GRANT ALL ON FUNCTION spef_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION spef_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION spef_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9572,6 +9654,7 @@ REVOKE ALL ON FUNCTION sper_iud() FROM postgres;
 GRANT ALL ON FUNCTION sper_iud() TO postgres;
 GRANT ALL ON FUNCTION sper_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION sper_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION sper_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9583,6 +9666,7 @@ REVOKE ALL ON FUNCTION table_type(in_schema character varying, in_name character
 GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO postgres;
 GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO PUBLIC;
 GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9594,6 +9678,7 @@ REVOKE ALL ON FUNCTION txt_iud() FROM postgres;
 GRANT ALL ON FUNCTION txt_iud() TO postgres;
 GRANT ALL ON FUNCTION txt_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION txt_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION txt_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9605,6 +9690,7 @@ REVOKE ALL ON FUNCTION v_crmsel_iud_insteadof_update() FROM postgres;
 GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO postgres;
 GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO PUBLIC;
 GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9616,6 +9702,7 @@ REVOKE ALL ON FUNCTION v_srmsel_iud_insteadof_update() FROM postgres;
 GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO postgres;
 GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO PUBLIC;
 GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9627,6 +9714,7 @@ REVOKE ALL ON FUNCTION xpp_iud() FROM postgres;
 GRANT ALL ON FUNCTION xpp_iud() TO postgres;
 GRANT ALL ON FUNCTION xpp_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION xpp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION xpp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -10795,6 +10883,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT SELECT,UPDA
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony REVOKE ALL ON FUNCTIONS  FROM PUBLIC;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony REVOKE ALL ON FUNCTIONS  FROM postgres;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT ALL ON FUNCTIONS  TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT ALL ON FUNCTIONS  TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --

@@ -26,7 +26,7 @@
   },
    "GPE_N": {
     "inherits": "N",
-    "table":"jsharmony.V_N_EXT",
+    "table":"jsharmony.N",
     "title":"Note - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
     "breadcrumbs":{
       "sql": ["select pe_fname, pe_lname from jsharmony.PE ",
@@ -37,7 +37,7 @@
   },
    "GPE_NB": {
     "inherits": "NB",
-    "table":"jsharmony.V_N_EXT",
+    "table":"jsharmony.N",
     "title":"Note - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
     "breadcrumbs":{
       "sql": ["select pe_fname, pe_lname from jsharmony.PE ",
