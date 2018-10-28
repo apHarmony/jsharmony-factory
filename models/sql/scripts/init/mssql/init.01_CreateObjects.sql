@@ -322,6 +322,7 @@ DECLARE @rslt NVARCHAR(MAX) = NULL
   RETURN (@rslt)
 
 END
+GO
 GRANT EXECUTE ON [jsharmony].[GET_PE_NAME] TO [jsharmony_role_exec] AS [dbo]
 GO
 GRANT EXECUTE ON [jsharmony].[GET_PE_NAME] TO [jsharmony_role_dev] AS [dbo]
