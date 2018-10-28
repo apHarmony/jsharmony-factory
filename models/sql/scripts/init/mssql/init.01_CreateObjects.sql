@@ -4935,17 +4935,9 @@ BEGIN
   DECLARE @WK_REF_ID BIGINT
   DECLARE @M NVARCHAR(MAX)
   DECLARE @CODEVAL NVARCHAR(MAX)
-  DECLARE @CPE_USER BIT
-  DECLARE @USER_C_ID BIGINT
 
   DECLARE @SQLCMD nvarchar(max)
-  DECLARE @GETCID nvarchar(max)
-  DECLARE @GETEID nvarchar(max)
   DECLARE @DSCOPE_DCTGR nvarchar(max)
-  DECLARE @MY_C_ID bigint
-  DECLARE @MY_E_ID bigint
-  DECLARE @C_ID bigint
-  DECLARE @E_ID bigint
 
   DECLARE @DB_K NVARCHAR(MAX)
   DECLARE @DB_OUT datetime2(7)
@@ -5005,16 +4997,6 @@ BEGIN
     ROLLBACK TRANSACTION
     return
   END
-
-  SELECT @GETCID = PP_VAL
-	FROM jsharmony.V_PP
-   where PP_PROCESS = 'SQL'
-	 and PP_ATTRIB = 'GETCID';
-
-  SELECT @GETEID = PP_VAL
-	FROM jsharmony.V_PP
-   where PP_PROCESS = 'SQL'
-	 and PP_ATTRIB = 'GETEID';
 
   
   OPEN CUR_D_IUD
@@ -5096,142 +5078,20 @@ BEGIN
 	END   
 
 
-    SET @CPE_USER = 0
-	SET @USER_C_ID = NULL	  
-    IF SUBSTRING(@MYUSER,1,1) = 'C'
-	BEGIN
-	  SELECT @USER_C_ID = C_ID
-	    FROM jsharmony.CPE
-       WHERE substring(@MYUSER,2,1024)=convert(varchar, PE_ID);   
-	  
-	  IF @USER_C_ID is not null
-	    SET @CPE_USER = 1
-	END
-
-	SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + isnull(isnull(@I_D_SCOPE,@D_D_SCOPE),'') + ''',' +
-	                    isnull(convert(nvarchar,isnull(@I_D_SCOPE_ID,@D_D_SCOPE_ID)),'') + ')'
-	EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
-	SET @C_ID = @MY_C_ID
-
-	SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + isnull(isnull(@I_D_SCOPE,@D_D_SCOPE),'') + ''',' +
-	                    isnull(convert(nvarchar,isnull(@I_D_SCOPE_ID,@D_D_SCOPE_ID)),'') + ')'
-	EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
-	SET @E_ID = @MY_E_ID
-
-
-
-
-
-    IF (@CPE_USER = 1)
-	BEGIN
-
-	  IF @USER_C_ID <> isnull(@C_ID,0)
-	     OR
-         isnull(@I_D_SCOPE,@D_D_SCOPE) not in 
-		              (select CODEVAL
-					     from jsharmony.UCOD_D_SCOPE
-                        where CODECODE = 'Y')
-	  BEGIN
-		CLOSE CUR_D_IUD
-		DEALLOCATE CUR_D_IUD
-		SET @M = 'Application Error - Client User has no rights to perform this operation'
-		raiserror(@M ,16,1)
-		ROLLBACK TRANSACTION
-	    return
-	  END 
-
-    END
-
     IF (@TP='I')
 	BEGIN
 
-      IF @C_ID is not null
-	  BEGIN
-		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
-	     	@in_tblname ='C',
-		    @in_tblid = @C_ID
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_D_IUD
-			DEALLOCATE CUR_D_IUD
-			SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@C_ID)
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	  END   
-
-      IF @E_ID is not null
-	  BEGIN
-		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
-	     	@in_tblname ='E',
-		    @in_tblid = @E_ID
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_D_IUD
-			DEALLOCATE CUR_D_IUD
-			SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@E_ID)
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	  END   
 
 	  IF (@I_D_SYNCTSTMP is null)
         UPDATE jsharmony.D
-	     SET C_ID = @C_ID,
-		     E_ID = @E_ID,
+	     SET C_ID = NULL,
+		     E_ID = NULL,
 		     D_ETstmp = @CURDTTM,
 			 D_EU = @MYUSER,
 		     D_MTstmp = @CURDTTM,
 			 D_MU = @MYUSER
          WHERE D.D_ID = @I_D_ID;
     END  
-
-    IF (@TP='U')
-	BEGIN
-
-      IF @I_C_ID is not null
-	     and
-		 jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0
-	  BEGIN
-		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
-	     	@in_tblname ='C',
-		    @in_tblid = @I_C_ID
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_D_IUD
-			DEALLOCATE CUR_D_IUD
-			SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	  END   
-
-      IF @I_E_ID is not null
-	     and
-		 jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0
-	  BEGIN
-		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
-	     	@in_tblname ='E',
-		    @in_tblid = @I_E_ID
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_D_IUD
-			DEALLOCATE CUR_D_IUD
-			SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@I_E_ID)
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	  END
-	     
-    END
-
-
-
-
 
 	/******************************************/
 	/****** SPECIAL FRONT ACTION - END   ******/
@@ -5244,7 +5104,7 @@ BEGIN
 	  SET @WK_D_ID = ISNULL(@D_D_ID,@I_D_ID)
 	  SET @WK_REF_NAME = ISNULL(@D_D_SCOPE,@I_D_SCOPE)
 	  SET @WK_REF_ID = ISNULL(@D_D_SCOPE_ID,@I_D_SCOPE_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH @TP, 'D', @WK_D_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default, @C_ID, @E_ID
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  @TP, 'D', @WK_D_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default
 	END
 
  
@@ -5255,7 +5115,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_D_SCOPE, @I_D_SCOPE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_SCOPE', @D_D_SCOPE)
       END
 
@@ -5263,7 +5123,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_D_SCOPE_ID, @I_D_SCOPE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_SCOPE_ID', @D_D_SCOPE_ID)
       END
 
@@ -5271,7 +5131,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_D_STS, @I_D_STS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_STS', @D_D_STS)
       END
 
@@ -5279,7 +5139,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_D_CTGR, @I_D_CTGR) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_CTGR', @D_D_CTGR)
       END
 
@@ -5287,7 +5147,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_D_Desc, @I_D_Desc) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_Desc', @D_D_Desc)
       END
 
@@ -5295,7 +5155,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALD(@D_D_UTSTMP, @I_D_UTSTMP) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_UTSTMP', @D_D_UTSTMP)
       END
 
@@ -5303,7 +5163,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_D_UU, @I_D_UU) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_UU', @D_D_UU)
       END
 
@@ -5311,7 +5171,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'C_ID', @D_C_ID)
       END
 
@@ -5319,7 +5179,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'E_ID', @D_E_ID)
       END
 
@@ -6081,19 +5941,13 @@ BEGIN
   DECLARE @WK_REF_ID BIGINT
   DECLARE @M NVARCHAR(MAX)
   DECLARE @CODEVAL NVARCHAR(MAX)
-  DECLARE @CPE_USER BIT
-  DECLARE @USER_C_ID BIGINT
 
   DECLARE @SQLCMD nvarchar(max)
   DECLARE @GETCID nvarchar(max)
   DECLARE @GETEID nvarchar(max)
-  DECLARE @MY_C_ID bigint
-  DECLARE @MY_E_ID bigint
-  DECLARE @C_ID bigint
-  DECLARE @E_ID bigint
 
-  DECLARE @DB_K NVARCHAR(MAX)
-  DECLARE @DB_OUT datetime2(7)
+  DECLARE @C_ID BIGINT = NULL;
+  DECLARE @E_ID BIGINT = NULL;
 
   DECLARE @return_value int,
 		  @out_msg nvarchar(max),
@@ -6148,16 +6002,6 @@ BEGIN
     ROLLBACK TRANSACTION
     return
   END
-
-  SELECT @GETCID = PP_VAL
-	FROM jsharmony.V_PP
-   where PP_PROCESS = 'SQL'
-	 and PP_ATTRIB = 'GETCID';
-
-  SELECT @GETEID = PP_VAL
-	FROM jsharmony.V_PP
-   where PP_PROCESS = 'SQL'
-	 and PP_ATTRIB = 'GETEID';
   
   OPEN CUR_N_IUD
   FETCH NEXT FROM CUR_N_IUD
@@ -6212,134 +6056,19 @@ BEGIN
 		END 
 	END   
 
-    SET @CPE_USER = 0
-	SET @USER_C_ID = NULL	  
-    IF SUBSTRING(@MYUSER,1,1) = 'C'
-	BEGIN
-	  SELECT @USER_C_ID = C_ID
-	    FROM jsharmony.CPE
-       WHERE substring(@MYUSER,2,1024)=convert(varchar, PE_ID);   
-	  
-	  IF @USER_C_ID is not null
-	    SET @CPE_USER = 1
-	END
-
-	SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + isnull(isnull(@I_N_SCOPE,@D_N_SCOPE),'') + ''',' +
-	                    isnull(convert(nvarchar,isnull(@I_N_SCOPE_ID,@D_N_SCOPE_ID)),'') + ')'
-	EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
-	SET @C_ID = @MY_C_ID
-
-	SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + isnull(isnull(@I_N_SCOPE,@D_N_SCOPE),'') + ''',' +
-	                    isnull(convert(nvarchar,isnull(@I_N_SCOPE_ID,@D_N_SCOPE_ID)),'') + ')'
-	EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
-	SET @E_ID = @MY_E_ID
-
-
-    IF (@CPE_USER = 1)
-	BEGIN
-
-	  IF @USER_C_ID <> isnull(@C_ID,0)
-	     OR
-         isnull(@I_N_SCOPE, @D_N_SCOPE) not in ('C','CT','E','J','SRV')
-		 OR
-		 isnull(@I_N_TYPE, @D_N_TYPE) not in ('C','S')
-	  BEGIN
-		CLOSE CUR_N_IUD
-		DEALLOCATE CUR_N_IUD
-		SET @M = 'Application Error - Customer User has no rights to perform this operation'
-		raiserror(@M ,16,1)
-		ROLLBACK TRANSACTION
-	    return
-	  END 
-
-    END
-
-
     IF (@TP='I')
 	BEGIN
 
-      IF @C_ID is not null
-	  BEGIN
-		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
-	     	@in_tblname ='C',
-		    @in_tblid = @C_ID
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_N_IUD
-			DEALLOCATE CUR_N_IUD
-			SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@C_ID)
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	  END   
-
-      IF @E_ID is not null
-	  BEGIN
-		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
-	     	@in_tblname ='E',
-		    @in_tblid = @E_ID
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_N_IUD
-			DEALLOCATE CUR_N_IUD
-			SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@E_ID)
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	  END   
-
-        UPDATE jsharmony.N
-	     SET C_ID = @C_ID,
-		     E_ID = @E_ID,
+      UPDATE jsharmony.N
+	     SET C_ID = NULL,
+		     E_ID = NULL,
 		     N_ETstmp = @CURDTTM,
 			 N_EU = @MYUSER,
 		     N_MTstmp = @CURDTTM,
 			 N_MU = @MYUSER
          WHERE N.N_ID = @I_N_ID;
+
     END  
-
-    IF (@TP='U')
-	BEGIN
-
-      IF @I_C_ID is not null
-	     and
-		 jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0
-	  BEGIN
-		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
-	     	@in_tblname ='C',
-		    @in_tblid = @I_C_ID
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_N_IUD
-			DEALLOCATE CUR_N_IUD
-			SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	  END   
-
-      IF @I_E_ID is not null
-	     and
-		 jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0
-	  BEGIN
-		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
-	     	@in_tblname ='E',
-		    @in_tblid = @I_E_ID
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_N_IUD
-			DEALLOCATE CUR_N_IUD
-			SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@I_E_ID)
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	  END
-	     
-    END
 
 	/******************************************/
 	/****** SPECIAL FRONT ACTION - END   ******/
@@ -6352,7 +6081,7 @@ BEGIN
 	  SET @WK_N_ID = ISNULL(@D_N_ID,@I_N_ID)
 	  SET @WK_REF_NAME = ISNULL(@D_N_SCOPE,@I_N_SCOPE)
 	  SET @WK_REF_ID = ISNULL(@D_N_SCOPE_ID,@I_N_SCOPE_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH @TP, 'N', @WK_N_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default, @C_ID, @E_ID
+	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'N', @WK_N_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default
 	END
 
  
@@ -6363,7 +6092,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_N_SCOPE, @I_N_SCOPE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_SCOPE', @D_N_SCOPE)
       END
 
@@ -6371,7 +6100,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_N_SCOPE_ID, @I_N_SCOPE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_SCOPE_ID', @D_N_SCOPE_ID)
       END
 
@@ -6379,7 +6108,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_N_STS, @I_N_STS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_STS', @D_N_STS)
       END
 
@@ -6387,7 +6116,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_N_TYPE, @I_N_TYPE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_TYPE', @D_N_TYPE)
       END
 
@@ -6395,7 +6124,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALC(@D_N_Note, @I_N_Note) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_Note', @D_N_Note)
       END
 
@@ -6403,7 +6132,7 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'C_ID', @D_C_ID)
       END
 
@@ -6411,13 +6140,12 @@ BEGIN
           @TP = 'U' AND jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default, @C_ID, @E_ID
+		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
         INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'E_ID', @D_E_ID)
       END
 
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
-
 
 	/******************************************/
 	/****** SPECIAL BACK ACTION - BEGIN  ******/
