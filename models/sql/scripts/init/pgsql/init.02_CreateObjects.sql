@@ -805,6 +805,8 @@ BEGIN
 
   wk_codeschema = coalesce(in_codeschema, 'public');
 
+  SET client_min_messages to ERROR;
+
   runmesql := 'CREATE TABLE '||wk_codeschema||'.gcod_'||in_codename||' '
             ||'( '
             ||'  CONSTRAINT gcod_'||in_codename||'_pkey PRIMARY KEY (gcod_id), '
@@ -825,6 +827,12 @@ BEGIN
   EXECUTE runmesql ; 
 
   runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.gcod_'||in_codename||' IS ''User Codes - '||coalesce(in_codemean,'')||''';';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_exec;';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -856,6 +864,8 @@ BEGIN
 
   wk_codeschema = coalesce(in_codeschema, 'public');
 
+  SET client_min_messages to ERROR;
+
   runmesql := 'CREATE TABLE '||wk_codeschema||'.gcod2_'||in_codename||' '
             ||'( '
             ||'  CONSTRAINT gcod2_'||in_codename||'_pkey PRIMARY KEY (gcod2_id), '
@@ -876,6 +886,12 @@ BEGIN
   EXECUTE runmesql ; 
 
   runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.gcod2_'||in_codename||' IS ''User Codes 2 - '||coalesce(in_codemean,'')||''';';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod2_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_exec;';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod2_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -907,6 +923,8 @@ BEGIN
 
   wk_codeschema = coalesce(in_codeschema, 'public');
 
+  SET client_min_messages to ERROR;
+
   runmesql := 'CREATE TABLE '||wk_codeschema||'.ucod_'||in_codename||' '
             ||'( '
             ||'  CONSTRAINT ucod_'||in_codename||'_pkey PRIMARY KEY (ucod_id), '
@@ -921,6 +939,12 @@ BEGIN
   EXECUTE runmesql ; 
 
   runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.ucod_'||in_codename||' IS ''System Codes - '||coalesce(in_codemean,'')||''';';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_exec;';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -952,6 +976,8 @@ BEGIN
 
   wk_codeschema = coalesce(in_codeschema, 'public');
 
+  SET client_min_messages to ERROR;
+
   runmesql := 'CREATE TABLE '||wk_codeschema||'.ucod2_'||in_codename||' '
             ||'( '
             ||'  CONSTRAINT ucod2_'||in_codename||'_pkey PRIMARY KEY (ucod2_id), '
@@ -965,6 +991,12 @@ BEGIN
   EXECUTE runmesql ; 
 
   runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.ucod2_'||in_codename||' IS ''System Codes 2 - '||coalesce(in_codemean,'')||''';';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod2_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_exec;';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod2_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
