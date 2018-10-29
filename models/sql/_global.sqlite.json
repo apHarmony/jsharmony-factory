@@ -442,6 +442,12 @@
     "params": ["dt"],
     "sql": "date(%%%dt%%%)"
   },
+  "jsharmony.d_filename":{
+    "params": ["d_id","d_ext"],
+    "sql": [
+      "(cast(%%%d_id%%% as text)||%%%d_ext%%%)"
+    ]
+  },
   "concat":{
     "params": ["a","b"],
     "sql": [
