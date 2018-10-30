@@ -17,11 +17,11 @@ INSERT INTO jsharmony.cr (cr_seq, cr_sts, cr_name, cr_desc, cr_snotes, cr_code, 
 INSERT INTO jsharmony.sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1, 'ACTIVE', NULL, 'MAIN', NULL, 'Main System', NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO jsharmony.sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 3, 'ACTIVE', 1, 'DASHBOARD', 1, 'Dashboard', NULL, NULL, 'DASHBOARD', NULL, NULL, NULL);
-INSERT INTO jsharmony.sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 160, 'ACTIVE', 1, 'REPORTS', 2, 'Reports', NULL, NULL, 'REPORTS', NULL, NULL, NULL);
+INSERT INTO jsharmony.sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 700, 'ACTIVE', 1, 'REPORTS', 70000, 'Reports', NULL, NULL, 'REPORTS', NULL, NULL, NULL);
 INSERT INTO jsharmony.sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 800, 'ACTIVE', 1, 'ADMINISTRATION', 80000, 'Administration', NULL, NULL, 'ADMIN_OVERVIEW', NULL, NULL, NULL);
 INSERT INTO jsharmony.sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 900, 'ACTIVE', 1, 'DEV', 90000, 'Developer', NULL, NULL, 'DEV_OVERVIEW', NULL, NULL, NULL);
 
-INSERT INTO jsharmony.sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 1601, 'ACTIVE', 160, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL, NULL);
+INSERT INTO jsharmony.sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 70801, 'ACTIVE', 700, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL, NULL);
 
 INSERT INTO jsharmony.sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90012, 'ACTIVE', 900, 'DEV_X_SML', 90011, 'Menu Items', NULL, NULL, 'X_SMLW', NULL, NULL, NULL);
 INSERT INTO jsharmony.sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90011, 'ACTIVE', 900, 'DEV_X_SRL', 90012, 'User Roles', NULL, NULL, 'X_SRL', NULL, NULL, NULL);
@@ -1141,12 +1141,12 @@ INSERT INTO jsharmony.sr (sr_seq, sr_sts, sr_name, sr_desc, sr_snotes, sr_code, 
 
 
 INSERT INTO jsharmony.srm (sm_id, srm_snotes, sr_name) VALUES (3, NULL, '*');
-INSERT INTO jsharmony.srm (sm_id, srm_snotes, sr_name) VALUES (160, NULL, 'SYSADMIN');
+INSERT INTO jsharmony.srm (sm_id, srm_snotes, sr_name) VALUES (700, NULL, 'SYSADMIN');
 INSERT INTO jsharmony.srm (sm_id, srm_snotes, sr_name) VALUES (800, NULL, 'SYSADMIN');
 INSERT INTO jsharmony.srm (sm_id, srm_snotes, sr_name) VALUES (800, NULL, 'DEV');
 INSERT INTO jsharmony.srm (sm_id, srm_snotes, sr_name) VALUES (900, NULL, 'DEV');
 
-INSERT INTO jsharmony.srm (sm_id, srm_snotes, sr_name) VALUES (1601, NULL, 'SYSADMIN');
+INSERT INTO jsharmony.srm (sm_id, srm_snotes, sr_name) VALUES (70801, NULL, 'SYSADMIN');
 
 INSERT INTO jsharmony.srm (sm_id, srm_snotes, sr_name) VALUES (80000, NULL, 'SYSADMIN');
 INSERT INTO jsharmony.srm (sm_id, srm_snotes, sr_name) VALUES (80000, NULL, 'DEV');
