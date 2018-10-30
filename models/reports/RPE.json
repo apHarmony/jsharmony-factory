@@ -18,15 +18,15 @@
       "onclick": "jsh.XRunReport();"}
   ],
   "onload": "if(jsh.App.xform__report_INVOICE.Data.INV_ID){ jsh.XDisable(jsh.$root('.INV_ID.xelem_report_INVOICE')); }",
-  "pageheader" : ["<h3 style=\"font-size:12px;font-family:'Roboto';margin-top:0;padding-top:0;text-align:center;\">User Listing",
-  				  "<div style='float:left;width:30%;text-align:left;'><%=data.HOUSE[0].HOUSE_NAME%></div>",
+  "pageheader" : ["<h3 style=\"font-size:12px;margin-top:0;padding-top:0;text-align:center;\">User Listing",
+                  "<div style='float:left;width:30%;text-align:left;'><%=data.HOUSE[0].HOUSE_NAME%></div>",
                   "<div style='float:right;width:30%;text-align:right;'><%=moment().format('MM/DD/YYYY hh:mma')%></div>",
                   "<br/><hr width=\"100%\" />",
-                  "<div style='float:left;width:60%;text-align:left;'><%=data.HOUSE[0].HOUSE_BPHONE%> &nbsp; &nbsp; <%=data.HOUSE[0].HOUSE_FAX%> &nbsp; &nbsp; <%=data.HOUSE[0].HOUSE_EMAIL%></div>",
+                  "<div style=\"float:left;width:60%;text-align:left;\"><%=data.HOUSE[0].HOUSE_BPHONE%> &nbsp; &nbsp; <%=data.HOUSE[0].HOUSE_FAX%> &nbsp; &nbsp; <%=data.HOUSE[0].HOUSE_EMAIL%></div>",
                   "<div style='float:right;width:40%;text-align:right;'><%=data.HOUSE[0].HOUSE_FULL_ADDR%></div></h3>"
                   ],
   "headerheight": "1.7cm",
-  "pagefooter" : ["<hr/><h3 align='center' style=\"font-size:12px;font-family:'Roboto';\"><div style='float:left;'>001 USERS</div>              <div style='float:right;'> Page <%-pageNum%> / <%-numPages%></div></h3>"],
+  "pagefooter" : ["<hr/><h3 align='center' style=\"font-size:12px;\"><div style='float:left;'>001 USERS</div>              <div style='float:right;'> Page <%-pageNum%> / <%-numPages%></div></h3>"],
   "reportdata" : {
     "PARAMS":{
       "sql":["select coalesce(codetxt,'(All)') pe_sts_txt ",
