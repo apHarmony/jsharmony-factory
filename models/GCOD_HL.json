@@ -47,6 +47,10 @@
        "caption":"Edit Codes","actions":"B","control": "html","cellstyle": "text-align:center;",
        "value": "<a href='/X_GCODL?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><# if(data[j]['click2']){ #><img src='/images/icon_edit.png' height='14' style='position:relative;top:2px;' /><# } #></a>",
        "__AFTER__": "my_create"}
+    ],
+    "dberrors": [
+      [ "PK_XPP", "Duplicate Key (Code Table name)" ],
+      [ "gcod_h_pk", "Duplicate Key (Code Table Name)" ]
     ]
   }
 }

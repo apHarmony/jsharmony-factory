@@ -869,7 +869,8 @@ BEGIN
   runmesql := 'CREATE TABLE '||wk_codeschema||'.gcod2_'||in_codename||' '
             ||'( '
             ||'  CONSTRAINT gcod2_'||in_codename||'_pkey PRIMARY KEY (gcod2_id), '
-            ||'  CONSTRAINT gcod2_'||in_codename||'_codeval1_codeval2_key UNIQUE (codeval1,codeval2) '
+            ||'  CONSTRAINT gcod2_'||in_codename||'_codeval1_codeval2_key UNIQUE (codeval1,codeval2), '
+            ||'  CONSTRAINT gcod2_'||in_codename||'_codeval1_codetxt_key UNIQUE (codeval1,codetxt) '
             ||') '
             ||'INHERITS ('||'jsharmony'||'.gcod2) '
             ||'WITH ( '
@@ -982,6 +983,7 @@ BEGIN
             ||'( '
             ||'  CONSTRAINT ucod2_'||in_codename||'_pkey PRIMARY KEY (ucod2_id), '
             ||'  CONSTRAINT ucod2_'||in_codename||'_codeval1_codeval2_key UNIQUE (codeval1, codeval2) '
+            ||'  CONSTRAINT ucod2_'||in_codename||'_codeval1_codetxt_key UNIQUE (codeval1, codetxt) '
             ||') '
             ||'INHERITS ('||'jsharmony'||'.ucod2) '
             ||'WITH ( '
@@ -7772,6 +7774,14 @@ ALTER TABLE ONLY gcod2
 
 
 --
+-- Name: gcod2_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY gcod2
+    ADD CONSTRAINT gcod2_codeval1_codetxt_key UNIQUE (codeval1, codetxt);
+
+
+--
 -- Name: gcod2_d_scope_d_ctgr_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7785,6 +7795,16 @@ ALTER TABLE ONLY gcod2_d_scope_d_ctgr
 
 ALTER TABLE ONLY gcod2_d_scope_d_ctgr
     ADD CONSTRAINT gcod2_d_scope_d_ctgr_codeval1_codeval2_key UNIQUE (codeval1, codeval2);
+
+
+
+
+--
+-- Name: gcod2_d_scope_d_ctgr_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY gcod2_d_scope_d_ctgr
+    ADD CONSTRAINT gcod2_d_scope_d_ctgr_codeval1_codetxt_key UNIQUE (codeval1, codetxt);
 
 
 --
@@ -8179,6 +8199,16 @@ ALTER TABLE ONLY ucod2
     ADD CONSTRAINT ucod2_codeval1_codeval2_key UNIQUE (codeval1, codeval2);
 
 
+
+
+--
+-- Name: ucod2_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY ucod2
+    ADD CONSTRAINT ucod2_codeval1_codetxt_key UNIQUE (codeval1, codetxt);
+
+
 --
 -- Name: ucod2_country_state_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
@@ -8193,6 +8223,16 @@ ALTER TABLE ONLY ucod2_country_state
 
 ALTER TABLE ONLY ucod2_country_state
     ADD CONSTRAINT ucod2_country_state_codeval1_codeval2_key UNIQUE (codeval1, codeval2);
+
+
+
+
+--
+-- Name: ucod2_country_state_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY ucod2_country_state
+    ADD CONSTRAINT ucod2_country_state_codeval1_codetxt_key UNIQUE (codeval1, codetxt);
 
 
 --

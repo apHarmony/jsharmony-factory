@@ -42,6 +42,7 @@
 	],
     "dberrors": [
       ["PK_UCOD_","CODE Value has to be unique"],
+      ["_codeval_key","CODE Value has to be unique"],
       ["UNQ_UCOD_","CODE Description has to be unique"]
     ]
   }

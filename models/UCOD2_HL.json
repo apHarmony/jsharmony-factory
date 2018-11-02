@@ -38,12 +38,7 @@
        "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod2_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"Edit Codes","actions":"B","control": "html","cellstyle": "text-align:center;",
        "value": "<a href='/UCOD2L?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><# if(data[j]['click2']){ #><img src='/images/icon_edit.png' height='14' style='position:relative;top:2px;' /><# } #></a>"}
-	],
-    "dberrors": [
-      [ "UNQ_UCOD2_H", "Duplicate" ],
-      [ "ucod2_h_codeschema_codename_key", "Duplicate" ],
-      [ "ucod2_h_coalesce_codename_idx", "Duplicate" ]
-    ]  
+	]
   },	
   "X_UCOD2_HL": {
     "inherits":"UCOD2_HL",
@@ -56,6 +51,10 @@
       {"name":"codecodemean","actions": "BIU","control": "textbox"},
       {"name":"codeattribmean","actions": "BIU","control": "textbox"},
       {"name":"my_create","actions": "B"}
-    ]
+    ],
+    "dberrors": [
+      [ "UNQ_UCOD2_H", "Duplicate Key (Schema + Code Table Name)" ],
+      [ "ucod2_h_codeschema_codename_key", "Duplicate Key (Schema + Code Table Name)" ]
+    ]  
   }
 }

@@ -120,7 +120,10 @@
       ["fk_spef_pe","Cannot delete a user with selected function(s)."],
       ["FK_SPEF_PE","Cannot delete a user with selected function(s)."],
       ["UNQ_PE_PE_EMAIL","A user with the same Email address already exists."],
-      ["unq_pe_pe_email","A user with the same Email address already exists."]
+      ["unq_pe_pe_email","A user with the same Email address already exists."],
+      ["sper_pe_id_fkey","Cannot delete a user with selected role(s)."],
+      ["spef_pe_id_fkey","Cannot delete a user with selected function(s)."],
+      ["pe_pe_email_unique","A user with the same Email address already exists."]
     ]
   },    
   "PE": {

@@ -56,6 +56,10 @@
       {"name":"codecodemean","actions": "BIU","control": "textbox"},
       {"name":"codeattribmean","actions": "BIU","control": "textbox"},
       {"name":"my_create","actions": "B"}
+    ],
+    "dberrors": [
+      [ "PK_XPP", "Duplicate Key (Schema + Code Table name)" ],
+      [ "ucod_h_codeschema_codename_key", "Duplicate Key (Schema + Code Table Name)" ]
     ]
   },
   "CREATE_UCOD": {
