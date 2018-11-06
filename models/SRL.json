@@ -32,6 +32,7 @@
     "dberrors": [
       [ "PK_SR", "Duplicate Role Name" ],
       [ "sr_pkey", "Duplicate Role Name" ],
+      [ "UNQ_SR_SR_Desc", "Duplicate Role Description" ],
       [ "sr_sr_desc_key", "Duplicate Role Description" ],
       [ "sper_sr_name_fkey", "Role Name consistency error" ]
     ]

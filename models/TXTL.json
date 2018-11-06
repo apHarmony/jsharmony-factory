@@ -1,12 +1,12 @@
 {
   "TXTL": {
-	"title":"Text Maintenance",
-	"table":"jsharmony.txt",
-	"actions":"B", 
+	  "title":"Text Maintenance",
+	  "table":"jsharmony.txt",
+	  "actions":"B", 
     "layout":"grid", 
-	"caption":[0,"Text","Text"],
-	"sort":["^txt_process","^txt_attrib"], 
-	"topmenu":"administration",
+	  "caption":[0,"Text","Text"],
+	  "sort":["^txt_process","^txt_attrib"], 
+	  "topmenu":"administration",
     "fields":[
       {"name":"txt_id","type":"bigint","key":1},
       {"name":"txt_process","type":"varchar","length":"32","caption":"Process","actions":"B","link":"edit:TXT"},
@@ -20,7 +20,7 @@
     "dev":1,
     "actions":"BI", 
     "topmenu":"dev",
-    "buttons":[{"link":"add:X_TXT"}],
+    "buttons":[{"link":"add:X_TXT", "text": "Add Text Module"}],
     "fields":[
       {"name":"txt_process","link":"edit:X_TXT"},
       {"name":"txt_attrib","link":"edit:X_TXT"},

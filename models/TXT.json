@@ -1,10 +1,11 @@
 {
   "TXT": {
-	"title":"Text Module",
-	"table":"jsharmony.txt",
-	"actions":"BU", 
+	  "title":"Text Module",
+	  "table":"jsharmony.txt",
+	  "actions":"BU", 
     "layout":"form", 
-	"topmenu":"administration",
+    "caption":[0,"Text Module","Text Modules"],
+	  "topmenu":"administration",
     "breadcrumbs": { "parents": ["TXTL"] },
     "onload": "if(jsh.App['xform_'+XBase['TXT']].Data.txt_type.toUpperCase()=='HTML'){ XExt.CKEditor('txt_val'); }",
     "fields":[
@@ -43,7 +44,10 @@
           "control":"textbox","controlstyle":"width:158px;","caption":"","eol":1}
     ],
     "dberrors": [
-      [ "txt_ucod_txt_type_fkey", "Incorrect Body Type" ]
+      [ "FK_TXT_UCOD_TXT_TYPE", "Incorrect Body Type" ],
+      [ "txt_ucod_txt_type_fkey", "Incorrect Body Type" ],
+      [ "UNQ_TXT", "Duplicate Key (Process + Attribute)" ],
+      [ "txt_txt_process_txt_attrib_key", "Duplicate Key (Process + Attribute)" ]
     ]
   },
   "X_TXT": {

@@ -982,7 +982,7 @@ BEGIN
   runmesql := 'CREATE TABLE '||wk_codeschema||'.ucod2_'||in_codename||' '
             ||'( '
             ||'  CONSTRAINT ucod2_'||in_codename||'_pkey PRIMARY KEY (ucod2_id), '
-            ||'  CONSTRAINT ucod2_'||in_codename||'_codeval1_codeval2_key UNIQUE (codeval1, codeval2) '
+            ||'  CONSTRAINT ucod2_'||in_codename||'_codeval1_codeval2_key UNIQUE (codeval1, codeval2), '
             ||'  CONSTRAINT ucod2_'||in_codename||'_codeval1_codetxt_key UNIQUE (codeval1, codetxt) '
             ||') '
             ||'INHERITS ('||'jsharmony'||'.ucod2) '
@@ -7774,14 +7774,6 @@ ALTER TABLE ONLY gcod2
 
 
 --
--- Name: gcod2_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY gcod2
-    ADD CONSTRAINT gcod2_codeval1_codetxt_key UNIQUE (codeval1, codetxt);
-
-
---
 -- Name: gcod2_d_scope_d_ctgr_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -7795,16 +7787,6 @@ ALTER TABLE ONLY gcod2_d_scope_d_ctgr
 
 ALTER TABLE ONLY gcod2_d_scope_d_ctgr
     ADD CONSTRAINT gcod2_d_scope_d_ctgr_codeval1_codeval2_key UNIQUE (codeval1, codeval2);
-
-
-
-
---
--- Name: gcod2_d_scope_d_ctgr_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY gcod2_d_scope_d_ctgr
-    ADD CONSTRAINT gcod2_d_scope_d_ctgr_codeval1_codetxt_key UNIQUE (codeval1, codetxt);
 
 
 --
@@ -8184,14 +8166,6 @@ ALTER TABLE ONLY txt
 
 
 --
--- Name: ucod2_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod2
-    ADD CONSTRAINT ucod2_codetxt_key UNIQUE (codetxt);
-
-
---
 -- Name: ucod2_codeval1_codeval2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
@@ -8207,14 +8181,6 @@ ALTER TABLE ONLY ucod2
 
 ALTER TABLE ONLY ucod2
     ADD CONSTRAINT ucod2_codeval1_codetxt_key UNIQUE (codeval1, codetxt);
-
-
---
--- Name: ucod2_country_state_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod2_country_state
-    ADD CONSTRAINT ucod2_country_state_codetxt_key UNIQUE (codetxt);
 
 
 --
@@ -8267,92 +8233,47 @@ ALTER TABLE ONLY ucod2
     ADD CONSTRAINT ucod2_pkey PRIMARY KEY (ucod2_id);
 
 
---
--- Name: ucod_ac1_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
+ALTER TABLE ONLY ucod_ac1
+    ADD CONSTRAINT ucod_ac1_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod_ac1
+    ADD CONSTRAINT ucod_ac1_codetxt_key UNIQUE (codetxt);
 ALTER TABLE ONLY ucod_ac1
     ADD CONSTRAINT ucod_ac1_codeval_key UNIQUE (codeval);
 
-
---
--- Name: ucod_ac1_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_ac1
-    ADD CONSTRAINT ucod_ac1_pkey PRIMARY KEY (ucod_id);
-
-
---
--- Name: ucod_ac_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
+ALTER TABLE ONLY ucod_ac
+    ADD CONSTRAINT ucod_ac_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod_ac
+    ADD CONSTRAINT ucod_ac_codetxt_key UNIQUE (codetxt);
 ALTER TABLE ONLY ucod_ac
     ADD CONSTRAINT ucod_ac_codeval_key UNIQUE (codeval);
 
-
---
--- Name: ucod_ac_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_ac
-    ADD CONSTRAINT ucod_ac_pkey PRIMARY KEY (ucod_id);
-
-
---
--- Name: ucod_ahc_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
+ALTER TABLE ONLY ucod_ahc
+    ADD CONSTRAINT ucod_ahc_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod_ahc
+    ADD CONSTRAINT ucod_ahc_codetxt_key UNIQUE (codetxt);
 ALTER TABLE ONLY ucod_ahc
     ADD CONSTRAINT ucod_ahc_codeval_key UNIQUE (codeval);
 
-
---
--- Name: ucod_ahc_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_ahc
-    ADD CONSTRAINT ucod_ahc_pkey PRIMARY KEY (ucod_id);
-
-
---
--- Name: ucod_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
+ALTER TABLE ONLY ucod
+    ADD CONSTRAINT ucod_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod
+    ADD CONSTRAINT ucod_codetxt_key UNIQUE (codetxt);
 ALTER TABLE ONLY ucod
     ADD CONSTRAINT ucod_codeval_key UNIQUE (codeval);
 
-
---
--- Name: ucod_country_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
+ALTER TABLE ONLY ucod_country
+    ADD CONSTRAINT ucod_country_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod_country
+    ADD CONSTRAINT ucod_country_codetxt_key UNIQUE (codetxt);
 ALTER TABLE ONLY ucod_country
     ADD CONSTRAINT ucod_country_codeval_key UNIQUE (codeval);
 
-
---
--- Name: ucod_country_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_country
-    ADD CONSTRAINT ucod_country_pkey PRIMARY KEY (ucod_id);
-
-
---
--- Name: ucod_d_scope_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_d_scope
-    ADD CONSTRAINT ucod_d_scope_codeval_key UNIQUE (codeval);
-
-
---
--- Name: ucod_d_scope_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
 ALTER TABLE ONLY ucod_d_scope
     ADD CONSTRAINT ucod_d_scope_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod_d_scope
+    ADD CONSTRAINT ucod_d_scope_codetxt_key UNIQUE (codetxt);
+ALTER TABLE ONLY ucod_d_scope
+    ADD CONSTRAINT ucod_d_scope_codeval_key UNIQUE (codeval);
 
 
 --
@@ -8371,108 +8292,47 @@ ALTER TABLE ONLY ucod_h
     ADD CONSTRAINT ucod_h_pkey PRIMARY KEY (ucod_h_id);
 
 
---
--- Name: ucod_n_scope_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
+ALTER TABLE ONLY ucod_n_scope
+    ADD CONSTRAINT ucod_n_scope_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod_n_scope
+    ADD CONSTRAINT ucod_n_scope_codetxt_key UNIQUE (codetxt);
 ALTER TABLE ONLY ucod_n_scope
     ADD CONSTRAINT ucod_n_scope_codeval_key UNIQUE (codeval);
 
-
---
--- Name: ucod_n_scope_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_n_scope
-    ADD CONSTRAINT ucod_n_scope_pkey PRIMARY KEY (ucod_id);
-
-
---
--- Name: ucod_n_type_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
+ALTER TABLE ONLY ucod_n_type
+    ADD CONSTRAINT ucod_n_type_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod_n_type
+    ADD CONSTRAINT ucod_n_type_codetxt_key UNIQUE (codetxt);
 ALTER TABLE ONLY ucod_n_type
     ADD CONSTRAINT ucod_n_type_codeval_key UNIQUE (codeval);
 
-
---
--- Name: ucod_n_type_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_n_type
-    ADD CONSTRAINT ucod_n_type_pkey PRIMARY KEY (ucod_id);
-
-
---
--- Name: ucod_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod
-    ADD CONSTRAINT ucod_pkey PRIMARY KEY (ucod_id);
-
-
---
--- Name: ucod_ppd_type_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
+ALTER TABLE ONLY ucod_ppd_type
+    ADD CONSTRAINT ucod_ppd_type_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod_ppd_type
+    ADD CONSTRAINT ucod_ppd_type_codetxt_key UNIQUE (codetxt);
 ALTER TABLE ONLY ucod_ppd_type
     ADD CONSTRAINT ucod_ppd_type_codeval_key UNIQUE (codeval);
 
-
---
--- Name: ucod_ppd_type_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_ppd_type
-    ADD CONSTRAINT ucod_ppd_type_pkey PRIMARY KEY (ucod_id);
-
-
---
--- Name: ucod_rqst_atype_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
+ALTER TABLE ONLY ucod_rqst_atype
+    ADD CONSTRAINT ucod_rqst_atype_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod_rqst_atype
+    ADD CONSTRAINT ucod_rqst_atype_codetxt_key UNIQUE (codetxt);
 ALTER TABLE ONLY ucod_rqst_atype
     ADD CONSTRAINT ucod_rqst_atype_codeval_key UNIQUE (codeval);
 
-
---
--- Name: ucod_rqst_atype_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_rqst_atype
-    ADD CONSTRAINT ucod_rqst_atype_pkey PRIMARY KEY (ucod_id);
-
-
---
--- Name: ucod_rqst_source_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
+ALTER TABLE ONLY ucod_rqst_source
+    ADD CONSTRAINT ucod_rqst_source_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod_rqst_source
+    ADD CONSTRAINT ucod_rqst_source_codetxt_key UNIQUE (codetxt);
 ALTER TABLE ONLY ucod_rqst_source
     ADD CONSTRAINT ucod_rqst_source_codeval_key UNIQUE (codeval);
 
-
---
--- Name: ucod_rqst_source_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_rqst_source
-    ADD CONSTRAINT ucod_rqst_source_pkey PRIMARY KEY (ucod_id);
-
-
---
--- Name: ucod_txt_type_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_txt_type
-    ADD CONSTRAINT ucod_txt_type_codeval_key UNIQUE (codeval);
-
-
---
--- Name: ucod_txt_type_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
 ALTER TABLE ONLY ucod_txt_type
     ADD CONSTRAINT ucod_txt_type_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY ucod_txt_type
+    ADD CONSTRAINT ucod_txt_type_codetxt_key UNIQUE (codetxt);
+ALTER TABLE ONLY ucod_txt_type
+    ADD CONSTRAINT ucod_txt_type_codeval_key UNIQUE (codeval);
 
 
 --

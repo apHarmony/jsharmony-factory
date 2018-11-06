@@ -1,18 +1,18 @@
 {
   "GCOD_HL": {
-	"title":"Admin 1-Dimensional Code Tables",
-	"table":"jsharmony.GCOD_H",
-	"actions":"B", 
+	  "title":"Admin 1-Dimensional Code Tables",
+	  "table":"jsharmony.GCOD_H",
+	  "actions":"B", 
     "layout":"grid", 
-	"caption":[0,"Code Table","Code Tables"],
+    "caption":[0,"Code Table","Code Tables"],
     "roles": {"X_B":"B","DADMIN":"*"},
-	"sort":["^codename"], 
+	  "sort":["^codename"], 
     "topmenu":"administration",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
-	"fields":[
+	  "fields":[
       {"name":"codeschema","type":"varchar","length":"16","actions":"B","caption":"Schema","control":"hidden"},
       {"name":"codename","type":"varchar","length":"16","key":1,"validate":["Required"],
        "caption":"Code Table Name","actions":"B","controlstyle":"width:120px;","control": "html",
