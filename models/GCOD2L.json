@@ -45,6 +45,10 @@
     "dberrors": [
       ["PK_GCOD_","CODE Value has to be unique"],
       ["UNQ_GCOD_","CODE Description has to be unique"],
+      ["/UNQ_GCOD2_.*_CODEVAL1_CODEVAL2/","CODE Value1+Value2 has to be unique"],
+      ["_codeval1_codeval2_key","CODE Value1+Value2 has to be unique"],
+      ["/UNQ_GCOD2_.*_CODEVAL1_CODETXT/","CODE Description has to be unique"],
+      ["_codeval1_codetxt_key","CODE Description has to be unique"],
       ["d_d_scope_d_ctgr","Scope - Document combination is used - cannot be removed."]
     ]
   },

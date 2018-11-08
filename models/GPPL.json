@@ -22,7 +22,7 @@
        "caption":"Attribute","control":"hidden"},
       {"name":"ppd_desc","type":"varchar","length":"255","caption":"Description","actions":"B",
        "sqlselect":"jsharmony.get_ppd_desc(gpp.gpp_process, gpp.gpp_attrib)"},
-      {"name":"gpp_val","type":"varchar","length":"256","validate":["Required"],"actions":"BU","control":"textbox_L",
+      {"name":"gpp_val","type":"varchar","length":"256","validate":["Required"],"actions":"BIU","control":"textbox_L",
        "caption":"Value"},
       {"name":"gpp_info","type":"varchar","length":"500","actions":"B","control":"textzoom",
        "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
@@ -30,7 +30,8 @@
        "controlstyle":"width:48px;display:none;"}
     ],
     "dberrors": [
-      [ "PK_GPP", "Duplicate Key (Process + Attribute)" ]
+      [ "PK_GPP", "Duplicate Key (Process + Attribute)" ],
+      [ "gpp_gpp_process_gpp_attrib_key", "Duplicate Key (Process + Attribute)" ]
     ]
   },    
   "X_GPPL": {

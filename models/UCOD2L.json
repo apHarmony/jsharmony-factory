@@ -1,10 +1,10 @@
 {
   "UCOD2L": {
     "layout":"grid", 
-	"caption":[0,"Code","Codes"],
-	"actions":"BIUD", 
-	"sort":["^codeval1","^codseq","^codeval2"], 
-	"topmenu":"dev",
+    "caption":[0,"Code","Codes"],
+	  "actions":"BIUD", 
+	  "sort":["^codeval1","^codseq","^codeval2"], 
+	  "topmenu":"dev",
     "roles": {"X_B":"B","DADMIN":"*"},
     "breadcrumbs": { "parents": ["X_UCOD2_HL"] },
     "reselectafteredit": "row",    "comment1":"row, or blank",
@@ -12,7 +12,7 @@
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
     "bindings":{"codename":"codename","codeschema":"codeschema"},
-	"fields":[
+	  "fields":[
       {"name":"ucod2_id","type":"bigint","actions":"B","key":1,"control":"hidden"}, //Previously had "F"
       {"name":"codename","type":"varchar","foreignkey":1,"actions":"IUD","virtual":1,"sqlwhere":"1=1",
        "sqlupdate":"","sqlinsert":"","length":16,"control":"hidden"},
@@ -41,11 +41,14 @@
        "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
        "sqlselect":"(jsharmony.audit_info(COD_ETstmp,COD_EU,COD_MTstmp,COD_MU))",
        "controlstyle":"width:48px;display:none;"}
-	],
+	  ],
     "dberrors": [
       ["PK_UCOD_","CODE Value has to be unique"],
       ["UNQ_UCOD_","CODE Description has to be unique"],
-      ["d_d_scope_d_ctgr","Scope - Document combination is used - cannot be removed."]
+      ["/UNQ_UCOD2_.*_CODEVAL1_CODEVAL2/","CODE Value1+Value2 has to be unique"],
+      ["_codeval1_codeval2_key","CODE Value1+Value2 has to be unique"],
+      ["/UNQ_UCOD2_.*_CODEVAL1_CODETXT/","CODE Description has to be unique"],
+      ["_codeval1_codetxt_key","CODE Description has to be unique"]
     ]
   }    
 }

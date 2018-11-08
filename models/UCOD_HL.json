@@ -40,9 +40,9 @@
        "value": "<a href='/UCODL?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><# if(data[j]['click2']){ #><img src='/images/icon_edit.png' height='14' style='position:relative;top:2px;' /><# } #></a>"}
 	],
     "dberrors": [
-      [ "UNQ_UCOD_H", "Duplicate" ],
-      [ "ucod_h_codeschema_codename_key", "Duplicate" ],
-      [ "ucod_h_coalesce_codename_idx", "Duplicate" ]
+      [ "UNQ_UCOD_H", "Duplicate Key (Schema + Code Table name)" ],
+      [ "ucod_h_codeschema_codename_key", "Duplicate Key (Schema + Code Table name)" ],
+      [ "ucod_h_coalesce_codename_idx", "Duplicate Key (Schema + Code Table name)" ]
     ]  
   },    
   "X_UCOD_HL": {
@@ -56,6 +56,11 @@
       {"name":"codecodemean","actions": "BIU","control": "textbox"},
       {"name":"codeattribmean","actions": "BIU","control": "textbox"},
       {"name":"my_create","actions": "B"}
+    ],
+    "dberrors": [
+      [ "UNQ_UCOD_H", "Duplicate Key (Schema + Code Table name)" ],
+      [ "ucod_h_codeschema_codename_key", "Duplicate Key (Schema + Code Table Name)" ],
+      [ "ucod_h_coalesce_codename_idx", "Duplicate Key (Schema + Code Table name)" ]
     ]
   },
   "CREATE_UCOD": {
