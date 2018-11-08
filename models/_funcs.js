@@ -161,9 +161,9 @@ exports.DEV_DB_SCRIPTS = function (req, res, next) {
     sqlFuncs['DB_LCASE'] = dbconfig.database.toLowerCase();
 
     if(mode=='run'){
-      db.RunScripts(jsh, scriptid, { dbconfig: dbconfig, sqlFuncs: sqlFuncs }, function(err, rslt){
-        if(err){ err.sql = 'scriptid:'+scriptid; return jsh.AppSrv.AppDBError(req, res, err); }
-        res.end(JSON.stringify({ _success: 1, dbrslt: rslt }));
+      db.RunScripts(jsh, scriptid, { dbconfig: dbconfig, sqlFuncs: sqlFuncs }, function(err, rslt, stats){
+        if(err){ err.sql = 'scriptid:'+scriptid; return jsh.AppSrv.AppDBError(req, res, err, stats); }
+        res.end(JSON.stringify({ _success: 1, _stats: Helper.FormatStats(req, stats, { notices: true, show_all_messages: true }), dbrslt: rslt }));
         return;
       });
     }

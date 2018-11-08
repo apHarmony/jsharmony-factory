@@ -33,7 +33,10 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
   if (rootmenu == '') { onComplete(); return; }
   var dbtypes = jsh.AppSrv.DB.types;
   var topmenu = '';
-  if ('TopMenu' in params) topmenu = params.TopMenu;
+  if ('selectedmenu' in params){
+    topmenu = params.selectedmenu;
+    if(_.isArray(topmenu)) topmenu = topmenu[0];
+  }
   
   var menusql = "menu_main";
   if (type == 'C') menusql = "menu_client";

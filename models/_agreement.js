@@ -46,7 +46,7 @@ exports.welcome = function (req, res, next) {
     function (cb) {
       var params = {};
       req.jshsite.menu(req, res, _this.jsh, params, function () {
-        HelperRender.reqGet(req, res, _this.jsh, 'welcome', 'Welcome', { basetemplate: 'client', TopMenu: '', XMenu: params.XMenu, params: { cms_welcome: cms_welcome, req: req } }, cb);
+        HelperRender.reqGet(req, res, _this.jsh, 'welcome', 'Welcome', { basetemplate: 'client', selectedmenu: '', XMenu: params.XMenu, params: { cms_welcome: cms_welcome, req: req } }, cb);
       });
     }
   ]);
@@ -74,7 +74,7 @@ exports.form = function (req, res, next) {
     function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', "agreement_COD_STATE", [], {}, function (rslt) { COD_STATE = rslt; COD_STATE.unshift(blank_code); cb(); }) },
     function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', "agreement_COD_MONTH", [], {}, function (rslt) { COD_MONTH = rslt; COD_MONTH.unshift(blank_code); cb(); }) },
     function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', "agreement_COD_YEAR", [], {}, function (rslt) { COD_YEAR = rslt; COD_YEAR.unshift(blank_code); cb(); }) },
-    function (cb) { HelperRender.reqGet(req, res, _this.jsh, 'agreement.form', 'User Agreement', { basetemplate: 'public', TopMenu: 'join', params: { cms_agreement: cms_agreement, COD_STATE: COD_STATE, COD_MONTH: COD_MONTH, COD_YEAR: COD_YEAR, req: req } }, cb); }
+    function (cb) { HelperRender.reqGet(req, res, _this.jsh, 'agreement.form', 'User Agreement', { basetemplate: 'public', selectedmenu: 'join', params: { cms_agreement: cms_agreement, COD_STATE: COD_STATE, COD_MONTH: COD_MONTH, COD_YEAR: COD_YEAR, req: req } }, cb); }
   ]);
 }
 
@@ -122,8 +122,8 @@ exports.sign = function (req, res, next) {
   var verrors = _.merge(verrors, validate.Validate('I', P));
   if (!_.isEmpty(verrors)) { Helper.GenError(req, res, -2, verrors[''].join('\n')); return; }
   
-  appsrv.ExecCommand('agreement', sql, sql_ptypes, sql_params, function (err, rslt) {
-    if (err != null) { err.sql = sql; appsrv.AppDBError(req, res, err); return; }
+  appsrv.ExecCommand('agreement', sql, sql_ptypes, sql_params, function (err, rslt, stats) {
+    if (err != null) { err.sql = sql; appsrv.AppDBError(req, res, err, stats); return; }
     rslt = {};
     rslt['_success'] = 1;
     res.end(JSON.stringify(rslt));
@@ -168,8 +168,8 @@ exports.paymentresult = function (req, res, next) {
   var verrors = _.merge(verrors, validate.Validate('B', sql_params));
   if (!_.isEmpty(verrors)) { Helper.GenError(req, res, -2, verrors[''].join('\n')); return; }
   
-  appsrv.ExecRow('join', sql, sql_ptypes, sql_params, function (err, rslt) {
-    if (err != null) { err.sql = sql; appsrv.AppDBError(req, res, err); return; }
+  appsrv.ExecRow('join', sql, sql_ptypes, sql_params, function (err, rslt, stats) {
+    if (err != null) { err.sql = sql; appsrv.AppDBError(req, res, err, stats); return; }
     else {
       if ((rslt != null) && (rslt.length == 1)) rslt = rslt[0];
       if (rslt != null) {

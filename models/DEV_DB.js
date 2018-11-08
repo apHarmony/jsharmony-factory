@@ -17,7 +17,6 @@ select * from cf;",
 };
 jsh.App.DEV_DB.samples.pgsql = {
   "Select": "select * from c;\r\n\
-select '-----TABLE-----' as table_boundary;\r\n\
 select * from cf;",
   "List Tables": "select table_schema||'.'||table_name as table from information_schema.tables where table_type='BASE TABLE' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
   "List Views": "select table_schema||'.'||table_name as view from information_schema.tables where table_type='VIEW' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
@@ -147,22 +146,27 @@ jsh.App.DEV_DB.RunSQL = function(){
   var db = jsh.$root('.DEV_DB_db').val();
   var dbtype = _this.DBs[db];
   var starttm = Date.now();
-  if(dbtype=='pgsql') sql = "select '-----TABLE-----' as table_boundary;"+sql;
   var params = { sql: sql, db: db };
   var runas_user = jsh.$root('.DEV_DB_user').val().trim();
   var runas_password = jsh.$root('.DEV_DB_password').val();
+  var nocontext = jsh.$root('.DEV_DB_nocontext').is(':checked');
   if(runas_user){
     params.runas_user = runas_user;
     params.runas_password = runas_password;
   }
+  params.show_notices = true;
+  params.nocontext = nocontext?'1':'';
   XPost.prototype.XExecutePost('../_db/exec', params, function (rslt) { //On success
     if ('_success' in rslt) { 
-      console.log(rslt);
       var str = '';
+      if(rslt._stats){
+        _.each(rslt._stats.warnings, function(warning){ str += "<div><b>WARNING: </b>"+warning+"</div>"; });
+        _.each(rslt._stats.notices, function(notice){ str += "<div><b>NOTICE: </b>"+notice+"</div>"; });
+      }
       if(rslt.dbrslt && rslt.dbrslt.length){
         for(var i=0;i<rslt.dbrslt.length;i++){
           var dbrslt = rslt.dbrslt[i];
-          str += '<h1>Resultset '+(i+1)+'</h1>';
+          str += '<h1 style="margin-top:10px;">Resultset '+(i+1)+'</h1>';
           if(dbrslt.length){
             str += '<table border=1>';
             var headers = _.keys(dbrslt[0]);
@@ -184,7 +188,7 @@ jsh.App.DEV_DB.RunSQL = function(){
             str += '</table>';
           }
           else str += '<div>Empty</div>';
-          str += '<div style="height:50px;"></div>';
+          str += '<div style="height:40px;"></div>';
         }
       }
       //Raw output

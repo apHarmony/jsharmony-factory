@@ -131,6 +131,12 @@ jsh.App.DEV_DB_SCRIPTS.ExecScript = function(obj, mode){
       }
       else{
         var txt = '';
+        if(rslt._stats){
+          _.each(rslt._stats, function(stats){
+            _.each(stats.warnings, function(warning){ txt += "WARNING: "+warning+"\r\n"; });
+            _.each(stats.notices, function(notice){ txt += "NOTICE: "+notice+"\r\n"; });
+          });
+        }
         if(rslt.dbrslt[0]) for(var i=0;i<rslt.dbrslt[0].length;i++){
           txt += "Resultset " + (i+1).toString() + "\r\n" + "------------------------------------\r\n";
           txt += JSON.stringify(rslt.dbrslt[0][i],null,4) + "\r\n\r\n";
