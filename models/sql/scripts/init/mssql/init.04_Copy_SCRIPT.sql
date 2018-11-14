@@ -3,49 +3,49 @@ GO
 SET XACT_ABORT, ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
 BEGIN TRANSACTION
-EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([SCRIPT_NAME], [SCRIPT_TXT]) VALUES (N''CREATE_GCOD'', N''CREATE TABLE [%%%schema%%%].[GCOD_%%%name%%%](
-	[GCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [date] NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[COD_EU_FMT]  AS ([jsharmony].[myCUSER_FMT]([COD_EU])),
-	[COD_MU_FMT]  AS ([jsharmony].[myCUSER_FMT]([COD_MU])),
-	[CODEATTRIB] [nvarchar](50) NULL,
+EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([SCRIPT_NAME], [SCRIPT_TXT]) VALUES (N''CREATE_GCOD'', N''CREATE TABLE [%%%schema%%%].[gcod_%%%name%%%](
+	[gcod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [date] NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[cod_eu_fmt]  AS ([jsharmony].[myCUSER_FMT]([cod_eu])),
+	[cod_mu_fmt]  AS ([jsharmony].[myCUSER_FMT]([cod_mu])),
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_GCOD_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[GCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_GCOD_%%%name%%%_CODETXT] UNIQUE NONCLUSTERED 
 (
-	[CODETXT] ASC
+	[codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_GCOD_%%%name%%%_CODEVAL] UNIQUE NONCLUSTERED 
 (
-	[CODEVAL] ASC
+	[codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''GCOD_ID''''
@@ -233,7 +233,7 @@ UPDATE [jsharmony].[SCRIPT] SET [SCRIPT_TXT].WRITE(N'CODSEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''CODSEQ'', @D_CODSEQ)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODSEQ''), @D_CODSEQ)
       END
 
       IF (@TP = ''D'' AND @D_CODETDT IS NOT NULL OR
@@ -241,7 +241,7 @@ UPDATE [jsharmony].[SCRIPT] SET [SCRIPT_TXT].WRITE(N'CODSEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''CODETDT'', @D_CODETDT)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODETDT''), @D_CODETDT)
       END
 
       IF (@TP = ''D'' AND @D_CODEVAL IS NOT NULL OR
@@ -249,7 +249,7 @@ UPDATE [jsharmony].[SCRIPT] SET [SCRIPT_TXT].WRITE(N'CODSEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''CODEVAL'', @D_CODEVAL)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODEVAL''), @D_CODEVAL)
       END
 
       IF (@TP = ''D'' AND @D_CODETXT IS NOT NULL OR
@@ -257,7 +257,7 @@ UPDATE [jsharmony].[SCRIPT] SET [SCRIPT_TXT].WRITE(N'CODSEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''CODETXT'', @D_CODETXT)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODETXT''), @D_CODETXT)
       END
 
       IF (@TP = ''D'' AND @D_CODECODE IS NOT NULL OR
@@ -265,7 +265,7 @@ UPDATE [jsharmony].[SCRIPT] SET [SCRIPT_TXT].WRITE(N'CODSEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''CODECODE'', @D_CODECODE)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODECODE''), @D_CODECODE)
       END
 
       IF (@TP = ''D'' AND @D_codeattrib IS NOT NULL OR
@@ -273,7 +273,7 @@ UPDATE [jsharmony].[SCRIPT] SET [SCRIPT_TXT].WRITE(N'CODSEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''CODEATTRIB'', @D_CODEATTRIB)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODEATTRIB''), @D_CODEATTRIB)
       END
 
       IF (@TP = ''D'' AND @D_CODETCM IS NOT NULL OR
@@ -281,7 +281,7 @@ UPDATE [jsharmony].[SCRIPT] SET [SCRIPT_TXT].WRITE(N'CODSEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''CODETCM'', @D_CODETCM)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODETCM''), @D_CODETCM)
       END
 
     END  /* END OF "IF @TP=''U'' OR @TP=''D''"  */
@@ -329,52 +329,52 @@ END
 
 
 ',NULL,NULL) WHERE [SCRIPT_NAME]=N'CREATE_GCOD_TRIGGER'
-EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([SCRIPT_NAME], [SCRIPT_TXT]) VALUES (N''CREATE_GCOD2'', N''CREATE TABLE [%%%schema%%%].[GCOD2_%%%name%%%](
-	[GCOD2_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL1] [nvarchar](8) NOT NULL,
-	[CODEVAL2] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[COD_EU_FMT]  AS ([jsharmony].[myCUSER_FMT]([COD_EU])),
-	[COD_MU_FMT]  AS ([jsharmony].[myCUSER_FMT]([COD_MU])),
+EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([SCRIPT_NAME], [SCRIPT_TXT]) VALUES (N''CREATE_GCOD2'', N''CREATE TABLE [%%%schema%%%].[gcod2_%%%name%%%](
+	[gcod2_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval1] [nvarchar](8) NOT NULL,
+	[codeval2] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codeattrib] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[cod_eu_fmt]  AS ([jsharmony].[myCUSER_FMT]([cod_eu])),
+	[cod_mu_fmt]  AS ([jsharmony].[myCUSER_FMT]([cod_mu])),
  CONSTRAINT [PK_GCOD2_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[GCOD2_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_GCOD2_%%%name%%%_CODEVAL1_CODEVAL2] UNIQUE NONCLUSTERED 
 (
-	[CODEVAL1] ASC,
-	[CODEVAL2] ASC
+	[codeval1] ASC,
+	[codeval2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_GCOD2_%%%name%%%_CODEVAL1_CODETXT] UNIQUE NONCLUSTERED 
 (
-	[CODEVAL1] ASC,
-	[CODETXT] ASC
+	[codeval1] ASC,
+	[codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''GCOD2_ID''''
@@ -574,7 +574,7 @@ EXEC(N'DECLARE @pv binary(16)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''''CODSEQ'''', @D_CODSEQ)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODSEQ''''), @D_CODSEQ)
       END
 
       IF (@TP = ''''D'''' AND @D_CODETDT IS NOT NULL OR
@@ -582,7 +582,7 @@ EXEC(N'DECLARE @pv binary(16)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''''CODETDT'''', @D_CODETDT)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODETDT''''), @D_CODETDT)
       END
 
       IF (@TP = ''''D'''' AND @D_CODEVAL1 IS NOT NULL OR
@@ -590,7 +590,7 @@ EXEC(N'DECLARE @pv binary(16)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''''CODEVAL1'''', @D_CODEVAL1)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODEVAL1''''), @D_CODEVAL1)
       END
 
       IF (@TP = ''''D'''' AND @D_CODEVAL2 IS NOT NULL OR
@@ -598,7 +598,7 @@ EXEC(N'DECLARE @pv binary(16)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''''CODEVAL2'''', @D_CODEVAL2)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODEVAL2''''), @D_CODEVAL2)
       END
 
       IF (@TP = ''''D'''' AND @D_CODETXT IS NOT NULL OR
@@ -606,7 +606,7 @@ EXEC(N'DECLARE @pv binary(16)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''''CODETXT'''', @D_CODETXT)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODETXT''''), @D_CODETXT)
       END
 
       IF (@TP = ''''D'''' AND @D_CODECODE IS NOT NULL OR
@@ -614,7 +614,7 @@ EXEC(N'DECLARE @pv binary(16)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''''CODECODE'''', @D_CODECODE)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODECODE''''), @D_CODECODE)
       END
 
       IF (@TP = ''''D'''' AND @D_CODEATTRIB IS NOT NULL OR
@@ -622,7 +622,7 @@ EXEC(N'DECLARE @pv binary(16)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''''CODEATTRIB'''', @D_CODEATTRIB)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODEATTRIB''''), @D_CODEATTRIB)
       END
 
       IF (@TP = ''''D'''' AND @D_CODETCM IS NOT NULL OR
@@ -630,7 +630,7 @@ EXEC(N'DECLARE @pv binary(16)
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, ''''CODETCM'''', @D_CODETCM)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODETCM''''), @D_CODETCM)
       END
 
     END  /* END OF "IF @TP=''''U'''' OR @TP=''''D''''"  */
@@ -680,47 +680,47 @@ END
 
 '',NULL,NULL) WHERE [SCRIPT_NAME]=N''CREATE_GCOD2_TRIGGER''
 ')
-EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([SCRIPT_NAME], [SCRIPT_TXT]) VALUES (N''CREATE_UCOD'', N''CREATE TABLE [%%%schema%%%].[UCOD_%%%name%%%](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([SCRIPT_NAME], [SCRIPT_TXT]) VALUES (N''CREATE_UCOD'', N''CREATE TABLE [%%%schema%%%].[ucod_%%%name%%%](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[UCOD_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_%%%name%%%_CODETXT] UNIQUE NONCLUSTERED 
 (
-	[CODETXT] ASC
+	[codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_%%%name%%%_CODEVAL] UNIQUE NONCLUSTERED 
 (
-	[CODEVAL] ASC
+	[codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''UCOD_ID''''
@@ -766,50 +766,50 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''System Code
 
 
 ',NULL,NULL) WHERE [SCRIPT_NAME]=N'CREATE_UCOD'
-EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([SCRIPT_NAME], [SCRIPT_TXT]) VALUES (N''CREATE_UCOD2'', N''CREATE TABLE [%%%schema%%%].[UCOD2_%%%name%%%](
-	[UCOD2_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL1] [nvarchar](8) NOT NULL,
-	[CODEVAL2] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
+EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([SCRIPT_NAME], [SCRIPT_TXT]) VALUES (N''CREATE_UCOD2'', N''CREATE TABLE [%%%schema%%%].[ucod2_%%%name%%%](
+	[ucod2_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval1] [nvarchar](8) NOT NULL,
+	[codeval2] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codeattrib] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
  CONSTRAINT [PK_UCOD2_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[UCOD2_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD2_%%%name%%%_CODEVAL1_CODEVAL2] UNIQUE NONCLUSTERED 
 (
-	[CODEVAL1] ASC,
-	[CODEVAL2] ASC
+	[codeval1] ASC,
+	[codeval2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD2_%%%name%%%_CODEVAL1_CODETXT] UNIQUE NONCLUSTERED 
 (
-	[CODEVAL1] ASC,
-	[CODETXT] ASC
+	[codeval1] ASC,
+	[codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''UCOD2_ID''''

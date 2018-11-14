@@ -60,7 +60,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[CHECK_PP]
+CREATE FUNCTION [jsharmony].[check_pp]
 (
 	@in_table nvarchar(3),
 	@in_process nvarchar(32),
@@ -140,7 +140,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE FUNCTION [jsharmony].[D_FILENAME]
+CREATE FUNCTION [jsharmony].[d_filename]
 (
 	@in_D_ID bigint,
 	@in_D_EXT NVARCHAR(MAX)
@@ -170,7 +170,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE FUNCTION [jsharmony].[EXISTS_D]
+CREATE FUNCTION [jsharmony].[exists_d]
 (
 	@tbl nvarchar(MAX),
 	@id bigint
@@ -212,7 +212,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[EXISTS_N]
+CREATE FUNCTION [jsharmony].[exists_n]
 (
 	@tbl nvarchar(MAX),
 	@id bigint
@@ -248,7 +248,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[GET_CPE_NAME]
+CREATE FUNCTION [jsharmony].[get_cpe_name]
 (
 	@in_PE_ID BIGINT
 )	
@@ -276,7 +276,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[GET_PE_NAME]
+CREATE FUNCTION [jsharmony].[get_pe_name]
 (
 	@in_PE_ID BIGINT
 )	
@@ -306,7 +306,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[GET_PPD_DESC]
+CREATE FUNCTION [jsharmony].[get_ppd_desc]
 (
 	@in_PPD_PROCESS NVARCHAR(MAX),
 	@in_PPD_ATTRIB NVARCHAR(MAX)
@@ -343,7 +343,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myCUSER]
+CREATE FUNCTION [jsharmony].[mycuser]
 ()	
 RETURNS varchar(20)   
 AS 
@@ -374,7 +374,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myCUSER_DO]
+CREATE FUNCTION [jsharmony].[mycuser_do]
 ()	
 RETURNS varchar(20)   
 AS 
@@ -411,7 +411,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myCUSER_FMT]
+CREATE FUNCTION [jsharmony].[mycuser_fmt]
 (@USER VARCHAR(20))	
 RETURNS nvarchar(120)   
 AS 
@@ -443,7 +443,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myCUSER_FMT_DO]
+CREATE FUNCTION [jsharmony].[mycuser_fmt_do]
 (@USER VARCHAR(20))	
 RETURNS nvarchar(120)   
 AS 
@@ -490,7 +490,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myHASH]
+CREATE FUNCTION [jsharmony].[myhash]
 (@TYPE CHAR(1),
  @PE_ID bigint,
  @PW nvarchar(255))	
@@ -543,7 +543,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myMMDDYYHHMI] (@X DATETIME2(7))
+CREATE FUNCTION [jsharmony].[mymmddyyhhmi] (@X DATETIME2(7))
 RETURNS varchar(140)
 AS
 BEGIN
@@ -562,7 +562,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myNOW]
+CREATE FUNCTION [jsharmony].[mynow]
 ()
 RETURNS DATETIME2(7)   
 AS 
@@ -592,7 +592,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myNOW_DO]
+CREATE FUNCTION [jsharmony].[mynow_do]
 ()
 RETURNS DATETIME2(7)   
 AS 
@@ -617,7 +617,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myPE]
+CREATE FUNCTION [jsharmony].[mype]
 ()	
 RETURNS bigint   
 AS 
@@ -640,7 +640,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE FUNCTION [jsharmony].[myPE_DO]
+CREATE FUNCTION [jsharmony].[mype_do]
 ()	
 RETURNS bigint   
 AS 
@@ -671,7 +671,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myPEC]
+CREATE FUNCTION [jsharmony].[mypec]
 ()	
 RETURNS bigint   
 AS 
@@ -695,7 +695,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myPEC_DO]
+CREATE FUNCTION [jsharmony].[mypec_do]
 ()	
 RETURNS bigint   
 AS 
@@ -724,7 +724,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myTODATE] (@X DATETIME2(7))
+CREATE FUNCTION [jsharmony].[mytodate] (@X DATETIME2(7))
 RETURNS date
 AS
 BEGIN
@@ -746,7 +746,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myTODAY] ()
+CREATE FUNCTION [jsharmony].[mytoday] ()
 RETURNS date
 AS
 BEGIN
@@ -767,7 +767,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[myTODAY_DO] ()
+CREATE FUNCTION [jsharmony].[mytoday_do] ()
 RETURNS date
 AS
 BEGIN
@@ -791,7 +791,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[NONEQUALC]
+CREATE FUNCTION [jsharmony].[nonequalc]
 (
 	@in1 nvarchar(MAX),
 	@in2 nvarchar(MAX)
@@ -830,7 +830,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[NONEQUALD]
+CREATE FUNCTION [jsharmony].[nonequald]
 (
 	@in1 DATETIME2(7),
 	@in2 DATETIME2(7)
@@ -875,7 +875,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[NONEQUALN]
+CREATE FUNCTION [jsharmony].[nonequaln]
 (
 	@in1 numeric(30,10),
 	@in2 numeric(30,10)
@@ -911,7 +911,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[TABLE_TYPE]
+CREATE FUNCTION [jsharmony].[table_type]
 (
 	@in_schema varchar(max),
 	@in_name varchar(max)
@@ -939,21 +939,21 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[PPD](
-	[PPD_PROCESS] [nvarchar](32) NOT NULL,
-	[PPD_ATTRIB] [nvarchar](16) NOT NULL,
-	[PPD_DESC] [nvarchar](255) NOT NULL,
-	[PPD_TYPE] [nvarchar](8) NOT NULL,
-	[CODENAME] [nvarchar](16) NULL,
-	[PPD_GPP] [bit] NOT NULL,
-	[PPD_PPP] [bit] NOT NULL,
-	[PPD_XPP] [bit] NOT NULL,
-	[PPD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[PPD_ETstmp] [datetime2](7) NOT NULL,
-	[PPD_EU] [nvarchar](20) NOT NULL,
-	[PPD_MTstmp] [datetime2](7) NOT NULL,
-	[PPD_MU] [nvarchar](20) NOT NULL,
-	[PPD_SNotes] [nvarchar](max) NULL,
+CREATE TABLE [jsharmony].[ppd](
+	[ppd_process] [nvarchar](32) NOT NULL,
+	[ppd_attrib] [nvarchar](16) NOT NULL,
+	[ppd_desc] [nvarchar](255) NOT NULL,
+	[ppd_type] [nvarchar](8) NOT NULL,
+	[codename] [nvarchar](16) NULL,
+	[ppd_gpp] [bit] NOT NULL,
+	[ppd_ppp] [bit] NOT NULL,
+	[ppd_xpp] [bit] NOT NULL,
+	[ppd_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[ppd_etstmp] [datetime2](7) NOT NULL,
+	[ppd_eu] [nvarchar](20) NOT NULL,
+	[ppd_mtstmp] [datetime2](7) NOT NULL,
+	[ppd_mu] [nvarchar](20) NOT NULL,
+	[ppd_snotes] [nvarchar](max) NULL,
  CONSTRAINT [PK_PPD] PRIMARY KEY CLUSTERED 
 (
 	[PPD_PROCESS] ASC,
@@ -969,14 +969,14 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[UCOD_PPP_PROCESS_V] as
+create view [jsharmony].[ucod_ppp_process_v] as
 SELECT distinct
-       NULL CODSEQ
-      ,PPD_PROCESS CODEVAL
-      ,PPD_PROCESS CODETXT
-      ,NULL CODECODE
-      ,NULL CODETDT
-      ,NULL CODETCM
+       NULL codseq
+      ,PPD_PROCESS codeval
+      ,PPD_PROCESS codetxt
+      ,NULL codecode
+      ,NULL codetdt
+      ,NULL codetcm
   FROM jsharmony.PPD
  where PPD_PPP = 1
 
@@ -985,19 +985,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[AUD_H](
-	[AUD_SEQ] [bigint] IDENTITY(1,1) NOT NULL,
-	[TABLE_NAME] [varchar](32) NOT NULL,
-	[TABLE_ID] [bigint] NOT NULL,
-	[AUD_OP] [char](10) NOT NULL,
-	[AUD_U] [nvarchar](20) NOT NULL,
-	[DB_K] [char](1) NOT NULL,
-	[AUD_Tstmp] [datetime2](7) NOT NULL,
-	[C_ID] [bigint] NULL,
-	[E_ID] [bigint] NULL,
-	[REF_NAME] [varchar](32) NULL,
-	[REF_ID] [bigint] NULL,
-	[SUBJ] [nvarchar](255) NULL,
+CREATE TABLE [jsharmony].[aud_h](
+	[aud_seq] [bigint] IDENTITY(1,1) NOT NULL,
+	[table_name] [varchar](32) NOT NULL,
+	[table_id] [bigint] NOT NULL,
+	[aud_op] [char](10) NOT NULL,
+	[aud_u] [nvarchar](20) NOT NULL,
+	[db_k] [char](1) NOT NULL,
+	[aud_tstmp] [datetime2](7) NOT NULL,
+	[c_id] [bigint] NULL,
+	[e_id] [bigint] NULL,
+	[ref_name] [varchar](32) NULL,
+	[ref_id] [bigint] NULL,
+	[subj] [nvarchar](255) NULL,
  CONSTRAINT [PK_AUD_H] PRIMARY KEY CLUSTERED 
 (
 	[AUD_SEQ] ASC
@@ -1008,10 +1008,10 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[AUD_D](
-	[AUD_SEQ] [bigint] NOT NULL,
-	[COLUMN_NAME] [varchar](30) NOT NULL,
-	[COLUMN_VAL] [nvarchar](max) NULL,
+CREATE TABLE [jsharmony].[aud_d](
+	[aud_seq] [bigint] NOT NULL,
+	[column_name] [varchar](30) NOT NULL,
+	[column_val] [nvarchar](max) NULL,
  CONSTRAINT [PK_AUD_D] PRIMARY KEY CLUSTERED 
 (
 	[AUD_SEQ] ASC,
@@ -1035,23 +1035,23 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[V_AUDL_RAW]
+CREATE VIEW [jsharmony].[v_audl_raw]
 AS
-SELECT        AUD_H.AUD_SEQ,
-              AUD_H.C_ID,
-              AUD_H.E_ID,
-              AUD_H.TABLE_NAME,
-              AUD_H.TABLE_ID,
-              AUD_H.AUD_OP,
-              AUD_H.AUD_U,
-			  jsharmony.myCUSER_FMT(AUD_H.AUD_U) PE_Name,
-			  AUD_H.DB_K,
-			  AUD_H.AUD_Tstmp,
-			  AUD_H.REF_NAME,
-			  AUD_H.REF_ID,
-			  AUD_H.SUBJ,
-              AUD_D.COLUMN_NAME, 
-			  AUD_D.COLUMN_VAL
+SELECT  AUD_H.aud_seq,
+        AUD_H.c_id,
+        AUD_H.e_id,
+        AUD_H.table_name,
+        AUD_H.table_id,
+        AUD_H.aud_op,
+        AUD_H.aud_u,
+			  jsharmony.myCUSER_FMT(AUD_H.AUD_U) pe_name,
+			  AUD_H.db_k,
+			  AUD_H.aud_tstmp,
+			  AUD_H.ref_name,
+			  AUD_H.ref_id,
+			  AUD_H.subj,
+        AUD_D.column_name, 
+			  AUD_D.column_val
 FROM          jsharmony.AUD_H 
 LEFT OUTER JOIN jsharmony.AUD_D ON AUD_H.AUD_SEQ = AUD_D.AUD_SEQ
 
@@ -1070,14 +1070,14 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[UCOD_XPP_PROCESS_V] as
+create view [jsharmony].[ucod_xpp_process_v] as
 SELECT distinct
-       NULL CODSEQ
-      ,PPD_PROCESS CODEVAL
-      ,PPD_PROCESS CODETXT
-      ,NULL CODECODE
-      ,NULL CODETDT
-      ,NULL CODETCM
+       NULL codseq
+      ,PPD_PROCESS codeval
+      ,PPD_PROCESS codetxt
+      ,NULL codecode
+      ,NULL codetdt
+      ,NULL codetcm
   FROM jsharmony.PPD
  where PPD_XPP = 1
 
@@ -1089,20 +1089,20 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[UCOD2_GPP_PROCESS_ATTRIB_V] as
-SELECT NULL CODSEQ
-      ,PPD_PROCESS CODEVAL1
-      ,PPD_ATTRIB CODEVAL2
-      ,PPD_DESC CODETXT
-      ,NULL CODECODE
-      ,NULL CODETDT
-      ,NULL CODETCM
-      ,NULL COD_ETstmp
-      ,NULL COD_EU
-      ,NULL COD_MTstmp
-      ,NULL COD_MU
-      ,NULL COD_SNotes
-      ,NULL COD_Notes
+create view [jsharmony].[ucod2_gpp_process_attrib_v] as
+SELECT NULL codseq
+      ,PPD_PROCESS codeval1
+      ,PPD_ATTRIB codeval2
+      ,PPD_DESC codetxt
+      ,NULL codecode
+      ,NULL codetdt
+      ,NULL codetcm
+      ,NULL cod_etstmp
+      ,NULL cod_eu
+      ,NULL cod_mtstmp
+      ,NULL cod_mu
+      ,NULL cod_snotes
+      ,NULL cod_notes
   FROM jsharmony.PPD
  WHERE PPD_GPP = 1
 GO
@@ -1114,20 +1114,20 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[UCOD2_PPP_PROCESS_ATTRIB_V] as
-SELECT NULL CODSEQ
-      ,PPD_PROCESS CODEVAL1
-      ,PPD_ATTRIB CODEVAL2
-      ,PPD_DESC CODETXT
-      ,NULL CODECODE
-      ,NULL CODETDT
-      ,NULL CODETCM
-      ,NULL COD_ETstmp
-      ,NULL COD_EU
-      ,NULL COD_MTstmp
-      ,NULL COD_MU
-      ,NULL COD_SNotes
-      ,NULL COD_Notes
+create view [jsharmony].[ucod2_ppp_process_attrib_v] as
+SELECT NULL codseq
+      ,PPD_PROCESS codeval1
+      ,PPD_ATTRIB codeval2
+      ,PPD_DESC codetxt
+      ,NULL codecode
+      ,NULL codetdt
+      ,NULL codetcm
+      ,NULL cod_etstmp
+      ,NULL cod_eu
+      ,NULL cod_mtstmp
+      ,NULL cod_mu
+      ,NULL cod_snotes
+      ,NULL cod_notes
   FROM jsharmony.PPD
  WHERE PPD_PPP = 1
 
@@ -1140,20 +1140,20 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[UCOD2_XPP_PROCESS_ATTRIB_V] as
-SELECT NULL CODSEQ
-      ,PPD_PROCESS CODEVAL1
-      ,PPD_ATTRIB CODEVAL2
-      ,PPD_DESC CODETXT
-      ,NULL CODECODE
-      ,NULL CODETDT
-      ,NULL CODETCM
-      ,NULL COD_ETstmp
-      ,NULL COD_EU
-      ,NULL COD_MTstmp
-      ,NULL COD_MU
-      ,NULL COD_SNotes
-      ,NULL COD_Notes
+create view [jsharmony].[ucod2_xpp_process_attrib_v] as
+SELECT NULL codseq
+      ,PPD_PROCESS codeval1
+      ,PPD_ATTRIB codeval2
+      ,PPD_DESC codetxt
+      ,NULL codecode
+      ,NULL codetdt
+      ,NULL codetcm
+      ,NULL cod_etstmp
+      ,NULL cod_eu
+      ,NULL cod_mtstmp
+      ,NULL cod_mu
+      ,NULL cod_snotes
+      ,NULL cod_notes
   FROM jsharmony.PPD
  WHERE PPD_XPP = 1
 
@@ -1162,15 +1162,15 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[SPER](
-	[PE_ID] [bigint] NOT NULL,
-	[SPER_SNotes] [nvarchar](255) NULL,
-	[SPER_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[SR_NAME] [nvarchar](16) NOT NULL,
+CREATE TABLE [jsharmony].[sper](
+	[pe_id] [bigint] NOT NULL,
+	[sper_snotes] [nvarchar](255) NULL,
+	[sper_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[sr_name] [nvarchar](16) NOT NULL,
  CONSTRAINT [PK_SPER] PRIMARY KEY CLUSTERED 
 (
-	[PE_ID] ASC,
-	[SR_NAME] ASC
+	[pe_id] ASC,
+	[sr_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SPER] UNIQUE NONCLUSTERED 
 (
@@ -1186,8 +1186,8 @@ GO
 
 
 
-CREATE view [jsharmony].[V_MY_ROLES] as
-select SPER.SR_NAME
+CREATE view [jsharmony].[v_my_roles] as
+select SPER.sr_name
   from jsharmony.SPER
  where SPER.PE_ID = jsharmony.myPE()
 
@@ -1197,11 +1197,11 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[NUMBERS](
-	[N] [smallint] NOT NULL,
+CREATE TABLE [jsharmony].[numbers](
+	[n] [smallint] NOT NULL,
  CONSTRAINT [PK_NUMBERS] PRIMARY KEY CLUSTERED 
 (
-	[N] ASC
+	[n] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1217,10 +1217,10 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-CREATE view [jsharmony].[V_MONTHS] as
-select N, 
-       right('0'+convert(nvarchar(50),N),2) MONTH,
-       right('0'+convert(nvarchar(50),N),2) MTH
+CREATE view [jsharmony].[v_months] as
+select n, 
+       right('0'+convert(nvarchar(50),N),2) month,
+       right('0'+convert(nvarchar(50),N),2) mth
   from jsharmony.NUMBERS
  where N <=12;
 
@@ -1239,7 +1239,7 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-CREATE view [jsharmony].[V_YEARS] as
+CREATE view [jsharmony].[v_years] as
 select datepart(year,sysdatetime())+N-1 year,
        datepart(year,sysdatetime())+N-1 yr
   from jsharmony.NUMBERS
@@ -1252,21 +1252,21 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[PPP](
-	[PE_ID] [bigint] NOT NULL,
-	[PPP_PROCESS] [nvarchar](32) NOT NULL,
-	[PPP_ATTRIB] [nvarchar](16) NOT NULL,
-	[PPP_VAL] [varchar](256) NULL,
-	[PPP_ETstmp] [datetime2](7) NOT NULL,
-	[PPP_EU] [nvarchar](20) NOT NULL,
-	[PPP_MTstmp] [datetime2](7) NOT NULL,
-	[PPP_MU] [nvarchar](20) NOT NULL,
-	[PPP_ID] [bigint] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [jsharmony].[ppp](
+	[pe_id] [bigint] NOT NULL,
+	[ppp_process] [nvarchar](32) NOT NULL,
+	[ppp_attrib] [nvarchar](16) NOT NULL,
+	[ppp_val] [varchar](256) NULL,
+	[ppp_etstmp] [datetime2](7) NOT NULL,
+	[ppp_eu] [nvarchar](20) NOT NULL,
+	[ppp_mtstmp] [datetime2](7) NOT NULL,
+	[ppp_mu] [nvarchar](20) NOT NULL,
+	[ppp_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_PPP] PRIMARY KEY CLUSTERED 
 (
-	[PE_ID] ASC,
-	[PPP_PROCESS] ASC,
-	[PPP_ATTRIB] ASC
+	[pe_id] ASC,
+	[ppp_process] ASC,
+	[ppp_attrib] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1274,19 +1274,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[GPP](
-	[GPP_PROCESS] [nvarchar](32) NOT NULL,
-	[GPP_ATTRIB] [nvarchar](16) NOT NULL,
-	[GPP_VAL] [varchar](256) NULL,
-	[GPP_ETstmp] [datetime2](7) NOT NULL,
-	[GPP_EU] [nvarchar](20) NOT NULL,
-	[GPP_MTstmp] [datetime2](7) NOT NULL,
-	[GPP_MU] [nvarchar](20) NOT NULL,
-	[GPP_ID] [bigint] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [jsharmony].[gpp](
+	[gpp_process] [nvarchar](32) NOT NULL,
+	[gpp_attrib] [nvarchar](16) NOT NULL,
+	[gpp_val] [varchar](256) NULL,
+	[gpp_etstmp] [datetime2](7) NOT NULL,
+	[gpp_eu] [nvarchar](20) NOT NULL,
+	[gpp_mtstmp] [datetime2](7) NOT NULL,
+	[gpp_mu] [nvarchar](20) NOT NULL,
+	[gpp_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_GPP] PRIMARY KEY CLUSTERED 
 (
-	[GPP_PROCESS] ASC,
-	[GPP_ATTRIB] ASC
+	[gpp_process] ASC,
+	[gpp_attrib] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1294,19 +1294,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[XPP](
-	[XPP_PROCESS] [nvarchar](32) NOT NULL,
-	[XPP_ATTRIB] [nvarchar](16) NOT NULL,
-	[XPP_VAL] [varchar](256) NOT NULL,
-	[XPP_ETstmp] [datetime2](7) NOT NULL,
-	[XPP_EU] [nvarchar](20) NOT NULL,
-	[XPP_MTstmp] [datetime2](7) NOT NULL,
-	[XPP_MU] [nvarchar](20) NOT NULL,
-	[XPP_ID] [bigint] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [jsharmony].[xpp](
+	[xpp_process] [nvarchar](32) NOT NULL,
+	[xpp_attrib] [nvarchar](16) NOT NULL,
+	[xpp_val] [varchar](256) NOT NULL,
+	[xpp_etstmp] [datetime2](7) NOT NULL,
+	[xpp_eu] [nvarchar](20) NOT NULL,
+	[xpp_mtstmp] [datetime2](7) NOT NULL,
+	[xpp_mu] [nvarchar](20) NOT NULL,
+	[xpp_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_XPP] PRIMARY KEY CLUSTERED 
 (
-	[XPP_PROCESS] ASC,
-	[XPP_ATTRIB] ASC
+	[xpp_process] ASC,
+	[xpp_attrib] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1319,19 +1319,19 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[V_PP] AS
- SELECT PPD.PPD_PROCESS AS PP_PROCESS, 
-        PPD.PPD_ATTRIB AS PP_ATTRIB, 
-		CASE WHEN PPP_VAL IS NULL OR PPP_VAL = '' 
-		     THEN CASE WHEN GPP_VAL IS NULL OR GPP_VAL = '' 
-			           THEN XPP_VAL 
+CREATE VIEW [jsharmony].[v_pp] AS
+ SELECT PPD.PPD_PROCESS AS pp_process, 
+        PPD.PPD_ATTRIB AS pp_attrib, 
+		    CASE WHEN PPP_VAL IS NULL OR PPP_VAL = '' 
+		         THEN CASE WHEN GPP_VAL IS NULL OR GPP_VAL = '' 
+			                 THEN XPP_VAL 
 					   ELSE GPP_VAL END 
-			 ELSE PPP_VAL END AS PP_VAL, 
-		CASE WHEN PPP_VAL IS NULL OR PPP_VAL = '' 
-		     THEN CASE WHEN GPP_VAL IS NULL OR GPP_VAL = '' 
-			           THEN 'XPP' 
-					   ELSE 'GPP' END 
-			 ELSE convert(varchar,PPP.PE_ID) END AS PP_SOURCE 
+			  ELSE PPP_VAL END AS pp_val, 
+		    CASE WHEN PPP_VAL IS NULL OR PPP_VAL = '' 
+		         THEN CASE WHEN GPP_VAL IS NULL OR GPP_VAL = '' 
+			                 THEN 'XPP' 
+					             ELSE 'GPP' END 
+			  ELSE convert(varchar,PPP.PE_ID) END AS pp_source 
    FROM jsharmony.PPD 
    LEFT OUTER JOIN jsharmony.XPP ON PPD.PPD_PROCESS = XPP.XPP_PROCESS AND PPD.PPD_ATTRIB = XPP.XPP_ATTRIB 
    LEFT OUTER JOIN jsharmony.GPP ON PPD.PPD_PROCESS = GPP.GPP_PROCESS AND PPD.PPD_ATTRIB = GPP.GPP_ATTRIB 
@@ -1345,30 +1345,30 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[D](
-	[D_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[D_SCOPE] [nvarchar](8) NOT NULL,
-	[D_SCOPE_ID] [bigint] NOT NULL,
-	[C_ID] [bigint] NULL,
-	[E_ID] [bigint] NULL,
-	[D_STS] [nvarchar](8) NOT NULL,
-	[D_CTGR] [nvarchar](8) NOT NULL,
-	[D_Desc] [nvarchar](255) NULL,
-	[D_EXT] [nvarchar](16) NULL,
-	[D_SIZE] [bigint] NULL,
-	[D_FileName]  AS (('D'+CONVERT([varchar](50),[D_ID],(0)))+isnull([D_EXT],'')) PERSISTED,
-	[D_ETstmp] [datetime2](7) NOT NULL,
-	[D_EU] [nvarchar](20) NOT NULL,
-	[D_MTstmp] [datetime2](7) NOT NULL,
-	[D_MU] [nvarchar](20) NOT NULL,
-	[D_UTstmp] [datetime2](7) NOT NULL,
-	[D_UU] [nvarchar](20) NOT NULL,
-	[D_SYNCTstmp] [datetime2](7) NULL,
-	[D_SNotes] [nvarchar](255) NULL,
-	[D_ID_MAIN] [bigint] NULL,
+CREATE TABLE [jsharmony].[d](
+	[d_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[d_scope] [nvarchar](8) NOT NULL,
+	[d_scope_id] [bigint] NOT NULL,
+	[c_id] [bigint] NULL,
+	[e_id] [bigint] NULL,
+	[d_sts] [nvarchar](8) NOT NULL,
+	[d_ctgr] [nvarchar](8) NOT NULL,
+	[d_desc] [nvarchar](255) NULL,
+	[d_ext] [nvarchar](16) NULL,
+	[d_size] [bigint] NULL,
+	[d_filename]  AS (('D'+CONVERT([varchar](50),[d_id],(0)))+isnull([d_ext],'')) PERSISTED,
+	[d_etstmp] [datetime2](7) NOT NULL,
+	[d_eu] [nvarchar](20) NOT NULL,
+	[d_mtstmp] [datetime2](7) NOT NULL,
+	[d_mu] [nvarchar](20) NOT NULL,
+	[d_utstmp] [datetime2](7) NOT NULL,
+	[d_uu] [nvarchar](20) NOT NULL,
+	[d_synctstmp] [datetime2](7) NULL,
+	[d_snotes] [nvarchar](255) NULL,
+	[d_id_main] [bigint] NULL,
  CONSTRAINT [PK_D] PRIMARY KEY CLUSTERED 
 (
-	[D_ID] ASC
+	[d_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1378,41 +1378,41 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[V_D_X] as
-SELECT D_ID
-      ,D_SCOPE
-      ,D_SCOPE_ID
-      ,C_ID
-      ,E_ID
-      ,D_STS
-      ,D_CTGR
-      ,D_Desc
-      ,D_EXT
-      ,D_SIZE
-      ,D_FileName
-      ,D_ETstmp
-      ,D_EU
-      ,D_MTstmp
-      ,D_MU
-      ,D_UTstmp
-      ,D_UU
-      ,D_SYNCTstmp
-      ,D_SNotes
-      ,D_ID_MAIN
+create view [jsharmony].[v_d_x] as
+SELECT d_id
+      ,d_scope
+      ,d_scope_id
+      ,c_id
+      ,e_id
+      ,d_sts
+      ,d_ctgr
+      ,d_desc
+      ,d_ext
+      ,d_size
+      ,d_filename
+      ,d_etstmp
+      ,d_eu
+      ,d_mtstmp
+      ,d_mu
+      ,d_utstmp
+      ,d_uu
+      ,d_synctstmp
+      ,d_snotes
+      ,d_id_main
   FROM jsharmony.D
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[DUAL](
-	[DUMMY] [nvarchar](1) NOT NULL,
-	[DUAL_IDENT] [bigint] NOT NULL,
-	[DUAL_BIGINT] [bigint] NULL,
-	[DUAL_NVARCHAR50] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[dual](
+	[dummy] [nvarchar](1) NOT NULL,
+	[dual_ident] [bigint] NOT NULL,
+	[dual_bigint] [bigint] NULL,
+	[dual_nvarchar50] [nvarchar](50) NULL,
  CONSTRAINT [PK_DUAL] PRIMARY KEY CLUSTERED 
 (
-	[DUAL_IDENT] ASC
+	[dual_ident] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1427,17 +1427,17 @@ GO
 
 
 
-CREATE view [jsharmony].[V_HOUSE] as
-select NAME.PP_VAL HOUSE_NAME,
-       ADDR.PP_VAL HOUSE_ADDR,
-	   CITY.PP_VAL HOUSE_CITY,
-	   [STATE].PP_VAL HOUSE_STATE,
-	   ZIP.PP_VAL HOUSE_ZIP,
-       isnull(ADDR.PP_VAL,'')+', '+isnull(CITY.PP_VAL,'')+' '+isnull([STATE].PP_VAL,'')+' '+isnull(ZIP.PP_VAL,'') HOUSE_FULL_ADDR,
-	   BPHONE.PP_VAL HOUSE_BPHONE,
-	   FAX.PP_VAL HOUSE_FAX,
-	   EMAIL.PP_VAL HOUSE_EMAIL,
-	   CONTACT.PP_VAL HOUSE_CONTACT
+CREATE view [jsharmony].[v_house] as
+select NAME.PP_VAL house_name,
+       ADDR.PP_VAL house_addr,
+	     CITY.PP_VAL house_city,
+	     [STATE].PP_VAL house_state,
+	     ZIP.PP_VAL house_zip,
+       isnull(ADDR.PP_VAL,'')+', '+isnull(CITY.PP_VAL,'')+' '+isnull([STATE].PP_VAL,'')+' '+isnull(ZIP.PP_VAL,'') house_full_addr,
+	     BPHONE.PP_VAL house_bphone,
+	     FAX.PP_VAL house_fax,
+	     EMAIL.PP_VAL house_email,
+	     CONTACT.PP_VAL house_contact
   from jsharmony.dual
  left outer join jsharmony.V_PP NAME on NAME.PP_PROCESS='HOUSE' and NAME.PP_ATTRIB='NAME'
  left outer join jsharmony.V_PP ADDR on ADDR.PP_PROCESS='HOUSE' and ADDR.PP_ATTRIB='ADDR'
@@ -1457,19 +1457,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[CRM](
-	[SM_ID] [bigint] NOT NULL,
-	[CRM_SNotes] [nvarchar](255) NULL,
-	[CRM_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CR_NAME] [nvarchar](16) NOT NULL,
+CREATE TABLE [jsharmony].[crm](
+	[sm_id] [bigint] NOT NULL,
+	[crm_snotes] [nvarchar](255) NULL,
+	[crm_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[cr_name] [nvarchar](16) NOT NULL,
  CONSTRAINT [PK_CRM] PRIMARY KEY CLUSTERED 
 (
-	[CR_NAME] ASC,
-	[SM_ID] ASC
+	[cr_name] ASC,
+	[sm_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_CRM] UNIQUE NONCLUSTERED 
 (
-	[CRM_ID] ASC
+	[crm_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1477,26 +1477,26 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[CR](
-	[CR_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CR_SEQ] [smallint] NULL,
-	[CR_STS] [nvarchar](8) NOT NULL,
-	[CR_Name] [nvarchar](16) NOT NULL,
-	[CR_Desc] [nvarchar](255) NOT NULL,
-	[CR_CODE] [nvarchar](50) NULL,
-	[CR_ATTRIB] [nvarchar](50) NULL,
-	[CR_SNotes] [nvarchar](255) NULL,
+CREATE TABLE [jsharmony].[cr](
+	[cr_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[cr_seq] [smallint] NULL,
+	[cr_sts] [nvarchar](8) NOT NULL,
+	[cr_name] [nvarchar](16) NOT NULL,
+	[cr_desc] [nvarchar](255) NOT NULL,
+	[cr_code] [nvarchar](50) NULL,
+	[cr_attrib] [nvarchar](50) NULL,
+	[cr_snotes] [nvarchar](255) NULL,
  CONSTRAINT [PK_CR] PRIMARY KEY CLUSTERED 
 (
-	[CR_Name] ASC
+	[cr_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_CR_CR_Desc] UNIQUE NONCLUSTERED 
 (
-	[CR_Desc] ASC
+	[cr_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_CR_CR_ID] UNIQUE NONCLUSTERED 
 (
-	[CR_ID] ASC
+	[cr_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1504,37 +1504,37 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[SM](
-	[SM_ID_AUTO] [bigint] IDENTITY(1,1) NOT NULL,
-	[SM_UTYPE] [char](1) NOT NULL,
-	[SM_ID] [bigint] NOT NULL,
-	[SM_STS] [nvarchar](8) NOT NULL,
-	[SM_ID_Parent] [bigint] NULL,
-	[SM_Name] [nvarchar](30) NOT NULL,
-	[SM_Seq] [int] NULL,
-	[SM_DESC] [nvarchar](255) NOT NULL,
-	[SM_DESCL] [nvarchar](max) NULL,
-	[SM_DESCVL] [nvarchar](max) NULL,
-	[SM_Cmd] [varchar](255) NULL,
-	[SM_Image] [nvarchar](255) NULL,
-	[SM_SNotes] [nvarchar](255) NULL,
-	[SM_SubCmd] [varchar](255) NULL,
+CREATE TABLE [jsharmony].[sm](
+	[sm_id_auto] [bigint] IDENTITY(1,1) NOT NULL,
+	[sm_utype] [char](1) NOT NULL,
+	[sm_id] [bigint] NOT NULL,
+	[sm_sts] [nvarchar](8) NOT NULL,
+	[sm_id_parent] [bigint] NULL,
+	[sm_name] [nvarchar](30) NOT NULL,
+	[sm_seq] [int] NULL,
+	[sm_desc] [nvarchar](255) NOT NULL,
+	[sm_descl] [nvarchar](max) NULL,
+	[sm_descvl] [nvarchar](max) NULL,
+	[sm_cmd] [varchar](255) NULL,
+	[sm_image] [nvarchar](255) NULL,
+	[sm_snotes] [nvarchar](255) NULL,
+	[sm_subcmd] [varchar](255) NULL,
  CONSTRAINT [PK_SM] PRIMARY KEY CLUSTERED 
 (
-	[SM_ID_AUTO] ASC
+	[sm_id_auto] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SM_SM_DESC] UNIQUE NONCLUSTERED 
 (
-	[SM_ID_Parent] ASC,
-	[SM_DESC] ASC
+	[sm_id_parent] ASC,
+	[sm_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SM_SM_ID] UNIQUE NONCLUSTERED 
 (
-	[SM_ID] ASC
+	[sm_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SM_SM_NAME] UNIQUE NONCLUSTERED 
 (
-	[SM_Name] ASC
+	[sm_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -1548,33 +1548,33 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[V_CRMSEL]
+CREATE VIEW [jsharmony].[v_crmsel]
 AS
-SELECT jsharmony.CRM.CRM_ID, 
-       ISNULL(jsharmony.DUAL.DUAL_NVARCHAR50, '') AS NEW_CR_NAME, 
-	   DUAL.DUAL_BIGINT AS NEW_SM_ID,
-	   CASE WHEN CRM.CRM_ID IS NULL 
-	        THEN 0 
-			ELSE 1 END AS CRMSEL_SEL, 
-	   M.CR_ID, 
-	   M.CR_SEQ, 
-	   M.CR_STS, 
-	   M.CR_Name, 
-	   M.CR_Desc, 
-	   M.SM_ID_AUTO, 
-	   M.SM_UTYPE, 
-       M.SM_ID, 
-	   M.SM_STS, 
-	   M.SM_ID_Parent, 
-	   M.SM_Name, 
-	   M.SM_Seq, 
-	   M.SM_DESC, 
-	   M.SM_DESCL, 
-	   M.SM_DESCVL, 
-	   M.SM_Cmd, 
-	   M.SM_Image, 
-	   M.SM_SNotes,
-	   M.SM_SubCmd
+SELECT jsharmony.CRM.crm_id, 
+       ISNULL(jsharmony.DUAL.DUAL_NVARCHAR50, '') AS new_cr_name, 
+	     DUAL.DUAL_BIGINT AS new_sm_id,
+	     CASE WHEN CRM.CRM_ID IS NULL 
+	          THEN 0 
+			 ELSE 1 END AS crmsel_sel, 
+	     M.cr_id, 
+	     M.cr_seq, 
+	     M.cr_sts, 
+	     M.cr_name, 
+	     M.cr_desc, 
+	     M.sm_id_auto, 
+	     M.sm_utype, 
+       M.sm_id, 
+	     M.sm_sts, 
+	     M.sm_id_parent, 
+	     M.sm_name, 
+	     M.sm_seq, 
+	     M.sm_desc, 
+	     M.sm_descl, 
+	     M.sm_descvl, 
+	     M.sm_cmd, 
+	     M.sm_image, 
+	     M.sm_snotes,
+	     M.sm_subcmd
   FROM (SELECT jsharmony.CR.CR_ID,
                jsharmony.CR.CR_SEQ, 
                jsharmony.CR.CR_STS, 
@@ -1607,19 +1607,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[CPER](
-	[PE_ID] [bigint] NOT NULL,
-	[CPER_SNotes] [nvarchar](255) NULL,
-	[CPER_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CR_NAME] [nvarchar](16) NOT NULL,
+CREATE TABLE [jsharmony].[cper](
+	[pe_id] [bigint] NOT NULL,
+	[cper_snotes] [nvarchar](255) NULL,
+	[cper_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[cr_name] [nvarchar](16) NOT NULL,
  CONSTRAINT [PK_CPER] PRIMARY KEY CLUSTERED 
 (
-	[PE_ID] ASC,
-	[CR_NAME] ASC
+	[pe_id] ASC,
+	[cr_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_CPER] UNIQUE NONCLUSTERED 
 (
-	[CPER_ID] ASC
+	[cper_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1630,9 +1630,9 @@ GO
 
 
 
-CREATE view [jsharmony].[V_CPER_NOSTAR] as
+CREATE view [jsharmony].[v_cper_nostar] as
 select *
-  from jsharmony.CPER
+  from jsharmony.cper
  where CR_NAME <> 'C*';
 
 GO
@@ -1640,26 +1640,26 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[SR](
-	[SR_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[SR_SEQ] [smallint] NOT NULL,
-	[SR_STS] [nvarchar](8) NOT NULL,
-	[SR_Name] [nvarchar](16) NOT NULL,
-	[SR_Desc] [nvarchar](255) NOT NULL,
-	[SR_CODE] [nvarchar](50) NULL,
-	[SR_ATTRIB] [nvarchar](50) NULL,
-	[SR_SNotes] [nvarchar](255) NULL,
+CREATE TABLE [jsharmony].[sr](
+	[sr_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[sr_seq] [smallint] NOT NULL,
+	[sr_sts] [nvarchar](8) NOT NULL,
+	[sr_name] [nvarchar](16) NOT NULL,
+	[sr_desc] [nvarchar](255) NOT NULL,
+	[sr_code] [nvarchar](50) NULL,
+	[sr_attrib] [nvarchar](50) NULL,
+	[sr_snotes] [nvarchar](255) NULL,
  CONSTRAINT [PK_SR] PRIMARY KEY CLUSTERED 
 (
-	[SR_Name] ASC
+	[sr_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SR_SR_Desc] UNIQUE NONCLUSTERED 
 (
-	[SR_Desc] ASC
+	[sr_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SR_SR_ID] UNIQUE NONCLUSTERED 
 (
-	[SR_ID] ASC
+	[sr_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1667,19 +1667,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[SRM](
-	[SM_ID] [bigint] NOT NULL,
-	[SRM_SNotes] [nvarchar](255) NULL,
-	[SRM_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[SR_NAME] [nvarchar](16) NOT NULL,
+CREATE TABLE [jsharmony].[srm](
+	[sm_id] [bigint] NOT NULL,
+	[srm_snotes] [nvarchar](255) NULL,
+	[srm_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[sr_name] [nvarchar](16) NOT NULL,
  CONSTRAINT [PK_SRM] PRIMARY KEY CLUSTERED 
 (
-	[SR_NAME] ASC,
-	[SM_ID] ASC
+	[sr_name] ASC,
+	[sm_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SRM] UNIQUE NONCLUSTERED 
 (
-	[SRM_ID] ASC
+	[srm_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1691,33 +1691,33 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[V_SRMSEL]
+CREATE VIEW [jsharmony].[v_srmsel]
 AS
-SELECT jsharmony.SRM.SRM_ID, 
-       ISNULL(jsharmony.DUAL.DUAL_NVARCHAR50, '') AS NEW_SR_NAME, 
-	   DUAL.DUAL_BIGINT AS NEW_SM_ID,
+SELECT jsharmony.SRM.srm_id, 
+       ISNULL(jsharmony.DUAL.DUAL_NVARCHAR50, '') AS new_sr_name, 
+	   DUAL.DUAL_BIGINT AS new_sm_id,
 	   CASE WHEN SRM.SRM_ID IS NULL 
 	        THEN 0 
-			ELSE 1 END AS SRMSEL_SEL, 
-	   M.SR_ID, 
-       M.SR_SEQ, 
-       M.SR_STS, 
-       M.SR_Name, 
-       M.SR_Desc, 
-	   M.SM_ID_AUTO, 
-	   M.SM_UTYPE, 
-       M.SM_ID, 
-	   M.SM_STS, 
-	   M.SM_ID_Parent, 
-	   M.SM_Name, 
-	   M.SM_Seq, 
-	   M.SM_DESC, 
-	   M.SM_DESCL, 
-	   M.SM_DESCVL, 
-	   M.SM_Cmd, 
-	   M.SM_Image, 
-	   M.SM_SNotes,
-	   M.SM_SubCmd
+			ELSE 1 END AS srmsel_sel, 
+	     M.sr_id, 
+       M.sr_seq, 
+       M.sr_sts, 
+       M.sr_name, 
+       M.sr_desc, 
+	   M.sm_id_auto, 
+	   M.sm_utype, 
+       M.sm_id, 
+	   M.sm_sts, 
+	   M.sm_id_parent, 
+	   M.sm_name, 
+	   M.sm_seq, 
+	   M.sm_desc, 
+	   M.sm_descl, 
+	   M.sm_descvl, 
+	   M.sm_cmd, 
+	   M.sm_image, 
+	   M.sm_snotes,
+	   M.sm_subcmd
   FROM (SELECT jsharmony.SR.SR_ID, 
                jsharmony.SR.SR_SEQ, 
                jsharmony.SR.SR_STS, 
@@ -1783,17 +1783,10 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[V_GPPL] AS
+CREATE VIEW [jsharmony].[v_gppl] AS
 SELECT jsharmony.GPP.*,
-       jsharmony.get_PPD_DESC(GPP_PROCESS, GPP_ATTRIB) PPD_DESC,
-	   jsharmony.audit_info(GPP_ETstmp, GPP_EU, GPP_MTstmp, GPP_MU) GPP_INFO
-
-
-
-
-
-
-
+       jsharmony.get_PPD_DESC(GPP_PROCESS, GPP_ATTRIB) ppd_desc,
+	   jsharmony.audit_info(GPP_ETstmp, GPP_EU, GPP_MTstmp, GPP_MU) gpp_info
   FROM jsharmony.GPP;
 
 
@@ -1853,10 +1846,10 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[V_PPPL] AS
+CREATE VIEW [jsharmony].[v_pppl] AS
 SELECT PPP.*,
-       jsharmony.get_PPD_DESC(PPP_PROCESS, PPP_ATTRIB) PPD_DESC,
-	   jsharmony.audit_info(PPP_ETstmp, PPP_EU, PPP_MTstmp, PPP_MU) PPP_INFO
+       jsharmony.get_PPD_DESC(PPP_PROCESS, PPP_ATTRIB) ppd_desc,
+	   jsharmony.audit_info(PPP_ETstmp, PPP_EU, PPP_MTstmp, PPP_MU) ppp_info
   FROM jsharmony.PPP
 
 
@@ -1915,10 +1908,10 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[V_XPPL] AS
+CREATE VIEW [jsharmony].[v_xppl] AS
 SELECT XPP.*,
-       jsharmony.get_PPD_DESC(XPP_PROCESS, XPP_ATTRIB) PPD_DESC,
-	   jsharmony.audit_info(XPP_ETstmp, XPP_EU, XPP_MTstmp, XPP_MU) XPP_INFO
+       jsharmony.get_PPD_DESC(XPP_PROCESS, XPP_ATTRIB) ppd_desc,
+	   jsharmony.audit_info(XPP_ETstmp, XPP_EU, XPP_MTstmp, XPP_MU) xpp_info
 
 
 
@@ -1985,16 +1978,9 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[V_PPDL] AS
+CREATE VIEW [jsharmony].[v_ppdl] AS
 SELECT PPD.*,
-	   jsharmony.audit_info(PPD_ETstmp, PPD_EU, PPD_MTstmp, PPD_MU) PPD_INFO
-
-
-
-
-
-
-
+	   jsharmony.audit_info(PPD_ETstmp, PPD_EU, PPD_MTstmp, PPD_MU) ppd_info
   FROM jsharmony.PPD;
 
 
@@ -2022,14 +2008,14 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[UCOD_GPP_PROCESS_V] as
+create view [jsharmony].[ucod_gpp_process_v] as
 SELECT distinct
-       NULL CODSEQ
-      ,PPD_PROCESS CODEVAL
-      ,PPD_PROCESS CODETXT
-      ,NULL CODECODE
-      ,NULL CODETDT
-      ,NULL CODETCM
+       NULL codseq
+      ,PPD_PROCESS codeval
+      ,PPD_PROCESS codetxt
+      ,NULL codecode
+      ,NULL codetdt
+      ,NULL codetcm
   FROM jsharmony.PPD
  where PPD_GPP = 1
 GO
@@ -2039,8 +2025,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-create view [jsharmony].[V_MYPE] as
-select jsharmony.myPE() MYPE
+create view [jsharmony].[v_mype] as
+select jsharmony.myPE() mype
 GO
 
 
@@ -2050,37 +2036,37 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ARITHABORT ON
 GO
-CREATE TABLE [jsharmony].[CPE](
-	[PE_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[C_ID] [bigint] NOT NULL,
-	[PE_STS] [nvarchar](8) NOT NULL,
-	[PE_STSDt] [date] NOT NULL,
-	[PE_FName] [nvarchar](35) NOT NULL,
-	[PE_MName] [nvarchar](35) NULL,
-	[PE_LName] [nvarchar](35) NOT NULL,
-	[PE_JTitle] [nvarchar](35) NULL,
-	[PE_BPhone] [nvarchar](30) NULL,
-	[PE_CPhone] [nvarchar](30) NULL,
-	[PE_Email] [nvarchar](255) NOT NULL,
-	[PE_ETstmp] [datetime2](7) NOT NULL,
-	[PE_EU] [nvarchar](20) NOT NULL,
-	[PE_MTstmp] [datetime2](7) NOT NULL,
-	[PE_MU] [nvarchar](20) NOT NULL,
-	[PE_PW1] [nvarchar](255) NULL,
-	[PE_PW2] [nvarchar](255) NULL,
-	[PE_Hash] [varbinary](200) NOT NULL,
-	[PE_LL_IP] [nvarchar](255) NULL,
-	[PE_LL_Tstmp] [datetime2](7) NULL,
-	[PE_SNotes] [nvarchar](255) NULL,
-	[PE_Name]  AS (([PE_LName]+', ')+[PE_FName]) PERSISTED NOT NULL,
-	[PE_UNQ_PE_Email]  AS (case when [PE_STS]='ACTIVE' then case when isnull([PE_Email],'')='' then 'E'+CONVERT([varchar](50),[PE_ID],(0)) else 'S'+[PE_Email] end else 'E'+CONVERT([varchar](50),[PE_ID],(0)) end) PERSISTED,
+CREATE TABLE [jsharmony].[cpe](
+	[pe_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[c_id] [bigint] NOT NULL,
+	[pe_sts] [nvarchar](8) NOT NULL,
+	[pe_stsdt] [date] NOT NULL,
+	[pe_fname] [nvarchar](35) NOT NULL,
+	[pe_mname] [nvarchar](35) NULL,
+	[pe_lname] [nvarchar](35) NOT NULL,
+	[pe_jtitle] [nvarchar](35) NULL,
+	[pe_bphone] [nvarchar](30) NULL,
+	[pe_cphone] [nvarchar](30) NULL,
+	[pe_email] [nvarchar](255) NOT NULL,
+	[pe_etstmp] [datetime2](7) NOT NULL,
+	[pe_eu] [nvarchar](20) NOT NULL,
+	[pe_mtstmp] [datetime2](7) NOT NULL,
+	[pe_mu] [nvarchar](20) NOT NULL,
+	[pe_pw1] [nvarchar](255) NULL,
+	[pe_pw2] [nvarchar](255) NULL,
+	[pe_hash] [varbinary](200) NOT NULL,
+	[pe_ll_ip] [nvarchar](255) NULL,
+	[pe_ll_tstmp] [datetime2](7) NULL,
+	[pe_snotes] [nvarchar](255) NULL,
+	[pe_name]  AS (([pe_lname]+', ')+[pe_fname]) PERSISTED NOT NULL,
+	[pe_unq_pe_email]  AS (case when [pe_sts]='ACTIVE' then case when isnull([pe_email],'')='' then 'E'+CONVERT([varchar](50),[pe_id],(0)) else 'S'+[pe_email] end else 'E'+CONVERT([varchar](50),[pe_id],(0)) end) PERSISTED,
  CONSTRAINT [PK_CPE] PRIMARY KEY CLUSTERED 
 (
-	[PE_ID] ASC
+	[pe_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_CPE_PE_Email] UNIQUE NONCLUSTERED 
 (
-	[PE_UNQ_PE_Email] ASC
+	[pe_unq_pe_email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2088,20 +2074,20 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[GCOD_H](
-	[CODENAME] [nvarchar](16) NOT NULL,
-	[CODEMEAN] [nvarchar](128) NULL,
-	[CODECODEMEAN] [nvarchar](128) NULL,
-	[CODEATTRIBMEAN] [nvarchar](128) NULL,
-	[COD_H_ETstmp] [datetime2](7) NULL,
-	[COD_H_EU] [nvarchar](20) NULL,
-	[COD_H_MTstmp] [datetime2](7) NULL,
-	[COD_H_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[CODESCHEMA] [nvarchar](16) NULL,
+CREATE TABLE [jsharmony].[gcod_h](
+	[codename] [nvarchar](16) NOT NULL,
+	[codemean] [nvarchar](128) NULL,
+	[codecodemean] [nvarchar](128) NULL,
+	[codeattribmean] [nvarchar](128) NULL,
+	[cod_h_etstmp] [datetime2](7) NULL,
+	[cod_h_eu] [nvarchar](20) NULL,
+	[cod_h_mtstmp] [datetime2](7) NULL,
+	[cod_h_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[codeschema] [nvarchar](16) NULL,
  CONSTRAINT [PK_GCOD_H] PRIMARY KEY CLUSTERED 
 (
-	[CODENAME] ASC
+	[codename] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2109,37 +2095,37 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR](
-	[GCOD2_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL1] [nvarchar](8) NOT NULL,
-	[CODEVAL2] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[COD_EU_FMT]  AS ([jsharmony].[myCUSER_FMT]([COD_EU])),
-	[COD_MU_FMT]  AS ([jsharmony].[myCUSER_FMT]([COD_MU])),
+CREATE TABLE [jsharmony].[gcod2_d_scope_d_ctgr](
+	[gcod2_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval1] [nvarchar](8) NOT NULL,
+	[codeval2] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codeattrib] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[cod_eu_fmt]  AS ([jsharmony].[myCUSER_FMT]([cod_eu])),
+	[cod_mu_fmt]  AS ([jsharmony].[myCUSER_FMT]([cod_mu])),
  CONSTRAINT [PK_GCOD2_D_SCOPE_D_CTGR] PRIMARY KEY CLUSTERED 
 (
-	[GCOD2_ID] ASC
+	[gcod2_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_GCOD2_D_SCOPE_D_CTGR_CODEVAL1_CODEVAL2] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_GCOD2_D_SCOPE_D_CTGR_codeval1_codeval2] UNIQUE NONCLUSTERED 
 (
-	[CODEVAL1] ASC,
-	[CODEVAL2] ASC
+	[codeval1] ASC,
+	[codeval2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_GCOD2_D_SCOPE_D_CTGR_CODEVAL1_CODETXT] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_GCOD2_D_SCOPE_D_CTGR_codeval1_CODETXT] UNIQUE NONCLUSTERED 
 (
-	[CODEVAL1] ASC,
-	[CODETXT] ASC
+	[codeval1] ASC,
+	[codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2147,20 +2133,20 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[GCOD2_H](
-	[CODENAME] [nvarchar](16) NOT NULL,
-	[CODEMEAN] [nvarchar](128) NULL,
-	[CODECODEMEAN] [nvarchar](128) NULL,
-	[CODEATTRIBMEAN] [nvarchar](128) NULL,
-	[COD_H_ETstmp] [datetime2](7) NULL,
-	[COD_H_EU] [nvarchar](20) NULL,
-	[COD_H_MTstmp] [datetime2](7) NULL,
-	[COD_H_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[CODESCHEMA] [nvarchar](16) NULL,
+CREATE TABLE [jsharmony].[gcod2_h](
+	[codename] [nvarchar](16) NOT NULL,
+	[codemean] [nvarchar](128) NULL,
+	[codecodemean] [nvarchar](128) NULL,
+	[codeattribmean] [nvarchar](128) NULL,
+	[cod_h_etstmp] [datetime2](7) NULL,
+	[cod_h_eu] [nvarchar](20) NULL,
+	[cod_h_mtstmp] [datetime2](7) NULL,
+	[cod_h_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[codeschema] [nvarchar](16) NULL,
  CONSTRAINT [PK_GCOD2_H] PRIMARY KEY CLUSTERED 
 (
-	[CODENAME] ASC
+	[codename] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2170,30 +2156,30 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ARITHABORT ON
 GO
-CREATE TABLE [jsharmony].[H](
-	[H_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[HP_CODE] [varchar](50) NULL,
-	[H_Title] [nvarchar](70) NOT NULL,
-	[H_Text] [nvarchar](max) NOT NULL,
-	[H_ETstmp] [datetime2](7) NOT NULL,
-	[H_EU] [nvarchar](20) NOT NULL,
-	[H_MTstmp] [datetime2](7) NOT NULL,
-	[H_MU] [nvarchar](20) NOT NULL,
-	[H_UNIQUE]  AS (case when [HP_CODE] IS NOT NULL then 'X'+[HP_CODE] else 'Y'+CONVERT([varchar](50),[H_ID],(0)) end) PERSISTED,
-	[H_SEQ] [int] NULL,
-	[H_INDEX_A] [bit] NOT NULL,
-	[H_INDEX_P] [bit] NOT NULL,
+CREATE TABLE [jsharmony].[h](
+	[h_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[hp_code] [varchar](50) NULL,
+	[h_title] [nvarchar](70) NOT NULL,
+	[h_text] [nvarchar](max) NOT NULL,
+	[h_etstmp] [datetime2](7) NOT NULL,
+	[h_eu] [nvarchar](20) NOT NULL,
+	[h_mtstmp] [datetime2](7) NOT NULL,
+	[h_mu] [nvarchar](20) NOT NULL,
+	[h_unique]  AS (case when [hp_code] IS NOT NULL then 'X'+[hp_code] else 'Y'+CONVERT([varchar](50),[h_id],(0)) end) PERSISTED,
+	[h_seq] [int] NULL,
+	[h_index_a] [bit] NOT NULL,
+	[h_index_p] [bit] NOT NULL,
  CONSTRAINT [PK_H] PRIMARY KEY CLUSTERED 
 (
-	[H_ID] ASC
+	[h_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_H_H_Title] UNIQUE NONCLUSTERED 
 (
-	[H_Title] ASC
+	[h_title] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_H_H_UNIQUE] UNIQUE NONCLUSTERED 
 (
-	[H_UNIQUE] ASC
+	[h_unique] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2201,21 +2187,21 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[HP](
-	[HP_CODE] [varchar](50) NOT NULL,
-	[HP_Desc] [nvarchar](50) NOT NULL,
-	[HP_ID] [bigint] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [jsharmony].[hp](
+	[hp_code] [varchar](50) NOT NULL,
+	[hp_desc] [nvarchar](50) NOT NULL,
+	[hp_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_HP] PRIMARY KEY CLUSTERED 
 (
-	[HP_CODE] ASC
+	[hp_code] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_HP_HP_Desc] UNIQUE NONCLUSTERED 
 (
-	[HP_Desc] ASC
+	[hp_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_HP_HP_ID] UNIQUE NONCLUSTERED 
 (
-	[HP_ID] ASC
+	[hp_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2223,25 +2209,25 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[N](
-	[N_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[N_SCOPE] [nvarchar](8) NOT NULL,
-	[N_SCOPE_ID] [bigint] NOT NULL,
-	[N_STS] [nvarchar](8) NOT NULL,
-	[C_ID] [bigint] NULL,
-	[E_ID] [bigint] NULL,
-	[N_TYPE] [nvarchar](8) NULL,
-	[N_Note] [nvarchar](max) NOT NULL,
-	[N_ETstmp] [datetime2](7) NOT NULL,
-	[N_EU] [nvarchar](20) NOT NULL,
-	[N_MTstmp] [datetime2](7) NOT NULL,
-	[N_MU] [nvarchar](20) NOT NULL,
-	[N_SYNCTstmp] [datetime2](7) NULL,
-	[N_Snotes] [nvarchar](255) NULL,
-	[N_ID_MAIN] [bigint] NULL,
+CREATE TABLE [jsharmony].[n](
+	[n_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[n_scope] [nvarchar](8) NOT NULL,
+	[n_scope_id] [bigint] NOT NULL,
+	[n_sts] [nvarchar](8) NOT NULL,
+	[c_id] [bigint] NULL,
+	[e_id] [bigint] NULL,
+	[n_type] [nvarchar](8) NULL,
+	[n_note] [nvarchar](max) NOT NULL,
+	[n_etstmp] [datetime2](7) NOT NULL,
+	[n_eu] [nvarchar](20) NOT NULL,
+	[n_mtstmp] [datetime2](7) NOT NULL,
+	[n_mu] [nvarchar](20) NOT NULL,
+	[n_synctstmp] [datetime2](7) NULL,
+	[n_snotes] [nvarchar](255) NULL,
+	[n_id_main] [bigint] NULL,
  CONSTRAINT [PK_N] PRIMARY KEY CLUSTERED 
 (
-	[N_ID] ASC
+	[n_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2251,45 +2237,45 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ARITHABORT ON
 GO
-CREATE TABLE [jsharmony].[PE](
-	[PE_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[PE_STS] [nvarchar](8) NOT NULL,
-	[PE_STSDt] [date] NOT NULL,
-	[PE_FName] [nvarchar](35) NOT NULL,
-	[PE_MName] [nvarchar](35) NULL,
-	[PE_LName] [nvarchar](35) NOT NULL,
-	[PE_JTitle] [nvarchar](35) NULL,
-	[PE_BPhone] [nvarchar](30) NULL,
-	[PE_CPhone] [nvarchar](30) NULL,
-	[PE_COUNTRY] [nvarchar](8) NOT NULL,
-	[PE_ADDR] [nvarchar](200) NULL,
-	[PE_CITY] [nvarchar](50) NULL,
-	[PE_STATE] [nvarchar](8) NULL,
-	[PE_ZIP] [nvarchar](20) NULL,
-	[PE_EMAIL] [nvarchar](255) NOT NULL,
-	[PE_STARTDT] [date] NOT NULL,
-	[PE_ENDDT] [date] NULL,
-	[PE_UNOTES] [nvarchar](4000) NULL,
-	[PE_ETstmp] [datetime2](7) NOT NULL,
-	[PE_EU] [nvarchar](20) NOT NULL,
-	[PE_MTstmp] [datetime2](7) NOT NULL,
-	[PE_MU] [nvarchar](20) NOT NULL,
-	[PE_PW1] [nvarchar](255) NULL,
-	[PE_PW2] [nvarchar](255) NULL,
-	[PE_Hash] [varbinary](200) NOT NULL,
-	[PE_LL_IP] [nvarchar](255) NULL,
-	[PE_LL_Tstmp] [datetime2](7) NULL,
-	[PE_SNotes] [nvarchar](255) NULL,
-	[PE_Name]  AS (([PE_LName]+', ')+[PE_FName]) PERSISTED NOT NULL,
-	[PE_Initials]  AS ((isnull(substring([PE_FName],(1),(1)),'')+isnull(substring([PE_MName],(1),(1)),''))+isnull(substring([PE_LName],(1),(1)),'')) PERSISTED NOT NULL,
-	[PE_UNQ_PE_Email]  AS (case when [PE_STS]='ACTIVE' then case when isnull([PE_Email],'')='' then 'E'+CONVERT([varchar](50),[PE_ID],(0)) else 'S'+[PE_Email] end else 'E'+CONVERT([varchar](50),[PE_ID],(0)) end) PERSISTED,
+CREATE TABLE [jsharmony].[pe](
+	[pe_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[pe_sts] [nvarchar](8) NOT NULL,
+	[pe_stsdt] [date] NOT NULL,
+	[pe_fname] [nvarchar](35) NOT NULL,
+	[pe_mname] [nvarchar](35) NULL,
+	[pe_lname] [nvarchar](35) NOT NULL,
+	[pe_jtitle] [nvarchar](35) NULL,
+	[pe_bphone] [nvarchar](30) NULL,
+	[pe_cphone] [nvarchar](30) NULL,
+	[pe_country] [nvarchar](8) NOT NULL,
+	[pe_addr] [nvarchar](200) NULL,
+	[pe_city] [nvarchar](50) NULL,
+	[pe_state] [nvarchar](8) NULL,
+	[pe_zip] [nvarchar](20) NULL,
+	[pe_email] [nvarchar](255) NOT NULL,
+	[pe_startdt] [date] NOT NULL,
+	[pe_enddt] [date] NULL,
+	[pe_unotes] [nvarchar](4000) NULL,
+	[pe_etstmp] [datetime2](7) NOT NULL,
+	[pe_eu] [nvarchar](20) NOT NULL,
+	[pe_mtstmp] [datetime2](7) NOT NULL,
+	[pe_mu] [nvarchar](20) NOT NULL,
+	[pe_pw1] [nvarchar](255) NULL,
+	[pe_pw2] [nvarchar](255) NULL,
+	[pe_hash] [varbinary](200) NOT NULL,
+	[pe_ll_ip] [nvarchar](255) NULL,
+	[pe_ll_tstmp] [datetime2](7) NULL,
+	[pe_snotes] [nvarchar](255) NULL,
+	[pe_name]  AS (([pe_lname]+', ')+[pe_fname]) PERSISTED NOT NULL,
+	[pe_initials]  AS ((isnull(substring([pe_fname],(1),(1)),'')+isnull(substring([pe_mname],(1),(1)),''))+isnull(substring([pe_lname],(1),(1)),'')) PERSISTED NOT NULL,
+	[pe_unq_pe_email]  AS (case when [pe_sts]='ACTIVE' then case when isnull([pe_email],'')='' then 'E'+CONVERT([varchar](50),[pe_id],(0)) else 'S'+[pe_email] end else 'E'+CONVERT([varchar](50),[pe_id],(0)) end) PERSISTED,
  CONSTRAINT [PK_PE] PRIMARY KEY CLUSTERED 
 (
-	[PE_ID] ASC
+	[pe_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_PE_PE_Email] UNIQUE NONCLUSTERED 
 (
-	[PE_UNQ_PE_Email] ASC
+	[pe_unq_pe_email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2297,19 +2283,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[RQ](
-	[RQ_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[RQ_ETstmp] [datetime2](7) NOT NULL,
-	[RQ_EU] [nvarchar](20) NOT NULL,
-	[RQ_NAME] [nvarchar](255) NOT NULL,
-	[RQ_MESSAGE] [nvarchar](max) NOT NULL,
-	[RQ_RSLT] [nvarchar](8) NULL,
-	[RQ_RSLT_TStmp] [datetime2](7) NULL,
-	[RQ_RSLT_U] [nvarchar](20) NULL,
-	[RQ_SNotes] [nvarchar](max) NULL,
+CREATE TABLE [jsharmony].[rq](
+	[rq_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[rq_etstmp] [datetime2](7) NOT NULL,
+	[rq_eu] [nvarchar](20) NOT NULL,
+	[rq_name] [nvarchar](255) NOT NULL,
+	[rq_message] [nvarchar](max) NOT NULL,
+	[rq_rslt] [nvarchar](8) NULL,
+	[rq_rslt_tstmp] [datetime2](7) NULL,
+	[rq_rslt_u] [nvarchar](20) NULL,
+	[rq_snotes] [nvarchar](max) NULL,
  CONSTRAINT [PK_RQ] PRIMARY KEY CLUSTERED 
 (
-	[RQ_ID] ASC
+	[rq_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2317,22 +2303,22 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[RQST](
-	[RQST_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[RQST_ETstmp] [datetime2](7) NOT NULL,
-	[RQST_EU] [nvarchar](20) NOT NULL,
-	[RQST_SOURCE] [nvarchar](8) NOT NULL,
-	[RQST_ATYPE] [nvarchar](8) NOT NULL,
-	[RQST_ANAME] [nvarchar](50) NOT NULL,
-	[RQST_PARMS] [nvarchar](max) NULL,
-	[RQST_IDENT] [nvarchar](255) NULL,
-	[RQST_RSLT] [nvarchar](8) NULL,
-	[RQST_RSLT_TStmp] [datetime2](7) NULL,
-	[RQST_RSLT_U] [nvarchar](20) NULL,
-	[RQST_SNotes] [nvarchar](max) NULL,
+CREATE TABLE [jsharmony].[rqst](
+	[rqst_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[rqst_etstmp] [datetime2](7) NOT NULL,
+	[rqst_eu] [nvarchar](20) NOT NULL,
+	[rqst_source] [nvarchar](8) NOT NULL,
+	[rqst_atype] [nvarchar](8) NOT NULL,
+	[rqst_aname] [nvarchar](50) NOT NULL,
+	[rqst_parms] [nvarchar](max) NULL,
+	[rqst_ident] [nvarchar](255) NULL,
+	[rqst_rslt] [nvarchar](8) NULL,
+	[rqst_rslt_tstmp] [datetime2](7) NULL,
+	[rqst_rslt_u] [nvarchar](20) NULL,
+	[rqst_snotes] [nvarchar](max) NULL,
  CONSTRAINT [PK_RQST] PRIMARY KEY CLUSTERED 
 (
-	[RQST_ID] ASC
+	[rqst_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2340,16 +2326,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[RQST_D](
-	[RQST_D_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[RQST_ID] [bigint] NOT NULL,
-	[D_SCOPE] [nvarchar](8) NULL,
-	[D_SCOPE_ID] [bigint] NULL,
-	[D_CTGR] [nvarchar](8) NULL,
-	[D_Desc] [nvarchar](255) NULL,
+CREATE TABLE [jsharmony].[rqst_d](
+	[rqst_d_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[rqst_id] [bigint] NOT NULL,
+	[d_scope] [nvarchar](8) NULL,
+	[d_scope_id] [bigint] NULL,
+	[d_ctgr] [nvarchar](8) NULL,
+	[d_desc] [nvarchar](255) NULL,
  CONSTRAINT [PK_RQST_D] PRIMARY KEY CLUSTERED 
 (
-	[RQST_D_ID] ASC
+	[rqst_d_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2357,21 +2343,21 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[RQST_EMAIL](
-	[RQST_EMAIL_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[RQST_ID] [bigint] NOT NULL,
-	[EMAIL_TXT_ATTRIB] [nvarchar](32) NULL,
-	[EMAIL_TO] [nvarchar](255) NOT NULL,
-	[EMAIL_CC] [nvarchar](255) NULL,
-	[EMAIL_BCC] [nvarchar](255) NULL,
-	[EMAIL_ATTACH] [smallint] NULL,
-	[EMAIL_SUBJECT] [nvarchar](500) NULL,
-	[EMAIL_TEXT] [ntext] NULL,
-	[EMAIL_HTML] [ntext] NULL,
-	[EMAIL_D_ID] [bigint] NULL,
+CREATE TABLE [jsharmony].[rqst_email](
+	[rqst_email_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[rqst_id] [bigint] NOT NULL,
+	[email_txt_attrib] [nvarchar](32) NULL,
+	[email_to] [nvarchar](255) NOT NULL,
+	[email_cc] [nvarchar](255) NULL,
+	[email_bcc] [nvarchar](255) NULL,
+	[email_attach] [smallint] NULL,
+	[email_subject] [nvarchar](500) NULL,
+	[email_text] [ntext] NULL,
+	[email_html] [ntext] NULL,
+	[email_d_id] [bigint] NULL,
  CONSTRAINT [PK_RQST_EMAIL] PRIMARY KEY CLUSTERED 
 (
-	[RQST_EMAIL_ID] ASC
+	[rqst_email_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2379,16 +2365,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[RQST_N](
-	[RQST_N_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[RQST_ID] [bigint] NOT NULL,
-	[N_SCOPE] [nvarchar](8) NULL,
-	[N_SCOPE_ID] [bigint] NULL,
-	[N_TYPE] [nvarchar](8) NULL,
-	[N_Note] [nvarchar](max) NULL,
+CREATE TABLE [jsharmony].[rqst_n](
+	[rqst_n_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[rqst_id] [bigint] NOT NULL,
+	[n_scope] [nvarchar](8) NULL,
+	[n_scope_id] [bigint] NULL,
+	[n_type] [nvarchar](8) NULL,
+	[n_note] [nvarchar](max) NULL,
  CONSTRAINT [PK_RQST_N] PRIMARY KEY CLUSTERED 
 (
-	[RQST_N_ID] ASC
+	[rqst_n_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2396,14 +2382,14 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[RQST_RQ](
-	[RQST_RQ_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[RQST_ID] [bigint] NOT NULL,
-	[RQ_NAME] [nvarchar](255) NOT NULL,
-	[RQ_MESSAGE] [nvarchar](max) NULL,
+CREATE TABLE [jsharmony].[rqst_rq](
+	[rqst_rq_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[rqst_id] [bigint] NOT NULL,
+	[rq_name] [nvarchar](255) NOT NULL,
+	[rq_message] [nvarchar](max) NULL,
  CONSTRAINT [PK_RQST_RQ] PRIMARY KEY CLUSTERED 
 (
-	[RQST_RQ_ID] ASC
+	[rqst_rq_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2411,15 +2397,15 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[RQST_SMS](
-	[RQST_SMS_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[RQST_ID] [bigint] NOT NULL,
-	[SMS_TXT_ATTRIB] [nvarchar](32) NULL,
-	[SMS_TO] [nvarchar](255) NOT NULL,
-	[SMS_BODY] [ntext] NULL,
+CREATE TABLE [jsharmony].[rqst_sms](
+	[rqst_sms_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[rqst_id] [bigint] NOT NULL,
+	[sms_txt_attrib] [nvarchar](32) NULL,
+	[sms_to] [nvarchar](255) NOT NULL,
+	[sms_body] [ntext] NULL,
  CONSTRAINT [PK_RQST_SMS] PRIMARY KEY CLUSTERED 
 (
-	[RQST_SMS_ID] ASC
+	[rqst_sms_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2427,12 +2413,12 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[SCRIPT](
-	[SCRIPT_NAME] [nvarchar](32) NOT NULL,
-	[SCRIPT_TXT] [nvarchar](max) NULL,
+CREATE TABLE [jsharmony].[script](
+	[script_name] [nvarchar](32) NOT NULL,
+	[script_txt] [nvarchar](max) NULL,
  CONSTRAINT [PK_SCRIPT] PRIMARY KEY CLUSTERED 
 (
-	[SCRIPT_NAME] ASC
+	[script_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2440,31 +2426,31 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[SF](
-	[SF_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[SF_SEQ] [smallint] NOT NULL,
-	[SF_STS] [nvarchar](8) NOT NULL,
-	[SF_Name] [nvarchar](16) NOT NULL,
-	[SF_Desc] [nvarchar](255) NOT NULL,
-	[SF_CODE] [nvarchar](50) NULL,
-	[SF_ATTRIB] [nvarchar](50) NULL,
-	[SF_SNotes] [nvarchar](255) NULL,
+CREATE TABLE [jsharmony].[sf](
+	[sf_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[sf_seq] [smallint] NOT NULL,
+	[sf_sts] [nvarchar](8) NOT NULL,
+	[sf_name] [nvarchar](16) NOT NULL,
+	[sf_desc] [nvarchar](255) NOT NULL,
+	[sf_code] [nvarchar](50) NULL,
+	[sf_attrib] [nvarchar](50) NULL,
+	[sf_snotes] [nvarchar](255) NULL,
  CONSTRAINT [PK_SF] PRIMARY KEY CLUSTERED 
 (
-	[SF_Name] ASC
+	[sf_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SF_SF_CODE_SF_NAME] UNIQUE NONCLUSTERED 
 (
-	[SF_CODE] ASC,
-	[SF_Name] ASC
+	[sf_code] ASC,
+	[sf_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SF_SF_Desc] UNIQUE NONCLUSTERED 
 (
-	[SF_Desc] ASC
+	[sf_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SF_SF_ID] UNIQUE NONCLUSTERED 
 (
-	[SF_ID] ASC
+	[sf_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2472,19 +2458,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[SPEF](
-	[PE_ID] [bigint] NOT NULL,
-	[SPEF_SNotes] [nvarchar](255) NULL,
-	[SPEF_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[SF_NAME] [nvarchar](16) NOT NULL,
+CREATE TABLE [jsharmony].[spef](
+	[pe_id] [bigint] NOT NULL,
+	[spef_snotes] [nvarchar](255) NULL,
+	[spef_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[sf_name] [nvarchar](16) NOT NULL,
  CONSTRAINT [PK_SPEF] PRIMARY KEY CLUSTERED 
 (
-	[PE_ID] ASC,
-	[SF_NAME] ASC
+	[pe_id] ASC,
+	[sf_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_SPEF] UNIQUE NONCLUSTERED 
 (
-	[SPEF_ID] ASC
+	[spef_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2492,27 +2478,27 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[TXT](
-	[TXT_PROCESS] [nvarchar](32) NOT NULL,
-	[TXT_ATTRIB] [nvarchar](32) NOT NULL,
-	[TXT_TYPE] [nvarchar](8) NOT NULL,
-	[TXT_TVAL] [nvarchar](max) NULL,
-	[TXT_VAL] [nvarchar](max) NULL,
-	[TXT_BCC] [nvarchar](255) NULL,
-	[TXT_Desc] [nvarchar](255) NULL,
-	[TXT_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[TXT_ETstmp] [datetime2](7) NOT NULL,
-	[TXT_EU] [varchar](64) NOT NULL,
-	[TXT_MTstmp] [datetime2](7) NOT NULL,
-	[TXT_MU] [varchar](64) NOT NULL,
+CREATE TABLE [jsharmony].[txt](
+	[txt_process] [nvarchar](32) NOT NULL,
+	[txt_attrib] [nvarchar](32) NOT NULL,
+	[txt_type] [nvarchar](8) NOT NULL,
+	[txt_tval] [nvarchar](max) NULL,
+	[txt_val] [nvarchar](max) NULL,
+	[txt_bcc] [nvarchar](255) NULL,
+	[txt_desc] [nvarchar](255) NULL,
+	[txt_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[txt_etstmp] [datetime2](7) NOT NULL,
+	[txt_eu] [varchar](64) NOT NULL,
+	[txt_mtstmp] [datetime2](7) NOT NULL,
+	[txt_mu] [varchar](64) NOT NULL,
  CONSTRAINT [PK_TXT] PRIMARY KEY CLUSTERED 
 (
-	[TXT_ID] ASC
+	[txt_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_TXT] UNIQUE NONCLUSTERED 
 (
-	[TXT_PROCESS] ASC,
-	[TXT_ATTRIB] ASC
+	[txt_process] ASC,
+	[txt_attrib] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2520,32 +2506,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_AC](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_ac](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_AC] PRIMARY KEY CLUSTERED 
 (
-	[UCOD_ID] ASC
+	[ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_AC_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+  [codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_AC_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_AC_codeval] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+  [codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2553,32 +2539,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_AC1](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_ac1](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_AC1] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_ID] ASC
+  [ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_AC1_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+  [codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_AC1_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_AC1_codeval] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+  [codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2586,32 +2572,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_AHC](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_ahc](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_AHC] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_ID] ASC
+  [ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_AHC_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+  [codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_AHC_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_AHC_codeval] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+  [codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2619,32 +2605,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_COUNTRY](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_country](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_COUNTRY] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_ID] ASC
+  [ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_COUNTRY_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+  [codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_COUNTRY_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_COUNTRY_codeval] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+  [codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2652,32 +2638,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_D_SCOPE](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_d_scope](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_D_SCOPE] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_ID] ASC
+  [ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_D_SCOPE_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+  [codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_D_SCOPE_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_D_SCOPE_codeval] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+  [codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2685,27 +2671,26 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_H](
-	[CODENAME] [nvarchar](16) NOT NULL,
-	[CODEMEAN] [nvarchar](128) NULL,
-	[CODECODEMEAN] [nvarchar](128) NULL,
-	[CODEATTRIBMEAN] [nvarchar](128) NULL,
-	[COD_H_CODECODE_DESC] [nvarchar](150) NULL,
-	[COD_H_ETstmp] [datetime2](7) NULL,
-	[COD_H_EU] [nvarchar](20) NULL,
-	[COD_H_MTstmp] [datetime2](7) NULL,
-	[COD_H_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[CODESCHEMA] [nvarchar](16) NULL,
-	[UCOD_H_ID] [bigint] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [jsharmony].[ucod_h](
+	[codename] [nvarchar](16) NOT NULL,
+	[codemean] [nvarchar](128) NULL,
+	[codecodemean] [nvarchar](128) NULL,
+	[codeattribmean] [nvarchar](128) NULL,
+	[cod_h_etstmp] [datetime2](7) NULL,
+	[cod_h_eu] [nvarchar](20) NULL,
+	[cod_h_mtstmp] [datetime2](7) NULL,
+	[cod_h_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[codeschema] [nvarchar](16) NULL,
+	[ucod_h_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_UCOD_H] PRIMARY KEY CLUSTERED 
 (
-	[UCOD_H_ID] ASC
+	[ucod_h_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_H] UNIQUE NONCLUSTERED 
 (
-	[CODESCHEMA] ASC,
-	[CODENAME] ASC
+	[codeschema] ASC,
+	[codename] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2713,32 +2698,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_N_SCOPE](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_n_scope](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_N_SCOPE] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_ID] ASC
+  [ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_N_SCOPE_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+  [codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_N_SCOPE_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_N_SCOPE_codeval] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+  [codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2746,32 +2731,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_N_TYPE](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_n_type](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_N_TYPE] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_ID] ASC
+  [ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_N_TYPE_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+  [codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_N_TYPE_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_N_TYPE_codeval] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+  [codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2779,32 +2764,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_PPD_TYPE](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_ppd_type](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_PPD_TYPE] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_ID] ASC
+  [ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_PPD_TYPE_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+  [codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_PPD_TYPE_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_PPD_TYPE_codeval] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+  [codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2812,32 +2797,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_RQST_ATYPE](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_rqst_atype](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_RQST_ATYPE] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_ID] ASC
+  [ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_RQST_ATYPE_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+  [codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_RQST_ATYPE_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_RQST_ATYPE_codeval] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+  [codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2845,32 +2830,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_RQST_SOURCE](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_rqst_source](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_RQST_SOURCE] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_ID] ASC
+  [ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_RQST_SOURCE_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+  [codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_RQST_SOURCE_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_RQST_SOURCE_codeval] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+  [codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2878,32 +2863,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_TXT_TYPE](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_txt_type](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_TXT_TYPE] PRIMARY KEY CLUSTERED 
 (
-  [UCOD_ID] ASC
+  [ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_TXT_TYPE_CODETXT] UNIQUE NONCLUSTERED 
 (
-  [CODETXT] ASC
+  [codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_TXT_TYPE_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_TXT_TYPE_codeval] UNIQUE NONCLUSTERED 
 (
-  [CODEVAL] ASC
+  [codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2911,32 +2896,32 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD_V_STS](
-	[UCOD_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
+CREATE TABLE [jsharmony].[ucod_v_sts](
+	[ucod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
+	[codeattrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_UCOD_V_STS] PRIMARY KEY CLUSTERED 
 (
-	[UCOD_ID] ASC
+	[ucod_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD_V_STS_CODETXT] UNIQUE NONCLUSTERED 
 (
-	[CODETXT] ASC
+	[codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_V_STS_CODEVAL] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD_V_STS_codeval] UNIQUE NONCLUSTERED 
 (
-	[CODEVAL] ASC
+	[codeval] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2944,35 +2929,35 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD2_COUNTRY_STATE](
-	[UCOD2_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[CODSEQ] [smallint] NULL,
-	[CODEVAL1] [nvarchar](8) NOT NULL,
-	[CODEVAL2] [nvarchar](8) NOT NULL,
-	[CODETXT] [nvarchar](50) NULL,
-	[CODECODE] [nvarchar](50) NULL,
-	[CODEATTRIB] [nvarchar](50) NULL,
-	[CODETDT] [datetime2](7) NULL,
-	[CODETCM] [nvarchar](50) NULL,
-	[COD_ETstmp] [datetime2](7) NULL,
-	[COD_EU] [nvarchar](20) NULL,
-	[COD_MTstmp] [datetime2](7) NULL,
-	[COD_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[COD_Notes] [nvarchar](255) NULL,
+CREATE TABLE [jsharmony].[ucod2_country_state](
+	[ucod2_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[codseq] [smallint] NULL,
+	[codeval1] [nvarchar](8) NOT NULL,
+	[codeval2] [nvarchar](8) NOT NULL,
+	[codetxt] [nvarchar](50) NULL,
+	[codecode] [nvarchar](50) NULL,
+	[codeattrib] [nvarchar](50) NULL,
+	[codetdt] [datetime2](7) NULL,
+	[codetcm] [nvarchar](50) NULL,
+	[cod_etstmp] [datetime2](7) NULL,
+	[cod_eu] [nvarchar](20) NULL,
+	[cod_mtstmp] [datetime2](7) NULL,
+	[cod_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[cod_notes] [nvarchar](255) NULL,
  CONSTRAINT [PK_UCOD2_COUNTRY_STATE] PRIMARY KEY CLUSTERED 
 (
-	[UCOD2_ID] ASC
+	[ucod2_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD2_COUNTRY_STATE_CODEVAL1_CODEVAL2] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD2_COUNTRY_STATE_codeval1_codeval2] UNIQUE NONCLUSTERED 
 (
-	[CODEVAL1] ASC,
-	[CODEVAL2] ASC
+	[codeval1] ASC,
+	[codeval2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD2_COUNTRY_STATE_CODEVAL1_CODETXT] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_UCOD2_COUNTRY_STATE_codeval1_CODETXT] UNIQUE NONCLUSTERED 
 (
-	[CODEVAL1] ASC,
-	[CODETXT] ASC
+	[codeval1] ASC,
+	[codetxt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2980,26 +2965,26 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[UCOD2_H](
-	[CODENAME] [nvarchar](16) NOT NULL,
-	[CODEMEAN] [nvarchar](128) NULL,
-	[CODECODEMEAN] [nvarchar](128) NULL,
-	[CODEATTRIBMEAN] [nvarchar](128) NULL,
-	[COD_H_ETstmp] [datetime2](7) NULL,
-	[COD_H_EU] [nvarchar](20) NULL,
-	[COD_H_MTstmp] [datetime2](7) NULL,
-	[COD_H_MU] [nvarchar](20) NULL,
-	[COD_SNotes] [nvarchar](255) NULL,
-	[CODESCHEMA] [nvarchar](16) NULL,
-	[UCOD2_H_ID] [bigint] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [jsharmony].[ucod2_h](
+	[codename] [nvarchar](16) NOT NULL,
+	[codemean] [nvarchar](128) NULL,
+	[codecodemean] [nvarchar](128) NULL,
+	[codeattribmean] [nvarchar](128) NULL,
+	[cod_h_etstmp] [datetime2](7) NULL,
+	[cod_h_eu] [nvarchar](20) NULL,
+	[cod_h_mtstmp] [datetime2](7) NULL,
+	[cod_h_mu] [nvarchar](20) NULL,
+	[cod_snotes] [nvarchar](255) NULL,
+	[codeschema] [nvarchar](16) NULL,
+	[ucod2_h_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_UCOD2_H] PRIMARY KEY CLUSTERED 
 (
-	[UCOD2_H_ID] ASC
+	[ucod2_h_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_UCOD2_H] UNIQUE NONCLUSTERED 
 (
-	[CODESCHEMA] ASC,
-	[CODENAME] ASC
+	[codeschema] ASC,
+	[codename] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -3007,180 +2992,180 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[V](
-	[V_ID] [bigint] IDENTITY(1,1) NOT NULL,
-	[V_COMP] [nvarchar](50) NOT NULL,
-	[V_NO_MAJOR] [int] NOT NULL,
-	[V_NO_MINOR] [int] NOT NULL,
-	[V_NO_BUILD] [int] NOT NULL,
-	[V_NO_REV] [int] NOT NULL,
-	[V_STS] [nvarchar](8) NOT NULL,
-	[V_NOTE] [nvarchar](max) NULL,
-	[V_ETstmp] [datetime2](7) NOT NULL,
-	[V_EU] [nvarchar](20) NOT NULL,
-	[V_MTstmp] [datetime2](7) NOT NULL,
-	[V_MU] [nvarchar](20) NOT NULL,
-	[V_SNotes] [nvarchar](255) NULL,
+CREATE TABLE [jsharmony].[v](
+	[v_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[v_comp] [nvarchar](50) NOT NULL,
+	[v_no_major] [int] NOT NULL,
+	[v_no_minor] [int] NOT NULL,
+	[v_no_build] [int] NOT NULL,
+	[v_no_rev] [int] NOT NULL,
+	[v_sts] [nvarchar](8) NOT NULL,
+	[v_note] [nvarchar](max) NULL,
+	[v_etstmp] [datetime2](7) NOT NULL,
+	[v_eu] [nvarchar](20) NOT NULL,
+	[v_mtstmp] [datetime2](7) NOT NULL,
+	[v_mu] [nvarchar](20) NOT NULL,
+	[v_snotes] [nvarchar](255) NULL,
  CONSTRAINT [UNQ_V] PRIMARY KEY CLUSTERED 
 (
-	[V_NO_MAJOR] ASC,
-	[V_NO_MINOR] ASC,
-	[V_NO_BUILD] ASC,
-	[V_NO_REV] ASC
+	[v_no_major] ASC,
+	[v_no_minor] ASC,
+	[v_no_build] ASC,
+	[v_no_rev] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [IX_CPE_C_ID] ON [jsharmony].[CPE]
+CREATE NONCLUSTERED INDEX [IX_CPE_C_ID] ON [jsharmony].[cpe]
 (
-	[C_ID] ASC
+	[c_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [IX_D_C_ID] ON [jsharmony].[D]
+CREATE NONCLUSTERED INDEX [IX_D_C_ID] ON [jsharmony].[d]
 (
-	[C_ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-GO
-CREATE NONCLUSTERED INDEX [IX_D_SCOPE] ON [jsharmony].[D]
-(
-	[D_SCOPE] ASC,
-	[D_SCOPE_ID] ASC
+	[c_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-CREATE NONCLUSTERED INDEX [IX_H] ON [jsharmony].[H]
+CREATE NONCLUSTERED INDEX [IX_D_SCOPE] ON [jsharmony].[d]
 (
-	[HP_CODE] ASC
+	[d_scope] ASC,
+	[d_scope_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-CREATE NONCLUSTERED INDEX [IX_RQ_RQ_NAME] ON [jsharmony].[RQ]
+CREATE NONCLUSTERED INDEX [IX_H] ON [jsharmony].[h]
 (
-	[RQ_NAME] ASC
+	[hp_code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [IX_RQ_RQ_NAME] ON [jsharmony].[rq]
+(
+	[rq_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 ALTER TABLE [jsharmony].[AUD_H] ADD  CONSTRAINT [DF_AUD_H_DB_K]  DEFAULT ('0') FOR [DB_K]
 GO
-ALTER TABLE [jsharmony].[CPE] ADD  CONSTRAINT [DF_CPE_PE_STS]  DEFAULT (N'ACTIVE') FOR [PE_STS]
+ALTER TABLE [jsharmony].[cpe] ADD  CONSTRAINT [DF_CPE_PE_STS]  DEFAULT (N'ACTIVE') FOR [pe_sts]
 GO
-ALTER TABLE [jsharmony].[CPE] ADD  CONSTRAINT [DF_CPE_PE_STS_Dt]  DEFAULT ([jsharmony].[myTODAY]()) FOR [PE_STSDt]
+ALTER TABLE [jsharmony].[cpe] ADD  CONSTRAINT [DF_CPE_PE_STS_Dt]  DEFAULT ([jsharmony].[myTODAY]()) FOR [pe_stsdt]
 GO
-ALTER TABLE [jsharmony].[CPE] ADD  CONSTRAINT [DF_CPE_PE_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [PE_ETstmp]
+ALTER TABLE [jsharmony].[cpe] ADD  CONSTRAINT [DF_CPE_PE_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [pe_etstmp]
 GO
-ALTER TABLE [jsharmony].[CPE] ADD  CONSTRAINT [DF_CPE_PE_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [PE_EU]
+ALTER TABLE [jsharmony].[cpe] ADD  CONSTRAINT [DF_CPE_PE_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [pe_eu]
 GO
-ALTER TABLE [jsharmony].[CPE] ADD  CONSTRAINT [DF_CPE_PE_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [PE_MTstmp]
+ALTER TABLE [jsharmony].[cpe] ADD  CONSTRAINT [DF_CPE_PE_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [pe_mtstmp]
 GO
-ALTER TABLE [jsharmony].[CPE] ADD  CONSTRAINT [DF_CPE_PE_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [PE_MU]
+ALTER TABLE [jsharmony].[cpe] ADD  CONSTRAINT [DF_CPE_PE_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [pe_mu]
 GO
-ALTER TABLE [jsharmony].[CPE] ADD  CONSTRAINT [DF_CPE_PE_Hash]  DEFAULT ((0)) FOR [PE_Hash]
+ALTER TABLE [jsharmony].[cpe] ADD  CONSTRAINT [DF_CPE_PE_Hash]  DEFAULT ((0)) FOR [pe_hash]
 GO
-ALTER TABLE [jsharmony].[CR] ADD  CONSTRAINT [DF_CR_CR_STS]  DEFAULT ('ACTIVE') FOR [CR_STS]
+ALTER TABLE [jsharmony].[cr] ADD  CONSTRAINT [DF_CR_CR_STS]  DEFAULT ('ACTIVE') FOR [cr_sts]
 GO
-ALTER TABLE [jsharmony].[D] ADD  CONSTRAINT [DF_D_D_SCOPE]  DEFAULT (N'S') FOR [D_SCOPE]
+ALTER TABLE [jsharmony].[d] ADD  CONSTRAINT [DF_D_D_SCOPE]  DEFAULT (N'S') FOR [d_scope]
 GO
-ALTER TABLE [jsharmony].[D] ADD  CONSTRAINT [DF_D_D_SCOPE_ID]  DEFAULT ((0)) FOR [D_SCOPE_ID]
+ALTER TABLE [jsharmony].[d] ADD  CONSTRAINT [DF_D_D_SCOPE_ID]  DEFAULT ((0)) FOR [d_scope_id]
 GO
-ALTER TABLE [jsharmony].[D] ADD  CONSTRAINT [DF_D_C_ID]  DEFAULT (NULL) FOR [C_ID]
+ALTER TABLE [jsharmony].[d] ADD  CONSTRAINT [DF_D_C_ID]  DEFAULT (NULL) FOR [c_id]
 GO
-ALTER TABLE [jsharmony].[D] ADD  CONSTRAINT [DF_D_E_ID]  DEFAULT (NULL) FOR [E_ID]
+ALTER TABLE [jsharmony].[d] ADD  CONSTRAINT [DF_D_E_ID]  DEFAULT (NULL) FOR [e_id]
 GO
-ALTER TABLE [jsharmony].[D] ADD  CONSTRAINT [DF_D_D_STS]  DEFAULT (N'A') FOR [D_STS]
+ALTER TABLE [jsharmony].[d] ADD  CONSTRAINT [DF_D_D_STS]  DEFAULT (N'A') FOR [d_sts]
 GO
-ALTER TABLE [jsharmony].[D] ADD  CONSTRAINT [DF_D_D_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [D_ETstmp]
+ALTER TABLE [jsharmony].[d] ADD  CONSTRAINT [DF_D_D_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [d_etstmp]
 GO
-ALTER TABLE [jsharmony].[D] ADD  CONSTRAINT [DF_D_D_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [D_EU]
+ALTER TABLE [jsharmony].[d] ADD  CONSTRAINT [DF_D_D_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [d_eu]
 GO
-ALTER TABLE [jsharmony].[D] ADD  CONSTRAINT [DF_D_D_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [D_MTstmp]
+ALTER TABLE [jsharmony].[d] ADD  CONSTRAINT [DF_D_D_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [d_mtstmp]
 GO
-ALTER TABLE [jsharmony].[D] ADD  CONSTRAINT [DF_D_D_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [D_MU]
+ALTER TABLE [jsharmony].[d] ADD  CONSTRAINT [DF_D_D_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [d_mu]
 GO
-ALTER TABLE [jsharmony].[D] ADD  CONSTRAINT [DF_D_D_UTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [D_UTstmp]
+ALTER TABLE [jsharmony].[d] ADD  CONSTRAINT [DF_D_D_UTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [d_utstmp]
 GO
-ALTER TABLE [jsharmony].[D] ADD  CONSTRAINT [DF_D_D_UU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [D_UU]
+ALTER TABLE [jsharmony].[d] ADD  CONSTRAINT [DF_D_D_UU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [d_uu]
 GO
-ALTER TABLE [jsharmony].[GCOD_H] ADD  CONSTRAINT [DF_GCOD_H_GCOD_H_Edt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_H_ETstmp]
+ALTER TABLE [jsharmony].[gcod_h] ADD  CONSTRAINT [DF_GCOD_H_GCOD_H_Edt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_h_etstmp]
 GO
-ALTER TABLE [jsharmony].[GCOD_H] ADD  CONSTRAINT [DF_GCOD_H_GCOD_H_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_H_EU]
+ALTER TABLE [jsharmony].[gcod_h] ADD  CONSTRAINT [DF_GCOD_H_GCOD_H_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_h_eu]
 GO
-ALTER TABLE [jsharmony].[GCOD_H] ADD  CONSTRAINT [DF_GCOD_H_GCOD_H_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_H_MTstmp]
+ALTER TABLE [jsharmony].[gcod_h] ADD  CONSTRAINT [DF_GCOD_H_GCOD_H_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_h_mtstmp]
 GO
-ALTER TABLE [jsharmony].[GCOD_H] ADD  CONSTRAINT [DF_GCOD_H_GCOD_H_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_H_MU]
+ALTER TABLE [jsharmony].[gcod_h] ADD  CONSTRAINT [DF_GCOD_H_GCOD_H_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_h_mu]
 GO
-ALTER TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR] ADD  CONSTRAINT [DF_GCOD2_D_SCOPE_D_CTGR_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[gcod2_d_scope_d_ctgr] ADD  CONSTRAINT [DF_GCOD2_D_SCOPE_D_CTGR_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR] ADD  CONSTRAINT [DF_GCOD2_D_SCOPE_D_CTGR_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[gcod2_d_scope_d_ctgr] ADD  CONSTRAINT [DF_GCOD2_D_SCOPE_D_CTGR_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR] ADD  CONSTRAINT [DF_GCOD2_D_SCOPE_D_CTGR_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[gcod2_d_scope_d_ctgr] ADD  CONSTRAINT [DF_GCOD2_D_SCOPE_D_CTGR_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR] ADD  CONSTRAINT [DF_GCOD2_D_SCOPE_D_CTGR_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[gcod2_d_scope_d_ctgr] ADD  CONSTRAINT [DF_GCOD2_D_SCOPE_D_CTGR_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[GCOD2_H] ADD  CONSTRAINT [DF_GCOD2_H_GCOD2_H_Edt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_H_ETstmp]
+ALTER TABLE [jsharmony].[gcod2_h] ADD  CONSTRAINT [DF_GCOD2_H_GCOD2_H_Edt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_h_etstmp]
 GO
-ALTER TABLE [jsharmony].[GCOD2_H] ADD  CONSTRAINT [DF_GCOD2_H_GCOD2_H_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_H_EU]
+ALTER TABLE [jsharmony].[gcod2_h] ADD  CONSTRAINT [DF_GCOD2_H_GCOD2_H_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_h_eu]
 GO
-ALTER TABLE [jsharmony].[GCOD2_H] ADD  CONSTRAINT [DF_GCOD2_H_GCOD2_H_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_H_MTstmp]
+ALTER TABLE [jsharmony].[gcod2_h] ADD  CONSTRAINT [DF_GCOD2_H_GCOD2_H_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_h_mtstmp]
 GO
-ALTER TABLE [jsharmony].[GCOD2_H] ADD  CONSTRAINT [DF_GCOD2_H_GCOD2_H_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_H_MU]
+ALTER TABLE [jsharmony].[gcod2_h] ADD  CONSTRAINT [DF_GCOD2_H_GCOD2_H_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_h_mu]
 GO
-ALTER TABLE [jsharmony].[GPP] ADD  CONSTRAINT [DF_GPP_GPP_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [GPP_ETstmp]
+ALTER TABLE [jsharmony].[gpp] ADD  CONSTRAINT [DF_GPP_GPP_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [gpp_etstmp]
 GO
-ALTER TABLE [jsharmony].[GPP] ADD  CONSTRAINT [DF_GPP_GPP_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [GPP_EU]
+ALTER TABLE [jsharmony].[gpp] ADD  CONSTRAINT [DF_GPP_GPP_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [gpp_eu]
 GO
-ALTER TABLE [jsharmony].[GPP] ADD  CONSTRAINT [DF_GPP_GPP_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [GPP_MTstmp]
+ALTER TABLE [jsharmony].[gpp] ADD  CONSTRAINT [DF_GPP_GPP_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [gpp_mtstmp]
 GO
-ALTER TABLE [jsharmony].[GPP] ADD  CONSTRAINT [DF_GPP_GPP_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [GPP_MU]
+ALTER TABLE [jsharmony].[gpp] ADD  CONSTRAINT [DF_GPP_GPP_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [gpp_mu]
 GO
-ALTER TABLE [jsharmony].[H] ADD  CONSTRAINT [DF_H_H_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [H_ETstmp]
+ALTER TABLE [jsharmony].[h] ADD  CONSTRAINT [DF_H_H_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [h_etstmp]
 GO
-ALTER TABLE [jsharmony].[H] ADD  CONSTRAINT [DF_H_H_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [H_EU]
+ALTER TABLE [jsharmony].[h] ADD  CONSTRAINT [DF_H_H_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [h_eu]
 GO
-ALTER TABLE [jsharmony].[H] ADD  CONSTRAINT [DF_H_H_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [H_MTstmp]
+ALTER TABLE [jsharmony].[h] ADD  CONSTRAINT [DF_H_H_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [h_mtstmp]
 GO
-ALTER TABLE [jsharmony].[H] ADD  CONSTRAINT [DF_H_H_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [H_MU]
+ALTER TABLE [jsharmony].[h] ADD  CONSTRAINT [DF_H_H_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [h_mu]
 GO
-ALTER TABLE [jsharmony].[H] ADD  CONSTRAINT [DF_H_H_INDEX_A]  DEFAULT ((1)) FOR [H_INDEX_A]
+ALTER TABLE [jsharmony].[h] ADD  CONSTRAINT [DF_H_H_INDEX_A]  DEFAULT ((1)) FOR [h_index_a]
 GO
-ALTER TABLE [jsharmony].[H] ADD  CONSTRAINT [DF_H_H_INDEX_P]  DEFAULT ((1)) FOR [H_INDEX_P]
+ALTER TABLE [jsharmony].[h] ADD  CONSTRAINT [DF_H_H_INDEX_P]  DEFAULT ((1)) FOR [h_index_p]
 GO
-ALTER TABLE [jsharmony].[N] ADD  CONSTRAINT [DF_N_N_SCOPE]  DEFAULT (N'S') FOR [N_SCOPE]
+ALTER TABLE [jsharmony].[n] ADD  CONSTRAINT [DF_N_N_SCOPE]  DEFAULT (N'S') FOR [n_scope]
 GO
-ALTER TABLE [jsharmony].[N] ADD  CONSTRAINT [DF_N_N_SCOPE_ID]  DEFAULT ((0)) FOR [N_SCOPE_ID]
+ALTER TABLE [jsharmony].[n] ADD  CONSTRAINT [DF_N_N_SCOPE_ID]  DEFAULT ((0)) FOR [n_scope_id]
 GO
-ALTER TABLE [jsharmony].[N] ADD  CONSTRAINT [DF_N_N_STS]  DEFAULT ('A') FOR [N_STS]
+ALTER TABLE [jsharmony].[n] ADD  CONSTRAINT [DF_N_N_STS]  DEFAULT ('A') FOR [n_sts]
 GO
-ALTER TABLE [jsharmony].[N] ADD  CONSTRAINT [DF_N_C_ID]  DEFAULT (NULL) FOR [C_ID]
+ALTER TABLE [jsharmony].[n] ADD  CONSTRAINT [DF_N_C_ID]  DEFAULT (NULL) FOR [c_id]
 GO
-ALTER TABLE [jsharmony].[N] ADD  CONSTRAINT [DF_N_E_ID]  DEFAULT (NULL) FOR [E_ID]
+ALTER TABLE [jsharmony].[n] ADD  CONSTRAINT [DF_N_E_ID]  DEFAULT (NULL) FOR [e_id]
 GO
-ALTER TABLE [jsharmony].[N] ADD  CONSTRAINT [DF_N_N_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [N_ETstmp]
+ALTER TABLE [jsharmony].[n] ADD  CONSTRAINT [DF_N_N_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [n_etstmp]
 GO
-ALTER TABLE [jsharmony].[N] ADD  CONSTRAINT [DF_N_N_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [N_EU]
+ALTER TABLE [jsharmony].[n] ADD  CONSTRAINT [DF_N_N_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [n_eu]
 GO
-ALTER TABLE [jsharmony].[N] ADD  CONSTRAINT [DF_N_N_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [N_MTstmp]
+ALTER TABLE [jsharmony].[n] ADD  CONSTRAINT [DF_N_N_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [n_mtstmp]
 GO
-ALTER TABLE [jsharmony].[N] ADD  CONSTRAINT [DF_N_N_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [N_MU]
+ALTER TABLE [jsharmony].[n] ADD  CONSTRAINT [DF_N_N_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [n_mu]
 GO
-ALTER TABLE [jsharmony].[PE] ADD  CONSTRAINT [DF_PE_PE_STS]  DEFAULT (N'ACTIVE') FOR [PE_STS]
+ALTER TABLE [jsharmony].[pe] ADD  CONSTRAINT [DF_PE_PE_STS]  DEFAULT (N'ACTIVE') FOR [pe_sts]
 GO
-ALTER TABLE [jsharmony].[PE] ADD  CONSTRAINT [DF__PE__PE_STS_Dt__17C286CF]  DEFAULT ([jsharmony].[myTODAY]()) FOR [PE_STSDt]
+ALTER TABLE [jsharmony].[pe] ADD  CONSTRAINT [DF__PE__PE_STS_Dt__17C286CF]  DEFAULT ([jsharmony].[myTODAY]()) FOR [pe_stsdt]
 GO
-ALTER TABLE [jsharmony].[PE] ADD  CONSTRAINT [DF_PE_PE_COUNTRY]  DEFAULT ('USA') FOR [PE_COUNTRY]
+ALTER TABLE [jsharmony].[pe] ADD  CONSTRAINT [DF_PE_PE_COUNTRY]  DEFAULT ('USA') FOR [pe_country]
 GO
-ALTER TABLE [jsharmony].[PE] ADD  CONSTRAINT [DF_PE_PE_STARTDT]  DEFAULT ([jsharmony].[myNOW]()) FOR [PE_STARTDT]
+ALTER TABLE [jsharmony].[pe] ADD  CONSTRAINT [DF_PE_PE_STARTDT]  DEFAULT ([jsharmony].[myNOW]()) FOR [pe_startdt]
 GO
-ALTER TABLE [jsharmony].[PE] ADD  CONSTRAINT [DF_PE_PE_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [PE_ETstmp]
+ALTER TABLE [jsharmony].[pe] ADD  CONSTRAINT [DF_PE_PE_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [pe_etstmp]
 GO
-ALTER TABLE [jsharmony].[PE] ADD  CONSTRAINT [DF__PE__PE_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [PE_EU]
+ALTER TABLE [jsharmony].[pe] ADD  CONSTRAINT [DF__PE__PE_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [pe_eu]
 GO
-ALTER TABLE [jsharmony].[PE] ADD  CONSTRAINT [DF__PE__PE_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [PE_MTstmp]
+ALTER TABLE [jsharmony].[pe] ADD  CONSTRAINT [DF__PE__PE_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [pe_mtstmp]
 GO
-ALTER TABLE [jsharmony].[PE] ADD  CONSTRAINT [DF__PE__PE_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [PE_MU]
+ALTER TABLE [jsharmony].[pe] ADD  CONSTRAINT [DF__PE__PE_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [pe_mu]
 GO
-ALTER TABLE [jsharmony].[PE] ADD  CONSTRAINT [DF__PE__PE_Hash__597119F2]  DEFAULT ((0)) FOR [PE_Hash]
+ALTER TABLE [jsharmony].[pe] ADD  CONSTRAINT [DF__PE__PE_Hash__597119F2]  DEFAULT ((0)) FOR [pe_hash]
 GO
 ALTER TABLE [jsharmony].[PPD] ADD  CONSTRAINT [DF_PPD_PPD_GPP]  DEFAULT ((0)) FOR [PPD_GPP]
 GO
@@ -3196,406 +3181,406 @@ ALTER TABLE [jsharmony].[PPD] ADD  CONSTRAINT [DF_PPD_PPD_MTstmp]  DEFAULT ([jsh
 GO
 ALTER TABLE [jsharmony].[PPD] ADD  CONSTRAINT [DF_PPD_PPD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [PPD_MU]
 GO
-ALTER TABLE [jsharmony].[PPP] ADD  CONSTRAINT [DF_PPP_PPP_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [PPP_ETstmp]
+ALTER TABLE [jsharmony].[PPP] ADD  CONSTRAINT [DF_PPP_PPP_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [ppp_etstmp]
 GO
-ALTER TABLE [jsharmony].[PPP] ADD  CONSTRAINT [DF_PPP_PPP_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [PPP_EU]
+ALTER TABLE [jsharmony].[PPP] ADD  CONSTRAINT [DF_PPP_PPP_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [ppp_eu]
 GO
-ALTER TABLE [jsharmony].[PPP] ADD  CONSTRAINT [DF_PPP_PPP_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [PPP_MTstmp]
+ALTER TABLE [jsharmony].[PPP] ADD  CONSTRAINT [DF_PPP_PPP_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [ppp_mtstmp]
 GO
-ALTER TABLE [jsharmony].[PPP] ADD  CONSTRAINT [DF_PPP_PPP_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [PPP_MU]
+ALTER TABLE [jsharmony].[PPP] ADD  CONSTRAINT [DF_PPP_PPP_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [ppp_mu]
 GO
-ALTER TABLE [jsharmony].[RQ] ADD  CONSTRAINT [DF_RQ_RQ_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [RQ_ETstmp]
+ALTER TABLE [jsharmony].[rq] ADD  CONSTRAINT [DF_RQ_RQ_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [rq_etstmp]
 GO
-ALTER TABLE [jsharmony].[RQ] ADD  CONSTRAINT [DF_RQ_RQ_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [RQ_EU]
+ALTER TABLE [jsharmony].[rq] ADD  CONSTRAINT [DF_RQ_RQ_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [rq_eu]
 GO
-ALTER TABLE [jsharmony].[RQST] ADD  CONSTRAINT [DF_RQST_RQST_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [RQST_ETstmp]
+ALTER TABLE [jsharmony].[rqst] ADD  CONSTRAINT [DF_RQST_RQST_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [rqst_etstmp]
 GO
-ALTER TABLE [jsharmony].[RQST] ADD  CONSTRAINT [DF_RQST_RQST_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [RQST_EU]
+ALTER TABLE [jsharmony].[rqst] ADD  CONSTRAINT [DF_RQST_RQST_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [rqst_eu]
 GO
-ALTER TABLE [jsharmony].[SF] ADD  CONSTRAINT [DF_SF_SF_STS]  DEFAULT ('ACTIVE') FOR [SF_STS]
+ALTER TABLE [jsharmony].[sf] ADD  CONSTRAINT [DF_SF_SF_STS]  DEFAULT ('ACTIVE') FOR [SF_STS]
 GO
-ALTER TABLE [jsharmony].[SM] ADD  CONSTRAINT [DF_SM_SM_UTYPE]  DEFAULT ('S') FOR [SM_UTYPE]
+ALTER TABLE [jsharmony].[sm] ADD  CONSTRAINT [DF_SM_SM_UTYPE]  DEFAULT ('S') FOR [sm_utype]
 GO
-ALTER TABLE [jsharmony].[SM] ADD  CONSTRAINT [DF_SM_SM_STS]  DEFAULT ('ACTIVE') FOR [SM_STS]
+ALTER TABLE [jsharmony].[sm] ADD  CONSTRAINT [DF_SM_SM_STS]  DEFAULT ('ACTIVE') FOR [sm_sts]
 GO
-ALTER TABLE [jsharmony].[SR] ADD  CONSTRAINT [DF_SR_SR_STS]  DEFAULT ('ACTIVE') FOR [SR_STS]
+ALTER TABLE [jsharmony].[sr] ADD  CONSTRAINT [DF_SR_SR_STS]  DEFAULT ('ACTIVE') FOR [sr_sts]
 GO
-ALTER TABLE [jsharmony].[TXT] ADD  CONSTRAINT [DF_TXT_TXT_TYPE]  DEFAULT ('TEXT') FOR [TXT_TYPE]
+ALTER TABLE [jsharmony].[txt] ADD  CONSTRAINT [DF_TXT_TXT_TYPE]  DEFAULT ('TEXT') FOR [txt_type]
 GO
-ALTER TABLE [jsharmony].[TXT] ADD  CONSTRAINT [DF_TXT_TXT_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [TXT_ETstmp]
+ALTER TABLE [jsharmony].[txt] ADD  CONSTRAINT [DF_TXT_TXT_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [txt_etstmp]
 GO
-ALTER TABLE [jsharmony].[TXT] ADD  CONSTRAINT [DF_TXT_TXT_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [TXT_EU]
+ALTER TABLE [jsharmony].[txt] ADD  CONSTRAINT [DF_TXT_TXT_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [txt_eu]
 GO
-ALTER TABLE [jsharmony].[TXT] ADD  CONSTRAINT [DF_TXT_TXT_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [TXT_MTstmp]
+ALTER TABLE [jsharmony].[txt] ADD  CONSTRAINT [DF_TXT_TXT_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [txt_mtstmp]
 GO
-ALTER TABLE [jsharmony].[TXT] ADD  CONSTRAINT [DF_TXT_TXT_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [TXT_MU]
+ALTER TABLE [jsharmony].[txt] ADD  CONSTRAINT [DF_TXT_TXT_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [txt_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_AC] ADD  CONSTRAINT [DF_UCOD_AC_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_ac] ADD  CONSTRAINT [DF_UCOD_AC_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_AC] ADD  CONSTRAINT [DF_UCOD_AC_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_ac] ADD  CONSTRAINT [DF_UCOD_AC_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_AC] ADD  CONSTRAINT [DF_UCOD_AC_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_ac] ADD  CONSTRAINT [DF_UCOD_AC_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_AC] ADD  CONSTRAINT [DF_UCOD_AC_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_ac] ADD  CONSTRAINT [DF_UCOD_AC_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_AC1] ADD  CONSTRAINT [DF_UCOD_AC1_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_ac1] ADD  CONSTRAINT [DF_UCOD_AC1_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_AC1] ADD  CONSTRAINT [DF_UCOD_AC1_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_ac1] ADD  CONSTRAINT [DF_UCOD_AC1_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_AC1] ADD  CONSTRAINT [DF_UCOD_AC1_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_ac1] ADD  CONSTRAINT [DF_UCOD_AC1_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_AC1] ADD  CONSTRAINT [DF_UCOD_AC1_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_ac1] ADD  CONSTRAINT [DF_UCOD_AC1_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_AHC] ADD  CONSTRAINT [DF_UCOD_AHC_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_ahc] ADD  CONSTRAINT [DF_UCOD_AHC_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_AHC] ADD  CONSTRAINT [DF_UCOD_AHC_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_ahc] ADD  CONSTRAINT [DF_UCOD_AHC_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_AHC] ADD  CONSTRAINT [DF_UCOD_AHC_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_ahc] ADD  CONSTRAINT [DF_UCOD_AHC_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_AHC] ADD  CONSTRAINT [DF_UCOD_AHC_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_ahc] ADD  CONSTRAINT [DF_UCOD_AHC_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_COUNTRY] ADD  CONSTRAINT [DF_UCOD_COUNTRY_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_country] ADD  CONSTRAINT [DF_UCOD_COUNTRY_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_COUNTRY] ADD  CONSTRAINT [DF_UCOD_COUNTRY_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_country] ADD  CONSTRAINT [DF_UCOD_COUNTRY_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_COUNTRY] ADD  CONSTRAINT [DF_UCOD_COUNTRY_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_country] ADD  CONSTRAINT [DF_UCOD_COUNTRY_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_COUNTRY] ADD  CONSTRAINT [DF_UCOD_COUNTRY_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_country] ADD  CONSTRAINT [DF_UCOD_COUNTRY_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_D_SCOPE] ADD  CONSTRAINT [DF_UCOD_SCOPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_d_scope] ADD  CONSTRAINT [DF_UCOD_SCOPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_D_SCOPE] ADD  CONSTRAINT [DF_UCOD_SCOPE_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_d_scope] ADD  CONSTRAINT [DF_UCOD_SCOPE_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_D_SCOPE] ADD  CONSTRAINT [DF_UCOD_SCOPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_d_scope] ADD  CONSTRAINT [DF_UCOD_SCOPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_D_SCOPE] ADD  CONSTRAINT [DF_UCOD_SCOPE_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_d_scope] ADD  CONSTRAINT [DF_UCOD_SCOPE_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_H] ADD  CONSTRAINT [DF_COD_H_COD_H_Edt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_H_ETstmp]
+ALTER TABLE [jsharmony].[ucod_h] ADD  CONSTRAINT [DF_COD_H_COD_H_Edt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_h_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_H] ADD  CONSTRAINT [DF_COD_H_COD_H_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_H_EU]
+ALTER TABLE [jsharmony].[ucod_h] ADD  CONSTRAINT [DF_COD_H_COD_H_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_h_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_H] ADD  CONSTRAINT [DF_COD_H_COD_H_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_H_MTstmp]
+ALTER TABLE [jsharmony].[ucod_h] ADD  CONSTRAINT [DF_COD_H_COD_H_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_h_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_H] ADD  CONSTRAINT [DF_COD_H_COD_H_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_H_MU]
+ALTER TABLE [jsharmony].[ucod_h] ADD  CONSTRAINT [DF_COD_H_COD_H_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_h_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_N_SCOPE] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_n_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_N_SCOPE] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_n_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_N_SCOPE] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_n_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_N_SCOPE] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_n_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_N_TYPE] ADD  CONSTRAINT [DF_UCOD_N_TYPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_n_type] ADD  CONSTRAINT [DF_UCOD_N_TYPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_N_TYPE] ADD  CONSTRAINT [DF_UCOD_N_TYPE_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_n_type] ADD  CONSTRAINT [DF_UCOD_N_TYPE_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_N_TYPE] ADD  CONSTRAINT [DF_UCOD_N_TYPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_n_type] ADD  CONSTRAINT [DF_UCOD_N_TYPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_N_TYPE] ADD  CONSTRAINT [DF_UCOD_N_TYPE_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_n_type] ADD  CONSTRAINT [DF_UCOD_N_TYPE_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_PPD_TYPE] ADD  CONSTRAINT [DF_UCOD_PPD_TYPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_ppd_type] ADD  CONSTRAINT [DF_UCOD_PPD_TYPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_PPD_TYPE] ADD  CONSTRAINT [DF_UCOD_PPD_TYPE_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_ppd_type] ADD  CONSTRAINT [DF_UCOD_PPD_TYPE_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_PPD_TYPE] ADD  CONSTRAINT [DF_UCOD_PPD_TYPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_ppd_type] ADD  CONSTRAINT [DF_UCOD_PPD_TYPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_PPD_TYPE] ADD  CONSTRAINT [DF_UCOD_PPD_TYPE_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_ppd_type] ADD  CONSTRAINT [DF_UCOD_PPD_TYPE_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_RQST_ATYPE] ADD  CONSTRAINT [DF_UCOD_RQST_ATYPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_rqst_atype] ADD  CONSTRAINT [DF_UCOD_RQST_ATYPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_RQST_ATYPE] ADD  CONSTRAINT [DF_UCOD_RQST_ATYPE_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_rqst_atype] ADD  CONSTRAINT [DF_UCOD_RQST_ATYPE_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_RQST_ATYPE] ADD  CONSTRAINT [DF_UCOD_RQST_ATYPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_rqst_atype] ADD  CONSTRAINT [DF_UCOD_RQST_ATYPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_RQST_ATYPE] ADD  CONSTRAINT [DF_UCOD_RQST_ATYPE_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_rqst_atype] ADD  CONSTRAINT [DF_UCOD_RQST_ATYPE_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_RQST_SOURCE] ADD  CONSTRAINT [DF_UCOD_RQST_SOURCE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_rqst_source] ADD  CONSTRAINT [DF_UCOD_RQST_SOURCE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_RQST_SOURCE] ADD  CONSTRAINT [DF_UCOD_RQST_SOURCE_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_rqst_source] ADD  CONSTRAINT [DF_UCOD_RQST_SOURCE_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_RQST_SOURCE] ADD  CONSTRAINT [DF_UCOD_RQST_SOURCE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_rqst_source] ADD  CONSTRAINT [DF_UCOD_RQST_SOURCE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_RQST_SOURCE] ADD  CONSTRAINT [DF_UCOD_RQST_SOURCE_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_rqst_source] ADD  CONSTRAINT [DF_UCOD_RQST_SOURCE_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_TXT_TYPE] ADD  CONSTRAINT [DF_UCOD_TXT_TYPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_txt_type] ADD  CONSTRAINT [DF_UCOD_TXT_TYPE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_TXT_TYPE] ADD  CONSTRAINT [DF_UCOD_TXT_TYPE_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_txt_type] ADD  CONSTRAINT [DF_UCOD_TXT_TYPE_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_TXT_TYPE] ADD  CONSTRAINT [DF_UCOD_TXT_TYPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_txt_type] ADD  CONSTRAINT [DF_UCOD_TXT_TYPE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_TXT_TYPE] ADD  CONSTRAINT [DF_UCOD_TXT_TYPE_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_txt_type] ADD  CONSTRAINT [DF_UCOD_TXT_TYPE_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD_V_STS] ADD  CONSTRAINT [DF_UCOD_V_STS_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod_v_sts] ADD  CONSTRAINT [DF_UCOD_V_STS_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_V_STS] ADD  CONSTRAINT [DF_UCOD_V_STS_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod_v_sts] ADD  CONSTRAINT [DF_UCOD_V_STS_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD_V_STS] ADD  CONSTRAINT [DF_UCOD_V_STS_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod_v_sts] ADD  CONSTRAINT [DF_UCOD_V_STS_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD_V_STS] ADD  CONSTRAINT [DF_UCOD_V_STS_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod_v_sts] ADD  CONSTRAINT [DF_UCOD_V_STS_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD2_COUNTRY_STATE] ADD  CONSTRAINT [DF_UCOD2_COUNTRY_STATE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_ETstmp]
+ALTER TABLE [jsharmony].[ucod2_country_state] ADD  CONSTRAINT [DF_UCOD2_COUNTRY_STATE_COD_EDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD2_COUNTRY_STATE] ADD  CONSTRAINT [DF_UCOD2_COUNTRY_STATE_COD_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_EU]
+ALTER TABLE [jsharmony].[ucod2_country_state] ADD  CONSTRAINT [DF_UCOD2_COUNTRY_STATE_cod_euser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD2_COUNTRY_STATE] ADD  CONSTRAINT [DF_UCOD2_COUNTRY_STATE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_MTstmp]
+ALTER TABLE [jsharmony].[ucod2_country_state] ADD  CONSTRAINT [DF_UCOD2_COUNTRY_STATE_COD_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD2_COUNTRY_STATE] ADD  CONSTRAINT [DF_UCOD2_COUNTRY_STATE_COD_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_MU]
+ALTER TABLE [jsharmony].[ucod2_country_state] ADD  CONSTRAINT [DF_UCOD2_COUNTRY_STATE_cod_muser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_mu]
 GO
-ALTER TABLE [jsharmony].[UCOD2_H] ADD  CONSTRAINT [DF_UCOD2_H_UCOD2_H_Edt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_H_ETstmp]
+ALTER TABLE [jsharmony].[ucod2_h] ADD  CONSTRAINT [DF_UCOD2_H_UCOD2_H_Edt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_h_etstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD2_H] ADD  CONSTRAINT [DF_UCOD2_H_UCOD2_H_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_H_EU]
+ALTER TABLE [jsharmony].[ucod2_h] ADD  CONSTRAINT [DF_UCOD2_H_UCOD2_H_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_h_eu]
 GO
-ALTER TABLE [jsharmony].[UCOD2_H] ADD  CONSTRAINT [DF_UCOD2_H_UCOD2_H_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [COD_H_MTstmp]
+ALTER TABLE [jsharmony].[ucod2_h] ADD  CONSTRAINT [DF_UCOD2_H_UCOD2_H_MDt]  DEFAULT ([jsharmony].[myNOW]()) FOR [cod_h_mtstmp]
 GO
-ALTER TABLE [jsharmony].[UCOD2_H] ADD  CONSTRAINT [DF_UCOD2_H_UCOD2_H_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [COD_H_MU]
+ALTER TABLE [jsharmony].[ucod2_h] ADD  CONSTRAINT [DF_UCOD2_H_UCOD2_H_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [cod_h_mu]
 GO
-ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_NO_MAJOR]  DEFAULT ((0)) FOR [V_NO_MAJOR]
+ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_NO_MAJOR]  DEFAULT ((0)) FOR [v_no_major]
 GO
-ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_NO_MINOR]  DEFAULT ((0)) FOR [V_NO_MINOR]
+ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_NO_MINOR]  DEFAULT ((0)) FOR [v_no_minor]
 GO
-ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_NO_BUILD]  DEFAULT ((0)) FOR [V_NO_BUILD]
+ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_NO_BUILD]  DEFAULT ((0)) FOR [v_no_build]
 GO
-ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_NO_REV]  DEFAULT ((0)) FOR [V_NO_REV]
+ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_NO_REV]  DEFAULT ((0)) FOR [v_no_rev]
 GO
-ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_STS]  DEFAULT ('OK') FOR [V_STS]
+ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_STS]  DEFAULT ('OK') FOR [v_sts]
 GO
-ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [V_ETstmp]
+ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [v_etstmp]
 GO
-ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [V_EU]
+ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_EU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [v_eu]
 GO
-ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [V_MTstmp]
+ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [v_mtstmp]
 GO
-ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [V_MU]
+ALTER TABLE [jsharmony].[V] ADD  CONSTRAINT [DF_V_V_MU]  DEFAULT ([jsharmony].[myCUSER]()) FOR [v_mu]
 GO
-ALTER TABLE [jsharmony].[XPP] ADD  CONSTRAINT [DF_XPP_XPP_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [XPP_ETstmp]
+ALTER TABLE [jsharmony].[xpp] ADD  CONSTRAINT [DF_XPP_XPP_ETstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [xpp_etstmp]
 GO
-ALTER TABLE [jsharmony].[XPP] ADD  CONSTRAINT [DF_XPP_XPP_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [XPP_EU]
+ALTER TABLE [jsharmony].[xpp] ADD  CONSTRAINT [DF_XPP_XPP_EUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [xpp_eu]
 GO
-ALTER TABLE [jsharmony].[XPP] ADD  CONSTRAINT [DF_XPP_XPP_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [XPP_MTstmp]
+ALTER TABLE [jsharmony].[xpp] ADD  CONSTRAINT [DF_XPP_XPP_MTstmp]  DEFAULT ([jsharmony].[myNOW]()) FOR [xpp_mtstmp]
 GO
-ALTER TABLE [jsharmony].[XPP] ADD  CONSTRAINT [DF_XPP_XPP_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [XPP_MU]
+ALTER TABLE [jsharmony].[xpp] ADD  CONSTRAINT [DF_XPP_XPP_MUser]  DEFAULT ([jsharmony].[myCUSER]()) FOR [xpp_mu]
 GO
 ALTER TABLE [jsharmony].[AUD_D]  WITH CHECK ADD  CONSTRAINT [FK_AUD_D_AUD_H] FOREIGN KEY([AUD_SEQ])
 REFERENCES [jsharmony].[AUD_H] ([AUD_SEQ])
 GO
 ALTER TABLE [jsharmony].[AUD_D] CHECK CONSTRAINT [FK_AUD_D_AUD_H]
 GO
-ALTER TABLE [jsharmony].[CPE]  WITH CHECK ADD  CONSTRAINT [FK_CPE_UCOD_AHC] FOREIGN KEY([PE_STS])
-REFERENCES [jsharmony].[UCOD_AHC] ([CODEVAL])
+ALTER TABLE [jsharmony].[cpe]  WITH CHECK ADD  CONSTRAINT [FK_CPE_UCOD_AHC] FOREIGN KEY([pe_sts])
+REFERENCES [jsharmony].[ucod_ahc] ([codeval])
 GO
-ALTER TABLE [jsharmony].[CPE] CHECK CONSTRAINT [FK_CPE_UCOD_AHC]
+ALTER TABLE [jsharmony].[cpe] CHECK CONSTRAINT [FK_CPE_UCOD_AHC]
 GO
-ALTER TABLE [jsharmony].[CPER]  WITH CHECK ADD  CONSTRAINT [FK_CPER_CPE] FOREIGN KEY([PE_ID])
-REFERENCES [jsharmony].[CPE] ([PE_ID])
+ALTER TABLE [jsharmony].[cper]  WITH CHECK ADD  CONSTRAINT [FK_CPER_CPE] FOREIGN KEY([pe_id])
+REFERENCES [jsharmony].[cpe] ([pe_id])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[CPER] CHECK CONSTRAINT [FK_CPER_CPE]
+ALTER TABLE [jsharmony].[cper] CHECK CONSTRAINT [FK_CPER_CPE]
 GO
-ALTER TABLE [jsharmony].[CPER]  WITH CHECK ADD  CONSTRAINT [FK_CPER_CR_CR_NAME] FOREIGN KEY([CR_NAME])
-REFERENCES [jsharmony].[CR] ([CR_Name])
+ALTER TABLE [jsharmony].[cper]  WITH CHECK ADD  CONSTRAINT [FK_CPER_CR_CR_NAME] FOREIGN KEY([cr_name])
+REFERENCES [jsharmony].[cr] ([cr_name])
 GO
-ALTER TABLE [jsharmony].[CPER] CHECK CONSTRAINT [FK_CPER_CR_CR_NAME]
+ALTER TABLE [jsharmony].[cper] CHECK CONSTRAINT [FK_CPER_CR_CR_NAME]
 GO
-ALTER TABLE [jsharmony].[CR]  WITH CHECK ADD  CONSTRAINT [FK_CR_UCOD_AHC] FOREIGN KEY([CR_STS])
-REFERENCES [jsharmony].[UCOD_AHC] ([CODEVAL])
+ALTER TABLE [jsharmony].[cr]  WITH CHECK ADD  CONSTRAINT [FK_CR_UCOD_AHC] FOREIGN KEY([cr_sts])
+REFERENCES [jsharmony].[ucod_ahc] ([codeval])
 GO
-ALTER TABLE [jsharmony].[CR] CHECK CONSTRAINT [FK_CR_UCOD_AHC]
+ALTER TABLE [jsharmony].[cr] CHECK CONSTRAINT [FK_CR_UCOD_AHC]
 GO
-ALTER TABLE [jsharmony].[CRM]  WITH CHECK ADD  CONSTRAINT [FK_CRM_CR_CR_NAME] FOREIGN KEY([CR_NAME])
-REFERENCES [jsharmony].[CR] ([CR_Name])
+ALTER TABLE [jsharmony].[crm]  WITH CHECK ADD  CONSTRAINT [FK_CRM_CR_CR_NAME] FOREIGN KEY([cr_name])
+REFERENCES [jsharmony].[cr] ([cr_name])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[CRM] CHECK CONSTRAINT [FK_CRM_CR_CR_NAME]
+ALTER TABLE [jsharmony].[crm] CHECK CONSTRAINT [FK_CRM_CR_CR_NAME]
 GO
-ALTER TABLE [jsharmony].[CRM]  WITH CHECK ADD  CONSTRAINT [FK_CRM_SM] FOREIGN KEY([SM_ID])
-REFERENCES [jsharmony].[SM] ([SM_ID])
+ALTER TABLE [jsharmony].[crm]  WITH CHECK ADD  CONSTRAINT [FK_CRM_SM] FOREIGN KEY([sm_id])
+REFERENCES [jsharmony].[sm] ([sm_id])
 ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[CRM] CHECK CONSTRAINT [FK_CRM_SM]
+ALTER TABLE [jsharmony].[crm] CHECK CONSTRAINT [FK_CRM_SM]
 GO
-ALTER TABLE [jsharmony].[D]  WITH CHECK ADD  CONSTRAINT [FK_D_GCOD2_D_SCOPE_D_CTGR] FOREIGN KEY([D_SCOPE], [D_CTGR])
-REFERENCES [jsharmony].[GCOD2_D_SCOPE_D_CTGR] ([CODEVAL1], [CODEVAL2])
+ALTER TABLE [jsharmony].[d]  WITH CHECK ADD  CONSTRAINT [FK_D_GCOD2_D_SCOPE_D_CTGR] FOREIGN KEY([d_scope], [d_ctgr])
+REFERENCES [jsharmony].[gcod2_d_scope_d_ctgr] ([codeval1], [codeval2])
 GO
-ALTER TABLE [jsharmony].[D] CHECK CONSTRAINT [FK_D_GCOD2_D_SCOPE_D_CTGR]
+ALTER TABLE [jsharmony].[d] CHECK CONSTRAINT [FK_D_GCOD2_D_SCOPE_D_CTGR]
 GO
-ALTER TABLE [jsharmony].[D]  WITH CHECK ADD  CONSTRAINT [FK_D_UCOD_D_SCOPE] FOREIGN KEY([D_SCOPE])
-REFERENCES [jsharmony].[UCOD_D_SCOPE] ([CODEVAL])
+ALTER TABLE [jsharmony].[d]  WITH CHECK ADD  CONSTRAINT [FK_D_UCOD_D_SCOPE] FOREIGN KEY([d_scope])
+REFERENCES [jsharmony].[ucod_d_scope] ([codeval])
 GO
-ALTER TABLE [jsharmony].[D] CHECK CONSTRAINT [FK_D_UCOD_D_SCOPE]
+ALTER TABLE [jsharmony].[d] CHECK CONSTRAINT [FK_D_UCOD_D_SCOPE]
 GO
-ALTER TABLE [jsharmony].[GPP]  WITH CHECK ADD  CONSTRAINT [FK_GPP_PPD] FOREIGN KEY([GPP_PROCESS], [GPP_ATTRIB])
+ALTER TABLE [jsharmony].[gpp]  WITH CHECK ADD  CONSTRAINT [FK_GPP_PPD] FOREIGN KEY([gpp_process], [gpp_attrib])
 REFERENCES [jsharmony].[PPD] ([PPD_PROCESS], [PPD_ATTRIB])
 GO
-ALTER TABLE [jsharmony].[GPP] CHECK CONSTRAINT [FK_GPP_PPD]
+ALTER TABLE [jsharmony].[gpp] CHECK CONSTRAINT [FK_GPP_PPD]
 GO
-ALTER TABLE [jsharmony].[H]  WITH CHECK ADD  CONSTRAINT [FK_H_HP] FOREIGN KEY([HP_CODE])
-REFERENCES [jsharmony].[HP] ([HP_CODE])
+ALTER TABLE [jsharmony].[h]  WITH CHECK ADD  CONSTRAINT [FK_H_HP] FOREIGN KEY([hp_code])
+REFERENCES [jsharmony].[hp] ([hp_code])
 GO
-ALTER TABLE [jsharmony].[H] CHECK CONSTRAINT [FK_H_HP]
+ALTER TABLE [jsharmony].[h] CHECK CONSTRAINT [FK_H_HP]
 GO
-ALTER TABLE [jsharmony].[N]  WITH CHECK ADD  CONSTRAINT [FK_N_UCOD_AC1] FOREIGN KEY([N_STS])
-REFERENCES [jsharmony].[UCOD_AC1] ([CODEVAL])
+ALTER TABLE [jsharmony].[n]  WITH CHECK ADD  CONSTRAINT [FK_N_UCOD_AC1] FOREIGN KEY([n_sts])
+REFERENCES [jsharmony].[ucod_ac1] ([codeval])
 GO
-ALTER TABLE [jsharmony].[N] CHECK CONSTRAINT [FK_N_UCOD_AC1]
+ALTER TABLE [jsharmony].[n] CHECK CONSTRAINT [FK_N_UCOD_AC1]
 GO
-ALTER TABLE [jsharmony].[N]  WITH CHECK ADD  CONSTRAINT [FK_N_UCOD_N_SCOPE] FOREIGN KEY([N_SCOPE])
-REFERENCES [jsharmony].[UCOD_N_SCOPE] ([CODEVAL])
+ALTER TABLE [jsharmony].[n]  WITH CHECK ADD  CONSTRAINT [FK_N_UCOD_N_SCOPE] FOREIGN KEY([n_scope])
+REFERENCES [jsharmony].[ucod_n_scope] ([codeval])
 GO
-ALTER TABLE [jsharmony].[N] CHECK CONSTRAINT [FK_N_UCOD_N_SCOPE]
+ALTER TABLE [jsharmony].[n] CHECK CONSTRAINT [FK_N_UCOD_N_SCOPE]
 GO
-ALTER TABLE [jsharmony].[N]  WITH CHECK ADD  CONSTRAINT [FK_N_UCOD_N_TYPE] FOREIGN KEY([N_TYPE])
-REFERENCES [jsharmony].[UCOD_N_TYPE] ([CODEVAL])
+ALTER TABLE [jsharmony].[n]  WITH CHECK ADD  CONSTRAINT [FK_N_UCOD_N_TYPE] FOREIGN KEY([n_type])
+REFERENCES [jsharmony].[ucod_n_type] ([codeval])
 GO
-ALTER TABLE [jsharmony].[N] CHECK CONSTRAINT [FK_N_UCOD_N_TYPE]
+ALTER TABLE [jsharmony].[n] CHECK CONSTRAINT [FK_N_UCOD_N_TYPE]
 GO
-ALTER TABLE [jsharmony].[PE]  WITH CHECK ADD  CONSTRAINT [FK_PE_UCOD_AHC] FOREIGN KEY([PE_STS])
-REFERENCES [jsharmony].[UCOD_AHC] ([CODEVAL])
+ALTER TABLE [jsharmony].[pe]  WITH CHECK ADD  CONSTRAINT [FK_PE_UCOD_AHC] FOREIGN KEY([pe_sts])
+REFERENCES [jsharmony].[ucod_ahc] ([codeval])
 GO
-ALTER TABLE [jsharmony].[PE] CHECK CONSTRAINT [FK_PE_UCOD_AHC]
+ALTER TABLE [jsharmony].[pe] CHECK CONSTRAINT [FK_PE_UCOD_AHC]
 GO
-ALTER TABLE [jsharmony].[PE]  WITH CHECK ADD  CONSTRAINT [FK_PE_UCOD_COUNTRY] FOREIGN KEY([PE_COUNTRY])
-REFERENCES [jsharmony].[UCOD_COUNTRY] ([CODEVAL])
+ALTER TABLE [jsharmony].[pe]  WITH CHECK ADD  CONSTRAINT [FK_PE_UCOD_COUNTRY] FOREIGN KEY([pe_country])
+REFERENCES [jsharmony].[ucod_country] ([codeval])
 GO
-ALTER TABLE [jsharmony].[PE] CHECK CONSTRAINT [FK_PE_UCOD_COUNTRY]
+ALTER TABLE [jsharmony].[pe] CHECK CONSTRAINT [FK_PE_UCOD_COUNTRY]
 GO
-ALTER TABLE [jsharmony].[PE]  WITH CHECK ADD  CONSTRAINT [FK_PE_UCOD2_COUNTRY_STATE] FOREIGN KEY([PE_COUNTRY], [PE_STATE])
-REFERENCES [jsharmony].[UCOD2_COUNTRY_STATE] ([CODEVAL1], [CODEVAL2])
+ALTER TABLE [jsharmony].[pe]  WITH CHECK ADD  CONSTRAINT [FK_PE_UCOD2_COUNTRY_STATE] FOREIGN KEY([pe_country], [pe_state])
+REFERENCES [jsharmony].[ucod2_country_state] ([codeval1], [codeval2])
 GO
-ALTER TABLE [jsharmony].[PE] CHECK CONSTRAINT [FK_PE_UCOD2_COUNTRY_STATE]
+ALTER TABLE [jsharmony].[pe] CHECK CONSTRAINT [FK_PE_UCOD2_COUNTRY_STATE]
 GO
 ALTER TABLE [jsharmony].[PPD]  WITH CHECK ADD  CONSTRAINT [FK_PPD_UCOD_PPD_TYPE] FOREIGN KEY([PPD_TYPE])
-REFERENCES [jsharmony].[UCOD_PPD_TYPE] ([CODEVAL])
+REFERENCES [jsharmony].[ucod_ppd_type] ([codeval])
 GO
 ALTER TABLE [jsharmony].[PPD] CHECK CONSTRAINT [FK_PPD_UCOD_PPD_TYPE]
 GO
-ALTER TABLE [jsharmony].[PPP]  WITH CHECK ADD  CONSTRAINT [FK_PPP_PE] FOREIGN KEY([PE_ID])
-REFERENCES [jsharmony].[PE] ([PE_ID])
+ALTER TABLE [jsharmony].[PPP]  WITH CHECK ADD  CONSTRAINT [FK_PPP_PE] FOREIGN KEY([pe_id])
+REFERENCES [jsharmony].[pe] ([pe_id])
 ON DELETE CASCADE
 GO
 ALTER TABLE [jsharmony].[PPP] CHECK CONSTRAINT [FK_PPP_PE]
 GO
-ALTER TABLE [jsharmony].[PPP]  WITH CHECK ADD  CONSTRAINT [FK_PPP_PPD] FOREIGN KEY([PPP_PROCESS], [PPP_ATTRIB])
+ALTER TABLE [jsharmony].[PPP]  WITH CHECK ADD  CONSTRAINT [FK_PPP_PPD] FOREIGN KEY([ppp_process], [ppp_attrib])
 REFERENCES [jsharmony].[PPD] ([PPD_PROCESS], [PPD_ATTRIB])
 ON DELETE CASCADE
 GO
 ALTER TABLE [jsharmony].[PPP] CHECK CONSTRAINT [FK_PPP_PPD]
 GO
-ALTER TABLE [jsharmony].[RQST]  WITH CHECK ADD  CONSTRAINT [FK_RQST_UCOD_RQST_ATYPE] FOREIGN KEY([RQST_ATYPE])
-REFERENCES [jsharmony].[UCOD_RQST_ATYPE] ([CODEVAL])
+ALTER TABLE [jsharmony].[rqst]  WITH CHECK ADD  CONSTRAINT [FK_RQST_UCOD_RQST_ATYPE] FOREIGN KEY([rqst_atype])
+REFERENCES [jsharmony].[ucod_rqst_atype] ([codeval])
 GO
-ALTER TABLE [jsharmony].[RQST] CHECK CONSTRAINT [FK_RQST_UCOD_RQST_ATYPE]
+ALTER TABLE [jsharmony].[rqst] CHECK CONSTRAINT [FK_RQST_UCOD_RQST_ATYPE]
 GO
-ALTER TABLE [jsharmony].[RQST]  WITH CHECK ADD  CONSTRAINT [FK_RQST_UCOD_RQST_SOURCE] FOREIGN KEY([RQST_SOURCE])
-REFERENCES [jsharmony].[UCOD_RQST_SOURCE] ([CODEVAL])
+ALTER TABLE [jsharmony].[rqst]  WITH CHECK ADD  CONSTRAINT [FK_RQST_UCOD_RQST_SOURCE] FOREIGN KEY([rqst_source])
+REFERENCES [jsharmony].[ucod_rqst_source] ([codeval])
 GO
-ALTER TABLE [jsharmony].[RQST] CHECK CONSTRAINT [FK_RQST_UCOD_RQST_SOURCE]
+ALTER TABLE [jsharmony].[rqst] CHECK CONSTRAINT [FK_RQST_UCOD_RQST_SOURCE]
 GO
-ALTER TABLE [jsharmony].[RQST_D]  WITH CHECK ADD  CONSTRAINT [FK_RQST_D_RQST] FOREIGN KEY([RQST_ID])
-REFERENCES [jsharmony].[RQST] ([RQST_ID])
+ALTER TABLE [jsharmony].[rqst_d]  WITH CHECK ADD  CONSTRAINT [FK_RQST_D_RQST] FOREIGN KEY([rqst_id])
+REFERENCES [jsharmony].[rqst] ([rqst_id])
 GO
-ALTER TABLE [jsharmony].[RQST_D] CHECK CONSTRAINT [FK_RQST_D_RQST]
+ALTER TABLE [jsharmony].[rqst_d] CHECK CONSTRAINT [FK_RQST_D_RQST]
 GO
-ALTER TABLE [jsharmony].[RQST_EMAIL]  WITH CHECK ADD  CONSTRAINT [FK_RQST_EMAIL_RQST] FOREIGN KEY([RQST_ID])
-REFERENCES [jsharmony].[RQST] ([RQST_ID])
+ALTER TABLE [jsharmony].[rqst_email]  WITH CHECK ADD  CONSTRAINT [FK_RQST_EMAIL_RQST] FOREIGN KEY([rqst_id])
+REFERENCES [jsharmony].[rqst] ([rqst_id])
 GO
-ALTER TABLE [jsharmony].[RQST_EMAIL] CHECK CONSTRAINT [FK_RQST_EMAIL_RQST]
+ALTER TABLE [jsharmony].[rqst_email] CHECK CONSTRAINT [FK_RQST_EMAIL_RQST]
 GO
-ALTER TABLE [jsharmony].[RQST_N]  WITH CHECK ADD  CONSTRAINT [FK_RQST_N_RQST] FOREIGN KEY([RQST_ID])
-REFERENCES [jsharmony].[RQST] ([RQST_ID])
+ALTER TABLE [jsharmony].[rqst_n]  WITH CHECK ADD  CONSTRAINT [FK_RQST_N_RQST] FOREIGN KEY([rqst_id])
+REFERENCES [jsharmony].[rqst] ([rqst_id])
 GO
-ALTER TABLE [jsharmony].[RQST_N] CHECK CONSTRAINT [FK_RQST_N_RQST]
+ALTER TABLE [jsharmony].[rqst_n] CHECK CONSTRAINT [FK_RQST_N_RQST]
 GO
-ALTER TABLE [jsharmony].[RQST_RQ]  WITH CHECK ADD  CONSTRAINT [FK_RQST_RQ_RQST] FOREIGN KEY([RQST_ID])
-REFERENCES [jsharmony].[RQST] ([RQST_ID])
+ALTER TABLE [jsharmony].[rqst_rq]  WITH CHECK ADD  CONSTRAINT [FK_RQST_RQ_RQST] FOREIGN KEY([rqst_id])
+REFERENCES [jsharmony].[rqst] ([rqst_id])
 GO
-ALTER TABLE [jsharmony].[RQST_RQ] CHECK CONSTRAINT [FK_RQST_RQ_RQST]
+ALTER TABLE [jsharmony].[rqst_rq] CHECK CONSTRAINT [FK_RQST_RQ_RQST]
 GO
-ALTER TABLE [jsharmony].[RQST_SMS]  WITH CHECK ADD  CONSTRAINT [FK_RQST_SMS_RQST] FOREIGN KEY([RQST_ID])
-REFERENCES [jsharmony].[RQST] ([RQST_ID])
+ALTER TABLE [jsharmony].[rqst_sms]  WITH CHECK ADD  CONSTRAINT [FK_RQST_SMS_RQST] FOREIGN KEY([rqst_id])
+REFERENCES [jsharmony].[rqst] ([rqst_id])
 GO
-ALTER TABLE [jsharmony].[RQST_SMS] CHECK CONSTRAINT [FK_RQST_SMS_RQST]
+ALTER TABLE [jsharmony].[rqst_sms] CHECK CONSTRAINT [FK_RQST_SMS_RQST]
 GO
-ALTER TABLE [jsharmony].[SF]  WITH CHECK ADD  CONSTRAINT [FK_SF_UCOD_AHC] FOREIGN KEY([SF_STS])
-REFERENCES [jsharmony].[UCOD_AHC] ([CODEVAL])
+ALTER TABLE [jsharmony].[sf]  WITH CHECK ADD  CONSTRAINT [FK_SF_UCOD_AHC] FOREIGN KEY([SF_STS])
+REFERENCES [jsharmony].[ucod_ahc] ([codeval])
 GO
-ALTER TABLE [jsharmony].[SF] CHECK CONSTRAINT [FK_SF_UCOD_AHC]
+ALTER TABLE [jsharmony].[sf] CHECK CONSTRAINT [FK_SF_UCOD_AHC]
 GO
-ALTER TABLE [jsharmony].[SM]  WITH CHECK ADD  CONSTRAINT [FK_SM_SM] FOREIGN KEY([SM_ID_Parent])
-REFERENCES [jsharmony].[SM] ([SM_ID])
+ALTER TABLE [jsharmony].[sm]  WITH CHECK ADD  CONSTRAINT [FK_SM_SM] FOREIGN KEY([sm_id_parent])
+REFERENCES [jsharmony].[sm] ([sm_id])
 GO
-ALTER TABLE [jsharmony].[SM] CHECK CONSTRAINT [FK_SM_SM]
+ALTER TABLE [jsharmony].[sm] CHECK CONSTRAINT [FK_SM_SM]
 GO
-ALTER TABLE [jsharmony].[SM]  WITH CHECK ADD  CONSTRAINT [FK_SM_UCOD_AHC] FOREIGN KEY([SM_STS])
-REFERENCES [jsharmony].[UCOD_AHC] ([CODEVAL])
+ALTER TABLE [jsharmony].[sm]  WITH CHECK ADD  CONSTRAINT [FK_SM_UCOD_AHC] FOREIGN KEY([sm_sts])
+REFERENCES [jsharmony].[ucod_ahc] ([codeval])
 GO
-ALTER TABLE [jsharmony].[SM] CHECK CONSTRAINT [FK_SM_UCOD_AHC]
+ALTER TABLE [jsharmony].[sm] CHECK CONSTRAINT [FK_SM_UCOD_AHC]
 GO
-ALTER TABLE [jsharmony].[SPEF]  WITH CHECK ADD  CONSTRAINT [FK_SPEF_PE] FOREIGN KEY([PE_ID])
-REFERENCES [jsharmony].[PE] ([PE_ID])
+ALTER TABLE [jsharmony].[spef]  WITH CHECK ADD  CONSTRAINT [FK_SPEF_PE] FOREIGN KEY([pe_id])
+REFERENCES [jsharmony].[pe] ([pe_id])
 GO
-ALTER TABLE [jsharmony].[SPEF] CHECK CONSTRAINT [FK_SPEF_PE]
+ALTER TABLE [jsharmony].[spef] CHECK CONSTRAINT [FK_SPEF_PE]
 GO
-ALTER TABLE [jsharmony].[SPEF]  WITH CHECK ADD  CONSTRAINT [FK_SPEF_SF_SF_NAME] FOREIGN KEY([SF_NAME])
-REFERENCES [jsharmony].[SF] ([SF_Name])
+ALTER TABLE [jsharmony].[spef]  WITH CHECK ADD  CONSTRAINT [FK_SPEF_SF_SF_NAME] FOREIGN KEY([sf_name])
+REFERENCES [jsharmony].[sf] ([sf_name])
 GO
-ALTER TABLE [jsharmony].[SPEF] CHECK CONSTRAINT [FK_SPEF_SF_SF_NAME]
+ALTER TABLE [jsharmony].[spef] CHECK CONSTRAINT [FK_SPEF_SF_SF_NAME]
 GO
-ALTER TABLE [jsharmony].[SPER]  WITH CHECK ADD  CONSTRAINT [FK_SPER_PE] FOREIGN KEY([PE_ID])
-REFERENCES [jsharmony].[PE] ([PE_ID])
+ALTER TABLE [jsharmony].[sper]  WITH CHECK ADD  CONSTRAINT [FK_SPER_PE] FOREIGN KEY([pe_id])
+REFERENCES [jsharmony].[pe] ([pe_id])
 GO
-ALTER TABLE [jsharmony].[SPER] CHECK CONSTRAINT [FK_SPER_PE]
+ALTER TABLE [jsharmony].[sper] CHECK CONSTRAINT [FK_SPER_PE]
 GO
-ALTER TABLE [jsharmony].[SPER]  WITH CHECK ADD  CONSTRAINT [FK_SPER_SR_SR_NAME] FOREIGN KEY([SR_NAME])
-REFERENCES [jsharmony].[SR] ([SR_Name])
+ALTER TABLE [jsharmony].[sper]  WITH CHECK ADD  CONSTRAINT [FK_SPER_SR_SR_NAME] FOREIGN KEY([sr_name])
+REFERENCES [jsharmony].[sr] ([sr_name])
 GO
-ALTER TABLE [jsharmony].[SPER] CHECK CONSTRAINT [FK_SPER_SR_SR_NAME]
+ALTER TABLE [jsharmony].[sper] CHECK CONSTRAINT [FK_SPER_SR_SR_NAME]
 GO
-ALTER TABLE [jsharmony].[SR]  WITH CHECK ADD  CONSTRAINT [FK_SR_UCOD_AHC] FOREIGN KEY([SR_STS])
-REFERENCES [jsharmony].[UCOD_AHC] ([CODEVAL])
+ALTER TABLE [jsharmony].[sr]  WITH CHECK ADD  CONSTRAINT [FK_SR_UCOD_AHC] FOREIGN KEY([sr_sts])
+REFERENCES [jsharmony].[ucod_ahc] ([codeval])
 GO
-ALTER TABLE [jsharmony].[SR] CHECK CONSTRAINT [FK_SR_UCOD_AHC]
+ALTER TABLE [jsharmony].[sr] CHECK CONSTRAINT [FK_SR_UCOD_AHC]
 GO
-ALTER TABLE [jsharmony].[SRM]  WITH CHECK ADD  CONSTRAINT [FK_SRM_SM] FOREIGN KEY([SM_ID])
-REFERENCES [jsharmony].[SM] ([SM_ID])
+ALTER TABLE [jsharmony].[srm]  WITH CHECK ADD  CONSTRAINT [FK_SRM_SM] FOREIGN KEY([sm_id])
+REFERENCES [jsharmony].[sm] ([sm_id])
 ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[SRM] CHECK CONSTRAINT [FK_SRM_SM]
+ALTER TABLE [jsharmony].[srm] CHECK CONSTRAINT [FK_SRM_SM]
 GO
-ALTER TABLE [jsharmony].[SRM]  WITH CHECK ADD  CONSTRAINT [FK_SRM_SR_SR_NAME] FOREIGN KEY([SR_NAME])
-REFERENCES [jsharmony].[SR] ([SR_Name])
+ALTER TABLE [jsharmony].[srm]  WITH CHECK ADD  CONSTRAINT [FK_SRM_SR_SR_NAME] FOREIGN KEY([sr_name])
+REFERENCES [jsharmony].[sr] ([sr_name])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[SRM] CHECK CONSTRAINT [FK_SRM_SR_SR_NAME]
+ALTER TABLE [jsharmony].[srm] CHECK CONSTRAINT [FK_SRM_SR_SR_NAME]
 GO
-ALTER TABLE [jsharmony].[TXT]  WITH CHECK ADD  CONSTRAINT [FK_TXT_UCOD_TXT_TYPE] FOREIGN KEY([TXT_TYPE])
-REFERENCES [jsharmony].[UCOD_TXT_TYPE] ([CODEVAL])
+ALTER TABLE [jsharmony].[txt]  WITH CHECK ADD  CONSTRAINT [FK_TXT_UCOD_TXT_TYPE] FOREIGN KEY([txt_type])
+REFERENCES [jsharmony].[ucod_txt_type] ([codeval])
 GO
-ALTER TABLE [jsharmony].[TXT] CHECK CONSTRAINT [FK_TXT_UCOD_TXT_TYPE]
+ALTER TABLE [jsharmony].[txt] CHECK CONSTRAINT [FK_TXT_UCOD_TXT_TYPE]
 GO
-ALTER TABLE [jsharmony].[V]  WITH CHECK ADD  CONSTRAINT [FK_V_UCOD_V_STS] FOREIGN KEY([V_STS])
-REFERENCES [jsharmony].[UCOD_V_STS] ([CODEVAL])
+ALTER TABLE [jsharmony].[V]  WITH CHECK ADD  CONSTRAINT [FK_V_UCOD_V_STS] FOREIGN KEY([v_sts])
+REFERENCES [jsharmony].[ucod_v_sts] ([codeval])
 GO
 ALTER TABLE [jsharmony].[V] CHECK CONSTRAINT [FK_V_UCOD_V_STS]
 GO
-ALTER TABLE [jsharmony].[XPP]  WITH CHECK ADD  CONSTRAINT [FK_XPP_PPD] FOREIGN KEY([XPP_PROCESS], [XPP_ATTRIB])
+ALTER TABLE [jsharmony].[xpp]  WITH CHECK ADD  CONSTRAINT [FK_XPP_PPD] FOREIGN KEY([xpp_process], [xpp_attrib])
 REFERENCES [jsharmony].[PPD] ([PPD_PROCESS], [PPD_ATTRIB])
 GO
-ALTER TABLE [jsharmony].[XPP] CHECK CONSTRAINT [FK_XPP_PPD]
+ALTER TABLE [jsharmony].[xpp] CHECK CONSTRAINT [FK_XPP_PPD]
 GO
-ALTER TABLE [jsharmony].[CPE]  WITH CHECK ADD  CONSTRAINT [CK_CPE_PE_Email] CHECK  ((isnull([PE_Email],'')<>''))
+ALTER TABLE [jsharmony].[cpe]  WITH CHECK ADD  CONSTRAINT [CK_CPE_PE_Email] CHECK  ((isnull([pe_email],'')<>''))
 GO
-ALTER TABLE [jsharmony].[CPE] CHECK CONSTRAINT [CK_CPE_PE_Email]
+ALTER TABLE [jsharmony].[cpe] CHECK CONSTRAINT [CK_CPE_PE_Email]
 GO
-ALTER TABLE [jsharmony].[PE]  WITH CHECK ADD  CONSTRAINT [CK_PE_PE_Email] CHECK  ((isnull([PE_Email],'')<>''))
+ALTER TABLE [jsharmony].[pe]  WITH CHECK ADD  CONSTRAINT [CK_PE_PE_Email] CHECK  ((isnull([pe_email],'')<>''))
 GO
-ALTER TABLE [jsharmony].[PE] CHECK CONSTRAINT [CK_PE_PE_Email]
+ALTER TABLE [jsharmony].[pe] CHECK CONSTRAINT [CK_PE_PE_Email]
 GO
-ALTER TABLE [jsharmony].[SM]  WITH CHECK ADD  CONSTRAINT [CK_SM_SM_UTYPE] CHECK  (([SM_UTYPE]='C' OR [SM_UTYPE]='S'))
+ALTER TABLE [jsharmony].[sm]  WITH CHECK ADD  CONSTRAINT [CK_SM_SM_UTYPE] CHECK  (([sm_utype]='C' OR [sm_utype]='S'))
 GO
-ALTER TABLE [jsharmony].[SM] CHECK CONSTRAINT [CK_SM_SM_UTYPE]
+ALTER TABLE [jsharmony].[sm] CHECK CONSTRAINT [CK_SM_SM_UTYPE]
 GO
 SET ANSI_NULLS ON
 GO
@@ -3603,7 +3588,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE  [jsharmony].[AUDH]
+CREATE PROCEDURE  [jsharmony].[audh]
 (
 	@op           nvarchar(max),
 	@tname        NVARCHAR(MAX),
@@ -3652,38 +3637,38 @@ BEGIN
     if (@OP = 'D')
 	begin
 		select top(1)
-			   @WK_C_ID = C_ID,
+			     @WK_C_ID = C_ID,
 		       @WK_E_ID = E_ID,
 		       @WK_REF_NAME = REF_NAME,
 		       @WK_REF_ID = REF_ID,
 		       @WK_SUBJ = SUBJ
 		  from jsharmony.AUD_H
-         where TABLE_NAME = @tname
+         where TABLE_NAME = lower(@tname)
 		   and TABLE_ID = @tid
 		   and AUD_OP = 'I'
          order by AUD_SEQ desc; 
          if @@ROWCOUNT = 0
 		 begin
 
-           if (@cid is null and @tname <> 'C')
+           if (@cid is null and lower(@tname) <> 'c')
 		   begin	
-	         SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
+	         SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	         EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
 	         SET @C_ID = @MY_C_ID
            end
 
-           if (@eid is null and @tname <> 'E')
+           if (@eid is null and lower(@tname) <> 'e')
 		   begin	
-	         SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
+	         SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	         EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
 	         SET @E_ID = @MY_E_ID
 		   end
 
 		   select @WK_C_ID = case when @cid is not null then @cid
-		                          when @tname = 'C' then @tid 
+		                          when lower(@tname) = 'c' then @tid 
 							      else @C_ID end,  
 		          @WK_E_ID = case when @eid is not null then @eid
-		                          when @tname  = 'E' then @tid 
+		                          when lower(@tname)  = 'e' then @tid 
 								  else @E_ID end, 
 		          @WK_REF_NAME = @ref_name,
 		          @WK_REF_ID = @ref_id,
@@ -3693,25 +3678,25 @@ BEGIN
     ELSE
 	begin
 
-        if (@cid is null and @tname <> 'C')
+        if (@cid is null and lower(@tname) <> 'c')
 		begin	
-	      SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
+	      SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	      EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
 	      SET @C_ID = @MY_C_ID
         end
 
-        if (@eid is null and @tname <> 'E')
+        if (@eid is null and lower(@tname) <> 'e')
 		begin	
-	      SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + @tname + ''',' + convert(varchar,@tid) + ')'
+	      SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	      EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
 	      SET @E_ID = @MY_E_ID
 		end
 
 		SET @WK_C_ID = case when @cid is not null then @cid
-		                    when @tname = 'C' then @tid 
+		                    when lower(@tname) = 'c' then @tid 
 							else @C_ID end;  
 		SET @WK_E_ID = case when @eid is not null then @eid
-		                    when @tname = 'E' then @tid 
+		                    when lower(@tname) = 'e' then @tid 
 							else @E_ID end; 
 		SET @WK_REF_NAME = @ref_name;
 		SET @WK_REF_ID = @ref_id;
@@ -3720,7 +3705,7 @@ BEGIN
 
     INSERT INTO jsharmony.AUD_H 
 	                  (TABLE_NAME, TABLE_ID, AUD_OP, AUD_U, AUD_Tstmp, C_ID, E_ID, REF_NAME, REF_ID, SUBJ) 
-               VALUES (@tname, 
+               VALUES (lower(@tname), 
 			           @tid, 
 					   @op, 
 					   @MYUSER, 
@@ -3764,7 +3749,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE  [jsharmony].[AUDH_BASE]
+CREATE PROCEDURE  [jsharmony].[audh_base]
 (
 	@op           nvarchar(max),
 	@tname        NVARCHAR(MAX),
@@ -3794,7 +3779,7 @@ BEGIN
 		       @WK_REF_ID = REF_ID,
 		       @WK_SUBJ = SUBJ
 		  from jsharmony.AUD_H
-         where TABLE_NAME = @tname
+         where TABLE_NAME = lower(@tname)
 		   and TABLE_ID = @tid
 		   and AUD_OP = 'I'
          order by AUD_SEQ desc; 
@@ -3814,7 +3799,7 @@ BEGIN
 
     INSERT INTO jsharmony.AUD_H 
 	                  (TABLE_NAME, TABLE_ID, AUD_OP, AUD_U, AUD_Tstmp, REF_NAME, REF_ID, SUBJ) 
-               VALUES (@tname, 
+               VALUES (lower(@tname), 
 			           @tid, 
 					   @op, 
 					   @MYUSER, 
@@ -3860,7 +3845,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[CHECK_CODE]
+CREATE PROCEDURE  [jsharmony].[check_code]
 (
 	@in_tblname nvarchar(255),
 	@in_codeval nvarchar(8)
@@ -3898,7 +3883,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[CHECK_CODE_P]
+CREATE PROCEDURE  [jsharmony].[check_code_p]
 (
 	@in_tblname nvarchar(255),
 	@in_codeval nvarchar(8)
@@ -3939,7 +3924,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[CHECK_CODE2]
+CREATE PROCEDURE  [jsharmony].[check_code2]
 (
 	@in_tblname nvarchar(255),
 	@in_codeval1 nvarchar(8),
@@ -3977,7 +3962,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[CHECK_CODE2_P]
+CREATE PROCEDURE  [jsharmony].[check_code2_p]
 (
 	@in_tblname nvarchar(255),
 	@in_codeval1 nvarchar(8),
@@ -4017,7 +4002,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[CHECK_FOREIGN]
+CREATE PROCEDURE  [jsharmony].[check_foreign]
 (
 	@in_tblname nvarchar(16),
 	@in_tblid bigint
@@ -4051,7 +4036,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[CHECK_FOREIGN_P]
+CREATE PROCEDURE  [jsharmony].[check_foreign_p]
 (
 	@in_tblname nvarchar(16),
 	@in_tblid bigint
@@ -4103,9 +4088,9 @@ BEGIN
     from jsharmony.SCRIPT
    where SCRIPT_NAME = 'CREATE_GCOD';
 
-  set @rrr = replace(@rrr, '%%%schema%%%', isnull(@in_codeschema,'dbo'))
-  set @rrr = replace(@rrr, '%%%name%%%', @in_codename)
-  set @rrr = replace(@rrr, '%%%mean%%%', @in_codemean)
+  set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
+  set @rrr = replace(@rrr, '%%%name%%%', lower(@in_codename))
+  set @rrr = replace(@rrr, '%%%mean%%%', lower(@in_codemean))
 
   EXEC (@rrr)      
 
@@ -4113,9 +4098,9 @@ BEGIN
     from jsharmony.SCRIPT
    where SCRIPT_NAME = 'CREATE_GCOD_TRIGGER';
 
-  set @rrrt = replace(@rrrt, '%%%schema%%%', isnull(@in_codeschema,'dbo'))
-  set @rrrt = replace(@rrrt, '%%%name%%%', @in_codename)
-  set @rrrt = replace(@rrrt, '%%%mean%%%', @in_codemean)
+  set @rrrt = replace(@rrrt, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
+  set @rrrt = replace(@rrrt, '%%%name%%%', lower(@in_codename))
+  set @rrrt = replace(@rrrt, '%%%mean%%%', lower(@in_codemean))
 
   EXEC (@rrrt)      
 
@@ -4153,9 +4138,9 @@ BEGIN
     from jsharmony.SCRIPT
    where SCRIPT_NAME = 'CREATE_GCOD2';
 
-  set @rrr = replace(@rrr, '%%%schema%%%', isnull(@in_codeschema,'dbo'))
-  set @rrr = replace(@rrr, '%%%name%%%', @in_codename)
-  set @rrr = replace(@rrr, '%%%mean%%%', @in_codemean)
+  set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
+  set @rrr = replace(@rrr, '%%%name%%%', lower(@in_codename))
+  set @rrr = replace(@rrr, '%%%mean%%%', lower(@in_codemean))
 
   EXEC (@rrr)      
 
@@ -4163,9 +4148,9 @@ BEGIN
     from jsharmony.SCRIPT
    where SCRIPT_NAME = 'CREATE_GCOD2_TRIGGER';
 
-  set @rrrt = replace(@rrrt, '%%%schema%%%', isnull(@in_codeschema,'dbo'))
-  set @rrrt = replace(@rrrt, '%%%name%%%', @in_codename)
-  set @rrrt = replace(@rrrt, '%%%mean%%%', @in_codemean)
+  set @rrrt = replace(@rrrt, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
+  set @rrrt = replace(@rrrt, '%%%name%%%', lower(@in_codename))
+  set @rrrt = replace(@rrrt, '%%%mean%%%', lower(@in_codemean))
 
   EXEC (@rrrt)      
 
@@ -4202,9 +4187,9 @@ BEGIN
     from jsharmony.SCRIPT
    where SCRIPT_NAME = 'CREATE_UCOD';
 
-  set @rrr = replace(@rrr, '%%%schema%%%', isnull(@in_codeschema,'dbo'))
-  set @rrr = replace(@rrr, '%%%name%%%', @in_codename)
-  set @rrr = replace(@rrr, '%%%mean%%%', @in_codemean)
+  set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
+  set @rrr = replace(@rrr, '%%%name%%%', lower(@in_codename))
+  set @rrr = replace(@rrr, '%%%mean%%%', lower(@in_codemean))
 
   EXEC (@rrr)      
 
@@ -4241,9 +4226,9 @@ BEGIN
     from jsharmony.SCRIPT
    where SCRIPT_NAME = 'CREATE_UCOD2';
 
-  set @rrr = replace(@rrr, '%%%schema%%%', isnull(@in_codeschema,'dbo'))
-  set @rrr = replace(@rrr, '%%%name%%%', @in_codename)
-  set @rrr = replace(@rrr, '%%%mean%%%', @in_codemean)
+  set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
+  set @rrr = replace(@rrr, '%%%name%%%', lower(@in_codename))
+  set @rrr = replace(@rrr, '%%%mean%%%', lower(@in_codemean))
 
   EXEC (@rrr)      
 
@@ -4269,7 +4254,7 @@ GO
 
 
 /*@ SEND DEBUGGING INFO TO TEXT FILE @*/
-CREATE PROCEDURE  [jsharmony].[ZZ-FILEDEBUG]
+CREATE PROCEDURE  [jsharmony].[zz-filedebug]
 (
 	@in_type nvarchar(MAX),
 	@in_object nvarchar(MAX),
@@ -4337,7 +4322,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[CPE_IUD] on [jsharmony].[CPE]
+CREATE trigger [jsharmony].[CPE_IUD] on [jsharmony].[cpe]
 for insert, update, delete
 AS
 BEGIN
@@ -4568,7 +4553,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'C_ID', @D_C_ID)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('C_ID'), @D_C_ID)
       END
 
       IF (@TP = 'D' AND @D_PE_STS IS NOT NULL OR
@@ -4576,7 +4561,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_STS', @D_PE_STS)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_STS'), @D_PE_STS)
       END
 
       IF (@TP = 'D' AND @D_PE_FName IS NOT NULL OR
@@ -4584,7 +4569,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_FName', @D_PE_FName)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_FName'), @D_PE_FName)
       END
 
       IF (@TP = 'D' AND @D_PE_MName IS NOT NULL OR
@@ -4592,7 +4577,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_MName', @D_PE_MName)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_MName'), @D_PE_MName)
       END
 
       IF (@TP = 'D' AND @D_PE_LName IS NOT NULL OR
@@ -4600,7 +4585,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_LName', @D_PE_LName)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LName'), @D_PE_LName)
       END
 
       IF (@TP = 'D' AND @D_PE_JTitle IS NOT NULL OR
@@ -4608,7 +4593,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_JTitle', @D_PE_JTitle)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_JTitle'), @D_PE_JTitle)
       END
 
       IF (@TP = 'D' AND @D_PE_BPhone IS NOT NULL OR
@@ -4616,7 +4601,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_BPhone', @D_PE_BPhone)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_BPhone'), @D_PE_BPhone)
       END
 
       IF (@TP = 'D' AND @D_PE_CPhone IS NOT NULL OR
@@ -4624,7 +4609,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_CPhone', @D_PE_CPhone)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_CPhone'), @D_PE_CPhone)
       END
 
       IF (@TP = 'D' AND @D_PE_Email IS NOT NULL OR
@@ -4632,7 +4617,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_Email', @D_PE_Email)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_Email'), @D_PE_Email)
       END
 
       IF (@TP = 'D' AND @D_PE_LL_TSTMP IS NOT NULL OR
@@ -4640,7 +4625,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_LL_TSTMP', @D_PE_LL_TSTMP)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LL_TSTMP'), @D_PE_LL_TSTMP)
       END
 
 	  IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
@@ -4659,7 +4644,7 @@ BEGIN
 
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_PW', '*')
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_PW'), '*')
 
 	    SET @UPDATE_PW = 'Y'
 	  END
@@ -4725,14 +4710,14 @@ BEGIN
 
 END
 GO
-ALTER TABLE [jsharmony].[CPE] ENABLE TRIGGER [CPE_IUD]
+ALTER TABLE [jsharmony].[cpe] ENABLE TRIGGER [CPE_IUD]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[CPER_IUD] on [jsharmony].[CPER]
+CREATE trigger [jsharmony].[CPER_IUD] on [jsharmony].[cper]
 for insert, update, delete
 AS
 BEGIN
@@ -4888,7 +4873,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPER', @I_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_ID', @D_PE_ID)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_ID'), @D_PE_ID)
       END
 
       IF (@TP = 'D' AND @D_CR_NAME IS NOT NULL OR
@@ -4896,7 +4881,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPER', @I_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CR_NAME', @D_CR_NAME)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CR_NAME'), @D_CR_NAME)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
@@ -4923,7 +4908,7 @@ BEGIN
 
 END
 GO
-ALTER TABLE [jsharmony].[CPER] ENABLE TRIGGER [CPER_IUD]
+ALTER TABLE [jsharmony].[cper] ENABLE TRIGGER [CPER_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -4931,7 +4916,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[D_IUD] on [jsharmony].[D]
+CREATE trigger [jsharmony].[D_IUD] on [jsharmony].[d]
 for insert, update, delete
 AS
 BEGIN
@@ -5173,7 +5158,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_SCOPE', @D_D_SCOPE)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_SCOPE'), @D_D_SCOPE)
       END
 
       IF (@TP = 'D' AND @D_D_SCOPE_ID IS NOT NULL OR
@@ -5181,7 +5166,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_SCOPE_ID', @D_D_SCOPE_ID)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_SCOPE_ID'), @D_D_SCOPE_ID)
       END
 
       IF (@TP = 'D' AND @D_D_STS IS NOT NULL OR
@@ -5189,7 +5174,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_STS', @D_D_STS)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_STS'), @D_D_STS)
       END
 
       IF (@TP = 'D' AND @D_D_CTGR IS NOT NULL OR
@@ -5197,7 +5182,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_CTGR', @D_D_CTGR)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_CTGR'), @D_D_CTGR)
       END
 
       IF (@TP = 'D' AND @D_D_Desc IS NOT NULL OR
@@ -5205,7 +5190,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_Desc', @D_D_Desc)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_Desc'), @D_D_Desc)
       END
 
       IF (@TP = 'D' AND @D_D_UTSTMP IS NOT NULL OR
@@ -5213,7 +5198,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_UTSTMP', @D_D_UTSTMP)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_UTSTMP'), @D_D_UTSTMP)
       END
 
       IF (@TP = 'D' AND @D_D_UU IS NOT NULL OR
@@ -5221,7 +5206,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'D_UU', @D_D_UU)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_UU'), @D_D_UU)
       END
 
       IF (@TP = 'D' AND @D_C_ID IS NOT NULL OR
@@ -5229,7 +5214,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'C_ID', @D_C_ID)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('C_ID'), @D_C_ID)
       END
 
       IF (@TP = 'D' AND @D_E_ID IS NOT NULL OR
@@ -5237,7 +5222,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'E_ID', @D_E_ID)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('E_ID'), @D_E_ID)
       END
 
 
@@ -5287,14 +5272,14 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[D] ENABLE TRIGGER [D_IUD]
+ALTER TABLE [jsharmony].[d] ENABLE TRIGGER [D_IUD]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[GCOD2_D_SCOPE_D_CTGR_IUD] on [jsharmony].[GCOD2_D_SCOPE_D_CTGR]
+CREATE trigger [jsharmony].[GCOD2_D_SCOPE_D_CTGR_IUD] on [jsharmony].[gcod2_d_scope_d_ctgr]
 for insert, update, delete
 AS
 BEGIN
@@ -5419,10 +5404,10 @@ BEGIN
     IF (@TP='I')
 	BEGIN
       UPDATE jsharmony.GCOD2_D_SCOPE_D_CTGR
-	     SET COD_ETstmp = @CURDTTM,
-			 COD_EU = @MYUSER,
-		     COD_MTstmp = @CURDTTM,
-			 COD_MU = @MYUSER
+	     SET cod_etstmp = @CURDTTM,
+			 cod_eu = @MYUSER,
+		     cod_mtstmp = @CURDTTM,
+			 cod_mu = @MYUSER
        WHERE GCOD2_D_SCOPE_D_CTGR.GCOD2_ID = @I_GCOD2_ID;
     END  
 
@@ -5447,7 +5432,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODSEQ', @D_CODSEQ)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODSEQ'), @D_CODSEQ)
       END
 
       IF (@TP = 'D' AND @D_CODETDT IS NOT NULL OR
@@ -5455,7 +5440,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODETDT', @D_CODETDT)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODETDT'), @D_CODETDT)
       END
 
       IF (@TP = 'D' AND @D_CODEVAL1 IS NOT NULL OR
@@ -5463,7 +5448,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODEVAL1', @D_CODEVAL1)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODEVAL1'), @D_CODEVAL1)
       END
 
       IF (@TP = 'D' AND @D_CODEVAL2 IS NOT NULL OR
@@ -5471,7 +5456,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODEVAL2', @D_CODEVAL2)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODEVAL2'), @D_CODEVAL2)
       END
 
       IF (@TP = 'D' AND @D_CODETXT IS NOT NULL OR
@@ -5479,7 +5464,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODETXT', @D_CODETXT)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODETXT'), @D_CODETXT)
       END
 
       IF (@TP = 'D' AND @D_CODECODE IS NOT NULL OR
@@ -5487,7 +5472,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODECODE', @D_CODECODE)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODECODE'), @D_CODECODE)
       END
 
       IF (@TP = 'D' AND @D_CODEATTRIB IS NOT NULL OR
@@ -5495,7 +5480,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODEATTRIB', @D_CODEATTRIB)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODEATTRIB'), @D_CODEATTRIB)
       END
 
       IF (@TP = 'D' AND @D_CODETCM IS NOT NULL OR
@@ -5503,7 +5488,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'CODETCM', @D_CODETCM)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODETCM'), @D_CODETCM)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
@@ -5516,8 +5501,8 @@ BEGIN
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
 	BEGIN
       UPDATE jsharmony.GCOD2_D_SCOPE_D_CTGR
-	     SET COD_MTstmp = @CURDTTM,
-			 COD_MU = @MYUSER
+	     SET cod_mtstmp = @CURDTTM,
+			 cod_mu = @MYUSER
        WHERE GCOD2_D_SCOPE_D_CTGR.GCOD2_ID = @I_GCOD2_ID;
     END  
 
@@ -5549,7 +5534,7 @@ BEGIN
 
 END
 GO
-ALTER TABLE [jsharmony].[GCOD2_D_SCOPE_D_CTGR] ENABLE TRIGGER [GCOD2_D_SCOPE_D_CTGR_IUD]
+ALTER TABLE [jsharmony].[gcod2_d_scope_d_ctgr] ENABLE TRIGGER [GCOD2_D_SCOPE_D_CTGR_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -5557,7 +5542,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[GPP_IUD] on [jsharmony].[GPP]
+CREATE trigger [jsharmony].[GPP_IUD] on [jsharmony].[gpp]
 for insert, update, delete
 AS
 BEGIN
@@ -5710,14 +5695,14 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[GPP] ENABLE TRIGGER [GPP_IUD]
+ALTER TABLE [jsharmony].[gpp] ENABLE TRIGGER [GPP_IUD]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[H_IUD] on [jsharmony].[H]
+CREATE trigger [jsharmony].[H_IUD] on [jsharmony].[h]
 for insert, update, delete
 AS
 BEGIN
@@ -5855,7 +5840,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'HP_CODE', @D_HP_CODE)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('HP_CODE'), @D_HP_CODE)
       END
 
       IF (@TP = 'D' AND @D_H_TITLE IS NOT NULL OR
@@ -5863,7 +5848,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'H_TITLE', @D_H_TITLE)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('H_TITLE'), @D_H_TITLE)
       END
 
       IF (@TP = 'D' AND @D_H_TEXT IS NOT NULL OR
@@ -5871,7 +5856,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'H_TEXT', @D_H_TEXT)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('H_TEXT'), @D_H_TEXT)
       END
 
       IF (@TP = 'D' AND @D_H_SEQ IS NOT NULL OR
@@ -5879,7 +5864,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'H_SEQ', @D_H_SEQ)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('H_SEQ'), @D_H_SEQ)
       END
 
       IF (@TP = 'D' AND @D_H_INDEX_A IS NOT NULL OR
@@ -5887,7 +5872,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'H_INDEX_A', @D_H_INDEX_A)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('H_INDEX_A'), @D_H_INDEX_A)
       END
 
       IF (@TP = 'D' AND @D_H_INDEX_P IS NOT NULL OR
@@ -5895,7 +5880,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'H_INDEX_P', @D_H_INDEX_P)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('H_INDEX_P'), @D_H_INDEX_P)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
@@ -5938,7 +5923,7 @@ BEGIN
 
 END
 GO
-ALTER TABLE [jsharmony].[H] ENABLE TRIGGER [H_IUD]
+ALTER TABLE [jsharmony].[h] ENABLE TRIGGER [H_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -5946,7 +5931,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[N_IUD] on [jsharmony].[N]
+CREATE trigger [jsharmony].[N_IUD] on [jsharmony].[n]
 for insert, update, delete
 AS
 BEGIN
@@ -6150,7 +6135,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_SCOPE', @D_N_SCOPE)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('N_SCOPE'), @D_N_SCOPE)
       END
 
       IF (@TP = 'D' AND @D_N_SCOPE_ID IS NOT NULL OR
@@ -6158,7 +6143,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_SCOPE_ID', @D_N_SCOPE_ID)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('N_SCOPE_ID'), @D_N_SCOPE_ID)
       END
 
       IF (@TP = 'D' AND @D_N_STS IS NOT NULL OR
@@ -6166,7 +6151,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_STS', @D_N_STS)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('N_STS'), @D_N_STS)
       END
 
       IF (@TP = 'D' AND @D_N_TYPE IS NOT NULL OR
@@ -6174,7 +6159,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_TYPE', @D_N_TYPE)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('N_TYPE'), @D_N_TYPE)
       END
 
       IF (@TP = 'D' AND @D_N_Note IS NOT NULL OR
@@ -6182,7 +6167,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'N_Note', @D_N_Note)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('N_Note'), @D_N_Note)
       END
 
 	  IF (@TP = 'D' AND @D_C_ID IS NOT NULL OR
@@ -6190,7 +6175,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'C_ID', @D_C_ID)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('C_ID'), @D_C_ID)
       END
 
       IF (@TP = 'D' AND @D_E_ID IS NOT NULL OR
@@ -6198,7 +6183,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'E_ID', @D_E_ID)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('E_ID'), @D_E_ID)
       END
 
 
@@ -6242,7 +6227,7 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[N] ENABLE TRIGGER [N_IUD]
+ALTER TABLE [jsharmony].[n] ENABLE TRIGGER [N_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6251,7 +6236,7 @@ GO
 
 
 
-CREATE trigger [jsharmony].[PE_IUD] on [jsharmony].[PE]
+CREATE trigger [jsharmony].[PE_IUD] on [jsharmony].[pe]
 for insert, update, delete
 AS
 BEGIN
@@ -6464,7 +6449,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_STS', @D_PE_STS)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_STS'), @D_PE_STS)
       END
 
       IF (@TP = 'D' AND @D_PE_FName IS NOT NULL OR
@@ -6472,7 +6457,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_FName', @D_PE_FName)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_FName'), @D_PE_FName)
       END
 
       IF (@TP = 'D' AND @D_PE_MName IS NOT NULL OR
@@ -6480,7 +6465,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_MName', @D_PE_MName)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_MName'), @D_PE_MName)
       END
 
       IF (@TP = 'D' AND @D_PE_LName IS NOT NULL OR
@@ -6488,7 +6473,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_LName', @D_PE_LName)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LName'), @D_PE_LName)
       END
 
       IF (@TP = 'D' AND @D_PE_JTitle IS NOT NULL OR
@@ -6496,7 +6481,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_JTitle', @D_PE_JTitle)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_JTitle'), @D_PE_JTitle)
       END
 
       IF (@TP = 'D' AND @D_PE_BPhone IS NOT NULL OR
@@ -6504,7 +6489,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_BPhone', @D_PE_BPhone)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_BPhone'), @D_PE_BPhone)
       END
 
       IF (@TP = 'D' AND @D_PE_CPhone IS NOT NULL OR
@@ -6512,7 +6497,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_CPhone', @D_PE_CPhone)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_CPhone'), @D_PE_CPhone)
       END
 
       IF (@TP = 'D' AND @D_PE_Email IS NOT NULL OR
@@ -6520,7 +6505,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_Email', @D_PE_Email)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_Email'), @D_PE_Email)
       END
 
       IF (@TP = 'D' AND @D_PE_LL_TSTMP IS NOT NULL OR
@@ -6528,7 +6513,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_LL_TSTMP', @D_PE_LL_TSTMP)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LL_TSTMP'), @D_PE_LL_TSTMP)
       END
 
 	  IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
@@ -6547,7 +6532,7 @@ BEGIN
 
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_PW', '*')
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_PW'), '*')
 
 	    SET @UPDATE_PW = 'Y'
 	  END
@@ -6612,7 +6597,7 @@ BEGIN
 
 END
 GO
-ALTER TABLE [jsharmony].[PE] ENABLE TRIGGER [PE_IUD]
+ALTER TABLE [jsharmony].[pe] ENABLE TRIGGER [PE_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6850,7 +6835,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[SPEF_IUD] on [jsharmony].[SPEF]
+CREATE trigger [jsharmony].[SPEF_IUD] on [jsharmony].[spef]
 for insert, update, delete
 AS
 BEGIN
@@ -6967,7 +6952,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPEF', @I_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_ID', @D_PE_ID)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_ID'), @D_PE_ID)
       END
 
       IF (@TP = 'D' AND @D_SF_NAME IS NOT NULL OR
@@ -6975,7 +6960,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPEF', @I_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'SF_NAME', @D_SF_NAME)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('SF_NAME'), @D_SF_NAME)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
@@ -7002,14 +6987,14 @@ BEGIN
 
 END
 GO
-ALTER TABLE [jsharmony].[SPEF] ENABLE TRIGGER [SPEF_IUD]
+ALTER TABLE [jsharmony].[spef] ENABLE TRIGGER [SPEF_IUD]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[SPER_IUD] on [jsharmony].[SPER]
+CREATE trigger [jsharmony].[SPER_IUD] on [jsharmony].[sper]
 for insert, update, delete
 AS
 BEGIN
@@ -7159,7 +7144,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPER', @I_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'PE_ID', @D_PE_ID)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_ID'), @D_PE_ID)
       END
 
       IF (@TP = 'D' AND @D_SR_NAME IS NOT NULL OR
@@ -7167,7 +7152,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPER', @I_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'SR_NAME', @D_SR_NAME)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('SR_NAME'), @D_SR_NAME)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
@@ -7196,7 +7181,7 @@ BEGIN
 
 END
 GO
-ALTER TABLE [jsharmony].[SPER] ENABLE TRIGGER [SPER_IUD]
+ALTER TABLE [jsharmony].[sper] ENABLE TRIGGER [SPER_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -7204,7 +7189,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[TXT_IUD] on [jsharmony].[TXT]
+CREATE trigger [jsharmony].[TXT_IUD] on [jsharmony].[txt]
 for insert, update, delete
 AS
 BEGIN
@@ -7336,7 +7321,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_PROCESS', @D_TXT_PROCESS)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_PROCESS'), @D_TXT_PROCESS)
       END
 
       IF (@TP = 'D' AND @D_TXT_ATTRIB IS NOT NULL OR
@@ -7344,7 +7329,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_ATTRIB', @D_TXT_ATTRIB)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_ATTRIB'), @D_TXT_ATTRIB)
       END
 	  
       IF (@TP = 'D' AND @D_TXT_TYPE IS NOT NULL OR
@@ -7352,7 +7337,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_TYPE', @D_TXT_TYPE)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_TYPE'), @D_TXT_TYPE)
       END
 
       IF (@TP = 'D' AND @D_TXT_TVAL IS NOT NULL OR
@@ -7360,7 +7345,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_TVAL', @D_TXT_TVAL)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_TVAL'), @D_TXT_TVAL)
       END
 
       IF (@TP = 'D' AND @D_TXT_VAL IS NOT NULL OR
@@ -7368,7 +7353,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_VAL', @D_TXT_VAL)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_VAL'), @D_TXT_VAL)
       END
 
       IF (@TP = 'D' AND @D_TXT_BCC IS NOT NULL OR
@@ -7376,7 +7361,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_BCC', @D_TXT_BCC)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_BCC'), @D_TXT_BCC)
       END
 
       IF (@TP = 'D' AND @D_TXT_DESC IS NOT NULL OR
@@ -7384,7 +7369,7 @@ BEGIN
       BEGIN
         IF (@MY_AUD_SEQ=0)
 		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, 'TXT_DESC', @D_TXT_DESC)
+        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_DESC'), @D_TXT_DESC)
       END
 
 
@@ -7437,7 +7422,7 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[TXT] ENABLE TRIGGER [TXT_IUD]
+ALTER TABLE [jsharmony].[txt] ENABLE TRIGGER [TXT_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -7445,7 +7430,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[XPP_IUD] on [jsharmony].[XPP]
+CREATE trigger [jsharmony].[XPP_IUD] on [jsharmony].[xpp]
 for insert, update, delete
 AS
 BEGIN
@@ -7597,7 +7582,7 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[XPP] ENABLE TRIGGER [XPP_IUD]
+ALTER TABLE [jsharmony].[xpp] ENABLE TRIGGER [XPP_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -8230,19 +8215,19 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header La
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
 GO
@@ -8260,15 +8245,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes 2 - Document Scope / Category' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR'
 GO
@@ -8360,19 +8345,19 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header La
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes 2 Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
 GO
@@ -9160,15 +9145,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Active / Closed' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC'
 GO
@@ -9186,15 +9171,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - A / C' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1'
 GO
@@ -9212,15 +9197,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Active / Hold / Closed' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC'
 GO
@@ -9238,15 +9223,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - TOrder Payment Method' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY'
 GO
@@ -9264,15 +9249,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Document Scope' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE'
 GO
@@ -9360,19 +9345,19 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header La
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
 GO
@@ -9390,15 +9375,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Note Scope' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE'
 GO
@@ -9416,15 +9401,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Note Type' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE'
 GO
@@ -9442,15 +9427,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Process Parameter Type' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE'
 GO
@@ -9468,15 +9453,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE'
 GO
@@ -9494,15 +9479,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Source (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE'
 GO
@@ -9520,15 +9505,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Text Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE'
 GO
@@ -9546,15 +9531,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Version Status' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS'
 GO
@@ -9572,15 +9557,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Ter
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'COD_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'COD_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'COD_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'COD_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 - Country / State' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE'
 GO
@@ -9672,19 +9657,19 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header La
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
 GO
@@ -9832,31 +9817,31 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-CREATE VIEW [jsharmony].[V_DL] AS
-SELECT D.D_ID
-      ,D.D_SCOPE
-      ,D.D_SCOPE_ID
-      ,D.C_ID
-      ,D.E_ID
-      ,D.D_STS
-      ,D.D_CTGR
-	  ,GDD.CODETXT D_CTGR_TXT
-      ,D.D_Desc
-      ,D.D_EXT
-      ,D.D_SIZE
-      ,D.D_FileName
-      ,D.D_ETstmp
-      ,D.D_EU
-      ,jsharmony.myCUSER_FMT(D_EU) D_EU_FMT
-      ,D.D_MTstmp
-      ,D.D_MU
-      ,jsharmony.myCUSER_FMT(D_MU) D_MU_FMT
-      ,D.D_UTstmp
-      ,D.D_UU
-      ,jsharmony.myCUSER_FMT(D_UU) D_UU_FMT
-      ,D.D_Snotes
-	  ,DUAL.DUAL_NVARCHAR50 TITLE_H
-	  ,DUAL.DUAL_NVARCHAR50 TITLE_B
+CREATE VIEW [jsharmony].[v_dl] AS
+SELECT D.d_id
+      ,D.d_scope
+      ,D.d_scope_id
+      ,D.c_id
+      ,D.e_id
+      ,D.d_sts
+      ,D.d_ctgr
+	    ,GDD.CODETXT d_ctgr_txt
+      ,D.d_desc
+      ,D.d_ext
+      ,D.d_size
+      ,D.d_filename
+      ,D.d_etstmp
+      ,D.d_eu
+      ,jsharmony.myCUSER_FMT(D_EU) d_eu_fmt
+      ,D.d_mtstmp
+      ,D.d_mu
+      ,jsharmony.myCUSER_FMT(D_MU) d_mu_fmt
+      ,D.d_utstmp
+      ,D.d_uu
+      ,jsharmony.myCUSER_FMT(D_UU) d_uu_fmt
+      ,D.d_snotes
+	    ,DUAL.DUAL_NVARCHAR50 title_h
+	    ,DUAL.DUAL_NVARCHAR50 title_b
   FROM jsharmony.D
   INNER JOIN jsharmony.DUAL on 1=1
   LEFT OUTER JOIN  jsharmony.GCOD2_D_SCOPE_D_CTGR GDD ON GDD.CODEVAL1 = D.D_SCOPE
@@ -9874,30 +9859,30 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-CREATE VIEW [jsharmony].[V_NL] as
-SELECT N.N_ID
-      ,N.N_SCOPE
-      ,N.N_SCOPE_ID
-	  ,N_STS
-      ,N.C_ID
-	  ,DUAL.DUAL_NVARCHAR50 C_Name
-	  ,DUAL.DUAL_NVARCHAR50 C_Name_EXT
-      ,N.E_ID
-	  ,DUAL.DUAL_NVARCHAR50 E_Name
-      ,N.N_TYPE
-      ,N.N_Note
-      ,jsharmony.myTODATE(N.N_ETstmp) N_Dt
-      ,N.N_ETstmp
-      ,jsharmony.myMMDDYYHHMI(N.N_ETstmp) N_ETstmp_FMT
-      ,N.N_EU
-      ,jsharmony.myCUSER_FMT(N.N_EU) N_EU_FMT
-      ,N.N_MTstmp
-      ,jsharmony.myMMDDYYHHMI(N.N_MTstmp) N_MTstmp_FMT
-      ,N.N_MU
-      ,jsharmony.myCUSER_FMT(N.N_MU) N_MU_FMT
-      ,N.N_Snotes
-	  ,DUAL.DUAL_NVARCHAR50 TITLE_H
-	  ,DUAL.DUAL_NVARCHAR50 TITLE_B
+CREATE VIEW [jsharmony].[v_nl] as
+SELECT N.n_id
+      ,N.n_scope
+      ,N.n_scope_id
+	    ,n_sts
+      ,N.c_id
+	    ,DUAL.DUAL_NVARCHAR50 c_name
+	    ,DUAL.DUAL_NVARCHAR50 c_name_ext
+      ,N.e_id
+	    ,DUAL.DUAL_NVARCHAR50 e_name
+      ,N.n_type
+      ,N.n_note
+      ,jsharmony.myTODATE(N.N_ETstmp) n_dt
+      ,N.n_etstmp
+      ,jsharmony.myMMDDYYHHMI(N.N_ETstmp) n_etstmp_fmt
+      ,N.n_eu
+      ,jsharmony.myCUSER_FMT(N.N_EU) n_eu_fmt
+      ,N.n_mtstmp
+      ,jsharmony.myMMDDYYHHMI(N.N_MTstmp) n_mtstmp_fmt
+      ,N.n_mu
+      ,jsharmony.myCUSER_FMT(N.N_MU) n_mu_fmt
+      ,N.n_snotes
+	    ,DUAL.DUAL_NVARCHAR50 title_h
+	    ,DUAL.DUAL_NVARCHAR50 title_b
   FROM jsharmony.N
   INNER JOIN jsharmony.DUAL ON 1=1
 
