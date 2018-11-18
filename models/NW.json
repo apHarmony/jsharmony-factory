@@ -2,7 +2,8 @@
   "NWUCS_BASE": {
     "layout":"form", 
     "table":"S",
-    "actions":"B", 
+    "caption":["","Note","Notes"],
+    "actions":"B",
     "unbound": 1,
     "tabpos":"top",
     "tabs": [
@@ -20,9 +21,10 @@
     "inherits":"NWUCS_BASE"
   },
   "NWUS": {
-    "table":"S",
-    "actions":"B", 
     "layout":"form", 
+    "table":"S",
+    "caption":["","Note","Notes"],
+    "actions":"B", 
     "tabpos":"top",
     "unbound": 1,
     "tabs": [
@@ -36,9 +38,10 @@
     ]
   }, 
   "NWCS": {
-    "table":"S",
-    "actions":"B", 
     "layout":"form", 
+    "table":"S",
+    "caption":["","Note","Notes"],
+    "actions":"B", 
     "tabpos":"top",
     "unbound": 1,
     "tabs": [
@@ -52,9 +55,10 @@
     ]
   }, 
   "NWCSC_BASE":{
+    "layout":"form",
     "table":"S",
+    "caption":["","Note","Notes"],
     "actions":"B", 
-    "layout":"form", 
     "tabpos":"top",
     "unbound": 1,
     "roles":{
@@ -74,9 +78,10 @@
     "inherits":"NWCSC_BASE"
   },
   "NWCSCB":{
-    "table":"S",
-    "actions":"B", 
     "layout":"form", 
+    "table":"S",
+    "caption":["","Note","Notes"],
+    "actions":"B", 
     "tabpos":"top",
     "unbound": 1,
     "tabs": [

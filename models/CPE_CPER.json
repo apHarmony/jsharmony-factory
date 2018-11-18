@@ -2,6 +2,8 @@
   "CPE_CPER_BASE": {
     "layout":"multisel", 
     "table":"jsharmony.V_CPER_NOSTAR",
+    "title":"",
+    "caption":["","Role","Roles"],
     "actions":"BIU",
     "roles": {
       "main": { "SYSADMIN":"*" },

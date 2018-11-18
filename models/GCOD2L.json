@@ -1,6 +1,7 @@
 {
   "GCOD2L": {
-    "layout":"grid", 
+  "layout":"grid", 
+  "table":"",
 	"caption":[0,"Code","Codes"],
 	"actions":"BIUD", 
 	"sort":["^codeval1","^codseq","^codeval2"], 

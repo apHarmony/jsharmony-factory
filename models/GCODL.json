@@ -1,6 +1,7 @@
 {
   "GCODL": {
-    "layout":"grid", 
+  "layout":"grid",
+  "table":"",
 	"caption":[0,"Code","Codes"],
 	"actions":"BIUD", 
 	"sort":["^codseq","^codeval"], 

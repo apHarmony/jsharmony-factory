@@ -11,7 +11,7 @@
     "grid_expand_filter":1,
     "hide_system_buttons" : ["clear"],
     "fields":[
-      {"name":"model_id","type":"varchar","actions":"FB","key":1,"caption":"Model ID"},
+      {"name":"model_id","type":"varchar","actions":"B","key":1,"caption":"Model ID"},
       {"name":"model_title","type":"varchar","actions":"B","caption":"Title"},
       {"name":"model_layout","type":"varchar","actions":"B","caption":"Layout"},
       {"name":"model_table","type":"varchar","actions":"B","caption":"Table"},

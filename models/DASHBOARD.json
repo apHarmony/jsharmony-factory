@@ -2,6 +2,7 @@
   "comment":"DASHBOARD",
   "layout":"form",
   "title":"Dashboard",
+  "caption":["","Dashboard","Dashboard"],
   "roles": {"*":"B"},
   "actions":"B",
   "topmenu":"dashboard",

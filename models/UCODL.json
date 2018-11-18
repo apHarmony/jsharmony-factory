@@ -1,10 +1,11 @@
 {
   "UCODL": {
     "layout":"grid", 
-	"caption":[0,"Code","Codes"],
-	"actions":"BIUD", 
-	"sort":["^codseq","^codeval"], 
-	"topmenu":"dev",
+    "table":"",
+    "caption":[0,"Code","Codes"],
+    "actions":"BIUD", 
+    "sort":["^codseq","^codeval"], 
+    "topmenu":"dev",
     "roles": {"X_B":"B","DADMIN":"*"},
     "breadcrumbs": { "parents": ["X_UCOD_HL"] },
     "reselectafteredit": "row",    "comment1":"row, or blank",
@@ -12,16 +13,16 @@
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
     "bindings":{"codename":"codename","codeschema":"codeschema"},
-	"fields":[
-	  {"name":"ucod_id","type":"bigint","actions":"B","key":1,"control":"hidden"}, //Previously had "F"
+  	"fields":[
+	    {"name":"ucod_id","type":"bigint","actions":"B","key":1,"control":"hidden"}, //Previously had "F"
       {"name":"codename","type":"varchar","foreignkey":1,"actions":"IUD","virtual":1,"sqlwhere":"1=1",
        "sqlupdate":"","sqlinsert":"","length":16,"control":"hidden"},
       {"name":"codeschema","type":"varchar","foreignkey":1,"actions":"IUD","virtual":1,"sqlwhere":"1=1",
        "sqlupdate":"","sqlinsert":"","length":16,"control":"hidden"},
-	  {"name":"codseq","type":"smallint","actions":"BIU","control":"textbox_VS","format":["decimal","0"],
-	   "validate":["IsNumeric"],"controlstyle":"text-align:right;","caption":"Seq"},
-	  {"name":"codeval","type":"varchar","length":"8","actions":"BI","control":"textbox_S",
-	   "validate":["Required"],"caption":"Value"},
+	    {"name":"codseq","type":"smallint","actions":"BIU","control":"textbox_VS","format":["decimal","0"],
+	     "validate":["IsNumeric"],"controlstyle":"text-align:right;","caption":"Seq"},
+	    {"name":"codeval","type":"varchar","length":"8","actions":"BI","control":"textbox_S",
+	     "validate":["Required"],"caption":"Value"},
       {"name":"codetxt","type":"varchar","length":"50","actions":"BIU","control":"textbox_S",
        "validate":["Required"],"caption":"Description"},
       {"name":"codecode","type":"varchar","length":"50","actions":"BIU","control":"textbox_S",
@@ -39,7 +40,7 @@
        "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
        "sqlselect":"(jsharmony.audit_info(COD_ETstmp,COD_EU,COD_MTstmp,COD_MU))",
        "controlstyle":"width:48px;display:none;"}
-	],
+	  ],
     "dberrors": [
       ["/UNQ_UCOD_.*_CODEVAL/","CODE Value has to be unique"],
       ["_codeval_key","CODE Value has to be unique"],

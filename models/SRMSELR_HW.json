@@ -14,7 +14,7 @@
       {"name":"SELECTOR","caption": "Roles Selector","target":"SRMSELR_SEL","bindings":{"sm_id":"sm_id"}}
     ],
     "fields":[
-      {"name":"sm_id","type":"bigint","actions":"BF","key":1}
+      {"name":"sm_id","type":"bigint","actions":"B","key":1}
     ]
   }  
 }

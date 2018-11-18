@@ -1,25 +1,26 @@
 {
   "HSHOWL": {
     "title":"Help Index",
-	"table":"jsharmony.h",
+    "caption":["","Help","Help"],
+    "table":"jsharmony.h",
     "sqlwhere":"(h_index_a=%%%TRUE%%%)",
-	"actions":"B", 
+    "actions":"B", 
     "roles": {"*":"B"},
-	"caption":[0,"Help Module","Help Modules"],
+    "caption":[0,"Help Module","Help Modules"],
     "layout":"grid", 
-	"hide_system_buttons": ["help","export"],
-	"sort":["^h_seq","^h_title"], 
-	"samplerepeat":5,
-	"popup":[850,525],
-	"fields":[
-	  {"name":"h_id","type":"bigint","key": 1,"datalock":{"C_ID":"ALWAYS"}},
-	  {"name":"h_seq","type":"int","actions":"B","control":"hidden"},
+    "hide_system_buttons": ["help","export"],
+    "sort":["^h_seq","^h_title"], 
+    "samplerepeat":5,
+    "popup":[850,525],
+    "fields":[
+      {"name":"h_id","type":"bigint","key": 1,"datalock":{"C_ID":"ALWAYS"}},
+      {"name":"h_seq","type":"int","actions":"B","control":"hidden"},
       {"name":"hp_code","type":"varchar","length":50,"foreignkey":1,"datalock":{"C_ID":"ALWAYS"}},
-	  {"name":"h_title","type":"varchar","length":"70","caption":"Help Module","controlstyle":"width:350px;","actions":"B","link":"edit:HSHOW","sample":"Test - General Information"}
-	],
+      {"name":"h_title","type":"varchar","length":"70","caption":"Help Module","controlstyle":"width:350px;","actions":"B","link":"edit:HSHOW","sample":"Test - General Information"}
+    ],
     "oninit": "jsh.App.HSHOWL.RAN = false; if('hp_code' in _GET) jsh.App['xform_'+XBase['HSHOWL']].Data['hp_code'] = _GET.hp_code;",
     "onload": "if(jsh.App.HSHOWL.RAN) return true; jsh.App.HSHOWL.RAN = true; var xform = jsh.App['xform_'+XBase['HSHOWL']]; if(!('hp_code' in xform.Data)) return true; if(xform.RowCount == 0){ delete xform.Data.hp_code; jsh.XForm_Select(callback); } else { XExt.navTo(jsh.$root('.xgrid_'+XBase['HSHOWL']+'_placeholder a').first().prop('href')); } return false;"
- },
+  },
   "C_HSHOWL": {
     "inherits": "HSHOWL",
     "roles": { "client": {"C*":"B"} },
@@ -27,5 +28,5 @@
     "fields":[
       {"name":"h_title","link":"edit:C_HSHOW"}
     ]
- }
+  }
 }

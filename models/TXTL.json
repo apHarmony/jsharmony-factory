@@ -18,7 +18,7 @@
   "X_TXTL": {
     "inherits":"TXTL",
     "dev":1,
-    "actions":"BI", 
+    "actions":"B", 
     "topmenu":"dev",
     "buttons":[{"link":"add:X_TXT", "text": "Add Text Module"}],
     "fields":[

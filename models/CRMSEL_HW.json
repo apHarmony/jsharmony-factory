@@ -15,7 +15,7 @@
     ],
     "fields":[
       {"name":"cr_id","type":"bigint"},
-      {"name":"cr_name","type":"varchar","length":16,"actions":"BF","key":1}
+      {"name":"cr_name","type":"varchar","length":16,"actions":"B","key":1}
     ]
   }  
 }

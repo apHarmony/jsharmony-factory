@@ -3,7 +3,7 @@
     "layout":"grid", 
     "title":"Documents",
 	"table":"jsharmony.D",
-	"actions":"BIUD", 
+	"actions":"B",
 	"sort":["vd_utstmp"], 
 	"samplerepeat":5,
 	"caption":[0,"Document","Documents"],

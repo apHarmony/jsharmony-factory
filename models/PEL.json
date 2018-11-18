@@ -4,7 +4,7 @@
     "table":"jsharmony.pe",
     "caption":[0,"User","Users"],
     "title":"System Users",
-    "actions":"BI", 
+    "actions":"B", 
     "sort":["^pe_name1"],
     "topmenu":"administration",
     "buttons":[{"link":"add:PE"}],

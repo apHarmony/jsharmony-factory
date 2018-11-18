@@ -1,21 +1,23 @@
 {
-    "comment":"PE_SPEF",
-    "layout":"multisel", 
-	"actions":"BIU",
-	"table":"jsharmony.spef",
-	"fields":[
-	  {"name":"pe_id","type":"bigint","foreignkey":1},
-	  {"name":"spef_id","type":"bigint","key":1},
-	  {"name":"sf_name","type":"varchar","length":"8","cellstyle":"width:300px;",
-       "caption":"Function","actions":"B",
-       "lov": { "sql": ["select sf_name as %%%jsh.map.codeval%%%, ",
+  "comment":"PE_SPEF",
+  "layout":"multisel", 
+  "actions":"BIU",
+  "table":"jsharmony.spef",
+  "title":"",
+  "caption":["","Function","Functions"],
+  "fields":[
+    {"name":"pe_id","type":"bigint","foreignkey":1},
+    {"name":"spef_id","type":"bigint","key":1},
+    {"name":"sf_name","type":"varchar","length":"8","cellstyle":"width:300px;",
+      "caption":"Function","actions":"B",
+      "lov": { "sql": ["select sf_name as %%%jsh.map.codeval%%%, ",
                         "       sf_desc as %%%jsh.map.codetxt%%%,",
                         "       sf_seq as %%%jsh.map.codeseq%%% ",
                         "  from jsharmony.SF"] }
-       }
-	],
-    "dberrors":[
-      ["fk_spef_pe","Cannot delete a user with selected function(s)."],
-      ["FK_SPEF_PE","Cannot delete a user with selected function(s)."]
-    ]
+      }
+  ],
+  "dberrors":[
+    ["fk_spef_pe","Cannot delete a user with selected function(s)."],
+    ["FK_SPEF_PE","Cannot delete a user with selected function(s)."]
+  ]
 }

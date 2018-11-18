@@ -3,7 +3,7 @@
     "layout":"grid", 
     "title":"Customer Users",
     "table":"jsharmony.CPE",
-    "actions":"BI", 
+    "actions":"B", 
     "roles": {
       "main": { "SYSADMIN":"*" },
       "client": {"CSYSADMIN":"*","CADMIN":"*"}

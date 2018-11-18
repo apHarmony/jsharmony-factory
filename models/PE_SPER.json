@@ -2,7 +2,9 @@
   "comment":"PE_SPER",
   "layout":"multisel", 
 	"actions":"BIU",
-	"table":"jsharmony.sper",
+  "table":"jsharmony.sper",
+  "title":"",
+  "caption":["","Role","Roles"],
 	"fields":[
 	  {"name":"pe_id","type":"bigint","foreignkey":1},
 	  {"name":"sper_id","type":"bigint","key":1},

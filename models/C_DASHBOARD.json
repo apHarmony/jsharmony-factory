@@ -2,6 +2,7 @@
   "comment":"C_DASHBOARD",
   "layout":"form",
   "title":"Dashboard",
+  "caption":["","Dashboard","Dashboard"],
   "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
   "actions":"B",
   "topmenu":"c_dashboard",
