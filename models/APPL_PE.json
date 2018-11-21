@@ -2,7 +2,7 @@
   "PE": {
     "inherits":"PE_BASE",  
     "fields":[
-      {"name":"pe_photo","actions":"BIU"}
+      {"name":"pe_photo","actions":""}
     ]
   },
   "PEL": {
