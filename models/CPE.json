@@ -11,7 +11,7 @@
     },
     "popup":[850,650],
     "fields":[
-      {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"PE_ID"}},
+      {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"PE_ID"},"control":"hidden"},
       {"name":"pe_sts","type":"varchar","length":8,"actions":"BIU","control":"dropdown_S",
         "lov": { "UCOD": "ahc", "schema": "jsharmony"}, "validate": ["Required"], "default": "ACTIVE",
    	    "caption":"Status","captionstyle":"width:120px;text-align:right;"},
@@ -72,7 +72,8 @@
   ],
   "dberrors":[
     ["FK_CPER_CPE","Cannot delete a user with selected role(s)"],
-    ["UNQ_CPE_PE_Email","Email address is not unique (UNQ_CPE_PE_Email)"]
+    ["UNQ_CPE_PE_Email","Email address is not unique "],
+    ["cpe_pe_email_unique","Email address is not unique "]
   ]
   },    
   "CPE": {

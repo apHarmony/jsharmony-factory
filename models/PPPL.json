@@ -13,7 +13,7 @@
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
 	  "fields":[
-	    {"name":"ppp_id","type":"bigint","key":1},
+	    {"name":"ppp_id","type":"bigint","key":1,"control":"hidden"},
       {"name":"PE_ID","type":"bigint","actions":"BI","control":"hidden",
        "default": "js:jsh.globalparams.user_id"},
       {"name":"ppp_process","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S",

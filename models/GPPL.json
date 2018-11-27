@@ -12,7 +12,7 @@
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
     "fields":[
-      {"name":"gpp_id","type":"bigint","key":1},
+      {"name":"gpp_id","type":"bigint","key":1,"control":"hidden"},
       {"name":"gpp_process","type":"varchar","length":32,"actions": "B","comment": "dropdown_S",
        "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_gpp_process_v order by codseq,codetxt","blank":1},"validate":["Required"],"control":"hidden",
        "caption":"Process","captionstyle":"width:120px;text-align:right;"},

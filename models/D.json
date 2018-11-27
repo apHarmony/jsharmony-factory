@@ -7,7 +7,7 @@
   "caption": [ "", "Document", "Documents" ],
   "popup":[900,350],
   "fields":[
-	  {"name":"d_id","type":"bigint","key": 1,"datalock":{"C_ID":"D_ID"}},
+	  {"name":"d_id","type":"bigint","key": 1,"datalock":{"C_ID":"D_ID"},"control":"hidden"},
     {"name":"d_scope_id","type":"bigint","actions":"I",
      "control": "hidden","default": "js:_GET['d_scope_id']","caption": "","datalock": {"C_ID": "D_SCOPE_ID"}},
 	  {"control":"html","value":"<div style=\"font-size:18px;padding-bottom:12px;\">"},
@@ -47,7 +47,7 @@
 	  {"name":"d_utstmp","type":"datetime","length":7,"actions":"B","nl":1,
 	   "control":"textbox_tstmp",
 	   "caption":"Uploaded"},
-    {"name": "d_uu","type":"varchar","length": 20},
+    {"name": "d_uu","type":"varchar","length": 20,"actions":""},
     {"name":"d_uu_fmt","type":"varchar","length":20,"actions":"B",
      "sqlselect":"(jsharmony.mycuser_fmt(d_uu))",
      "control":"textbox","controlstyle":"width:158px;","caption":""},
