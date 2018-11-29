@@ -1,7 +1,7 @@
 {
   "NWUCS_BASE": {
     "layout":"form", 
-    "table":"S",
+//    "table":"S",
     "caption":["","Note","Notes"],
     "actions":"B",
     "unbound": 1,
@@ -13,8 +13,8 @@
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-	  {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
-      {"name":"n_scope_id", "type": "bigint","foreignkey":1}
+	  {"name":"n_scope","type":"varchar","length":"8","foreignkey":1,"actions":""},
+      {"name":"n_scope_id", "type": "bigint","foreignkey":1,"actions":""}
     ]
   },
   "NWUCS":{
@@ -22,7 +22,7 @@
   },
   "NWUS": {
     "layout":"form", 
-    "table":"S",
+//    "table":"S",
     "caption":["","Note","Notes"],
     "actions":"B", 
     "tabpos":"top",
@@ -33,13 +33,13 @@
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-      {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
-      {"name":"n_scope_id", "type": "bigint","foreignkey":1}
+      {"name":"n_scope","type":"varchar","length":"8","foreignkey":1,"actions":""},
+      {"name":"n_scope_id", "type": "bigint","foreignkey":1,"actions":""}
     ]
   }, 
   "NWCS": {
     "layout":"form", 
-    "table":"S",
+//    "table":"S",
     "caption":["","Note","Notes"],
     "actions":"B", 
     "tabpos":"top",
@@ -50,13 +50,13 @@
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-      {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
-      {"name":"n_scope_id", "type": "bigint","foreignkey":1}
+      {"name":"n_scope","type":"varchar","length":"8","foreignkey":1,"actions":""},
+      {"name":"n_scope_id", "type": "bigint","foreignkey":1,"actions":""}
     ]
   }, 
   "NWCSC_BASE":{
     "layout":"form",
-    "table":"S",
+//    "table":"S",
     "caption":["","Note","Notes"],
     "actions":"B", 
     "tabpos":"top",
@@ -70,8 +70,8 @@
     ],
     "tabpanelstyle": "min-width:900px;",
       "fields":[
-        {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
-        {"name":"n_scope_id", "type": "bigint","foreignkey":1}
+        {"name":"n_scope","type":"varchar","length":"8","foreignkey":1,"actions":""},
+        {"name":"n_scope_id", "type": "bigint","foreignkey":1,"actions":""}
       ]
   },
   "NWCSC":{
@@ -79,7 +79,7 @@
   },
   "NWCSCB":{
     "layout":"form", 
-    "table":"S",
+//    "table":"S",
     "caption":["","Note","Notes"],
     "actions":"B", 
     "tabpos":"top",
@@ -90,8 +90,8 @@
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-      {"name":"n_scope","type":"varchar","length":"8","foreignkey":1},
-      {"name":"n_scope_id","type":"bigint","foreignkey":1 }
+      {"name":"n_scope","type":"varchar","length":"8","foreignkey":1,"actions":""},
+      {"name":"n_scope_id","type":"bigint","foreignkey":1 ,"actions":""}
     ]
   }
 }

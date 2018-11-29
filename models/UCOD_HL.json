@@ -14,7 +14,7 @@
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
 	"fields":[
-      {"name":"ucod_h_id","type":"bigint","key":1},
+      {"name":"ucod_h_id","type":"bigint","key":1,"control":"hidden"},
       {"name":"click","type":"varchar","length":"128","validate":["Required"],
        "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"","actions":"B","control": "html","cellstyle": "text-align:center;",

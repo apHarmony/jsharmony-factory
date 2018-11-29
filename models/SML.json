@@ -14,7 +14,7 @@
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
     "fields":[
-      {"name":"sm_id_auto","type":"bigint","key":1},
+      {"name":"sm_id_auto","type":"bigint","key":1,"control":"hidden"},
       {"name":"sm_utype","type":"char","length":1,"actions": "BIU","control":"textbox_VS",
        "validate":["Required","RegEx:'/S|C/','be one of the following S-System, C-Customer'"],
        "controlstyle":"width:10px;","default":"S",

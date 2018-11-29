@@ -8,7 +8,7 @@
     "topmenu":"administration",
     "popup":[850,650],
     "fields":[
-      {"name":"pe_id","type":"bigint","key":1},
+      {"name":"pe_id","type":"bigint","key":1,"control":"hidden"},
       {"name":"pe_sts","type":"varchar","length":8,"actions":"BIU","validate": ["Required"],
        "control":"dropdown_S","lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_ahc order by codseq,codetxt"},
        "default": "ACTIVE",
