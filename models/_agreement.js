@@ -46,7 +46,7 @@ exports.welcome = function (req, res, next) {
     function (cb) {
       var params = {};
       req.jshsite.menu(req, res, _this.jsh, params, function () {
-        HelperRender.reqGet(req, res, _this.jsh, 'welcome', 'Welcome', { basetemplate: 'client', selectedmenu: '', XMenu: params.XMenu, params: { cms_welcome: cms_welcome, req: req } }, cb);
+        HelperRender.reqGet(req, res, _this.jsh, 'welcome', 'Welcome', { basetemplate: 'client', selectedmenu: '', menudata: params.menudata, params: { cms_welcome: cms_welcome, req: req } }, cb);
       });
     }
   ]);

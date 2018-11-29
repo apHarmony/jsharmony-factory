@@ -32,9 +32,9 @@
   
   <%
   var xmenu_headings = {};
-  if('MainMenu' in XMenu){
+  if(locals.menudata && menudata.MainMenu){
     %><div class="xmenu"><%
-    	for(var i=0;i<XMenu.MainMenu.length;i++){ menu = XMenu.MainMenu[i];
+    	for(var i=0;i<menudata.MainMenu.length;i++){ menu = menudata.MainMenu[i];
     	  xmenu_headings[menu.ID] = menu.Title;
     	  %><a href="<%-menu.Link%>" onclick="<%-ejsext.escapeHTML(menu.OnClick)%>" data-id="<%=menu.ID%>" class="menu_<%=menu.ID%> <%-ejsext.iif(menu.Selected,'selected')%>"><%=menu.Title%><div class="bottom"></div></a><%
       }
@@ -42,8 +42,8 @@
     %></div><%
     %><div class="xmenuside"></div><%
   }
-  if('SubMenus' in XMenu){
-    for(var parentid in XMenu.SubMenus){ var submenu = XMenu.SubMenus[parentid];
+  if(locals.menudata && menudata.SubMenus){
+    for(var parentid in menudata.SubMenus){ var submenu = menudata.SubMenus[parentid];
       var parentname = '';
       if(parentid in xmenu_headings) parentname = xmenu_headings[parentid];
       %><div style="display:none;" class="xsubmenu xsubmenu_<%=parentid%>"><div class="head"><%=parentname%>:</div><%

@@ -21,10 +21,13 @@ var _ = require('lodash');
 var Helper = require('jsharmony/Helper');
 
 exports = module.exports = function GenMenu(type, req, res, jsh, params, onComplete) {
+  var startmodel = null;
   if(!req.isAuthenticated){
-    params.XMenu = {};
+    params.menudata = {};
+    params.startmodel = null;
     return onComplete();
   }
+  var startmodel = null;
   var rootmenu = '';
   var basetemplate = req.jshsite.basetemplate;
   if (basetemplate == 'index') rootmenu = 'MAIN';
@@ -32,29 +35,32 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
 
   if (rootmenu == '') { onComplete(); return; }
   var dbtypes = jsh.AppSrv.DB.types;
-  var topmenu = '';
+  var selectedmenu = '';
   if ('selectedmenu' in params){
-    topmenu = params.selectedmenu;
-    if(_.isArray(topmenu)) topmenu = topmenu[0];
+    selectedmenu = params.selectedmenu;
+    if(!_.isString(selectedmenu) && _.isArray(selectedmenu)) selectedmenu = selectedmenu[selectedmenu.length - 1];
   }
   
   var menusql = "menu_main";
   if (type == 'C') menusql = "menu_client";
   
+  //Select menu data from the database
   var sqlparams = {};
   sqlparams[jsh.map.user_id] = req.user_id;
   sqlparams['ROOT_MENU'] = rootmenu;
-  sqlparams['TOP_MENU'] = topmenu;
-  jsh.AppSrv.ExecMultiRecordset(req._DBContext, menusql, [dbtypes.BigInt, dbtypes.VarChar(30), dbtypes.VarChar(30)], sqlparams, function (err, rslt) {
+  jsh.AppSrv.ExecMultiRecordset(req._DBContext, menusql, [dbtypes.BigInt, dbtypes.VarChar(30)], sqlparams, function (err, rslt) {
     if(err){ return Helper.GenError(req, res, -99999, "An unexpected database error has occurred: "+err.toString()); }
     var xmenu = {};
     xmenu.MainMenu = [];
     xmenu.SubMenus = {};
     if ((rslt != null) && (rslt.length == 1) && (rslt[0] != null) && (rslt[0].length == 2)) {
+
+      //Generate the Main Menu
       _.each(rslt[0][0], function (menuitem) {
+        
+        //Generate Link + Onclick Event
         var link_url = GenLink(req, jsh, menuitem);
         var link_onclick = '';
-        
         if (menuitem[jsh.map.menu_command] && menuitem[jsh.map.menu_command].substr(0, 3) == 'js:') {
           link_url = '#';
           link_onclick = 'return '+req.jshsite.instance+'.XExt.JSEval('+JSON.stringify(menuitem[jsh.map.menu_command].substr(3)) + ')||false;';
@@ -65,24 +71,40 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
           link_onclick = jsh.getModelLinkOnClick(link_targetmodelid, req, menuitem[jsh.map.menu_command]);
         }
 
+        //Check if the menu item is selected
         var selected = false;
-        if (menuitem[jsh.map.menu_name].toString().toUpperCase() == topmenu.toString().toUpperCase()) {
+        if (menuitem[jsh.map.menu_name].toString().toUpperCase() == selectedmenu.toString().toUpperCase()) {
           selected = true;
         }
-        xmenu.MainMenu.push({ Title: menuitem[jsh.map.menu_title], Link: link_url, OnClick: link_onclick, Selected: selected, ID: menuitem[jsh.map.menu_name].toString().toUpperCase()  });
+
+        //Add the menu item to the array
+        xmenu.MainMenu.push({ 
+          ID: menuitem[jsh.map.menu_name].toString().toUpperCase(),
+          Title: menuitem[jsh.map.menu_title], 
+          Link: link_url,
+          OnClick: link_onclick,
+          Selected: selected
+        });
       });
-      //Submenu
-      var last_parent = null;
+
+      //Generate the Submenus
+      var last_parentname = null;
+      var cur_parent = null;
       var cur_sub_menu = [];
       _.each(rslt[0][1], function (menuitem) {
-        if (menuitem[jsh.map.menu_parentname] !== last_parent) {
-          if (cur_sub_menu.length > 0) xmenu.SubMenus[last_parent] = cur_sub_menu;
+
+        //Create a new submenu for each Parent ID
+        if(!menuitem[jsh.map.menu_parentname]) return;
+        if(menuitem[jsh.map.menu_parentname].toString().toUpperCase() !== last_parentname) {
+          if (cur_sub_menu.length > 0) xmenu.SubMenus[last_parentname] = cur_sub_menu;
           cur_sub_menu = [];
-          last_parent = menuitem[jsh.map.menu_parentname];
+          last_parentname = menuitem[jsh.map.menu_parentname].toString().toUpperCase();
+          cur_parent = _.find(xmenu.MainMenu,function(menuitem){ return menuitem.ID==last_parentname; });
         }
+
+        //Generate Link + Onclick Event
         var link_url = GenLink(req, jsh, menuitem);
         var link_onclick = '';
-        
         if (menuitem[jsh.map.menu_command] && menuitem[jsh.map.menu_command].substr(0, 3) == 'js:') {
           link_url = '#';
           link_onclick = 'return '+req.jshsite.instance+'.XExt.JSEval('+JSON.stringify(menuitem[jsh.map.menu_command].substr(3)) + ')||false;';
@@ -94,11 +116,37 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
           link_onclick = jsh.getModelLinkOnClick(link_targetmodelid, req, menuitem[jsh.map.menu_command]);
         }
 
-        cur_sub_menu.push({ Title: menuitem[jsh.map.menu_title], Link: link_url, OnClick: link_onclick });
+        //Check if the menu item is selected
+        var selected = false;
+        if (menuitem[jsh.map.menu_name].toString().toUpperCase() == selectedmenu.toString().toUpperCase()) {
+          cur_parent.Selected = true;
+          selected = true;
+        }
+
+        //Add the menu item to the array
+        cur_sub_menu.push({
+          ID: menuitem[jsh.map.menu_name].toString().toUpperCase(),
+          Title: menuitem[jsh.map.menu_title], 
+          Link: link_url, 
+          OnClick: link_onclick,
+          Selected: selected
+        });
       });
-      if (cur_sub_menu.length > 0) xmenu.SubMenus[last_parent] = cur_sub_menu;
+      if (cur_sub_menu.length > 0) xmenu.SubMenus[last_parentname] = cur_sub_menu;
     }
-    params.XMenu = xmenu;
+
+    //Find the startmodel
+    for(var i=0;i<xmenu.MainMenu.length;i++){
+      var menuitem = xmenu.MainMenu[i];
+      if(menuitem.Link && (menuitem.Link != '/')){
+        startmodel = menuitem.Link;
+        break;
+      }
+    }
+
+    //Return the data
+    params.startmodel = startmodel;
+    params.menudata = xmenu;
     onComplete();
   });
 }
