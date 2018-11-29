@@ -5,7 +5,7 @@
   "inherits": "TMPL_DEFAULT",
   "actions": "BIU",
   "roles": {"RPT":"B"},
-  "topmenu":"reports",
+  "menu":"reports",
   "description": "User Listing",
   "pagesettings":  {"orientation": "portrait"},
   "fields": [

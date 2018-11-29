@@ -7,7 +7,7 @@
   "roles": {"X_B":"B","X_X":"*","DASH":"*"},
   "sort":["vn_etstmp","vn_id"],
   "caption":[0,"Note","System Notes"],
-  "topmenu":"dashboard",
+  "menu":"dashboard",
   "rowlimit":10,
   "disableautoload": 1,
   "fields":[

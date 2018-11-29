@@ -7,7 +7,7 @@
 	  "sort":["vd_utstmp"], 
 	  "samplerepeat":5,
 	  "caption":[0,"Document","Documents"],
-	  "topmenu":"dashboard",
+	  "menu":"dashboard",
     "buttons":[{"link":"add:D","bindings":{"d_scope_id":"d_scope_id","d_scope":"d_scope"}}],
 	  "fields":[
 	    {"name":"d_id","type":"bigint","key": 1,"datalock":{"C_ID":"D_ID"},"control":"hidden"},

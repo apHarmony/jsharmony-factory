@@ -7,7 +7,7 @@
   "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
 	"sort":["vn_dt","vn_id"], 
 	"caption":[0,"Note","System Notes"],
-	"topmenu":"c_dashboard",
+	"menu":"c_dashboard",
   "hide_system_buttons" : ["print","export"],
   "rowlimit":10,
   "disableautoload": 1,

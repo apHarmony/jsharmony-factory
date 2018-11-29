@@ -8,7 +8,7 @@
     "actions":"B", 
     "unbound": 1,
     "roles": {"SYSADMIN": "B","*": "B","RPT": "B"},
-    "topmenu":"reports",
+    "menu":"reports",
     "fields":[
       {"control":"html","value":"<div class=\"clear\" style=\"width:800px;\">Please select a report:</div>"},
       {"control":"html","value":"<div class='xsubmenu_listing'></div>"}
@@ -18,6 +18,6 @@
    "REPORTS_CLIENT": {
     "inherits": "REPORTS",
     "roles": { "client": {"CX_B":"B","CX_X":"B"} },
-    "topmenu":"c_reports" 
+    "menu":"c_reports" 
   }
 }

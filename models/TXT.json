@@ -5,7 +5,7 @@
 	  "actions":"BU", 
     "layout":"form", 
     "caption":[0,"Text Module","Text Modules"],
-	  "topmenu":"administration",
+	  "menu":"ADMINISTRATION_TEXTMAINTENANCE",
     "breadcrumbs": { "parents": ["TXTL"] },
     "onload": "if(jsh.App['xform_'+XBase['TXT']].Data.txt_type.toUpperCase()=='HTML'){ XExt.CKEditor('txt_val'); }",
     "fields":[
@@ -54,7 +54,7 @@
     "inherits":"TXT",
     "dev":1,
     "actions":"BIUD", 
-    "topmenu":"dev",
+    "menu":"DEV_X_TXTL",
     "breadcrumbs": { "parents": ["X_TXTL"] },
     "fields":[
       {"name":"txt_process","actions":"BIU"},

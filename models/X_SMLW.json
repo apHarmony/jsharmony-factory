@@ -9,7 +9,7 @@
     "sqlselect": "X_SMLW_TOP",
     "querystring": { "|action": "edit", "|cur_sm_id_auto": "0" },
     "buttons": [{"link":"X_SML&", "icon": "list", "text": "List View", "actions": "B" }],
-    "topmenu":"dev",
+    "menu":"DEV_X_SML",
     "hide_system_buttons" : ["print","export"], 
     "fields":[
 	  { "control": "html", "value": "<div class=\"clear\" style=\"padding-bottom:15px;width:1000px;\"></div>" },

@@ -4,7 +4,7 @@
   "title": "Customer Agreement",
   "actions": "B",
   //"roles": { "client": {"CSYSADMIN":"*","CADMIN":"*"} },
-  "topmenu":"reports",
+  "menu":"reports",
   "description": "Generate Signed Customer Agreement",
   "template": "AGREEMENT.ejs",
   "inherits": "_report_TMPL_DEFAULT",

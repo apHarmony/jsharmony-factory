@@ -6,7 +6,7 @@
 	"actions":"BU", 
 	"caption":[0,"Item","Items"],
     "sort":[{"sm_id_parent":"asc"},{"sm_seq":"asc"},{"sm_name":"asc"}], 
-	"topmenu":"items",
+	"menu":"items",
     "grid_expand_filter": 1,
     "nogridadd":1,
     "rowlimit":500,

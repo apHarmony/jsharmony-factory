@@ -8,7 +8,7 @@
 	"caption":[0,"System Code2 Table","System Code2 Tables"],
     "roles": {"X_B":"B","DADMIN":"*"},
     "sort":["^codename","^codeschema"], 
-	"topmenu":"dev",
+	"menu":"DEV_X_UCOD2_HL",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",

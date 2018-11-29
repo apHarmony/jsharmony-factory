@@ -31,6 +31,6 @@
   "CPEL_CLIENT": {
     "inherits": "CPEL",
     "roles": { "client": {"CSYSADMIN":"*","CADMIN":"*"} },
-    "topmenu":"c_administration"
+    "menu":"c_administration"
   }
 }

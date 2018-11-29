@@ -6,7 +6,7 @@
     "table": "jsharmony.sm",
     "actions": "B", 
     "caption": [ 0, "Item", "Items" ],
-    "topmenu": "dev",
+    "menu": "dev",
     "tabpos":"top",
     "tabpanelstyle": "min-width:1000px;",
     "popup":[1050,700],

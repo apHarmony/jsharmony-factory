@@ -6,7 +6,7 @@
     "layout":"grid", 
 	  "caption":[0,"Text","Text"],
 	  "sort":["^txt_process","^txt_attrib"], 
-	  "topmenu":"administration",
+	  "menu":"ADMINISTRATION_TEXTMAINTENANCE",
     "fields":[
       {"name":"txt_id","type":"bigint","key":1,"control":"hidden"},
       {"name":"txt_process","type":"varchar","length":"32","caption":"Process","actions":"B","link":"edit:TXT"},
@@ -19,7 +19,7 @@
     "inherits":"TXTL",
     "dev":1,
     "actions":"B", 
-    "topmenu":"dev",
+    "menu":"DEV_X_TXTL",
     "buttons":[{"link":"add:X_TXT", "text": "Add Text Module"}],
     "fields":[
       {"name":"txt_process","link":"edit:X_TXT"},

@@ -11,7 +11,7 @@
     },
 	  "caption":[0,"Item","Items"],
     "sort":[{"cr_seq":"asc"},{"cr_name":"asc"}], 
-	  "topmenu":"dev",
+	  "menu":"dev",
     "grid_expand_filter": 1,
     "nogridadd":1,
     "rowlimit":500,

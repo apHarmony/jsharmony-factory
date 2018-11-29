@@ -5,7 +5,7 @@
 	"caption":[0,"Code","Codes"],
 	"actions":"BIUD", 
 	"sort":["^codseq","^codeval"], 
-	"topmenu":"administration",
+	"menu":"ADMINISTRATION_CODETABLES",
     "roles": {"X_B":"B","DADMIN":"*"},
     "breadcrumbs": { "parents": ["GCOD_HL"] },
     "reselectafteredit": "row",    "comment1":"row, or blank",
@@ -51,7 +51,7 @@
   "X_GCODL": {
     "inherits":"GCODL",
     "dev":1,
-    "topmenu":"dev",
+    "menu":"DEV_X_GCOD_HL",
     "breadcrumbs": { "parents": ["X_GCOD_HL"] }
   }
 }

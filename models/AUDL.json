@@ -6,7 +6,7 @@
     "layout":"grid", 
     "caption":[0,"Record","Test ResultsRecords"],
     "sort":["vaud_tstmp","^column_name"], 
-    "topmenu":"administration",
+    "menu":"ADMINISTRATION_AUDITTRAIL",
     "fields":[
       {"name":"db_k","type":"varchar","length":"1","caption":"D","actions":"","controlstyle":"text-align:right;"},
       {"name":"aud_tstmp","type":"datetime","length":"7","format":"tstmp","caption":"Date - Time","actions":"B"},

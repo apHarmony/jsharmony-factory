@@ -5,7 +5,7 @@
     "table":"",
     "actions":"B", 
     "layout":"exec", 
-    "topmenu":"Administration",
+    "menu":"ADMINISTRATION_RESTART_SYSTEM",
     "caption": [ "", "Request", "Requests" ],
     "hide_system_buttons":["print","help"],
 	  "fields":[

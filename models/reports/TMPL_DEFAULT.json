@@ -2,5 +2,5 @@
 "comment":"TMPL_DEFAULT",
   "layout": "exec",
   "actions": "B",
-  "topmenu":"reports"
+  "menu":"reports"
 }

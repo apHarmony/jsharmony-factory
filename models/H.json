@@ -5,7 +5,7 @@
 	  "actions":"BIUD", 
     "layout":"form", 
     "caption": [ "", "Help Module", "Help Modules" ],
-    "topmenu":"administration",
+    "menu":"ADMINISTRATION_HELPMAINTENANCE",
     "breadcrumbs": { "parents": ["HL"] },
     "onload": "XExt.CKEditor('h_text');",
 	  "fields":[

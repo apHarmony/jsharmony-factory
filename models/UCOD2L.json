@@ -5,7 +5,7 @@
     "caption":[0,"Code","Codes"],
 	  "actions":"BIUD", 
 	  "sort":["^codeval1","^codseq","^codeval2"], 
-	  "topmenu":"dev",
+	  "menu":"DEV_X_UCOD2_HL",
     "roles": {"X_B":"B","DADMIN":"*"},
     "breadcrumbs": { "parents": ["X_UCOD2_HL"] },
     "reselectafteredit": "row",    "comment1":"row, or blank",

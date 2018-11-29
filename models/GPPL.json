@@ -6,7 +6,7 @@
     "caption":[0,"Parameter","Parameters"],
     "layout":"grid", 
     "sort":["^gpp_process","^gpp_attrib"], 
-    "topmenu":"administration",
+    "menu":"ADMINISTRATION_GPARAMETERS",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
@@ -39,7 +39,7 @@
     "dev":1,
     "title":"System (G) Settings",
     "actions":"BIUD", 
-    "topmenu":"dev",
+    "menu":"DEV_X_GPPL",
     "fields":[
       {"name":"gpp_process","actions": "BIU","control": "dropdown_S"},
       {"name":"gpp_attrib","actions": "BIU","control": "dropdown_M"},

@@ -6,7 +6,7 @@
     "title":"System Users",
     "actions":"B", 
     "sort":["^pe_name1"],
-    "topmenu":"administration",
+    "menu":"ADMINISTRATION_USERS",
     "buttons":[{"link":"add:PE"}],
     "fields":[
       {"name":"pe_id","type":"bigint","key":"1","actions":"B","caption":"ID","link":"edit:PE"},

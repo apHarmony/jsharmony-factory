@@ -6,7 +6,7 @@
 	  "caption":[0,"Help Module","Help Modules"],
     "layout":"grid", 
 	  "sort":["^h_seq","^h_title"], 
-	  "topmenu":"administration",
+	  "menu":"ADMINISTRATION_HELPMAINTENANCE",
 	  "buttons":[{"link":"add:H"}],
     "reselectafteredit": "row",      "comment1":"row, or blank",
     "newrowposition": "last",        "comment2":"first or last",

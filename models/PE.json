@@ -5,7 +5,7 @@
     "title":"System User",
     "caption": [ "", "User", "Users" ],
     "actions":"BIUD", 
-    "topmenu":"administration",
+    "menu":"ADMINISTRATION_USERS",
     "popup":[850,650],
     "fields":[
       {"name":"pe_id","type":"bigint","key":1,"control":"hidden"},

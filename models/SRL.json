@@ -7,7 +7,7 @@
     "caption":[0,"Role","Roles"],
     "layout":"grid", 
     "sort":[{"sr_seq":"asc"},{"sr_name":"asc"}], 
-    "topmenu":"dev",
+    "menu":"DEV_X_SRL",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
