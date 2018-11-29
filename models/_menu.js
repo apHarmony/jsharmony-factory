@@ -40,6 +40,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
     selectedmenu = params.selectedmenu;
     if(!_.isString(selectedmenu) && _.isArray(selectedmenu)) selectedmenu = selectedmenu[selectedmenu.length - 1];
   }
+  selectedmenu = (selectedmenu||'').toString().toUpperCase();
   
   var menusql = "menu_main";
   if (type == 'C') menusql = "menu_client";
@@ -73,7 +74,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
 
         //Check if the menu item is selected
         var selected = false;
-        if (menuitem[jsh.map.menu_name].toString().toUpperCase() == selectedmenu.toString().toUpperCase()) {
+        if (menuitem[jsh.map.menu_name].toString().toUpperCase() == selectedmenu) {
           selected = true;
         }
 
@@ -118,7 +119,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
 
         //Check if the menu item is selected
         var selected = false;
-        if (menuitem[jsh.map.menu_name].toString().toUpperCase() == selectedmenu.toString().toUpperCase()) {
+        if (menuitem[jsh.map.menu_name].toString().toUpperCase() == selectedmenu) {
           cur_parent.Selected = true;
           selected = true;
         }

@@ -28,33 +28,8 @@
     <a class="xlogoimg" href="<%-ejsext.iif(req.isAuthenticated,'',req.jshsite.home_url)%>/"><img src="/images/logo.png" alt="<%=jsh.Config.app_name%>" title="<%=jsh.Config.app_name%>" /></a>
     <a class="xsublogo" href="<%-ejsext.iif(req.isAuthenticated,'',req.jshsite.home_url)%>/"><img src="/images/portal_main.png" /></a>
   </div>
-  
-  <%
-  var xmenu_headings = {};
-  if(locals.menudata && menudata.MainMenu){
-    %><div class="xmenu"><%
-    	for(var i=0;i<menudata.MainMenu.length;i++){ menu = menudata.MainMenu[i];
-    	  xmenu_headings[menu.ID] = menu.Title;
-    	  %><a href="<%-menu.Link%>" onclick="<%-ejsext.escapeHTML(menu.OnClick)%>" data-id="<%=menu.ID%>" class="menu_<%=menu.ID%> <%-ejsext.iif(menu.Selected,'selected')%>"><%=menu.Title%><div class="bottom"></div></a><%
-      }
-    	%><a class="xmenu_more" href="#"><div class="xmenu_more_bg">Menu <img src="/images/arrow_right_white.png" /><div class="bottom"></div></div></a><%
-    %></div><%
-    %><div class="xmenuside"></div><%
-  }
-  if(locals.menudata && menudata.SubMenus){
-    for(var parentid in menudata.SubMenus){ var submenu = menudata.SubMenus[parentid];
-      var parentname = '';
-      if(parentid in xmenu_headings) parentname = xmenu_headings[parentid];
-      %><div style="display:none;" class="xsubmenu xsubmenu_<%=parentid%>"><div class="head"><%=parentname%>:</div><%
-      for(var i=0;i<submenu.length;i++){ menu = submenu[i];
-        %><a href="<%-menu.Link%>" onclick="<%-ejsext.escapeHTML(menu.OnClick)%>"><%=menu.Title%></a><%-ejsext.iif(i<submenu.length-1,'<div>&nbsp;|&nbsp;</div>')%><%
-      }
-      %><a class="xsubmenu_more" href="#">Menu &nbsp;&#9656;</a><%
-      %></div><%
-      %><div class="xsubmenuside"></div><%
-    }
-  }
-  %>
+
+  <%-jsh.RenderEJS('jsh_menu_horizontal',locals)%>
 </div>
 
 <div class="xbody"><%-ejsext.BreadCrumbs(req, jsh, modelid)%><% if(title){ %>
