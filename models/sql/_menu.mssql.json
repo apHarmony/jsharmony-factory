@@ -36,5 +36,21 @@
     "  inner join jsharmony.SM SM_Parent on SM_Parent.SM_ID = SM.SM_ID_Parent",
     "where SM_Parent.SM_ID_Parent = (select SM_ID from jsharmony.SM where SM_NAME=@ROOT_MENU)",
     "order by SM_Parent.SM_Name,coalesce(SM.SM_Seq,SM.SM_ID),SM.SM_Name,SM.SM_ID;"
+  ],
+  "menu_main_noauth": [
+    "select distinct SM.SM_Name,SM.SM_DESC,",
+    "  case when ((SM.SM_Cmd is null) or (SM.SM_Cmd = '')) then (",
+    "  /*Get first child if parent SM_Cmd is blank*/",
+    "    select top 1 SMSUB.SM_Cmd from jsharmony.SM SMSUB ",
+    "      where SMSUB.SM_ID_Parent = SM.SM_ID and (SMSUB.SM_Cmd is not null) and (SMSUB.SM_Cmd <> '')",
+    "      order by coalesce(SMSUB.SM_Seq,SMSUB.SM_ID),SM_Name,SMSUB.SM_ID",
+    "  ) else SM.SM_Cmd end as SM_Cmd,",
+    "  SM.SM_SubCmd,coalesce(SM.SM_Seq,SM.SM_ID) SM_Seq,SM.SM_ID from jsharmony.SM ",
+    "  where SM_ID_Parent = (select SM_ID from jsharmony.SM where SM_NAME=@ROOT_MENU) ",
+    "  order by coalesce(SM.SM_Seq,SM.SM_ID),SM_Name,SM.SM_ID;",
+    "select distinct SM.SM_Name,SM.SM_DESC,SM.SM_Cmd,SM.SM_SubCmd,coalesce(SM.SM_Seq,SM.SM_ID) SM_Seq,SM.SM_ID,sm_parent.sm_name SM_Parent_Name from jsharmony.SM ",
+    "  inner join jsharmony.SM SM_Parent on SM_Parent.SM_ID = SM.SM_ID_Parent",
+    "  where SM_Parent.SM_ID_Parent = (select SM_ID from jsharmony.SM where SM_NAME=@ROOT_MENU) ",
+    "  order by SM_Parent.SM_Name,coalesce(SM.SM_Seq,SM.SM_ID),SM.SM_Name,SM.SM_ID;"
   ]
 }

@@ -15,7 +15,7 @@
 	  { "control": "html", "value": "<div class=\"clear\" style=\"padding-bottom:15px;width:1000px;\"></div>" },
       {"name": "cur_sm_id_auto", "type": "bigint", "key": 1 },
       {"name": "sm_id_auto", "type": "bigint","foreignkey":1,"actions": "B","caption": "","control": "tree","virtual": 1,
-       "controlstyle": "float:left;margin-right:10px;height:400px;width:300px;",
+       "controlstyle": "display:inline-block;margin-right:10px;height:400px;width:300px;",
        "lov": { "sql": "X_SMLW_LOV" },
        "controlparams": {
           "expand_all": true,
@@ -29,7 +29,7 @@
       {
         "name": "X_SML_EDIT",
         "control": "subform",
-        "controlstyle": "width:780px;float:left;",
+        "controlstyle": "width:450px;display:inline-block;",
         "target": "X_SML_EDIT",
         "bindings": { "sm_id_auto": "sm_id_auto" },
         "caption": "",

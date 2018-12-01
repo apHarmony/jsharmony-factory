@@ -44,7 +44,8 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
   
   var menusql = "menu_main";
   if (type == 'C') menusql = "menu_client";
-  
+  else if(req.jshsite && !req.jshsite.auth && req._roles && (req._roles.SYSADMIN || req._roles.DEV)) menusql = 'menu_main_noauth';
+
   //Select menu data from the database
   var sqlparams = {};
   sqlparams[jsh.map.user_id] = req.user_id;

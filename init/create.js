@@ -74,8 +74,13 @@ jsHarmonyFactory_Create.Run = function(run_cb){
   jsh.Config.appbasepath = process.cwd();
   jsh.Config.silentStart = true;
   jsh.Config.interactive = true;
+  jsh.Config.onConfigLoaded.push(function(cb){
+    jsh.Config.system_settings.automatic_schema = false;
+    jsh.Config.debug_params.jsh_error_level = 1;
+    return cb();
+  });
   jsh.Init(function(){
-
+    
     var db = jsh.DB['default'];
     dbs = new DatabaseScripter(jsh, scriptConfig);
 

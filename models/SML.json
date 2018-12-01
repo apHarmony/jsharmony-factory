@@ -48,7 +48,7 @@
                  " class=\"privs_link xform_ctrl xelemX_SML xform_label uneditable\"",
                  " onclick=\"window.open(<#=instance#>.$(this).attr('href'),'_blank','width=1200,height=700,resizable=1,scrollbars=1');return false;\"",
                  "><#-((data[j]['sm_id_auto'])?'<img src=\"/images/icon_edit.png\" class=\"xicon\">':'')#></a>"],
-       "caption": "Role Access"}
+       "caption": "Privileges"}
     ],
     "dberrors": [
       [ "UNQ_SM_SM_ID", "Duplicate ID" ],

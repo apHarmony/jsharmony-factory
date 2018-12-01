@@ -1,7 +1,7 @@
 {
   "CRMSELR_SEL": {
     "layout":"grid", 
-    "title": "Roles for Menu Item C<#=data.sm_id#> - <#=bcrumbs.sm_desc#>",
+    "title": "Menu Privileges: <#=bcrumbs.sm_desc#> (C<#=data.sm_id#>)",
 	  "table":"jsharmony.V_CRMSEL",
 	  "actions":"BU", 
     "breadcrumbs":{
@@ -31,7 +31,7 @@
       {"name":"crmsel_sel","type":"smallint","actions":"BU","caption":"Select","control":"checkbox",
        "controlparams":{"value_true":"1","value_false":"0","value_hidden":""},"captionstyle": "text-align:center;"},
       {"name":"cr_name","type":"varchar","length":16,"actions":"B","datalock":{"C_ID":"C_ID"},"control":"label","key":1,
-       "caption":""},
+       "caption":"Role"},
       {"name":"new_sm_id","type":"bigint","actions":"BU","control":"hidden","captionstyle":"display:none;","cellstyle":"display:none;",
        "sqlselect":"@sm_id"},
       {"name":"sm_id","type":"bigint","actions": "B","control": "hidden","key":1},
