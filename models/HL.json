@@ -2,7 +2,7 @@
   "HL": {
     "title":"Help Maintenance",
 	  "table":"jsharmony.h",
-	  "actions":"BIU", 
+	  "actions":"BU", 
 	  "caption":[0,"Help Module","Help Modules"],
     "layout":"grid", 
 	  "sort":["^h_seq","^h_title"], 
@@ -12,7 +12,6 @@
     "newrowposition": "last",        "comment2":"first or last",
     "commitlevel": "row",            "comment3":"cell, row, page, or none",
     "validationlevel": "row",        "comment4":"cell, or row",
-    "nogridadd":1,
 	  "fields":[
 	    {"name":"h_id","type":"bigint","key":1,"control":"hidden"},
 	    {"name":"h_title","type":"varchar","length":"70","caption":"Module Title","controlstyle":"min-width:200px;","actions":"B","link":"edit:H",

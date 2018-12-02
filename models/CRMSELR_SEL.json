@@ -13,7 +13,6 @@
     "sort":[{"cr_seq":"asc"},{"cr_name":"asc"}], 
 	  "menu":"dev",
     "grid_expand_filter": 1,
-    "nogridadd":1,
     "rowlimit":500,
     "grid_rowcount":1,
     "reselectafteredit": "row",      "comment1":"row, or blank",
