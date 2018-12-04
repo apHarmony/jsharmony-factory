@@ -432,8 +432,8 @@ CREATE TABLE jsharmony_crm (
   cr_name text NOT NULL,
   crm_snotes text,
   UNIQUE (cr_name, sm_id),
-  FOREIGN KEY (sm_id) REFERENCES jsharmony_sm(sm_id),
-  FOREIGN KEY (cr_name) REFERENCES jsharmony_cr(cr_name)
+  FOREIGN KEY (sm_id) REFERENCES jsharmony_sm(sm_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (cr_name) REFERENCES jsharmony_cr(cr_name) ON DELETE CASCADE
 );
 
 /***************GCOD_H***************/
@@ -529,8 +529,8 @@ CREATE TABLE jsharmony_srm (
   sr_name text NOT NULL,
   srm_snotes text,
   UNIQUE (sr_name, sm_id),
-  FOREIGN KEY (sm_id) REFERENCES jsharmony_sm(sm_id),
-  FOREIGN KEY (sr_name) REFERENCES jsharmony_sr(sr_name)
+  FOREIGN KEY (sm_id) REFERENCES jsharmony_sm(sm_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (sr_name) REFERENCES jsharmony_sr(sr_name) ON DELETE CASCADE
 );
 
 /***************UCOD_H***************/
