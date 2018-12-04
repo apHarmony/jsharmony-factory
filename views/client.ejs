@@ -30,7 +30,7 @@
     <a class="xsublogo" href="<%-ejsext.iif(req.isAuthenticated,'/client',req.jshsite.home_url)%>/"><img src="/images/portal_client.png" /></a>
   </div>
   
-  <%-jsh.RenderEJS('jsh_menu_horizontal',locals)%>
+  <%-jsh.RenderView('jsh_menu_horizontal',locals)%>
 </div>
 
 <div class="xbody"><%-ejsext.BreadCrumbs(req, jsh, modelid)%><% if(title){ %>
