@@ -14,8 +14,8 @@
       {"name":"SELECTOR","caption": "Menu Items Selector","target":"CRMSEL_SEL","bindings":{"cr_name":"cr_name"}}
     ],
     "fields":[
-      {"name":"cr_id","type":"bigint"},
-      {"name":"cr_name","type":"varchar","length":16,"actions":"B","key":1}
+      {"name":"cr_id","type":"bigint","control":"hidden"},
+      {"name":"cr_name","type":"varchar","length":16,"actions":"B","key":1,"control":"hidden"}
     ]
   }  
 }

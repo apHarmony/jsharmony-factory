@@ -14,8 +14,8 @@
       {"name":"SELECTOR","caption": "Menu Items Selector","target":"SRMSEL_SEL","bindings":{"sr_name":"sr_name"}}
     ],
     "fields":[
-      {"name":"sr_id","type":"bigint"},
-      {"name":"sr_name","type":"varchar","length":16,"actions":"B","key":1}
+      {"name":"sr_id","type":"bigint","control":"hidden"},
+      {"name":"sr_name","type":"varchar","length":16,"actions":"B","key":1,"control":"hidden"}
     ]
   }  
 }
