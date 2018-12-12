@@ -183,3 +183,42 @@ exports.DEV_DB_SCRIPTS = function (req, res, next) {
   }
   return next();
 }
+
+exports.DEV_DB_SCHEMA = function (req, res, next) {
+
+  var verb = req.method.toLowerCase();
+  if (!req.body) req.body = {};
+  
+  var Q = req.query;
+  var P = {};
+  if (req.body && ('data' in req.body)){
+    try{ P = JSON.parse(req.body.data); }
+    catch(ex){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+  }
+  var appsrv = this;
+  var jsh = this.jsh;
+  var dbtypes = appsrv.DB.types;
+  var model = jsh.getModel(req, 'DEV_DB_SCHEMA');
+  
+  if (!Helper.HasModelAccess(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
+
+  if (verb == 'get') {
+    if (!appsrv.ParamCheck('Q', Q, ['|db'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+    var dbid = Q.db;
+
+    if(dbid){
+      if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Databse ID'); return; }
+      var schema = jsh.DB[dbid].schema_definition;
+      res.end(JSON.stringify({ _success: 1, schema: schema }));
+    }
+    else {
+      var dbs = [];
+      for(var dbid in jsh.DB) dbs.push(dbid);
+      res.end(JSON.stringify({ _success: 1, dbs: dbs }));
+    }
+    
+    return;
+  }
+
+  return next();
+}

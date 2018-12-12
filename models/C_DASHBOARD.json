@@ -8,7 +8,7 @@
   "menu":"c_dashboard",
   "sqlselect": "select (select TXT_VAL from jsharmony.TXT where TXT_PROCESS='CMS' and TXT_ATTRIB='C_DASHBOARD') as MOTD from jsharmony.DUAL where 1=1 %%%DATALOCKS%%%",
   "nokey": 1,
-  "onload":"jsh.$root('.DASHBOARD_MOTD').html(jsh.App['xform_'+XBase['C_DASHBOARD'][0]].Data.MOTD);",
+  "onload":"jsh.$root('.DASHBOARD_MOTD').html(xmodel.controller.form.Data.MOTD);",
   "fields":[
     {"name":"motd","type":"varchar","actions":"B","control":"hidden","caption":"","datalock":{"C_ID":"ALWAYS"}},
     {"control":"html","value":"<div class=\"clear DASHBOARD_MOTD\"></div>"},

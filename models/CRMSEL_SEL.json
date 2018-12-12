@@ -19,7 +19,7 @@
 	    {"link":"js:jsh.App.CRMSEL_SEL.SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
 	    {"link":"js:jsh.App.CRMSEL_SEL.DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
 	],
-    "oninit": "jsh.App.CRMSEL_SEL.oninit(xform);",
+    "oninit": "jsh.App.CRMSEL_SEL.oninit(xmodel);",
     "oncommit": "jsh.App.CRMSEL_SEL.oncommit();",
 	"fields":[
 	  {"name":"cr_name","type":"varchar","length":16,"actions":"B","datalock":{"C_ID":"C_ID"},"control":"hidden","key":1,
@@ -33,11 +33,11 @@
        "caption":"ID","captionstyle": "text-align:right;"},
       {"name":"sm_id_parent","type":"bigint","actions": "B","control": "label",
        "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
-       "sql_sort":"(coalesce(sm_id_parent,0))",
+       "sqlsort":"(coalesce(sm_id_parent,0))",
        "caption":"Parent","captionstyle": "text-align:right;"},
       {"name":"sm_seq","type":"int","actions": "B","control": "label",
        "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
-       "sql_sort":"(coalesce(coalesce(sm_seq,sm_id),0))",
+       "sqlsort":"(coalesce(coalesce(sm_seq,sm_id),0))",
        "caption":"Seq","captionstyle": "text-align:right;"},
       {"name":"sm_name","type":"varchar","length":30,"actions": "B","control": "label",
        "validate":["Required"],"caption":"Name"},

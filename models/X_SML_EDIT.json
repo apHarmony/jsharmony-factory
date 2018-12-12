@@ -23,7 +23,7 @@
        },
       {"name":"sm_seq","type":"int","actions": "BIU","control": "textbox_VS","nl":1,
        "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
-       "sql_sort":"(coalesce(coalesce(sm_seq,sm_id),0))",
+       "sqlsort":"(coalesce(coalesce(sm_seq,sm_id),0))",
        "caption":"Sequence #"},
       {"name":"sm_sts","type":"varchar","length":8,"actions": "BIU","control": "dropdown_S","nl":1,
        "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
@@ -52,7 +52,7 @@
       // "caption":"Item ID #","captionstyle": "text-align:right;width:120px;"},
       //{"name":"sm_id_parent","type":"bigint","actions": "BIU","control": "textbox_VS","nl":1,
       // "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;width:60px;",
-      // "sql_sort":"(coalesce(sm_id_parent,0))",
+      // "sqlsort":"(coalesce(sm_id_parent,0))",
       // "caption":"Parent ID #"},
 
        {"control":"html","value":"<div style='padding-bottom:10px;'></div>" }

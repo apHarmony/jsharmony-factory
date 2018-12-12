@@ -172,7 +172,8 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
   jshconfig_main.private_apps = [
     {
       '/_funcs/LOG_DOWNLOAD': systemfuncs.LOG_DOWNLOAD,
-      '/_funcs/DEV_DB_SCRIPTS': systemfuncs.DEV_DB_SCRIPTS
+      '/_funcs/DEV_DB_SCRIPTS': systemfuncs.DEV_DB_SCRIPTS,
+      '/_funcs/DEV_DB_SCHEMA': systemfuncs.DEV_DB_SCHEMA
     }
   ];
   return jshconfig_main;

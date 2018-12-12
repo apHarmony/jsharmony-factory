@@ -212,7 +212,8 @@ INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 90022, 'ACTIVE', 900, 'DEV_X_HPL', 90042, 'Help Panels', NULL, NULL, 'X_HPL', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 90023, 'ACTIVE', 900, 'DEV_DB', 90043, 'DB SQL', NULL, NULL, 'DEV_DB', NULL, NULL);
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 90024, 'ACTIVE', 900, 'DEV_DB_SCRIPTS', 90044, 'DB Scripts', NULL, NULL, 'DEV_DB_SCRIPTS', NULL, NULL);
-INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 90025, 'ACTIVE', 900, 'DEV_MODELS', 90045, 'Model Viewer', NULL, NULL, 'DEV_MODELS', NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 90025, 'ACTIVE', 900, 'DEV_DB_SCHEMA', 90045, 'DB Schema', NULL, NULL, 'DEV_DB_SCHEMA', NULL, NULL);
+INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 90026, 'ACTIVE', 900, 'DEV_MODELS', 90046, 'Model Viewer', NULL, NULL, 'DEV_MODELS', NULL, NULL);
 
 INSERT INTO jsharmony_sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_subcmd) VALUES ('S', 70801, 'ACTIVE', 700, 'REPORTS_USERS', NULL, 'User Listing', NULL, NULL, '_report/RPE', NULL, NULL);
 
@@ -288,6 +289,7 @@ INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (90022, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (90023, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (90024, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (90025, 'DEV');
+INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (90026, 'DEV');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (80086, 'SYSADMIN');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (80095, 'SYSADMIN');
 INSERT INTO jsharmony_srm (sm_id, sr_name) VALUES (80096, 'SYSADMIN');

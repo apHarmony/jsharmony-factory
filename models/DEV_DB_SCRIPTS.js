@@ -1,8 +1,8 @@
 jsh.App.DEV_DB_SCRIPTS = { }
 
-jsh.App.DEV_DB_SCRIPTS.oninit = function(xform) {
+jsh.App.DEV_DB_SCRIPTS.oninit = function(xmodel) {
   var _this = this;
-  XPost.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { }, function (rslt) { //On success
+  XForm.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { }, function (rslt) { //On success
     if ('_success' in rslt) { 
       _this.RenderDBListing(rslt.dbs);
     }
@@ -34,7 +34,7 @@ jsh.App.DEV_DB_SCRIPTS.RenderDBListing = function(dbs){
 
 jsh.App.DEV_DB_SCRIPTS.GetScripts = function(dbid){
   var _this = this;
-  XPost.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { db: dbid }, function (rslt) { //On success
+  XForm.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { db: dbid }, function (rslt) { //On success
     if ('_success' in rslt) { 
       _this.RenderScripts(rslt.scripts);
     }
@@ -64,9 +64,9 @@ jsh.App.DEV_DB_SCRIPTS.RenderScripts = function(scripts){
   jobj.append(_this.RenderScriptsNode(scripts));
   //Generate "All" tree
   var allscripts = null;
-  for(var component in scripts){
-    if(allscripts===null) allscripts = scripts[component];
-    else allscripts = union(allscripts, scripts[component]);
+  for(var module in scripts){
+    if(allscripts===null) allscripts = scripts[module];
+    else allscripts = union(allscripts, scripts[module]);
   }
   allscripts = { "(All)": allscripts };
   jobj.children("ul").prepend(_this.RenderScriptsNode(allscripts).children());
@@ -124,7 +124,7 @@ jsh.App.DEV_DB_SCRIPTS.ExecScript = function(obj, mode){
     params.runas_password = runas_password;
   }
 
-  XPost.prototype.XExecutePost('../_funcs/DEV_DB_SCRIPTS', { data: JSON.stringify(params) }, function (rslt) { //On success
+  XForm.prototype.XExecutePost('../_funcs/DEV_DB_SCRIPTS', { data: JSON.stringify(params) }, function (rslt) { //On success
     if ('_success' in rslt) {
       if(mode=='read'){
         jsh.$root('.DEV_DB_SCRIPTS_rslt').text(params.scriptid+"\r\n-------------------------------\r\n"+rslt.src);

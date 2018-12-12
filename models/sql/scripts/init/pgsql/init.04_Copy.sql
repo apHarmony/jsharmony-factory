@@ -44,7 +44,8 @@ INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc,
 INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90022, 'ACTIVE', 900, 'DEV_X_HPL', 90042, 'Help Panels', NULL, NULL, 'X_HPL', NULL, NULL, NULL);
 INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90023, 'ACTIVE', 900, 'DEV_DB', 90043, 'DB SQL', NULL, NULL, 'DEV_DB', NULL, NULL, NULL);
 INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90024, 'ACTIVE', 900, 'DEV_DB_SCRIPTS', 90044, 'DB Scripts', NULL, NULL, 'DEV_DB_SCRIPTS', NULL, NULL, NULL);
-INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90025, 'ACTIVE', 900, 'DEV_MODELS', 90045, 'Model Viewer', NULL, NULL, 'DEV_MODELS', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90025, 'ACTIVE', 900, 'DEV_DB_SCHEMA', 90045, 'DB Schema', NULL, NULL, 'DEV_DB_SCHEMA', NULL, NULL, NULL);
+INSERT INTO sm (sm_utype, sm_id, sm_sts, sm_id_parent, sm_name, sm_seq, sm_desc, sm_descl, sm_descvl, sm_cmd, sm_image, sm_snotes, sm_subcmd) VALUES ('S', 90026, 'ACTIVE', 900, 'DEV_MODELS', 90046, 'Model Viewer', NULL, NULL, 'DEV_MODELS', NULL, NULL, NULL);
 
 
 
@@ -1182,6 +1183,7 @@ INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90022, NULL, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90023, NULL, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90024, NULL, 'DEV');
 INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90025, NULL, 'DEV');
+INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (90026, NULL, 'DEV');
 
 INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (2, NULL, 'SYSADMIN');
 INSERT INTO srm (sm_id, srm_snotes, sr_name) VALUES (200, NULL, 'SYSADMIN');

@@ -4,8 +4,8 @@ jsh.App.X_SMLW.sm_id_auto = 0;
 
 jsh.App.X_SMLW.oninit = function(){
   var _this = this;
-  XForms[XBase['X_SMLW'][0]].sm_id_auto = function () { 
-    if(!_this.sm_id_auto) _this.sm_id_auto = jsh.App['xform_'+XBase['X_SMLW'][0]].Data.sm_id_auto;
+  XModels[XBase['X_SMLW'][0]].sm_id_auto = function () { 
+    if(!_this.sm_id_auto) _this.sm_id_auto = xmodel.controller.form.Data.sm_id_auto;
     return _this.sm_id_auto;
   };
   jsh.$root('.sm_id_auto.tree').data('oncontextmenu','return '+jsh.getInstance()+'.App.X_SMLW.oncontextmenu(this, n);');
@@ -42,14 +42,14 @@ jsh.App.X_SMLW.sm_id_onchange = function(obj, newval) {
 }
 
 jsh.App.X_SMLW.select_sm_id_auto = function(newval,cb){
-  jsh.App.xform_X_SMLW.Data.cur_sm_id_auto = newval;
-  jsh.App.xform_X_SMLW.Data.sm_id_auto = newval;
+  xmodel.controller.form.Data.cur_sm_id_auto = newval;
+  xmodel.controller.form.Data.sm_id_auto = newval;
   this.sm_id_auto = newval;
-  jsh.XForm_Select(cb, XBase['X_SML_EDIT'][0]);
+  jsh.XPage.Select(cb, XBase['X_SML_EDIT'][0]);
 }
 
 jsh.App.X_SMLW.item_insert = function(context_item){
-  if(jsh.XForm_GetChanges().length) return XExt.Alert('Please save changes before adding menu items.');
+  if(jsh.XPage.GetChanges().length) return XExt.Alert('Please save changes before adding menu items.');
 
   var fields = {
     "sm_name": { "caption": "Menu ID", "actions": "BI", "type": "varchar", "length": 30, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(30)] },
@@ -73,11 +73,11 @@ jsh.App.X_SMLW.item_insert = function(context_item){
   }, function (success) { //onAccept
     _.each(fields, function (val, key) { data[key] = jsh.$root('.X_SMLW_InsertPopup .' + key).val(); });
     if (!validate.ValidateControls('I', data, '')) return;
-    XPost.prototype.XExecutePost('X_SMLW_INSERT', data, function (rslt) { //On success
+    XForm.prototype.XExecutePost('X_SMLW_INSERT', data, function (rslt) { //On success
       if ('_success' in rslt) { 
         jsh.App.X_SMLW.select_sm_id_auto(parseInt(rslt.X_SMLW_INSERT[0].sm_id_auto),function(){
           success(); 
-          jsh.XForm_Refresh(); 
+          jsh.XPage.Refresh(); 
         });
       }
     });
@@ -89,7 +89,7 @@ jsh.App.X_SMLW.item_insert = function(context_item){
 jsh.App.X_SMLW.getSMbyValue = function(sm_id_auto){
   var _this = this;
   if(!sm_id_auto) return null;
-  var lov = jsh.App['xform_'+XBase["X_SMLW"]]._LOVs.sm_id_auto;
+  var lov = xmodel.controller.form.LOVs.sm_id_auto;
   for(var i=0;i<lov.length;i++){
     if(lov[i][jsh.uimap.codeval]==sm_id_auto.toString()) return lov[i];
   }
@@ -99,7 +99,7 @@ jsh.App.X_SMLW.getSMbyValue = function(sm_id_auto){
 jsh.App.X_SMLW.getSMbyID = function(sm_id){
   var _this = this;
   if(!sm_id) return null;
-  var lov = jsh.App['xform_'+XBase["X_SMLW"]]._LOVs.sm_id_auto;
+  var lov = xmodel.controller.form.LOVs.sm_id_auto;
   for(var i=0;i<lov.length;i++){
     if(lov[i][jsh.uimap.codeid]==sm_id.toString()) return lov[i];
   }
@@ -108,8 +108,8 @@ jsh.App.X_SMLW.getSMbyID = function(sm_id){
 
 jsh.App.X_SMLW.item_delete = function(context_item){
   var _this = this;
-  if(jsh.XForm_GetChanges().length) return XExt.Alert('Please save changes before deleting menu items.');
-  var item_desc = XExt.getLOVTxt(jsh.App['xform_'+XBase["X_SMLW"]]._LOVs.sm_id_auto,context_item);
+  if(jsh.XPage.GetChanges().length) return XExt.Alert('Please save changes before deleting menu items.');
+  var item_desc = XExt.getLOVTxt(xmodel.controller.form.LOVs.sm_id_auto,context_item);
 
   var sm = jsh.App.X_SMLW.getSMbyValue(context_item);
   var sm_parent = null;
@@ -117,7 +117,7 @@ jsh.App.X_SMLW.item_delete = function(context_item){
   if(sm){
     if(!sm[jsh.uimap.codeparentid]) return XExt.Alert('Cannot delete root node');
     sm_parent = jsh.App.X_SMLW.getSMbyID(sm[jsh.uimap.codeparentid]);
-    var lov = jsh.App['xform_'+XBase["X_SMLW"]]._LOVs.sm_id_auto;
+    var lov = xmodel.controller.form.LOVs.sm_id_auto;
     for(var i=0;i<lov.length;i++){
       if(lov[i][jsh.uimap.codeparentid] && (lov[i][jsh.uimap.codeparentid].toString()==sm[jsh.uimap.codeid].toString())) has_children = true;
     }
@@ -132,11 +132,11 @@ jsh.App.X_SMLW.item_delete = function(context_item){
   }
 
   XExt.Confirm('Are you sure you want to delete \''+item_desc+'\'?',function(){ 
-    XPost.prototype.XExecutePost('X_SMLW_DELETE', { sm_id_auto: context_item }, function (rslt) { //On success
+    XForm.prototype.XExecutePost('X_SMLW_DELETE', { sm_id_auto: context_item }, function (rslt) { //On success
       if ('_success' in rslt) { 
         //Select parent
         if(new_sm_id_auto) XExt.TreeSelectNode(jsh.$root('.sm_id_auto.tree'),new_sm_id_auto);
-        jsh.XForm_Refresh(); 
+        jsh.XPage.Refresh(); 
       }
     });
   });

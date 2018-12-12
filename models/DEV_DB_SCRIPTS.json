@@ -10,6 +10,6 @@
     "caption": [ "", "Database Management", "Database Management" ],
     "hide_system_buttons":["print","help"],
     "fields":[	  ],
-    "oninit": "jsh.App.DEV_DB_SCRIPTS.oninit(xform);"
+    "oninit": "jsh.App.DEV_DB_SCRIPTS.oninit(xmodel);"
 	}
 }

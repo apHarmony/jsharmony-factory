@@ -25,11 +25,11 @@
      "validate": [ "Required" ],
 		 "caption":"Date of Birth","controlstyle":"width:80px;","captionstyle":"width:80px;"},
     {"nl": 1,"control":"button","value":"Run Report","controlstyle": "padding:3px 8px;",
-      "onclick": "jsh.XRunReport();"},
+      "onclick": "jsh.XPage.RunReport();"},
     {"control":"button","value":"Test Job Queue","controlstyle": "padding:3px 8px;",
-      "onclick": "jsh.XTestQueue();"},
+      "onclick": "jsh.XPage.TestQueue();"},
     {"control":"button","value":"Email to Cust","controlstyle": "padding:3px 8px;",
-      "onclick": "jsh.XRunQueue();"}
+      "onclick": "jsh.XPage.RunQueue();"}
   ],
   "reportdata" : {
     "cms_agreement": { "sql": "select TXT_VAL \"TXT_VAL\" from jsharmony.TXT where TXT_PROCESS='CMS' and TXT_ATTRIB='AGREEMENT'", "nodatalock": ["C_ID"] },

@@ -18,7 +18,7 @@
 	     "control":"label"},
       {"name":"hp_desc","type":"varchar","length":"50","caption":"Panel Name","controlstyle":"min-width:100px;","actions":"B",
        "sqlselect":"(select hp_desc from jsharmony.hp where hp.hp_code = h.hp_code)",
-       "sql_search":"(select hp_desc from jsharmony.hp where hp.hp_code = h.hp_code)"},
+       "sqlsearch":"(select hp_desc from jsharmony.hp where hp.hp_code = h.hp_code)"},
       {"name":"h_seq","type":"int","caption":"Seq","actions":"BU","control":"textbox_VS"},
       {"name":"h_index_a","type":"boolean","actions":"BU","control":"checkbox",
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Main System"},

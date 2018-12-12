@@ -3,7 +3,7 @@ jsh.App.DEV_MODELS = { }
 jsh.App.DEV_MODELS.Models = {};  //Populated onroute
 jsh.App.DEV_MODELS.ModelData = "{}";  //Populated onroute
 
-jsh.App.DEV_MODELS.oninit = function(xform) {
+jsh.App.DEV_MODELS.oninit = function(xmodel) {
   var _this = this;
   _this.Models = _this.Models.sort(function(a, b){
     if(a.toUpperCase() > b.toUpperCase()) return 1;

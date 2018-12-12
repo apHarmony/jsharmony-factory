@@ -29,7 +29,7 @@ jsHarmonyAgreement.prototype.Init = function(){
   var moment = jsh.moment;
   var XValidate = jsh.XValidate;
   var XFormat = jsh.XFormat;
-  var XPost = jsh.XPost;
+  var XForm = jsh.XForm;
 
   $(document).ready(function () {
     jsh.$root('.A_Date').val(moment().format('MM/DD/YYYY'));
@@ -56,7 +56,7 @@ jsHarmonyAgreement.prototype.Init = function(){
     var xf = new XFormStep1();
     xf.GetValues();
     xf.xvalidate = XFormStep1.prototype.xvalidate;
-    var xp = new XPost();
+    var xp = new XForm();
     xp.Data = xf;
     var valid = xp.Validate('I');
     delete xf.xvalidate;
@@ -107,7 +107,7 @@ jsHarmonyAgreement.prototype.Init = function(){
       'A_Name': data.A_Name,
       'A_DOB': data.A_DOB
     };
-    XPost.prototype.XExecutePost('../agreement/_sign', d, function (rslt) {
+    XForm.prototype.XExecutePost('../agreement/_sign', d, function (rslt) {
       if ('_success' in rslt) {
         window.location.href = jsh._BASEURL + 'agreement/welcome/';
       }

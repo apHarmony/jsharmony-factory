@@ -4,11 +4,10 @@ jsh.App.DEV_DB.DBs = {};  //Populated onroute
 
 jsh.App.DEV_DB.samples = {};
 jsh.App.DEV_DB.samples.mssql = {
-  "Select": "select * from c;\r\n\
-select * from cf;",
-  "List Tables": "",
-  "List Views": "",
-  "List Stored Procedures": "",
+  "Select": "select top 1000 * from TABLE;",
+  "List Tables": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='U' order by schema_name,table_name",
+  "List Views": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='V' order by schema_name,table_name",
+  "List Stored Procedures": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='P' order by schema_name,table_name",
   "Describe Table": "select * from information_schema.columns where table_name = 'xxxxx' order by ordinal_position",
   "Create Table": "",
   "Create View": "",
@@ -16,8 +15,7 @@ select * from cf;",
   "Create UCOD": "",
 };
 jsh.App.DEV_DB.samples.pgsql = {
-  "Select": "select * from c;\r\n\
-select * from cf;",
+  "Select": "select * from TABLE limit 1000;",
   "List Tables": "select table_schema||'.'||table_name as table from information_schema.tables where table_type='BASE TABLE' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
   "List Views": "select table_schema||'.'||table_name as view from information_schema.tables where table_type='VIEW' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
   "List Stored Procedures": "SELECT nspname||'.'||proname as proc from pg_catalog.pg_namespace n inner join pg_catalog.pg_proc p on pronamespace = n.oid where nspname not in ('information_schema','pg_catalog') order by nspname,proname",
@@ -46,8 +44,7 @@ insert into c(c_id,c_sts,c_name) values (1,'ACTIVE','ACME Industries');",
   "Create UCOD": "",
 };
 jsh.App.DEV_DB.samples.sqlite = {
-  "Select": "select * from c;\r\n\
-select * from cf;",
+  "Select": "select * from TABLE limit 1000;",
   "List Tables": "SELECT name FROM sqlite_master WHERE type='table' order by name;",
   "List Views": "SELECT name FROM sqlite_master WHERE type='view' order by name;",
   "Describe Table": "PRAGMA table_info(xxxxx);",
@@ -77,7 +74,7 @@ insert into ucod_c_sts(codseq,codeval,codetxt,codecode) values (1,'ACTIVE','Acti
 };
 
 
-jsh.App.DEV_DB.oninit = function(xform) {
+jsh.App.DEV_DB.oninit = function(xmodel) {
   var _this = this;
   jsh.$root('.DEV_DB_db').change(function(){
     var db = jsh.$root('.DEV_DB_db').val();
@@ -116,6 +113,9 @@ jsh.App.DEV_DB.RenderDBListing = function(dbs){
     jobj.append($('<option>',{value:db}).text(db));
   }
   if(dbs.length==1) jsh.App.DEV_DB.LoadScripts(dbs[0]);
+  else if(_GET['db']){
+    jobj.val(_GET['db']).change();
+  }
 }
 
 jsh.App.DEV_DB.LoadScripts = function(db){
@@ -134,7 +134,14 @@ jsh.App.DEV_DB.LoadScripts = function(db){
       option.val(sampleName);
       jSamples.append(option);
     }
-    if('Select' in samples){
+    if(_GET['table']){
+      var sql = samples['Select'];
+      sql = sql.replace('TABLE',_GET['table']);
+      jsh.$root('.DEV_DB_sql').val(sql);
+      jsh.$root('.DEV_DB_runsql').click();
+
+    }
+    else if('Select' in samples){
       jsh.$root('.DEV_DB_sql').val(samples['Select'])
     }
   }
@@ -156,7 +163,7 @@ jsh.App.DEV_DB.RunSQL = function(){
   }
   params.show_notices = true;
   params.nocontext = nocontext?'1':'';
-  XPost.prototype.XExecutePost('../_db/exec', params, function (rslt) { //On success
+  XForm.prototype.XExecutePost('../_db/exec', params, function (rslt) { //On success
     if ('_success' in rslt) { 
       var str = '';
       if(rslt._stats){

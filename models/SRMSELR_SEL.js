@@ -3,15 +3,15 @@ jsh.App.SRMSELR_SEL = { }
 jsh.App.SRMSELR_SEL.loadobj = '';
 jsh.App.SRMSELR_SEL.ops = [];
 
-jsh.App.SRMSELR_SEL.oninit = function(xform) {
-  jsh.App['xform_post_'+XBase['SRMSELR_SEL'][0]].GetReselectParams = function(){ 
+jsh.App.SRMSELR_SEL.oninit = function(xmodel) {
+  xmodel.controller.form.GetReselectParams = function(){ 
 	  var rslt = this.GetKeys(); 
 	  rslt.sm_id = this.Data.new_sm_id; 
 	  return rslt; 
   };
   var old_onbeforeunload = window.onbeforeunload;
   window.onbeforeunload = function(){
-	  jsh.XForm_RefreshParent();
+	  jsh.XPage.RefreshParent();
 	  if(old_onbeforeunload) old_onbeforeunload();
   }
 }
@@ -54,8 +54,7 @@ jsh.App.SRMSELR_SEL.ForAllChildren = function(add_op) {
   if (_this.loadobj) return;
   _this.ops = [];
   //First, Select All Unchecked
-  var jtbl = jsh.$root('.xform' + XBase['SRMSELR_SEL'][0] + '.xtbl');
-  var xform = jsh.App['xform_' + XBase['SRMSELR_SEL'][0]];
+  var jtbl = jsh.$root('.xform' + xmodel.class + '.xtbl');
   _this.loadobj = 'SRMSELR_SELLOADER';
   jsh.xLoader.StartLoading(_this.loadobj);
   
@@ -67,8 +66,9 @@ jsh.App.SRMSELR_SEL.ForAllChildren = function(add_op) {
   }
   
   function loadmore() {
-    if (xform.EOF) { fselectall(); return; }
-    xform.Load(xform.RowCount, undefined, loadmore);
+    var xgrid = xmodel.controller.grid;
+    if (xgrid.EOF) { fselectall(); return; }
+    xgrid.Load(xgrid.RowCount, undefined, loadmore);
   }
   loadmore();
 }

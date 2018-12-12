@@ -6,7 +6,7 @@
     "actions":"B",
     "dev":1,
     "caption":[0,"Model","Models"],
-    "sort":["vmodel_title"],
+    "sort":["^model_id"],
     "menu":"DEV_MODELS",
     "grid_expand_filter":1,
     "hide_system_buttons" : ["clear"],
@@ -15,7 +15,7 @@
       {"name":"model_title","type":"varchar","actions":"B","caption":"Title"},
       {"name":"model_layout","type":"varchar","actions":"B","caption":"Layout"},
       {"name":"model_table","type":"varchar","actions":"B","caption":"Table"},
-      {"name":"model_component","type":"varchar","actions":"B","caption":"Component"},
+      {"name":"model_module","type":"varchar","actions":"B","caption":"Module"},
       {"name":"model_parents","type":"varchar","actions":"B","caption":"Parents"}
     ]
   }

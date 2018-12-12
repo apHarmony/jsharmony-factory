@@ -24,7 +24,7 @@
 	    {"link":"js:jsh.App.SRMSELR_SEL.SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
 	    {"link":"js:jsh.App.SRMSELR_SEL.DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
 	  ],
-    "oninit": "jsh.App.SRMSELR_SEL.oninit(xform);",
+    "oninit": "jsh.App.SRMSELR_SEL.oninit(xmodel);",
     "oncommit": "jsh.App.SRMSELR_SEL.oncommit();",
 	  "fields":[
       {"name":"srmsel_sel","type":"smallint","actions":"BU","caption":"Select","control":"checkbox",
@@ -36,7 +36,7 @@
       {"name":"sm_id","type":"bigint","actions": "B","control": "hidden","key":1},
       {"name":"sr_seq","type":"int","actions": "B","control": "label",
        "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
-       "sql_sort":"(coalesce(coalesce(sr_seq,sr_id),0))",
+       "sqlsort":"(coalesce(coalesce(sr_seq,sr_id),0))",
        "caption":"Seq","captionstyle": "text-align:right;"},
       {"name":"sr_desc","type":"varchar","length":"255","actions":"B","control": "label",
        "validate":["Required"],"caption":"Description"}
