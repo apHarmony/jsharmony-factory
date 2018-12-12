@@ -8,7 +8,7 @@
   "popup":[900,350],
   "fields":[
 	  {"name":"d_id","type":"bigint","key": 1,"datalock":{"C_ID":"D_ID"},"control":"hidden"},
-    {"name":"d_scope_id","type":"bigint","actions":"I",
+    {"name":"d_scope_id","type":"bigint","actions":"BI",
      "control": "hidden","default": "js:_GET['d_scope_id']","caption": "","datalock": {"C_ID": "D_SCOPE_ID"}},
 	  {"control":"html","value":"<div style=\"font-size:18px;padding-bottom:12px;\">"},
 	  {"name":"title_b","type":"varchar","length":"255","control":"hidden","actions":"","caption":""},
@@ -58,7 +58,7 @@
 	   "control":"label_S",
 	   "caption":"Bytes"},
     {"name":"d_filename", "sqlselect":"jsharmony.d_filename(d_id, d_ext)",
-     "type":"varchar","length":67,"actions":"B"},
+     "type":"varchar","length":67,"actions":"B","control":"hidden"},
     {"name":"d_file","type":"file","actions":"BIU","nl":1,
      "control":"file_upload","caption":"Document",
      "controlparams": { 
