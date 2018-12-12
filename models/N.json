@@ -12,7 +12,7 @@
 	  "popup":[800,300],
 	  "fields":[
 	    {"name":"n_id","type":"bigint","key": 1,"datalock":{"C_ID":"N_ID"},"control":"hidden"},
-      {"name":"n_scope_id","type":"bigint","actions":"I","datalock":{"C_ID":"N_SCOPE_ID"},
+      {"name":"n_scope_id","type":"bigint","actions":"BI","datalock":{"C_ID":"N_SCOPE_ID"},
        "control": "hidden","default": "js:_GET['n_scope_id']","caption": ""},
 	    {"control":"html","value":"<div style=\"font-size:18px;padding-bottom:12px;\">"},
       {"name":"title_b","type":"varchar","length":255,"control":"hidden","actions":"","caption":""},
