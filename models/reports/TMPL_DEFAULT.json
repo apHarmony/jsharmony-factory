@@ -1,6 +1,6 @@
 {
-"comment":"TMPL_DEFAULT",
-  "layout": "exec",
+  "comment":"TMPL_DEFAULT",
+  "layout": "report",
   "actions": "B",
   "menu":"reports"
 }

@@ -1,6 +1,6 @@
 {
 "comment":"RPE",
-  "layout": "exec",
+  "layout": "report",
   "title": "User Listing",
   "inherits": "TMPL_DEFAULT",
   "actions": "BIU",

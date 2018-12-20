@@ -4,7 +4,7 @@ jsh.App.X_SMLW.sm_id_auto = 0;
 
 jsh.App.X_SMLW.oninit = function(){
   var _this = this;
-  XModels[XBase['X_SMLW'][0]].sm_id_auto = function () { 
+  XModels[modelid].sm_id_auto = function () { 
     if(!_this.sm_id_auto) _this.sm_id_auto = xmodel.controller.form.Data.sm_id_auto;
     return _this.sm_id_auto;
   };
@@ -45,7 +45,7 @@ jsh.App.X_SMLW.select_sm_id_auto = function(newval,cb){
   xmodel.controller.form.Data.cur_sm_id_auto = newval;
   xmodel.controller.form.Data.sm_id_auto = newval;
   this.sm_id_auto = newval;
-  jsh.XPage.Select(cb, XBase['X_SML_EDIT'][0]);
+  jsh.XPage.Select(cb, XBase[xmodel.namespace+'X_SML_EDIT'][0]);
 }
 
 jsh.App.X_SMLW.item_insert = function(context_item){

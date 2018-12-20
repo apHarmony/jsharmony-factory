@@ -34,16 +34,17 @@ var jsHarmonyFactoryConfig = require('./jsHarmonyFactoryConfig.js');
 var jsHarmonyFactoryJobProc = require('./models/_jobproc.js');
 
 var agreement = require('./models/_agreement.js');
-var systemfuncs = require('./models/_funcs.js');
 var menu = require('./models/_menu.js');
+var funcs = require('./models/_funcs.js');
 
-function jsHarmonyFactory(options){
+function jsHarmonyFactory(name, options){
   options = _.extend({
     mainSiteID: 'main',
     clientSiteID: 'client',
     clientPortal: false,
   }, options);
   var _this = this;
+  if(name) _this.name = name;
   _this.Config = new jsHarmonyFactoryConfig();
   _this.typename = 'jsHarmonyFactory';
 
@@ -53,12 +54,13 @@ function jsHarmonyFactory(options){
 
   _this.mainRouter = null;
   _this.clientRouter = null;
+  _this.funcs = new funcs(_this);;
 }
 
 jsHarmonyFactory.prototype = new jsHarmonyModule();
 
 jsHarmonyFactory.Application = function(options){
-  return (new jsHarmonyFactory(options)).Application();
+  return (new jsHarmonyFactory(null,options)).Application();
 }
 
 jsHarmonyFactory.prototype.onModuleAdded = function(jsh){
@@ -171,9 +173,10 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
   }
   jshconfig_main.private_apps = [
     {
-      '/_funcs/LOG_DOWNLOAD': systemfuncs.LOG_DOWNLOAD,
-      '/_funcs/DEV_DB_SCRIPTS': systemfuncs.DEV_DB_SCRIPTS,
-      '/_funcs/DEV_DB_SCHEMA': systemfuncs.DEV_DB_SCHEMA
+      '/_funcs/LOG_DOWNLOAD': _this.funcs.LOG_DOWNLOAD,
+      '/_funcs/DEV_DB_SCRIPTS': _this.funcs.DEV_DB_SCRIPTS,
+      '/_funcs/DEV_DB_SCHEMA': _this.funcs.DEV_DB_SCHEMA,
+      '/_funcs/DEV_MODELS': _this.funcs.DEV_MODELS
     }
   ];
   return jshconfig_main;

@@ -125,14 +125,13 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
   if (job.RQST_ATYPE != 'REPORT') return _this.SetJobResult(job, 'ERROR', 'RQST_ATYPE not REPORT', onComplete);
 
   //Process Report ID (make sure it's in the system)
-  var reportid = job.RQST_ANAME;
-  var modelid = '_report_' + reportid;
-  if (!thisapp.jsh.hasModel(undefined, modelid)) return _this.SetJobResult(job, 'ERROR', 'Report not found in collection', onComplete);
+  var fullmodelid = job.RQST_ANAME;
+  if (!thisapp.jsh.hasModel(undefined, fullmodelid)) return _this.SetJobResult(job, 'ERROR', 'Report not found in collection', onComplete);
   
   var rparams = {};
   if (job.RQST_PARMS) rparams = JSON.parse(job.RQST_PARMS);
 
-  thisapp.rptsrv.queueReport(undefined, undefined, modelid, rparams, {}, { db: _this.db, dbcontext: 'jobproc', errorHandler: function(num, txt){ return _this.SetJobResult(job, 'ERROR', txt, onComplete); } }, function (err, tmppath, dispose, dbdata) {
+  thisapp.rptsrv.queueReport(undefined, undefined, fullmodelid, rparams, {}, { db: _this.db, dbcontext: 'jobproc', errorHandler: function(num, txt){ return _this.SetJobResult(job, 'ERROR', txt, onComplete); } }, function (err, tmppath, dispose, dbdata) {
     if (err) return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete);
     /* Report Done */ 
     fs.stat(tmppath, function (err, stat) {
@@ -260,7 +259,7 @@ AppSrvJobProc.prototype.SetJobResult = function (job, RQST_RSLT, RQST_SNotes, on
   });
 }
 
-AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jrow, reportid, rparams) {
+AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jrow, fullmodelid, rparams) {
   var _this = this;
   var thisapp = this.AppSrv;
   var dbtypes = thisapp.DB.types;
@@ -268,7 +267,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   var jrow = _this.map_db_rslt(_jrow);
   var job_sql = this.AppSrv.getSQL('','jobproc_add_BEGIN');
   var job_sql_ptypes = [dbtypes.VarChar(8), dbtypes.VarChar(8), dbtypes.VarChar(50), dbtypes.VarChar(dbtypes.MAX)];
-  var job_sql_params = { 'RQST_SOURCE': jrow.RQST_SOURCE, 'RQST_ATYPE': 'REPORT', 'RQST_ANAME': reportid, 'RQST_PARMS': JSON.stringify(rparams) };
+  var job_sql_params = { 'RQST_SOURCE': jrow.RQST_SOURCE, 'RQST_ATYPE': 'REPORT', 'RQST_ANAME': fullmodelid, 'RQST_PARMS': JSON.stringify(rparams) };
   jobvalidate.AddValidator('_obj.RQST_SOURCE', 'RQST_SOURCE', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
   if ('D_SCOPE' in jrow) {
     //Add Document to Job

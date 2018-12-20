@@ -6,7 +6,7 @@
     "actions":"B", 
     "layout":"exec", 
     "dev":1,
-    "menu":"DEV_DB",
+    "menu":"DEV_DB_SCHEMA",
     "caption": [ "", "Database Schema", "Database Schema" ],
     "hide_system_buttons":["print","help"],
     "fields":[	  ],
