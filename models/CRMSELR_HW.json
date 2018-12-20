@@ -14,7 +14,7 @@
       {"name":"SELECTOR","caption": "Client Menu Item Privileges","target":"CRMSELR_SEL","bindings":{"sm_id":"sm_id"}}
     ],
     "fields":[
-      {"name":"sm_id","type":"bigint","actions":"B","key":1}
+      {"name":"sm_id","type":"bigint","actions":"B","key":1,"control":"hidden"}
     ]
   }  
 }
