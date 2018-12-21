@@ -32,12 +32,12 @@ jsHarmonyAgreement.prototype.Init = function(){
   var XForm = jsh.XForm;
 
   $(document).ready(function () {
-    jsh.$root('.A_Date').val(moment().format('MM/DD/YYYY'));
+    jsh.$root('.a_date').val(moment().format('MM/DD/YYYY'));
   
     //Sample Data
-    /*jsh.$root('.A_Name').val('Slim Stanowski');
-    jsh.$root('.A_DOB').val('9/9/1990');
-    jsh.$root('.A_Accept').prop('checked', true);*/
+    /*jsh.$root('.a_name').val('Slim Stanowski');
+    jsh.$root('.a_dob').val('9/9/1990');
+    jsh.$root('.a_accept').prop('checked', true);*/
     
     //Set up Step 1
     _.each(XFormStep1.prototype.Fields, function (field, fieldid) {
@@ -66,17 +66,17 @@ jsHarmonyAgreement.prototype.Init = function(){
   }
 
   function _v_IsChecked() {
-    var _val = jsh.$root('.A_Accept').prop('checked');
+    var _val = jsh.$root('.a_accept').prop('checked');
     if (!_val) return "E-signature must be checked to continue.";
     return "";
   }
 
   function XFormStep1() { }
   XFormStep1.prototype.Fields = {
-    "A_Accept": { "caption": "E-signature", "actions": "I", "validators": [XValidate._v_Required(), _v_IsChecked] },
-    "A_Date": { "caption": "Today's Date", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate()] },
-    "A_Name": { "caption": "Signed Name", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
-    "A_DOB": { "caption": "Date of Birth", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_IsValidDOB(), XValidate._v_MinDOB(18)] }
+    "a_accept": { "caption": "E-signature", "actions": "I", "validators": [XValidate._v_Required(), _v_IsChecked] },
+    "a_date": { "caption": "Today's Date", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate()] },
+    "a_name": { "caption": "Signed Name", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
+    "a_dob": { "caption": "Date of Birth", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_IsValidDOB(), XValidate._v_MinDOB(18)] }
   }
   XFormStep1.prototype.GetValues = function () {
     var _this = this;
@@ -104,8 +104,8 @@ jsHarmonyAgreement.prototype.Init = function(){
   //AppSrv Logic
   function SignAgreement(data) {
     var d = {
-      'A_Name': data.A_Name,
-      'A_DOB': data.A_DOB
+      'a_name': data.a_name,
+      'a_dob': data.a_dob
     };
     XForm.prototype.XExecutePost('../agreement/_sign', d, function (rslt) {
       if ('_success' in rslt) {

@@ -1,3 +1,3 @@
 jsh.App.HSHOWL = { }
 
-jsh.App.HSHOWL.RAN = false;
+jsh.App.HSHOWL.ran = false;
