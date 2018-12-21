@@ -26,7 +26,7 @@
        "sqlsort":"(coalesce(coalesce(sm_seq,sm_id),0))",
        "caption":"Sequence #"},
       {"name":"sm_sts","type":"varchar","length":8,"actions": "BIU","control": "dropdown_S","nl":1,
-       "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
+       "lov": {"sql":"select codeval, codetxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
        "controlstyle":"width:70px;","caption":"Status"},
       {"name":"privs","actions":"B","control": "label","nl":1,"caption":"Privileges",
         "value": ["<a href='<#=((data['sm_utype']=='S')?'X_SRMSELR_HW':'X_CRMSELR_HW')#>?action=edit&amp;sm_id=<#=data['sm_id']#>'",

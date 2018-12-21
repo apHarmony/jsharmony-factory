@@ -6,12 +6,12 @@
   "layout":"form", 
   "caption": [ "", "Request", "Requests" ],
 	"fields":[
-	  {"name":"RQ_ID","type":"bigint","key": 1},
+	  {"name":"rq_id","type":"bigint","key": 1},
     {"name":"RQ_FILE","type":"file","actions":"BIU","nl":1,
        "control":"file_upload","caption":"Document",
        "controlparams": { 
          "sqlparams": {
-                       "FILE_NAME": "RQ_ID"
+                       "FILE_NAME": "rq_id"
          },
          "data_folder": "RQ"
        },

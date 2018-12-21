@@ -12,8 +12,8 @@
     "sort":["^pe_name1"], 
     "buttons":[{"link":"add:CPE"}],
     "fields":[
-      {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"PE_ID"},"control":"hidden"},
-      {"name":"c_id","type":"bigint","datalock":{"C_ID":"C_ID"},"foreignkey":1,"control":"hidden"},
+      {"name":"pe_id","type":"bigint","key":1,"datalock":{"c_id":"pe_id"},"control":"hidden"},
+      {"name":"c_id","type":"bigint","datalock":{"c_id":"c_id"},"foreignkey":1,"control":"hidden"},
       {"name":"pe_sts","type":"varchar","length":"50","caption":"Status","actions":"B"},
       {"name":"pe_name1","type":"varchar","length":"255","caption":"User","actions":"B","link":"edit:CPE",
        "sqlselect":"(jsharmony.get_cpe_name(pe_id))","sqlsearch":"(jsharmony.get_cpe_name(pe_id))",

@@ -87,30 +87,30 @@ AppSrvJobProc.prototype.ExecJob = function (job, onComplete) {
   var _this = this;
   var thisapp = this.AppSrv;
   if (_this.jshFactory.Config.debug_params.email_override) {
-    if (job.EMAIL_TO) job.EMAIL_TO = _this.jshFactory.Config.debug_params.email_override;
-    if (job.EMAIL_CC) job.EMAIL_CC = _this.jshFactory.Config.debug_params.email_override;
-    if (job.EMAIL_BCC) job.EMAIL_BCC = _this.jshFactory.Config.debug_params.email_override;
+    if (job.email_to) job.email_to = _this.jshFactory.Config.debug_params.email_override;
+    if (job.email_cc) job.email_cc = _this.jshFactory.Config.debug_params.email_override;
+    if (job.email_bcc) job.email_bcc = _this.jshFactory.Config.debug_params.email_override;
   }
   if (_this.jshFactory.Config.debug_params.sms_override) {
-    if (job.SMS_TO) job.SMS_TO = _this.jshFactory.Config.debug_params.sms_override;
+    if (job.sms_to) job.sms_to = _this.jshFactory.Config.debug_params.sms_override;
   }
-  _this.jsh.Log.info('Starting Job #' + job.RQST_ID);
+  _this.jsh.Log.info('Starting Job #' + job.rqst_id);
   if (_this.jshFactory.Config.debug_params.job_requests) _this.jsh.Log.info(job);
   
-  if (job.RQST_ATYPE == 'REPORT') return _this.ExecJob_REPORT(job, onComplete);
-  else if (job.RQST_ATYPE == 'MESSAGE') return _this.ExecJob_MESSAGE(job, onComplete);
-  else return _this.SetJobResult(job, 'ERROR', 'RQST_ATYPE not Supported', onComplete);
+  if (job.rqst_atype == 'REPORT') return _this.ExecJob_REPORT(job, onComplete);
+  else if (job.rqst_atype == 'MESSAGE') return _this.ExecJob_MESSAGE(job, onComplete);
+  else return _this.SetJobResult(job, 'ERROR', 'rqst_atype not Supported', onComplete);
 };
 
 AppSrvJobProc.prototype.ExecJob_MESSAGE = function (job, onComplete) {
   var _this = this;
   var thisapp = this.AppSrv;
-  if (job.RQST_ATYPE != 'MESSAGE') return _this.SetJobResult(job, 'ERROR', 'RQST_ATYPE not MESSAGE', onComplete);
+  if (job.rqst_atype != 'MESSAGE') return _this.SetJobResult(job, 'ERROR', 'rqst_atype not MESSAGE', onComplete);
   
   var rparams = {};
-  if (job.RQST_PARMS){
+  if (job.rqst_parms){
     try{
-      rparams = JSON.parse(job.RQST_PARMS);
+      rparams = JSON.parse(job.rqst_parms);
     }
     catch (ex) {
       return _this.SetJobResult(job, 'ERROR', 'Error parsing JOB MESSAGE - Invalid JSON', onComplete);
@@ -122,14 +122,14 @@ AppSrvJobProc.prototype.ExecJob_MESSAGE = function (job, onComplete) {
 AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
   var _this = this;
   var thisapp = this.AppSrv;
-  if (job.RQST_ATYPE != 'REPORT') return _this.SetJobResult(job, 'ERROR', 'RQST_ATYPE not REPORT', onComplete);
+  if (job.rqst_atype != 'REPORT') return _this.SetJobResult(job, 'ERROR', 'rqst_atype not REPORT', onComplete);
 
   //Process Report ID (make sure it's in the system)
-  var fullmodelid = job.RQST_ANAME;
+  var fullmodelid = job.rqst_aname;
   if (!thisapp.jsh.hasModel(undefined, fullmodelid)) return _this.SetJobResult(job, 'ERROR', 'Report not found in collection', onComplete);
   
   var rparams = {};
-  if (job.RQST_PARMS) rparams = JSON.parse(job.RQST_PARMS);
+  if (job.rqst_parms) rparams = JSON.parse(job.rqst_parms);
 
   thisapp.rptsrv.queueReport(undefined, undefined, fullmodelid, rparams, {}, { db: _this.db, dbcontext: 'jobproc', errorHandler: function(num, txt){ return _this.SetJobResult(job, 'ERROR', txt, onComplete); } }, function (err, tmppath, dispose, dbdata) {
     if (err) return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete);
@@ -149,36 +149,36 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
   if (_this.jsh.Config.debug_params.report_debug) console.log(dbdata);
   var thisapp = this.AppSrv;
   var dbtypes = thisapp.DB.types;
-  var D_ID = null;
-  var RQ_ID = null;
+  var d_id = null;
+  var rq_id = null;
   var saveD = function (callback) {
     _this.db.Scalar('jobproc', "jobproc_saveD", 
       [dbtypes.VarChar(8), dbtypes.BigInt, dbtypes.VarChar(8), dbtypes.VarChar(255), dbtypes.BigInt], 
-      { 'D_SCOPE': job.D_SCOPE, 'D_SCOPE_ID': job.D_SCOPE_ID, 'D_CTGR': job.D_CTGR, 'D_Desc': job.D_Desc, 'D_SIZE': fsize }, function (err, rslt) {
+      { 'd_scope': job.d_scope, 'd_scope_id': job.d_scope_id, 'd_ctgr': job.d_ctgr, 'd_desc': job.d_desc, 'd_size': fsize }, function (err, rslt) {
       if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting document', -99999); }
-      if (err == null) D_ID = rslt;
+      if (err == null) d_id = rslt;
       callback(err);
     });
   };
   var saveRQ = function (callback) {
-    var rq_message = job.RQ_MESSAGE || '{}';
+    var rq_message = job.rq_message || '{}';
     var rq_message_obj = {};
     try {
       rq_message_obj = JSON.parse(rq_message);
     }
     catch (ex) {
-      _this.jsh.Log.error('Error parsing RQ_MESSAGE: ' + rq_message_obj);
+      _this.jsh.Log.error('Error parsing rq_message: ' + rq_message_obj);
     }
     _this.db.Scalar('jobproc', "jobproc_saveRQ", 
-      [dbtypes.VarChar(255)], { 'RQ_NAME': job.RQ_NAME }, function (err, rslt) {
+      [dbtypes.VarChar(255)], { 'rq_name': job.rq_name }, function (err, rslt) {
       if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting remote queue request', -99999); }
       if (err == null) {
-        RQ_ID = rslt;
-        rq_message_obj.url = '/_dl/RQ/' + RQ_ID + '/RQ_FILE';
+        rq_id = rslt;
+        rq_message_obj.url = '/_dl/RQ/' + rq_id + '/RQ_FILE';
         rq_message_obj.filetype = 'pdf';
-        _this.db.Command('jobproc', "jobproc_saveRQ_MESSAGE", 
+        _this.db.Command('jobproc', "jobproc_saverq_message", 
           [dbtypes.BigInt, dbtypes.VarChar(dbtypes.MAX)], 
-          { 'RQ_ID': RQ_ID, 'RQ_MESSAGE': JSON.stringify(rq_message_obj) }, function (err, rslt) {
+          { 'rq_id': rq_id, 'rq_message': JSON.stringify(rq_message_obj) }, function (err, rslt) {
           callback(err);
         });
       }
@@ -188,7 +188,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
   var saveN = function (callback) {
     _this.db.Command('jobproc', "jobproc_saveN", 
       [dbtypes.VarChar(8), dbtypes.BigInt, dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX)], 
-      { 'N_SCOPE': job.N_SCOPE, 'N_SCOPE_ID': job.N_SCOPE_ID, 'N_TYPE': job.N_TYPE, 'N_Note': job.N_Note }, function (err, rslt) {
+      { 'n_scope': job.n_scope, 'n_scope_id': job.n_scope_id, 'n_type': job.n_type, 'n_note': job.n_note }, function (err, rslt) {
       callback(err);
     });
   };
@@ -198,51 +198,51 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
     var attachments = [];
     async.waterfall([
       function(cb){
-        if (job.EMAIL_ATTACH && tmppath){
+        if (job.email_attach && tmppath){
           fs.exists(tmppath, function(exists){
             if(!exists) return cb(new Error('Report output does not exist'));
-            attachments.push({ filename: 'D' + (D_ID||'0') + '.pdf', content: fs.createReadStream(tmppath) });
+            attachments.push({ filename: 'D' + (d_id||'0') + '.pdf', content: fs.createReadStream(tmppath) });
             return cb();
           });
         }
         else return cb();
       },
       function(cb){
-        if (job.EMAIL_D_ID){
-          var email_d_id_path = _this.jsh.Config.datadir + '/D/D_FILE_' + job.EMAIL_D_ID;
+        if (job.email_d_id){
+          var email_d_id_path = _this.jsh.Config.datadir + '/D/D_FILE_' + job.email_d_id;
           fs.exists(email_d_id_path, function(exists){
-            if(!exists) return cb(new Error('Email D_ID does not exist'));
-            attachments.push({ filename: job.EMAIL_D_FileName, content: fs.createReadStream(email_d_id_path) });
+            if(!exists) return cb(new Error('Email d_id does not exist'));
+            attachments.push({ filename: job.email_d_filename, content: fs.createReadStream(email_d_id_path) });
             return cb();
           });
         }
         else return cb();
       },
       function(cb){
-        if (job.EMAIL_TXT_ATTRIB) thisapp.jsh.SendTXTEmail('jobproc', job.EMAIL_TXT_ATTRIB, job.EMAIL_TO, job.EMAIL_CC, job.EMAIL_BCC, attachments, dbdata, cb);
-        else thisapp.jsh.SendBaseEmail('jobproc', job.EMAIL_SUBJECT, job.EMAIL_TEXT, job.EMAIL_HTML, job.EMAIL_TO, job.EMAIL_CC, job.EMAIL_BCC, attachments, dbdata, cb);
+        if (job.email_txt_attrib) thisapp.jsh.SendTXTEmail('jobproc', job.email_txt_attrib, job.email_to, job.email_cc, job.email_bcc, attachments, dbdata, cb);
+        else thisapp.jsh.SendBaseEmail('jobproc', job.email_subject, job.email_text, job.email_html, job.email_to, job.email_cc, job.email_bcc, attachments, dbdata, cb);
       }
     ], callback);
   }
   var sendSMS = function (callback) {
     //Add attachment??
     if (_this.jshFactory.Config.debug_params.no_job_sms) return callback(null);
-    if (job.SMS_TXT_ATTRIB) SMS.SendTXTSMS('jobproc', thisapp.jsh, job.SMS_TXT_ATTRIB, job.SMS_TO, dbdata, callback);
-    else SMS.SendBaseSMS('jobproc', thisapp.jsh, job.SMS_BODY, job.SMS_TO, dbdata, callback);
+    if (job.sms_txt_attrib) SMS.SendTXTSMS('jobproc', thisapp.jsh, job.sms_txt_attrib, job.sms_to, dbdata, callback);
+    else SMS.SendBaseSMS('jobproc', thisapp.jsh, job.sms_body, job.sms_to, dbdata, callback);
   }
   
   var execarr = [];
-  if (job.D_SCOPE && tmppath) {
+  if (job.d_scope && tmppath) {
     execarr.push(saveD);
-    execarr.push(function (cb) { HelperFS.copyFile(tmppath, (_this.jsh.Config.datadir + 'D/d_file_' + D_ID), cb); });
+    execarr.push(function (cb) { HelperFS.copyFile(tmppath, (_this.jsh.Config.datadir + 'D/d_file_' + d_id), cb); });
   }
-  if (job.RQ_NAME && tmppath) {
+  if (job.rq_name && tmppath) {
     execarr.push(saveRQ);
-    execarr.push(function (cb) { HelperFS.copyFile(tmppath, (_this.jsh.Config.datadir + 'RQ/rq_file_' + RQ_ID), cb); });
+    execarr.push(function (cb) { HelperFS.copyFile(tmppath, (_this.jsh.Config.datadir + 'RQ/rq_file_' + rq_id), cb); });
   }
-  if (job.N_SCOPE) execarr.push(saveN);
-  if (job.SMS_TO) execarr.push(sendSMS);
-  if (job.EMAIL_TO) execarr.push(sendEMAIL);
+  if (job.n_scope) execarr.push(saveN);
+  if (job.sms_to) execarr.push(sendSMS);
+  if (job.email_to) execarr.push(sendEMAIL);
   
   async.waterfall(execarr, function (err, rslt) {
     if(err && _this.jsh.Config.debug_params.report_debug) console.log(err);
@@ -251,10 +251,10 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
   });
 }
 
-AppSrvJobProc.prototype.SetJobResult = function (job, RQST_RSLT, RQST_SNotes, onComplete) {
-  this.jsh.Log.info('Completed Job #' + job.RQST_ID + ': ' + RQST_RSLT + (RQST_SNotes ? ' - ' + RQST_SNotes : ''));
+AppSrvJobProc.prototype.SetJobResult = function (job, rqst_rslt, rqst_snotes, onComplete) {
+  this.jsh.Log.info('Completed Job #' + job.rqst_id + ': ' + rqst_rslt + (rqst_snotes ? ' - ' + rqst_snotes : ''));
   var dbtypes = this.AppSrv.DB.types;
-  this.AppSrv.ExecRow('jobproc', "jobproc_jobresult", [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], { 'RQST_RSLT': RQST_RSLT, 'RQST_SNotes': RQST_SNotes, 'RQST_ID': job.RQST_ID }, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', "jobproc_jobresult", [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], { 'rqst_rslt': rqst_rslt, 'rqst_snotes': rqst_snotes, 'rqst_id': job.rqst_id }, function (err, rslt) {
     onComplete();
   });
 }
@@ -267,94 +267,94 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   var jrow = _this.map_db_rslt(_jrow);
   var job_sql = this.AppSrv.getSQL('','jobproc_add_BEGIN');
   var job_sql_ptypes = [dbtypes.VarChar(8), dbtypes.VarChar(8), dbtypes.VarChar(50), dbtypes.VarChar(dbtypes.MAX)];
-  var job_sql_params = { 'RQST_SOURCE': jrow.RQST_SOURCE, 'RQST_ATYPE': 'REPORT', 'RQST_ANAME': fullmodelid, 'RQST_PARMS': JSON.stringify(rparams) };
-  jobvalidate.AddValidator('_obj.RQST_SOURCE', 'RQST_SOURCE', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
-  if ('D_SCOPE' in jrow) {
+  var job_sql_params = { 'rqst_source': jrow.rqst_source, 'rqst_atype': 'REPORT', 'rqst_aname': fullmodelid, 'rqst_parms': JSON.stringify(rparams) };
+  jobvalidate.AddValidator('_obj.rqst_source', 'rqst_source', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
+  if ('d_scope' in jrow) {
     //Add Document to Job
-    if (!('D_SCOPE_ID' in jrow) || !('D_CTGR' in jrow) || !('D_Desc' in jrow)) throw new Error('Job with D_SCOPE requires D_SCOPE_ID, D_CTGR, and D_Desc');
+    if (!('d_scope_id' in jrow) || !('d_ctgr' in jrow) || !('d_desc' in jrow)) throw new Error('Job with d_scope requires d_scope_id, d_ctgr, and d_desc');
     job_sql += this.AppSrv.getSQL('','jobproc_add_RQST_D');
     job_sql_ptypes.push(dbtypes.VarChar(8));
-    job_sql_params['D_SCOPE'] = jrow.D_SCOPE;
-    jobvalidate.AddValidator('_obj.D_SCOPE', 'D_SCOPE', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
+    job_sql_params['d_scope'] = jrow.d_scope;
+    jobvalidate.AddValidator('_obj.d_scope', 'd_scope', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.BigInt);
-    job_sql_params['D_SCOPE_ID'] = jrow.D_SCOPE_ID;
-    jobvalidate.AddValidator('_obj.D_SCOPE_ID', 'D_SCOPE_ID', 'B', [XValidate._v_IsNumeric(), XValidate._v_Required()]);
+    job_sql_params['d_scope_id'] = jrow.d_scope_id;
+    jobvalidate.AddValidator('_obj.d_scope_id', 'd_scope_id', 'B', [XValidate._v_IsNumeric(), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.VarChar(8));
-    job_sql_params['D_CTGR'] = jrow.D_CTGR;
-    jobvalidate.AddValidator('_obj.D_CTGR', 'D_CTGR', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
+    job_sql_params['d_ctgr'] = jrow.d_ctgr;
+    jobvalidate.AddValidator('_obj.d_ctgr', 'd_ctgr', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.VarChar(255));
-    job_sql_params['D_Desc'] = jrow.D_Desc;
-    jobvalidate.AddValidator('_obj.D_Desc', 'D_Desc', 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
+    job_sql_params['d_desc'] = jrow.d_desc;
+    jobvalidate.AddValidator('_obj.d_desc', 'd_desc', 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
   }
-  if ('RQ_NAME' in jrow) {
+  if ('rq_name' in jrow) {
     //Add Document to Job
     job_sql += this.AppSrv.getSQL('','jobproc_add_RQST_RQ');
     job_sql_ptypes.push(dbtypes.VarChar(255));
-    job_sql_params['RQ_NAME'] = jrow.RQ_NAME;
-    jobvalidate.AddValidator('_obj.RQ_NAME', 'RQ_NAME', 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
+    job_sql_params['rq_name'] = jrow.rq_name;
+    jobvalidate.AddValidator('_obj.rq_name', 'rq_name', 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.VarChar(dbtypes.MAX));
-    job_sql_params['RQ_MESSAGE'] = jrow.RQ_MESSAGE || '';
-    jobvalidate.AddValidator('_obj.RQ_MESSAGE', 'RQ_MESSAGE', 'B', [XValidate._v_MaxLength(8)]);
+    job_sql_params['rq_message'] = jrow.rq_message || '';
+    jobvalidate.AddValidator('_obj.rq_message', 'rq_message', 'B', [XValidate._v_MaxLength(8)]);
   }
-  if ('EMAIL_TO' in jrow) {
+  if ('email_to' in jrow) {
     //Add Email to Job
-    if (!('EMAIL_TXT_ATTRIB' in jrow) && !('EMAIL_SUBJECT' in jrow)) throw new Error('Job with EMAIL_TO requires EMAIL_TXT_ATTRIB or EMAIL_SUBJECT');
+    if (!('email_txt_attrib' in jrow) && !('email_subject' in jrow)) throw new Error('Job with email_to requires email_txt_attrib or email_subject');
     job_sql += this.AppSrv.getSQL('','jobproc_add_RQST_EMAIL');
     job_sql_ptypes.push(dbtypes.VarChar(32));
-    job_sql_params['EMAIL_TXT_ATTRIB'] = jrow.EMAIL_TXT_ATTRIB;
-    jobvalidate.AddValidator('_obj.EMAIL_TXT_ATTRIB', 'EMAIL_TXT_ATTRIB', 'B', [XValidate._v_MaxLength(32)]);
+    job_sql_params['email_txt_attrib'] = jrow.email_txt_attrib;
+    jobvalidate.AddValidator('_obj.email_txt_attrib', 'email_txt_attrib', 'B', [XValidate._v_MaxLength(32)]);
     job_sql_ptypes.push(dbtypes.VarChar(255));
-    job_sql_params['EMAIL_TO'] = jrow.EMAIL_TO;
-    jobvalidate.AddValidator('_obj.EMAIL_TO', 'EMAIL_TO', 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
+    job_sql_params['email_to'] = jrow.email_to;
+    jobvalidate.AddValidator('_obj.email_to', 'email_to', 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.VarChar(255));
-    job_sql_params['EMAIL_CC'] = jrow.EMAIL_CC || null;
-    jobvalidate.AddValidator('_obj.EMAIL_CC', 'EMAIL_CC', 'B', [XValidate._v_MaxLength(255)]);
+    job_sql_params['email_cc'] = jrow.email_cc || null;
+    jobvalidate.AddValidator('_obj.email_cc', 'email_cc', 'B', [XValidate._v_MaxLength(255)]);
     job_sql_ptypes.push(dbtypes.VarChar(255));
-    job_sql_params['EMAIL_BCC'] = jrow.EMAIL_BCC || null;
-    jobvalidate.AddValidator('_obj.EMAIL_BCC', 'EMAIL_BCC', 'B', [XValidate._v_MaxLength(255)]);
+    job_sql_params['email_bcc'] = jrow.email_bcc || null;
+    jobvalidate.AddValidator('_obj.email_bcc', 'email_bcc', 'B', [XValidate._v_MaxLength(255)]);
     job_sql_ptypes.push(dbtypes.SmallInt);
-    job_sql_params['EMAIL_ATTACH'] = jrow.EMAIL_ATTACH;
-    jobvalidate.AddValidator('_obj.EMAIL_ATTACH', 'EMAIL_ATTACH', 'B', [XValidate._v_IsNumeric()]);
+    job_sql_params['email_attach'] = jrow.email_attach;
+    jobvalidate.AddValidator('_obj.email_attach', 'email_attach', 'B', [XValidate._v_IsNumeric()]);
     job_sql_ptypes.push(dbtypes.VarChar(500));
-    job_sql_params['EMAIL_SUBJECT'] = jrow.EMAIL_SUBJECT || null;
-    jobvalidate.AddValidator('_obj.EMAIL_SUBJECT', 'EMAIL_SUBJECT', 'B', [XValidate._v_MaxLength(500)]);
+    job_sql_params['email_subject'] = jrow.email_subject || null;
+    jobvalidate.AddValidator('_obj.email_subject', 'email_subject', 'B', [XValidate._v_MaxLength(500)]);
     job_sql_ptypes.push(dbtypes.VarChar(dbtypes.MAX));
-    job_sql_params['EMAIL_TEXT'] = jrow.EMAIL_TEXT || null;
+    job_sql_params['email_text'] = jrow.email_text || null;
     job_sql_ptypes.push(dbtypes.VarChar(dbtypes.MAX));
-    job_sql_params['EMAIL_HTML'] = jrow.EMAIL_HTML || null;
+    job_sql_params['email_html'] = jrow.email_html || null;
     job_sql_ptypes.push(dbtypes.BigInt);
-    job_sql_params['EMAIL_D_ID'] = jrow.EMAIL_D_ID || null;
-    jobvalidate.AddValidator('_obj.EMAIL_D_ID', 'EMAIL_D_ID', 'B', [XValidate._v_IsNumeric()]);
+    job_sql_params['email_d_id'] = jrow.email_d_id || null;
+    jobvalidate.AddValidator('_obj.email_d_id', 'email_d_id', 'B', [XValidate._v_IsNumeric()]);
   }
-  if ('SMS_TO' in jrow) {
+  if ('sms_to' in jrow) {
     //Add SMS to Job
-    if (!('SMS_TXT_ATTRIB' in jrow) && !('SMS_BODY' in jrow)) throw new Error('Job with SMS_TO requires SMS_TXT_ATTRIB or SMS_BODY');
+    if (!('sms_txt_attrib' in jrow) && !('sms_body' in jrow)) throw new Error('Job with sms_to requires sms_txt_attrib or sms_body');
     job_sql += this.AppSrv.getSQL('','jobproc_add_RQST_SMS');
     job_sql_ptypes.push(dbtypes.VarChar(32));
-    job_sql_params['SMS_TXT_ATTRIB'] = jrow.SMS_TXT_ATTRIB;
-    jobvalidate.AddValidator('_obj.SMS_TXT_ATTRIB', 'SMS_TXT_ATTRIB', 'B', [XValidate._v_MaxLength(32)]);
+    job_sql_params['sms_txt_attrib'] = jrow.sms_txt_attrib;
+    jobvalidate.AddValidator('_obj.sms_txt_attrib', 'sms_txt_attrib', 'B', [XValidate._v_MaxLength(32)]);
     job_sql_ptypes.push(dbtypes.VarChar(255));
-    job_sql_params['SMS_TO'] = jrow.SMS_TO;
-    jobvalidate.AddValidator('_obj.SMS_TO', 'SMS_TO', 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
+    job_sql_params['sms_to'] = jrow.sms_to;
+    jobvalidate.AddValidator('_obj.sms_to', 'sms_to', 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.VarChar(dbtypes.MAX));
-    job_sql_params['SMS_BODY'] = jrow.SMS_BODY || null;
+    job_sql_params['sms_body'] = jrow.sms_body || null;
   }
-  if ('N_SCOPE' in jrow) {
+  if ('n_scope' in jrow) {
     //Add Note to Job
-    if (!('N_SCOPE_ID' in jrow) || !('N_TYPE' in jrow) || !('N_Note' in jrow)) throw new Error('Job with N_SCOPE requires N_SCOPE_ID, N_TYPE, and N_Note');
+    if (!('n_scope_id' in jrow) || !('n_type' in jrow) || !('n_note' in jrow)) throw new Error('Job with n_scope requires n_scope_id, n_type, and n_note');
     job_sql += this.AppSrv.getSQL('','jobproc_add_RQST_N');
     job_sql_ptypes.push(dbtypes.VarChar(8));
-    job_sql_params['N_SCOPE'] = jrow.N_SCOPE;
-    jobvalidate.AddValidator('_obj.N_SCOPE', 'N_SCOPE', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
+    job_sql_params['n_scope'] = jrow.n_scope;
+    jobvalidate.AddValidator('_obj.n_scope', 'n_scope', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.BigInt);
-    job_sql_params['N_SCOPE_ID'] = jrow.N_SCOPE_ID;
-    jobvalidate.AddValidator('_obj.N_SCOPE_ID', 'N_SCOPE_ID', 'B', [XValidate._v_IsNumeric(), XValidate._v_Required()]);
+    job_sql_params['n_scope_id'] = jrow.n_scope_id;
+    jobvalidate.AddValidator('_obj.n_scope_id', 'n_scope_id', 'B', [XValidate._v_IsNumeric(), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.VarChar(8));
-    job_sql_params['N_TYPE'] = jrow.N_TYPE;
-    jobvalidate.AddValidator('_obj.N_TYPE', 'N_TYPE', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
+    job_sql_params['n_type'] = jrow.n_type;
+    jobvalidate.AddValidator('_obj.n_type', 'n_type', 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.VarChar(dbtypes.MAX));
-    job_sql_params['N_Note'] = jrow.N_Note;
-    jobvalidate.AddValidator('_obj.N_Note', 'N_Note', 'B', [XValidate._v_Required()]);
+    job_sql_params['n_note'] = jrow.n_note;
+    jobvalidate.AddValidator('_obj.n_note', 'n_note', 'B', [XValidate._v_Required()]);
   }
   job_sql += this.AppSrv.getSQL('','jobproc_add_END');
   var verrors = _.merge(verrors, jobvalidate.Validate('B', job_sql_params));
@@ -370,11 +370,11 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   return true;
 };
 
-AppSrvJobProc.prototype.SetSubscriberQueueResult = function (RQ_ID, RQ_RSLT, RQ_SNotes, onComplete) {
+AppSrvJobProc.prototype.SetSubscriberQueueResult = function (rq_id, rq_rslt, rq_snotes, onComplete) {
   var _this = this;
-  _this.jsh.Log.info('Completed Queue Task #' + RQ_ID + ': ' + RQ_RSLT + (RQ_SNotes ? ' - ' + RQ_SNotes : ''));
+  _this.jsh.Log.info('Completed Queue Task #' + rq_id + ': ' + rq_rslt + (rq_snotes ? ' - ' + rq_snotes : ''));
   var dbtypes = this.AppSrv.DB.types;
-  this.AppSrv.ExecRow('jobproc', "jobproc_queueresult", [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], { 'RQ_RSLT': RQ_RSLT, 'RQ_SNotes': RQ_SNotes, 'RQ_ID': RQ_ID }, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', "jobproc_queueresult", [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], { 'rq_rslt': rq_rslt, 'rq_snotes': rq_snotes, 'rq_id': rq_id }, function (err, rslt) {
     if (err) { _this.jsh.Log.error(err); }
     if (onComplete) onComplete();
   });
@@ -384,12 +384,12 @@ AppSrvJobProc.prototype.SubscribeToQueue = function (req, res, queueid) {
   //Check if queue has a message, otherwise, add to subscriptions
   var _this = this;
   var dbtypes = this.AppSrv.DB.types;
-  this.AppSrv.ExecRow('jobproc', "jobproc_queuecheck", [dbtypes.VarChar(255)], { 'RQ_NAME': queueid }, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', "jobproc_queuecheck", [dbtypes.VarChar(255)], { 'rq_name': queueid }, function (err, rslt) {
     if (err != null) { _this.jsh.Log.error(err); return onComplete(null); }
     if ((rslt != null) && (rslt.length == 1) && (rslt[0])) {
       var queuetask = _this.map_db_rslt(rslt[0]);
       _this.jsh.Log.info('Notifying subscriber ' + queueid);
-      var msg = JSON.stringify({ ID: queuetask.RQ_ID, MESSAGE: queuetask.RQ_MESSAGE });
+      var msg = JSON.stringify({ ID: queuetask.rq_id, MESSAGE: queuetask.rq_message });
       res.send(msg);
     }
     else {
@@ -412,14 +412,14 @@ AppSrvJobProc.prototype.CheckSubscriberQueue = function (onComplete) {
     if ((rslt != null) && (rslt.length == 1) && (rslt[0])) {
       async.each(rslt[0], function (row, queue_cb) {
         var queuetask = _this.map_db_rslt(row);
-        if (!(queuetask.RQ_NAME in _this.AppSrv.jsh.Config.queues)) {
-          _this.SetSubscriberQueueResult(queuetask.RQ_ID, 'ERROR', 'Queue not set up in config', queue_cb);
+        if (!(queuetask.rq_name in _this.AppSrv.jsh.Config.queues)) {
+          _this.SetSubscriberQueueResult(queuetask.rq_id, 'ERROR', 'Queue not set up in config', queue_cb);
         }
         else {
-          if(!_this.QueueHistory[queuetask.RQ_NAME]) _this.jsh.Log.info('Message for queue ' + queuetask.RQ_NAME);
-          _this.QueueHistory[queuetask.RQ_NAME] = 1;
-          var msg = JSON.stringify({ ID: queuetask.RQ_ID, MESSAGE: queuetask.RQ_MESSAGE });
-          _this.AppSrv.SendQueue(queuetask.RQ_NAME, msg);
+          if(!_this.QueueHistory[queuetask.rq_name]) _this.jsh.Log.info('Message for queue ' + queuetask.rq_name);
+          _this.QueueHistory[queuetask.rq_name] = 1;
+          var msg = JSON.stringify({ ID: queuetask.rq_id, MESSAGE: queuetask.rq_message });
+          _this.AppSrv.SendQueue(queuetask.rq_name, msg);
           queue_cb(null);
         }
       },
@@ -434,7 +434,7 @@ AppSrvJobProc.prototype.CheckSubscriberQueue = function (onComplete) {
 AppSrvJobProc.prototype.PopQueue = function (req, res, queueid, queueresult, onComplete) {
   var _this = this;
   var dbtypes = this.AppSrv.DB.types;
-  this.AppSrv.ExecScalar('jobproc', "jobproc_queuepop", [dbtypes.BigInt, dbtypes.VarChar(255)], { 'RQ_ID': queueresult.ID, 'RQ_NAME': queueid }, function (err, rslt) {
+  this.AppSrv.ExecScalar('jobproc', "jobproc_queuepop", [dbtypes.BigInt, dbtypes.VarChar(255)], { 'rq_id': queueresult.ID, 'rq_name': queueid }, function (err, rslt) {
     if (err) { return Helper.GenError(req, res, -99999, err); }
     else if ((rslt == null) || (rslt.length != 1) || (!rslt[0])) { return Helper.GenError(req, res, -99999, 'Queue item ID does not exist or has already been resulted.'); }
     if (onComplete) onComplete(null);

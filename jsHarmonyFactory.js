@@ -78,12 +78,12 @@ jsHarmonyFactory.prototype.Init = function(cb){
   if(_this.clientPortal){
     var prevClientConfig = this.jsh.Sites[_this.clientSiteID];
     if(prevClientConfig && prevClientConfig.initialized) throw new Error('jsHarmony Factory could not initialize site "'+_this.clientSiteID+'": Already initialized');
-    this.jsh.Sites[_this.clientSiteID] = new jsHarmonySite(_this.clientSiteID, _this.GetDefaultClientConfig());
+    this.jsh.Sites[_this.clientSiteID] = new jsHarmonySite(_this.jsh, _this.clientSiteID, _this.GetDefaultClientConfig());
     this.jsh.Sites[_this.clientSiteID].Merge(prevClientConfig);
   }
   var prevMainConfig = this.jsh.Sites[_this.mainSiteID];
   if(prevMainConfig && prevMainConfig.initialized) throw new Error('jsHarmony Factory could not initialize site "'+_this.mainSiteID+'": Already initialized');
-  this.jsh.Sites[_this.mainSiteID] = new jsHarmonySite(_this.mainSiteID, _this.GetDefaultMainConfig());
+  this.jsh.Sites[_this.mainSiteID] = new jsHarmonySite(_this.jsh, _this.mainSiteID, _this.GetDefaultMainConfig());
   this.jsh.Sites[_this.mainSiteID].Merge(prevMainConfig);
 
   var mainSite = this.jsh.Sites[_this.mainSiteID];

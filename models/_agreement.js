@@ -89,8 +89,8 @@ exports.sign = function (req, res, next) {
   var jsh = this.jsh;
   
   var fields = {
-    "A_Name": { "caption": "Signed Name", "actions": "I", "type": "varchar", "length": 72, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
-    "A_DOB": { "caption": "Date of Birth", "actions": "I", "type": "date", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_IsValidDOB()] }
+    "a_name": { "caption": "Signed Name", "actions": "I", "type": "varchar", "length": 72, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
+    "a_dob": { "caption": "Date of Birth", "actions": "I", "type": "date", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_IsValidDOB()] }
   }
   
   //Validate Parameters
@@ -104,14 +104,14 @@ exports.sign = function (req, res, next) {
   var dbtypes = appsrv.DB.types;
   var validate = new XValidate();
   
-  //sql = "update C set C_ATstmp=getdate() where C_ID=@C_ID";
+  //sql = "update C set c_atstmp=getdate() where c_id=@c_id";
   sql = "agreement_sign";
   sql_ptypes.push(dbtypes.BigInt, dbtypes.VarChar(dbtypes.MAX));
-  sql_params['C_ID'] = req.gdata[jsh.map.client_id];
-  sql_params['RQST_PARMS'] = JSON.stringify({
-    'A_Name': P.A_Name,
-    'A_DOB': P.A_DOB,
-    'C_ID': req.gdata[jsh.map.client_id]
+  sql_params['c_id'] = req.gdata[jsh.map.client_id];
+  sql_params['rqst_parms'] = JSON.stringify({
+    'a_name': P.a_name,
+    'a_dob': P.a_dob,
+    'c_id': req.gdata[jsh.map.client_id]
   });
   
   var fieldnames = _.keys(fields);
@@ -174,15 +174,15 @@ exports.paymentresult = function (req, res, next) {
       if ((rslt != null) && (rslt.length == 1)) rslt = rslt[0];
       if (rslt != null) {
         rslt.key = '';
-        if (rslt.PE_ID) {
-          rslt.key = crypto.createHash('sha1').update(rslt.PE_ID + req.jshsite.auth.salt + rslt.PE_LL_Tstmp).digest('hex');
+        if (rslt.pe_id) {
+          rslt.key = crypto.createHash('sha1').update(rslt.pe_id + req.jshsite.auth.salt + rslt.pe_ll_tstmp).digest('hex');
         }
-        rslt.NEW_CLIENT_ERROR = 0;
-        if (!rslt.C_ID || !rslt.PE_ID || rslt.NEW_CLIENT_Result) rslt.NEW_CLIENT_ERROR = 1;
-        delete rslt.C_ID;
-        delete rslt.PE_ID;
-        delete rslt.PE_LL_Tstmp;
-        delete rslt.NEW_CLIENT_Result;
+        rslt.new_client_error = 0;
+        if (!rslt.c_id || !rslt.pe_id || rslt.new_client_result) rslt.new_client_error = 1;
+        delete rslt.c_id;
+        delete rslt.pe_id;
+        delete rslt.pe_ll_tstmp;
+        delete rslt.new_client_result;
         rslt['_success'] = 1;
         res.end(JSON.stringify(rslt));
       }

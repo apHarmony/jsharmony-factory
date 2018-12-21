@@ -29,7 +29,7 @@
 	  "fields":[
       {"name":"crmsel_sel","type":"smallint","actions":"BU","caption":"Select","control":"checkbox",
        "controlparams":{"value_true":"1","value_false":"0","value_hidden":""},"captionstyle": "text-align:center;"},
-      {"name":"cr_name","type":"varchar","length":16,"actions":"B","datalock":{"C_ID":"C_ID"},"control":"label","key":1,
+      {"name":"cr_name","type":"varchar","length":16,"actions":"B","datalock":{"c_id":"c_id"},"control":"label","key":1,
        "caption":"Role"},
       {"name":"new_sm_id","type":"bigint","actions":"BU","control":"hidden","captionstyle":"display:none;","cellstyle":"display:none;",
        "sqlselect":"@sm_id"},

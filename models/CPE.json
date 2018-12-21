@@ -11,7 +11,7 @@
     },
     "popup":[850,650],
     "fields":[
-      {"name":"pe_id","type":"bigint","key":1,"datalock":{"C_ID":"PE_ID"},"control":"hidden"},
+      {"name":"pe_id","type":"bigint","key":1,"datalock":{"c_id":"pe_id"},"control":"hidden"},
       {"name":"pe_sts","type":"varchar","length":8,"actions":"BIU","control":"dropdown_S",
         "lov": { "UCOD": "ahc", "schema": "jsharmony"}, "validate": ["Required"], "default": "ACTIVE",
    	    "caption":"Status","captionstyle":"width:120px;text-align:right;"},
@@ -63,11 +63,11 @@
       {"name":"pe_ll_tstmp","type":"datetime","length":"7","actions":"B","nl":1,
           "control":"textbox_tstmp",
           "caption":"Last Login (UTC)"},
-      {"name":"PE_LL_IP","type":"varchar","length":255,"actions":"B",
+      {"name":"pe_ll_ip","type":"varchar","length":255,"actions":"B",
           "control":"label_S",
     	    "caption":"Last Login IP",
           "eol":1},
-      {"name":"c_id","type":"bigint","datalock":{"C_ID":"C_ID"},"foreignkey":1,"actions":"BI",
+      {"name":"c_id","type":"bigint","datalock":{"c_id":"c_id"},"foreignkey":1,"actions":"BI",
           "control": "hidden","caption": ""}
   ],
   "dberrors":[

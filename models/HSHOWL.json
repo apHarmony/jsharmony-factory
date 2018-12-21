@@ -13,13 +13,13 @@
     "samplerepeat":5,
     "popup":[850,525],
     "fields":[
-      {"name":"h_id","type":"bigint","key": 1,"datalock":{"C_ID":"ALWAYS"}},
+      {"name":"h_id","type":"bigint","key": 1,"datalock":{"c_id":"always"}},
       {"name":"h_seq","type":"int","actions":"B","control":"hidden"},
-      {"name":"hp_code","type":"varchar","length":50,"foreignkey":1,"datalock":{"C_ID":"ALWAYS"}},
+      {"name":"hp_code","type":"varchar","length":50,"foreignkey":1,"datalock":{"c_id":"always"}},
       {"name":"h_title","type":"varchar","length":"70","caption":"Help Module","controlstyle":"width:350px;","actions":"B","link":"edit:HSHOW","sample":"Test - General Information"}
     ],
-    "oninit": "jsh.App.HSHOWL.RAN = false; if('hp_code' in _GET) xmodel.controller.grid.Data['hp_code'] = _GET.hp_code;",
-    "onload": "if(jsh.App.HSHOWL.RAN) return true; jsh.App.HSHOWL.RAN = true; var xgrid = xmodel.controller.grid; if(!('hp_code' in xgrid.Data)) return true; if(xgrid.RowCount == 0){ delete xgrid.Data.hp_code; jsh.XPage.Select(callback); } else { XExt.navTo(jsh.$root('.xgrid_'+xmodel.class+'_placeholder a').first().prop('href')); } return false;"
+    "oninit": "jsh.App.HSHOWL.ran = false; if('hp_code' in _GET) xmodel.controller.grid.Data['hp_code'] = _GET.hp_code;",
+    "onload": "if(jsh.App.HSHOWL.ran) return true; jsh.App.HSHOWL.ran = true; var xgrid = xmodel.controller.grid; if(!('hp_code' in xgrid.Data)) return true; if(xgrid.RowCount == 0){ delete xgrid.Data.hp_code; jsh.XPage.Select(callback); } else { XExt.navTo(jsh.$root('.xgrid_'+xmodel.class+'_placeholder a').first().prop('href')); } return false;"
   },
   "C_HSHOWL": {
     "inherits": "HSHOWL",

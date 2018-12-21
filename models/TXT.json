@@ -18,7 +18,7 @@
        "control":"textbox_S",
        "caption":"Attribute","captionstyle":"width:98px;text-align:right;"},
       {"name":"txt_type","type":"varchar","length":8,"actions":"B","control":"dropdown_S",
-       "lov": { "sql": "select CODEVal, CODETxt from jsharmony.ucod_txt_type order by codseq,codetxt", 
+       "lov": { "sql": "select codeval, codetxt from jsharmony.ucod_txt_type order by codseq,codetxt", 
        "blank": 1 }, "validate": ["Required"], "default": "HTML",
        "caption":"Body Type","captionstyle":"width:98px;text-align:right;"},
       {"name":"txt_desc","type":"varchar","length":255,"actions":"B","nl":1,

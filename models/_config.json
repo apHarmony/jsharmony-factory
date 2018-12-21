@@ -14,21 +14,21 @@
   "datalocks": {
     "client": {
       "c_id": {
-        "C_ID": "C_ID=@datalock_c_id",
-        "D_ID": "D_ID in (select D_ID from jsharmony.D where jsharmony.D.C_ID=@datalock_c_id or D_SCOPE='S')",
-        "D_SCOPE": "D_SCOPE in ('C','E')",
-        "D_SCOPE_ID": "(((D_SCOPE = 'S' or D_SCOPE = 'C') and D_SCOPE_ID=@datalock_c_id) or (D_SCOPE='E' and D_SCOPE_ID in (select E_ID from E where E.C_ID=@datalock_c_id)))",
-        "D_CTGR": "1=1",
-        "N_ID": "N_ID in (select N_ID from jsharmony.N where jsharmony.N.C_ID=@datalock_c_id)",
-        "N_SCOPE": "N_SCOPE in ('C','E')",
-        "N_SCOPE_ID": "((N_SCOPE = 'C' and N_SCOPE_ID=@datalock_c_id) or (N_SCOPE='E' and N_SCOPE_ID in (select E_ID from E where E.C_ID=@datalock_c_id)))",
-        "N_TYPE": "N_TYPE in ('S','C')",
-        "PE_ID": "PE_ID in (select PE_ID from jsharmony.CPE where jsharmony.CPE.C_ID=@datalock_c_id)",
-        "CPER_ID": "CPER_ID in (select CPER_ID from jsharmony.CPER inner join jsharmony.CPE on jsharmony.CPE.PE_ID=jsharmony.CPER.PE_ID where jsharmony.CPE.C_ID=@datalock_c_id)",
-        "ALWAYS": "1=1",
-        "NEVER": "1=2",
-        "N_SCOPE_C": "N_SCOPE = 'C'",
-        "D_SCOPE_C": "D_SCOPE = 'C'"
+        "c_id": "c_id=@datalock_c_id",
+        "d_id": "d_id in (select d_id from jsharmony.d where jsharmony.d.c_id=@datalock_c_id or d_scope='S')",
+        "d_scope": "d_scope in ('C','E')",
+        "d_scope_id": "(((d_scope = 'S' or d_scope = 'C') and d_scope_id=@datalock_c_id) or (d_scope='E' and d_scope_id in (select e_id from e where e.c_id=@datalock_c_id)))",
+        "d_ctgr": "1=1",
+        "n_id": "n_id in (select n_id from jsharmony.n where jsharmony.n.c_id=@datalock_c_id)",
+        "n_scope": "n_scope in ('C','E')",
+        "n_scope_id": "((n_scope = 'C' and n_scope_id=@datalock_c_id) or (n_scope='E' and n_scope_id in (select e_id from e where e.c_id=@datalock_c_id)))",
+        "n_type": "n_type in ('S','C')",
+        "pe_id": "pe_id in (select pe_id from jsharmony.cpe where jsharmony.cpe.c_id=@datalock_c_id)",
+        "cper_id": "cper_id in (select cper_id from jsharmony.cper inner join jsharmony.cpe on jsharmony.cpe.pe_id=jsharmony.cper.pe_id where jsharmony.cpe.c_id=@datalock_c_id)",
+        "always": "1=1",
+        "never": "1=2",
+        "n_scope_c": "n_scope = 'C'",
+        "d_scope_c": "d_scope = 'C'"
       }
     }
   }

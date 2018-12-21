@@ -10,8 +10,8 @@
       "client": {"CSYSADMIN":"*"}
     },
     "fields":[
-      {"name":"pe_id","type":"bigint","foreignkey":1,"datalock":{"C_ID":"PE_ID"}},
-      {"name":"cper_id","type":"bigint","key":1,"datalock":{"C_ID":"CPER_ID"}},
+      {"name":"pe_id","type":"bigint","foreignkey":1,"datalock":{"c_id":"pe_id"}},
+      {"name":"cper_id","type":"bigint","key":1,"datalock":{"c_id":"cper_id"}},
       {"name":"cr_name","type":"varchar","length":"16","cellstyle":"width:300px;",
         "caption":"Role","actions":"B",
         "lov": { 
@@ -20,7 +20,7 @@
                   "       cr_seq as %%%jsh.map.codeseq%%% ",
                   "  from jsharmony.CR ",
                   " where cr_name<>'C*' %%%DATALOCKS%%%"],
-          "datalock":{"C_ID":"ALWAYS"} 
+          "datalock":{"c_id":"always"} 
         }
       }
 	  ]

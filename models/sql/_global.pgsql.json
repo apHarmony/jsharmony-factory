@@ -1,13 +1,13 @@
 {
   "TSTMP": "jsharmony.myNOW()",
   "CUSER": "jsharmony.myCUSER()",
-  "SMS_SendTXTSMS": "select TXT_TVAL,TXT_VAL,TXT_BCC from jsharmony.TXT where TXT_PROCESS='SMS' and TXT_ATTRIB=@TXT_ATTRIB",
+  "SMS_SendTXTSMS": "select txt_tval,txt_val,txt_bcc from jsharmony.TXT where txt_process='SMS' and txt_attrib=@txt_attrib",
   "CONCAT":"||",
   "FUN_PREFIX":"",
   "PROC_RUN":"select ",
   "PAR_LIST_BEG":"(",
   "PAR_LIST_END":")",
-  "X_SMLW_TOP":"select case when @cur_sm_id_auto <> 0 then @cur_sm_id_auto else (select sm_id_auto from jsharmony.sm where 1=1 order by sm_utype desc,coalesce(SM.SM_Seq,SM.SM_ID),SM_Name,SM.SM_ID limit 1) end sm_id_auto from jsharmony.dual",
+  "X_SMLW_TOP":"select case when @cur_sm_id_auto <> 0 then @cur_sm_id_auto else (select sm_id_auto from jsharmony.sm where 1=1 order by sm_utype desc,coalesce(SM.sm_seq,SM.sm_id),sm_name,SM.sm_id limit 1) end sm_id_auto from jsharmony.dual",
   "X_SMLW_INSERT":["update jsharmony.SM sm set sm_seq=coalesce(sm_seq,sm_id)+1",
                   "  where coalesce(sm_seq,sm_id) > (select coalesce(sm_seq,sm_id) from jsharmony.sm where sm_id=@sm_id_parent) ",
                   "    and sm_utype = (select sm_utype from jsharmony.sm where sm_id=@sm_id_parent)",
@@ -17,7 +17,7 @@
                   "  select (select max(sm_id)+1 from jsharmony.SM),sm_id,sm_utype,coalesce(sm_seq,sm_id)+1,@sm_name,@sm_desc,'ACTIVE' from jsharmony.SM where sm_id=@sm_id_parent",
                   "  returning sm_id_auto",
                   ") select sm_id_auto from xrslt;"],
-  "X_SMLW_LOV":"select sm_id as CODEID,sm_id_parent as CODEParentID,sm_id_auto as CODEVal,sm_desc as CODETxt,'folder' as CODEIcon from jsharmony.sm where 1=1 %%%DATALOCKS%%% order by sm_utype desc,coalesce(SM.SM_Seq,SM.SM_ID),SM_Name,SM.SM_ID",
-  "SM_UTYPE_LOV":"select * from (values('S','Main'),('C','Client')) as COD(CODEVal,CODETxt)",
+  "X_SMLW_LOV":"select sm_id as codeid,sm_id_parent as codeparentid,sm_id_auto as codeval,sm_desc as codetxt,'folder' as codeicon from jsharmony.sm where 1=1 %%%DATALOCKS%%% order by sm_utype desc,coalesce(SM.sm_seq,SM.sm_id),sm_name,SM.sm_id",
+  "SM_UTYPE_LOV":"select * from (values('S','Main'),('C','Client')) as COD(codeval,codetxt)",
   "JSHARMONY_FACTORY_INSTALLED":"select case when coalesce((select count(*) from INFORMATION_SCHEMA.COLUMNS where table_name = 'dual' and table_schema='jsharmony'),0) > 0 then 1 else 0 end jsharmony_factory_installed"
 }

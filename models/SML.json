@@ -41,7 +41,7 @@
         }
        },
       {"name":"sm_sts","type":"varchar","length":8,"actions": "BIU","control": "dropdown_S",
-       "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
+       "lov": {"sql":"select codeval, codetxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
        "controlstyle":"width:70px;","caption":"Status"},
       {"name":"privs","control": "html","disable_sort":"1","disable_search":1,"disable_search_all":1,
        "value": ["<a href='<#=((data[j]['sm_utype']=='S')?'X_SRMSELR_HW':'X_CRMSELR_HW')#>?action=edit&amp;sm_id=<#=data[j]['sm_id']#>'",

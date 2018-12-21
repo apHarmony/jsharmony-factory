@@ -18,11 +18,11 @@ body {
 </style>
 </head>
 <body>
-<div style="border:1px solid black;padding:4px;margin-bottom:20px;"><%-data.cms_agreement[0].TXT_VAL%></div>
+<div style="border:1px solid black;padding:4px;margin-bottom:20px;"><%-data.cms_agreement[0].txt_val%></div>
 <div style="font-size:18px;line-height:24px;">
   <b>E-Sign Date:</b> <%=moment().format('MM/DD/YYYY')%><br/>
-  <b>Signed By:</b> <%=params.A_Name%><br/>
-  <b>Date of Birth:</b> <%=moment.utc(new Date(params.A_DOB)).format('MM/DD/YYYY')%>
+  <b>Signed By:</b> <%=params.a_name%><br/>
+  <b>Date of Birth:</b> <%=moment.utc(new Date(params.a_dob)).format('MM/DD/YYYY')%>
 </div>
 </body>
 </html>

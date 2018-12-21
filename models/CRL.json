@@ -25,7 +25,7 @@
       {"name":"cr_code","type":"varchar","length":"255","actions":"BIU","control": "textbox_S","caption":"Code"},
       {"name":"cr_attrib","type":"varchar","length":"255","actions":"BIU","control": "textbox_S","caption":"Attribute"},
       {"name":"cr_sts","type":"varchar","length":8,"actions": "BIU","control": "dropdown_S",
-       "lov": {"sql":"select CODEVal, CODETxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
+       "lov": {"sql":"select codeval, codetxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
        "controlstyle":"width:70px;","caption":"Status"},
       {"name":"privs","caption":"Menu Access","control":"html","value":"<img src='/images/icon_edit.png' class='xicon' />","link":"edit:X_CRMSEL_HW&cr_name"}
     ],

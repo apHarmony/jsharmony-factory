@@ -22,7 +22,7 @@
     "oninit": "jsh.App.SRMSEL_SEL.oninit(xmodel);",
     "oncommit": "jsh.App.SRMSEL_SEL.oncommit();",
 	"fields":[
-	  {"name":"sr_name","type":"varchar","length":16,"actions":"B","datalock":{"C_ID":"C_ID"},"control":"hidden","key":1,
+	  {"name":"sr_name","type":"varchar","length":16,"actions":"B","datalock":{"c_id":"c_id"},"control":"hidden","key":1,
 	   "caption":""},
       {"name":"srmsel_sel","type":"smallint","actions":"BU","caption":"Select","control":"checkbox",
        "controlparams":{"value_true":"1","value_false":"0","value_hidden":""},"captionstyle": "text-align:center;"},

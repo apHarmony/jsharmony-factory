@@ -10,8 +10,8 @@
   "pagesettings":  {"orientation": "portrait"},
   "fields": [
     {"name":"pe_sts","type":"varchar","nl":1,"control":"dropdown_S","actions": "B",
-     "lov": { "sql": "select CODEVal,CODETxt from jsharmony.UCOD_AHC where 1=1 %%%DATALOCKS%%% order by codseq", 
-              "datalock":{"C_ID":"C_ID"}, "blank": "(All)" },
+     "lov": { "sql": "select codeval,codetxt from jsharmony.UCOD_AHC where 1=1 %%%DATALOCKS%%% order by codseq", 
+              "datalock":{"c_id":"c_id"}, "blank": "(All)" },
      "caption":"User Status","captionstyle": "width:90px;"},
 
     {"nl": 1,"control":"button","value":"Run Report","controlstyle": "padding:3px 8px;margin-top:15px;margin-left:94px;",
@@ -31,16 +31,16 @@
     "PARAMS":{
       "sql":["select coalesce(codetxt,'(All)') pe_sts_txt ",
              "  from jsharmony.dual ",
-             "  left outer join jsharmony.UCOD_AHC on codeval = @pe_sts"], "nodatalock": ["C_ID"] 
+             "  left outer join jsharmony.UCOD_AHC on codeval = @pe_sts"], "nodatalock": ["c_id"] 
     },
     "PE":{
       "sql":["select pe_id, pe_sts, pe_fname, pe_mname, pe_lname, pe_jtitle, pe_email, ",
              "       pe_bphone, pe_cphone ",
              "  from jsharmony.PE ",
              " where pe_sts = coalesce(@pe_sts,pe_sts) ",
-             " order by pe_lname, pe_fname "], "nodatalock": ["C_ID"] 
+             " order by pe_lname, pe_fname "], "nodatalock": ["c_id"] 
     },
     "HOUSE": { "sql": ["select HOUSE_NAME \"HOUSE_NAME\",coalesce('Phone:  '%%%CONCAT%%%HOUSE_BPHONE,'') \"HOUSE_BPHONE\",coalesce('Fax:  '%%%CONCAT%%%HOUSE_FAX,'') \"HOUSE_FAX\",coalesce('Email:  '%%%CONCAT%%%HOUSE_EMAIL,'') \"HOUSE_EMAIL\", ",
-                       " HOUSE_FULL_ADDR \"HOUSE_FULL_ADDR\" from jsharmony.v_house"], "nodatalock": ["C_ID"] }
+                       " HOUSE_FULL_ADDR \"HOUSE_FULL_ADDR\" from jsharmony.v_house"], "nodatalock": ["c_id"] }
   }
 }

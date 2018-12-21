@@ -1,19 +1,19 @@
 {
   "client_sql_auth": [
-    "select pe_id,pe_hash,pe_sts,pe_fname,pe_lname,PE_LL_Tstmp,PE_Email,C.C_ID,C.C_Name,C_ATstmp,0 INV_OVERDUE from jsharmony.CPE inner join C on C.C_ID = CPE.C_ID inner join UCOD_C_STS on UCOD_C_STS.CODEVAL=C.C_STS and UCOD_C_STS.CODECODE='A' where lower(PE_Email)=lower(@pe_email);",
-    "select cper.cr_name as sr_name from jsharmony.CR inner join jsharmony.CPER on CPER.CR_Name=CR.CR_Name inner join jsharmony.CPE on CPE.PE_ID=CPER.PE_ID where CR_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email) and PE_STS='ACTIVE';"
+    "select pe_id,pe_hash,pe_sts,pe_fname,pe_lname,pe_ll_tstmp,pe_email,C.c_id,C.c_name,c_atstmp,0 inv_overdue from jsharmony.CPE inner join C on C.c_id = CPE.c_id inner join UCOD_C_STS on UCOD_C_STS.CODEVAL=C.C_STS and UCOD_C_STS.CODECODE='A' where lower(pe_email)=lower(@pe_email);",
+    "select cper.cr_name as sr_name from jsharmony.CR inner join jsharmony.CPER on CPER.cr_name=CR.cr_name inner join jsharmony.CPE on CPE.pe_id=CPER.pe_id where CR_STS='ACTIVE' and lower(pe_email)=lower(@pe_email) and pe_sts='ACTIVE';"
   ],
-  "client_sql_login": "select pe_id,pe_hash,pe_sts from jsharmony.CPE where lower(PE_Email)=lower(@pe_email)",
-  "client_sql_superlogin": "select PE.pe_id,pe_hash from jsharmony.PE inner join jsharmony.SPER on SPER.PE_ID = PE.PE_ID and SPER.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email)",
-  "client_sql_loginsuccess": "with xrslt as (update jsharmony.CPE set PE_LL_IP=@pe_ll_ip,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id returning 1) select count(*) xrowcount from xrslt;",
-  "client_sql_passwordreset": "with xrslt as (update jsharmony.CPE set PE_HASH=@pe_hash,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id returning 1) select count(*) xrowcount from xrslt;",
+  "client_sql_login": "select pe_id,pe_hash,pe_sts from jsharmony.CPE where lower(pe_email)=lower(@pe_email)",
+  "client_sql_superlogin": "select PE.pe_id,pe_hash from jsharmony.PE inner join jsharmony.SPER on SPER.pe_id = PE.pe_id and SPER.sr_name='SYSADMIN' where pe_sts='ACTIVE' and lower(pe_email)=lower(@pe_email)",
+  "client_sql_loginsuccess": "with xrslt as (update jsharmony.CPE set pe_ll_ip=@pe_ll_ip,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id returning 1) select count(*) xrowcount from xrslt;",
+  "client_sql_passwordreset": "with xrslt as (update jsharmony.CPE set pe_hash=@pe_hash,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id returning 1) select count(*) xrowcount from xrslt;",
   "main_sql_auth": [
-    "select pe_id,pe_hash,pe_sts,pe_fname,pe_lname,PE_LL_Tstmp,PE_Email from jsharmony.PE where lower(PE_Email)=lower(@pe_email);",
-    "select sper.sr_name from jsharmony.SR inner join jsharmony.SPER on SPER.SR_Name=SR.SR_Name inner join jsharmony.PE on PE.PE_ID=SPER.PE_ID where SR_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email) and PE_STS='ACTIVE';"
+    "select pe_id,pe_hash,pe_sts,pe_fname,pe_lname,pe_ll_tstmp,pe_email from jsharmony.PE where lower(pe_email)=lower(@pe_email);",
+    "select sper.sr_name from jsharmony.SR inner join jsharmony.SPER on SPER.sr_name=SR.sr_name inner join jsharmony.PE on PE.pe_id=SPER.pe_id where SR_STS='ACTIVE' and lower(pe_email)=lower(@pe_email) and pe_sts='ACTIVE';"
   ],
-  "main_sql_login": "select pe_id,pe_hash,pe_sts from jsharmony.PE where lower(PE_Email)=lower(@pe_email)",
-  "main_sql_superlogin": "select PE.pe_id,pe_hash from jsharmony.PE inner join jsharmony.SPER on SPER.PE_ID = PE.PE_ID and SPER.SR_Name='SYSADMIN' where PE_STS='ACTIVE' and lower(PE_Email)=lower(@pe_email)",
-  "main_sql_loginsuccess": "with xrslt as (update jsharmony.PE set PE_LL_IP=@pe_ll_ip,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id returning 1) select count(*) xrowcount from xrslt;",
-  "main_sql_passwordreset": "with xrslt as (update jsharmony.PE set PE_HASH=@pe_hash,PE_LL_IP=@pe_ll_ip,PE_LL_Tstmp=@pe_ll_tstmp where PE_ID=@pe_id returning 1) select count(*) xrowcount from xrslt;",
-  "main_sql_check_email": "select PE_Email from jsharmony.PE where PE_ID=@pe_id"
+  "main_sql_login": "select pe_id,pe_hash,pe_sts from jsharmony.PE where lower(pe_email)=lower(@pe_email)",
+  "main_sql_superlogin": "select PE.pe_id,pe_hash from jsharmony.PE inner join jsharmony.SPER on SPER.pe_id = PE.pe_id and SPER.sr_name='SYSADMIN' where pe_sts='ACTIVE' and lower(pe_email)=lower(@pe_email)",
+  "main_sql_loginsuccess": "with xrslt as (update jsharmony.PE set pe_ll_ip=@pe_ll_ip,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id returning 1) select count(*) xrowcount from xrslt;",
+  "main_sql_passwordreset": "with xrslt as (update jsharmony.PE set pe_hash=@pe_hash,pe_ll_ip=@pe_ll_ip,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id returning 1) select count(*) xrowcount from xrslt;",
+  "main_sql_check_email": "select pe_email from jsharmony.PE where pe_id=@pe_id"
 }
