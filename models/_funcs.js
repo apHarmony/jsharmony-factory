@@ -46,7 +46,7 @@ function ModuleFunctions(module){
     var dbtypes = appsrv.DB.types;
     var model = jsh.getModel(req, module.namespace + 'LOG');
     
-    if (!Helper.HasModelAccess(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
+    if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
     
     if (verb == 'get') {
       var farr = [];
@@ -113,7 +113,7 @@ function ModuleFunctions(module){
     var dbtypes = appsrv.DB.types;
     var model = jsh.getModel(req, module.namespace + 'DEV_DB_SCRIPTS');
     
-    if (!Helper.HasModelAccess(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
+    if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
     var dbscripter = 1;
     
@@ -200,7 +200,7 @@ function ModuleFunctions(module){
     var dbtypes = appsrv.DB.types;
     var model = jsh.getModel(req, module.namespace + 'DEV_DB_SCHEMA');
     
-    if (!Helper.HasModelAccess(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
+    if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
     if (verb == 'get') {
       if (!appsrv.ParamCheck('Q', Q, ['|db'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
@@ -239,7 +239,7 @@ function ModuleFunctions(module){
     var dbtypes = appsrv.DB.types;
     var model = jsh.getModel(req, module.namespace + 'DEV_MODELS');
     
-    if (!Helper.HasModelAccess(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
+    if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
     if (verb == 'get') {
       if (!appsrv.ParamCheck('Q', Q, ['&action'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
