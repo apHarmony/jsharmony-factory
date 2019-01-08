@@ -30,7 +30,7 @@
 	   "control":"textarea","controlstyle":"width:608px;height:35px;",
 	   "caption":"Description","captionstyle":"width:120px;height:35px;vertical-align:top;padding-top:3px;text-align:right;"},
     {"name": "d_preview","control": "html",
-     "value": "<img class='D_IMG_viewer' style='max-width:100%;display:none;' />",
+     "value": "<table cellspacing=0 cellpadding=0 border=0 class='D_IMG_viewer_container' style='display:none;'><tr><td valign='top'><div class='xform_caption' style='width:120px;text-align:right;vertical-align:top;padding-top:3px;'>Preview:</div></td><td><img class='D_IMG_viewer' style='max-width:100%;margin-left:auto;margin-right:auto;' /></td></tr></table>",
      "caption": ""},
 	  {"name":"d_etstmp","type":"datetime","length":7,"actions":"B","nl":1,
 	   "control":"textbox_tstmp",
