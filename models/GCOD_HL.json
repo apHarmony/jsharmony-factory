@@ -26,7 +26,7 @@
        "caption":"Attribute","actions":"B","controlstyle":"width:160px;"},
       {"name":"my_create","type":"varchar","length":"128","cellstyle":"text-align:center;",
        "sqlselect":"(case jsharmony.table_type(codeschema,concat('gcod_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
-       "link":"add:POPUP_EXEC_CREATE_GCOD&codeschema=codeschema&codename=codename&codemean=codemean",
+       "link":"edit:POPUP_EXEC_CREATE_GCOD&codeschema=codeschema&codename=codename&codemean=codemean",
        "caption":"Create Table","actions":""}
 	]
   },    

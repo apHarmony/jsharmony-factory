@@ -32,7 +32,7 @@
        "caption":"Attribute","actions":"B","controlstyle":"width:160px;"},
       {"name":"my_create","type":"varchar","length":"128","cellstyle":"text-align:center;",
        "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
-       "link":"add:POPUP_EXEC_CREATE_UCOD&codeschema=codeschema&codename=codename&codemean=codemean",
+       "link":"edit:POPUP_EXEC_CREATE_UCOD&codeschema=codeschema&codename=codename&codemean=codemean",
        "caption":"Create Table","actions":""},
       {"name":"click2","type":"varchar","length":"128","validate":["Required"],
        "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod_',codename)) when 'BASE TABLE' then 'U' else NULL end)",

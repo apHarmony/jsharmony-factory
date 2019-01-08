@@ -4,7 +4,7 @@
     "table":"jsharmony.V_CPER_NOSTAR",
     "title":"",
     "caption":["","Role","Roles"],
-    "actions":"BIU",
+    "actions":"BU",
     "roles": {
       "main": { "SYSADMIN":"*" },
       "client": {"CSYSADMIN":"*"}

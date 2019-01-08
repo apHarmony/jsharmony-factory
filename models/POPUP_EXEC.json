@@ -2,7 +2,7 @@
  "POPUP_EXEC": {
   "layout": "exec",
   "title": "Popup Exec Title",
-  "actions": "BIU",
+  "actions": "BU",
   "dev":1,
   "roles": {"X_X":"*"},
   "menu":"dev",

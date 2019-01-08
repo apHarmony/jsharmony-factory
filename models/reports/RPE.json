@@ -3,7 +3,7 @@
   "layout": "report",
   "title": "User Listing",
   "inherits": "TMPL_DEFAULT",
-  "actions": "BIU",
+  "actions": "BU",
   "roles": {"RPT":"B"},
   "menu":"reports",
   "description": "User Listing",

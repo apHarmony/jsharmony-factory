@@ -1,7 +1,7 @@
 {
   "comment":"PE_SPER",
   "layout":"multisel", 
-	"actions":"BIU",
+	"actions":"BU",
   "table":"jsharmony.sper",
   "title":"",
   "caption":["","Role","Roles"],
