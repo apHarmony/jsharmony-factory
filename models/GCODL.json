@@ -3,6 +3,7 @@
   "layout":"grid",
   "table":"",
 	"caption":[0,"Code","Codes"],
+  "roles": {"X_B":"B","DADMIN":"*"},
 	"actions":"BIUD", 
 	"sort":["^codseq","^codeval"], 
 	"menu":"ADMINISTRATION_CODETABLES",
