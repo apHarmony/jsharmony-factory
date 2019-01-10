@@ -188,6 +188,7 @@ jsh.App.DEV_DB.RunSQL = function(){
               for(var col in row){
                 var escval = XExt.escapeHTMLBR(row[col])||'';
                 if((escval.indexOf(' ')<0)||(escval.length < 50)) escval = '<span style="white-space:nowrap;">'+escval+'</span>';
+                if(row[col]===null) escval = '<span class="null">null</span>';
                 str += '<td style="font-family:monospace;">' + escval + '</td>';
               }
               str += '</tr>';
