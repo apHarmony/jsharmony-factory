@@ -8,7 +8,7 @@
     "caption":[0,"Model","Models"],
     "sort":["^model_id"],
     "menu":"DEV_MODELS",
-    "grid_expand_filter":1,
+    "grid_expand_search":1,
     "hide_system_buttons" : ["clear"],
     "fields":[
       {"name":"model_id","type":"varchar","actions":"B","key":1,"caption":"Model ID"},

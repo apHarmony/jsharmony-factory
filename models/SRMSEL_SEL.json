@@ -7,7 +7,7 @@
 	"caption":[0,"Item","Items"],
     "sort":[{"sm_id_parent":"asc"},{"sm_seq":"asc"},{"sm_name":"asc"}], 
 	"menu":"dev",
-    "grid_expand_filter": 1,
+    "grid_expand_search": 1,
     "rowlimit":500,
     "grid_rowcount":1,
     "reselectafteredit": "row",      "comment1":"row, or blank",
