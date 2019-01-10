@@ -16,10 +16,10 @@
       {"name":"codeschema","type":"varchar","length":"16","actions":"B","caption":"Schema","control":"hidden"},
       {"name":"codename","type":"varchar","length":"16","key":1,"validate":["Required"],
        "caption":"Code Table Name","actions":"B","controlstyle":"width:120px;","control": "html",
-       "value": "<a href='/GCODL?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codename']#></a>"},
+       "value": "<a href='/jsHarmonyFactory/GCODL?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codename']#></a>"},
       {"name":"codemean","type":"varchar","length":"128","validate":["Required"],
        "caption":"Table Description","actions":"B","controlstyle":"width:260px;","control": "html",
-       "value": "<a href='/GCODL?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codemean']#></a>"},
+       "value": "<a href='/jsHarmonyFactory/GCODL?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codemean']#></a>"},
       {"name":"codecodemean","type":"varchar","length":"128",
        "caption":"Code","actions":"B","controlstyle":"width:160px;"},
       {"name":"codeattribmean","type":"varchar","length":"128",
@@ -45,7 +45,7 @@
       {"name":"click2","type":"varchar","length":"128","validate":["Required"],
        "sqlselect":"(case jsharmony.table_type(codeschema,concat('gcod_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"Edit Codes","actions":"B","control": "html","cellstyle": "text-align:center;",
-       "value": "<a href='/X_GCODL?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><# if(data[j]['click2']){ #><img src='/images/icon_edit.png' height='14' style='position:relative;top:2px;' /><# } #></a>",
+       "value": "<a href='/jsHarmonyFactory/X_GCODL?codename=<#=data[j]['codename']#>&codeschema=<#=(data[j]['codeschema']||'')#>'><# if(data[j]['click2']){ #><img src='/images/icon_edit.png' height='14' style='position:relative;top:2px;' /><# } #></a>",
        "__AFTER__": "my_create"}
     ],
     "dberrors": [
