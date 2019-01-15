@@ -7,7 +7,7 @@ update jsharmony_xpp set XPP_VAL = '%%%INIT_DB_HASH_CLIENT%%%'
 
 insert into jsharmony_pe (pe_fname,pe_lname,pe_email,pe_pw1,pe_pw2,
                           pe_startdt, pe_stsdt, pe_eu, pe_etstmp, pe_mu, pe_mtstmp)
-  values ('First','User','%%%INIT_DB_ADMIN_EMAIL%%%','%%%INIT_DB_ADMIN_PASS%%%','%%%INIT_DB_ADMIN_PASS%%%',
+  values ('Admin','User','%%%INIT_DB_ADMIN_EMAIL%%%','%%%INIT_DB_ADMIN_PASS%%%','%%%INIT_DB_ADMIN_PASS%%%',
           date('now','localtime'),datetime('now','localtime'),(select context from jsharmony_meta limit 1),datetime('now','localtime'),(select context from jsharmony_meta limit 1),datetime('now','localtime'));
 
 insert into jsharmony_sper (pe_id, sr_name) values(1,'*');
