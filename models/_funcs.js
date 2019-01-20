@@ -244,7 +244,7 @@ function ModuleFunctions(module){
     if (verb == 'get') {
       if (!appsrv.ParamCheck('Q', Q, ['&action'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
 
-      var actions = ['namespace_conflicts'];
+      var actions = ['namespace_conflicts','auto_controls'];
 
       if (!_.includes(actions, Q.action)) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
 
@@ -286,6 +286,22 @@ function ModuleFunctions(module){
           }
           res.end(JSON.stringify({ _success: 1, conflicts: conflicts }));
         });
+      }
+      else if(Q.action=='auto_controls'){
+        var auto_controls = [];
+        _.each(jsh.Models, function(model, modelid){
+          _.each(model.fields, function(field){
+            if(model.layout=='grid'){
+              if(field._auto.actions && (field._auto.control || !('control' in field))) auto_controls.push(model.id + ':' + (field.name||JSON.stringify(field)));
+            }
+            else{
+              if(field._auto.control){
+                auto_controls.push(model.id + ':' + (field.name||JSON.stringify(field)));
+              }
+            }
+          });
+        });
+        res.end(JSON.stringify({ _success: 1, content: auto_controls }));
       }
       
       return;

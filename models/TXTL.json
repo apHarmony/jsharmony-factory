@@ -9,10 +9,10 @@
 	  "menu":"ADMINISTRATION_TEXTMAINTENANCE",
     "fields":[
       {"name":"txt_id","type":"bigint","key":1,"control":"hidden"},
-      {"name":"txt_process","type":"varchar","length":"32","caption":"Process","actions":"B","link":"edit:TXT"},
-      {"name":"txt_attrib","type":"varchar","length":"32","caption":"Attribute","actions":"B","link":"edit:TXT"},
+      {"name":"txt_process","type":"varchar","length":"32","caption":"Process","actions":"B","link":"update:TXT"},
+      {"name":"txt_attrib","type":"varchar","length":"32","caption":"Attribute","actions":"B","link":"update:TXT"},
       {"name":"txt_desc","type":"varchar","length":"255","caption":"Description","actions":"B",
-       "controlstyle":"width:600px;","link":"edit:TXT"}
+       "controlstyle":"width:600px;","link":"update:TXT"}
     ]
   },	
   "X_TXTL": {
@@ -20,11 +20,11 @@
     "dev":1,
     "actions":"B", 
     "menu":"DEV_X_TXTL",
-    "buttons":[{"link":"add:X_TXT", "text": "Add Text Module"}],
+    "buttons":[{"link":"insert:X_TXT", "text": "Add Text Module"}],
     "fields":[
-      {"name":"txt_process","link":"edit:X_TXT"},
-      {"name":"txt_attrib","link":"edit:X_TXT"},
-      {"name":"txt_desc","link":"edit:X_TXT"}
+      {"name":"txt_process","link":"update:X_TXT"},
+      {"name":"txt_attrib","link":"update:X_TXT"},
+      {"name":"txt_desc","link":"update:X_TXT"}
     ]
   }
 }

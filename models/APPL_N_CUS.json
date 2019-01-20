@@ -11,9 +11,9 @@
     "inherits": "NL_U",
     "table":"jsharmony.V_NL",
     "roles": {"O_B":"B","O_X":"*"},
-    "buttons":[{"link":"add:GPE_N","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"n_type"}}],
+    "buttons":[{"link":"insert:GPE_N","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"n_type"}}],
     "fields":[
-      {"name":"n_etstmp","link":"edit:GPE_N"}
+      {"name":"n_etstmp","link":"update:GPE_N"}
     ]   
   },
   "GPE_NL_S": {
@@ -21,7 +21,7 @@
     "table":"jsharmony.V_NL",
     "roles": {"O_B":"B","O_X":"*"},
     "fields":[
-      {"name":"n_etstmp","link":"edit:GPE_NB"}
+      {"name":"n_etstmp","link":"update:GPE_NB"}
     ]   
   },
    "GPE_N": {

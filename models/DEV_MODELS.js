@@ -6,10 +6,12 @@ jsh.App[modelid] = new (function(){
 
   this.panelViewer = null;
   this.panelNSConflicts = null;
+  this.panelUtilities = null;
 
   this.oninit = function(xmodel) {
     this.panelViewer = jsh.$root('.DEV_MODELS_viewer');
     this.panelNSConflicts = jsh.$root('.DEV_MODELS_namespace_conflicts');
+    this.panelUtilities = jsh.$root('.DEV_MODELS_utilities');
 
     _this.Models = _this.Models.sort(function(a, b){
       if(a.toUpperCase() > b.toUpperCase()) return 1;
@@ -25,6 +27,9 @@ jsh.App[modelid] = new (function(){
     });
     _this.panelNSConflicts.find('.run').click(function(){
       _this.RenderNamespaceConflicts();
+    });
+    _this.panelUtilities.find('.auto_controls').click(function(){
+      _this.RenderAutoControls();
     });
   }
   
@@ -57,6 +62,15 @@ jsh.App[modelid] = new (function(){
         rslt = XExt.ReplaceAll(rslt, '[RED]', '<span style="color:red;font-weight:bold;">');
         rslt = XExt.ReplaceAll(rslt, '[/RED]', '</span>');
         _this.panelNSConflicts.find('.rslt').html(rslt);
+      }
+    });
+  }
+
+  this.RenderAutoControls = function(){
+    XForm.prototype.XExecute('../_funcs/DEV_MODELS', { action: 'auto_controls' }, function (rslt) { //On success
+      if ('_success' in rslt) {
+        var rslt = JSON.stringify(rslt.content,null,4);
+        _this.panelUtilities.find('.rslt').html(rslt);
       }
     });
   }

@@ -8,15 +8,15 @@
 	  "samplerepeat":5,
 	  "caption":[0,"Document","Documents"],
 	  "menu":"dashboard",
-    "buttons":[{"link":"add:D","bindings":{"d_scope_id":"d_scope_id","d_scope":"d_scope"}}],
+    "buttons":[{"link":"insert:D","bindings":{"d_scope_id":"d_scope_id","d_scope":"d_scope"}}],
 	  "fields":[
 	    {"name":"d_id","type":"bigint","key": 1,"datalock":{"c_id":"d_id"},"control":"hidden"},
       {"name":"d_scope","type":"varchar","length":8,"foreignkey":1,"datalock":{"c_id":"d_scope"},"control":"hidden"},
       {"name":"d_scope_fmt","type":"varchar","length":8,"foreignkey":1,"actions":"B","datalock":{"c_id":"d_scope"},
-       "sqlselect":"(d_scope)","link":"edit:D","caption":"=","caption_ext":"Scope"},
+       "sqlselect":"(d_scope)","link":"update:D","caption":"=","caption_ext":"Scope"},
 	    {"name":"d_scope_id","type":"bigint","foreignkey":1,"datalock":{"c_id":"d_scope_id"},"control":"hidden"},
 	    {"name":"d_utstmp","type":"datetime","length":"7","format":"tstmp","caption":"Uploaded","actions":"B",
-	     "controlstyle": "width:100px;","link":"edit:D"},
+	     "controlstyle": "width:100px;","link":"update:D"},
 	    {"name":"d_sts","type":"varchar","length":8,"caption":"Status","actions":"B"},
       {"name":"title_h","type":"varchar","length":8,"actions":""},
 	    {"name":"title_b","type":"varchar","length":8,"actions":""},
@@ -25,7 +25,7 @@
       {"name":"btndownload","caption": "Download","control": "html","disable_sort":1,
        "value": "<a href='_dl/D/<#=data[j]['d_id']#>/d_file'>Download</a>"},
       {"name":"btndetails","caption": "Details","value": "Details","control": "html",
-       "link": "edit:D","actions":"B"}
+       "link": "update:D","actions":"B"}
 	  ]
   },
   "DL": {

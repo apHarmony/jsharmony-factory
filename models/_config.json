@@ -5,7 +5,7 @@
   },
   "help_panelid": "hp_code", 
   "default_buttons": {
-    "add": { "icon": "add", "text": "Add %%%CAPTION%%%", "actions": "I", "class": "xbuttonadd" }
+    "insert": { "icon": "insert", "text": "Add %%%CAPTION%%%", "actions": "I", "class": "xbuttoninsert" }
   },
   "model_groups": {
     "JSHARMONY_NOTES": ["NWUCS", "NWUS", "NWCS", "NWCSC_BASE", "NWCSC", "NWCSCB"],

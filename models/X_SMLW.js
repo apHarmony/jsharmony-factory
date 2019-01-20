@@ -13,7 +13,7 @@ jsh.App.X_SMLW.oninit = function(){
 
 jsh.App.X_SMLW.oncontextmenu = function(ctrl, n){
   var menuid = '._item_context_menu_sm_id_auto';
-  var menu_add = jsh.$root(menuid).children('.add');
+  var menu_add = jsh.$root(menuid).children('.insert');
   var menu_delete = jsh.$root(menuid).children('.delete');
   var jctrl = $(ctrl);
   var level = 0;
