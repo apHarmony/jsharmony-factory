@@ -12,9 +12,9 @@
   "rowlimit":10,
   "disableautoload": 1,
 	"fields":[
-	  {"name":"n_id","type":"bigint","key": 1,"datalock":{"c_id":"n_id"}},
-	  {"name":"n_scope","type":"varchar","length":8,"foreignkey":1,"datalock":{"c_id":"n_scope"}},
-	  {"name":"n_type","type":"varchar","length":8,"foreignkey":1,"datalock":{"c_id":"n_type"}},
+	  {"name":"n_id","type":"bigint","key": 1,"datalock":{"c_id":"n_id"},"control":"hidden"},
+	  {"name":"n_scope","type":"varchar","length":8,"foreignkey":1,"datalock":{"c_id":"n_scope"},"control":"hidden"},
+	  {"name":"n_type","type":"varchar","length":8,"foreignkey":1,"datalock":{"c_id":"n_type"},"control":"hidden"},
 	  {"name":"n_dt","type":"date","format":["date","MM/DD/YY"],"caption":"Posted","actions":"B"},
 	  {"name":"n_note","type":"varchar","length":"9999999","caption":"Note","actions":"B","controlstyle":"width:700px;"}
 	]

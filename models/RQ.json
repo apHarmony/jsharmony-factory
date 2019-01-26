@@ -6,7 +6,7 @@
   "layout":"form", 
   "caption": [ "", "Request", "Requests" ],
 	"fields":[
-	  {"name":"rq_id","type":"bigint","key": 1},
+	  {"name":"rq_id","type":"bigint","key": 1,"control":"hidden"},
     {"name":"RQ_FILE","type":"file","actions":"BIU","nl":1,
        "control":"file_upload","caption":"Document",
        "controlparams": { 

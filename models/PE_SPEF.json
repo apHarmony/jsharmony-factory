@@ -6,8 +6,8 @@
   "title":"",
   "caption":["","Function","Functions"],
   "fields":[
-    {"name":"pe_id","type":"bigint","foreignkey":1},
-    {"name":"spef_id","type":"bigint","key":1},
+    {"name":"pe_id","type":"bigint","foreignkey":1,"control":"hidden"},
+    {"name":"spef_id","type":"bigint","key":1,"control":"hidden"},
     {"name":"sf_name","type":"varchar","length":"8","cellstyle":"width:300px;",
       "caption":"Function","actions":"B",
       "lov": { "sql": ["select sf_name as %%%jsh.map.codeval%%%, ",

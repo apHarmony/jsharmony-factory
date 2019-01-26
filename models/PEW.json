@@ -14,9 +14,9 @@
     ],
 	"popup":[1100,900],
 	"fields":[
-      {"name":"pe_id","type":"bigint","key":1,"datalock":{"c_id":"pe_id"}},
-      {"name":"pe_fname","type":"varchar","actions":"B"},
-      {"name":"pe_lname","type":"varchar","actions":"B"}
+      {"name":"pe_id","type":"bigint","key":1,"datalock":{"c_id":"pe_id"},"control":"hidden"},
+      {"name":"pe_fname","type":"varchar","actions":"B","control":"hidden"},
+      {"name":"pe_lname","type":"varchar","actions":"B","control":"hidden"}
 	]
   }
 }

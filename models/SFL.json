@@ -13,7 +13,7 @@
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
     "fields":[
-      {"name":"sf_id","type":"bigint","key":1},
+      {"name":"sf_id","type":"bigint","key":1,"control":"hidden"},
       {"name":"sf_seq","type":"smallint","actions": "BIU","control": "textbox_VS",
        "validate":["Required","IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
        "caption":"Seq","captionstyle": "text-align:right;"},

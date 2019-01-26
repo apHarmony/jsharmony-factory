@@ -6,8 +6,8 @@
   "title":"",
   "caption":["","Role","Roles"],
 	"fields":[
-	  {"name":"pe_id","type":"bigint","foreignkey":1},
-	  {"name":"sper_id","type":"bigint","key":1},
+	  {"name":"pe_id","type":"bigint","foreignkey":1,"control":"hidden"},
+	  {"name":"sper_id","type":"bigint","key":1,"control":"hidden"},
 	  {"name":"sr_name","type":"varchar","length":"8","cellstyle":"width:300px;",
        "caption":"Role","actions":"B",
        "lov": { "sql": ["select sr_name as %%%jsh.map.codeval%%%, ",
