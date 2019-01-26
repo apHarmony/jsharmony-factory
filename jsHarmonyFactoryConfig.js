@@ -42,6 +42,10 @@ function jsHarmonyFactoryConfig(){
     ACCOUNT_SID: '',          //Twilio Account SID
     AUTH_TOKEN: ''            //Twilio Auth Token
   },
+  //Models for Help Listing
+  this.help_view = {};
+  //ID field for Help Listing
+  this.help_panelid = "";
 
   //Debug settings
   this.debug_params = {
@@ -84,5 +88,20 @@ function jsHarmonyFactoryConfig(){
   this._validProperties = _.keys(this);
 }
 jsHarmonyFactoryConfig.prototype = new jsHarmonyConfig.Base();
+
+jsHarmonyFactoryConfig.prototype.Merge = function(config, jsh, sourceModuleName){
+  var sourceModule = null;
+  var _this = this;
+  if(jsh && sourceModuleName) sourceModule = jsh.Modules[sourceModuleName];
+  if(config.help_view){
+    if(_.isString(config.help_view)) config.help_view = addNamespace(config.help_view);
+    else{
+      for(var siteid in config.help_view){
+        config.help_view[siteid] = jsHarmonyConfig.addNamespace(config.help_view[siteid], sourceModule);
+      }
+    }
+  }
+  jsHarmonyConfig.Base.prototype.Merge.apply(_this, arguments);
+}
 
 exports = module.exports = jsHarmonyFactoryConfig;

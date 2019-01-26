@@ -34,6 +34,7 @@ var jsHarmonyFactoryJobProc = require('./models/_jobproc.js');
 
 var agreement = require('./models/_agreement.js');
 var menu = require('./models/_menu.js');
+var help = require('./models/_help.js');
 var funcs = require('./models/_funcs.js');
 
 function jsHarmonyFactory(name, options){
@@ -161,6 +162,7 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
       getContextUser: function (user_info, jsh) { return 'S' + user_info[jsh.map.user_id]; }
     },
     menu: menu.bind(null, 'S'),
+    help: help.bind(_this),
     globalparams: {
       'barcode_server': _this.Config.barcode_settings.server,
       'scanner_server': _this.Config.scanner_settings.server,
@@ -213,6 +215,7 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
       },
     },
     menu: menu.bind(null, 'C'),
+    help: help.bind(_this),
     datalock: { /* jsh.map.client_id (below) */ },
     datalocktypes: { /* jsh.map.client_id (below) */ },
     globalparams: {

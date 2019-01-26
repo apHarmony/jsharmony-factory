@@ -1,12 +1,4 @@
 {
-  "help_view": {
-    "main": "HSHOWL",
-    "client": "C_HSHOWL"
-  },
-  "help_panelid": "hp_code", 
-  "default_buttons": {
-    "insert": { "icon": "insert", "text": "Add %%%CAPTION%%%", "actions": "I", "class": "xbuttoninsert" }
-  },
   "model_groups": {
     "JSHARMONY_NOTES": ["NWUCS", "NWUS", "NWCS", "NWCSC_BASE", "NWCSC", "NWCSCB"],
     "JSHARMONY_DOCUMENTS": ["DL_BASE"]
@@ -30,6 +22,15 @@
         "n_scope_c": "n_scope = 'C'",
         "d_scope_c": "d_scope = 'C'"
       }
+    }
+  },
+  "modules":{
+    "jsHarmonyFactory": {
+      "help_view": {
+        "main": "HSHOWL",
+        "client": "C_HSHOWL"
+      },
+      "help_panelid": "hp_code"
     }
   }
 }
