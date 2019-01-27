@@ -18,11 +18,11 @@
        "caption":"Sequence","captionstyle":"width:120px;text-align:right;"},
 
       {"name":"h_index_a","type":"boolean","actions":"BIU","control":"checkbox",
-       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Main System Help Index","default":"1",
+       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Main System","default":"1",
        "captionstyle":"width:120px;text-align:right;"},
 
       {"name":"h_index_p","type":"boolean","actions":"BIU","control":"checkbox",
-       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Portal Help Index","default":"1",
+       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Client Portal","default":"1",
        "captionstyle":"width:120px;text-align:right;"},
 		  
 		  

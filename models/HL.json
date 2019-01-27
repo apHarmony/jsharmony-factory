@@ -23,7 +23,7 @@
       {"name":"h_index_a","type":"boolean","actions":"BU","control":"checkbox",
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Main System"},
       {"name":"h_index_p","type":"boolean","actions":"BU","control":"checkbox",
-       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Portal"},
+       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Client Portal"},
 	    {"name":"h_mtstmp","type":"datetime","length":"7","format":"tstmp","caption":"Last Update","actions":"B"}
 	  ]
   }

@@ -45,7 +45,7 @@ function getHelpView(req, jsh, jshFactory){
 
 exports = module.exports = function(req, res, jsh, helpid, onComplete){
   var jshFactory = this;
-  var helpurl = getHelpURL(req, jsh, jshFactory);
+  var helpurl = getHelpURL(req, jsh, jshFactory, helpid);
   var helpurl_onclick = getHelpOnClick(req, jsh, jshFactory);
   return onComplete(helpurl, helpurl_onclick);
 };

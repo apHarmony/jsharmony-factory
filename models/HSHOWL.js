@@ -1,3 +1,6 @@
-jsh.App.HSHOWL = { }
+jsh.App[modelid] = new (function(){
+  var _this = this;
 
-jsh.App.HSHOWL.ran = false;
+  this.ran = false;
+
+})();
