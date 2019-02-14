@@ -23,6 +23,7 @@ var jsHarmonyCodeGen = require('jsharmony/CodeGen');
 var JSHdb = require('jsharmony-db');
 var path = require('path');
 var _ = require('lodash');
+var async = require('async');
 
 function jsHarmonyFactoryAPI(options){
   this.options = _.extend({ db: 'default' }, options);
@@ -50,7 +51,10 @@ jsHarmonyFactoryAPI.prototype.dbTest = function(onComplete){
  });
 }
 jsHarmonyFactoryAPI.prototype.dbClose = function(onComplete){
-  this.db.Close(function(){ if(onComplete) onComplete(); });
+  var _this = this;
+  async.eachOf(_this.jsh.DB, function(db, dbid, cb){
+    db.Close(cb);
+  }, onComplete);
 }
 
 module.exports = exports = jsHarmonyFactoryAPI;
