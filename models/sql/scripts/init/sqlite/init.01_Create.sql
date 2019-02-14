@@ -183,7 +183,7 @@ CREATE TABLE jsharmony_n (
   n_sts text NOT NULL DEFAULT 'A',
   c_id integer,
   e_id integer,
-  n_type text,
+  n_type text NOT NULL,
   n_note text NOT NULL,
   n_etstmp text,
   n_eu text,

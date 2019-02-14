@@ -2216,7 +2216,7 @@ CREATE TABLE [jsharmony].[n](
 	[n_sts] [nvarchar](8) NOT NULL,
 	[c_id] [bigint] NULL,
 	[e_id] [bigint] NULL,
-	[n_type] [nvarchar](8) NULL,
+	[n_type] [nvarchar](8) NOT NULL,
 	[n_note] [nvarchar](max) NOT NULL,
 	[n_etstmp] [datetime2](7) NOT NULL,
 	[n_eu] [nvarchar](20) NOT NULL,

@@ -4532,7 +4532,7 @@ CREATE TABLE n (
     n_sts character varying(8) DEFAULT 'A'::character varying NOT NULL,
     c_id bigint,
     e_id bigint,
-    n_type character varying(8),
+    n_type character varying(8) NOT NULL,
     n_note text NOT NULL,
     n_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
     n_eu character varying(20) DEFAULT mycuser() NOT NULL,
