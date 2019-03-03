@@ -32,7 +32,7 @@
       {"name":"cod_notes","type":"varchar","length":"255","actions":"BIU","control":"textbox_M",
        "caption":"Annotations"},
       {"name":"codetdt","type":"date","actions":"BIU","validate": ["IsDate"],
-       "control":"date","controlparams":{"dateformat":"mm/dd/y"},
+       "control":"date",
        "controlstyle":"width:60px;","caption":"Term. Dt","format":["date","MM/DD/YY"]},
       {"name":"codetcm","type":"varchar","length":"50","actions":"BIU","control":"textbox_M",
        "controlstyle":"width:130px;","caption":"Termination Comment"},
