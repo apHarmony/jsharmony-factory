@@ -37,8 +37,8 @@
     "menu":"DEV_X_GCOD2_HL",
     "fields":[
       {"name":"codeschema","actions": "BI","control": "textbox"},
-      {"name":"codename","actions": "BI","control": "textbox"},
-      {"name":"codemean","actions": "BIU","control": "textbox"},
+      {"name":"codename","actions": "BI","control": "textbox","value":"__REMOVEPROPERTY__"},
+      {"name":"codemean","actions": "BIU","control": "textbox","value":"__REMOVEPROPERTY__"},
       {"name":"codecodemean","actions": "BIU","control": "textbox"},
       {"name":"codeattribmean","actions": "BIU","control": "textbox"},
       {"name":"my_create","actions": "B"},
