@@ -68,9 +68,8 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
           link_onclick = 'return '+req.jshsite.instance+'.XExt.JSEval('+JSON.stringify(menuitem[jsh.map.menu_command].substr(3)) + ')||false;';
         }
         else if (jsh.hasModel(req, menuitem[jsh.map.menu_command])) {
-          var link_targetmodelid = jsh.parseLink(menuitem[jsh.map.menu_command]).modelid;
           link_url = jsh.getURL(req, undefined, menuitem[jsh.map.menu_command]);
-          link_onclick = jsh.getModelLinkOnClick(req, undefined, link_targetmodelid, menuitem[jsh.map.menu_command]);
+          link_onclick = jsh.getURL_onclick(req, undefined, menuitem[jsh.map.menu_command]);
         }
 
         //Check if the menu item is selected
@@ -112,10 +111,9 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
           link_onclick = 'return '+req.jshsite.instance+'.XExt.JSEval('+JSON.stringify(menuitem[jsh.map.menu_command].substr(3)) + ')||false;';
         }
         else if (jsh.hasModel(req, menuitem[jsh.map.menu_command])) {
-          var link_targetmodelid = jsh.parseLink(menuitem[jsh.map.menu_command]).modelid;
           link_url = jsh.getURL(req, undefined, menuitem[jsh.map.menu_command]);
           if (menuitem[jsh.map.menu_subcommand]) link_url += menuitem[jsh.map.menu_subcommand];
-          link_onclick = jsh.getModelLinkOnClick(req, undefined, link_targetmodelid, menuitem[jsh.map.menu_command]);
+          link_onclick = jsh.getURL_onclick(req, undefined, menuitem[jsh.map.menu_command]);
         }
 
         //Check if the menu item is selected

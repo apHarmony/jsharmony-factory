@@ -31,7 +31,7 @@ function getHelpURL(req, jsh, jshFactory, helpid){
 function getHelpOnClick(req, jsh, jshFactory) {
   var help_view = getHelpView(req, jsh, jshFactory);
   if(!help_view) return req.jshsite.instance+'.XExt.Alert(\'Help not initialized.\'); return false;';
-  return jsh.getModelLinkOnClick(req, undefined, help_view);
+  return jsh.getURL_onclick(req, undefined, help_view);
 }
 function getHelpView(req, jsh, jshFactory){
   if(!jshFactory.Config.help_view) return null;
