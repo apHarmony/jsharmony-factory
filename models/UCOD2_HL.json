@@ -18,14 +18,14 @@
       {"name":"click","type":"varchar","length":"128","validate":["Required"],
        "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod2_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"","actions":"B","control": "html",
-       "value": "<a href='UCOD2L?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['click']#></a>"},
+       "value": "<a href='UCOD2L?codename=<#=data['codename']#>&codeschema=<#=data['codeschema']#>'><#=data['click']#></a>"},
       {"name":"codeschema","type":"varchar","length":"16","actions":"B","caption":"Schema"},
 	  {"name":"codename","type":"varchar","length":"16","control": "html", 
        "caption":"Code2 Table Name","actions":"B","controlstyle":"width:120px;","validate":["Required"],
-       "value": "<a href='UCOD2L?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codename']#></a>"},
+       "value": "<a href='UCOD2L?codename=<#=data['codename']#>&codeschema=<#=data['codeschema']#>'><#=data['codename']#></a>"},
 	  {"name":"codemean","type":"varchar","length":"128","validate":["Required"],
        "caption":"Table Description","actions":"B","controlstyle":"width:260px;","control": "html", 
-       "value": "<a href='UCOD2L?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><#=data[j]['codemean']#></a>"},
+       "value": "<a href='UCOD2L?codename=<#=data['codename']#>&codeschema=<#=data['codeschema']#>'><#=data['codemean']#></a>"},
 	  {"name":"codecodemean","type":"varchar","length":"128",
        "caption":"Code","actions":"B","controlstyle":"width:160px;"},
       {"name":"codeattribmean","type":"varchar","length":"128",
@@ -37,7 +37,7 @@
       {"name":"click2","type":"varchar","length":"128","validate":["Required"],
        "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod2_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"Edit Codes","actions":"B","control": "html","cellstyle": "text-align:center;",
-       "value": "<a href='UCOD2L?codename=<#=data[j]['codename']#>&codeschema=<#=data[j]['codeschema']#>'><# if(data[j]['click2']){ #><img src='/images/icon_update.png' height='14' style='position:relative;top:2px;' /><# } #></a>"}
+       "value": "<a href='UCOD2L?codename=<#=data['codename']#>&codeschema=<#=data['codeschema']#>'><# if(data['click2']){ #><img src='/images/icon_update.png' height='14' style='position:relative;top:2px;' /><# } #></a>"}
 	]
   },	
   "X_UCOD2_HL": {
