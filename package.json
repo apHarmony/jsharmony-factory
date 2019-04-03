@@ -1,6 +1,6 @@
 {
   "name": "jsharmony-factory",
-  "version": "1.1.42",
+  "version": "1.1.43",
   "description": "Enterprise framework for jsHarmony",
   "main": "index.js",
   "scripts": {
@@ -31,20 +31,20 @@
   },
   "homepage": "https://github.com/apHarmony/jsharmony-factory",
   "devDependencies": {
-    "jsharmony-db-pgsql": "^1.1.11",
+    "jsharmony-db-pgsql": "^1.1.19",
     "mocha": "^5.2.0"
   },
   "dependencies": {
     "archiver": "^1.3.0",
-    "async": "^2.1.4",
-    "cookie-parser": "^1.4.3",
-    "decompress-zip": "^0.3.0",
+    "async": "^2.6.2",
+    "cookie-parser": "^1.4.4",
+    "decompress-zip": "^0.3.2",
     "ejs": "^2.5.5",
-    "jsharmony": "^1.1.58",
-    "jsharmony-db": "^1.1.0",
-    "jsharmony-validate": "^1.1.0",
+    "jsharmony": "^1.1.84",
+    "jsharmony-db": "^1.1.17",
+    "jsharmony-validate": "^1.1.5",
     "lodash": "^4.17.4",
-    "moment": "^2.17.1",
-    "twilio": "^3.23.1"
+    "moment": "^2.24.0",
+    "twilio": "^3.30.0"
   }
 }
