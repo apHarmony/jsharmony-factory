@@ -20,7 +20,7 @@
   <% if(req.isAuthenticated){ %>
     <div class="xtoplinks"><img src="/images/toplinks_corner.png" class="xtoplinks_corner" alt="" title="" />
       <b>Client Portal:</b>&nbsp; <%=(req.jshsite.globalparams.company_name(req)+' - '+req.user_name)%> &nbsp;|&nbsp; 
-      <a class="toplink_help" class="static" href="<%-req.baseurl%>HSHOWL/" onclick="<%=req.jshsite.instance%>.XExt.popupForm('HSHOWL'); return false;">Help</a> &nbsp;|&nbsp; 
+      <a class="toplink_help static" href="<%-req.baseurl%>HSHOWL/" onclick="<%=req.jshsite.instance%>.XExt.popupForm('HSHOWL'); return false;">Help</a> &nbsp;|&nbsp; 
       <a href="/client/logout">Logout</a>
     </div>
   <% } %>
