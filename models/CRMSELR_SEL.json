@@ -35,7 +35,7 @@
        "sqlselect":"@sm_id"},
       {"name":"sm_id","type":"bigint","actions": "B","control": "hidden","key":1},
       {"name":"cr_seq","type":"int","actions": "B","control": "label",
-       "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
+       "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"cellstyle": "text-align:right;",
        "sqlsort":"(coalesce(coalesce(cr_seq,cr_id),0))",
        "caption":"Seq","captionstyle": "text-align:right;"},
       {"name":"cr_desc","type":"varchar","length":"255","actions":"B","control": "label",
