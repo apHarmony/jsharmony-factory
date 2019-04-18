@@ -76,7 +76,7 @@ jsHarmonyAgreement.prototype.Init = function(){
     "a_accept": { "caption": "E-signature", "actions": "I", "validators": [XValidate._v_Required(), _v_IsChecked] },
     "a_date": { "caption": "Today's Date", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate()] },
     "a_name": { "caption": "Signed Name", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
-    "a_dob": { "caption": "Date of Birth", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_IsValidDOB(), XValidate._v_MinAge(18)] }
+    "a_dob": { "caption": "Date of Birth", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_MaxAge(150), XValidate._v_MinAge(18)] }
   }
   XFormStep1.prototype.GetValues = function () {
     var _this = this;

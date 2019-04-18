@@ -90,7 +90,7 @@ exports.sign = function (req, res, next) {
   
   var fields = {
     "a_name": { "caption": "Signed Name", "actions": "I", "type": "varchar", "length": 72, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
-    "a_dob": { "caption": "Date of Birth", "actions": "I", "type": "date", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_IsValidDOB()] }
+    "a_dob": { "caption": "Date of Birth", "actions": "I", "type": "date", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_MaxAge(150)] }
   }
   
   //Validate Parameters
