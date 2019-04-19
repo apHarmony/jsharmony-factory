@@ -21,6 +21,8 @@
           "popupiconstyle":"position:relative;top:5px;"
         }
        },
+      {"name":"sm_subcmd","type":"varchar","length":"255","actions":"BIU","control": "textbox_M","nl":1,
+       "caption":"SubCommand"},
       {"name":"sm_seq","type":"int","actions": "BIU","control": "textbox_VS","nl":1,
        "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
        "sqlsort":"(coalesce(coalesce(sm_seq,sm_id),0))",
