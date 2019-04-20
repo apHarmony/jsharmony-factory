@@ -16,9 +16,9 @@
     "bindings":{"codename":"codename","codeschema":"codeschema"},
 	"fields":[
 	  {"name":"gcod_id","type":"bigint","actions":"B","key":1,"control":"hidden"}, //Previously had "F"
-      {"name":"codename","type":"varchar","foreignkey":1,"actions":"IUD","virtual":1,"sqlwhere":"1=1",
+      {"name":"codename","type":"varchar","foreignkey":1,"actions":"IUD","sqlwhere":"1=1",
        "sqlupdate":"","sqlinsert":"","length":16,"control":"hidden"},
-      {"name":"codeschema","type":"varchar","foreignkey":1,"actions":"IUD","virtual":1,"sqlwhere":"1=1",
+      {"name":"codeschema","type":"varchar","foreignkey":1,"actions":"IUD","sqlwhere":"1=1",
        "sqlupdate":"","sqlinsert":"","length":16,"control":"hidden"},
 	  {"name":"codseq","type":"smallint","actions":"BIU","control":"textbox_VS","format":["decimal","0"],
 	   "validate":["IsNumeric"],"controlstyle":"text-align:right;","caption":"Seq"},
