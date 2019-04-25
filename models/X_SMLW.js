@@ -45,7 +45,7 @@ jsh.App.X_SMLW.select_sm_id_auto = function(newval,cb){
   xmodel.controller.form.Data.cur_sm_id_auto = newval;
   xmodel.controller.form.Data.sm_id_auto = newval;
   this.sm_id_auto = newval;
-  jsh.XPage.Select(cb, XBase[xmodel.namespace+'X_SML_EDIT'][0]);
+  jsh.XPage.Select(XBase[xmodel.namespace+'X_SML_EDIT'][0], cb);
 }
 
 jsh.App.X_SMLW.item_insert = function(context_item){

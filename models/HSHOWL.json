@@ -18,7 +18,7 @@
       {"name":"h_title","type":"varchar","length":"70","caption":"Help Module","controlstyle":"width:350px;","actions":"B","link":"update:HSHOW","sample":"Test - General Information"}
     ],
     "oninit": "_this.ran = false; if('hp_code' in _GET) xmodel.controller.grid.Data['hp_code'] = _GET.hp_code;",
-    "onload": "if(_this.ran) return true; _this.ran = true; var xgrid = xmodel.controller.grid; if(!('hp_code' in xgrid.Data)) return true; if(xgrid.RowCount == 0){ delete xgrid.Data.hp_code; delete jsh._GET.hp_code; jsh.XPage.Select(callback); } else { XExt.navTo(jsh.$root('.xgrid_'+xmodel.class+'_placeholder a').first().prop('href')); } return false;"
+    "onload": "if(_this.ran) return true; _this.ran = true; var xgrid = xmodel.controller.grid; if(!('hp_code' in xgrid.Data)) return true; if(xgrid.RowCount == 0){ delete xgrid.Data.hp_code; delete jsh._GET.hp_code; jsh.XPage.Select(undefined, callback); } else { XExt.navTo(jsh.$root('.xgrid_'+xmodel.class+'_placeholder a').first().prop('href')); } return false;"
   },
   "C_HSHOWL": {
     "inherits": "HSHOWL",
