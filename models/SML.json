@@ -41,7 +41,7 @@
         }
        },
       {"name":"sm_subcmd","type":"varchar","length":"255","actions":"BIU","control": "textbox_S",
-       "caption":"SubCommand"},
+       "caption":"Querystring / Anchor"},
       {"name":"sm_sts","type":"varchar","length":8,"actions": "BIU","control": "dropdown_S",
        "lov": {"sql":"select codeval, codetxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
        "controlstyle":"width:70px;","caption":"Status"},

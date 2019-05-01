@@ -11,7 +11,7 @@
     "fields":[
       {"name":"sm_id_auto","type":"bigint","key":1,"control":"hidden"},
       {"name":"sm_name","type":"varchar","length":30,"actions": "BIU","control": "textbox_M",
-       "validate":["Required"],"caption":"Menu ID","captionstyle": "text-align:right;width:120px;"},
+       "validate":["Required"],"caption":"Menu ID","captionstyle": "text-align:right;width:130px;"},
       {"name":"sm_desc","type":"varchar","length":"255","actions":"BIU","control": "textbox_M","nl":1,
        "validate":["Required"],"caption":"Display Name"},
       {"name":"sm_cmd","type":"varchar","length":255,"actions": "BIU","control": "textbox_M","caption":"Model / Command","nl":1,
@@ -22,7 +22,7 @@
         }
        },
       {"name":"sm_subcmd","type":"varchar","length":"255","actions":"BIU","control": "textbox_M","nl":1,
-       "caption":"SubCommand"},
+       "caption":"Querystring / Anchor"},
       {"name":"sm_seq","type":"int","actions": "BIU","control": "textbox_VS","nl":1,
        "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
        "sqlsort":"(coalesce(coalesce(sm_seq,sm_id),0))",
