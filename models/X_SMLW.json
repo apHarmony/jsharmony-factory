@@ -24,7 +24,7 @@
             { "icon": "delete", "text": "Delete", "command": "jsh.App.X_SMLW.item_delete(context_item);", "actions": "IUD", "class": "delete" }
           ]
         },
-        "onchange": "jsh.App.X_SMLW.sm_id_onchange(obj,newval);"
+        "onchange": "jsh.App.X_SMLW.sm_id_onchange(obj,newval,undoChange,e);"
       },
       {
         "name": "X_SML_EDIT",

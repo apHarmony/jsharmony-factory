@@ -37,15 +37,19 @@ jsh.App.X_SMLW.oncontextmenu = function(ctrl, n){
   return false;
 }
 
-jsh.App.X_SMLW.sm_id_onchange = function(obj, newval) {
+jsh.App.X_SMLW.sm_id_onchange = function(obj, newval, undoChange) {
+  if(jsh.XPage.GetChanges().length){
+    undoChange();
+    return XExt.Alert('Please save changes before navigating to a different record.');
+  }
   jsh.App.X_SMLW.select_sm_id_auto(newval);
 }
 
-jsh.App.X_SMLW.select_sm_id_auto = function(newval,cb){
+jsh.App.X_SMLW.select_sm_id_auto = function(newval, cb){
   xmodel.controller.form.Data.cur_sm_id_auto = newval;
   xmodel.controller.form.Data.sm_id_auto = newval;
   this.sm_id_auto = newval;
-  jsh.XPage.Select(XBase[xmodel.namespace+'X_SML_EDIT'][0], cb);
+  jsh.XPage.Select({ modelid: XBase[xmodel.namespace+'X_SML_EDIT'][0], force: true }, cb);
 }
 
 jsh.App.X_SMLW.item_insert = function(context_item){
@@ -75,7 +79,7 @@ jsh.App.X_SMLW.item_insert = function(context_item){
     if (!validate.ValidateControls('I', data, '')) return;
     XForm.prototype.XExecutePost('X_SMLW_INSERT', data, function (rslt) { //On success
       if ('_success' in rslt) { 
-        jsh.App.X_SMLW.select_sm_id_auto(parseInt(rslt.X_SMLW_INSERT[0].sm_id_auto),function(){
+        jsh.App.X_SMLW.select_sm_id_auto(parseInt(rslt.X_SMLW_INSERT[0].sm_id_auto), function(){
           success(); 
           jsh.XPage.Refresh(); 
         });
