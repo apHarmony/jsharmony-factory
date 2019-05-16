@@ -1,16 +1,16 @@
-CREATE ROLE [jsharmony_role_exec]
+CREATE ROLE [{{schema}}_role_exec]
 GO
-CREATE ROLE [jsharmony_role_dev]
+CREATE ROLE [{{schema}}_role_dev]
 GO
-ALTER ROLE [db_datareader] ADD MEMBER [jsharmony_role_exec]
+ALTER ROLE [db_datareader] ADD MEMBER [{{schema}}_role_exec]
 GO
-ALTER ROLE [db_datawriter] ADD MEMBER [jsharmony_role_exec]
+ALTER ROLE [db_datawriter] ADD MEMBER [{{schema}}_role_exec]
 GO
-ALTER ROLE [db_datareader] ADD MEMBER [jsharmony_role_dev]
+ALTER ROLE [db_datareader] ADD MEMBER [{{schema}}_role_dev]
 GO
-ALTER ROLE [db_datawriter] ADD MEMBER [jsharmony_role_dev]
+ALTER ROLE [db_datawriter] ADD MEMBER [{{schema}}_role_dev]
 GO
-GRANT CREATE TABLE TO [jsharmony_role_dev] AS [dbo]
+GRANT CREATE TABLE TO [{{schema}}_role_dev] AS [dbo]
 GO
 /*
 GRANT VIEW ANY COLUMN ENCRYPTION KEY DEFINITION TO [public] AS [dbo]
@@ -18,7 +18,7 @@ GRANT VIEW ANY COLUMN MASTER KEY DEFINITION TO [public] AS [dbo]
 */
 CREATE SCHEMA [jsharmony]
 GO
-GRANT ALTER ON SCHEMA::[jsharmony] TO [jsharmony_role_dev] AS [dbo]
+GRANT ALTER ON SCHEMA::[jsharmony] TO [{{schema}}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -38,17 +38,17 @@ BEGIN
   DECLARE @rslt nvarchar(max) = NULL
 
   SET @rslt =  'INFO'+char(13)+char(10)+ 
-               '         Entered:  '+jsharmony.mymmddyyhhmi(@ETSTMP)+'  '+jsharmony.mycuser_fmt(@EU)+
+               '         Entered:  '+{{schema}}.mymmddyyhhmi(@ETSTMP)+'  '+{{schema}}.mycuser_fmt(@EU)+
 			   char(13)+char(10)+ 
-               'Last Updated:  '+jsharmony.mymmddyyhhmi(@MTSTMP)+'  '+jsharmony.mycuser_fmt(@MU); 
+               'Last Updated:  '+{{schema}}.mymmddyyhhmi(@MTSTMP)+'  '+{{schema}}.mycuser_fmt(@MU); 
 
   RETURN @rslt
 END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[audit_info] TO [jsharmony_role_exec] AS [dbo]
-GRANT EXECUTE ON [jsharmony].[audit_info] TO [jsharmony_role_dev] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[audit_info] TO [{{schema}}_role_exec] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[audit_info] TO [{{schema}}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -88,7 +88,7 @@ DECLARE @ppd_xpp BIT
          @ppd_gpp = ppd.ppd_gpp,
          @ppd_ppp = ppd.ppd_ppp,
          @ppd_xpp = ppd.ppd_xpp
-    FROM jsharmony.PPD
+    FROM {{schema}}.PPD
    WHERE ppd.ppd_process = @in_process
      AND ppd.ppd_attrib = @in_attrib      
 
@@ -158,9 +158,9 @@ END
 
 GO
 
-GRANT EXECUTE ON jsharmony.D_FILENAME TO jsharmony_role_exec;
+GRANT EXECUTE ON {{schema}}.D_FILENAME TO {{schema}}_role_exec;
 GO
-GRANT EXECUTE ON jsharmony.D_FILENAME TO jsharmony_role_dev;
+GRANT EXECUTE ON {{schema}}.D_FILENAME TO {{schema}}_role_dev;
 GO
 
 
@@ -181,7 +181,7 @@ BEGIN
 DECLARE @rslt BIT = 0
 
   select top(1) @rslt=1
-    from jsharmony.D
+    from {{schema}}.D
    where D_SCOPE = @tbl
      and D_SCOPE_ID = @id;	 
 
@@ -223,7 +223,7 @@ BEGIN
 DECLARE @rslt BIT = 0
 
   select top(1) @rslt=1
-    from jsharmony.N
+    from {{schema}}.N
    where N_SCOPE = @tbl
      and N_SCOPE_ID = @id;	 
 
@@ -258,7 +258,7 @@ BEGIN
 DECLARE @rslt NVARCHAR(MAX) = NULL
 
   SELECT @rslt = PE_LName+', '+PE_FName
-    FROM jsharmony.CPE
+    FROM {{schema}}.CPE
    WHERE PE_ID = @in_PE_ID;
 
   RETURN (@rslt)
@@ -267,7 +267,7 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[GET_CPE_NAME] TO [jsharmony_role_exec] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[GET_CPE_NAME] TO [{{schema}}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -286,7 +286,7 @@ BEGIN
 DECLARE @rslt NVARCHAR(MAX) = NULL
 
   SELECT @rslt = PE_LName+', '+PE_FName
-    FROM jsharmony.PE
+    FROM {{schema}}.PE
    WHERE PE_ID = @in_PE_ID;
 
   RETURN (@rslt)
@@ -294,9 +294,9 @@ DECLARE @rslt NVARCHAR(MAX) = NULL
 END
 
 GO
-GRANT EXECUTE ON [jsharmony].[GET_PE_NAME] TO [jsharmony_role_exec] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[GET_PE_NAME] TO [{{schema}}_role_exec] AS [dbo]
 GO
-GRANT EXECUTE ON [jsharmony].[GET_PE_NAME] TO [jsharmony_role_dev] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[GET_PE_NAME] TO [{{schema}}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -317,7 +317,7 @@ BEGIN
 DECLARE @rslt NVARCHAR(MAX) = NULL
 
   SELECT @rslt = PPD_DESC
-    FROM jsharmony.PPD
+    FROM {{schema}}.PPD
    WHERE PPD_PROCESS = @in_PPD_PROCESS
      AND PPD_ATTRIB = @in_PPD_ATTRIB
 
@@ -325,9 +325,9 @@ DECLARE @rslt NVARCHAR(MAX) = NULL
 
 END
 GO
-GRANT EXECUTE ON [jsharmony].[GET_PPD_DESC] TO [jsharmony_role_exec] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[GET_PPD_DESC] TO [{{schema}}_role_exec] AS [dbo]
 GO
-GRANT EXECUTE ON [jsharmony].[GET_PPD_DESC] TO [jsharmony_role_dev] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[GET_PPD_DESC] TO [{{schema}}_role_dev] AS [dbo]
 GO
 
 
@@ -350,7 +350,7 @@ AS
 BEGIN
 DECLARE @rslt varchar(20)
 
-  SET @rslt = jsharmony.myCUSER_DO()
+  SET @rslt = {{schema}}.myCUSER_DO()
 
   return (@rslt)
 
@@ -359,9 +359,9 @@ END
 
 
 GO
-GRANT REFERENCES ON [jsharmony].[myCUSER] TO [jsharmony_role_dev] AS [dbo]
+GRANT REFERENCES ON [jsharmony].[myCUSER] TO [{{schema}}_role_dev] AS [dbo]
 GO
-GRANT EXECUTE ON [jsharmony].[myCUSER] TO [jsharmony_role_exec] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[myCUSER] TO [{{schema}}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -388,7 +388,7 @@ DECLARE @pe_id BIGINT=-1;
   IF ((@an IS NOT NULL) AND (@an <> 'DBAPP')) 
   BEGIN 
     SELECT @pe_id=pe_id
-	  FROM jsharmony.PE
+	  FROM {{schema}}.PE
      WHERE PE_Email = @an;
 	
 	SET @rslt = CASE WHEN @pe_id=(-1) THEN @an ELSE 'P'+CONVERT(VARCHAR(30),@pe_id) END
@@ -418,7 +418,7 @@ AS
 BEGIN
 DECLARE @rslt nvarchar(255)
 
-  SET @rslt = jsharmony.myCUSER_FMT_DO(@USER)
+  SET @rslt = {{schema}}.myCUSER_FMT_DO(@USER)
   
   return (@rslt)
 
@@ -428,9 +428,9 @@ END
 
 
 GO
-GRANT REFERENCES ON [jsharmony].[myCUSER_FMT] TO [jsharmony_role_dev] AS [dbo]
+GRANT REFERENCES ON [jsharmony].[myCUSER_FMT] TO [{{schema}}_role_dev] AS [dbo]
 GO
-GRANT EXECUTE ON [jsharmony].[myCUSER_FMT] TO [jsharmony_role_exec] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[myCUSER_FMT] TO [{{schema}}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -458,14 +458,14 @@ DECLARE @rslt nvarchar(255)
   begin
     set @rslt = @USER;
     select @rslt = 'S-'+isnull(PE_Name,'')
-	 from jsharmony.PE
+	 from {{schema}}.PE
     where convert(varchar(50),PE_ID)=substring(@USER,2,1024);
   end
   else if (substring(@USER,1,1)='C' and isnumeric(substring(@USER,2,1024))=1)
   begin
     set @rslt = @USER;
     select @rslt = 'C-'+isnull(PE_Name,'')
-	 from jsharmony.CPE
+	 from {{schema}}.CPE
     where convert(varchar(50),PE_ID)=substring(@USER,2,1024);
   end
 
@@ -504,14 +504,14 @@ DECLARE @v varchar(255)
   if (@TYPE = 'S')
   BEGIN
     select @seed = PP_VAL
-	  from jsharmony.V_PP
+	  from {{schema}}.V_PP
      where PP_PROCESS = 'USERS'
 	   and PP_ATTRIB = 'HASH_SEED_S';
   END
   else if (@TYPE = 'C')
   BEGIN
     select @seed = PP_VAL
-	  from jsharmony.V_PP
+	  from {{schema}}.V_PP
      where PP_PROCESS = 'USERS'
 	   and PP_ATTRIB = 'HASH_SEED_C';
   END
@@ -567,7 +567,7 @@ CREATE FUNCTION [jsharmony].[mynow]
 RETURNS DATETIME2(7)   
 AS 
 BEGIN
-  RETURN (jsharmony.myNOW_DO())
+  RETURN ({{schema}}.myNOW_DO())
 END
 
 
@@ -577,9 +577,9 @@ END
 
 
 GO
-GRANT REFERENCES ON [jsharmony].[myNOW] TO [jsharmony_role_dev] AS [dbo]
+GRANT REFERENCES ON [jsharmony].[myNOW] TO [{{schema}}_role_dev] AS [dbo]
 GO
-GRANT EXECUTE ON [jsharmony].[myNOW] TO [jsharmony_role_exec] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[myNOW] TO [{{schema}}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -624,7 +624,7 @@ AS
 BEGIN
 DECLARE @rslt bigint
 
-  SET @rslt = jsharmony.myPE_DO()
+  SET @rslt = {{schema}}.myPE_DO()
 
   return (@rslt)
 
@@ -678,7 +678,7 @@ AS
 BEGIN
 DECLARE @rslt bigint
 
-  SET @rslt = jsharmony.myPEC_DO()
+  SET @rslt = {{schema}}.myPEC_DO()
 
   return (@rslt)
 
@@ -750,13 +750,13 @@ CREATE FUNCTION [jsharmony].[mytoday] ()
 RETURNS date
 AS
 BEGIN
-	RETURN (jsharmony.myTODAY_DO())
+	RETURN ({{schema}}.myTODAY_DO())
 END
 
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[myTODAY] TO [jsharmony_role_exec] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[myTODAY] TO [{{schema}}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -772,7 +772,7 @@ RETURNS date
 AS
 BEGIN
 	
-	RETURN DATEADD(day, DATEDIFF(day, 0, jsharmony.myNOW()), 0)
+	RETURN DATEADD(day, DATEDIFF(day, 0, {{schema}}.myNOW()), 0)
 
 
 END
@@ -933,7 +933,7 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[TABLE_TYPE] TO [jsharmony_role_exec] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[TABLE_TYPE] TO [{{schema}}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -977,7 +977,7 @@ SELECT distinct
       ,NULL codecode
       ,NULL codetdt
       ,NULL codetcm
-  FROM jsharmony.PPD
+  FROM {{schema}}.PPD
  where PPD_PPP = 1
 
 GO
@@ -1044,7 +1044,7 @@ SELECT  AUD_H.aud_seq,
         AUD_H.table_id,
         AUD_H.aud_op,
         AUD_H.aud_u,
-			  jsharmony.myCUSER_FMT(AUD_H.AUD_U) pe_name,
+			  {{schema}}.myCUSER_FMT(AUD_H.AUD_U) pe_name,
 			  AUD_H.db_k,
 			  AUD_H.aud_tstmp,
 			  AUD_H.ref_name,
@@ -1052,8 +1052,8 @@ SELECT  AUD_H.aud_seq,
 			  AUD_H.subj,
         AUD_D.column_name, 
 			  AUD_D.column_val
-FROM          jsharmony.AUD_H 
-LEFT OUTER JOIN jsharmony.AUD_D ON AUD_H.AUD_SEQ = AUD_D.AUD_SEQ
+FROM          {{schema}}.AUD_H 
+LEFT OUTER JOIN {{schema}}.AUD_D ON AUD_H.AUD_SEQ = AUD_D.AUD_SEQ
 
 
 
@@ -1078,7 +1078,7 @@ SELECT distinct
       ,NULL codecode
       ,NULL codetdt
       ,NULL codetcm
-  FROM jsharmony.PPD
+  FROM {{schema}}.PPD
  where PPD_XPP = 1
 
 GO
@@ -1103,7 +1103,7 @@ SELECT NULL codseq
       ,NULL cod_mu
       ,NULL cod_snotes
       ,NULL cod_notes
-  FROM jsharmony.PPD
+  FROM {{schema}}.PPD
  WHERE PPD_GPP = 1
 GO
 SET ANSI_NULLS ON
@@ -1128,7 +1128,7 @@ SELECT NULL codseq
       ,NULL cod_mu
       ,NULL cod_snotes
       ,NULL cod_notes
-  FROM jsharmony.PPD
+  FROM {{schema}}.PPD
  WHERE PPD_PPP = 1
 
 GO
@@ -1154,7 +1154,7 @@ SELECT NULL codseq
       ,NULL cod_mu
       ,NULL cod_snotes
       ,NULL cod_notes
-  FROM jsharmony.PPD
+  FROM {{schema}}.PPD
  WHERE PPD_XPP = 1
 
 GO
@@ -1188,8 +1188,8 @@ GO
 
 CREATE view [jsharmony].[v_my_roles] as
 select SPER.sr_name
-  from jsharmony.SPER
- where SPER.PE_ID = jsharmony.myPE()
+  from {{schema}}.SPER
+ where SPER.PE_ID = {{schema}}.myPE()
 
 
 GO
@@ -1221,7 +1221,7 @@ CREATE view [jsharmony].[v_months] as
 select n, 
        right('0'+convert(nvarchar(50),N),2) month,
        right('0'+convert(nvarchar(50),N),2) mth
-  from jsharmony.NUMBERS
+  from {{schema}}.NUMBERS
  where N <=12;
 
 
@@ -1242,7 +1242,7 @@ GO
 CREATE view [jsharmony].[v_years] as
 select datepart(year,sysdatetime())+N-1 year,
        datepart(year,sysdatetime())+N-1 yr
-  from jsharmony.NUMBERS
+  from {{schema}}.NUMBERS
  where N <=10;
 
 
@@ -1332,10 +1332,10 @@ CREATE VIEW [jsharmony].[v_pp] AS
 			                 THEN 'XPP' 
 					             ELSE 'GPP' END 
 			  ELSE convert(varchar,PPP.PE_ID) END AS pp_source 
-   FROM jsharmony.PPD 
-   LEFT OUTER JOIN jsharmony.XPP ON PPD.PPD_PROCESS = XPP.XPP_PROCESS AND PPD.PPD_ATTRIB = XPP.XPP_ATTRIB 
-   LEFT OUTER JOIN jsharmony.GPP ON PPD.PPD_PROCESS = GPP.GPP_PROCESS AND PPD.PPD_ATTRIB = GPP.GPP_ATTRIB 
-   LEFT OUTER JOIN jsharmony.PPP ON PPD.PPD_PROCESS = PPP.PPP_PROCESS AND PPD.PPD_ATTRIB = PPP.PPP_ATTRIB AND PPP.PE_ID = jsharmony.myPE();
+   FROM {{schema}}.PPD 
+   LEFT OUTER JOIN {{schema}}.XPP ON PPD.PPD_PROCESS = XPP.XPP_PROCESS AND PPD.PPD_ATTRIB = XPP.XPP_ATTRIB 
+   LEFT OUTER JOIN {{schema}}.GPP ON PPD.PPD_PROCESS = GPP.GPP_PROCESS AND PPD.PPD_ATTRIB = GPP.GPP_ATTRIB 
+   LEFT OUTER JOIN {{schema}}.PPP ON PPD.PPD_PROCESS = PPP.PPP_PROCESS AND PPD.PPD_ATTRIB = PPP.PPP_ATTRIB AND PPP.PE_ID = {{schema}}.myPE();
 
 
 
@@ -1399,7 +1399,7 @@ SELECT d_id
       ,d_synctstmp
       ,d_snotes
       ,d_id_main
-  FROM jsharmony.D
+  FROM {{schema}}.D
 GO
 SET ANSI_NULLS ON
 GO
@@ -1438,16 +1438,16 @@ select NAME.PP_VAL house_name,
 	     FAX.PP_VAL house_fax,
 	     EMAIL.PP_VAL house_email,
 	     CONTACT.PP_VAL house_contact
-  from jsharmony.dual
- left outer join jsharmony.V_PP NAME on NAME.PP_PROCESS='HOUSE' and NAME.PP_ATTRIB='NAME'
- left outer join jsharmony.V_PP ADDR on ADDR.PP_PROCESS='HOUSE' and ADDR.PP_ATTRIB='ADDR'
- left outer join jsharmony.V_PP CITY on CITY.PP_PROCESS='HOUSE' and CITY.PP_ATTRIB='CITY'
- left outer join jsharmony.V_PP [STATE] on[STATE].PP_PROCESS='HOUSE' and [STATE].PP_ATTRIB='STATE'
- left outer join jsharmony.V_PP ZIP on ZIP.PP_PROCESS='HOUSE' and ZIP.PP_ATTRIB='ZIP'
- left outer join jsharmony.V_PP BPHONE on BPHONE.PP_PROCESS='HOUSE' and BPHONE.PP_ATTRIB='BPHONE'
- left outer join jsharmony.V_PP FAX on FAX.PP_PROCESS='HOUSE' and FAX.PP_ATTRIB='FAX'
- left outer join jsharmony.V_PP EMAIL on EMAIL.PP_PROCESS='HOUSE' and EMAIL.PP_ATTRIB='EMAIL'
- left outer join jsharmony.V_PP CONTACT on CONTACT.PP_PROCESS='HOUSE' and CONTACT.PP_ATTRIB='CONTACT'
+  from {{schema}}.dual
+ left outer join {{schema}}.V_PP NAME on NAME.PP_PROCESS='HOUSE' and NAME.PP_ATTRIB='NAME'
+ left outer join {{schema}}.V_PP ADDR on ADDR.PP_PROCESS='HOUSE' and ADDR.PP_ATTRIB='ADDR'
+ left outer join {{schema}}.V_PP CITY on CITY.PP_PROCESS='HOUSE' and CITY.PP_ATTRIB='CITY'
+ left outer join {{schema}}.V_PP [STATE] on[STATE].PP_PROCESS='HOUSE' and [STATE].PP_ATTRIB='STATE'
+ left outer join {{schema}}.V_PP ZIP on ZIP.PP_PROCESS='HOUSE' and ZIP.PP_ATTRIB='ZIP'
+ left outer join {{schema}}.V_PP BPHONE on BPHONE.PP_PROCESS='HOUSE' and BPHONE.PP_ATTRIB='BPHONE'
+ left outer join {{schema}}.V_PP FAX on FAX.PP_PROCESS='HOUSE' and FAX.PP_ATTRIB='FAX'
+ left outer join {{schema}}.V_PP EMAIL on EMAIL.PP_PROCESS='HOUSE' and EMAIL.PP_ATTRIB='EMAIL'
+ left outer join {{schema}}.V_PP CONTACT on CONTACT.PP_PROCESS='HOUSE' and CONTACT.PP_ATTRIB='CONTACT'
 
 
 
@@ -1550,8 +1550,8 @@ GO
 
 CREATE VIEW [jsharmony].[v_crmsel]
 AS
-SELECT jsharmony.CRM.crm_id, 
-       ISNULL(jsharmony.DUAL.DUAL_NVARCHAR50, '') AS new_cr_name, 
+SELECT {{schema}}.CRM.crm_id, 
+       ISNULL({{schema}}.DUAL.DUAL_NVARCHAR50, '') AS new_cr_name, 
 	     DUAL.DUAL_BIGINT AS new_sm_id,
 	     CASE WHEN CRM.CRM_ID IS NULL 
 	          THEN 0 
@@ -1575,29 +1575,29 @@ SELECT jsharmony.CRM.crm_id,
 	     M.sm_image, 
 	     M.sm_snotes,
 	     M.sm_subcmd
-  FROM (SELECT jsharmony.CR.CR_ID,
-               jsharmony.CR.CR_SEQ, 
-               jsharmony.CR.CR_STS, 
-               jsharmony.CR.CR_Name, 
-               jsharmony.CR.CR_Desc, 
-               jsharmony.SM.SM_ID_AUTO, 
-			   jsharmony.SM.SM_UTYPE, 
-			   jsharmony.SM.SM_ID, 
-			   jsharmony.SM.SM_STS, 
-			   jsharmony.SM.SM_ID_Parent, 
-			   jsharmony.SM.SM_Name, 
-               jsharmony.SM.SM_Seq, 
-			   jsharmony.SM.SM_DESC, 
-			   jsharmony.SM.SM_DESCL, 
-			   jsharmony.SM.SM_DESCVL, 
-			   jsharmony.SM.SM_Cmd, 
-			   jsharmony.SM.SM_Image, 
-			   jsharmony.SM.SM_SNotes, 
-               jsharmony.SM.SM_SubCmd
-          FROM jsharmony.CR 
-		  LEFT OUTER JOIN jsharmony.SM ON jsharmony.SM.SM_UTYPE = 'C') AS M 
- INNER JOIN jsharmony.DUAL ON 1 = 1 
-  LEFT OUTER JOIN jsharmony.CRM ON jsharmony.CRM.CR_NAME = M.CR_Name AND jsharmony.CRM.SM_ID = M.SM_ID;
+  FROM (SELECT {{schema}}.CR.CR_ID,
+               {{schema}}.CR.CR_SEQ, 
+               {{schema}}.CR.CR_STS, 
+               {{schema}}.CR.CR_Name, 
+               {{schema}}.CR.CR_Desc, 
+               {{schema}}.SM.SM_ID_AUTO, 
+			   {{schema}}.SM.SM_UTYPE, 
+			   {{schema}}.SM.SM_ID, 
+			   {{schema}}.SM.SM_STS, 
+			   {{schema}}.SM.SM_ID_Parent, 
+			   {{schema}}.SM.SM_Name, 
+               {{schema}}.SM.SM_Seq, 
+			   {{schema}}.SM.SM_DESC, 
+			   {{schema}}.SM.SM_DESCL, 
+			   {{schema}}.SM.SM_DESCVL, 
+			   {{schema}}.SM.SM_Cmd, 
+			   {{schema}}.SM.SM_Image, 
+			   {{schema}}.SM.SM_SNotes, 
+               {{schema}}.SM.SM_SubCmd
+          FROM {{schema}}.CR 
+		  LEFT OUTER JOIN {{schema}}.SM ON {{schema}}.SM.SM_UTYPE = 'C') AS M 
+ INNER JOIN {{schema}}.DUAL ON 1 = 1 
+  LEFT OUTER JOIN {{schema}}.CRM ON {{schema}}.CRM.CR_NAME = M.CR_Name AND {{schema}}.CRM.SM_ID = M.SM_ID;
 
 
 
@@ -1632,7 +1632,7 @@ GO
 
 CREATE view [jsharmony].[v_cper_nostar] as
 select *
-  from jsharmony.cper
+  from {{schema}}.cper
  where CR_NAME <> 'C*';
 
 GO
@@ -1693,8 +1693,8 @@ GO
 
 CREATE VIEW [jsharmony].[v_srmsel]
 AS
-SELECT jsharmony.SRM.srm_id, 
-       ISNULL(jsharmony.DUAL.DUAL_NVARCHAR50, '') AS new_sr_name, 
+SELECT {{schema}}.SRM.srm_id, 
+       ISNULL({{schema}}.DUAL.DUAL_NVARCHAR50, '') AS new_sr_name, 
 	   DUAL.DUAL_BIGINT AS new_sm_id,
 	   CASE WHEN SRM.SRM_ID IS NULL 
 	        THEN 0 
@@ -1718,29 +1718,29 @@ SELECT jsharmony.SRM.srm_id,
 	   M.sm_image, 
 	   M.sm_snotes,
 	   M.sm_subcmd
-  FROM (SELECT jsharmony.SR.SR_ID, 
-               jsharmony.SR.SR_SEQ, 
-               jsharmony.SR.SR_STS, 
-               jsharmony.SR.SR_Name, 
-               jsharmony.SR.SR_Desc, 
-               jsharmony.SM.SM_ID_AUTO, 
-			   jsharmony.SM.SM_UTYPE, 
-			   jsharmony.SM.SM_ID, 
-			   jsharmony.SM.SM_STS, 
-			   jsharmony.SM.SM_ID_Parent, 
-			   jsharmony.SM.SM_Name, 
-               jsharmony.SM.SM_Seq, 
-			   jsharmony.SM.SM_DESC, 
-			   jsharmony.SM.SM_DESCL, 
-			   jsharmony.SM.SM_DESCVL, 
-			   jsharmony.SM.SM_Cmd, 
-			   jsharmony.SM.SM_Image, 
-			   jsharmony.SM.SM_SNotes, 
-               jsharmony.SM.SM_SubCmd
-          FROM jsharmony.SR 
-		  LEFT OUTER JOIN jsharmony.SM ON jsharmony.SM.SM_UTYPE = 'S') AS M 
- INNER JOIN jsharmony.DUAL ON 1 = 1 
-  LEFT OUTER JOIN jsharmony.SRM ON jsharmony.SRM.SR_NAME = M.SR_Name AND jsharmony.SRM.SM_ID = M.SM_ID;
+  FROM (SELECT {{schema}}.SR.SR_ID, 
+               {{schema}}.SR.SR_SEQ, 
+               {{schema}}.SR.SR_STS, 
+               {{schema}}.SR.SR_Name, 
+               {{schema}}.SR.SR_Desc, 
+               {{schema}}.SM.SM_ID_AUTO, 
+			   {{schema}}.SM.SM_UTYPE, 
+			   {{schema}}.SM.SM_ID, 
+			   {{schema}}.SM.SM_STS, 
+			   {{schema}}.SM.SM_ID_Parent, 
+			   {{schema}}.SM.SM_Name, 
+               {{schema}}.SM.SM_Seq, 
+			   {{schema}}.SM.SM_DESC, 
+			   {{schema}}.SM.SM_DESCL, 
+			   {{schema}}.SM.SM_DESCVL, 
+			   {{schema}}.SM.SM_Cmd, 
+			   {{schema}}.SM.SM_Image, 
+			   {{schema}}.SM.SM_SNotes, 
+               {{schema}}.SM.SM_SubCmd
+          FROM {{schema}}.SR 
+		  LEFT OUTER JOIN {{schema}}.SM ON {{schema}}.SM.SM_UTYPE = 'S') AS M 
+ INNER JOIN {{schema}}.DUAL ON 1 = 1 
+  LEFT OUTER JOIN {{schema}}.SRM ON {{schema}}.SRM.SR_NAME = M.SR_Name AND {{schema}}.SRM.SM_ID = M.SM_ID;
 
 
 GO
@@ -1784,10 +1784,10 @@ GO
 
 
 CREATE VIEW [jsharmony].[v_gppl] AS
-SELECT jsharmony.GPP.*,
-       jsharmony.get_PPD_DESC(GPP_PROCESS, GPP_ATTRIB) ppd_desc,
-	   jsharmony.audit_info(GPP_ETstmp, GPP_EU, GPP_MTstmp, GPP_MU) gpp_info
-  FROM jsharmony.GPP;
+SELECT {{schema}}.GPP.*,
+       {{schema}}.get_PPD_DESC(GPP_PROCESS, GPP_ATTRIB) ppd_desc,
+	   {{schema}}.audit_info(GPP_ETstmp, GPP_EU, GPP_MTstmp, GPP_MU) gpp_info
+  FROM {{schema}}.GPP;
 
 
 
@@ -1848,9 +1848,9 @@ GO
 
 CREATE VIEW [jsharmony].[v_pppl] AS
 SELECT PPP.*,
-       jsharmony.get_PPD_DESC(PPP_PROCESS, PPP_ATTRIB) ppd_desc,
-	   jsharmony.audit_info(PPP_ETstmp, PPP_EU, PPP_MTstmp, PPP_MU) ppp_info
-  FROM jsharmony.PPP
+       {{schema}}.get_PPD_DESC(PPP_PROCESS, PPP_ATTRIB) ppd_desc,
+	   {{schema}}.audit_info(PPP_ETstmp, PPP_EU, PPP_MTstmp, PPP_MU) ppp_info
+  FROM {{schema}}.PPP
 
 
 
@@ -1910,8 +1910,8 @@ GO
 
 CREATE VIEW [jsharmony].[v_xppl] AS
 SELECT XPP.*,
-       jsharmony.get_PPD_DESC(XPP_PROCESS, XPP_ATTRIB) ppd_desc,
-	   jsharmony.audit_info(XPP_ETstmp, XPP_EU, XPP_MTstmp, XPP_MU) xpp_info
+       {{schema}}.get_PPD_DESC(XPP_PROCESS, XPP_ATTRIB) ppd_desc,
+	   {{schema}}.audit_info(XPP_ETstmp, XPP_EU, XPP_MTstmp, XPP_MU) xpp_info
 
 
 
@@ -1919,7 +1919,7 @@ SELECT XPP.*,
 
 
 
-  FROM jsharmony.XPP;
+  FROM {{schema}}.XPP;
 
 
 
@@ -1980,8 +1980,8 @@ GO
 
 CREATE VIEW [jsharmony].[v_ppdl] AS
 SELECT PPD.*,
-	   jsharmony.audit_info(PPD_ETstmp, PPD_EU, PPD_MTstmp, PPD_MU) ppd_info
-  FROM jsharmony.PPD;
+	   {{schema}}.audit_info(PPD_ETstmp, PPD_EU, PPD_MTstmp, PPD_MU) ppd_info
+  FROM {{schema}}.PPD;
 
 
 
@@ -2016,7 +2016,7 @@ SELECT distinct
       ,NULL codecode
       ,NULL codetdt
       ,NULL codetcm
-  FROM jsharmony.PPD
+  FROM {{schema}}.PPD
  where PPD_GPP = 1
 GO
 SET ANSI_NULLS ON
@@ -2026,7 +2026,7 @@ GO
 
 
 create view [jsharmony].[v_mype] as
-select jsharmony.myPE() mype
+select {{schema}}.myPE() mype
 GO
 
 
@@ -3623,16 +3623,16 @@ BEGIN
   BEGIN TRY  
 
     SELECT @GETCID = PP_VAL
-	  FROM jsharmony.V_PP
+	  FROM {{schema}}.V_PP
      where PP_PROCESS = 'SQL'
 	   and PP_ATTRIB = 'GETCID';
 
     SELECT @GETEID = PP_VAL
-	  FROM jsharmony.V_PP
+	  FROM {{schema}}.V_PP
      where PP_PROCESS = 'SQL'
 	   and PP_ATTRIB = 'GETEID';
 
-    SET @MYUSER = CASE WHEN @u IS NULL THEN jsharmony.myCUSER() ELSE @u END
+    SET @MYUSER = CASE WHEN @u IS NULL THEN {{schema}}.myCUSER() ELSE @u END
 
     if (@OP = 'D')
 	begin
@@ -3642,7 +3642,7 @@ BEGIN
 		       @WK_REF_NAME = REF_NAME,
 		       @WK_REF_ID = REF_ID,
 		       @WK_SUBJ = SUBJ
-		  from jsharmony.AUD_H
+		  from {{schema}}.AUD_H
          where TABLE_NAME = lower(@tname)
 		   and TABLE_ID = @tid
 		   and AUD_OP = 'I'
@@ -3703,7 +3703,7 @@ BEGIN
 		SET @WK_SUBJ = @subj;
 	end
 
-    INSERT INTO jsharmony.AUD_H 
+    INSERT INTO {{schema}}.AUD_H 
 	                  (TABLE_NAME, TABLE_ID, AUD_OP, AUD_U, AUD_Tstmp, C_ID, E_ID, REF_NAME, REF_ID, SUBJ) 
                VALUES (lower(@tname), 
 			           @tid, 
@@ -3770,7 +3770,7 @@ BEGIN
  
   BEGIN TRY  
 
-    SET @MYUSER = CASE WHEN @u IS NULL THEN jsharmony.myCUSER() ELSE @u END
+    SET @MYUSER = CASE WHEN @u IS NULL THEN {{schema}}.myCUSER() ELSE @u END
 
     if (@OP = 'D')
 	begin
@@ -3778,7 +3778,7 @@ BEGIN
 		       @WK_REF_NAME = REF_NAME,
 		       @WK_REF_ID = REF_ID,
 		       @WK_SUBJ = SUBJ
-		  from jsharmony.AUD_H
+		  from {{schema}}.AUD_H
          where TABLE_NAME = lower(@tname)
 		   and TABLE_ID = @tid
 		   and AUD_OP = 'I'
@@ -3797,7 +3797,7 @@ BEGIN
 		SET @WK_SUBJ = @subj;
 	end
 
-    INSERT INTO jsharmony.AUD_H 
+    INSERT INTO {{schema}}.AUD_H 
 	                  (TABLE_NAME, TABLE_ID, AUD_OP, AUD_U, AUD_Tstmp, REF_NAME, REF_ID, SUBJ) 
                VALUES (lower(@tname), 
 			           @tid, 
@@ -3900,7 +3900,7 @@ BEGIN
 		             isnull(@in_codeval,'') + ''''
     from information_schema.tables
    where table_name = @in_tblname
-   order by (case table_schema when 'jsharmony' then 1 else 2 end),table_schema;
+   order by (case table_schema when '{{schema}}' then 1 else 2 end),table_schema;
 
   exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output 	
       
@@ -3980,7 +3980,7 @@ BEGIN
 		             isnull(@in_codeval1,'') + ''' and codeval2 = ''' + isnull(@in_codeval2,'') +  ''''
     from information_schema.tables
    where table_name = @in_tblname
-   order by (case table_schema when 'jsharmony' then 1 else 2 end),table_schema;
+   order by (case table_schema when '{{schema}}' then 1 else 2 end),table_schema;
 
   exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output 	
       
@@ -4053,7 +4053,7 @@ BEGIN
                      '_id = ' + CAST(@in_tblid AS VARCHAR(255)) 
     from information_schema.tables
    where table_name = @in_tblname
-   order by (case table_schema when 'jsharmony' then 1 else 2 end),table_schema;
+   order by (case table_schema when '{{schema}}' then 1 else 2 end),table_schema;
 
   exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output 	
       
@@ -4085,7 +4085,7 @@ BEGIN
   DECLARE @rrrt NVARCHAR(max)
 
   select @rrr = SCRIPT_TXT
-    from jsharmony.SCRIPT
+    from {{schema}}.SCRIPT
    where SCRIPT_NAME = 'CREATE_GCOD';
 
   set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
@@ -4095,7 +4095,7 @@ BEGIN
   EXEC (@rrr)      
 
   select @rrrt = SCRIPT_TXT
-    from jsharmony.SCRIPT
+    from {{schema}}.SCRIPT
    where SCRIPT_NAME = 'CREATE_GCOD_TRIGGER';
 
   set @rrrt = replace(@rrrt, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
@@ -4114,7 +4114,7 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[create_gcod] TO [jsharmony_role_dev] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[create_gcod] TO [{{schema}}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -4135,7 +4135,7 @@ BEGIN
   DECLARE @rrrt NVARCHAR(max)
 
   select @rrr = SCRIPT_TXT
-    from jsharmony.SCRIPT
+    from {{schema}}.SCRIPT
    where SCRIPT_NAME = 'CREATE_GCOD2';
 
   set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
@@ -4145,7 +4145,7 @@ BEGIN
   EXEC (@rrr)      
 
   select @rrrt = SCRIPT_TXT
-    from jsharmony.SCRIPT
+    from {{schema}}.SCRIPT
    where SCRIPT_NAME = 'CREATE_GCOD2_TRIGGER';
 
   set @rrrt = replace(@rrrt, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
@@ -4164,7 +4164,7 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[create_gcod2] TO [jsharmony_role_dev] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[create_gcod2] TO [{{schema}}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -4184,7 +4184,7 @@ BEGIN
   DECLARE @rrr NVARCHAR(max)
 
   select @rrr = SCRIPT_TXT
-    from jsharmony.SCRIPT
+    from {{schema}}.SCRIPT
    where SCRIPT_NAME = 'CREATE_UCOD';
 
   set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
@@ -4203,7 +4203,7 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[create_ucod] TO [jsharmony_role_dev] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[create_ucod] TO [{{schema}}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -4223,7 +4223,7 @@ BEGIN
   DECLARE @rrr NVARCHAR(max)
 
   select @rrr = SCRIPT_TXT
-    from jsharmony.SCRIPT
+    from {{schema}}.SCRIPT
    where SCRIPT_NAME = 'CREATE_UCOD2';
 
   set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull(@in_codeschema,'dbo')))
@@ -4242,7 +4242,7 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[create_ucod2] TO [jsharmony_role_dev] AS [dbo]
+GRANT EXECUTE ON [jsharmony].[create_ucod2] TO [{{schema}}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -4411,9 +4411,9 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
+  SET @CURDTTM = {{schema}}.myNOW_DO()
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(PE_ID)
   BEGIN
@@ -4461,7 +4461,7 @@ BEGIN
 
     IF (@TP='I' or @TP='U')
 	BEGIN
-	  if (jsharmony.NONEQUALC(@I_PE_PW1, @I_PE_PW2) > 0)
+	  if ({{schema}}.NONEQUALC(@I_PE_PW1, @I_PE_PW2) > 0)
         SET @M = 'Application Error - New Password and Repeat Password are different'
 	  else if ((@TP='I' or isnull(@I_PE_PW1,'')>'') and len(ltrim(rtrim(isnull(@I_PE_PW1,'')))) < 6)
         SET @M = 'Application Error - Password length - at least 6 characters required'
@@ -4485,7 +4485,7 @@ BEGIN
 
     IF (@TP='I' 
 	    OR 
-		@TP='U' AND jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
+		@TP='U' AND {{schema}}.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
 	BEGIN
 		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
 	     	@in_tblname ='C',
@@ -4504,7 +4504,7 @@ BEGIN
     IF (@TP='I')
 	BEGIN
 
-	  set @hash = jsharmony.myHASH('C', @I_PE_ID, @NEWPW);
+	  set @hash = {{schema}}.myHASH('C', @I_PE_ID, @NEWPW);
 
 	  if (@hash is null)
       BEGIN
@@ -4516,7 +4516,7 @@ BEGIN
         return
       END
 
-      UPDATE jsharmony.CPE
+      UPDATE {{schema}}.CPE
 	     SET PE_STSDt = @CURDTTM,
 		     PE_ETstmp = @CURDTTM,
 			 PE_EU = @MYUSER,
@@ -4527,7 +4527,7 @@ BEGIN
 			 PE_PW2 = NULL
        WHERE CPE.PE_ID = @I_PE_ID;
 
-      INSERT INTO jsharmony.CPER (PE_ID, CR_NAME)
+      INSERT INTO {{schema}}.CPER (PE_ID, CR_NAME)
 	             VALUES(@I_PE_ID, 'C*');
 
     END  
@@ -4542,95 +4542,95 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN  
 	  SET @WK_PE_ID = ISNULL(@D_PE_ID,@I_PE_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH @TP, 'CPE', @WK_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH @TP, 'CPE', @WK_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
 	END
  
     IF @TP='U' OR @TP='D'
 	BEGIN
 
       IF (@TP = 'D' AND @D_C_ID IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_C_ID, @I_C_ID) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_C_ID, @I_C_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('C_ID'), @D_C_ID)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('C_ID'), @D_C_ID)
       END
 
       IF (@TP = 'D' AND @D_PE_STS IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_STS'), @D_PE_STS)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_STS'), @D_PE_STS)
       END
 
       IF (@TP = 'D' AND @D_PE_FName IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_FName, @I_PE_FName) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_FName, @I_PE_FName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_FName'), @D_PE_FName)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_FName'), @D_PE_FName)
       END
 
       IF (@TP = 'D' AND @D_PE_MName IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_MName, @I_PE_MName) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_MName, @I_PE_MName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_MName'), @D_PE_MName)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_MName'), @D_PE_MName)
       END
 
       IF (@TP = 'D' AND @D_PE_LName IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_LName, @I_PE_LName) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_LName, @I_PE_LName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LName'), @D_PE_LName)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LName'), @D_PE_LName)
       END
 
       IF (@TP = 'D' AND @D_PE_JTitle IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_JTitle, @I_PE_JTitle) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_JTitle, @I_PE_JTitle) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_JTitle'), @D_PE_JTitle)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_JTitle'), @D_PE_JTitle)
       END
 
       IF (@TP = 'D' AND @D_PE_BPhone IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_BPhone, @I_PE_BPhone) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_BPhone, @I_PE_BPhone) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_BPhone'), @D_PE_BPhone)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_BPhone'), @D_PE_BPhone)
       END
 
       IF (@TP = 'D' AND @D_PE_CPhone IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_CPhone, @I_PE_CPhone) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_CPhone, @I_PE_CPhone) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_CPhone'), @D_PE_CPhone)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_CPhone'), @D_PE_CPhone)
       END
 
       IF (@TP = 'D' AND @D_PE_Email IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_Email, @I_PE_Email) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_Email, @I_PE_Email) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_Email'), @D_PE_Email)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_Email'), @D_PE_Email)
       END
 
       IF (@TP = 'D' AND @D_PE_LL_TSTMP IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALD(@D_PE_LL_TSTMP, @I_PE_LL_TSTMP) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALD(@D_PE_LL_TSTMP, @I_PE_LL_TSTMP) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LL_TSTMP'), @D_PE_LL_TSTMP)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LL_TSTMP'), @D_PE_LL_TSTMP)
       END
 
 	  IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
 	  BEGIN
-		set @hash = jsharmony.myHASH('C', @I_PE_ID, @NEWPW);
+		set @hash = {{schema}}.myHASH('C', @I_PE_ID, @NEWPW);
 
 		if (@hash is null)
 		BEGIN
@@ -4643,8 +4643,8 @@ BEGIN
 		END
 
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_PW'), '*')
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ,@WK_C_ID
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_PW'), '*')
 
 	    SET @UPDATE_PW = 'Y'
 	  END
@@ -4659,8 +4659,8 @@ BEGIN
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
 	BEGIN
-      UPDATE jsharmony.CPE
-	     SET PE_STSDt = CASE WHEN jsharmony.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0 THEN @CURDTTM ELSE PE_STSDt END,
+      UPDATE {{schema}}.CPE
+	     SET PE_STSDt = CASE WHEN {{schema}}.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0 THEN @CURDTTM ELSE PE_STSDt END,
 		     PE_MTstmp = @CURDTTM,
 			 PE_MU = @MYUSER,
 			 PE_Hash = case @UPDATE_PW when 'Y' then @hash else PE_Hash end,
@@ -4670,7 +4670,7 @@ BEGIN
     END  
     ELSE IF (@TP='U' AND (@I_PE_PW1 is not null or @I_PE_PW2 is not null))
 	BEGIN
-      UPDATE jsharmony.CPE
+      UPDATE {{schema}}.CPE
 	     SET PE_PW1 = NULL,
 			 PE_PW2 = NULL
        WHERE CPE.PE_ID = @I_PE_ID;
@@ -4770,9 +4770,9 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
+  SET @CURDTTM = {{schema}}.myNOW_DO()
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(CPER_ID)
   BEGIN
@@ -4812,7 +4812,7 @@ BEGIN
 	/******************************************/
 	
     SELECT @WK_SUBJ = isnull(PE_LNAME,'')+', '+isnull(PE_FNAME,'')
-	  FROM jsharmony.CPE
+	  FROM {{schema}}.CPE
      WHERE PE_ID = @I_PE_ID; 
 
 
@@ -4827,7 +4827,7 @@ BEGIN
 
 	  IF EXISTS (select 1
 	               from CF
-                  inner join jsharmony.CPE on CPE.C_ID = CF.C_ID
+                  inner join {{schema}}.CPE on CPE.C_ID = CF.C_ID
                   where CPE.PE_ID = @I_PE_ID
 				    and CF.CF_TYPE = 'LVL2')
       BEGIN
@@ -4862,26 +4862,26 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN  
 	  SET @WK_CPER_ID = ISNULL(@D_CPER_ID,@I_CPER_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH @TP, 'CPER', @WK_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH @TP, 'CPER', @WK_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
 	END
 
     IF @TP='U' OR @TP='D'
 	BEGIN
 
       IF (@TP = 'D' AND @D_PE_ID IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_PE_ID, @I_PE_ID) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_PE_ID, @I_PE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPER', @I_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_ID'), @D_PE_ID)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPER', @I_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_ID'), @D_PE_ID)
       END
 
       IF (@TP = 'D' AND @D_CR_NAME IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_CR_NAME, @I_CR_NAME) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_CR_NAME, @I_CR_NAME) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH 'U', 'CPER', @I_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CR_NAME'), @D_CR_NAME)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH 'U', 'CPER', @I_CPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('CR_NAME'), @D_CR_NAME)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
@@ -5001,9 +5001,9 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
+  SET @CURDTTM = {{schema}}.myNOW_DO()
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(D_ID)
   BEGIN
@@ -5030,7 +5030,7 @@ BEGIN
   END
 
   SELECT @DSCOPE_DCTGR = PP_VAL
-	FROM jsharmony.V_PP
+	FROM {{schema}}.V_PP
    where PP_PROCESS = 'SQL'
 	 and PP_ATTRIB = 'DSCOPE_DCTGR';
   IF (@TP='I' OR @TP='U') AND @DSCOPE_DCTGR IS NULL
@@ -5066,9 +5066,9 @@ BEGIN
  
     IF (@TP='I' 
 	    OR 
-		@TP='U' AND (jsharmony.nonequalc(@D_D_SCOPE, @I_D_SCOPE)>0
+		@TP='U' AND ({{schema}}.nonequalc(@D_D_SCOPE, @I_D_SCOPE)>0
 		             OR
-					 jsharmony.nonequaln(@D_D_SCOPE_ID, @I_D_SCOPE_ID)>0))
+					 {{schema}}.nonequaln(@D_D_SCOPE_ID, @I_D_SCOPE_ID)>0))
 	BEGIN
 		IF @I_D_SCOPE = 'S' AND @I_D_SCOPE_ID <> 0
 		   OR
@@ -5125,7 +5125,7 @@ BEGIN
 
 
 	  IF (@I_D_SYNCTSTMP is null)
-        UPDATE jsharmony.D
+        UPDATE {{schema}}.D
 	     SET C_ID = NULL,
 		     E_ID = NULL,
 		     D_ETstmp = @CURDTTM,
@@ -5146,7 +5146,7 @@ BEGIN
 	  SET @WK_D_ID = ISNULL(@D_D_ID,@I_D_ID)
 	  SET @WK_REF_NAME = ISNULL(@D_D_SCOPE,@I_D_SCOPE)
 	  SET @WK_REF_ID = ISNULL(@D_D_SCOPE_ID,@I_D_SCOPE_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  @TP, 'D', @WK_D_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  @TP, 'D', @WK_D_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default
 	END
 
  
@@ -5154,75 +5154,75 @@ BEGIN
 	BEGIN
 
       IF (@TP = 'D' AND @D_D_SCOPE IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_D_SCOPE, @I_D_SCOPE) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_D_SCOPE, @I_D_SCOPE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_SCOPE'), @D_D_SCOPE)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('D_SCOPE'), @D_D_SCOPE)
       END
 
       IF (@TP = 'D' AND @D_D_SCOPE_ID IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_D_SCOPE_ID, @I_D_SCOPE_ID) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_D_SCOPE_ID, @I_D_SCOPE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_SCOPE_ID'), @D_D_SCOPE_ID)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('D_SCOPE_ID'), @D_D_SCOPE_ID)
       END
 
       IF (@TP = 'D' AND @D_D_STS IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_D_STS, @I_D_STS) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_D_STS, @I_D_STS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_STS'), @D_D_STS)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('D_STS'), @D_D_STS)
       END
 
       IF (@TP = 'D' AND @D_D_CTGR IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_D_CTGR, @I_D_CTGR) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_D_CTGR, @I_D_CTGR) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_CTGR'), @D_D_CTGR)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('D_CTGR'), @D_D_CTGR)
       END
 
       IF (@TP = 'D' AND @D_D_Desc IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_D_Desc, @I_D_Desc) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_D_Desc, @I_D_Desc) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_Desc'), @D_D_Desc)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('D_Desc'), @D_D_Desc)
       END
 
       IF (@TP = 'D' AND @D_D_UTSTMP IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALD(@D_D_UTSTMP, @I_D_UTSTMP) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALD(@D_D_UTSTMP, @I_D_UTSTMP) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_UTSTMP'), @D_D_UTSTMP)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('D_UTSTMP'), @D_D_UTSTMP)
       END
 
       IF (@TP = 'D' AND @D_D_UU IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_D_UU, @I_D_UU) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_D_UU, @I_D_UU) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('D_UU'), @D_D_UU)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('D_UU'), @D_D_UU)
       END
 
       IF (@TP = 'D' AND @D_C_ID IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('C_ID'), @D_C_ID)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('C_ID'), @D_C_ID)
       END
 
       IF (@TP = 'D' AND @D_E_ID IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_E_ID, @I_E_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('E_ID'), @D_E_ID)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'D', @I_D_ID, @MYUSER, @CURDTTM, @I_D_SCOPE, @I_D_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('E_ID'), @D_E_ID)
       END
 
 
@@ -5235,8 +5235,8 @@ BEGIN
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
 	BEGIN
- 	  if (jsharmony.NONEQUALD(@D_D_SYNCTstmp, @I_D_SYNCTstmp) <= 0)
-        UPDATE jsharmony.D
+ 	  if ({{schema}}.NONEQUALD(@D_D_SYNCTstmp, @I_D_SYNCTstmp) <= 0)
+        UPDATE {{schema}}.D
 	     SET D_MTstmp = @CURDTTM,
 			 D_MU = @MYUSER,
 			 D_SYNCTstmp = NULL
@@ -5352,10 +5352,10 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
-  SET @CURDT = jsharmony.myTODATE(@CURDTTM)
+  SET @CURDTTM = {{schema}}.myNOW_DO()
+  SET @CURDT = {{schema}}.myTODATE(@CURDTTM)
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(GCOD2_ID)
   BEGIN
@@ -5403,7 +5403,7 @@ BEGIN
 
     IF (@TP='I')
 	BEGIN
-      UPDATE jsharmony.GCOD2_D_SCOPE_D_CTGR
+      UPDATE {{schema}}.GCOD2_D_SCOPE_D_CTGR
 	     SET cod_etstmp = @CURDTTM,
 			 cod_eu = @MYUSER,
 		     cod_mtstmp = @CURDTTM,
@@ -5420,7 +5420,7 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN  
 	  SET @WK_GCOD2_ID = ISNULL(@D_GCOD2_ID,@I_GCOD2_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'GCOD2_D_SCOPE_D_CTGR', @WK_GCOD2_ID, @MYUSER, @CURDTTM
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'GCOD2_D_SCOPE_D_CTGR', @WK_GCOD2_ID, @MYUSER, @CURDTTM
 	END
 
  
@@ -5428,67 +5428,67 @@ BEGIN
 	BEGIN
 
       IF (@TP = 'D' AND @D_CODSEQ IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_CODSEQ, @I_CODSEQ) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_CODSEQ, @I_CODSEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODSEQ'), @D_CODSEQ)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('CODSEQ'), @D_CODSEQ)
       END
 
       IF (@TP = 'D' AND @D_CODETDT IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALD(@D_CODETDT, @I_CODETDT) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALD(@D_CODETDT, @I_CODETDT) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODETDT'), @D_CODETDT)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('CODETDT'), @D_CODETDT)
       END
 
       IF (@TP = 'D' AND @D_CODEVAL1 IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_CODEVAL1, @I_CODEVAL1) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_CODEVAL1, @I_CODEVAL1) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODEVAL1'), @D_CODEVAL1)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('CODEVAL1'), @D_CODEVAL1)
       END
 
       IF (@TP = 'D' AND @D_CODEVAL2 IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_CODEVAL2, @I_CODEVAL2) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_CODEVAL2, @I_CODEVAL2) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODEVAL2'), @D_CODEVAL2)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('CODEVAL2'), @D_CODEVAL2)
       END
 
       IF (@TP = 'D' AND @D_CODETXT IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_CODETXT, @I_CODETXT) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_CODETXT, @I_CODETXT) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODETXT'), @D_CODETXT)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('CODETXT'), @D_CODETXT)
       END
 
       IF (@TP = 'D' AND @D_CODECODE IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_CODECODE, @I_CODECODE) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_CODECODE, @I_CODECODE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODECODE'), @D_CODECODE)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('CODECODE'), @D_CODECODE)
       END
 
       IF (@TP = 'D' AND @D_CODEATTRIB IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_CODEATTRIB, @I_CODEATTRIB) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_CODEATTRIB, @I_CODEATTRIB) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODEATTRIB'), @D_CODEATTRIB)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('CODEATTRIB'), @D_CODEATTRIB)
       END
 
       IF (@TP = 'D' AND @D_CODETCM IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_CODETCM, @I_CODETCM) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_CODETCM, @I_CODETCM) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('CODETCM'), @D_CODETCM)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'GCOD2_D_SCOPE_D_CTGR', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('CODETCM'), @D_CODETCM)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
@@ -5500,7 +5500,7 @@ BEGIN
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
 	BEGIN
-      UPDATE jsharmony.GCOD2_D_SCOPE_D_CTGR
+      UPDATE {{schema}}.GCOD2_D_SCOPE_D_CTGR
 	     SET cod_mtstmp = @CURDTTM,
 			 cod_mu = @MYUSER
        WHERE GCOD2_D_SCOPE_D_CTGR.GCOD2_ID = @I_GCOD2_ID;
@@ -5591,9 +5591,9 @@ BEGIN
   
   SET @MYGETDATE = SYSDATETIME()
 
-  SET @CURDTTM = jsharmony.myNOW_DO()
+  SET @CURDTTM = {{schema}}.myNOW_DO()
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(GPP_ID)
   BEGIN
@@ -5605,7 +5605,7 @@ BEGIN
   if(@TP = 'I')
   BEGIN
   
-    update jsharmony.GPP set
+    update {{schema}}.GPP set
       GPP_ETstmp = @CURDTTM,
       GPP_EU =@MYUSER, 
       GPP_MTstmp = @CURDTTM,
@@ -5622,7 +5622,7 @@ BEGIN
       
       IF (@I_GPP_VAL IS NOT NULL)
       BEGIN
-        SET @ERRTXT = jsharmony.CHECK_PP('GPP',@I_GPP_PROCESS,@I_GPP_ATTRIB,@I_GPP_VAL)
+        SET @ERRTXT = {{schema}}.CHECK_PP('GPP',@I_GPP_PROCESS,@I_GPP_ATTRIB,@I_GPP_VAL)
         IF @ERRTXT IS NOT null  
         BEGIN
           raiserror(@ERRTXT,16,1)
@@ -5632,7 +5632,7 @@ BEGIN
       END
 
 	  SET @WK_ID = ISNULL(@I_GPP_ID,@D_GPP_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'GPP', @WK_ID, @MYUSER, @CURDTTM
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'GPP', @WK_ID, @MYUSER, @CURDTTM
 
       FETCH NEXT FROM CUR_GPP_I INTO @I_GPP_ID, 
                                      @I_GPP_PROCESS, 
@@ -5665,7 +5665,7 @@ BEGIN
       BEGIN
         IF (@I_GPP_VAL IS NOT NULL)
         BEGIN      
-          SET @ERRTXT = jsharmony.CHECK_PP('GPP',@I_GPP_PROCESS,@I_GPP_ATTRIB,@I_GPP_VAL)
+          SET @ERRTXT = {{schema}}.CHECK_PP('GPP',@I_GPP_PROCESS,@I_GPP_ATTRIB,@I_GPP_VAL)
           IF @ERRTXT IS NOT null  
           BEGIN
             raiserror(@ERRTXT,16,1)
@@ -5678,7 +5678,7 @@ BEGIN
       END
 
 	  SET @WK_ID = ISNULL(@I_GPP_ID,@D_GPP_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'GPP', @WK_ID, @MYUSER, @CURDTTM
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'GPP', @WK_ID, @MYUSER, @CURDTTM
             
       FETCH NEXT FROM CUR_GPP_DU
             INTO @D_GPP_ID, @I_GPP_ID,
@@ -5770,10 +5770,10 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
-  SET @CURDT = jsharmony.myTODATE(@CURDTTM)
+  SET @CURDTTM = {{schema}}.myNOW_DO()
+  SET @CURDT = {{schema}}.myTODATE(@CURDTTM)
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(H_ID)
   BEGIN
@@ -5811,7 +5811,7 @@ BEGIN
 
     IF (@TP='I')
 	BEGIN
-      UPDATE jsharmony.H
+      UPDATE {{schema}}.H
 	     SET H_ETstmp = @CURDTTM,
 			 H_EU = @MYUSER,
 		     H_MTstmp = @CURDTTM,
@@ -5828,7 +5828,7 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN  
 	  SET @WK_H_ID = ISNULL(@D_H_ID,@I_H_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'H', @WK_H_ID, @MYUSER, @CURDTTM
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'H', @WK_H_ID, @MYUSER, @CURDTTM
 	END
 
  
@@ -5836,51 +5836,51 @@ BEGIN
 	BEGIN
 
       IF (@TP = 'D' AND @D_HP_CODE IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_HP_CODE, @I_HP_CODE) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_HP_CODE, @I_HP_CODE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('HP_CODE'), @D_HP_CODE)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('HP_CODE'), @D_HP_CODE)
       END
 
       IF (@TP = 'D' AND @D_H_TITLE IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_H_TITLE, @I_H_TITLE) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_H_TITLE, @I_H_TITLE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('H_TITLE'), @D_H_TITLE)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('H_TITLE'), @D_H_TITLE)
       END
 
       IF (@TP = 'D' AND @D_H_TEXT IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_H_TEXT, @I_H_TEXT) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_H_TEXT, @I_H_TEXT) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('H_TEXT'), @D_H_TEXT)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('H_TEXT'), @D_H_TEXT)
       END
 
       IF (@TP = 'D' AND @D_H_SEQ IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_H_SEQ, @I_H_SEQ) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_H_SEQ, @I_H_SEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('H_SEQ'), @D_H_SEQ)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('H_SEQ'), @D_H_SEQ)
       END
 
       IF (@TP = 'D' AND @D_H_INDEX_A IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_H_INDEX_A, @I_H_INDEX_A) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_H_INDEX_A, @I_H_INDEX_A) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('H_INDEX_A'), @D_H_INDEX_A)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('H_INDEX_A'), @D_H_INDEX_A)
       END
 
       IF (@TP = 'D' AND @D_H_INDEX_P IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_H_INDEX_P, @I_H_INDEX_P) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_H_INDEX_P, @I_H_INDEX_P) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('H_INDEX_P'), @D_H_INDEX_P)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'H', @I_H_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('H_INDEX_P'), @D_H_INDEX_P)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
@@ -5892,7 +5892,7 @@ BEGIN
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
 	BEGIN
-      UPDATE jsharmony.H
+      UPDATE {{schema}}.H
 	     SET H_MTstmp = @CURDTTM,
 			 H_MU = @MYUSER
        WHERE H.H_ID = @I_H_ID;
@@ -6009,9 +6009,9 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
+  SET @CURDTTM = {{schema}}.myNOW_DO()
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(N_ID)
   BEGIN
@@ -6065,9 +6065,9 @@ BEGIN
  
     IF (@TP='I' 
 	    OR 
-		@TP='U' AND (jsharmony.nonequalc(@D_N_SCOPE, @I_N_SCOPE)>0
+		@TP='U' AND ({{schema}}.nonequalc(@D_N_SCOPE, @I_N_SCOPE)>0
 		             OR
-					 jsharmony.nonequaln(@D_N_SCOPE_ID, @I_N_SCOPE_ID)>0))
+					 {{schema}}.nonequaln(@D_N_SCOPE_ID, @I_N_SCOPE_ID)>0))
 	BEGIN
 		IF @I_N_SCOPE = 'S' AND @I_N_SCOPE_ID <> 0
 		   OR
@@ -6101,7 +6101,7 @@ BEGIN
     IF (@TP='I')
 	BEGIN
 
-      UPDATE jsharmony.N
+      UPDATE {{schema}}.N
 	     SET C_ID = NULL,
 		     E_ID = NULL,
 		     N_ETstmp = @CURDTTM,
@@ -6123,7 +6123,7 @@ BEGIN
 	  SET @WK_N_ID = ISNULL(@D_N_ID,@I_N_ID)
 	  SET @WK_REF_NAME = ISNULL(@D_N_SCOPE,@I_N_SCOPE)
 	  SET @WK_REF_ID = ISNULL(@D_N_SCOPE_ID,@I_N_SCOPE_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'N', @WK_N_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'N', @WK_N_ID, @MYUSER, @CURDTTM, @WK_REF_NAME, @WK_REF_ID, default
 	END
 
  
@@ -6131,59 +6131,59 @@ BEGIN
 	BEGIN
 
       IF (@TP = 'D' AND @D_N_SCOPE IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_N_SCOPE, @I_N_SCOPE) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_N_SCOPE, @I_N_SCOPE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('N_SCOPE'), @D_N_SCOPE)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('N_SCOPE'), @D_N_SCOPE)
       END
 
       IF (@TP = 'D' AND @D_N_SCOPE_ID IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_N_SCOPE_ID, @I_N_SCOPE_ID) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_N_SCOPE_ID, @I_N_SCOPE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('N_SCOPE_ID'), @D_N_SCOPE_ID)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('N_SCOPE_ID'), @D_N_SCOPE_ID)
       END
 
       IF (@TP = 'D' AND @D_N_STS IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_N_STS, @I_N_STS) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_N_STS, @I_N_STS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('N_STS'), @D_N_STS)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('N_STS'), @D_N_STS)
       END
 
       IF (@TP = 'D' AND @D_N_TYPE IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_N_TYPE, @I_N_TYPE) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_N_TYPE, @I_N_TYPE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('N_TYPE'), @D_N_TYPE)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('N_TYPE'), @D_N_TYPE)
       END
 
       IF (@TP = 'D' AND @D_N_Note IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_N_Note, @I_N_Note) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_N_Note, @I_N_Note) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('N_Note'), @D_N_Note)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('N_Note'), @D_N_Note)
       END
 
 	  IF (@TP = 'D' AND @D_C_ID IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('C_ID'), @D_C_ID)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('C_ID'), @D_C_ID)
       END
 
       IF (@TP = 'D' AND @D_E_ID IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_E_ID, @I_E_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('E_ID'), @D_E_ID)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE  'U', 'N', @I_N_ID, @MYUSER, @CURDTTM, @I_N_SCOPE, @I_N_SCOPE_ID, default
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('E_ID'), @D_E_ID)
       END
 
 
@@ -6195,7 +6195,7 @@ BEGIN
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
 	BEGIN
-        UPDATE jsharmony.N
+        UPDATE {{schema}}.N
 	     SET N_MTstmp = @CURDTTM,
 			 N_MU = @MYUSER
          WHERE N.N_ID = @I_N_ID;
@@ -6325,9 +6325,9 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
+  SET @CURDTTM = {{schema}}.myNOW_DO()
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(PE_ID)
   BEGIN
@@ -6359,7 +6359,7 @@ BEGIN
 	IF (@TP = 'D')
 	BEGIN
 	  
-	  if (jsharmony.EXISTS_D('PE', @D_PE_ID) > 0)
+	  if ({{schema}}.EXISTS_D('PE', @D_PE_ID) > 0)
       begin
 		CLOSE CUR_PE_IUD
 		DEALLOCATE CUR_PE_IUD
@@ -6379,7 +6379,7 @@ BEGIN
 
     IF (@TP='I' or @TP='U')
 	BEGIN
-	  if (jsharmony.NONEQUALC(@I_PE_PW1, @I_PE_PW2) > 0)
+	  if ({{schema}}.NONEQUALC(@I_PE_PW1, @I_PE_PW2) > 0)
         SET @M = 'Application Error - New Password and Repeat Password are different'
 	  else if ((@TP='I' or isnull(@I_PE_PW1,'')>'') and len(ltrim(rtrim(isnull(@I_PE_PW1,'')))) < 6)
         SET @M = 'Application Error - Password length - at least 6 characters required'
@@ -6403,7 +6403,7 @@ BEGIN
     IF (@TP='I')
 	BEGIN
 
-	  set @hash = jsharmony.myHASH('S', @I_PE_ID, @NEWPW);
+	  set @hash = {{schema}}.myHASH('S', @I_PE_ID, @NEWPW);
 
 	  if (@hash is null)
       BEGIN
@@ -6415,7 +6415,7 @@ BEGIN
         return
       END
 
-      UPDATE jsharmony.PE
+      UPDATE {{schema}}.PE
 	     SET PE_STSDt = @CURDTTM,
 		     PE_ETstmp = @CURDTTM,
 			 PE_EU = @MYUSER,
@@ -6438,87 +6438,87 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN
 	  SET @WK_PE_ID =  ISNULL(@D_PE_ID,@I_PE_ID) 
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'PE', @WK_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'PE', @WK_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
 	END
  
     IF @TP='U' OR @TP='D'
 	BEGIN
 
       IF (@TP = 'D' AND @D_PE_STS IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_STS'), @D_PE_STS)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_STS'), @D_PE_STS)
       END
 
       IF (@TP = 'D' AND @D_PE_FName IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_FName, @I_PE_FName) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_FName, @I_PE_FName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_FName'), @D_PE_FName)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_FName'), @D_PE_FName)
       END
 
       IF (@TP = 'D' AND @D_PE_MName IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_MName, @I_PE_MName) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_MName, @I_PE_MName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_MName'), @D_PE_MName)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_MName'), @D_PE_MName)
       END
 
       IF (@TP = 'D' AND @D_PE_LName IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_LName, @I_PE_LName) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_LName, @I_PE_LName) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LName'), @D_PE_LName)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LName'), @D_PE_LName)
       END
 
       IF (@TP = 'D' AND @D_PE_JTitle IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_JTitle, @I_PE_JTitle) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_JTitle, @I_PE_JTitle) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_JTitle'), @D_PE_JTitle)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_JTitle'), @D_PE_JTitle)
       END
 
       IF (@TP = 'D' AND @D_PE_BPhone IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_BPhone, @I_PE_BPhone) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_BPhone, @I_PE_BPhone) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_BPhone'), @D_PE_BPhone)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_BPhone'), @D_PE_BPhone)
       END
 
       IF (@TP = 'D' AND @D_PE_CPhone IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_CPhone, @I_PE_CPhone) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_CPhone, @I_PE_CPhone) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_CPhone'), @D_PE_CPhone)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_CPhone'), @D_PE_CPhone)
       END
 
       IF (@TP = 'D' AND @D_PE_Email IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_PE_Email, @I_PE_Email) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_PE_Email, @I_PE_Email) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_Email'), @D_PE_Email)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_Email'), @D_PE_Email)
       END
 
       IF (@TP = 'D' AND @D_PE_LL_TSTMP IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALD(@D_PE_LL_TSTMP, @I_PE_LL_TSTMP) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALD(@D_PE_LL_TSTMP, @I_PE_LL_TSTMP) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LL_TSTMP'), @D_PE_LL_TSTMP)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_LL_TSTMP'), @D_PE_LL_TSTMP)
       END
 
 	  IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
 	  BEGIN
-		set @hash = jsharmony.myHASH('S', @I_PE_ID, @NEWPW);
+		set @hash = {{schema}}.myHASH('S', @I_PE_ID, @NEWPW);
 
 		if (@hash is null)
 		BEGIN
@@ -6531,8 +6531,8 @@ BEGIN
 		END
 
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_PW'), '*')
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'PE', @I_PE_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_PW'), '*')
 
 	    SET @UPDATE_PW = 'Y'
 	  END
@@ -6547,8 +6547,8 @@ BEGIN
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
 	BEGIN
-      UPDATE jsharmony.PE
-	     SET PE_STSDt = CASE WHEN jsharmony.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0 THEN @CURDTTM ELSE PE_STSDt END,
+      UPDATE {{schema}}.PE
+	     SET PE_STSDt = CASE WHEN {{schema}}.NONEQUALC(@D_PE_STS, @I_PE_STS) > 0 THEN @CURDTTM ELSE PE_STSDt END,
 		     PE_MTstmp = @CURDTTM,
 			 PE_MU = @MYUSER,
 			 PE_Hash = case @UPDATE_PW when 'Y' then @hash else PE_Hash end,
@@ -6558,7 +6558,7 @@ BEGIN
     END  
     ELSE IF (@TP='U' AND (@I_PE_PW1 is not null or @I_PE_PW2 is not null))
 	BEGIN
-      UPDATE jsharmony.PE
+      UPDATE {{schema}}.PE
 	     SET PE_PW1 = NULL,
 			 PE_PW2 = NULL
        WHERE PE.PE_ID = @I_PE_ID;
@@ -6627,14 +6627,14 @@ BEGIN
     else
       return
   
-  SET @MYGETDATE = jsharmony.myNOW()
+  SET @MYGETDATE = {{schema}}.myNOW()
 
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   if(@TP = 'I')
   BEGIN
   
-    update jsharmony.PPD set
+    update {{schema}}.PPD set
       PPD_ETstmp = @MYGETDATE,
       PPD_EU =@MYUSER, 
       PPD_MTstmp = @MYGETDATE,
@@ -6648,7 +6648,7 @@ BEGIN
   
     if(@TP = 'U')
     BEGIN
-      update jsharmony.PPD set
+      update {{schema}}.PPD set
         PPD_MTstmp = @MYGETDATE,
         PPD_MU =@MYUSER 
       from inserted 
@@ -6721,9 +6721,9 @@ BEGIN
   
   SET @MYGETDATE = SYSDATETIME()
 
-  SET @CURDTTM = jsharmony.myNOW_DO()
+  SET @CURDTTM = {{schema}}.myNOW_DO()
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(PPP_ID)
   BEGIN
@@ -6735,7 +6735,7 @@ BEGIN
   if(@TP = 'I')
   BEGIN
   
-    update jsharmony.PPP set
+    update {{schema}}.PPP set
       PPP_ETstmp = @CURDTTM,
       PPP_EU =@MYUSER, 
       PPP_MTstmp = @CURDTTM,
@@ -6752,7 +6752,7 @@ BEGIN
       
       IF (@I_PPP_VAL IS NOT NULL)
       BEGIN
-        SET @ERRTXT = jsharmony.CHECK_PP('PPP',@I_PPP_PROCESS,@I_PPP_ATTRIB,@I_PPP_VAL)
+        SET @ERRTXT = {{schema}}.CHECK_PP('PPP',@I_PPP_PROCESS,@I_PPP_ATTRIB,@I_PPP_VAL)
         IF @ERRTXT IS NOT null  
         BEGIN
           CLOSE CUR_PPP_I
@@ -6764,7 +6764,7 @@ BEGIN
       END
 
 	  SET @WK_ID = ISNULL(@I_PPP_ID,@D_PPP_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'PPP', @WK_ID, @MYUSER, @CURDTTM
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'PPP', @WK_ID, @MYUSER, @CURDTTM
 
       FETCH NEXT FROM CUR_PPP_I INTO @I_PPP_ID, 
                                      @I_PPP_PROCESS, 
@@ -6779,7 +6779,7 @@ BEGIN
   
     if(@TP = 'U')
     BEGIN
-      update jsharmony.PPP set
+      update {{schema}}.PPP set
         PPP_MTstmp = @CURDTTM,
         PPP_MU =@MYUSER 
         from inserted WHERE PPP.PPP_id = INSERTED.PPP_id
@@ -6798,7 +6798,7 @@ BEGIN
      
         IF (@I_PPP_VAL IS NOT NULL)
         BEGIN
-          SET @ERRTXT = jsharmony.CHECK_PP('PPP',@I_PPP_PROCESS,@I_PPP_ATTRIB,@I_PPP_VAL)
+          SET @ERRTXT = {{schema}}.CHECK_PP('PPP',@I_PPP_PROCESS,@I_PPP_ATTRIB,@I_PPP_VAL)
           IF @ERRTXT IS NOT null  
           BEGIN
             CLOSE CUR_PPP_DU
@@ -6811,7 +6811,7 @@ BEGIN
       END
 
 	  SET @WK_ID = ISNULL(@I_PPP_ID,@D_PPP_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'PPP', @WK_ID, @MYUSER, @CURDTTM
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'PPP', @WK_ID, @MYUSER, @CURDTTM
             
       FETCH NEXT FROM CUR_PPP_DU
             INTO @D_PPP_ID, @I_PPP_ID,
@@ -6888,9 +6888,9 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
+  SET @CURDTTM = {{schema}}.myNOW_DO()
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(SPEF_ID)
   BEGIN
@@ -6930,7 +6930,7 @@ BEGIN
 	/******************************************/
 	
     SELECT @WK_SUBJ = isnull(PE_LNAME,'')+', '+isnull(PE_FNAME,'')
-	  FROM jsharmony.PE
+	  FROM {{schema}}.PE
      WHERE PE_ID = @I_PE_ID; 
 
 	/******************************************/
@@ -6941,26 +6941,26 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN  
 	  SET @WK_SPEF_ID = ISNULL(@D_SPEF_ID,@I_SPEF_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'SPEF', @WK_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'SPEF', @WK_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
 	END
 
     IF @TP='U' OR @TP='D'
 	BEGIN
 
       IF (@TP = 'D' AND @D_PE_ID IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_PE_ID, @I_PE_ID) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_PE_ID, @I_PE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPEF', @I_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_ID'), @D_PE_ID)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'SPEF', @I_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_ID'), @D_PE_ID)
       END
 
       IF (@TP = 'D' AND @D_SF_NAME IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_SF_NAME, @I_SF_NAME) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_SF_NAME, @I_SF_NAME) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPEF', @I_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('SF_NAME'), @D_SF_NAME)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'SPEF', @I_SPEF_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('SF_NAME'), @D_SF_NAME)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
@@ -7030,7 +7030,7 @@ BEGIN
   DECLARE @WK_SUBJ NVARCHAR(MAX)
   DECLARE @CODEVAL NVARCHAR(MAX)
 
-  DECLARE @MY_PE_ID BIGINT = jsharmony.mype()
+  DECLARE @MY_PE_ID BIGINT = {{schema}}.mype()
 
   /*
   EXEC [jsharmony].[ZZ-FILEDEBUG] 'TRIGGER','SPER_IUD','START', ''
@@ -7049,9 +7049,9 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
+  SET @CURDTTM = {{schema}}.myNOW_DO()
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(SPER_ID)
   BEGIN
@@ -7098,7 +7098,7 @@ BEGIN
         IF (case when @TP = 'D' then @D_SR_NAME else @I_SR_NAME end) = 'DEV' 
 	    BEGIN
           IF not exists (select sr_name
-                           from jsharmony.V_MY_ROLES
+                           from {{schema}}.V_MY_ROLES
                           where SR_NAME = 'DEV') 
           BEGIN
             EXEC [jsharmony].[ZZ-FILEDEBUG] 'TRIGGER','SPER_IUD','ERR', 'Only Developer can maintain Developer Role(1)'
@@ -7122,7 +7122,7 @@ BEGIN
 	END
 
     SELECT @WK_SUBJ = isnull(PE_LNAME,'')+', '+isnull(PE_FNAME,'')
-	  FROM jsharmony.PE
+	  FROM {{schema}}.PE
      WHERE PE_ID = @I_PE_ID; 
 
 	/******************************************/
@@ -7133,26 +7133,26 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN  
 	  SET @WK_SPER_ID = ISNULL(@D_SPER_ID,@I_SPER_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'SPER', @WK_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'SPER', @WK_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
 	END
 
     IF @TP='U' OR @TP='D'
 	BEGIN
 
       IF (@TP = 'D' AND @D_PE_ID IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALN(@D_PE_ID, @I_PE_ID) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALN(@D_PE_ID, @I_PE_ID) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPER', @I_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_ID'), @D_PE_ID)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'SPER', @I_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('PE_ID'), @D_PE_ID)
       END
 
       IF (@TP = 'D' AND @D_SR_NAME IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_SR_NAME, @I_SR_NAME) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_SR_NAME, @I_SR_NAME) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'SPER', @I_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('SR_NAME'), @D_SR_NAME)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'SPER', @I_SPER_ID, @MYUSER, @CURDTTM,default,default,@WK_SUBJ
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('SR_NAME'), @D_SR_NAME)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
@@ -7258,10 +7258,10 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
-  SET @CURDT = jsharmony.myTODATE(@CURDTTM)
+  SET @CURDTTM = {{schema}}.myNOW_DO()
+  SET @CURDT = {{schema}}.myTODATE(@CURDTTM)
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(TXT_ID)
   BEGIN
@@ -7292,7 +7292,7 @@ BEGIN
 
     IF (@TP='I')
 	BEGIN
-      UPDATE jsharmony.TXT
+      UPDATE {{schema}}.TXT
 	     SET TXT_ETstmp = @CURDTTM,
 			 TXT_EU = @MYUSER,
 		     TXT_MTstmp = @CURDTTM,
@@ -7309,7 +7309,7 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN  
 	  SET @WK_TXT_ID = ISNULL(@D_TXT_ID,@I_TXT_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'TXT', @WK_TXT_ID, @MYUSER, @CURDTTM
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'TXT', @WK_TXT_ID, @MYUSER, @CURDTTM
 	END
 
  
@@ -7317,59 +7317,59 @@ BEGIN
 	BEGIN
 
       IF (@TP = 'D' AND @D_TXT_PROCESS IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_PROCESS, @I_TXT_PROCESS) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_TXT_PROCESS, @I_TXT_PROCESS) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_PROCESS'), @D_TXT_PROCESS)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_PROCESS'), @D_TXT_PROCESS)
       END
 
       IF (@TP = 'D' AND @D_TXT_ATTRIB IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_ATTRIB, @I_TXT_ATTRIB) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_TXT_ATTRIB, @I_TXT_ATTRIB) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_ATTRIB'), @D_TXT_ATTRIB)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_ATTRIB'), @D_TXT_ATTRIB)
       END
 	  
       IF (@TP = 'D' AND @D_TXT_TYPE IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_TYPE, @I_TXT_TYPE) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_TXT_TYPE, @I_TXT_TYPE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_TYPE'), @D_TXT_TYPE)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_TYPE'), @D_TXT_TYPE)
       END
 
       IF (@TP = 'D' AND @D_TXT_TVAL IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_TVAL, @I_TXT_TVAL) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_TXT_TVAL, @I_TXT_TVAL) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_TVAL'), @D_TXT_TVAL)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_TVAL'), @D_TXT_TVAL)
       END
 
       IF (@TP = 'D' AND @D_TXT_VAL IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_VAL, @I_TXT_VAL) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_TXT_VAL, @I_TXT_VAL) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_VAL'), @D_TXT_VAL)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_VAL'), @D_TXT_VAL)
       END
 
       IF (@TP = 'D' AND @D_TXT_BCC IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_BCC, @I_TXT_BCC) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_TXT_BCC, @I_TXT_BCC) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_BCC'), @D_TXT_BCC)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_BCC'), @D_TXT_BCC)
       END
 
       IF (@TP = 'D' AND @D_TXT_DESC IS NOT NULL OR
-          @TP = 'U' AND jsharmony.NONEQUALC(@D_TXT_DESC, @I_TXT_DESC) > 0)
+          @TP = 'U' AND {{schema}}.NONEQUALC(@D_TXT_DESC, @I_TXT_DESC) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_DESC'), @D_TXT_DESC)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE 'U', 'TXT', @I_TXT_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower('TXT_DESC'), @D_TXT_DESC)
       END
 
 
@@ -7382,7 +7382,7 @@ BEGIN
 
     IF (@TP='U' AND @MY_AUD_SEQ <> 0)
 	BEGIN
-      UPDATE jsharmony.TXT
+      UPDATE {{schema}}.TXT
 	     SET TXT_MTstmp = @CURDTTM,
 			 TXT_MU = @MYUSER
        WHERE TXT.TXT_ID = @I_TXT_ID;
@@ -7479,9 +7479,9 @@ BEGIN
   
   SET @MYGETDATE = SYSDATETIME()
 
-  SET @CURDTTM = jsharmony.myNOW_DO()
+  SET @CURDTTM = {{schema}}.myNOW_DO()
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+'.0000000'
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = 'U' AND UPDATE(XPP_ID)
   BEGIN
@@ -7493,7 +7493,7 @@ BEGIN
   if(@TP = 'I')
   BEGIN
   
-    update jsharmony.XPP set
+    update {{schema}}.XPP set
       XPP_ETstmp = @CURDTTM,
       XPP_EU =@MYUSER, 
       XPP_MTstmp = @CURDTTM,
@@ -7508,7 +7508,7 @@ BEGIN
     WHILE (@@Fetch_Status = 0)
     BEGIN
       
-      SET @ERRTXT = jsharmony.CHECK_PP('XPP',@I_XPP_PROCESS,@I_XPP_ATTRIB,@I_XPP_VAL)
+      SET @ERRTXT = {{schema}}.CHECK_PP('XPP',@I_XPP_PROCESS,@I_XPP_ATTRIB,@I_XPP_VAL)
       
       IF @ERRTXT IS NOT null  
       BEGIN
@@ -7520,7 +7520,7 @@ BEGIN
       END
 
 	  SET @WK_ID = ISNULL(@I_XPP_ID,@D_XPP_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'XPP', @WK_ID, @MYUSER, @CURDTTM
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'XPP', @WK_ID, @MYUSER, @CURDTTM
 
       FETCH NEXT FROM CUR_XPP_I INTO @I_XPP_ID, 
                                      @I_XPP_PROCESS, 
@@ -7535,7 +7535,7 @@ BEGIN
   
     if(@TP = 'U')
     BEGIN
-      update jsharmony.XPP set
+      update {{schema}}.XPP set
         XPP_MTstmp = @CURDTTM,
         XPP_MU =@MYUSER 
         from inserted WHERE XPP.XPP_id = INSERTED.XPP_id
@@ -7552,7 +7552,7 @@ BEGIN
       if(@TP = 'U')
       BEGIN
       
-        SET @ERRTXT = jsharmony.CHECK_PP('XPP',@I_XPP_PROCESS,@I_XPP_ATTRIB,@I_XPP_VAL)
+        SET @ERRTXT = {{schema}}.CHECK_PP('XPP',@I_XPP_PROCESS,@I_XPP_ATTRIB,@I_XPP_VAL)
        
         IF @ERRTXT IS NOT null  
         BEGIN
@@ -7565,7 +7565,7 @@ BEGIN
       END
 
 	  SET @WK_ID = ISNULL(@I_XPP_ID,@D_XPP_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, 'XPP', @WK_ID, @MYUSER, @CURDTTM
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, 'XPP', @WK_ID, @MYUSER, @CURDTTM
             
       FETCH NEXT FROM CUR_XPP_DU
             INTO @D_XPP_ID, @I_XPP_ID,
@@ -7603,28 +7603,28 @@ begin
   BEGIN
   set @I = 1
 
-    delete from jsharmony.CRM
+    delete from {{schema}}.CRM
 	 where CRM_ID in (
 	   select i.CRM_ID
 	     from inserted i
         inner join deleted d on d.SM_ID=i.SM_ID
-        where jsharmony.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
+        where {{schema}}.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
 		  and isnull(i.CRMSEL_SEL,0) = 0);
 
 	 
-    insert into jsharmony.CRM (CR_NAME, SM_ID)
+    insert into {{schema}}.CRM (CR_NAME, SM_ID)
 	   select i.NEW_CR_NAME, i.SM_ID
 	     from inserted i
         inner join deleted d on d.SM_ID=i.SM_ID
-        where jsharmony.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
+        where {{schema}}.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
 		  and isnull(i.CRMSEL_SEL,0) = 1
 		  and isnull(i.NEW_CR_NAME,'')<>'';
 	 
-    insert into jsharmony.CRM (CR_NAME, SM_ID)
+    insert into {{schema}}.CRM (CR_NAME, SM_ID)
 	   select i.CR_NAME, i.NEW_SM_ID
 	     from inserted i
         inner join deleted d on d.SM_ID=i.SM_ID
-        where jsharmony.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
+        where {{schema}}.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
 		  and isnull(i.CRMSEL_SEL,0) = 1
 		  and isnull(i.NEW_CR_NAME,'')='';
 	 
@@ -7653,28 +7653,28 @@ begin
   BEGIN
   set @I = 1
 
-    delete from jsharmony.SRM
+    delete from {{schema}}.SRM
 	 where SRM_ID in (
 	   select i.SRM_ID
 	     from inserted i
         inner join deleted d on d.SM_ID=i.SM_ID
-        where jsharmony.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
+        where {{schema}}.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
 		  and isnull(i.SRMSEL_SEL,0) = 0);
 
 	 
-    insert into jsharmony.SRM (SR_NAME, SM_ID)
+    insert into {{schema}}.SRM (SR_NAME, SM_ID)
 	   select i.NEW_SR_NAME, i.SM_ID
 	     from inserted i
         inner join deleted d on d.SM_ID=i.SM_ID
-        where jsharmony.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
+        where {{schema}}.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
 		  and isnull(i.SRMSEL_SEL,0) = 1
 		  and isnull(i.NEW_SR_NAME,'')<>'';
 	 
-    insert into jsharmony.SRM (SR_NAME, SM_ID)
+    insert into {{schema}}.SRM (SR_NAME, SM_ID)
 	   select i.SR_NAME, i.NEW_SM_ID
 	     from inserted i
         inner join deleted d on d.SM_ID=i.SM_ID
-        where jsharmony.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
+        where {{schema}}.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
 		  and isnull(i.SRMSEL_SEL,0) = 1
 		  and isnull(i.NEW_SR_NAME,'')='';
 	 
@@ -7683,2127 +7683,2127 @@ end
 
 
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Sequence - AUD_H' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Sequence - AUD_H' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Detail Column Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Detail Column Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=4515 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=4515 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Detail Previous Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Detail Previous Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D', @level2type=N'COLUMN',@level2name=N'COLUMN_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Detail (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_D'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Detail (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_D'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=960 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=960 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Table Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Table Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header ID Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header ID Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'TABLE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Operation - DUI' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Operation - DUI' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_OP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header User Number' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header User Number' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_U'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=3690 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=3690 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'AUD_Tstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'C_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'C_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Equipment ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'E_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Equipment ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'E_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Reference Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'REF_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Reference Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'REF_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Reference ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'REF_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Reference ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'REF_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Subject' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'SUBJ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Subject' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H', @level2type=N'COLUMN',@level2name=N'SUBJ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'AUD_H'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'AUD_H'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'IMD' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'IMD' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'TRIGGER', @value=N'Referential Integrity back to AC' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'TRIGGER', @value=N'Referential Integrity back to AC' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'C_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'C_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Status - ACTIVE, HOLD, CLOSED - UCOD_AHC' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Status - ACTIVE, HOLD, CLOSED - UCOD_AHC' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Status Last Change Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Status Last Change Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'TRIGGER', @value=N'Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'TRIGGER', @value=N'Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel First Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel First Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Middle Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_MName'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Middle Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_MName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Last Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Last Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Job Title' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_JTitle'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Job Title' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_JTitle'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Business Phone Number' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_BPhone'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Business Phone Number' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_BPhone'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Cell Phone Number' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_CPhone'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Cell Phone Number' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_CPhone'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Email' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Email' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Email'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Hash' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Hash'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Hash' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_Hash'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel last login IP' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LL_IP'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel last login IP' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LL_IP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel last login timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LL_Tstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel last login timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_LL_Tstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer Personnel (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer Personnel (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPER', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPER', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Role System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPER', @level2type=N'COLUMN',@level2name=N'CPER_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Role System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPER', @level2type=N'COLUMN',@level2name=N'CPER_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Role ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPER', @level2type=N'COLUMN',@level2name=N'CPER_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personnel Role ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPER', @level2type=N'COLUMN',@level2name=N'CPER_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPER', @level2type=N'COLUMN',@level2name=N'CR_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPER', @level2type=N'COLUMN',@level2name=N'CR_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer - Personnel Roles (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CPER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer - Personnel Roles (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CPER'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'SIMD' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'SIMD' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=4920 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=4920 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR', @level2type=N'COLUMN',@level2name=N'CR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer - Roles (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CR'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer - Roles (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CR'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CRM', @level2type=N'COLUMN',@level2name=N'SM_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CRM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Menu Item System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CRM', @level2type=N'COLUMN',@level2name=N'CRM_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Menu Item System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CRM', @level2type=N'COLUMN',@level2name=N'CRM_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CRM', @level2type=N'COLUMN',@level2name=N'CRM_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CRM', @level2type=N'COLUMN',@level2name=N'CRM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CRM', @level2type=N'COLUMN',@level2name=N'CR_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CRM', @level2type=N'COLUMN',@level2name=N'CR_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer - Role Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'CRM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer - Role Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'CRM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope - UCOD_D_SCOPE' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SCOPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope - UCOD_D_SCOPE' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SCOPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SCOPE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SCOPE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID - C' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'C_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID - C' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'C_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Employee ID - E' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'E_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Employee ID - E' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'E_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Status - UCOD_AC1' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Status - UCOD_AC1' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Category - GCOD2_D_SCOPE_D_CTGR' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_CTGR'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Category - GCOD2_D_SCOPE_D_CTGR' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_CTGR'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Extension (file suffix)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_EXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Extension (file suffix)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_EXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Size in bytes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SIZE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Size in bytes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SIZE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document File Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_FileName'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document File Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_FileName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_UTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_UTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_UU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_UU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Synchronization Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SYNCTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Synchronization Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SYNCTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Main ID (Synchronization)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_ID_MAIN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Main ID (Synchronization)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_ID_MAIN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Documents (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'D'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Documents (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'D'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Table (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'DUAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Table (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'DUAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=5565 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=5565 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Code Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODECODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Code Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODECODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Attrib Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEATTRIBMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Attrib Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'CODEATTRIBMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=3 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=3 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD_H'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD_H'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'GCOD2_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'GCOD2_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODEVAL1'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODEVAL1'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes 2 - Document Scope / Category' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes 2 - Document Scope / Category' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_D_SCOPE_D_CTGR'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=5565 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=5565 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Code Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODECODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Code Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODECODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Attrib Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEATTRIBMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Attrib Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEATTRIBMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=3 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=3 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes 2 Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GCOD2_H'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes 2 Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GCOD2_H'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GPP Process Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GPP', @level2type=N'COLUMN',@level2name=N'GPP_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GPP Process Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GPP', @level2type=N'COLUMN',@level2name=N'GPP_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GPP Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GPP', @level2type=N'COLUMN',@level2name=N'GPP_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GPP Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GPP', @level2type=N'COLUMN',@level2name=N'GPP_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GPP Attribute (Parameter) value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GPP', @level2type=N'COLUMN',@level2name=N'GPP_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GPP Attribute (Parameter) value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GPP', @level2type=N'COLUMN',@level2name=N'GPP_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters - Global (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'GPP'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters - Global (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'GPP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Header Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'HP_CODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Header Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'HP_CODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Title' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_Title'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Title' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_Title'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Text' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_Text'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Text' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_Text'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Last Modification Entry' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Last Modification Entry' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help UNIQUE - not null HP_CODE unique' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_UNIQUE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help UNIQUE - not null HP_CODE unique' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_UNIQUE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help - Show on Admin Index' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_INDEX_A'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help - Show on Admin Index' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_INDEX_A'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help - Show on Portal Index' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_INDEX_P'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help - Show on Portal Index' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H', @level2type=N'COLUMN',@level2name=N'H_INDEX_P'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'H'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'H'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'HP', @level2type=N'COLUMN',@level2name=N'HP_CODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'HP', @level2type=N'COLUMN',@level2name=N'HP_CODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'HP', @level2type=N'COLUMN',@level2name=N'HP_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'HP', @level2type=N'COLUMN',@level2name=N'HP_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'HP', @level2type=N'COLUMN',@level2name=N'HP_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'HP', @level2type=N'COLUMN',@level2name=N'HP_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'HP'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'HP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Scope - UCOD_N_SCOPE' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_SCOPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Scope - UCOD_N_SCOPE' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_SCOPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Scope ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_SCOPE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Scope ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_SCOPE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Status - UCOD_AC1' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Status - UCOD_AC1' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID - C' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'C_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID - C' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'C_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Employee ID - E' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'E_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Employee ID - E' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'E_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Type - UCOD_N_TYPE - C,S,U' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_TYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Type - UCOD_N_TYPE - C,S,U' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_TYPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note NOTE' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_Note'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note NOTE' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_Note'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_Snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N', @level2type=N'COLUMN',@level2name=N'N_Snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Notes (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'N'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Notes (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'N'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Table (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'NUMBERS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Table (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'NUMBERS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Status ACTIVE, HOLD, CLOSED - UCOD_AHC' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Status ACTIVE, HOLD, CLOSED - UCOD_AHC' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Status Last Change Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Status Last Change Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'TRIGGER', @value=N'Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
+EXEC sys.sp_addextendedproperty @name=N'TRIGGER', @value=N'Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STSDt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel First Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel First Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_FName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Middle Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_MName'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Middle Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_MName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Last Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Last Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Job Title' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_JTitle'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Job Title' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_JTitle'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Business Phone Number' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_BPhone'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Business Phone Number' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_BPhone'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Cell Phone Number' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_CPhone'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Cell Phone Number' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_CPhone'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel country - UCOD_COUNTRY' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_COUNTRY'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel country - UCOD_COUNTRY' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_COUNTRY'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel address' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ADDR'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel address' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ADDR'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel city' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_CITY'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel city' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_CITY'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel state - UCOD2_COUNTRY_STATE' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel state - UCOD2_COUNTRY_STATE' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STATE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel zip code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ZIP'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel zip code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ZIP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Email' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Email' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EMAIL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel start date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STARTDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel start date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_STARTDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel end date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ENDDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel end date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ENDDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel user notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_UNOTES'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel user notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_UNOTES'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Hash' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_Hash'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Hash' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_Hash'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel last login IP' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LL_IP'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel last login IP' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LL_IP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel last login timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LL_Tstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel last login timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_LL_Tstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE', @level2type=N'COLUMN',@level2name=N'PE_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PPD Process Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPD', @level2type=N'COLUMN',@level2name=N'PPD_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PPD Process Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PPD', @level2type=N'COLUMN',@level2name=N'PPD_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PPD Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPD', @level2type=N'COLUMN',@level2name=N'PPD_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PPD Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PPD', @level2type=N'COLUMN',@level2name=N'PPD_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PPD Attribute (Parameter) Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPD', @level2type=N'COLUMN',@level2name=N'PPD_DESC'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PPD Attribute (Parameter) Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PPD', @level2type=N'COLUMN',@level2name=N'PPD_DESC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PPD Attribute (Parameter) Type - UCOD_PPD_TYPE' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPD', @level2type=N'COLUMN',@level2name=N'PPD_TYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PPD Attribute (Parameter) Type - UCOD_PPD_TYPE' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PPD', @level2type=N'COLUMN',@level2name=N'PPD_TYPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters Dictionary (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPD'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters Dictionary (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PPD'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPP', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PPP', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Process Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPP', @level2type=N'COLUMN',@level2name=N'PPP_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Process Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PPP', @level2type=N'COLUMN',@level2name=N'PPP_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPP', @level2type=N'COLUMN',@level2name=N'PPP_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PPP', @level2type=N'COLUMN',@level2name=N'PPP_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Attribute (Parameter) value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPP', @level2type=N'COLUMN',@level2name=N'PPP_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Attribute (Parameter) value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PPP', @level2type=N'COLUMN',@level2name=N'PPP_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters - Personal (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'PPP'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters - Personal (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'PPP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Queue Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Queue Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Message' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_MESSAGE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Message' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_MESSAGE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result - OK, ERROR' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_RSLT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result - OK, ERROR' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_RSLT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_RSLT_TStmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_RSLT_TStmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_RSLT_U'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_RSLT_U'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQ', @level2type=N'COLUMN',@level2name=N'RQ_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Source - UCOD_RQST_SOURCE' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_SOURCE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Source - UCOD_RQST_SOURCE' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_SOURCE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Type - UCOD_RQST_ATYPE' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_ATYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Type - UCOD_RQST_ATYPE' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_ATYPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_ANAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_ANAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Parameters' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_PARMS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Parameters' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_PARMS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result - OK, ERROR' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_RSLT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result - OK, ERROR' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_RSLT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_RSLT_TStmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_RSLT_TStmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_RSLT_U'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_RSLT_U'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST', @level2type=N'COLUMN',@level2name=N'RQST_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'RQST_D_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'RQST_D_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'RQST_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'RQST_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Scope' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'D_SCOPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Scope' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'D_SCOPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Scope ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'D_SCOPE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Scope ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'D_SCOPE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Category' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'D_CTGR'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Category' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'D_CTGR'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'D_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_D', @level2type=N'COLUMN',@level2name=N'D_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - Document (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_D'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - Document (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_D'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'RQST_EMAIL_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'RQST_EMAIL_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'RQST_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'RQST_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email SUBJECT' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'EMAIL_TXT_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email SUBJECT' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'EMAIL_TXT_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email TO' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'EMAIL_TO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email TO' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'EMAIL_TO'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email CC' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'EMAIL_CC'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email CC' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'EMAIL_CC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email BCC' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'EMAIL_BCC'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email BCC' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_EMAIL', @level2type=N'COLUMN',@level2name=N'EMAIL_BCC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - EMail (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_EMAIL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - EMail (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_EMAIL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'RQST_N_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'RQST_N_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'RQST_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'RQST_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Scope' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'N_SCOPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Scope' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'N_SCOPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Scope ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'N_SCOPE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Scope ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'N_SCOPE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Type' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'N_TYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Type' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'N_TYPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Note' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'N_Note'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Note' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_N', @level2type=N'COLUMN',@level2name=N'N_Note'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - Note (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_N'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - Note (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_N'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_RQ', @level2type=N'COLUMN',@level2name=N'RQST_RQ_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_RQ', @level2type=N'COLUMN',@level2name=N'RQST_RQ_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_RQ', @level2type=N'COLUMN',@level2name=N'RQST_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_RQ', @level2type=N'COLUMN',@level2name=N'RQST_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - RQ (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_RQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - RQ (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_RQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_SMS', @level2type=N'COLUMN',@level2name=N'RQST_SMS_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_SMS', @level2type=N'COLUMN',@level2name=N'RQST_SMS_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_SMS', @level2type=N'COLUMN',@level2name=N'RQST_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_SMS', @level2type=N'COLUMN',@level2name=N'RQST_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS SUBJECT' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_SMS', @level2type=N'COLUMN',@level2name=N'SMS_TXT_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS SUBJECT' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_SMS', @level2type=N'COLUMN',@level2name=N'SMS_TXT_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS TO' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_SMS', @level2type=N'COLUMN',@level2name=N'SMS_TO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS TO' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_SMS', @level2type=N'COLUMN',@level2name=N'SMS_TO'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - SMS (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'RQST_SMS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - SMS (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'RQST_SMS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Scripts (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SCRIPT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Scripts (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SCRIPT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_CODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_CODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Attrib' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Attrib' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SF', @level2type=N'COLUMN',@level2name=N'SF_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Functions (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SF'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Functions (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SF'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item User Type - S-System, C-Customer' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_UTYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item User Type - S-System, C-Customer' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_UTYPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'SIMD' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'SIMD' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=2550 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=2550 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=3090 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=3090 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=4470 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=4470 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description Long' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description Long' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=8 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=8 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=8370 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=8370 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description Very Long' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description Very Long' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_DESCVL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=9 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=9 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Command' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Command' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Cmd'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=10 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=10 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'For buttons as SMs: unique identifier for image' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'For buttons as SMs: unique identifier for image' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_Image'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=11 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=11 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM', @level2type=N'COLUMN',@level2name=N'SM_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPEF', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SPEF', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Function System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPEF', @level2type=N'COLUMN',@level2name=N'SPEF_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Function System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SPEF', @level2type=N'COLUMN',@level2name=N'SPEF_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Function ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPEF', @level2type=N'COLUMN',@level2name=N'SPEF_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Function ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SPEF', @level2type=N'COLUMN',@level2name=N'SPEF_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPEF', @level2type=N'COLUMN',@level2name=N'SF_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SPEF', @level2type=N'COLUMN',@level2name=N'SF_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Personnel Functions (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPEF'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Personnel Functions (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SPEF'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPER', @level2type=N'COLUMN',@level2name=N'PE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SPER', @level2type=N'COLUMN',@level2name=N'PE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Role System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPER', @level2type=N'COLUMN',@level2name=N'SPER_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Role System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SPER', @level2type=N'COLUMN',@level2name=N'SPER_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Role ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPER', @level2type=N'COLUMN',@level2name=N'SPER_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel Role ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SPER', @level2type=N'COLUMN',@level2name=N'SPER_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPER', @level2type=N'COLUMN',@level2name=N'SR_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SPER', @level2type=N'COLUMN',@level2name=N'SR_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Personnel Roles (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SPER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Personnel Roles (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SPER'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'SIMD' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'SIMD' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'N' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=4920 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=4920 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_CODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_CODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Attrib' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Attrib' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR', @level2type=N'COLUMN',@level2name=N'SR_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Roles (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SR'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Roles (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SR'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SRM', @level2type=N'COLUMN',@level2name=N'SM_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SRM', @level2type=N'COLUMN',@level2name=N'SM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Menu Item System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SRM', @level2type=N'COLUMN',@level2name=N'SRM_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Menu Item System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SRM', @level2type=N'COLUMN',@level2name=N'SRM_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SRM', @level2type=N'COLUMN',@level2name=N'SRM_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SRM', @level2type=N'COLUMN',@level2name=N'SRM_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SRM', @level2type=N'COLUMN',@level2name=N'SR_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SRM', @level2type=N'COLUMN',@level2name=N'SR_NAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Role Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'SRM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Role Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'SRM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Process Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Process Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Type HTML / TAXT - UCOD_TXT_TYPE' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Type HTML / TAXT - UCOD_TXT_TYPE' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TYPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=1350 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=1350 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Title' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Title' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_TVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=10110 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=10110 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP BCC' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_BCC'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP BCC' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_BCC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=525 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=525 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT', @level2type=N'COLUMN',@level2name=N'TXT_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'String Process Parameters (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'TXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'String Process Parameters (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'TXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Active / Closed' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Active / Closed' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - A / C' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AC1'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - A / C' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AC1'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Active / Hold / Closed' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_AHC'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Active / Hold / Closed' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_AHC'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - TOrder Payment Method' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - TOrder Payment Method' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_COUNTRY'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Document Scope' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Document Scope' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_D_SCOPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=5565 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=5565 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=3 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=3 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_H'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_H'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Note Scope' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Note Scope' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_SCOPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Note Type' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Note Type' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_N_TYPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Process Parameter Type' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Process Parameter Type' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_PPD_TYPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_ATYPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Source (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Source (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_RQST_SOURCE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Text Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Text Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_TXT_TYPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'UCOD_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODEVAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODEVAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Version Status' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD_V_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Version Status' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD_V_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'UCOD2_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'UCOD2_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODSEQ'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODEVAL1'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODEVAL1'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODETXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODETXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODECODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODECODE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODETDT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODETDT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODETCM'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'CODETCM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_eu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_eu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_mu'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_mu'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 - Country / State' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 - Country / State' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_COUNTRY_STATE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODENAME'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=5565 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=5565 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Code Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODECODEMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Code Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODECODEMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Attrib Description' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEATTRIBMEAN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Attrib Description' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'CODEATTRIBMEAN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=3 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=3 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Entry User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification User' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'COD_H_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Header System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H', @level2type=N'COLUMN',@level2name=N'cod_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'UCOD2_H'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'UCOD2_H'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version ID (internal)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version ID (internal)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Component Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_COMP'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Component Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_COMP'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Major' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_NO_MAJOR'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Major' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_NO_MAJOR'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Minor' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_NO_MINOR'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Minor' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_NO_MINOR'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Build' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_NO_BUILD'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Build' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_NO_BUILD'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Revision' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_NO_REV'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Revision' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_NO_REV'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version status - UCOD_V_STS' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version status - UCOD_V_STS' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Note' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_NOTE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Note' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_NOTE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version entry date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version entry date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version entry user' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version entry user' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version last modification date' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version last modification date' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version last modification user' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version last modification user' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version System Notes' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version System Notes' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V', @level2type=N'COLUMN',@level2name=N'V_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Versions (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'V'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Versions (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'V'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Process Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Process Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_PROCESS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=2460 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=2460 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ATTRIB'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=3975 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=3975 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Attribute (Parameter) value' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'XPP Attribute (Parameter) value' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_VAL'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP', @level2type=N'COLUMN',@level2name=N'XPP_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters - System (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'jsharmony', @level1type=N'TABLE',@level1name=N'XPP'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters - System (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{{schema}}', @level1type=N'TABLE',@level1name=N'XPP'
 GO
 
 
@@ -9832,19 +9832,19 @@ SELECT D.d_id
       ,D.d_filename
       ,D.d_etstmp
       ,D.d_eu
-      ,jsharmony.myCUSER_FMT(D_EU) d_eu_fmt
+      ,{{schema}}.myCUSER_FMT(D_EU) d_eu_fmt
       ,D.d_mtstmp
       ,D.d_mu
-      ,jsharmony.myCUSER_FMT(D_MU) d_mu_fmt
+      ,{{schema}}.myCUSER_FMT(D_MU) d_mu_fmt
       ,D.d_utstmp
       ,D.d_uu
-      ,jsharmony.myCUSER_FMT(D_UU) d_uu_fmt
+      ,{{schema}}.myCUSER_FMT(D_UU) d_uu_fmt
       ,D.d_snotes
 	    ,DUAL.DUAL_NVARCHAR50 title_h
 	    ,DUAL.DUAL_NVARCHAR50 title_b
-  FROM jsharmony.D
-  INNER JOIN jsharmony.DUAL on 1=1
-  LEFT OUTER JOIN  jsharmony.GCOD2_D_SCOPE_D_CTGR GDD ON GDD.CODEVAL1 = D.D_SCOPE
+  FROM {{schema}}.D
+  INNER JOIN {{schema}}.DUAL on 1=1
+  LEFT OUTER JOIN  {{schema}}.GCOD2_D_SCOPE_D_CTGR GDD ON GDD.CODEVAL1 = D.D_SCOPE
                                              AND GDD.CODEVAL2 = D.D_CTGR   
 
 GO
@@ -9871,20 +9871,20 @@ SELECT N.n_id
 	    ,DUAL.DUAL_NVARCHAR50 e_name
       ,N.n_type
       ,N.n_note
-      ,jsharmony.myTODATE(N.N_ETstmp) n_dt
+      ,{{schema}}.myTODATE(N.N_ETstmp) n_dt
       ,N.n_etstmp
-      ,jsharmony.myMMDDYYHHMI(N.N_ETstmp) n_etstmp_fmt
+      ,{{schema}}.myMMDDYYHHMI(N.N_ETstmp) n_etstmp_fmt
       ,N.n_eu
-      ,jsharmony.myCUSER_FMT(N.N_EU) n_eu_fmt
+      ,{{schema}}.myCUSER_FMT(N.N_EU) n_eu_fmt
       ,N.n_mtstmp
-      ,jsharmony.myMMDDYYHHMI(N.N_MTstmp) n_mtstmp_fmt
+      ,{{schema}}.myMMDDYYHHMI(N.N_MTstmp) n_mtstmp_fmt
       ,N.n_mu
-      ,jsharmony.myCUSER_FMT(N.N_MU) n_mu_fmt
+      ,{{schema}}.myCUSER_FMT(N.N_MU) n_mu_fmt
       ,N.n_snotes
 	    ,DUAL.DUAL_NVARCHAR50 title_h
 	    ,DUAL.DUAL_NVARCHAR50 title_b
-  FROM jsharmony.N
-  INNER JOIN jsharmony.DUAL ON 1=1
+  FROM {{schema}}.N
+  INNER JOIN {{schema}}.DUAL ON 1=1
 
 GO
 

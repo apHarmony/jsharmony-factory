@@ -46,8 +46,8 @@ CREATE FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm     timestamp default jsharmony.mynow();
-      myuser      text default jsharmony.mycuser();
+      curdttm     timestamp default {{schema}}.mynow();
+      myuser      text default {{schema}}.mycuser();
       my_c_id     bigint default null;
       my_e_id     bigint default null;
       my_ref_name text default null;
@@ -70,7 +70,7 @@ CREATE FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint
 		       my_REF_NAME,
 		       my_REF_ID,
 		       my_SUBJ
-		  from jsharmony.aud_h
+		  from {{schema}}.aud_h
                  where TABLE_NAME = toa.table_name
 		   and TABLE_ID = par_table_id
 		   and AUD_OP = 'I'
@@ -84,7 +84,7 @@ CREATE FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint
             my_subj = toa.subj;
           END if;
         
-          insert into jsharmony.aud_h 
+          insert into {{schema}}.aud_h 
                             (table_name, table_id, aud_op, aud_u, aud_tstmp, c_id, e_id, ref_name, ref_id, subj)
                      values (toa.table_name,
                              par_table_id,
@@ -102,7 +102,7 @@ CREATE FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint
                      returning aud_seq into par_aud_seq; 
         END IF;
         IF toa.op in ('UPDATE','DELETE') THEN
-          insert into jsharmony.aud_d 
+          insert into {{schema}}.aud_d 
                             (aud_seq, column_name, column_val)
                      values (par_aud_seq, upper(par_column_name), par_column_val);
         END IF;           
@@ -110,7 +110,7 @@ CREATE FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint
 $$;
 
 
-ALTER FUNCTION jsharmony.audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) OWNER TO postgres;
 
 --
 -- Name: audit_base(toaudit, bigint, bigint, character varying, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -120,8 +120,8 @@ CREATE FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id b
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm     timestamp default jsharmony.mynow();
-      myuser      text default jsharmony.mycuser();
+      curdttm     timestamp default {{schema}}.mynow();
+      myuser      text default {{schema}}.mycuser();
       my_ref_name text default null;
       my_ref_id   bigint default null;
       my_subj     text default null;
@@ -138,7 +138,7 @@ CREATE FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id b
 		       my_REF_NAME,
 		       my_REF_ID,
 		       my_SUBJ
-		  from jsharmony.AUD_H
+		  from {{schema}}.AUD_H
                  where TABLE_NAME = toa.table_name
 		   and TABLE_ID = par_table_id
 		   and AUD_OP = 'I'
@@ -150,7 +150,7 @@ CREATE FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id b
             my_subj = toa.subj;
           END if;
         
-          insert into jsharmony.AUD_H 
+          insert into {{schema}}.AUD_H 
                             (table_name, table_id, aud_op, aud_u, aud_tstmp, ref_name, ref_id, subj)
                      values (toa.table_name,
                              par_table_id,
@@ -166,7 +166,7 @@ CREATE FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id b
                      returning aud_seq into par_aud_seq; 
         END IF;
         IF toa.op in ('UPDATE','DELETE') THEN
-          insert into jsharmony.aud_d 
+          insert into {{schema}}.aud_d 
                              (aud_seq, column_name, column_val)
                      values (par_aud_seq, upper(par_column_name), par_column_val);
         END IF;           
@@ -174,7 +174,7 @@ CREATE FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id b
 $$;
 
 
-ALTER FUNCTION jsharmony.audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) OWNER TO postgres;
 
 --
 -- Name: audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -183,12 +183,12 @@ ALTER FUNCTION jsharmony.audit_base(toa toaudit, INOUT par_aud_seq bigint, par_t
 CREATE FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) RETURNS character varying
     LANGUAGE sql
     AS $_$select 'INFO'||chr(13)||chr(10)|| 
-               '     Entered:  '||jsharmony.mymmddyyhhmi($1)||'  '||jsharmony.mycuser_fmt($2)||
+               '     Entered:  '||{{schema}}.mymmddyyhhmi($1)||'  '||{{schema}}.mycuser_fmt($2)||
 			   chr(13)||chr(10)|| 
-               'Last Updated:  '||jsharmony.mymmddyyhhmi($3)||'  '||jsharmony.mycuser_fmt($4);$_$;
+               'Last Updated:  '||{{schema}}.mymmddyyhhmi($3)||'  '||{{schema}}.mycuser_fmt($4);$_$;
 
 
-ALTER FUNCTION jsharmony.audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) OWNER TO postgres;
 
 --
 -- Name: check_code(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -202,7 +202,7 @@ DECLARE
     runmesql text;
 BEGIN
 
-  rslt := jsharmony.check_code_p(in_tblname, in_codeval);
+  rslt := {{schema}}.check_code_p(in_tblname, in_codeval);
 
   RETURN rslt;
 
@@ -214,7 +214,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.check_code(in_tblname character varying, in_codeval character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.check_code(in_tblname character varying, in_codeval character varying) OWNER TO postgres;
 
 --
 -- Name: check_code2(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -228,7 +228,7 @@ DECLARE
     runmesql text;
 BEGIN
 
-  rslt := jsharmony.check_code2_p(in_tblname, in_codeval1, in_codeval2);
+  rslt := {{schema}}.check_code2_p(in_tblname, in_codeval1, in_codeval2);
 
   RETURN rslt;
 
@@ -240,7 +240,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) OWNER TO postgres;
 
 --
 -- Name: check_code2_p(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -261,7 +261,7 @@ BEGIN
     into runmesql
     from pg_tables
    where tablename = lower(in_tblname) 
-   order by (case schemaname when 'jsharmony' then 1 else 2 end), schemaname
+   order by (case schemaname when '{{schema}}' then 1 else 2 end), schemaname
    limit 1;
 
   EXECUTE runmesql INTO rslt USING in_codeval1, in_codeval2;
@@ -271,7 +271,7 @@ END;
 $_$;
 
 
-ALTER FUNCTION jsharmony.check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) OWNER TO postgres;
 
 --
 -- Name: check_code_p(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -291,7 +291,7 @@ BEGIN
     into runmesql
     from pg_tables
    where tablename = lower(in_tblname) 
-   order by (case schemaname when 'jsharmony' then 1 else 2 end), schemaname
+   order by (case schemaname when '{{schema}}' then 1 else 2 end), schemaname
    limit 1;
 
   EXECUTE runmesql INTO rslt USING in_codeval;
@@ -301,7 +301,7 @@ END;
 $_$;
 
 
-ALTER FUNCTION jsharmony.check_code_p(in_tblname character varying, in_codeval character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.check_code_p(in_tblname character varying, in_codeval character varying) OWNER TO postgres;
 
 --
 -- Name: check_foreign(character varying, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -315,7 +315,7 @@ DECLARE
     runmesql text;
 BEGIN
 
-  rslt := jsharmony.check_foreign_p(in_tblname, in_tblid);
+  rslt := {{schema}}.check_foreign_p(in_tblname, in_tblid);
 
   RETURN rslt;
 
@@ -327,7 +327,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.check_foreign(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.check_foreign(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
 
 --
 -- Name: check_foreign_p(character varying, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -348,7 +348,7 @@ BEGIN
     into runmesql
     from pg_tables
    where tablename = lower(in_tblname) 
-   order by (case schemaname when 'jsharmony' then 1 else 2 end), schemaname
+   order by (case schemaname when '{{schema}}' then 1 else 2 end), schemaname
    limit 1;
 
   EXECUTE runmesql INTO rslt USING in_tblid;
@@ -358,7 +358,7 @@ END;
 $_$;
 
 
-ALTER FUNCTION jsharmony.check_foreign_p(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.check_foreign_p(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
 
 --
 -- Name: check_pp(character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -386,7 +386,7 @@ BEGIN
          ppd_gpp,
          ppd_ppp,
          ppd_xpp
-    FROM jsharmony.PPD
+    FROM {{schema}}.PPD
    WHERE ppd.ppd_process = in_process
      AND ppd.ppd_attrib = in_attrib;      
 
@@ -410,7 +410,7 @@ BEGIN
     RETURN 'Value has to be present';
   END IF;  
 
-  IF ppd_type='N' AND not jsharmony.myISNUMERIC(in_val) THEN
+  IF ppd_type='N' AND not {{schema}}.myISNUMERIC(in_val) THEN
     RETURN 'Value '||in_val||' is not numeric';
   END IF;  
 
@@ -418,7 +418,7 @@ BEGIN
 
     select count(*)
       into c
-      from jsharmony.ucod
+      from {{schema}}.ucod
      where codename = codename
        and codeval = in_val; 
        
@@ -438,7 +438,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) OWNER TO postgres;
 
 --
 -- Name: cpe_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -448,13 +448,13 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm   timestamp default jsharmony.mynow();
-      myuser    text default jsharmony.mycuser();
+      curdttm   timestamp default {{schema}}.mynow();
+      myuser    text default {{schema}}.mycuser();
       aud_seq   bigint default NULL;
       my_id     bigint default case TG_OP when 'DELETE' then OLD.PE_ID else NEW.PE_ID end;
       newpw     text default NULL;
       hash      bytea default NULL;
-      my_toa    jsharmony.toaudit;
+      my_toa    {{schema}}.toaudit;
     BEGIN
 
         /**********************************/
@@ -476,18 +476,18 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
 
         IF TG_OP = 'UPDATE'
            and
-           jsharmony.nonequal(NEW.pe_id, OLD.pe_id) THEN
+           {{schema}}.nonequal(NEW.pe_id, OLD.pe_id) THEN
           RAISE EXCEPTION  'Application Error - ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'UPDATE'
            and
-           jsharmony.nonequal(NEW.c_id, OLD.c_id) THEN
+           {{schema}}.nonequal(NEW.c_id, OLD.c_id) THEN
           RAISE EXCEPTION  'Application Error - Customer ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'INSERT' or TG_OP = 'UPDATE' THEN
-	  IF jsharmony.nonequal(NEW.PE_PW1, NEW.PE_PW2) THEN
+	  IF {{schema}}.nonequal(NEW.PE_PW1, NEW.PE_PW2) THEN
             RAISE EXCEPTION  'Application Error - New Password and Repeat Password are different.';
           ELSIF (TG_OP='INSERT' or NEW.pe_pw1 is not null)  AND length(btrim(NEW.pe_pw1::text)) < 6  THEN
             RAISE EXCEPTION  'Application Error - Password length - at least 6 characters required.';
@@ -497,8 +497,8 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
 
         IF (TG_OP='INSERT' 
             OR 
-            TG_OP='UPDATE' AND jsharmony.nonequal(NEW.C_ID, OLD.C_ID)) THEN
-          IF jsharmony.check_foreign('C', NEW.C_ID) <= 0THEN
+            TG_OP='UPDATE' AND {{schema}}.nonequal(NEW.C_ID, OLD.C_ID)) THEN
+          IF {{schema}}.check_foreign('C', NEW.C_ID) <= 0THEN
             RAISE EXCEPTION  'Table C does not contain record % .', NEW.C_ID::text ;
 	  END IF;
 	END IF;   
@@ -509,68 +509,68 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
 
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_ID is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_ID, OLD.PE_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_ID', OLD.PE_ID::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_ID, OLD.PE_ID) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_ID', OLD.PE_ID::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.C_ID is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.C_ID, OLD.C_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'C_ID', OLD.C_ID::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.C_ID, OLD.C_ID) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'C_ID', OLD.C_ID::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_STS is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_STS, OLD.PE_STS) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_STS', OLD.PE_STS::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_STS, OLD.PE_STS) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_STS', OLD.PE_STS::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_FNAME is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_FNAME, OLD.PE_FNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_FNAME', OLD.PE_FNAME::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_FNAME, OLD.PE_FNAME) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_FNAME', OLD.PE_FNAME::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_MNAME is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_MNAME, OLD.PE_MNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_MNAME', OLD.PE_MNAME::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_MNAME, OLD.PE_MNAME) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_MNAME', OLD.PE_MNAME::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_LNAME is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_LNAME, OLD.PE_LNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_LNAME', OLD.PE_LNAME::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_LNAME, OLD.PE_LNAME) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_LNAME', OLD.PE_LNAME::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_JTITLE is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_JTITLE, OLD.PE_JTITLE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_JTITLE', OLD.PE_JTITLE::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_JTITLE, OLD.PE_JTITLE) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_JTITLE', OLD.PE_JTITLE::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_BPHONE is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_BPHONE, OLD.PE_BPHONE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_BPHONE', OLD.PE_BPHONE::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_BPHONE, OLD.PE_BPHONE) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_BPHONE', OLD.PE_BPHONE::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_CPHONE is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_CPHONE, OLD.PE_CPHONE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_CPHONE', OLD.PE_CPHONE::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_CPHONE, OLD.PE_CPHONE) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_CPHONE', OLD.PE_CPHONE::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_EMAIL is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_EMAIL, OLD.PE_EMAIL) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_EMAIL', OLD.PE_EMAIL::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_EMAIL, OLD.PE_EMAIL) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_EMAIL', OLD.PE_EMAIL::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_LL_TSTMP is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_LL_TSTMP, OLD.PE_LL_TSTMP) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_LL_TSTMP', OLD.PE_LL_TSTMP::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_LL_TSTMP, OLD.PE_LL_TSTMP) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_LL_TSTMP', OLD.PE_LL_TSTMP::text);  
         END IF;
 
       
         IF TG_OP = 'UPDATE' and coalesce(NEW.pe_pw1,'') <> '' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_PW','*');  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_PW','*');  
         END IF;
 
 
@@ -601,7 +601,7 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
 	    NEW.pe_mu := myuser;
           ELSIF TG_OP = 'UPDATE' THEN
             IF aud_seq is not NULL THEN
-              if jsharmony.nonequal(OLD.PE_STS, NEW.PE_STS) then
+              if {{schema}}.nonequal(OLD.PE_STS, NEW.PE_STS) then
                 NEW.pe_stsdt := curdttm;
               end if;
 	      NEW.pe_mtstmp := curdttm;
@@ -627,7 +627,7 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.cpe_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.cpe_iud() OWNER TO postgres;
 
 --
 -- Name: cpe_iud_after_insert(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -638,7 +638,7 @@ CREATE FUNCTION cpe_iud_after_insert() RETURNS trigger
     AS $$
     BEGIN
         IF TG_OP = 'INSERT' THEN
-          insert into jsharmony.cper (pe_id, cr_name) values(NEW.pe_id, 'C*');
+          insert into {{schema}}.cper (pe_id, cr_name) values(NEW.pe_id, 'C*');
         END IF;
 
         RETURN NEW;   
@@ -647,7 +647,7 @@ CREATE FUNCTION cpe_iud_after_insert() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.cpe_iud_after_insert() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.cpe_iud_after_insert() OWNER TO postgres;
 
 --
 -- Name: cper_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -657,11 +657,11 @@ CREATE FUNCTION cper_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $_$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.cper_id else NEW.cper_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
 
       sqlcmd     text;
       getcid     text;
@@ -676,7 +676,7 @@ CREATE FUNCTION cper_iud() RETURNS trigger
 
         select pp_val
           into getcid
-          from jsharmony.v_pp 
+          from {{schema}}.v_pp 
          where pp_process = 'SQL'
            and pp_attrib = 'GETCID'; 
         wk_pe_id := case TG_OP when 'DELETE' then OLD.pe_id else NEW.pe_id end;  
@@ -691,7 +691,7 @@ CREATE FUNCTION cper_iud() RETURNS trigger
         my_toa.ref_name := NULL;
         my_toa.ref_id := NULL;
         my_toa.subj := case when TG_OP = 'DELETE' then NULL else (select coalesce(PE_LNAME,'')||', '||coalesce(PE_FNAME,'') 
-                                                                    from jsharmony.CPE 
+                                                                    from {{schema}}.CPE 
                                                                    where pe_id = NEW.PE_ID) end;
          
 
@@ -701,13 +701,13 @@ CREATE FUNCTION cper_iud() RETURNS trigger
 
         IF TG_OP = 'UPDATE'
            and
-           jsharmony.nonequal(NEW.cper_id, OLD.cper_id) THEN
+           {{schema}}.nonequal(NEW.cper_id, OLD.cper_id) THEN
           RAISE EXCEPTION  'Application Error - ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'UPDATE'
            and
-           jsharmony.nonequal(NEW.pe_id, OLD.pe_id) THEN
+           {{schema}}.nonequal(NEW.pe_id, OLD.pe_id) THEN
           RAISE EXCEPTION  'Application Error - Customer User ID cannot be updated.';
         END IF;
 
@@ -746,23 +746,23 @@ CREATE FUNCTION cper_iud() RETURNS trigger
         /* AUDIT TRAIL                    */ 
         /**********************************/
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
 
 
         IF (case when TG_OP = 'DELETE' then OLD.CPER_ID is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.CPER_ID, OLD.CPER_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id, 'CPER_ID', OLD.CPER_ID::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.CPER_ID, OLD.CPER_ID) end) THEN
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id, 'CPER_ID', OLD.CPER_ID::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_ID is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_ID, OLD.PE_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id, 'PE_ID', OLD.PE_ID::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_ID, OLD.PE_ID) end) THEN
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_ID', OLD.PE_ID::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.CR_NAME is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.CR_NAME, OLD.CR_NAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id, 'CR_NAME', OLD.CR_NAME::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.CR_NAME, OLD.CR_NAME) end) THEN
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id, 'CR_NAME', OLD.CR_NAME::text);  
         END IF;
 
 
@@ -786,7 +786,7 @@ CREATE FUNCTION cper_iud() RETURNS trigger
 $_$;
 
 
-ALTER FUNCTION jsharmony.cper_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.cper_iud() OWNER TO postgres;
 
 --
 -- Name: create_gcod(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -813,7 +813,7 @@ BEGIN
             ||'  CONSTRAINT gcod_'||in_codename||'_codeval_key UNIQUE (codeval), '
             ||'  CONSTRAINT gcod_'||in_codename||'_codetxt_key UNIQUE (codetxt) '
             ||') '
-            ||'INHERITS ('||'jsharmony'||'.gcod) '
+            ||'INHERITS ('||'{{schema}}'||'.gcod) '
             ||'WITH ( '
             ||'  OIDS=FALSE '
             ||');';
@@ -823,16 +823,16 @@ BEGIN
             ||'BEFORE INSERT OR UPDATE OR DELETE '
             ||'ON '||wk_codeschema||'.gcod_'||in_codename||' ' 
             ||'FOR EACH ROW '
-            ||'EXECUTE PROCEDURE '||'jsharmony'||'.gcod_iud();';
+            ||'EXECUTE PROCEDURE '||'{{schema}}'||'.gcod_iud();';
   EXECUTE runmesql ; 
 
   runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.gcod_'||in_codename||' IS ''User Codes - '||coalesce(in_codemean,'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod_'||in_codename||' TO {{schema}}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod_'||in_codename||' TO {{schema}}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -845,7 +845,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
 
 --
 -- Name: create_gcod2(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -872,7 +872,7 @@ BEGIN
             ||'  CONSTRAINT gcod2_'||in_codename||'_codeval1_codeval2_key UNIQUE (codeval1,codeval2), '
             ||'  CONSTRAINT gcod2_'||in_codename||'_codeval1_codetxt_key UNIQUE (codeval1,codetxt) '
             ||') '
-            ||'INHERITS ('||'jsharmony'||'.gcod2) '
+            ||'INHERITS ('||'{{schema}}'||'.gcod2) '
             ||'WITH ( '
             ||'  OIDS=FALSE '
             ||');';
@@ -883,16 +883,16 @@ BEGIN
             ||'BEFORE INSERT OR UPDATE OR DELETE '
             ||'ON '||wk_codeschema||'.gcod2_'||in_codename||' ' 
             ||'FOR EACH ROW '
-            ||'EXECUTE PROCEDURE '||'jsharmony'||'.gcod2_iud();';
+            ||'EXECUTE PROCEDURE '||'{{schema}}'||'.gcod2_iud();';
   EXECUTE runmesql ; 
 
   runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.gcod2_'||in_codename||' IS ''User Codes 2 - '||coalesce(in_codemean,'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod2_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod2_'||in_codename||' TO {{schema}}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod2_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod2_'||in_codename||' TO {{schema}}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -905,7 +905,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
 
 --
 -- Name: create_ucod(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -932,7 +932,7 @@ BEGIN
             ||'  CONSTRAINT ucod_'||in_codename||'_codeval_key UNIQUE (codeval), '
             ||'  CONSTRAINT ucod_'||in_codename||'_codetxt_key UNIQUE (codetxt) '
             ||') '
-            ||'INHERITS ('||'jsharmony'||'.ucod) '
+            ||'INHERITS ('||'{{schema}}'||'.ucod) '
             ||'WITH ( '
             ||'  OIDS=FALSE '
             ||');';
@@ -942,10 +942,10 @@ BEGIN
   runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.ucod_'||in_codename||' IS ''System Codes - '||coalesce(in_codemean,'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod_'||in_codename||' TO {{schema}}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod_'||in_codename||' TO {{schema}}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -958,7 +958,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
 
 --
 -- Name: create_ucod2(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -985,7 +985,7 @@ BEGIN
             ||'  CONSTRAINT ucod2_'||in_codename||'_codeval1_codeval2_key UNIQUE (codeval1, codeval2), '
             ||'  CONSTRAINT ucod2_'||in_codename||'_codeval1_codetxt_key UNIQUE (codeval1, codetxt) '
             ||') '
-            ||'INHERITS ('||'jsharmony'||'.ucod2) '
+            ||'INHERITS ('||'{{schema}}'||'.ucod2) '
             ||'WITH ( '
             ||'  OIDS=FALSE '
             ||');';
@@ -995,10 +995,10 @@ BEGIN
   runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.ucod2_'||in_codename||' IS ''System Codes 2 - '||coalesce(in_codemean,'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod2_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod2_'||in_codename||' TO {{schema}}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod2_'||in_codename||' TO jsharmony_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod2_'||in_codename||' TO {{schema}}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -1011,7 +1011,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
 
 --
 -- Name: d_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1021,11 +1021,11 @@ CREATE FUNCTION d_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $_$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.d_id else NEW.d_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
 
       sqlcmd     text;
       getcid     text = NULL;
@@ -1045,19 +1045,19 @@ CREATE FUNCTION d_iud() RETURNS trigger
         /**********************************/
         select pp_val
           into getcid
-          from jsharmony.v_pp 
+          from {{schema}}.v_pp 
          where pp_process = 'SQL'
            and pp_attrib = 'GETCID'; 
 
         select pp_val
           into geteid
-          from jsharmony.v_pp 
+          from {{schema}}.v_pp 
          where pp_process = 'SQL'
            and pp_attrib = 'GETEID'; 
 
         select pp_val
           into dscope_dctgr
-          from jsharmony.v_pp 
+          from {{schema}}.v_pp 
          where pp_process = 'SQL'
            and pp_attrib = 'DSCOPE_DCTGR'; 
 
@@ -1086,7 +1086,7 @@ CREATE FUNCTION d_iud() RETURNS trigger
         IF SUBSTRING(MYUSER,1,1) = 'C' THEN
           select c_id
 	    into user_c_id
-	    from jsharmony.CPE
+	    from {{schema}}.CPE
            where substring(MYUSER,2,1024)=PE_ID::text
 	     and C_ID = my_c_id;
           IF user_c_id is not null THEN		  
@@ -1101,25 +1101,25 @@ CREATE FUNCTION d_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF jsharmony.nonequal(NEW.d_id, OLD.d_id) THEN
+          IF {{schema}}.nonequal(NEW.d_id, OLD.d_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF jsharmony.nonequal(NEW.d_scope, OLD.d_scope) THEN
+          IF {{schema}}.nonequal(NEW.d_scope, OLD.d_scope) THEN
             RAISE EXCEPTION  'Application Error - Scope cannot be updated..';
           END IF;
-          IF jsharmony.nonequal(NEW.d_scope_id, OLD.d_scope_id) THEN
+          IF {{schema}}.nonequal(NEW.d_scope_id, OLD.d_scope_id) THEN
             RAISE EXCEPTION  'Application Error - Scope ID cannot be updated..';
           END IF;
-          IF jsharmony.nonequal(NEW.d_ctgr, OLD.d_ctgr) THEN
+          IF {{schema}}.nonequal(NEW.d_ctgr, OLD.d_ctgr) THEN
             RAISE EXCEPTION  'Application Error - Document Category cannot be updated..';
           END IF;
         END IF;
 
         IF (TG_OP = 'INSERT' 
 	    OR 
-	    TG_OP = 'UPDATE' AND (jsharmony.nonequal(OLD.D_SCOPE, NEW.D_SCOPE)
+	    TG_OP = 'UPDATE' AND ({{schema}}.nonequal(OLD.D_SCOPE, NEW.D_SCOPE)
 		                  OR
-				  jsharmony.nonequal(OLD.D_SCOPE_ID, NEW.D_SCOPE_ID))) THEN
+				  {{schema}}.nonequal(OLD.D_SCOPE_ID, NEW.D_SCOPE_ID))) THEN
 	  IF NEW.D_SCOPE = 'S' AND NEW.D_SCOPE_ID <> 0
 	     OR
 	     NEW.D_SCOPE <> 'S' AND NEW.D_SCOPE_ID is NULL THEN
@@ -1136,13 +1136,13 @@ CREATE FUNCTION d_iud() RETURNS trigger
         END IF;
 
         IF (TG_OP='INSERT' OR TG_OP='UPDATE') THEN
-          IF NOT jsharmony.check_foreign(NEW.D_SCOPE, NEW.D_SCOPE_ID)>0 THEN
+          IF NOT {{schema}}.check_foreign(NEW.D_SCOPE, NEW.D_SCOPE_ID)>0 THEN
             RAISE EXCEPTION  'Table % does not contain record % .', NEW.D_SCOPE, NEW.D_SCOPE_ID::text ;
 	  END IF;
 	END IF;   
 
         IF (TG_OP='INSERT' OR TG_OP='UPDATE') THEN
-          IF NOT jsharmony.check_code2(dscope_dctgr, NEW.D_SCOPE, NEW.D_CTGR)>0 THEN
+          IF NOT {{schema}}.check_code2(dscope_dctgr, NEW.D_SCOPE, NEW.D_CTGR)>0 THEN
             RAISE EXCEPTION  'Document type % not allowed for selected scope: % .', NEW.D_ctgr, NEW.D_SCOPE ;
 	  END IF;
 	END IF;   
@@ -1152,62 +1152,62 @@ CREATE FUNCTION d_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.d_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.d_id, OLD.d_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'd_id',OLD.d_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.d_id, OLD.d_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'd_id',OLD.d_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.C_ID is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.C_ID, OLD.C_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'C_ID',OLD.C_ID::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.C_ID, OLD.C_ID) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'C_ID',OLD.C_ID::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.d_scope is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.d_scope, OLD.d_scope) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'd_scope',OLD.d_scope::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.d_scope, OLD.d_scope) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'd_scope',OLD.d_scope::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.d_scope_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.d_scope_id, OLD.d_scope_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'd_scope_id',OLD.d_scope_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.d_scope_id, OLD.d_scope_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'd_scope_id',OLD.d_scope_id::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.e_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.e_id, OLD.e_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'e_id',OLD.e_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.e_id, OLD.e_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'e_id',OLD.e_id::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.d_sts is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.d_sts, OLD.d_sts) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'd_sts',OLD.d_sts::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.d_sts, OLD.d_sts) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'd_sts',OLD.d_sts::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.d_ctgr is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.d_ctgr, OLD.d_ctgr) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'd_ctgr',OLD.d_ctgr::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.d_ctgr, OLD.d_ctgr) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'd_ctgr',OLD.d_ctgr::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.d_desc is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.d_desc, OLD.d_desc) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'd_desc',OLD.d_desc::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.d_desc, OLD.d_desc) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'd_desc',OLD.d_desc::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.d_utstmp is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.d_utstmp, OLD.d_utstmp) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'd_utstmp',OLD.d_utstmp::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.d_utstmp, OLD.d_utstmp) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'd_utstmp',OLD.d_utstmp::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.d_uu is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.d_uu, OLD.d_uu) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'd_uu',OLD.d_uu::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.d_uu, OLD.d_uu) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'd_uu',OLD.d_uu::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.d_synctstmp is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.d_synctstmp, OLD.d_synctstmp) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'd_synctstmp',OLD.d_synctstmp::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.d_synctstmp, OLD.d_synctstmp) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'd_synctstmp',OLD.d_synctstmp::text);  
         END IF;
 
  
@@ -1248,12 +1248,12 @@ CREATE FUNCTION d_iud() RETURNS trigger
 $_$;
 
 
-ALTER FUNCTION jsharmony.d_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.d_iud() OWNER TO postgres;
 
 
--- Function: jsharmony.d_filename(bigint, text)
+-- Function: {{schema}}.d_filename(bigint, text)
 
-CREATE OR REPLACE FUNCTION jsharmony.d_filename(
+CREATE OR REPLACE FUNCTION {{schema}}.d_filename(
     d_id bigint,
     d_ext text)
   RETURNS text AS
@@ -1268,7 +1268,7 @@ END;$BODY$
   LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER
   COST 10;
 
-ALTER FUNCTION jsharmony.d_filename(bigint, text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.d_filename(bigint, text) OWNER TO postgres;
 
 
 --
@@ -1280,7 +1280,7 @@ CREATE FUNCTION digest(bytea, text) RETURNS bytea
     AS '$libdir/pgcrypto', 'pg_digest';
 
 
-ALTER FUNCTION jsharmony.digest(bytea, text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.digest(bytea, text) OWNER TO postgres;
 
 --
 -- Name: digest(text, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1291,7 +1291,7 @@ CREATE FUNCTION digest(text, text) RETURNS bytea
     AS '$libdir/pgcrypto', 'pg_digest';
 
 
-ALTER FUNCTION jsharmony.digest(text, text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.digest(text, text) OWNER TO postgres;
 
 --
 -- Name: gcod2_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1301,11 +1301,11 @@ CREATE FUNCTION gcod2_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.gcod2_id else NEW.gcod2_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
     BEGIN
 
         /**********************************/
@@ -1326,13 +1326,13 @@ CREATE FUNCTION gcod2_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF jsharmony.nonequal(NEW.gcod2_id, OLD.gcod2_id) THEN
+          IF {{schema}}.nonequal(NEW.gcod2_id, OLD.gcod2_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF jsharmony.nonequal(NEW.codeval1, OLD.codeval1) THEN
+          IF {{schema}}.nonequal(NEW.codeval1, OLD.codeval1) THEN
             RAISE EXCEPTION  'Application Error - Code Value 1 cannot be updated..';
           END IF;
-          IF jsharmony.nonequal(NEW.codeval2, OLD.codeval2) THEN
+          IF {{schema}}.nonequal(NEW.codeval2, OLD.codeval2) THEN
             RAISE EXCEPTION  'Application Error - Code Value 2 cannot be updated..';
           END IF;
         END IF;
@@ -1343,52 +1343,52 @@ CREATE FUNCTION gcod2_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.gcod2_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.gcod2_id, OLD.gcod2_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'gcod2_id',OLD.gcod2_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.gcod2_id, OLD.gcod2_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'gcod2_id',OLD.gcod2_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codseq is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codseq, OLD.codseq) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codseq',OLD.codseq::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codseq, OLD.codseq) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codseq',OLD.codseq::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codeval1 is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codeval1, OLD.codeval1) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codeval1',OLD.codeval1::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codeval1, OLD.codeval1) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codeval1',OLD.codeval1::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codeval2 is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codeval2, OLD.codeval2) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codeval2',OLD.codeval2::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codeval2, OLD.codeval2) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codeval2',OLD.codeval2::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codetxt is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codetxt, OLD.codetxt) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codetxt',OLD.codetxt::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codetxt, OLD.codetxt) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codetxt',OLD.codetxt::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codecode is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codecode, OLD.codecode) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codecode',OLD.codecode::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codecode, OLD.codecode) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codecode',OLD.codecode::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codetdt is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codetdt, OLD.codetdt) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codetdt',OLD.codetdt::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codetdt, OLD.codetdt) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codetdt',OLD.codetdt::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codetcm is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codetcm, OLD.codetcm) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codetcm',OLD.codetcm::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codetcm, OLD.codetcm) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codetcm',OLD.codetcm::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.COD_NOTES is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.COD_NOTES, OLD.COD_NOTES) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'COD_NOTES',OLD.COD_NOTES::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.COD_NOTES, OLD.COD_NOTES) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'COD_NOTES',OLD.COD_NOTES::text);  
         END IF;
 
  
@@ -1425,7 +1425,7 @@ CREATE FUNCTION gcod2_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.gcod2_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.gcod2_iud() OWNER TO postgres;
 
 --
 -- Name: gcod_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1435,11 +1435,11 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.gcod_id else NEW.gcod_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
     BEGIN
 
         /**********************************/
@@ -1460,10 +1460,10 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF jsharmony.nonequal(NEW.gcod_id, OLD.gcod_id) THEN
+          IF {{schema}}.nonequal(NEW.gcod_id, OLD.gcod_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF jsharmony.nonequal(NEW.codeval, OLD.codeval) THEN
+          IF {{schema}}.nonequal(NEW.codeval, OLD.codeval) THEN
             RAISE EXCEPTION  'Application Error - Code Value 1 cannot be updated..';
           END IF;
         END IF;
@@ -1474,47 +1474,47 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.gcod_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.gcod_id, OLD.gcod_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'gcod_id',OLD.gcod_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.gcod_id, OLD.gcod_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'gcod_id',OLD.gcod_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codseq is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codseq, OLD.codseq) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codseq',OLD.codseq::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codseq, OLD.codseq) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codseq',OLD.codseq::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codeval is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codeval, OLD.codeval) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codeval',OLD.codeval::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codeval, OLD.codeval) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codeval',OLD.codeval::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codetxt is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codetxt, OLD.codetxt) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codetxt',OLD.codetxt::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codetxt, OLD.codetxt) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codetxt',OLD.codetxt::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codecode is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codecode, OLD.codecode) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codecode',OLD.codecode::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codecode, OLD.codecode) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codecode',OLD.codecode::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codetdt is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codetdt, OLD.codetdt) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codetdt',OLD.codetdt::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codetdt, OLD.codetdt) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codetdt',OLD.codetdt::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codetcm is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codetcm, OLD.codetcm) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codetcm',OLD.codetcm::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codetcm, OLD.codetcm) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codetcm',OLD.codetcm::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.COD_NOTES is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.COD_NOTES, OLD.COD_NOTES) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'COD_NOTES',OLD.COD_NOTES::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.COD_NOTES, OLD.COD_NOTES) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'COD_NOTES',OLD.COD_NOTES::text);  
         END IF;
 
  
@@ -1551,7 +1551,7 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.gcod_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.gcod_iud() OWNER TO postgres;
 
 --
 -- Name: get_cpe_name(bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1566,7 +1566,7 @@ BEGIN
 
   select cpe.pe_lname::text || ', '::text || cpe.pe_fname::text
     into rslt
-    from jsharmony.cpe
+    from {{schema}}.cpe
    where cpe.pe_id = in_pe_id; 
   
   RETURN rslt;
@@ -1574,7 +1574,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.get_cpe_name(in_pe_id bigint) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.get_cpe_name(in_pe_id bigint) OWNER TO postgres;
 
 --
 -- Name: get_pe_name(bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1589,7 +1589,7 @@ BEGIN
 
   select pe.pe_lname::text || ', '::text || pe.pe_fname::text
     into rslt
-    from jsharmony.pe
+    from {{schema}}.pe
    where pe_id = in_pe_id; 
   
   RETURN rslt;
@@ -1597,7 +1597,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.get_pe_name(in_pe_id bigint) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.get_pe_name(in_pe_id bigint) OWNER TO postgres;
 
 --
 -- Name: get_ppd_desc(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1612,7 +1612,7 @@ BEGIN
 
   select ppd_desc
     into rslt
-    from jsharmony.ppd
+    from {{schema}}.ppd
    where ppd.ppd_process = in_ppd_process
      and ppd.ppd_attrib = in_ppd_attrib;
   
@@ -1621,7 +1621,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) OWNER TO postgres;
 
 --
 -- Name: good_email(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1632,7 +1632,7 @@ CREATE FUNCTION good_email(x text) RETURNS boolean
     AS $_$select x ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$';$_$;
 
 
-ALTER FUNCTION jsharmony.good_email(x text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.good_email(x text) OWNER TO postgres;
 
 --
 -- Name: gpp_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1642,11 +1642,11 @@ CREATE FUNCTION gpp_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.gpp_id else NEW.gpp_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
       m          text;
     BEGIN
 
@@ -1668,20 +1668,20 @@ CREATE FUNCTION gpp_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF jsharmony.nonequal(NEW.gpp_id, OLD.gpp_id) THEN
+          IF {{schema}}.nonequal(NEW.gpp_id, OLD.gpp_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF jsharmony.nonequal(NEW.gpp_process, OLD.gpp_process) THEN
+          IF {{schema}}.nonequal(NEW.gpp_process, OLD.gpp_process) THEN
             RAISE EXCEPTION  'Application Error - Process cannot be updated..';
           END IF;
-          IF jsharmony.nonequal(NEW.gpp_attrib, OLD.gpp_attrib) THEN
+          IF {{schema}}.nonequal(NEW.gpp_attrib, OLD.gpp_attrib) THEN
             RAISE EXCEPTION  'Application Error - Attribute cannot be updated..';
           END IF;
         END IF;
           
 
         IF (TG_OP = 'INSERT' or TG_OP = 'UPDATE') THEN
-          m := jsharmony.CHECK_PP('GPP', NEW.GPP_PROCESS, NEW.GPP_ATTRIB, NEW.GPP_VAL);
+          m := {{schema}}.CHECK_PP('GPP', NEW.GPP_PROCESS, NEW.GPP_ATTRIB, NEW.GPP_VAL);
           IF m IS NOT null THEN 
             RAISE EXCEPTION '%', m;
           END IF;
@@ -1694,27 +1694,27 @@ CREATE FUNCTION gpp_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.gpp_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.gpp_id, OLD.gpp_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'gpp_id',OLD.gpp_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.gpp_id, OLD.gpp_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'gpp_id',OLD.gpp_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.gpp_process is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.gpp_process, OLD.gpp_process) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'gpp_process',OLD.gpp_process::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.gpp_process, OLD.gpp_process) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'gpp_process',OLD.gpp_process::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.gpp_attrib is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.gpp_attrib, OLD.gpp_attrib) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'gpp_attrib',OLD.gpp_attrib::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.gpp_attrib, OLD.gpp_attrib) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'gpp_attrib',OLD.gpp_attrib::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.gpp_val is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.gpp_val, OLD.gpp_val) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'gpp_val',OLD.gpp_val::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.gpp_val, OLD.gpp_val) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'gpp_val',OLD.gpp_val::text);  
         END IF;
 
  
@@ -1751,7 +1751,7 @@ CREATE FUNCTION gpp_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.gpp_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.gpp_iud() OWNER TO postgres;
 
 --
 -- Name: h_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1761,11 +1761,11 @@ CREATE FUNCTION h_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.h_id else NEW.h_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
       my_hp_code text = NULL;
       my_hp_desc text = NULL;
     BEGIN
@@ -1782,7 +1782,7 @@ CREATE FUNCTION h_iud() RETURNS trigger
 
         select HP.hp_desc
           into my_hp_desc
-          from jsharmony.HP
+          from {{schema}}.HP
          where HP.hp_code = hp_code;           
 
         my_toa.op := TG_OP;
@@ -1798,10 +1798,10 @@ CREATE FUNCTION h_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF jsharmony.nonequal(NEW.h_id, OLD.h_id) THEN
+          IF {{schema}}.nonequal(NEW.h_id, OLD.h_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF jsharmony.nonequal(NEW.hp_code, OLD.hp_code) THEN
+          IF {{schema}}.nonequal(NEW.hp_code, OLD.hp_code) THEN
             RAISE EXCEPTION  'Application Error - HP Code cannot be updated..';
           END IF;
         END IF;
@@ -1812,42 +1812,42 @@ CREATE FUNCTION h_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.h_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.h_id, OLD.h_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'h_id',OLD.h_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.h_id, OLD.h_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'h_id',OLD.h_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.hp_code is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.hp_code, OLD.hp_code) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'hp_code',OLD.hp_code::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.hp_code, OLD.hp_code) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'hp_code',OLD.hp_code::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.h_title is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.h_title, OLD.h_title) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'h_title',OLD.h_title::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.h_title, OLD.h_title) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'h_title',OLD.h_title::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.h_text is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.h_text, OLD.h_text) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'h_text',OLD.h_text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.h_text, OLD.h_text) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'h_text',OLD.h_text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.h_seq is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.h_seq, OLD.h_seq) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'h_seq',OLD.h_seq::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.h_seq, OLD.h_seq) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'h_seq',OLD.h_seq::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.h_index_a is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.h_index_a, OLD.h_index_a) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'h_index_a',OLD.h_index_a::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.h_index_a, OLD.h_index_a) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'h_index_a',OLD.h_index_a::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.h_index_p is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.h_index_p, OLD.h_index_p) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'h_index_p',OLD.h_index_p::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.h_index_p, OLD.h_index_p) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'h_index_p',OLD.h_index_p::text);  
         END IF;
 
  
@@ -1884,13 +1884,13 @@ CREATE FUNCTION h_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.h_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.h_iud() OWNER TO postgres;
 
 --
 -- Name: mycuser(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION jsharmony.mycuser() RETURNS text
+CREATE FUNCTION {{schema}}.mycuser() RETURNS text
     LANGUAGE plpgsql
     AS $$
 BEGIN 
@@ -1903,7 +1903,7 @@ EXCEPTION
     return 'U'||current_user::text;
 END;$$;
 
-ALTER FUNCTION jsharmony.mycuser() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.mycuser() OWNER TO postgres;
 
 --
 -- Name: mycuser_email(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1920,13 +1920,13 @@ BEGIN
     when 'S' then
       select pe_email
         into wk
-        from jsharmony.pe
+        from {{schema}}.pe
        where pe_id::text = substring(u,2,1024);  
       rslt = wk;
     when 'C' then
       select pe_email
         into wk
-        from jsharmony.cpe
+        from {{schema}}.cpe
        where pe_id::text = substring(u,2,1024);  
       rslt = wk;
     else
@@ -1937,7 +1937,7 @@ BEGIN
 END;$$;
 
 
-ALTER FUNCTION jsharmony.mycuser_email(u text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.mycuser_email(u text) OWNER TO postgres;
 
 --
 -- Name: mycuser_fmt(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1954,13 +1954,13 @@ BEGIN
     when 'S' then
       select 'S-'||pe_lname||', '||pe_fname
         into wk
-        from jsharmony.pe
+        from {{schema}}.pe
        where pe_id::text = substring(u,2,1024);  
       rslt = coalesce(wk, u);
     when 'C' then
       select 'C-'||pe_lname||', '||pe_fname
         into wk
-        from jsharmony.cpe
+        from {{schema}}.cpe
        where pe_id::text = substring(u,2,1024);  
       rslt = coalesce(wk, u);
     when 'U' then
@@ -1973,7 +1973,7 @@ BEGIN
 END;$$;
 
 
-ALTER FUNCTION jsharmony.mycuser_fmt(u text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.mycuser_fmt(u text) OWNER TO postgres;
 
 --
 -- Name: myhash(character, bigint, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1990,12 +1990,12 @@ BEGIN
 
   if (par_type = 'S') THEN
     select PP_VAL into seed
-      from jsharmony.V_PP
+      from {{schema}}.V_PP
      where PP_PROCESS = 'USERS'
        and PP_ATTRIB = 'HASH_SEED_S';
   elsif (par_type = 'C') THEN
     select PP_VAL into seed
-      from jsharmony.V_PP
+      from {{schema}}.V_PP
      where PP_PROCESS = 'USERS'
        and PP_ATTRIB = 'HASH_SEED_C';
   END IF;
@@ -2005,7 +2005,7 @@ BEGIN
       and coalesce(par_pw,'') <> '') THEN
     v = par_pe_id::text||par_pw||seed;
     /* rslt = hashbytes('sha1',v); */
-    rslt = jsharmony.digest(v, 'sha1'::text);
+    rslt = {{schema}}.digest(v, 'sha1'::text);
   end if;
 
   return rslt;
@@ -2014,7 +2014,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.myhash(par_type character, par_pe_id bigint, par_pw character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.myhash(par_type character, par_pe_id bigint, par_pw character varying) OWNER TO postgres;
 
 --
 -- Name: myisnumeric(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2033,7 +2033,7 @@ END;
 $_$;
 
 
-ALTER FUNCTION jsharmony.myisnumeric(text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.myisnumeric(text) OWNER TO postgres;
 
 --
 -- Name: mymmddyy(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2044,7 +2044,7 @@ CREATE FUNCTION mymmddyy(timestamp without time zone) RETURNS character varying
     AS $_$select to_char($1, 'MM/DD/YY');$_$;
 
 
-ALTER FUNCTION jsharmony.mymmddyy(timestamp without time zone) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.mymmddyy(timestamp without time zone) OWNER TO postgres;
 
 --
 -- Name: mymmddyyhhmi(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2055,7 +2055,7 @@ CREATE FUNCTION mymmddyyhhmi(timestamp without time zone) RETURNS character vary
     AS $_$select to_char($1, 'MM/DD/YY HH24:MI');$_$;
 
 
-ALTER FUNCTION jsharmony.mymmddyyhhmi(timestamp without time zone) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.mymmddyyhhmi(timestamp without time zone) OWNER TO postgres;
 
 --
 -- Name: mymmddyyyyhhmi(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2066,7 +2066,7 @@ CREATE FUNCTION mymmddyyyyhhmi(timestamp without time zone) RETURNS character va
     AS $_$select to_char($1, 'MM/DD/YYYY HH24:MI');$_$;
 
 
-ALTER FUNCTION jsharmony.mymmddyyyyhhmi(timestamp without time zone) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.mymmddyyyyhhmi(timestamp without time zone) OWNER TO postgres;
 
 --
 -- Name: mynow(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2077,7 +2077,7 @@ CREATE FUNCTION mynow() RETURNS timestamp without time zone
     AS $$select localtimestamp;$$;
 
 
-ALTER FUNCTION jsharmony.mynow() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.mynow() OWNER TO postgres;
 
 --
 -- Name: mype(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2087,7 +2087,7 @@ CREATE FUNCTION mype() RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
-    u       text = jsharmony.mycuser();
+    u       text = {{schema}}.mycuser();
     rslt    bigint = NULL;
     wk      text = NULL;
 BEGIN
@@ -2103,7 +2103,7 @@ BEGIN
 END;$$;
 
 
-ALTER FUNCTION jsharmony.mype() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.mype() OWNER TO postgres;
 
 --
 -- Name: mypec(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2113,7 +2113,7 @@ CREATE FUNCTION mypec() RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
-    u       text = jsharmony.mycuser();
+    u       text = {{schema}}.mycuser();
     rslt    bigint = NULL;
     wk      text = NULL;
 BEGIN
@@ -2129,7 +2129,7 @@ BEGIN
 END;$$;
 
 
-ALTER FUNCTION jsharmony.mypec() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.mypec() OWNER TO postgres;
 
 --
 -- Name: mytodate(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2140,7 +2140,7 @@ CREATE FUNCTION mytodate(timestamp without time zone) RETURNS date
     AS $_$select date_trunc('day',$1)::date;$_$;
 
 
-ALTER FUNCTION jsharmony.mytodate(timestamp without time zone) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.mytodate(timestamp without time zone) OWNER TO postgres;
 
 --
 -- Name: mytoday(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2151,7 +2151,7 @@ CREATE FUNCTION mytoday() RETURNS date
     AS $$select current_date;$$;
 
 
-ALTER FUNCTION jsharmony.mytoday() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.mytoday() OWNER TO postgres;
 
 --
 -- Name: n_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2161,11 +2161,11 @@ CREATE FUNCTION n_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.n_id else NEW.n_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
 
       my_c_id    bigint = NULL;
       user_c_id  bigint = NULL;
@@ -2218,7 +2218,7 @@ CREATE FUNCTION n_iud() RETURNS trigger
         IF SUBSTRING(MYUSER,1,1) = 'C' THEN
           select c_id
 	    into user_c_id
-	    from jsharmony.CPE
+	    from {{schema}}.CPE
            where substring(MYUSER,2,1024)=PE_ID::text
 	     and C_ID = my_c_id;
           IF user_c_id is not null THEN		  
@@ -2242,23 +2242,23 @@ CREATE FUNCTION n_iud() RETURNS trigger
 
             
         IF TG_OP = 'UPDATE' THEN
-          IF jsharmony.nonequal(NEW.n_id, OLD.n_id) THEN
+          IF {{schema}}.nonequal(NEW.n_id, OLD.n_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF jsharmony.nonequal(NEW.n_scope, OLD.n_scope) THEN
+          IF {{schema}}.nonequal(NEW.n_scope, OLD.n_scope) THEN
             RAISE EXCEPTION  'Application Error - Scope cannot be updated..';
           END IF;
-          IF jsharmony.nonequal(NEW.n_scope_id, OLD.n_scope_id) THEN
+          IF {{schema}}.nonequal(NEW.n_scope_id, OLD.n_scope_id) THEN
             RAISE EXCEPTION  'Application Error - Scope ID cannot be updated..';
           END IF;
-          IF jsharmony.nonequal(NEW.n_type, OLD.n_type) THEN
+          IF {{schema}}.nonequal(NEW.n_type, OLD.n_type) THEN
             RAISE EXCEPTION  'Application Error - Note Type cannot be updated..';
           END IF;
         END IF;
           
 
         IF (TG_OP='INSERT' OR TG_OP='UPDATE') THEN
-          IF NOT jsharmony.check_foreign(NEW.n_scope, NEW.n_scope_ID)>0 THEN
+          IF NOT {{schema}}.check_foreign(NEW.n_scope, NEW.n_scope_ID)>0 THEN
             RAISE EXCEPTION  'Table % does not contain record % .', NEW.n_scope, NEW.n_scope_ID::text ;
 	  END IF;
 	END IF;   
@@ -2272,47 +2272,47 @@ CREATE FUNCTION n_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.n_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.n_id, OLD.n_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id, 'n_id',OLD.n_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.n_id, OLD.n_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id, 'n_id',OLD.n_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.c_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.c_id, OLD.c_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id, 'c_id',OLD.c_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.c_id, OLD.c_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id, 'c_id',OLD.c_id::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.n_scope is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.n_scope, OLD.n_scope) end) THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id, 'n_scope',OLD.n_scope::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.n_scope, OLD.n_scope) end) THEN
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id, 'n_scope',OLD.n_scope::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.n_scope_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.n_scope_id, OLD.n_scope_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id, 'n_scope_id',OLD.n_scope_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.n_scope_id, OLD.n_scope_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id, 'n_scope_id',OLD.n_scope_id::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.e_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.e_id, OLD.e_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id, 'e_id',OLD.e_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.e_id, OLD.e_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id, 'e_id',OLD.e_id::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.n_sts is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.n_sts, OLD.n_sts) end) THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id, 'n_sts',OLD.n_sts::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.n_sts, OLD.n_sts) end) THEN
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id, 'n_sts',OLD.n_sts::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.n_type is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.n_type, OLD.n_type) end) THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id, 'n_type',OLD.n_type::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.n_type, OLD.n_type) end) THEN
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id, 'n_type',OLD.n_type::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.n_note is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.n_note, OLD.n_note) end) THEN
-          SELECT par_aud_seq INTO aud_seq from jsharmony.audit(my_toa, aud_seq, my_id, 'n_note',OLD.n_note::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.n_note, OLD.n_note) end) THEN
+          SELECT par_aud_seq INTO aud_seq from {{schema}}.audit(my_toa, aud_seq, my_id, 'n_note',OLD.n_note::text);  
         END IF;
 
  
@@ -2353,7 +2353,7 @@ CREATE FUNCTION n_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.n_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.n_iud() OWNER TO postgres;
 
 --
 -- Name: nonequal(bit, bit); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2376,7 +2376,7 @@ CREATE FUNCTION nonequal(x1 bit, x2 bit) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION jsharmony.nonequal(x1 bit, x2 bit) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.nonequal(x1 bit, x2 bit) OWNER TO postgres;
 
 --
 -- Name: nonequal(boolean, boolean); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2399,7 +2399,7 @@ CREATE FUNCTION nonequal(x1 boolean, x2 boolean) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION jsharmony.nonequal(x1 boolean, x2 boolean) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.nonequal(x1 boolean, x2 boolean) OWNER TO postgres;
 
 --
 -- Name: nonequal(smallint, smallint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2422,7 +2422,7 @@ CREATE FUNCTION nonequal(x1 smallint, x2 smallint) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION jsharmony.nonequal(x1 smallint, x2 smallint) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.nonequal(x1 smallint, x2 smallint) OWNER TO postgres;
 
 --
 -- Name: nonequal(integer, integer); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2445,7 +2445,7 @@ CREATE FUNCTION nonequal(x1 integer, x2 integer) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION jsharmony.nonequal(x1 integer, x2 integer) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.nonequal(x1 integer, x2 integer) OWNER TO postgres;
 
 --
 -- Name: nonequal(bigint, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2468,7 +2468,7 @@ CREATE FUNCTION nonequal(x1 bigint, x2 bigint) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION jsharmony.nonequal(x1 bigint, x2 bigint) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.nonequal(x1 bigint, x2 bigint) OWNER TO postgres;
 
 --
 -- Name: nonequal(numeric, numeric); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2491,7 +2491,7 @@ CREATE FUNCTION nonequal(x1 numeric, x2 numeric) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION jsharmony.nonequal(x1 numeric, x2 numeric) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.nonequal(x1 numeric, x2 numeric) OWNER TO postgres;
 
 --
 -- Name: nonequal(text, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2514,7 +2514,7 @@ CREATE FUNCTION nonequal(x1 text, x2 text) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION jsharmony.nonequal(x1 text, x2 text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.nonequal(x1 text, x2 text) OWNER TO postgres;
 
 --
 -- Name: nonequal(timestamp without time zone, timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2537,7 +2537,7 @@ CREATE FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without ti
 $$;
 
 
-ALTER FUNCTION jsharmony.nonequal(x1 timestamp without time zone, x2 timestamp without time zone) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.nonequal(x1 timestamp without time zone, x2 timestamp without time zone) OWNER TO postgres;
 
 --
 -- Name: pe_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2547,13 +2547,13 @@ CREATE FUNCTION pe_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm   timestamp default jsharmony.mynow();
-      myuser    text default jsharmony.mycuser();
+      curdttm   timestamp default {{schema}}.mynow();
+      myuser    text default {{schema}}.mycuser();
       aud_seq   bigint default NULL;
       my_id     bigint default case TG_OP when 'DELETE' then OLD.pe_id else NEW.pe_id end;
       newpw     text default NULL;
       hash      bytea default NULL;
-      my_toa    jsharmony.toaudit;
+      my_toa    {{schema}}.toaudit;
     BEGIN
 
         /**********************************/
@@ -2575,12 +2575,12 @@ CREATE FUNCTION pe_iud() RETURNS trigger
 
         IF TG_OP = 'UPDATE'
            and
-           jsharmony.nonequal(NEW.pe_id, OLD.pe_id) THEN
+           {{schema}}.nonequal(NEW.pe_id, OLD.pe_id) THEN
           RAISE EXCEPTION  'Application Error - ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'INSERT' or TG_OP = 'UPDATE' THEN
-	  IF jsharmony.nonequal(NEW.PE_PW1, NEW.PE_PW2) THEN
+	  IF {{schema}}.nonequal(NEW.PE_PW1, NEW.PE_PW2) THEN
             RAISE EXCEPTION  'Application Error - New Password and Repeat Password are different.';
           ELSIF (TG_OP='INSERT' or NEW.pe_pw1 is not null)  AND length(btrim(NEW.pe_pw1::text)) < 6  THEN
             RAISE EXCEPTION  'Application Error - Password length - at least 6 characters required.';
@@ -2593,103 +2593,103 @@ CREATE FUNCTION pe_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
 
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_ID is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_ID, OLD.PE_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_ID', OLD.PE_ID::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_ID, OLD.PE_ID) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_ID', OLD.PE_ID::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_STS is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_STS, OLD.PE_STS) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_STS', OLD.PE_STS::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_STS, OLD.PE_STS) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_STS', OLD.PE_STS::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_FNAME is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_FNAME, OLD.PE_FNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_FNAME', OLD.PE_FNAME::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_FNAME, OLD.PE_FNAME) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_FNAME', OLD.PE_FNAME::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_MNAME is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_MNAME, OLD.PE_MNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_MNAME', OLD.PE_MNAME::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_MNAME, OLD.PE_MNAME) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_MNAME', OLD.PE_MNAME::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_LNAME is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_LNAME, OLD.PE_LNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_LNAME', OLD.PE_LNAME::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_LNAME, OLD.PE_LNAME) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_LNAME', OLD.PE_LNAME::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_JTITLE is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_JTITLE, OLD.PE_JTITLE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_JTITLE', OLD.PE_JTITLE::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_JTITLE, OLD.PE_JTITLE) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_JTITLE', OLD.PE_JTITLE::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_BPHONE is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_BPHONE, OLD.PE_BPHONE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_BPHONE', OLD.PE_BPHONE::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_BPHONE, OLD.PE_BPHONE) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_BPHONE', OLD.PE_BPHONE::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_CPHONE is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_CPHONE, OLD.PE_CPHONE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_CPHONE', OLD.PE_CPHONE::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_CPHONE, OLD.PE_CPHONE) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_CPHONE', OLD.PE_CPHONE::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_COUNTRY is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_COUNTRY, OLD.PE_COUNTRY) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_COUNTRY', OLD.PE_COUNTRY::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_COUNTRY, OLD.PE_COUNTRY) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_COUNTRY', OLD.PE_COUNTRY::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_ADDR is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_ADDR, OLD.PE_ADDR) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_ADDR', OLD.PE_ADDR::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_ADDR, OLD.PE_ADDR) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_ADDR', OLD.PE_ADDR::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_CITY is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_CITY, OLD.PE_CITY) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_CITY', OLD.PE_CITY::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_CITY, OLD.PE_CITY) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_CITY', OLD.PE_CITY::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_STATE is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_STATE, OLD.PE_STATE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_STATE', OLD.PE_STATE::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_STATE, OLD.PE_STATE) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_STATE', OLD.PE_STATE::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_ZIP is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_ZIP, OLD.PE_ZIP) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_ZIP', OLD.PE_ZIP::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_ZIP, OLD.PE_ZIP) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_ZIP', OLD.PE_ZIP::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_EMAIL is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_EMAIL, OLD.PE_EMAIL) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_EMAIL', OLD.PE_EMAIL::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_EMAIL, OLD.PE_EMAIL) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_EMAIL', OLD.PE_EMAIL::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_STARTDT is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_STARTDT, OLD.PE_STARTDT) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_STARTDT', OLD.PE_STARTDT::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_STARTDT, OLD.PE_STARTDT) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_STARTDT', OLD.PE_STARTDT::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_ENDDT is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_ENDDT, OLD.PE_ENDDT) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_ENDDT', OLD.PE_ENDDT::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_ENDDT, OLD.PE_ENDDT) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_ENDDT', OLD.PE_ENDDT::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_UNOTES is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_UNOTES, OLD.PE_UNOTES) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_UNOTES', OLD.PE_UNOTES::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_UNOTES, OLD.PE_UNOTES) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_UNOTES', OLD.PE_UNOTES::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.PE_LL_TSTMP is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.PE_LL_TSTMP, OLD.PE_LL_TSTMP) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_LL_TSTMP', OLD.PE_LL_TSTMP::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.PE_LL_TSTMP, OLD.PE_LL_TSTMP) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_LL_TSTMP', OLD.PE_LL_TSTMP::text);  
         END IF;
 
       
         IF TG_OP = 'UPDATE' and coalesce(NEW.pe_pw1,'') <> '' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'PE_PW','*');  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'PE_PW','*');  
         END IF;
 
 
@@ -2701,7 +2701,7 @@ CREATE FUNCTION pe_iud() RETURNS trigger
         
           newpw = btrim(NEW.pe_pw1);
           if newpw is not null then
-            hash = jsharmony.myhash('S', NEW.pe_id, newpw);
+            hash = {{schema}}.myhash('S', NEW.pe_id, newpw);
             if (hash is null) then
               RAISE EXCEPTION  'Application Error - Missing or Incorrect Password.';
             end if;
@@ -2720,7 +2720,7 @@ CREATE FUNCTION pe_iud() RETURNS trigger
 	    NEW.pe_mu := myuser;
           ELSIF TG_OP = 'UPDATE' THEN
             IF aud_seq is not NULL THEN
-              if jsharmony.nonequal(OLD.PE_STS, NEW.PE_STS) then
+              if {{schema}}.nonequal(OLD.PE_STS, NEW.PE_STS) then
                 NEW.pe_stsdt := curdttm;
               end if;
 	      NEW.pe_mtstmp := curdttm;
@@ -2746,7 +2746,7 @@ CREATE FUNCTION pe_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.pe_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.pe_iud() OWNER TO postgres;
 
 --
 -- Name: ppd_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2756,11 +2756,11 @@ CREATE FUNCTION ppd_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.ppd_id else NEW.ppd_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
     BEGIN
 
         /**********************************/
@@ -2781,7 +2781,7 @@ CREATE FUNCTION ppd_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF jsharmony.nonequal(NEW.ppd_id, OLD.ppd_id) THEN
+          IF {{schema}}.nonequal(NEW.ppd_id, OLD.ppd_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
         END IF;
@@ -2792,52 +2792,52 @@ CREATE FUNCTION ppd_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppd_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppd_id, OLD.ppd_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppd_id',OLD.ppd_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppd_id, OLD.ppd_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppd_id',OLD.ppd_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppd_process is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppd_process, OLD.ppd_process) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppd_process',OLD.ppd_process::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppd_process, OLD.ppd_process) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppd_process',OLD.ppd_process::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppd_attrib is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppd_attrib, OLD.ppd_attrib) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppd_attrib',OLD.ppd_attrib::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppd_attrib, OLD.ppd_attrib) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppd_attrib',OLD.ppd_attrib::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppd_desc is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppd_desc, OLD.ppd_desc) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppd_desc',OLD.ppd_desc::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppd_desc, OLD.ppd_desc) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppd_desc',OLD.ppd_desc::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppd_type is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppd_type, OLD.ppd_type) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppd_type',OLD.ppd_type::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppd_type, OLD.ppd_type) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppd_type',OLD.ppd_type::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.codename is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.codename, OLD.codename) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'codename',OLD.codename::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.codename, OLD.codename) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'codename',OLD.codename::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppd_gpp is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppd_gpp, OLD.ppd_gpp) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppd_gpp',OLD.ppd_gpp::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppd_gpp, OLD.ppd_gpp) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppd_gpp',OLD.ppd_gpp::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppd_ppp is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppd_ppp, OLD.ppd_ppp) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppd_ppp',OLD.ppd_ppp::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppd_ppp, OLD.ppd_ppp) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppd_ppp',OLD.ppd_ppp::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppd_xpp is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppd_xpp, OLD.ppd_xpp) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppd_xpp',OLD.ppd_xpp::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppd_xpp, OLD.ppd_xpp) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppd_xpp',OLD.ppd_xpp::text);  
         END IF;
 
  
@@ -2874,7 +2874,7 @@ CREATE FUNCTION ppd_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.ppd_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.ppd_iud() OWNER TO postgres;
 
 --
 -- Name: ppp_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2884,11 +2884,11 @@ CREATE FUNCTION ppp_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.ppp_id else NEW.ppp_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
       m          text;
     BEGIN
 
@@ -2900,7 +2900,7 @@ CREATE FUNCTION ppp_iud() RETURNS trigger
         my_toa.table_name := upper(TG_TABLE_NAME::text);
         my_toa.ref_name := NULL;
         my_toa.ref_id := NULL;
-        my_toa.subj := case when TG_OP = 'DELETE' then NULL else (select coalesce(PE_LNAME,'')||', '||coalesce(PE_FNAME,'') from jsharmony.PE where pe_id = NEW.PE_ID) end;
+        my_toa.subj := case when TG_OP = 'DELETE' then NULL else (select coalesce(PE_LNAME,'')||', '||coalesce(PE_FNAME,'') from {{schema}}.PE where pe_id = NEW.PE_ID) end;
 
 
         /**********************************/
@@ -2908,23 +2908,23 @@ CREATE FUNCTION ppp_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF jsharmony.nonequal(NEW.ppp_id, OLD.ppp_id) THEN
+          IF {{schema}}.nonequal(NEW.ppp_id, OLD.ppp_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF jsharmony.nonequal(NEW.pe_id, OLD.pe_id) THEN
+          IF {{schema}}.nonequal(NEW.pe_id, OLD.pe_id) THEN
             RAISE EXCEPTION  'Application Error - Personnel cannot be updated.';
           END IF;
-          IF jsharmony.nonequal(NEW.ppp_process, OLD.ppp_process) THEN
+          IF {{schema}}.nonequal(NEW.ppp_process, OLD.ppp_process) THEN
             RAISE EXCEPTION  'Application Error - Process cannot be updated..';
           END IF;
-          IF jsharmony.nonequal(NEW.ppp_attrib, OLD.ppp_attrib) THEN
+          IF {{schema}}.nonequal(NEW.ppp_attrib, OLD.ppp_attrib) THEN
             RAISE EXCEPTION  'Application Error - Attribute cannot be updated..';
           END IF;
         END IF;
           
 
         IF (TG_OP = 'INSERT' or TG_OP = 'UPDATE') THEN
-          m := jsharmony.CHECK_PP('PPP', NEW.PPP_PROCESS, NEW.PPP_ATTRIB, NEW.PPP_VAL);
+          m := {{schema}}.CHECK_PP('PPP', NEW.PPP_PROCESS, NEW.PPP_ATTRIB, NEW.PPP_VAL);
           IF m IS NOT null THEN 
             RAISE EXCEPTION '%', m;
           END IF;
@@ -2937,32 +2937,32 @@ CREATE FUNCTION ppp_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppp_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppp_id, OLD.ppp_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppp_id',OLD.ppp_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppp_id, OLD.ppp_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppp_id',OLD.ppp_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.pe_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.pe_id, OLD.pe_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'pe_id',OLD.pe_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.pe_id, OLD.pe_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'pe_id',OLD.pe_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppp_process is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppp_process, OLD.ppp_process) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppp_process',OLD.ppp_process::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppp_process, OLD.ppp_process) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppp_process',OLD.ppp_process::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppp_attrib is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppp_attrib, OLD.ppp_attrib) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppp_attrib',OLD.ppp_attrib::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppp_attrib, OLD.ppp_attrib) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppp_attrib',OLD.ppp_attrib::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.ppp_val is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.ppp_val, OLD.ppp_val) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'ppp_val',OLD.ppp_val::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.ppp_val, OLD.ppp_val) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'ppp_val',OLD.ppp_val::text);  
         END IF;
 
  
@@ -2999,7 +2999,7 @@ CREATE FUNCTION ppp_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.ppp_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.ppp_iud() OWNER TO postgres;
 
 --
 -- Name: sanit(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -3020,7 +3020,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.sanit(x text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.sanit(x text) OWNER TO postgres;
 
 --
 -- Name: sanit_json(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -3057,7 +3057,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.sanit_json(x text) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.sanit_json(x text) OWNER TO postgres;
 
 --
 -- Name: spef_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -3067,11 +3067,11 @@ CREATE FUNCTION spef_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.spef_id else NEW.spef_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
     BEGIN
 
         /**********************************/
@@ -3085,7 +3085,7 @@ CREATE FUNCTION spef_iud() RETURNS trigger
         my_toa.ref_name := NULL;
         my_toa.ref_id := NULL;
         my_toa.subj := case when TG_OP = 'DELETE' then NULL else (select coalesce(PE_LNAME,'')||', '||coalesce(PE_FNAME,'') 
-                                                                    from jsharmony.CPE 
+                                                                    from {{schema}}.CPE 
                                                                    where pe_id = NEW.PE_ID) end;
          
 
@@ -3095,13 +3095,13 @@ CREATE FUNCTION spef_iud() RETURNS trigger
 
         IF TG_OP = 'UPDATE'
            and
-           jsharmony.nonequal(NEW.spef_id, OLD.spef_id) THEN
+           {{schema}}.nonequal(NEW.spef_id, OLD.spef_id) THEN
           RAISE EXCEPTION  'Application Error - ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'UPDATE'
            and
-           jsharmony.nonequal(NEW.pe_id, OLD.pe_id) THEN
+           {{schema}}.nonequal(NEW.pe_id, OLD.pe_id) THEN
           RAISE EXCEPTION  'Application Error - User ID cannot be updated.';
         END IF;
 
@@ -3113,23 +3113,23 @@ CREATE FUNCTION spef_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
 
 
         IF (case when TG_OP = 'DELETE' then OLD.spef_ID is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.spef_ID, OLD.spef_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'spef_ID', OLD.spef_ID::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.spef_ID, OLD.spef_ID) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'spef_ID', OLD.spef_ID::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.pe_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.pe_id, OLD.pe_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'pe_id', OLD.pe_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.pe_id, OLD.pe_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'pe_id', OLD.pe_id::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.sf_name is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.sf_name, OLD.sf_name) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'sf_name', OLD.sf_name::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.sf_name, OLD.sf_name) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'sf_name', OLD.sf_name::text);  
         END IF;
 
 
@@ -3153,7 +3153,7 @@ CREATE FUNCTION spef_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.spef_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.spef_iud() OWNER TO postgres;
 
 --
 -- Name: sper_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -3163,11 +3163,11 @@ CREATE FUNCTION sper_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.sper_id else NEW.sper_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
     BEGIN
 
         /**********************************/
@@ -3181,7 +3181,7 @@ CREATE FUNCTION sper_iud() RETURNS trigger
         my_toa.ref_name := NULL;
         my_toa.ref_id := NULL;
         my_toa.subj := case when TG_OP = 'DELETE' then NULL else (select coalesce(PE_LNAME,'')||', '||coalesce(PE_FNAME,'') 
-                                                                    from jsharmony.CPE 
+                                                                    from {{schema}}.CPE 
                                                                    where pe_id = NEW.PE_ID) end;
          
 
@@ -3191,22 +3191,22 @@ CREATE FUNCTION sper_iud() RETURNS trigger
 
         IF TG_OP = 'UPDATE'
            and
-           jsharmony.nonequal(NEW.sper_id, OLD.sper_id) THEN
+           {{schema}}.nonequal(NEW.sper_id, OLD.sper_id) THEN
           RAISE EXCEPTION  'Application Error - ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'UPDATE'
            and
-           jsharmony.nonequal(NEW.pe_id, OLD.pe_id) THEN
+           {{schema}}.nonequal(NEW.pe_id, OLD.pe_id) THEN
           RAISE EXCEPTION  'Application Error - User ID cannot be updated.';
         END IF;
 
-        IF jsharmony.mype() is not null
+        IF {{schema}}.mype() is not null
            and 
            (case when TG_OP = 'DELETE' then OLD.sr_name else NEW.sr_name end) = 'DEV' THEN
           
           IF not exists (select sr_name
-                           from jsharmony.V_MY_ROLES
+                           from {{schema}}.V_MY_ROLES
                           where SR_NAME = 'DEV') THEN
             RAISE EXCEPTION  'Application Error - Only Developer can maintain Developer Role.';
           END IF;                 
@@ -3218,23 +3218,23 @@ CREATE FUNCTION sper_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
 
 
         IF (case when TG_OP = 'DELETE' then OLD.sper_ID is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.sper_ID, OLD.sper_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'sper_ID', OLD.sper_ID::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.sper_ID, OLD.sper_ID) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'sper_ID', OLD.sper_ID::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.pe_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.pe_id, OLD.pe_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'pe_id', OLD.pe_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.pe_id, OLD.pe_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'pe_id', OLD.pe_id::text);  
         END IF;
 
         IF (case when TG_OP = 'DELETE' then OLD.sr_name is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.sr_name, OLD.sr_name) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'sr_name', OLD.sr_name::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.sr_name, OLD.sr_name) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'sr_name', OLD.sr_name::text);  
         END IF;
 
 
@@ -3258,7 +3258,7 @@ CREATE FUNCTION sper_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.sper_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.sper_iud() OWNER TO postgres;
 
 --
 -- Name: table_type(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -3289,7 +3289,7 @@ END;
 $$;
 
 
-ALTER FUNCTION jsharmony.table_type(in_schema character varying, in_name character varying) OWNER TO postgres;
+ALTER FUNCTION {{schema}}.table_type(in_schema character varying, in_name character varying) OWNER TO postgres;
 
 --
 -- Name: txt_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -3299,11 +3299,11 @@ CREATE FUNCTION txt_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.txt_id else NEW.txt_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
     BEGIN
 
         /**********************************/
@@ -3324,7 +3324,7 @@ CREATE FUNCTION txt_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF jsharmony.nonequal(NEW.txt_id, OLD.txt_id) THEN
+          IF {{schema}}.nonequal(NEW.txt_id, OLD.txt_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
         END IF;
@@ -3335,47 +3335,47 @@ CREATE FUNCTION txt_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.txt_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.txt_id, OLD.txt_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'txt_id',OLD.txt_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.txt_id, OLD.txt_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'txt_id',OLD.txt_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.txt_process is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.txt_process, OLD.txt_process) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'txt_process',OLD.txt_process::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.txt_process, OLD.txt_process) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'txt_process',OLD.txt_process::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.txt_attrib is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.txt_attrib, OLD.txt_attrib) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'txt_attrib',OLD.txt_attrib::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.txt_attrib, OLD.txt_attrib) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'txt_attrib',OLD.txt_attrib::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.txt_type is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.txt_type, OLD.txt_type) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'txt_type',OLD.txt_type::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.txt_type, OLD.txt_type) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'txt_type',OLD.txt_type::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.txt_tval is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.txt_tval, OLD.txt_tval) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'txt_tval',OLD.txt_tval::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.txt_tval, OLD.txt_tval) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'txt_tval',OLD.txt_tval::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.txt_val is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.txt_val, OLD.txt_val) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'txt_val',OLD.txt_val::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.txt_val, OLD.txt_val) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'txt_val',OLD.txt_val::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.txt_bcc is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.txt_bcc, OLD.txt_bcc) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'txt_bcc',OLD.txt_bcc::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.txt_bcc, OLD.txt_bcc) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'txt_bcc',OLD.txt_bcc::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.txt_desc is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.txt_desc, OLD.txt_desc) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'txt_desc',OLD.txt_desc::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.txt_desc, OLD.txt_desc) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'txt_desc',OLD.txt_desc::text);  
         END IF;
  
         /**********************************/
@@ -3411,7 +3411,7 @@ CREATE FUNCTION txt_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.txt_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.txt_iud() OWNER TO postgres;
 
 --
 -- Name: v_crmsel_iud_insteadof_update(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -3421,29 +3421,29 @@ CREATE FUNCTION v_crmsel_iud_insteadof_update() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm   timestamp default jsharmony.mynow();
-      myuser    text default jsharmony.mycuser();
+      curdttm   timestamp default {{schema}}.mynow();
+      myuser    text default {{schema}}.mycuser();
       M         text; 
     BEGIN
 
-        IF (jsharmony.nonequal(NEW.crmsel_sel, OLD.crmsel_sel)
+        IF ({{schema}}.nonequal(NEW.crmsel_sel, OLD.crmsel_sel)
             and
             coalesce(NEW.crmsel_sel,0) = 0) THEN
 
-          delete from jsharmony.crm
+          delete from {{schema}}.crm
                 where crm_id = NEW.crm_id;
             
         END IF;    
 
-        IF (jsharmony.nonequal(NEW.crmsel_sel, OLD.crmsel_sel)
+        IF ({{schema}}.nonequal(NEW.crmsel_sel, OLD.crmsel_sel)
             and
             coalesce(NEW.crmsel_sel,0) = 1) THEN
 
           IF coalesce(NEW.new_cr_name,'')<>'' THEN
-            insert into jsharmony.crm (cr_name, sm_id)
+            insert into {{schema}}.crm (cr_name, sm_id)
                              values (NEW.new_cr_name, NEW.sm_id);
 	  ELSE
-            insert into jsharmony.crm (cr_name, sm_id)
+            insert into {{schema}}.crm (cr_name, sm_id)
                              values (NEW.cr_name, NEW.new_sm_id);
           END IF;                     
             
@@ -3456,7 +3456,7 @@ CREATE FUNCTION v_crmsel_iud_insteadof_update() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.v_crmsel_iud_insteadof_update() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.v_crmsel_iud_insteadof_update() OWNER TO postgres;
 
 --
 -- Name: v_srmsel_iud_insteadof_update(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -3466,28 +3466,28 @@ CREATE FUNCTION v_srmsel_iud_insteadof_update() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm   timestamp default jsharmony.mynow();
-      myuser    text default jsharmony.mycuser();
+      curdttm   timestamp default {{schema}}.mynow();
+      myuser    text default {{schema}}.mycuser();
       M         text; 
     BEGIN
 
-        IF (jsharmony.nonequal(NEW.srmsel_sel, OLD.srmsel_sel)
+        IF ({{schema}}.nonequal(NEW.srmsel_sel, OLD.srmsel_sel)
             and
             coalesce(NEW.srmsel_sel,0) = 0) THEN
 
-          delete from jsharmony.SRM 
+          delete from {{schema}}.SRM 
                 where SRM_ID = NEW.srm_id;
             
         END IF;    
 
-        IF (jsharmony.nonequal(NEW.srmsel_sel, OLD.srmsel_sel)
+        IF ({{schema}}.nonequal(NEW.srmsel_sel, OLD.srmsel_sel)
             and
             coalesce(NEW.srmsel_sel,0) = 1) THEN
           IF coalesce(NEW.new_sr_name,'')<>'' THEN
-            insert into jsharmony.SRM (SR_NAME, SM_ID)
+            insert into {{schema}}.SRM (SR_NAME, SM_ID)
                              values (NEW.new_sr_name, NEW.sm_id);
 	  ELSE
-            insert into jsharmony.SRM (SR_NAME, SM_ID)
+            insert into {{schema}}.SRM (SR_NAME, SM_ID)
                              values (NEW.sr_name, NEW.new_sm_id);
           END IF;                     
             
@@ -3500,7 +3500,7 @@ CREATE FUNCTION v_srmsel_iud_insteadof_update() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.v_srmsel_iud_insteadof_update() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.v_srmsel_iud_insteadof_update() OWNER TO postgres;
 
 --
 -- Name: xpp_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -3510,11 +3510,11 @@ CREATE FUNCTION xpp_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default jsharmony.mynow();
-      myuser     text default jsharmony.mycuser();
+      curdttm    timestamp default {{schema}}.mynow();
+      myuser     text default {{schema}}.mycuser();
       aud_seq    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.xpp_id else NEW.xpp_id end;
-      my_toa     jsharmony.toaudit;
+      my_toa     {{schema}}.toaudit;
       m          text;
     BEGIN
 
@@ -3536,20 +3536,20 @@ CREATE FUNCTION xpp_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF jsharmony.nonequal(NEW.xpp_id, OLD.xpp_id) THEN
+          IF {{schema}}.nonequal(NEW.xpp_id, OLD.xpp_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF jsharmony.nonequal(NEW.xpp_process, OLD.xpp_process) THEN
+          IF {{schema}}.nonequal(NEW.xpp_process, OLD.xpp_process) THEN
             RAISE EXCEPTION  'Application Error - Process cannot be updated..';
           END IF;
-          IF jsharmony.nonequal(NEW.xpp_attrib, OLD.xpp_attrib) THEN
+          IF {{schema}}.nonequal(NEW.xpp_attrib, OLD.xpp_attrib) THEN
             RAISE EXCEPTION  'Application Error - Attribute cannot be updated..';
           END IF;
         END IF;
           
 
         IF (TG_OP = 'INSERT' or TG_OP = 'UPDATE') THEN
-          m := jsharmony.CHECK_PP('XPP', NEW.xpp_PROCESS, NEW.xpp_ATTRIB, NEW.xpp_VAL);
+          m := {{schema}}.CHECK_PP('XPP', NEW.xpp_PROCESS, NEW.xpp_ATTRIB, NEW.xpp_VAL);
           IF m IS NOT null THEN 
             RAISE EXCEPTION '%', m;
           END IF;
@@ -3562,27 +3562,27 @@ CREATE FUNCTION xpp_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id);  
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.xpp_id is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.xpp_id, OLD.xpp_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'xpp_id',OLD.xpp_id::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.xpp_id, OLD.xpp_id) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'xpp_id',OLD.xpp_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.xpp_process is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.xpp_process, OLD.xpp_process) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'xpp_process',OLD.xpp_process::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.xpp_process, OLD.xpp_process) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'xpp_process',OLD.xpp_process::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.xpp_attrib is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.xpp_attrib, OLD.xpp_attrib) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'xpp_attrib',OLD.xpp_attrib::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.xpp_attrib, OLD.xpp_attrib) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'xpp_attrib',OLD.xpp_attrib::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.xpp_val is not null 
-                 else TG_OP = 'UPDATE' and jsharmony.nonequal(NEW.xpp_val, OLD.xpp_val) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM jsharmony.audit(my_toa, aud_seq, my_id, 'xpp_val',OLD.xpp_val::text);  
+                 else TG_OP = 'UPDATE' and {{schema}}.nonequal(NEW.xpp_val, OLD.xpp_val) end) THEN
+          SELECT par_aud_seq INTO aud_seq FROM {{schema}}.audit(my_toa, aud_seq, my_id, 'xpp_val',OLD.xpp_val::text);  
         END IF;
 
  
@@ -3619,7 +3619,7 @@ CREATE FUNCTION xpp_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION jsharmony.xpp_iud() OWNER TO postgres;
+ALTER FUNCTION {{schema}}.xpp_iud() OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -6365,30 +6365,30 @@ CREATE VIEW v_cper_nostar AS
 
 ALTER TABLE v_cper_nostar OWNER TO postgres;
 
--- Rule: v_cper_nostar_delete ON jsharmony.v_cper_nostar
+-- Rule: v_cper_nostar_delete ON {{schema}}.v_cper_nostar
 
 CREATE OR REPLACE RULE v_cper_nostar_delete AS
-    ON DELETE TO jsharmony.v_cper_nostar DO INSTEAD  DELETE FROM jsharmony.cper
+    ON DELETE TO {{schema}}.v_cper_nostar DO INSTEAD  DELETE FROM {{schema}}.cper
   WHERE cper.cper_id = old.cper_id
   RETURNING cper.pe_id,
     cper.cper_snotes,
     cper.cper_id,
     cper.cr_name;
 
--- Rule: v_cper_nostar_insert ON jsharmony.v_cper_nostar
+-- Rule: v_cper_nostar_insert ON {{schema}}.v_cper_nostar
 
 CREATE OR REPLACE RULE v_cper_nostar_insert AS
-    ON INSERT TO jsharmony.v_cper_nostar DO INSTEAD  INSERT INTO jsharmony.cper (pe_id, cper_snotes, cr_name)
+    ON INSERT TO {{schema}}.v_cper_nostar DO INSTEAD  INSERT INTO {{schema}}.cper (pe_id, cper_snotes, cr_name)
   VALUES (new.pe_id, new.cper_snotes, new.cr_name)
   RETURNING cper.pe_id,
     cper.cper_snotes,
     cper.cper_id,
     cper.cr_name;
 
--- Rule: v_cper_nostar_update ON jsharmony.v_cper_nostar
+-- Rule: v_cper_nostar_update ON {{schema}}.v_cper_nostar
 
 CREATE OR REPLACE RULE v_cper_nostar_update AS
-    ON UPDATE TO jsharmony.v_cper_nostar DO INSTEAD  UPDATE jsharmony.cper SET pe_id = new.pe_id, cper_snotes = new.cper_snotes, cr_name = new.cr_name
+    ON UPDATE TO {{schema}}.v_cper_nostar DO INSTEAD  UPDATE {{schema}}.cper SET pe_id = new.pe_id, cper_snotes = new.cper_snotes, cr_name = new.cr_name
   WHERE cper.cper_id = old.cper_id
   RETURNING cper.pe_id,
     cper.cper_snotes,
@@ -8900,8 +8900,8 @@ ALTER TABLE ONLY xpp
 REVOKE ALL ON SCHEMA jsharmony FROM PUBLIC;
 REVOKE ALL ON SCHEMA jsharmony FROM postgres;
 GRANT ALL ON SCHEMA jsharmony TO postgres;
-GRANT USAGE ON SCHEMA jsharmony TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT USAGE ON SCHEMA jsharmony TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT USAGE ON SCHEMA jsharmony TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT USAGE ON SCHEMA jsharmony TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -8912,8 +8912,8 @@ REVOKE ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id
 REVOKE ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) FROM postgres;
 GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO postgres;
 GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO PUBLIC;
-GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -8924,8 +8924,8 @@ REVOKE ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_tab
 REVOKE ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) FROM postgres;
 GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO postgres;
 GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO PUBLIC;
-GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -8936,8 +8936,8 @@ REVOKE ALL ON FUNCTION audit_info(timestamp without time zone, character varying
 REVOKE ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) FROM postgres;
 GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO postgres;
 GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -8948,8 +8948,8 @@ REVOKE ALL ON FUNCTION check_code(in_tblname character varying, in_codeval chara
 REVOKE ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) FROM postgres;
 GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO postgres;
 GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -8960,8 +8960,8 @@ REVOKE ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 cha
 REVOKE ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) FROM postgres;
 GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO postgres;
 GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -8972,8 +8972,8 @@ REVOKE ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 c
 REVOKE ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) FROM postgres;
 GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO postgres;
 GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -8984,8 +8984,8 @@ REVOKE ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval cha
 REVOKE ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) FROM postgres;
 GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO postgres;
 GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -8996,8 +8996,8 @@ REVOKE ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigi
 REVOKE ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) FROM postgres;
 GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO postgres;
 GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9008,8 +9008,8 @@ REVOKE ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bi
 REVOKE ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) FROM postgres;
 GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO postgres;
 GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9020,8 +9020,8 @@ REVOKE ALL ON FUNCTION check_pp(in_table character varying, in_process character
 REVOKE ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) FROM postgres;
 GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO postgres;
 GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9032,8 +9032,8 @@ REVOKE ALL ON FUNCTION cpe_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION cpe_iud() FROM postgres;
 GRANT ALL ON FUNCTION cpe_iud() TO postgres;
 GRANT ALL ON FUNCTION cpe_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION cpe_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION cpe_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION cpe_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION cpe_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9044,8 +9044,8 @@ REVOKE ALL ON FUNCTION cpe_iud_after_insert() FROM PUBLIC;
 REVOKE ALL ON FUNCTION cpe_iud_after_insert() FROM postgres;
 GRANT ALL ON FUNCTION cpe_iud_after_insert() TO postgres;
 GRANT ALL ON FUNCTION cpe_iud_after_insert() TO PUBLIC;
-GRANT ALL ON FUNCTION cpe_iud_after_insert() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION cpe_iud_after_insert() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION cpe_iud_after_insert() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION cpe_iud_after_insert() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9056,8 +9056,8 @@ REVOKE ALL ON FUNCTION cper_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION cper_iud() FROM postgres;
 GRANT ALL ON FUNCTION cper_iud() TO postgres;
 GRANT ALL ON FUNCTION cper_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION cper_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION cper_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION cper_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION cper_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9067,7 +9067,7 @@ GRANT ALL ON FUNCTION cper_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 REVOKE ALL ON FUNCTION create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM PUBLIC;
 REVOKE ALL ON FUNCTION create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM postgres;
 GRANT ALL ON FUNCTION create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO postgres;
-GRANT ALL ON FUNCTION create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9077,7 +9077,7 @@ GRANT ALL ON FUNCTION create_gcod(in_codeschema character varying, in_codename c
 REVOKE ALL ON FUNCTION create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM PUBLIC;
 REVOKE ALL ON FUNCTION create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM postgres;
 GRANT ALL ON FUNCTION create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO postgres;
-GRANT ALL ON FUNCTION create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9087,7 +9087,7 @@ GRANT ALL ON FUNCTION create_gcod2(in_codeschema character varying, in_codename 
 REVOKE ALL ON FUNCTION create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM PUBLIC;
 REVOKE ALL ON FUNCTION create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM postgres;
 GRANT ALL ON FUNCTION create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO postgres;
-GRANT ALL ON FUNCTION create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9097,7 +9097,7 @@ GRANT ALL ON FUNCTION create_ucod(in_codeschema character varying, in_codename c
 REVOKE ALL ON FUNCTION create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM PUBLIC;
 REVOKE ALL ON FUNCTION create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM postgres;
 GRANT ALL ON FUNCTION create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO postgres;
-GRANT ALL ON FUNCTION create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9108,17 +9108,17 @@ REVOKE ALL ON FUNCTION d_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION d_iud() FROM postgres;
 GRANT ALL ON FUNCTION d_iud() TO postgres;
 GRANT ALL ON FUNCTION d_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION d_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION d_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION d_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION d_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 
-REVOKE ALL ON FUNCTION jsharmony.d_filename(bigint, text) FROM PUBLIC;
-REVOKE ALL ON FUNCTION jsharmony.d_filename(bigint, text) FROM postgres;
-GRANT ALL ON FUNCTION jsharmony.d_filename(bigint, text) TO postgres;
-GRANT ALL ON FUNCTION jsharmony.d_filename(bigint, text) TO PUBLIC;
-GRANT ALL ON FUNCTION jsharmony.d_filename(bigint, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION jsharmony.d_filename(bigint, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {{schema}}.d_filename(bigint, text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {{schema}}.d_filename(bigint, text) FROM postgres;
+GRANT ALL ON FUNCTION {{schema}}.d_filename(bigint, text) TO postgres;
+GRANT ALL ON FUNCTION {{schema}}.d_filename(bigint, text) TO PUBLIC;
+GRANT ALL ON FUNCTION {{schema}}.d_filename(bigint, text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {{schema}}.d_filename(bigint, text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9129,8 +9129,8 @@ REVOKE ALL ON FUNCTION digest(bytea, text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION digest(bytea, text) FROM postgres;
 GRANT ALL ON FUNCTION digest(bytea, text) TO postgres;
 GRANT ALL ON FUNCTION digest(bytea, text) TO PUBLIC;
-GRANT ALL ON FUNCTION digest(bytea, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION digest(bytea, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION digest(bytea, text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION digest(bytea, text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9141,8 +9141,8 @@ REVOKE ALL ON FUNCTION digest(text, text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION digest(text, text) FROM postgres;
 GRANT ALL ON FUNCTION digest(text, text) TO postgres;
 GRANT ALL ON FUNCTION digest(text, text) TO PUBLIC;
-GRANT ALL ON FUNCTION digest(text, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION digest(text, text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION digest(text, text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION digest(text, text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9153,8 +9153,8 @@ REVOKE ALL ON FUNCTION gcod2_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION gcod2_iud() FROM postgres;
 GRANT ALL ON FUNCTION gcod2_iud() TO postgres;
 GRANT ALL ON FUNCTION gcod2_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION gcod2_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION gcod2_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION gcod2_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION gcod2_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9165,8 +9165,8 @@ REVOKE ALL ON FUNCTION gcod_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION gcod_iud() FROM postgres;
 GRANT ALL ON FUNCTION gcod_iud() TO postgres;
 GRANT ALL ON FUNCTION gcod_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION gcod_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION gcod_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION gcod_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION gcod_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9177,8 +9177,8 @@ REVOKE ALL ON FUNCTION get_cpe_name(in_pe_id bigint) FROM PUBLIC;
 REVOKE ALL ON FUNCTION get_cpe_name(in_pe_id bigint) FROM postgres;
 GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO postgres;
 GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9189,8 +9189,8 @@ REVOKE ALL ON FUNCTION get_pe_name(in_pe_id bigint) FROM PUBLIC;
 REVOKE ALL ON FUNCTION get_pe_name(in_pe_id bigint) FROM postgres;
 GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO postgres;
 GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9201,8 +9201,8 @@ REVOKE ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_att
 REVOKE ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) FROM postgres;
 GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO postgres;
 GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9213,8 +9213,8 @@ REVOKE ALL ON FUNCTION good_email(x text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION good_email(x text) FROM postgres;
 GRANT ALL ON FUNCTION good_email(x text) TO postgres;
 GRANT ALL ON FUNCTION good_email(x text) TO PUBLIC;
-GRANT ALL ON FUNCTION good_email(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION good_email(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION good_email(x text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION good_email(x text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9225,8 +9225,8 @@ REVOKE ALL ON FUNCTION gpp_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION gpp_iud() FROM postgres;
 GRANT ALL ON FUNCTION gpp_iud() TO postgres;
 GRANT ALL ON FUNCTION gpp_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION gpp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION gpp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION gpp_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION gpp_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9237,8 +9237,8 @@ REVOKE ALL ON FUNCTION h_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION h_iud() FROM postgres;
 GRANT ALL ON FUNCTION h_iud() TO postgres;
 GRANT ALL ON FUNCTION h_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION h_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION h_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION h_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION h_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9249,8 +9249,8 @@ REVOKE ALL ON FUNCTION mycuser() FROM PUBLIC;
 REVOKE ALL ON FUNCTION mycuser() FROM postgres;
 GRANT ALL ON FUNCTION mycuser() TO postgres;
 GRANT ALL ON FUNCTION mycuser() TO PUBLIC;
-GRANT ALL ON FUNCTION mycuser() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mycuser() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION mycuser() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mycuser() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9261,8 +9261,8 @@ REVOKE ALL ON FUNCTION mycuser_email(u text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION mycuser_email(u text) FROM postgres;
 GRANT ALL ON FUNCTION mycuser_email(u text) TO postgres;
 GRANT ALL ON FUNCTION mycuser_email(u text) TO PUBLIC;
-GRANT ALL ON FUNCTION mycuser_email(u text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mycuser_email(u text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION mycuser_email(u text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mycuser_email(u text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9273,8 +9273,8 @@ REVOKE ALL ON FUNCTION mycuser_fmt(u text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION mycuser_fmt(u text) FROM postgres;
 GRANT ALL ON FUNCTION mycuser_fmt(u text) TO postgres;
 GRANT ALL ON FUNCTION mycuser_fmt(u text) TO PUBLIC;
-GRANT ALL ON FUNCTION mycuser_fmt(u text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mycuser_fmt(u text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION mycuser_fmt(u text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mycuser_fmt(u text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9285,8 +9285,8 @@ REVOKE ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw chara
 REVOKE ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) FROM postgres;
 GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO postgres;
 GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9297,8 +9297,8 @@ REVOKE ALL ON FUNCTION myisnumeric(text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION myisnumeric(text) FROM postgres;
 GRANT ALL ON FUNCTION myisnumeric(text) TO postgres;
 GRANT ALL ON FUNCTION myisnumeric(text) TO PUBLIC;
-GRANT ALL ON FUNCTION myisnumeric(text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION myisnumeric(text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION myisnumeric(text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION myisnumeric(text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9309,8 +9309,8 @@ REVOKE ALL ON FUNCTION mymmddyy(timestamp without time zone) FROM PUBLIC;
 REVOKE ALL ON FUNCTION mymmddyy(timestamp without time zone) FROM postgres;
 GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO postgres;
 GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO PUBLIC;
-GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9321,8 +9321,8 @@ REVOKE ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) FROM PUBLIC;
 REVOKE ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) FROM postgres;
 GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO postgres;
 GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO PUBLIC;
-GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9333,8 +9333,8 @@ REVOKE ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) FROM PUBLIC;
 REVOKE ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) FROM postgres;
 GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO postgres;
 GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO PUBLIC;
-GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9345,8 +9345,8 @@ REVOKE ALL ON FUNCTION mynow() FROM PUBLIC;
 REVOKE ALL ON FUNCTION mynow() FROM postgres;
 GRANT ALL ON FUNCTION mynow() TO postgres;
 GRANT ALL ON FUNCTION mynow() TO PUBLIC;
-GRANT ALL ON FUNCTION mynow() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mynow() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION mynow() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mynow() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9357,8 +9357,8 @@ REVOKE ALL ON FUNCTION mype() FROM PUBLIC;
 REVOKE ALL ON FUNCTION mype() FROM postgres;
 GRANT ALL ON FUNCTION mype() TO postgres;
 GRANT ALL ON FUNCTION mype() TO PUBLIC;
-GRANT ALL ON FUNCTION mype() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mype() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION mype() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mype() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9369,8 +9369,8 @@ REVOKE ALL ON FUNCTION mypec() FROM PUBLIC;
 REVOKE ALL ON FUNCTION mypec() FROM postgres;
 GRANT ALL ON FUNCTION mypec() TO postgres;
 GRANT ALL ON FUNCTION mypec() TO PUBLIC;
-GRANT ALL ON FUNCTION mypec() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mypec() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION mypec() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mypec() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9381,8 +9381,8 @@ REVOKE ALL ON FUNCTION mytodate(timestamp without time zone) FROM PUBLIC;
 REVOKE ALL ON FUNCTION mytodate(timestamp without time zone) FROM postgres;
 GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO postgres;
 GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO PUBLIC;
-GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9393,8 +9393,8 @@ REVOKE ALL ON FUNCTION mytoday() FROM PUBLIC;
 REVOKE ALL ON FUNCTION mytoday() FROM postgres;
 GRANT ALL ON FUNCTION mytoday() TO postgres;
 GRANT ALL ON FUNCTION mytoday() TO PUBLIC;
-GRANT ALL ON FUNCTION mytoday() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mytoday() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION mytoday() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION mytoday() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9405,8 +9405,8 @@ REVOKE ALL ON FUNCTION n_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION n_iud() FROM postgres;
 GRANT ALL ON FUNCTION n_iud() TO postgres;
 GRANT ALL ON FUNCTION n_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION n_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION n_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION n_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION n_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9417,8 +9417,8 @@ REVOKE ALL ON FUNCTION nonequal(x1 bit, x2 bit) FROM PUBLIC;
 REVOKE ALL ON FUNCTION nonequal(x1 bit, x2 bit) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9429,8 +9429,8 @@ REVOKE ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) FROM PUBLIC;
 REVOKE ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9441,8 +9441,8 @@ REVOKE ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) FROM PUBLIC;
 REVOKE ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9453,8 +9453,8 @@ REVOKE ALL ON FUNCTION nonequal(x1 integer, x2 integer) FROM PUBLIC;
 REVOKE ALL ON FUNCTION nonequal(x1 integer, x2 integer) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9465,8 +9465,8 @@ REVOKE ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) FROM PUBLIC;
 REVOKE ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9477,8 +9477,8 @@ REVOKE ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) FROM PUBLIC;
 REVOKE ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9489,8 +9489,8 @@ REVOKE ALL ON FUNCTION nonequal(x1 text, x2 text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION nonequal(x1 text, x2 text) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9501,8 +9501,8 @@ REVOKE ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp wit
 REVOKE ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) FROM postgres;
 GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO postgres;
 GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9513,8 +9513,8 @@ REVOKE ALL ON FUNCTION pe_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION pe_iud() FROM postgres;
 GRANT ALL ON FUNCTION pe_iud() TO postgres;
 GRANT ALL ON FUNCTION pe_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION pe_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION pe_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION pe_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION pe_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9525,8 +9525,8 @@ REVOKE ALL ON FUNCTION ppd_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION ppd_iud() FROM postgres;
 GRANT ALL ON FUNCTION ppd_iud() TO postgres;
 GRANT ALL ON FUNCTION ppd_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION ppd_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION ppd_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION ppd_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION ppd_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9537,8 +9537,8 @@ REVOKE ALL ON FUNCTION ppp_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION ppp_iud() FROM postgres;
 GRANT ALL ON FUNCTION ppp_iud() TO postgres;
 GRANT ALL ON FUNCTION ppp_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION ppp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION ppp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION ppp_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION ppp_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9549,8 +9549,8 @@ REVOKE ALL ON FUNCTION sanit(x text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION sanit(x text) FROM postgres;
 GRANT ALL ON FUNCTION sanit(x text) TO postgres;
 GRANT ALL ON FUNCTION sanit(x text) TO PUBLIC;
-GRANT ALL ON FUNCTION sanit(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION sanit(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION sanit(x text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION sanit(x text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9561,8 +9561,8 @@ REVOKE ALL ON FUNCTION sanit_json(x text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION sanit_json(x text) FROM postgres;
 GRANT ALL ON FUNCTION sanit_json(x text) TO postgres;
 GRANT ALL ON FUNCTION sanit_json(x text) TO PUBLIC;
-GRANT ALL ON FUNCTION sanit_json(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION sanit_json(x text) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION sanit_json(x text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION sanit_json(x text) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9573,8 +9573,8 @@ REVOKE ALL ON FUNCTION spef_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION spef_iud() FROM postgres;
 GRANT ALL ON FUNCTION spef_iud() TO postgres;
 GRANT ALL ON FUNCTION spef_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION spef_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION spef_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION spef_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION spef_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9585,8 +9585,8 @@ REVOKE ALL ON FUNCTION sper_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION sper_iud() FROM postgres;
 GRANT ALL ON FUNCTION sper_iud() TO postgres;
 GRANT ALL ON FUNCTION sper_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION sper_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION sper_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION sper_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION sper_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9597,8 +9597,8 @@ REVOKE ALL ON FUNCTION table_type(in_schema character varying, in_name character
 REVOKE ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) FROM postgres;
 GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO postgres;
 GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9609,8 +9609,8 @@ REVOKE ALL ON FUNCTION txt_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION txt_iud() FROM postgres;
 GRANT ALL ON FUNCTION txt_iud() TO postgres;
 GRANT ALL ON FUNCTION txt_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION txt_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION txt_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION txt_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION txt_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9621,8 +9621,8 @@ REVOKE ALL ON FUNCTION v_crmsel_iud_insteadof_update() FROM PUBLIC;
 REVOKE ALL ON FUNCTION v_crmsel_iud_insteadof_update() FROM postgres;
 GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO postgres;
 GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO PUBLIC;
-GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9633,8 +9633,8 @@ REVOKE ALL ON FUNCTION v_srmsel_iud_insteadof_update() FROM PUBLIC;
 REVOKE ALL ON FUNCTION v_srmsel_iud_insteadof_update() FROM postgres;
 GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO postgres;
 GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO PUBLIC;
-GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9645,8 +9645,8 @@ REVOKE ALL ON FUNCTION xpp_iud() FROM PUBLIC;
 REVOKE ALL ON FUNCTION xpp_iud() FROM postgres;
 GRANT ALL ON FUNCTION xpp_iud() TO postgres;
 GRANT ALL ON FUNCTION xpp_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION xpp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION xpp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+GRANT ALL ON FUNCTION xpp_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION xpp_iud() TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9656,7 +9656,7 @@ GRANT ALL ON FUNCTION xpp_iud() TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
 REVOKE ALL ON TABLE aud_d FROM PUBLIC;
 REVOKE ALL ON TABLE aud_d FROM postgres;
 GRANT ALL ON TABLE aud_d TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE aud_d TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE aud_d TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9666,7 +9666,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE aud_d TO jsharmony_%%%INIT_DB_LCASE%%
 REVOKE ALL ON TABLE aud_h FROM PUBLIC;
 REVOKE ALL ON TABLE aud_h FROM postgres;
 GRANT ALL ON TABLE aud_h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE aud_h TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE aud_h TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9676,7 +9676,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE aud_h TO jsharmony_%%%INIT_DB_LCASE%%
 REVOKE ALL ON SEQUENCE aud_h_aud_seq_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE aud_h_aud_seq_seq FROM postgres;
 GRANT ALL ON SEQUENCE aud_h_aud_seq_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE aud_h_aud_seq_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE aud_h_aud_seq_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9686,7 +9686,7 @@ GRANT SELECT,UPDATE ON SEQUENCE aud_h_aud_seq_seq TO jsharmony_%%%INIT_DB_LCASE%
 REVOKE ALL ON TABLE cpe FROM PUBLIC;
 REVOKE ALL ON TABLE cpe FROM postgres;
 GRANT ALL ON TABLE cpe TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cpe TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cpe TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9696,7 +9696,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cpe TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON SEQUENCE cpe_pe_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE cpe_pe_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE cpe_pe_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE cpe_pe_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE cpe_pe_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9706,7 +9706,7 @@ GRANT SELECT,UPDATE ON SEQUENCE cpe_pe_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_r
 REVOKE ALL ON TABLE cper FROM PUBLIC;
 REVOKE ALL ON TABLE cper FROM postgres;
 GRANT ALL ON TABLE cper TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cper TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cper TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9716,7 +9716,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cper TO jsharmony_%%%INIT_DB_LCASE%%%
 REVOKE ALL ON SEQUENCE cper_cper_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE cper_cper_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE cper_cper_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE cper_cper_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE cper_cper_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9726,7 +9726,7 @@ GRANT SELECT,UPDATE ON SEQUENCE cper_cper_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 REVOKE ALL ON TABLE cr FROM PUBLIC;
 REVOKE ALL ON TABLE cr FROM postgres;
 GRANT ALL ON TABLE cr TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cr TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cr TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9736,7 +9736,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cr TO jsharmony_%%%INIT_DB_LCASE%%%_r
 REVOKE ALL ON SEQUENCE cr_cr_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE cr_cr_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE cr_cr_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE cr_cr_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE cr_cr_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9746,7 +9746,7 @@ GRANT SELECT,UPDATE ON SEQUENCE cr_cr_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 REVOKE ALL ON TABLE crm FROM PUBLIC;
 REVOKE ALL ON TABLE crm FROM postgres;
 GRANT ALL ON TABLE crm TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE crm TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE crm TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9756,7 +9756,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE crm TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON SEQUENCE crm_crm_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE crm_crm_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE crm_crm_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE crm_crm_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE crm_crm_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9766,7 +9766,7 @@ GRANT SELECT,UPDATE ON SEQUENCE crm_crm_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON TABLE d FROM PUBLIC;
 REVOKE ALL ON TABLE d FROM postgres;
 GRANT ALL ON TABLE d TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE d TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE d TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9776,7 +9776,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE d TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 REVOKE ALL ON SEQUENCE d_d_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE d_d_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE d_d_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE d_d_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE d_d_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9786,7 +9786,7 @@ GRANT SELECT,UPDATE ON SEQUENCE d_d_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role
 REVOKE ALL ON TABLE dual FROM PUBLIC;
 REVOKE ALL ON TABLE dual FROM postgres;
 GRANT ALL ON TABLE dual TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE dual TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE dual TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9796,7 +9796,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE dual TO jsharmony_%%%INIT_DB_LCASE%%%
 REVOKE ALL ON SEQUENCE dual_dual_ident_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE dual_dual_ident_seq FROM postgres;
 GRANT ALL ON SEQUENCE dual_dual_ident_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE dual_dual_ident_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE dual_dual_ident_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9806,7 +9806,7 @@ GRANT SELECT,UPDATE ON SEQUENCE dual_dual_ident_seq TO jsharmony_%%%INIT_DB_LCAS
 REVOKE ALL ON SEQUENCE gcod_gcod_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE gcod_gcod_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE gcod_gcod_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE gcod_gcod_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE gcod_gcod_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9816,7 +9816,7 @@ GRANT SELECT,UPDATE ON SEQUENCE gcod_gcod_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 REVOKE ALL ON TABLE gcod FROM PUBLIC;
 REVOKE ALL ON TABLE gcod FROM postgres;
 GRANT ALL ON TABLE gcod TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9826,7 +9826,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod TO jsharmony_%%%INIT_DB_LCASE%%%
 REVOKE ALL ON SEQUENCE gcod2_gcod2_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE gcod2_gcod2_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE gcod2_gcod2_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE gcod2_gcod2_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE gcod2_gcod2_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9836,7 +9836,7 @@ GRANT SELECT,UPDATE ON SEQUENCE gcod2_gcod2_id_seq TO jsharmony_%%%INIT_DB_LCASE
 REVOKE ALL ON TABLE gcod2 FROM PUBLIC;
 REVOKE ALL ON TABLE gcod2 FROM postgres;
 GRANT ALL ON TABLE gcod2 TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2 TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2 TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9846,7 +9846,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2 TO jsharmony_%%%INIT_DB_LCASE%%
 REVOKE ALL ON TABLE gcod2_d_scope_d_ctgr FROM PUBLIC;
 REVOKE ALL ON TABLE gcod2_d_scope_d_ctgr FROM postgres;
 GRANT ALL ON TABLE gcod2_d_scope_d_ctgr TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2_d_scope_d_ctgr TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2_d_scope_d_ctgr TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9856,7 +9856,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2_d_scope_d_ctgr TO jsharmony_%%%
 REVOKE ALL ON TABLE gcod2_h FROM PUBLIC;
 REVOKE ALL ON TABLE gcod2_h FROM postgres;
 GRANT ALL ON TABLE gcod2_h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2_h TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2_h TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9866,7 +9866,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2_h TO jsharmony_%%%INIT_DB_LCASE
 REVOKE ALL ON TABLE gcod_h FROM PUBLIC;
 REVOKE ALL ON TABLE gcod_h FROM postgres;
 GRANT ALL ON TABLE gcod_h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod_h TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod_h TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9876,7 +9876,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod_h TO jsharmony_%%%INIT_DB_LCASE%
 REVOKE ALL ON TABLE gpp FROM PUBLIC;
 REVOKE ALL ON TABLE gpp FROM postgres;
 GRANT ALL ON TABLE gpp TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gpp TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gpp TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9886,7 +9886,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gpp TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON SEQUENCE gpp_gpp_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE gpp_gpp_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE gpp_gpp_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE gpp_gpp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE gpp_gpp_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9896,7 +9896,7 @@ GRANT SELECT,UPDATE ON SEQUENCE gpp_gpp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON TABLE h FROM PUBLIC;
 REVOKE ALL ON TABLE h FROM postgres;
 GRANT ALL ON TABLE h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE h TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE h TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9906,7 +9906,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE h TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 REVOKE ALL ON SEQUENCE h_h_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE h_h_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE h_h_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE h_h_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE h_h_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9916,7 +9916,7 @@ GRANT SELECT,UPDATE ON SEQUENCE h_h_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role
 REVOKE ALL ON TABLE hp FROM PUBLIC;
 REVOKE ALL ON TABLE hp FROM postgres;
 GRANT ALL ON TABLE hp TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE hp TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE hp TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9926,7 +9926,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE hp TO jsharmony_%%%INIT_DB_LCASE%%%_r
 REVOKE ALL ON SEQUENCE hp_hp_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE hp_hp_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE hp_hp_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE hp_hp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE hp_hp_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9936,7 +9936,7 @@ GRANT SELECT,UPDATE ON SEQUENCE hp_hp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 REVOKE ALL ON TABLE n FROM PUBLIC;
 REVOKE ALL ON TABLE n FROM postgres;
 GRANT ALL ON TABLE n TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE n TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE n TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9946,7 +9946,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE n TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 REVOKE ALL ON SEQUENCE n_n_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE n_n_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE n_n_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE n_n_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE n_n_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9956,7 +9956,7 @@ GRANT SELECT,UPDATE ON SEQUENCE n_n_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role
 REVOKE ALL ON TABLE numbers FROM PUBLIC;
 REVOKE ALL ON TABLE numbers FROM postgres;
 GRANT ALL ON TABLE numbers TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE numbers TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE numbers TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9966,7 +9966,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE numbers TO jsharmony_%%%INIT_DB_LCASE
 REVOKE ALL ON TABLE pe FROM PUBLIC;
 REVOKE ALL ON TABLE pe FROM postgres;
 GRANT ALL ON TABLE pe TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE pe TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE pe TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9976,7 +9976,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE pe TO jsharmony_%%%INIT_DB_LCASE%%%_r
 REVOKE ALL ON SEQUENCE pe_pe_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE pe_pe_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE pe_pe_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE pe_pe_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE pe_pe_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9986,7 +9986,7 @@ GRANT SELECT,UPDATE ON SEQUENCE pe_pe_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 REVOKE ALL ON TABLE ppd FROM PUBLIC;
 REVOKE ALL ON TABLE ppd FROM postgres;
 GRANT ALL ON TABLE ppd TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ppd TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ppd TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9996,7 +9996,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ppd TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON SEQUENCE ppd_ppd_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE ppd_ppd_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE ppd_ppd_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ppd_ppd_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE ppd_ppd_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10006,7 +10006,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ppd_ppd_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON TABLE ppp FROM PUBLIC;
 REVOKE ALL ON TABLE ppp FROM postgres;
 GRANT ALL ON TABLE ppp TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ppp TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ppp TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10016,7 +10016,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ppp TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON SEQUENCE ppp_ppp_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE ppp_ppp_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE ppp_ppp_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ppp_ppp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE ppp_ppp_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10026,7 +10026,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ppp_ppp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON TABLE rq FROM PUBLIC;
 REVOKE ALL ON TABLE rq FROM postgres;
 GRANT ALL ON TABLE rq TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10036,7 +10036,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rq TO jsharmony_%%%INIT_DB_LCASE%%%_r
 REVOKE ALL ON SEQUENCE rq_rq_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE rq_rq_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE rq_rq_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rq_rq_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE rq_rq_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10046,7 +10046,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rq_rq_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 REVOKE ALL ON TABLE rqst FROM PUBLIC;
 REVOKE ALL ON TABLE rqst FROM postgres;
 GRANT ALL ON TABLE rqst TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10056,7 +10056,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst TO jsharmony_%%%INIT_DB_LCASE%%%
 REVOKE ALL ON TABLE rqst_d FROM PUBLIC;
 REVOKE ALL ON TABLE rqst_d FROM postgres;
 GRANT ALL ON TABLE rqst_d TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_d TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_d TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10066,7 +10066,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_d TO jsharmony_%%%INIT_DB_LCASE%
 REVOKE ALL ON SEQUENCE rqst_d_rqst_d_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE rqst_d_rqst_d_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE rqst_d_rqst_d_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_d_rqst_d_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE rqst_d_rqst_d_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10076,7 +10076,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_d_rqst_d_id_seq TO jsharmony_%%%INIT_DB_LCA
 REVOKE ALL ON TABLE rqst_email FROM PUBLIC;
 REVOKE ALL ON TABLE rqst_email FROM postgres;
 GRANT ALL ON TABLE rqst_email TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_email TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_email TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10086,7 +10086,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_email TO jsharmony_%%%INIT_DB_LC
 REVOKE ALL ON SEQUENCE rqst_email_rqst_email_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE rqst_email_rqst_email_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE rqst_email_rqst_email_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_email_rqst_email_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE rqst_email_rqst_email_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10096,7 +10096,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_email_rqst_email_id_seq TO jsharmony_%%%INI
 REVOKE ALL ON TABLE rqst_n FROM PUBLIC;
 REVOKE ALL ON TABLE rqst_n FROM postgres;
 GRANT ALL ON TABLE rqst_n TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_n TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_n TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10106,7 +10106,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_n TO jsharmony_%%%INIT_DB_LCASE%
 REVOKE ALL ON SEQUENCE rqst_n_rqst_n_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE rqst_n_rqst_n_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE rqst_n_rqst_n_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_n_rqst_n_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE rqst_n_rqst_n_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10116,7 +10116,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_n_rqst_n_id_seq TO jsharmony_%%%INIT_DB_LCA
 REVOKE ALL ON TABLE rqst_rq FROM PUBLIC;
 REVOKE ALL ON TABLE rqst_rq FROM postgres;
 GRANT ALL ON TABLE rqst_rq TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_rq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_rq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10126,7 +10126,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_rq TO jsharmony_%%%INIT_DB_LCASE
 REVOKE ALL ON SEQUENCE rqst_rq_rqst_rq_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE rqst_rq_rqst_rq_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE rqst_rq_rqst_rq_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_rq_rqst_rq_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE rqst_rq_rqst_rq_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10136,7 +10136,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_rq_rqst_rq_id_seq TO jsharmony_%%%INIT_DB_L
 REVOKE ALL ON SEQUENCE rqst_rqst_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE rqst_rqst_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE rqst_rqst_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_rqst_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE rqst_rqst_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10146,7 +10146,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_rqst_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 REVOKE ALL ON TABLE rqst_sms FROM PUBLIC;
 REVOKE ALL ON TABLE rqst_sms FROM postgres;
 GRANT ALL ON TABLE rqst_sms TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_sms TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_sms TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10156,7 +10156,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_sms TO jsharmony_%%%INIT_DB_LCAS
 REVOKE ALL ON SEQUENCE rqst_sms_rqst_sms_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE rqst_sms_rqst_sms_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE rqst_sms_rqst_sms_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_sms_rqst_sms_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE rqst_sms_rqst_sms_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10166,7 +10166,7 @@ GRANT SELECT,UPDATE ON SEQUENCE rqst_sms_rqst_sms_id_seq TO jsharmony_%%%INIT_DB
 REVOKE ALL ON TABLE sf FROM PUBLIC;
 REVOKE ALL ON TABLE sf FROM postgres;
 GRANT ALL ON TABLE sf TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sf TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sf TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10176,7 +10176,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sf TO jsharmony_%%%INIT_DB_LCASE%%%_r
 REVOKE ALL ON SEQUENCE sf_sf_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE sf_sf_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE sf_sf_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE sf_sf_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE sf_sf_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10186,7 +10186,7 @@ GRANT SELECT,UPDATE ON SEQUENCE sf_sf_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 REVOKE ALL ON TABLE sm FROM PUBLIC;
 REVOKE ALL ON TABLE sm FROM postgres;
 GRANT ALL ON TABLE sm TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sm TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sm TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10196,7 +10196,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sm TO jsharmony_%%%INIT_DB_LCASE%%%_r
 REVOKE ALL ON SEQUENCE sm_sm_id_auto_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE sm_sm_id_auto_seq FROM postgres;
 GRANT ALL ON SEQUENCE sm_sm_id_auto_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE sm_sm_id_auto_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE sm_sm_id_auto_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10206,7 +10206,7 @@ GRANT SELECT,UPDATE ON SEQUENCE sm_sm_id_auto_seq TO jsharmony_%%%INIT_DB_LCASE%
 REVOKE ALL ON TABLE spef FROM PUBLIC;
 REVOKE ALL ON TABLE spef FROM postgres;
 GRANT ALL ON TABLE spef TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spef TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spef TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10216,7 +10216,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spef TO jsharmony_%%%INIT_DB_LCASE%%%
 REVOKE ALL ON SEQUENCE spef_spef_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE spef_spef_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE spef_spef_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE spef_spef_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE spef_spef_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10226,7 +10226,7 @@ GRANT SELECT,UPDATE ON SEQUENCE spef_spef_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 REVOKE ALL ON TABLE sper FROM PUBLIC;
 REVOKE ALL ON TABLE sper FROM postgres;
 GRANT ALL ON TABLE sper TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sper TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sper TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10236,7 +10236,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sper TO jsharmony_%%%INIT_DB_LCASE%%%
 REVOKE ALL ON SEQUENCE sper_sper_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE sper_sper_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE sper_sper_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE sper_sper_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE sper_sper_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10246,7 +10246,7 @@ GRANT SELECT,UPDATE ON SEQUENCE sper_sper_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 REVOKE ALL ON TABLE sr FROM PUBLIC;
 REVOKE ALL ON TABLE sr FROM postgres;
 GRANT ALL ON TABLE sr TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sr TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sr TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10256,7 +10256,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sr TO jsharmony_%%%INIT_DB_LCASE%%%_r
 REVOKE ALL ON SEQUENCE sr_sr_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE sr_sr_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE sr_sr_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE sr_sr_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE sr_sr_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10266,7 +10266,7 @@ GRANT SELECT,UPDATE ON SEQUENCE sr_sr_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 REVOKE ALL ON TABLE srm FROM PUBLIC;
 REVOKE ALL ON TABLE srm FROM postgres;
 GRANT ALL ON TABLE srm TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE srm TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE srm TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10276,7 +10276,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE srm TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON SEQUENCE srm_srm_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE srm_srm_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE srm_srm_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE srm_srm_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE srm_srm_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10286,7 +10286,7 @@ GRANT SELECT,UPDATE ON SEQUENCE srm_srm_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON TABLE txt FROM PUBLIC;
 REVOKE ALL ON TABLE txt FROM postgres;
 GRANT ALL ON TABLE txt TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE txt TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE txt TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10296,7 +10296,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE txt TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON SEQUENCE txt_txt_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE txt_txt_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE txt_txt_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE txt_txt_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE txt_txt_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10306,7 +10306,7 @@ GRANT SELECT,UPDATE ON SEQUENCE txt_txt_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON TABLE ucod FROM PUBLIC;
 REVOKE ALL ON TABLE ucod FROM postgres;
 GRANT ALL ON TABLE ucod TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10316,7 +10316,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod TO jsharmony_%%%INIT_DB_LCASE%%%
 REVOKE ALL ON SEQUENCE ucod2_ucod2_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE ucod2_ucod2_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE ucod2_ucod2_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ucod2_ucod2_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE ucod2_ucod2_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10326,7 +10326,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ucod2_ucod2_id_seq TO jsharmony_%%%INIT_DB_LCASE
 REVOKE ALL ON TABLE ucod2 FROM PUBLIC;
 REVOKE ALL ON TABLE ucod2 FROM postgres;
 GRANT ALL ON TABLE ucod2 TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2 TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2 TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10336,7 +10336,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2 TO jsharmony_%%%INIT_DB_LCASE%%
 REVOKE ALL ON TABLE ucod2_country_state FROM PUBLIC;
 REVOKE ALL ON TABLE ucod2_country_state FROM postgres;
 GRANT ALL ON TABLE ucod2_country_state TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_country_state TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_country_state TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10346,7 +10346,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_country_state TO jsharmony_%%%I
 REVOKE ALL ON TABLE ucod2_gpp_process_attrib_v FROM PUBLIC;
 REVOKE ALL ON TABLE ucod2_gpp_process_attrib_v FROM postgres;
 GRANT ALL ON TABLE ucod2_gpp_process_attrib_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_gpp_process_attrib_v TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_gpp_process_attrib_v TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10356,7 +10356,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_gpp_process_attrib_v TO jsharmo
 REVOKE ALL ON TABLE ucod2_h FROM PUBLIC;
 REVOKE ALL ON TABLE ucod2_h FROM postgres;
 GRANT ALL ON TABLE ucod2_h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_h TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_h TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10366,7 +10366,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_h TO jsharmony_%%%INIT_DB_LCASE
 REVOKE ALL ON SEQUENCE ucod2_h_ucod2_h_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE ucod2_h_ucod2_h_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE ucod2_h_ucod2_h_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ucod2_h_ucod2_h_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE ucod2_h_ucod2_h_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10376,7 +10376,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ucod2_h_ucod2_h_id_seq TO jsharmony_%%%INIT_DB_L
 REVOKE ALL ON TABLE ucod2_ppp_process_attrib_v FROM PUBLIC;
 REVOKE ALL ON TABLE ucod2_ppp_process_attrib_v FROM postgres;
 GRANT ALL ON TABLE ucod2_ppp_process_attrib_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_ppp_process_attrib_v TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_ppp_process_attrib_v TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10386,7 +10386,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_ppp_process_attrib_v TO jsharmo
 REVOKE ALL ON TABLE ucod2_xpp_process_attrib_v FROM PUBLIC;
 REVOKE ALL ON TABLE ucod2_xpp_process_attrib_v FROM postgres;
 GRANT ALL ON TABLE ucod2_xpp_process_attrib_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_xpp_process_attrib_v TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_xpp_process_attrib_v TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10396,7 +10396,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_xpp_process_attrib_v TO jsharmo
 REVOKE ALL ON TABLE ucod_ac FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_ac FROM postgres;
 GRANT ALL ON TABLE ucod_ac TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ac TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ac TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10406,7 +10406,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ac TO jsharmony_%%%INIT_DB_LCASE
 REVOKE ALL ON TABLE ucod_ac1 FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_ac1 FROM postgres;
 GRANT ALL ON TABLE ucod_ac1 TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ac1 TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ac1 TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10416,7 +10416,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ac1 TO jsharmony_%%%INIT_DB_LCAS
 REVOKE ALL ON TABLE ucod_ahc FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_ahc FROM postgres;
 GRANT ALL ON TABLE ucod_ahc TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ahc TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ahc TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10426,7 +10426,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ahc TO jsharmony_%%%INIT_DB_LCAS
 REVOKE ALL ON TABLE ucod_country FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_country FROM postgres;
 GRANT ALL ON TABLE ucod_country TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_country TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_country TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10436,7 +10436,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_country TO jsharmony_%%%INIT_DB_
 REVOKE ALL ON TABLE ucod_d_scope FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_d_scope FROM postgres;
 GRANT ALL ON TABLE ucod_d_scope TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_d_scope TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_d_scope TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10446,7 +10446,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_d_scope TO jsharmony_%%%INIT_DB_
 REVOKE ALL ON TABLE ucod_gpp_process_v FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_gpp_process_v FROM postgres;
 GRANT ALL ON TABLE ucod_gpp_process_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_gpp_process_v TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_gpp_process_v TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10456,7 +10456,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_gpp_process_v TO jsharmony_%%%IN
 REVOKE ALL ON TABLE ucod_h FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_h FROM postgres;
 GRANT ALL ON TABLE ucod_h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_h TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_h TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10466,7 +10466,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_h TO jsharmony_%%%INIT_DB_LCASE%
 REVOKE ALL ON SEQUENCE ucod_h_ucod_h_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE ucod_h_ucod_h_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE ucod_h_ucod_h_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ucod_h_ucod_h_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE ucod_h_ucod_h_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10476,7 +10476,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ucod_h_ucod_h_id_seq TO jsharmony_%%%INIT_DB_LCA
 REVOKE ALL ON TABLE ucod_n_scope FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_n_scope FROM postgres;
 GRANT ALL ON TABLE ucod_n_scope TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_n_scope TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_n_scope TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10486,7 +10486,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_n_scope TO jsharmony_%%%INIT_DB_
 REVOKE ALL ON TABLE ucod_n_type FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_n_type FROM postgres;
 GRANT ALL ON TABLE ucod_n_type TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_n_type TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_n_type TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10496,7 +10496,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_n_type TO jsharmony_%%%INIT_DB_L
 REVOKE ALL ON TABLE ucod_ppd_type FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_ppd_type FROM postgres;
 GRANT ALL ON TABLE ucod_ppd_type TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ppd_type TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ppd_type TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10506,7 +10506,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ppd_type TO jsharmony_%%%INIT_DB
 REVOKE ALL ON TABLE ucod_ppp_process_v FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_ppp_process_v FROM postgres;
 GRANT ALL ON TABLE ucod_ppp_process_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ppp_process_v TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ppp_process_v TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10516,7 +10516,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ppp_process_v TO jsharmony_%%%IN
 REVOKE ALL ON TABLE ucod_rqst_atype FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_rqst_atype FROM postgres;
 GRANT ALL ON TABLE ucod_rqst_atype TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_rqst_atype TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_rqst_atype TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10526,7 +10526,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_rqst_atype TO jsharmony_%%%INIT_
 REVOKE ALL ON TABLE ucod_rqst_source FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_rqst_source FROM postgres;
 GRANT ALL ON TABLE ucod_rqst_source TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_rqst_source TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_rqst_source TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10536,7 +10536,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_rqst_source TO jsharmony_%%%INIT
 REVOKE ALL ON TABLE ucod_txt_type FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_txt_type FROM postgres;
 GRANT ALL ON TABLE ucod_txt_type TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_txt_type TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_txt_type TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10546,7 +10546,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_txt_type TO jsharmony_%%%INIT_DB
 REVOKE ALL ON SEQUENCE ucod_ucod_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE ucod_ucod_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE ucod_ucod_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ucod_ucod_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE ucod_ucod_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10556,7 +10556,7 @@ GRANT SELECT,UPDATE ON SEQUENCE ucod_ucod_id_seq TO jsharmony_%%%INIT_DB_LCASE%%
 REVOKE ALL ON TABLE ucod_v_sts FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_v_sts FROM postgres;
 GRANT ALL ON TABLE ucod_v_sts TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_v_sts TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_v_sts TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10566,7 +10566,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_v_sts TO jsharmony_%%%INIT_DB_LC
 REVOKE ALL ON TABLE ucod_xpp_process_v FROM PUBLIC;
 REVOKE ALL ON TABLE ucod_xpp_process_v FROM postgres;
 GRANT ALL ON TABLE ucod_xpp_process_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_xpp_process_v TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_xpp_process_v TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10576,7 +10576,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_xpp_process_v TO jsharmony_%%%IN
 REVOKE ALL ON TABLE v FROM PUBLIC;
 REVOKE ALL ON TABLE v FROM postgres;
 GRANT ALL ON TABLE v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10586,7 +10586,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v TO jsharmony_%%%INIT_DB_LCASE%%%_ro
 REVOKE ALL ON TABLE v_audl_raw FROM PUBLIC;
 REVOKE ALL ON TABLE v_audl_raw FROM postgres;
 GRANT ALL ON TABLE v_audl_raw TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_audl_raw TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_audl_raw TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10596,7 +10596,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_audl_raw TO jsharmony_%%%INIT_DB_LC
 REVOKE ALL ON TABLE v_cper_nostar FROM PUBLIC;
 REVOKE ALL ON TABLE v_cper_nostar FROM postgres;
 GRANT ALL ON TABLE v_cper_nostar TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_cper_nostar TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_cper_nostar TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10606,7 +10606,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_cper_nostar TO jsharmony_%%%INIT_DB
 REVOKE ALL ON TABLE v_crmsel FROM PUBLIC;
 REVOKE ALL ON TABLE v_crmsel FROM postgres;
 GRANT ALL ON TABLE v_crmsel TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_crmsel TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_crmsel TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10616,7 +10616,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_crmsel TO jsharmony_%%%INIT_DB_LCAS
 REVOKE ALL ON TABLE v_d_ext FROM PUBLIC;
 REVOKE ALL ON TABLE v_d_ext FROM postgres;
 GRANT ALL ON TABLE v_d_ext TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_d_ext TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_d_ext TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10626,7 +10626,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_d_ext TO jsharmony_%%%INIT_DB_LCASE
 REVOKE ALL ON TABLE v_d_x FROM PUBLIC;
 REVOKE ALL ON TABLE v_d_x FROM postgres;
 GRANT ALL ON TABLE v_d_x TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_d_x TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_d_x TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10636,7 +10636,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_d_x TO jsharmony_%%%INIT_DB_LCASE%%
 REVOKE ALL ON TABLE v_dl FROM PUBLIC;
 REVOKE ALL ON TABLE v_dl FROM postgres;
 GRANT ALL ON TABLE v_dl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_dl TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_dl TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10646,7 +10646,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_dl TO jsharmony_%%%INIT_DB_LCASE%%%
 REVOKE ALL ON TABLE v_gppl FROM PUBLIC;
 REVOKE ALL ON TABLE v_gppl FROM postgres;
 GRANT ALL ON TABLE v_gppl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_gppl TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_gppl TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10656,7 +10656,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_gppl TO jsharmony_%%%INIT_DB_LCASE%
 REVOKE ALL ON TABLE xpp FROM PUBLIC;
 REVOKE ALL ON TABLE xpp FROM postgres;
 GRANT ALL ON TABLE xpp TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE xpp TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE xpp TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10666,7 +10666,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE xpp TO jsharmony_%%%INIT_DB_LCASE%%%_
 REVOKE ALL ON TABLE v_pp FROM PUBLIC;
 REVOKE ALL ON TABLE v_pp FROM postgres;
 GRANT ALL ON TABLE v_pp TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_pp TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_pp TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10676,7 +10676,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_pp TO jsharmony_%%%INIT_DB_LCASE%%%
 REVOKE ALL ON TABLE v_house FROM PUBLIC;
 REVOKE ALL ON TABLE v_house FROM postgres;
 GRANT ALL ON TABLE v_house TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_house TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_house TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10686,7 +10686,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_house TO jsharmony_%%%INIT_DB_LCASE
 REVOKE ALL ON TABLE v_months FROM PUBLIC;
 REVOKE ALL ON TABLE v_months FROM postgres;
 GRANT ALL ON TABLE v_months TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_months TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_months TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10696,7 +10696,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_months TO jsharmony_%%%INIT_DB_LCAS
 REVOKE ALL ON TABLE v_my_roles FROM PUBLIC;
 REVOKE ALL ON TABLE v_my_roles FROM postgres;
 GRANT ALL ON TABLE v_my_roles TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_my_roles TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_my_roles TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10706,7 +10706,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_my_roles TO jsharmony_%%%INIT_DB_LC
 REVOKE ALL ON TABLE v_mype FROM PUBLIC;
 REVOKE ALL ON TABLE v_mype FROM postgres;
 GRANT ALL ON TABLE v_mype TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_mype TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_mype TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10716,7 +10716,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_mype TO jsharmony_%%%INIT_DB_LCASE%
 REVOKE ALL ON TABLE v_n_ext FROM PUBLIC;
 REVOKE ALL ON TABLE v_n_ext FROM postgres;
 GRANT ALL ON TABLE v_n_ext TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_n_ext TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_n_ext TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10726,7 +10726,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_n_ext TO jsharmony_%%%INIT_DB_LCASE
 REVOKE ALL ON TABLE v_nl FROM PUBLIC;
 REVOKE ALL ON TABLE v_nl FROM postgres;
 GRANT ALL ON TABLE v_nl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_nl TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_nl TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10736,7 +10736,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_nl TO jsharmony_%%%INIT_DB_LCASE%%%
 REVOKE ALL ON TABLE v_ppdl FROM PUBLIC;
 REVOKE ALL ON TABLE v_ppdl FROM postgres;
 GRANT ALL ON TABLE v_ppdl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_ppdl TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_ppdl TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10746,7 +10746,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_ppdl TO jsharmony_%%%INIT_DB_LCASE%
 REVOKE ALL ON TABLE v_pppl FROM PUBLIC;
 REVOKE ALL ON TABLE v_pppl FROM postgres;
 GRANT ALL ON TABLE v_pppl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_pppl TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_pppl TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10756,7 +10756,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_pppl TO jsharmony_%%%INIT_DB_LCASE%
 REVOKE ALL ON TABLE v_srmsel FROM PUBLIC;
 REVOKE ALL ON TABLE v_srmsel FROM postgres;
 GRANT ALL ON TABLE v_srmsel TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_srmsel TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_srmsel TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10766,7 +10766,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_srmsel TO jsharmony_%%%INIT_DB_LCAS
 REVOKE ALL ON SEQUENCE v_v_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE v_v_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE v_v_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE v_v_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE v_v_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10776,7 +10776,7 @@ GRANT SELECT,UPDATE ON SEQUENCE v_v_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role
 REVOKE ALL ON TABLE v_xppl FROM PUBLIC;
 REVOKE ALL ON TABLE v_xppl FROM postgres;
 GRANT ALL ON TABLE v_xppl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_xppl TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_xppl TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10786,7 +10786,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_xppl TO jsharmony_%%%INIT_DB_LCASE%
 REVOKE ALL ON TABLE v_years FROM PUBLIC;
 REVOKE ALL ON TABLE v_years FROM postgres;
 GRANT ALL ON TABLE v_years TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_years TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_years TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10796,7 +10796,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_years TO jsharmony_%%%INIT_DB_LCASE
 REVOKE ALL ON SEQUENCE xpp_xpp_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE xpp_xpp_id_seq FROM postgres;
 GRANT ALL ON SEQUENCE xpp_xpp_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE xpp_xpp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT SELECT,UPDATE ON SEQUENCE xpp_xpp_id_seq TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10805,7 +10805,7 @@ GRANT SELECT,UPDATE ON SEQUENCE xpp_xpp_id_seq TO jsharmony_%%%INIT_DB_LCASE%%%_
 
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony REVOKE ALL ON SEQUENCES  FROM PUBLIC;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony REVOKE ALL ON SEQUENCES  FROM postgres;
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT SELECT,UPDATE ON SEQUENCES  TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT SELECT,UPDATE ON SEQUENCES  TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10814,8 +10814,8 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT SELECT,UPDA
 
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony REVOKE ALL ON FUNCTIONS  FROM PUBLIC;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony REVOKE ALL ON FUNCTIONS  FROM postgres;
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT ALL ON FUNCTIONS  TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT ALL ON FUNCTIONS  TO jsharmony_%%%INIT_DB_LCASE%%%_role_dev;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT ALL ON FUNCTIONS  TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT ALL ON FUNCTIONS  TO {{schema}}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -10824,7 +10824,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT ALL ON FUNC
 
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony REVOKE ALL ON TABLES  FROM PUBLIC;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony REVOKE ALL ON TABLES  FROM postgres;
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT SELECT,INSERT,DELETE,UPDATE ON TABLES  TO jsharmony_%%%INIT_DB_LCASE%%%_role_exec;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA jsharmony GRANT SELECT,INSERT,DELETE,UPDATE ON TABLES  TO {{schema}}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 

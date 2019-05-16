@@ -161,10 +161,10 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
-  SET @CURDT = jsharmony.myTODATE(@CURDTTM)
+  SET @CURDTTM = {{schema}}.myNOW_DO()
+  SET @CURDT = {{schema}}.myTODATE(@CURDTTM)
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+''''.0000000''''
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = ''''U'''' AND UPDATE(GCOD_ID)
   BEGIN
@@ -220,7 +220,7 @@ BEGIN
 	IF (@TP=''''I'''' OR @TP=''''D'''')
 	BEGIN  
 	  SET @WK_GCOD_ID = ISNULL(@D_GCOD_ID,@I_GCOD_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, ''''GCOD_%%%name%%%'''', @WK_GCOD_ID, @MYUSER, @CURDTTM
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, ''''GCOD_%%%name%%%'''', @WK_GCOD_ID, @MYUSER, @CURDTTM
 	END
 
  
@@ -228,60 +228,60 @@ BEGIN
 	BEGIN
 
       IF (@TP = ''''D'''' AND @D_CODSEQ IS NOT NULL OR
-          @TP = ''''U'''' AND jsharmony.NONEQUALN(@D_CODSEQ, @I_'')')
+          @TP = ''''U'''' AND {{schema}}.NONEQUALN(@D_CODSEQ, @I_'')')
 UPDATE [jsharmony].[SCRIPT] SET [SCRIPT_TXT].WRITE(N'CODSEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODSEQ''), @D_CODSEQ)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODSEQ''), @D_CODSEQ)
       END
 
       IF (@TP = ''D'' AND @D_CODETDT IS NOT NULL OR
-          @TP = ''U'' AND jsharmony.NONEQUALD(@D_CODETDT, @I_CODETDT) > 0)
+          @TP = ''U'' AND {{schema}}.NONEQUALD(@D_CODETDT, @I_CODETDT) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODETDT''), @D_CODETDT)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODETDT''), @D_CODETDT)
       END
 
       IF (@TP = ''D'' AND @D_CODEVAL IS NOT NULL OR
-          @TP = ''U'' AND jsharmony.NONEQUALC(@D_CODEVAL, @I_CODEVAL) > 0)
+          @TP = ''U'' AND {{schema}}.NONEQUALC(@D_CODEVAL, @I_CODEVAL) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODEVAL''), @D_CODEVAL)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODEVAL''), @D_CODEVAL)
       END
 
       IF (@TP = ''D'' AND @D_CODETXT IS NOT NULL OR
-          @TP = ''U'' AND jsharmony.NONEQUALC(@D_CODETXT, @I_CODETXT) > 0)
+          @TP = ''U'' AND {{schema}}.NONEQUALC(@D_CODETXT, @I_CODETXT) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODETXT''), @D_CODETXT)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODETXT''), @D_CODETXT)
       END
 
       IF (@TP = ''D'' AND @D_CODECODE IS NOT NULL OR
-          @TP = ''U'' AND jsharmony.NONEQUALC(@D_CODECODE, @I_CODECODE) > 0)
+          @TP = ''U'' AND {{schema}}.NONEQUALC(@D_CODECODE, @I_CODECODE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODECODE''), @D_CODECODE)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODECODE''), @D_CODECODE)
       END
 
       IF (@TP = ''D'' AND @D_codeattrib IS NOT NULL OR
-          @TP = ''U'' AND jsharmony.NONEQUALC(@D_codeattrib, @I_codeattrib) > 0)
+          @TP = ''U'' AND {{schema}}.NONEQUALC(@D_codeattrib, @I_codeattrib) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODEATTRIB''), @D_CODEATTRIB)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODEATTRIB''), @D_CODEATTRIB)
       END
 
       IF (@TP = ''D'' AND @D_CODETCM IS NOT NULL OR
-          @TP = ''U'' AND jsharmony.NONEQUALC(@D_CODETCM, @I_CODETCM) > 0)
+          @TP = ''U'' AND {{schema}}.NONEQUALC(@D_CODETCM, @I_CODETCM) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODETCM''), @D_CODETCM)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''CODETCM''), @D_CODETCM)
       END
 
     END  /* END OF "IF @TP=''U'' OR @TP=''D''"  */
@@ -492,10 +492,10 @@ BEGIN
       RETURN
     END    
   
-  SET @CURDTTM = jsharmony.myNOW_DO()
-  SET @CURDT = jsharmony.myTODATE(@CURDTTM)
+  SET @CURDTTM = {{schema}}.myNOW_DO()
+  SET @CURDT = {{schema}}.myTODATE(@CURDTTM)
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+''''.0000000''''
-  SET @MYUSER = jsharmony.myCUSER() 
+  SET @MYUSER = {{schema}}.myCUSER() 
 
   IF @TP = ''''U'''' AND UPDATE(GCOD2_ID)
   BEGIN
@@ -562,7 +562,7 @@ EXEC(N'DECLARE @pv binary(16)
 	IF (@TP=''''I'''' OR @TP=''''D'''')
 	BEGIN  
 	  SET @WK_GCOD2_ID = ISNULL(@D_GCOD2_ID,@I_GCOD2_ID)
-	  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE @TP, ''''GCOD2_%%%name%%%'''', @WK_GCOD2_ID, @MYUSER, @CURDTTM
+	  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE @TP, ''''GCOD2_%%%name%%%'''', @WK_GCOD2_ID, @MYUSER, @CURDTTM
 	END
 
  
@@ -570,67 +570,67 @@ EXEC(N'DECLARE @pv binary(16)
 	BEGIN
 
       IF (@TP = ''''D'''' AND @D_CODSEQ IS NOT NULL OR
-          @TP = ''''U'''' AND jsharmony.NONEQUALN(@D_CODSEQ, @I_CODSEQ) > 0)
+          @TP = ''''U'''' AND {{schema}}.NONEQUALN(@D_CODSEQ, @I_CODSEQ) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODSEQ''''), @D_CODSEQ)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODSEQ''''), @D_CODSEQ)
       END
 
       IF (@TP = ''''D'''' AND @D_CODETDT IS NOT NULL OR
-          @TP = ''''U'''' AND jsharmony.NONEQUALD(@D_CODETDT, @I_CODETDT) > 0)
+          @TP = ''''U'''' AND {{schema}}.NONEQUALD(@D_CODETDT, @I_CODETDT) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODETDT''''), @D_CODETDT)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODETDT''''), @D_CODETDT)
       END
 
       IF (@TP = ''''D'''' AND @D_CODEVAL1 IS NOT NULL OR
-          @TP = ''''U'''' AND jsharmony.NONEQUALC(@D_CODEVAL1, @I_CODEVAL1) > 0)
+          @TP = ''''U'''' AND {{schema}}.NONEQUALC(@D_CODEVAL1, @I_CODEVAL1) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODEVAL1''''), @D_CODEVAL1)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODEVAL1''''), @D_CODEVAL1)
       END
 
       IF (@TP = ''''D'''' AND @D_CODEVAL2 IS NOT NULL OR
-          @TP = ''''U'''' AND jsharmony.NONEQUALC(@D_CODEVAL2, @I_CODEVAL2) > 0)
+          @TP = ''''U'''' AND {{schema}}.NONEQUALC(@D_CODEVAL2, @I_CODEVAL2) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODEVAL2''''), @D_CODEVAL2)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODEVAL2''''), @D_CODEVAL2)
       END
 
       IF (@TP = ''''D'''' AND @D_CODETXT IS NOT NULL OR
-          @TP = ''''U'''' AND jsharmony.NONEQUALC(@D_CODETXT, @I_CODETXT) > 0)
+          @TP = ''''U'''' AND {{schema}}.NONEQUALC(@D_CODETXT, @I_CODETXT) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODETXT''''), @D_CODETXT)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODETXT''''), @D_CODETXT)
       END
 
       IF (@TP = ''''D'''' AND @D_CODECODE IS NOT NULL OR
-          @TP = ''''U'''' AND jsharmony.NONEQUALC(@D_CODECODE, @I_CODECODE) > 0)
+          @TP = ''''U'''' AND {{schema}}.NONEQUALC(@D_CODECODE, @I_CODECODE) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODECODE''''), @D_CODECODE)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODECODE''''), @D_CODECODE)
       END
 
       IF (@TP = ''''D'''' AND @D_CODEATTRIB IS NOT NULL OR
-          @TP = ''''U'''' AND jsharmony.NONEQUALC(@D_CODEATTRIB, @I_CODEATTRIB) > 0)
+          @TP = ''''U'''' AND {{schema}}.NONEQUALC(@D_CODEATTRIB, @I_CODEATTRIB) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODEATTRIB''''), @D_CODEATTRIB)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODEATTRIB''''), @D_CODEATTRIB)
       END
 
       IF (@TP = ''''D'''' AND @D_CODETCM IS NOT NULL OR
-          @TP = ''''U'''' AND jsharmony.NONEQUALC(@D_CODETCM, @I_CODETCM) > 0)
+          @TP = ''''U'''' AND {{schema}}.NONEQUALC(@D_CODETCM, @I_CODETCM) > 0)
       BEGIN
         IF (@MY_AUD_SEQ=0)
-		  EXEC	@MY_AUD_SEQ = jsharmony.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
-        INSERT INTO jsharmony.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODETCM''''), @D_CODETCM)
+		  EXEC	@MY_AUD_SEQ = {{schema}}.AUDH_BASE ''''U'''', ''''GCOD2_%%%name%%%'''', @I_GCOD2_ID, @MYUSER, @CURDTTM
+        INSERT INTO {{schema}}.AUD_D VALUES (@MY_AUD_SEQ, lower(''''CODETCM''''), @D_CODETCM)
       END
 
     END  /* END OF "IF @TP=''''U'''' OR @TP=''''D''''"  */

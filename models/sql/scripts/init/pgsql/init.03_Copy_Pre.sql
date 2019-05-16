@@ -1,1 +1,1 @@
-ALTER TABLE jsharmony.sm DROP CONSTRAINT sm_sm_id_parent_fkey;
+ALTER TABLE {{schema}}.sm DROP CONSTRAINT sm_sm_id_parent_fkey;

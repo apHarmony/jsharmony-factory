@@ -386,19 +386,19 @@
   "{{schema}}.get_pe_name":{
     "params": ["id"],
     "sql": [
-      "(select get_pe_name_jsharmony_pe_name from (select pe_lname||', '||pe_fname get_pe_name_jsharmony_pe_name,pe_id get_pe_name_jsharmony_pe_id from {{schema}}_pe) get_pe_name_jsharmony_pe where get_pe_name_jsharmony_pe_id = %%%id%%%)"
+      "(select get_pe_name_{{schema}}_pe_name from (select pe_lname||', '||pe_fname get_pe_name_{{schema}}_pe_name,pe_id get_pe_name_{{schema}}_pe_id from {{schema}}_pe) get_pe_name_{{schema}}_pe where get_pe_name_{{schema}}_pe_id = %%%id%%%)"
     ]
   },
   "{{schema}}.get_ppd_desc":{
     "params": ["in_ppd_process","in_ppd_attrib"],
     "sql": [
-      "(select get_ppd_desc_jsharmony_ppd_desc from (select ppd_desc get_ppd_desc_jsharmony_ppd_desc, ppd_process get_ppd_desc_jsharmony_ppd_process, ppd_attrib get_ppd_desc_jsharmony_ppd_attrib from {{schema}}_ppd) get_ppd_desc_jsharmony_ppd where get_ppd_desc_jsharmony_ppd_process = %%%in_ppd_process%%% and get_ppd_desc_jsharmony_ppd_attrib = %%%in_ppd_attrib%%%)"
+      "(select get_ppd_desc_{{schema}}_ppd_desc from (select ppd_desc get_ppd_desc_{{schema}}_ppd_desc, ppd_process get_ppd_desc_{{schema}}_ppd_process, ppd_attrib get_ppd_desc_{{schema}}_ppd_attrib from {{schema}}_ppd) get_ppd_desc_{{schema}}_ppd where get_ppd_desc_{{schema}}_ppd_process = %%%in_ppd_process%%% and get_ppd_desc_{{schema}}_ppd_attrib = %%%in_ppd_attrib%%%)"
     ]
   },
   "{{schema}}.get_cpe_name":{
     "params": ["id"],
     "sql": [
-      "(select get_cpe_name_jsharmony_cpe_name from (select pe_id get_cpe_name_jsharmony_cpe_id, pe_lname||', '||pe_fname get_cpe_name_jsharmony_cpe_name from {{schema}}_cpe) get_cpe_name_jsharmony_cpe where get_cpe_name_jsharmony_cpe_id = %%%id%%%)"
+      "(select get_cpe_name_{{schema}}_cpe_name from (select pe_id get_cpe_name_{{schema}}_cpe_id, pe_lname||', '||pe_fname get_cpe_name_{{schema}}_cpe_name from {{schema}}_cpe) get_cpe_name_{{schema}}_cpe where get_cpe_name_{{schema}}_cpe_id = %%%id%%%)"
     ]
   },
   "{{schema}}.table_type":{
