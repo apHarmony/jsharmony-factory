@@ -4,7 +4,7 @@ begin;
 
 
 /***************AUD_H***************/
-CREATE TABLE jsharmony_aud_h (
+CREATE TABLE {{schema}}_aud_h (
   aud_seq integer primary key autoincrement NOT NULL,
   table_name text,
   table_id integer NOT NULL,
@@ -20,17 +20,17 @@ CREATE TABLE jsharmony_aud_h (
 );
 
 /***************AUD_D***************/
-CREATE TABLE jsharmony_aud_d
+CREATE TABLE {{schema}}_aud_d
 (
   aud_seq integer NOT NULL,
   column_name text NOT NULL,
   column_val text,
   PRIMARY KEY (aud_seq, column_name),
-  FOREIGN KEY (aud_seq) REFERENCES jsharmony_aud_h(aud_seq)
+  FOREIGN KEY (aud_seq) REFERENCES {{schema}}_aud_h(aud_seq)
 );
 
 /*********DUAL*********/
-CREATE TABLE jsharmony_dual (
+CREATE TABLE {{schema}}_dual (
   dual_ident integer primary key NOT NULL,
   dummy text NOT NULL,
   dual_integer integer,
@@ -38,50 +38,50 @@ CREATE TABLE jsharmony_dual (
 );
 
 /*********UCOD_AC*********/
-jsharmony.create_ucod('jsharmony','ac','');
+{{schema}}.create_ucod('{{schema}}','ac','');
 
 /*********UCOD_AC1*********/
-jsharmony.create_ucod('jsharmony','ac1','');
+{{schema}}.create_ucod('{{schema}}','ac1','');
 
 /*********UCOD_AHC*********/
-jsharmony.create_ucod('jsharmony','ahc','');
+{{schema}}.create_ucod('{{schema}}','ahc','');
 
 /*********UCOD_COUNTRY*********/
-jsharmony.create_ucod('jsharmony','country','');
+{{schema}}.create_ucod('{{schema}}','country','');
 
 /*********UCOD_D_SCOPE*********/
-jsharmony.create_ucod('jsharmony','d_scope','');
+{{schema}}.create_ucod('{{schema}}','d_scope','');
 
 
 /*********UCOD_N_SCOPE*********/
-jsharmony.create_ucod('jsharmony','n_scope','');
+{{schema}}.create_ucod('{{schema}}','n_scope','');
 
 /*********UCOD_N_TYPE*********/
-jsharmony.create_ucod('jsharmony','n_type','');
+{{schema}}.create_ucod('{{schema}}','n_type','');
 
 /*********UCOD_PPD_TYPE*********/
-jsharmony.create_ucod('jsharmony','ppd_type','');
+{{schema}}.create_ucod('{{schema}}','ppd_type','');
 
 /*********UCOD_RQST_ATYPE*********/
-jsharmony.create_ucod('jsharmony','rqst_atype','');
+{{schema}}.create_ucod('{{schema}}','rqst_atype','');
 
 /*********UCOD_RQST_SOURCE*********/
-jsharmony.create_ucod('jsharmony','rqst_source','');
+{{schema}}.create_ucod('{{schema}}','rqst_source','');
 
 /*********UCOD_TXT_TYPE*********/
-jsharmony.create_ucod('jsharmony','txt_type','');
+{{schema}}.create_ucod('{{schema}}','txt_type','');
 
 /*********UCOD_V_STS*********/
-jsharmony.create_ucod('jsharmony','v_sts','');
+{{schema}}.create_ucod('{{schema}}','v_sts','');
 
 /*********UCOD2_COUNTRY_STATE*********/
-jsharmony.create_ucod2('jsharmony','country_state','');
+{{schema}}.create_ucod2('{{schema}}','country_state','');
 
 /*********GCOD2_D_SCOPE_D_CTGR*********/
-jsharmony.create_gcod2('jsharmony','d_scope_d_ctgr','');
+{{schema}}.create_gcod2('{{schema}}','d_scope_d_ctgr','');
 
 /***************CPE***************/
-create table jsharmony_cpe (
+create table {{schema}}_cpe (
     pe_id integer primary key autoincrement NOT NULL,
     c_id integer NOT NULL,
     pe_sts text DEFAULT 'ACTIVE' NOT NULL,
@@ -103,14 +103,14 @@ create table jsharmony_cpe (
     pe_ll_ip text,
     pe_ll_tstmp text,
     pe_snotes text,
-    FOREIGN KEY (pe_sts) REFERENCES jsharmony_ucod_ahc(codeval),
+    FOREIGN KEY (pe_sts) REFERENCES {{schema}}_ucod_ahc(codeval),
     CHECK (COALESCE(pe_email,'')<>'')
 );
 
-create index idx_jsharmony_cpe_c_id on jsharmony_cpe(c_id);
+create index idx_{{schema}}_cpe_c_id on {{schema}}_cpe(c_id);
 
 /***************CR***************/
-CREATE TABLE jsharmony_cr (
+CREATE TABLE {{schema}}_cr (
   cr_id integer primary key autoincrement NOT NULL,
   cr_seq integer NOT NULL,
   cr_sts text NOT NULL DEFAULT 'ACTIVE',
@@ -121,11 +121,11 @@ CREATE TABLE jsharmony_cr (
   cr_attrib text,
   UNIQUE (cr_desc),
   UNIQUE (cr_name),
-  FOREIGN KEY (cr_sts) REFERENCES jsharmony_ucod_ahc(codeval)
+  FOREIGN KEY (cr_sts) REFERENCES {{schema}}_ucod_ahc(codeval)
 );
 
 /***************D***************/
-CREATE TABLE jsharmony_d (
+CREATE TABLE {{schema}}_d (
   d_id integer primary key autoincrement NOT NULL,
   d_scope text NOT NULL DEFAULT 'S',
   d_scope_id integer NOT NULL DEFAULT 0,
@@ -145,12 +145,12 @@ CREATE TABLE jsharmony_d (
   d_synctstmp text,
   d_snotes text,
   d_id_main integer,
-  FOREIGN KEY (d_scope, d_ctgr) REFERENCES jsharmony_gcod2_d_scope_d_ctgr (codeval1, codeval2),
-  FOREIGN KEY (d_scope) REFERENCES jsharmony_ucod_d_scope (codeval)
+  FOREIGN KEY (d_scope, d_ctgr) REFERENCES {{schema}}_gcod2_d_scope_d_ctgr (codeval1, codeval2),
+  FOREIGN KEY (d_scope) REFERENCES {{schema}}_ucod_d_scope (codeval)
 );
 
 /***************HP***************/
-CREATE TABLE jsharmony_hp (
+CREATE TABLE {{schema}}_hp (
   hp_id integer primary key autoincrement NOT NULL,
   hp_code text NOT NULL,
   hp_desc text NOT NULL,
@@ -159,7 +159,7 @@ CREATE TABLE jsharmony_hp (
 );
 
 /***************H***************/
-CREATE TABLE jsharmony_h (
+CREATE TABLE {{schema}}_h (
   h_id integer primary key autoincrement NOT NULL,
   hp_code text,
   h_title text NOT NULL,
@@ -172,11 +172,11 @@ CREATE TABLE jsharmony_h (
   h_index_a integer NOT NULL DEFAULT 1,
   h_index_p integer NOT NULL DEFAULT 1,
   UNIQUE (h_title),
-  FOREIGN KEY (hp_code) REFERENCES jsharmony_hp (hp_code)
+  FOREIGN KEY (hp_code) REFERENCES {{schema}}_hp (hp_code)
 );
 
 /***************N***************/
-CREATE TABLE jsharmony_n (
+CREATE TABLE {{schema}}_n (
   n_id integer primary key autoincrement NOT NULL,
   n_scope text NOT NULL DEFAULT 'S',
   n_scope_id integer NOT NULL DEFAULT 0,
@@ -192,13 +192,13 @@ CREATE TABLE jsharmony_n (
   n_synctstmp text,
   n_snotes text,
   n_id_main integer,
-  FOREIGN KEY (n_scope) REFERENCES jsharmony_ucod_n_scope (codeval),
-  FOREIGN KEY (n_sts) REFERENCES jsharmony_ucod_ac1 (codeval),
-  FOREIGN KEY (n_type) REFERENCES jsharmony_ucod_n_type (codeval) 
+  FOREIGN KEY (n_scope) REFERENCES {{schema}}_ucod_n_scope (codeval),
+  FOREIGN KEY (n_sts) REFERENCES {{schema}}_ucod_ac1 (codeval),
+  FOREIGN KEY (n_type) REFERENCES {{schema}}_ucod_n_type (codeval) 
 );
 
 /***************PE***************/
-create table jsharmony_pe (
+create table {{schema}}_pe (
     pe_id integer primary key autoincrement NOT NULL,
     pe_sts text DEFAULT 'ACTIVE' NOT NULL,
     pe_stsdt text,
@@ -227,14 +227,14 @@ create table jsharmony_pe (
     pe_ll_ip text,
     pe_ll_tstmp text,
     pe_snotes text,
-    FOREIGN KEY (pe_sts) REFERENCES jsharmony_ucod_ahc(codeval),
-    FOREIGN KEY (pe_country) REFERENCES jsharmony_ucod_country(codeval),
-    FOREIGN KEY (pe_country, pe_state) REFERENCES jsharmony_ucod2_country_state(codeval1,codeval2),
+    FOREIGN KEY (pe_sts) REFERENCES {{schema}}_ucod_ahc(codeval),
+    FOREIGN KEY (pe_country) REFERENCES {{schema}}_ucod_country(codeval),
+    FOREIGN KEY (pe_country, pe_state) REFERENCES {{schema}}_ucod2_country_state(codeval1,codeval2),
     CHECK (COALESCE(pe_email,'')<>'')
 );
 
   /***************PPD***************/
-CREATE TABLE jsharmony_ppd (
+CREATE TABLE {{schema}}_ppd (
   ppd_id integer primary key autoincrement NOT NULL,
   ppd_process text NOT NULL,
   ppd_attrib text NOT NULL,
@@ -249,12 +249,12 @@ CREATE TABLE jsharmony_ppd (
   ppd_gpp integer NOT NULL DEFAULT 0,
   ppd_ppp integer NOT NULL DEFAULT 0,
   ppd_xpp integer NOT NULL DEFAULT 0,
-  FOREIGN KEY (ppd_type) REFERENCES jsharmony_ucod_ppd_type(codeval),
+  FOREIGN KEY (ppd_type) REFERENCES {{schema}}_ucod_ppd_type(codeval),
   UNIQUE (ppd_process, ppd_attrib)
 );
 
 /***************RQ***************/
-CREATE TABLE jsharmony_rq (
+CREATE TABLE {{schema}}_rq (
   rq_id integer primary key autoincrement NOT NULL,
   rq_etstmp text,
   rq_eu text,
@@ -267,7 +267,7 @@ CREATE TABLE jsharmony_rq (
 );
 
 /***************RQST***************/
-CREATE TABLE jsharmony_rqst (
+CREATE TABLE {{schema}}_rqst (
   rqst_id integer primary key autoincrement NOT NULL,
   rqst_etstmp text,
   rqst_eu text,
@@ -280,23 +280,23 @@ CREATE TABLE jsharmony_rqst (
   rqst_rslt_tstmp text,
   rqst_rslt_u text,
   rqst_snotes text,
-  FOREIGN KEY (rqst_atype) REFERENCES jsharmony_ucod_rqst_atype (codeval),
-  FOREIGN KEY (rqst_source) REFERENCES jsharmony_ucod_rqst_source (codeval)
+  FOREIGN KEY (rqst_atype) REFERENCES {{schema}}_ucod_rqst_atype (codeval),
+  FOREIGN KEY (rqst_source) REFERENCES {{schema}}_ucod_rqst_source (codeval)
 );
 
 /***************RQST_D***************/
-CREATE TABLE jsharmony_rqst_d (
+CREATE TABLE {{schema}}_rqst_d (
   rqst_d_id integer primary key autoincrement NOT NULL,
   rqst_id integer NOT NULL,
   d_scope text,
   d_scope_id integer,
   d_ctgr text,
   d_desc text,
-  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
+  FOREIGN KEY (rqst_id) REFERENCES {{schema}}_rqst (rqst_id)
 );
 
 /***************RQST_EMAIL***************/
-CREATE TABLE jsharmony_rqst_email (
+CREATE TABLE {{schema}}_rqst_email (
   rqst_email_id integer primary key autoincrement NOT NULL,
   rqst_id integer NOT NULL,
   email_txt_attrib text,
@@ -308,41 +308,41 @@ CREATE TABLE jsharmony_rqst_email (
   email_text text,
   email_html text,
   email_d_id integer,
-  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
+  FOREIGN KEY (rqst_id) REFERENCES {{schema}}_rqst (rqst_id)
 );
 
 /***************RQST_N***************/
-CREATE TABLE jsharmony_rqst_n (
+CREATE TABLE {{schema}}_rqst_n (
   rqst_n_id integer primary key autoincrement NOT NULL,
   rqst_id integer NOT NULL,
   n_scope text,
   n_scope_id integer,
   n_type text,
   n_note text,
-  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
+  FOREIGN KEY (rqst_id) REFERENCES {{schema}}_rqst (rqst_id)
 );
 
 /***************RQST_RQ***************/
-CREATE TABLE jsharmony_rqst_rq (
+CREATE TABLE {{schema}}_rqst_rq (
   rqst_rq_id integer primary key autoincrement NOT NULL,
   rqst_id integer NOT NULL,
   rq_name text NOT NULL,
   rq_message text,
-  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
+  FOREIGN KEY (rqst_id) REFERENCES {{schema}}_rqst (rqst_id)
 );
 
 /***************RQST_SMS***************/
-CREATE TABLE jsharmony_rqst_sms (
+CREATE TABLE {{schema}}_rqst_sms (
   rqst_sms_id integer primary key autoincrement NOT NULL,
   rqst_id integer NOT NULL,
   sms_txt_attrib text,
   sms_to text NOT NULL,
   sms_body text,
-  FOREIGN KEY (rqst_id) REFERENCES jsharmony_rqst (rqst_id)
+  FOREIGN KEY (rqst_id) REFERENCES {{schema}}_rqst (rqst_id)
 );
 
 /***************SM***************/
-CREATE TABLE jsharmony_sm (
+CREATE TABLE {{schema}}_sm (
   sm_id_auto integer primary key autoincrement NOT NULL,
   sm_utype text NOT NULL DEFAULT 'S',
   sm_id integert NOT NULL,
@@ -362,12 +362,12 @@ CREATE TABLE jsharmony_sm (
   UNIQUE (sm_id, sm_desc),
   UNIQUE (sm_name),
   CHECK (sm_utype in ('S', 'C')),
-  FOREIGN KEY (sm_id_parent) REFERENCES jsharmony_sm(sm_id),
-  FOREIGN KEY (sm_sts) REFERENCES jsharmony_ucod_ahc(codeval)
+  FOREIGN KEY (sm_id_parent) REFERENCES {{schema}}_sm(sm_id),
+  FOREIGN KEY (sm_sts) REFERENCES {{schema}}_ucod_ahc(codeval)
 );
 
 /***************SR***************/
-CREATE TABLE jsharmony_sr (
+CREATE TABLE {{schema}}_sr (
   sr_id integer primary key autoincrement NOT NULL,
   sr_seq integer NOT NULL,
   sr_sts text NOT NULL DEFAULT 'ACTIVE',
@@ -378,11 +378,11 @@ CREATE TABLE jsharmony_sr (
   sr_attrib text,
   UNIQUE (sr_desc),
   UNIQUE (sr_name),
-  FOREIGN KEY (sr_sts) REFERENCES jsharmony_ucod_ahc(codeval)
+  FOREIGN KEY (sr_sts) REFERENCES {{schema}}_ucod_ahc(codeval)
 );
 
 /***************SF***************/
-CREATE TABLE jsharmony_sf (
+CREATE TABLE {{schema}}_sf (
   sf_id integer primary key autoincrement NOT NULL,
   sf_seq integer NOT NULL,
   sf_sts text NOT NULL DEFAULT 'ACTIVE',
@@ -393,11 +393,11 @@ CREATE TABLE jsharmony_sf (
   sf_attrib text,
   UNIQUE (sf_desc),
   UNIQUE (sf_name),
-  FOREIGN KEY (sf_sts) REFERENCES jsharmony_ucod_ahc(codeval)
+  FOREIGN KEY (sf_sts) REFERENCES {{schema}}_ucod_ahc(codeval)
 );
 
 /***************TXT***************/
-CREATE TABLE jsharmony_txt (
+CREATE TABLE {{schema}}_txt (
   txt_id integer primary key autoincrement NOT NULL,
   txt_process text NOT NULL,
   txt_attrib text NOT NULL,
@@ -411,33 +411,33 @@ CREATE TABLE jsharmony_txt (
   txt_mtstmp text,
   txt_mu text,
   UNIQUE (txt_process, txt_attrib),
-  FOREIGN KEY (txt_type) REFERENCES jsharmony_ucod_txt_type (codeval)
+  FOREIGN KEY (txt_type) REFERENCES {{schema}}_ucod_txt_type (codeval)
 );
 
 /***************CPER***************/
-CREATE TABLE jsharmony_cper (
+CREATE TABLE {{schema}}_cper (
   cper_id integer primary key autoincrement NOT NULL,
   pe_id integer NOT NULL,
   cr_name text NOT NULL,
   cper_snotes text,
   UNIQUE (pe_id, cr_name),
-  FOREIGN KEY (pe_id) REFERENCES jsharmony_cpe(pe_id),
-  FOREIGN KEY (cr_name) REFERENCES jsharmony_cr(cr_name)
+  FOREIGN KEY (pe_id) REFERENCES {{schema}}_cpe(pe_id),
+  FOREIGN KEY (cr_name) REFERENCES {{schema}}_cr(cr_name)
 );
 
 /***************CRM***************/
-CREATE TABLE jsharmony_crm (
+CREATE TABLE {{schema}}_crm (
   crm_id integer primary key autoincrement NOT NULL,
   sm_id integer NOT NULL,
   cr_name text NOT NULL,
   crm_snotes text,
   UNIQUE (cr_name, sm_id),
-  FOREIGN KEY (sm_id) REFERENCES jsharmony_sm(sm_id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (cr_name) REFERENCES jsharmony_cr(cr_name) ON DELETE CASCADE
+  FOREIGN KEY (sm_id) REFERENCES {{schema}}_sm(sm_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (cr_name) REFERENCES {{schema}}_cr(cr_name) ON DELETE CASCADE
 );
 
 /***************GCOD_H***************/
-CREATE TABLE jsharmony_gcod_h (
+CREATE TABLE {{schema}}_gcod_h (
     gcod_h_id  integer primary key autoincrement NOT NULL,
     codename text NOT NULL,
     codemean text,
@@ -453,7 +453,7 @@ CREATE TABLE jsharmony_gcod_h (
 );
 
 /***************GCOD2_H***************/
-CREATE TABLE jsharmony_gcod2_h (
+CREATE TABLE {{schema}}_gcod2_h (
     gcod2_h_id  integer primary key autoincrement NOT NULL,
     codename text NOT NULL,
     codemean text,
@@ -469,7 +469,7 @@ CREATE TABLE jsharmony_gcod2_h (
 );
 
 /***************GPP***************/
-CREATE TABLE jsharmony_gpp (
+CREATE TABLE {{schema}}_gpp (
   gpp_id integer primary key autoincrement NOT NULL,
   gpp_process text NULL,
   gpp_attrib text NOT NULL,
@@ -479,11 +479,11 @@ CREATE TABLE jsharmony_gpp (
   gpp_mtstmp text,
   gpp_mu text,
   UNIQUE (gpp_process, gpp_attrib),
-  FOREIGN KEY (gpp_process, gpp_attrib) REFERENCES jsharmony_ppd(ppd_process, ppd_attrib)
+  FOREIGN KEY (gpp_process, gpp_attrib) REFERENCES {{schema}}_ppd(ppd_process, ppd_attrib)
 );
 
 /***************PPP***************/
-CREATE TABLE jsharmony_ppp (
+CREATE TABLE {{schema}}_ppp (
   ppp_id integer primary key autoincrement NOT NULL,
   pe_id integer NOT NULL,
   ppp_process text NULL,
@@ -494,47 +494,47 @@ CREATE TABLE jsharmony_ppp (
   ppp_mtstmp text,
   ppp_mu text,
   UNIQUE (ppp_process, ppp_attrib),
-  FOREIGN KEY (ppp_process, ppp_attrib) REFERENCES jsharmony_ppd(ppd_process, ppd_attrib)
+  FOREIGN KEY (ppp_process, ppp_attrib) REFERENCES {{schema}}_ppd(ppd_process, ppd_attrib)
               ON UPDATE NO ACTION ON DELETE CASCADE,
-  FOREIGN KEY (pe_id) REFERENCES jsharmony_pe(pe_id)
+  FOREIGN KEY (pe_id) REFERENCES {{schema}}_pe(pe_id)
               ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 /***************SPEF***************/
-CREATE TABLE jsharmony_spef (
+CREATE TABLE {{schema}}_spef (
   spef_id integer primary key autoincrement NOT NULL,
   pe_id integer NOT NULL,
   sf_name text NOT NULL,
   spef_snotes text,
   UNIQUE (pe_id, sf_name),
-  FOREIGN KEY (pe_id) REFERENCES jsharmony_pe(pe_id),
-  FOREIGN KEY (sf_name) REFERENCES jsharmony_sf(sf_name)
+  FOREIGN KEY (pe_id) REFERENCES {{schema}}_pe(pe_id),
+  FOREIGN KEY (sf_name) REFERENCES {{schema}}_sf(sf_name)
 );
 
 /***************SPER***************/
-CREATE TABLE jsharmony_sper (
+CREATE TABLE {{schema}}_sper (
   sper_id integer primary key autoincrement NOT NULL,
   pe_id integer NOT NULL,
   sr_name text NOT NULL,
   sper_snotes text,
   UNIQUE (pe_id, sr_name),
-  FOREIGN KEY (pe_id) REFERENCES jsharmony_pe(pe_id),
-  FOREIGN KEY (sr_name) REFERENCES jsharmony_sr(sr_name)
+  FOREIGN KEY (pe_id) REFERENCES {{schema}}_pe(pe_id),
+  FOREIGN KEY (sr_name) REFERENCES {{schema}}_sr(sr_name)
 );
 
 /***************SRM***************/
-CREATE TABLE jsharmony_srm (
+CREATE TABLE {{schema}}_srm (
   srm_id integer primary key autoincrement NOT NULL,
   sm_id integer NOT NULL,
   sr_name text NOT NULL,
   srm_snotes text,
   UNIQUE (sr_name, sm_id),
-  FOREIGN KEY (sm_id) REFERENCES jsharmony_sm(sm_id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (sr_name) REFERENCES jsharmony_sr(sr_name) ON DELETE CASCADE
+  FOREIGN KEY (sm_id) REFERENCES {{schema}}_sm(sm_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (sr_name) REFERENCES {{schema}}_sr(sr_name) ON DELETE CASCADE
 );
 
 /***************UCOD_H***************/
-CREATE TABLE jsharmony_ucod_h (
+CREATE TABLE {{schema}}_ucod_h (
     ucod_h_id  integer primary key autoincrement NOT NULL,
     codename text NOT NULL,
     codemean text,
@@ -550,7 +550,7 @@ CREATE TABLE jsharmony_ucod_h (
 );
 
 /***************UCOD2_H***************/
-CREATE TABLE jsharmony_ucod2_h (
+CREATE TABLE {{schema}}_ucod2_h (
     ucod2_h_id  integer primary key autoincrement NOT NULL,
     codename text NOT NULL,
     codemean text,
@@ -566,7 +566,7 @@ CREATE TABLE jsharmony_ucod2_h (
 );
 
 /***************V***************/
-CREATE TABLE jsharmony_v (
+CREATE TABLE {{schema}}_v (
     v_id integer primary key autoincrement NOT NULL,
     v_comp text NOT NULL,
     v_no_major integer DEFAULT 0 NOT NULL,
@@ -581,11 +581,11 @@ CREATE TABLE jsharmony_v (
     v_mu text,
     v_snotes text,
     UNIQUE (v_no_major, v_no_minor, v_no_build, v_no_rev),
-    FOREIGN KEY (v_sts) REFERENCES jsharmony_ucod_v_sts(codeval)
+    FOREIGN KEY (v_sts) REFERENCES {{schema}}_ucod_v_sts(codeval)
 );
 
 /***************XPP***************/
-CREATE TABLE jsharmony_xpp (
+CREATE TABLE {{schema}}_xpp (
   xpp_id integer primary key autoincrement NOT NULL,
   xpp_process text NULL,
   xpp_attrib text NOT NULL,
@@ -595,11 +595,11 @@ CREATE TABLE jsharmony_xpp (
   xpp_mtstmp text,
   xpp_mu text,
   UNIQUE (xpp_process, xpp_attrib),
-  FOREIGN KEY (xpp_process, xpp_attrib) REFERENCES jsharmony_ppd(ppd_process, ppd_attrib)
+  FOREIGN KEY (xpp_process, xpp_attrib) REFERENCES {{schema}}_ppd(ppd_process, ppd_attrib)
 );
 
 /***************NUMBERS***************/
-CREATE TABLE jsharmony_numbers (
+CREATE TABLE {{schema}}_numbers (
   n integr NOT NULL,
   PRIMARY KEY (n)
 );
