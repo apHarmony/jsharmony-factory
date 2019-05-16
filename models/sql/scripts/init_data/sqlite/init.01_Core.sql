@@ -82,13 +82,13 @@ insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('M
 insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','QE','Queretaro');
 insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','QR','Quintana Roo');
 insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','SI','Sinaloa');
-insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','SL','San Luis Potos�');
+insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','SL','San Luis Potosí');
 insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','SO','Sonora');
 insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','TB','Tabasco');
 insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','TL','Tlaxcala');
 insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','TM','Tamaulipas');
 insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','VE','Veracruz');
-insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','YU','Yucat�n');
+insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','YU','Yucatán');
 insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('MEXICO','ZA','Zacatecas');
 insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('USA','AK','Alaska');
 insert into {{schema}}_ucod2_country_state(codeval1,codeval2,codetxt) values ('USA','AL','Alabama');
