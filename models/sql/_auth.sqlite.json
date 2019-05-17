@@ -1,19 +1,19 @@
 {
   "client_sql_auth": [
-    "select pe_id,pe_hash,pe_sts,pe_fname,pe_lname,pe_ll_tstmp,pe_email,C.c_id,C.c_name,c_atstmp,0 inv_overdue from {{schema}}.CPE inner join C on C.c_id = CPE.c_id inner join UCOD_C_STS on UCOD_C_STS.CODEVAL=C.C_STS and UCOD_C_STS.CODECODE='A' where lower(pe_email)=lower(@pe_email);",
-    "select cper.cr_name as sr_name from {{schema}}.CR inner join {{schema}}.CPER on CPER.cr_name=CR.cr_name inner join {{schema}}.CPE on CPE.pe_id=CPER.pe_id where CR_STS='ACTIVE' and lower(pe_email)=lower(@pe_email) and pe_sts='ACTIVE';"
+    "select pe_id,pe_hash,pe_sts,pe_fname,pe_lname,pe_ll_tstmp,pe_email,C.c_id,C.c_name,c_atstmp,0 inv_overdue from {schema}.CPE inner join C on C.c_id = CPE.c_id inner join UCOD_C_STS on UCOD_C_STS.CODEVAL=C.C_STS and UCOD_C_STS.CODECODE='A' where lower(pe_email)=lower(@pe_email);",
+    "select cper.cr_name as sr_name from {schema}.CR inner join {schema}.CPER on CPER.cr_name=CR.cr_name inner join {schema}.CPE on CPE.pe_id=CPER.pe_id where CR_STS='ACTIVE' and lower(pe_email)=lower(@pe_email) and pe_sts='ACTIVE';"
   ],
-  "client_sql_login": "select pe_id,pe_hash,pe_sts from {{schema}}.CPE where lower(pe_email)=lower(@pe_email)",
-  "client_sql_superlogin": "select PE.pe_id,pe_hash from {{schema}}.PE inner join {{schema}}.SPER on SPER.pe_id = PE.pe_id and SPER.sr_name='SYSADMIN' where pe_sts='ACTIVE' and lower(pe_email)=lower(@pe_email)",
-  "client_sql_loginsuccess": "update {{schema}}.CPE set pe_ll_ip=@pe_ll_ip,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id; select changes() xrowcount;",
-  "client_sql_passwordreset": "update {{schema}}.CPE set pe_hash=@pe_hash,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id; select changes() xrowcount;",
+  "client_sql_login": "select pe_id,pe_hash,pe_sts from {schema}.CPE where lower(pe_email)=lower(@pe_email)",
+  "client_sql_superlogin": "select PE.pe_id,pe_hash from {schema}.PE inner join {schema}.SPER on SPER.pe_id = PE.pe_id and SPER.sr_name='SYSADMIN' where pe_sts='ACTIVE' and lower(pe_email)=lower(@pe_email)",
+  "client_sql_loginsuccess": "update {schema}.CPE set pe_ll_ip=@pe_ll_ip,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id; select changes() xrowcount;",
+  "client_sql_passwordreset": "update {schema}.CPE set pe_hash=@pe_hash,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id; select changes() xrowcount;",
   "main_sql_auth": [
-    "select pe_id,pe_hash,pe_sts,pe_fname,pe_lname,pe_ll_tstmp,pe_email from {{schema}}.PE where lower(pe_email)=lower(@pe_email);",
-    "select sper.sr_name from {{schema}}.SR inner join {{schema}}.SPER on SPER.sr_name=SR.sr_name inner join {{schema}}.PE on PE.pe_id=SPER.pe_id where SR_STS='ACTIVE' and lower(pe_email)=lower(@pe_email) and pe_sts='ACTIVE';"
+    "select pe_id,pe_hash,pe_sts,pe_fname,pe_lname,pe_ll_tstmp,pe_email from {schema}.PE where lower(pe_email)=lower(@pe_email);",
+    "select sper.sr_name from {schema}.SR inner join {schema}.SPER on SPER.sr_name=SR.sr_name inner join {schema}.PE on PE.pe_id=SPER.pe_id where SR_STS='ACTIVE' and lower(pe_email)=lower(@pe_email) and pe_sts='ACTIVE';"
   ],
-  "main_sql_login": "select pe_id,pe_hash,pe_sts from {{schema}}.PE where lower(pe_email)=lower(@pe_email)",
-  "main_sql_superlogin": "select PE.pe_id,pe_hash from {{schema}}.PE inner join {{schema}}.SPER on SPER.pe_id = PE.pe_id and SPER.sr_name='SYSADMIN' where pe_sts='ACTIVE' and lower(pe_email)=lower(@pe_email)",
-  "main_sql_loginsuccess": "update {{schema}}.PE set pe_ll_ip=@pe_ll_ip,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id; select changes() xrowcount;",
-  "main_sql_passwordreset": "update {{schema}}.PE set pe_hash=@pe_hash,pe_ll_ip=@pe_ll_ip,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id; select changes() xrowcount;",
-  "main_sql_check_email": "select pe_email from {{schema}}.PE where pe_id=@pe_id"
+  "main_sql_login": "select pe_id,pe_hash,pe_sts from {schema}.PE where lower(pe_email)=lower(@pe_email)",
+  "main_sql_superlogin": "select PE.pe_id,pe_hash from {schema}.PE inner join {schema}.SPER on SPER.pe_id = PE.pe_id and SPER.sr_name='SYSADMIN' where pe_sts='ACTIVE' and lower(pe_email)=lower(@pe_email)",
+  "main_sql_loginsuccess": "update {schema}.PE set pe_ll_ip=@pe_ll_ip,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id; select changes() xrowcount;",
+  "main_sql_passwordreset": "update {schema}.PE set pe_hash=@pe_hash,pe_ll_ip=@pe_ll_ip,pe_ll_tstmp=@pe_ll_tstmp where pe_id=@pe_id; select changes() xrowcount;",
+  "main_sql_check_email": "select pe_email from {schema}.PE where pe_id=@pe_id"
 }

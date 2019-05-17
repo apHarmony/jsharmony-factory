@@ -1,23 +1,23 @@
 {
   "TSTMP": "datetime('now','localtime')",
   "CUSER": "(select context from jsharmony_meta limit 1)",
-  "SMS_SendTXTSMS": "select txt_tval,txt_val,txt_bcc from {{schema}}_txt where txt_process='SMS' and txt_attrib=@txt_attrib",
+  "SMS_SendTXTSMS": "select txt_tval,txt_val,txt_bcc from {schema}_txt where txt_process='SMS' and txt_attrib=@txt_attrib",
   "CONCAT":"||",
   "FUN_PREFIX":"",
   "PROC_RUN":"",
   "PAR_LIST_BEG":"(",
   "PAR_LIST_END":")",
-  "X_SMLW_TOP":"select case when @cur_sm_id_auto <> 0 then @cur_sm_id_auto else (select sm_id_auto from {{schema}}.sm where 1=1 order by sm_utype desc,coalesce(SM.sm_seq,SM.sm_id),sm_name,SM.sm_id limit 1) end sm_id_auto from {{schema}}.dual",
-  "X_SMLW_INSERT":["update {{schema}}.sm set sm_seq=coalesce(sm_seq,sm_id)+1",
-                  "  where coalesce(sm_seq,sm_id) > (select coalesce(sm_seq,sm_id) from {{schema}}.sm where sm_id=@sm_id_parent) ",
-                  "    and sm_utype = (select sm_utype from {{schema}}.sm where sm_id=@sm_id_parent)",
-                  "    and (coalesce(sm_seq,sm_id)-(select coalesce(sm_seq,sm_id) from {{schema}}.sm where sm_id=@sm_id_parent))/(select count(*) from {{schema}}.sm sm2 where coalesce(sm2.sm_seq,sm2.sm_id) > (select coalesce(sm_seq,sm_id) from {{schema}}.sm where sm_id=@sm_id_parent) and coalesce(sm2.sm_seq,sm2.sm_id) <= coalesce(sm.sm_seq,sm.sm_id))<=1.0;",
-                  "insert into {{schema}}.SM (sm_id,sm_id_parent,sm_utype,sm_seq,sm_name,sm_desc,sm_sts)",
-                  "  select (select max(sm_id)+1 from {{schema}}.SM),sm_id,sm_utype,coalesce(sm_seq,sm_id)+1,@sm_name,@sm_desc,'ACTIVE' from {{schema}}.SM where sm_id=@sm_id_parent;",
-                  "select sm_id_auto from {{schema}}_sm where rowid=last_insert_rowid();"],
-  "X_SMLW_LOV":"select sm_id as codeid,sm_id_parent as codeparentid,sm_id_auto as codeval,sm_desc as codetxt,'folder' as codeicon from {{schema}}.sm where 1=1 %%%DATALOCKS%%% order by sm_utype desc,coalesce(SM.sm_seq,SM.sm_id),sm_name,SM.sm_id",
+  "X_SMLW_TOP":"select case when @cur_sm_id_auto <> 0 then @cur_sm_id_auto else (select sm_id_auto from {schema}.sm where 1=1 order by sm_utype desc,coalesce(SM.sm_seq,SM.sm_id),sm_name,SM.sm_id limit 1) end sm_id_auto from {schema}.dual",
+  "X_SMLW_INSERT":["update {schema}.sm set sm_seq=coalesce(sm_seq,sm_id)+1",
+                  "  where coalesce(sm_seq,sm_id) > (select coalesce(sm_seq,sm_id) from {schema}.sm where sm_id=@sm_id_parent) ",
+                  "    and sm_utype = (select sm_utype from {schema}.sm where sm_id=@sm_id_parent)",
+                  "    and (coalesce(sm_seq,sm_id)-(select coalesce(sm_seq,sm_id) from {schema}.sm where sm_id=@sm_id_parent))/(select count(*) from {schema}.sm sm2 where coalesce(sm2.sm_seq,sm2.sm_id) > (select coalesce(sm_seq,sm_id) from {schema}.sm where sm_id=@sm_id_parent) and coalesce(sm2.sm_seq,sm2.sm_id) <= coalesce(sm.sm_seq,sm.sm_id))<=1.0;",
+                  "insert into {schema}.SM (sm_id,sm_id_parent,sm_utype,sm_seq,sm_name,sm_desc,sm_sts)",
+                  "  select (select max(sm_id)+1 from {schema}.SM),sm_id,sm_utype,coalesce(sm_seq,sm_id)+1,@sm_name,@sm_desc,'ACTIVE' from {schema}.SM where sm_id=@sm_id_parent;",
+                  "select sm_id_auto from {schema}_sm where rowid=last_insert_rowid();"],
+  "X_SMLW_LOV":"select sm_id as codeid,sm_id_parent as codeparentid,sm_id_auto as codeval,sm_desc as codetxt,'folder' as codeicon from {schema}.sm where 1=1 %%%DATALOCKS%%% order by sm_utype desc,coalesce(SM.sm_seq,SM.sm_id),sm_name,SM.sm_id",
   "SM_UTYPE_LOV":"select 'S' as codeval,'Main' as codetxt union all select 'C','Client'",
-  "JSHARMONY_FACTORY_INSTALLED":"select case when ifnull((SELECT count(*)FROM sqlite_master WHERE name='{{schema}}_dual' and type='table'),0) > 0 then 1 else 0 end jsharmony_factory_installed",
+  "JSHARMONY_FACTORY_INSTALLED":"select case when ifnull((SELECT count(*)FROM sqlite_master WHERE name='{schema}_dual' and type='table'),0) > 0 then 1 else 0 end jsharmony_factory_installed",
   "JSEXEC_STR": {
     "params": [],
     "exec": [
@@ -25,7 +25,7 @@
       "return rslt.replace(/'/g,\"''\").replace(/\\;/g,\"\\\\\\\\;\").replace(/\\r/g,\" \").replace(/\\n/g,\"\\\\n \");"
     ]
   },
-  "{{schema}}.create_gcod" : {
+  "{schema}.create_gcod" : {
     "params": ["SCHEMA","ID","COMMENT"],
     "sql": ["create_gcod(ifnull(%%%SCHEMA%%%||'_','')||'gcod_'||%%%ID%%%)"]
   },
@@ -79,7 +79,7 @@
       "\" }';"
     ]
   },
-  "{{schema}}.create_gcod2" : {
+  "{schema}.create_gcod2" : {
     "params": ["SCHEMA","ID","COMMENT"],
     "sql": ["create_gcod2(ifnull(%%%SCHEMA%%%||'_','')||'gcod2_'||%%%ID%%%)"]
   },
@@ -136,7 +136,7 @@
       "\" }';"
     ]
   },
-  "{{schema}}.create_ucod" : {
+  "{schema}.create_ucod" : {
     "params": ["SCHEMA","ID","COMMENT"],
     "sql": ["create_ucod(ifnull(%%%SCHEMA%%%||'_','')||'ucod_'||%%%ID%%%)"]
   },
@@ -190,7 +190,7 @@
       "\" }';"
     ]
   },
-  "{{schema}}.create_ucod2" : {
+  "{schema}.create_ucod2" : {
     "params": ["SCHEMA","ID","COMMENT"],
     "sql": ["create_ucod2(ifnull(%%%SCHEMA%%%||'_','')||'ucod2_'||%%%ID%%%)"]
   },
@@ -254,20 +254,20 @@
   "AUDIT_I_EXT" : {
     "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "sql": [
-      "insert into {{schema}}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
+      "insert into {schema}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
       "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
       "  where exists(select * from jsharmony_meta where aud_seq is null)\\\\\\;",
-      "update jsharmony_meta set aud_seq = (select aud_seq from {{schema}}_aud_h where rowid = last_insert_rowid())",
+      "update jsharmony_meta set aud_seq = (select aud_seq from {schema}_aud_h where rowid = last_insert_rowid())",
       "  where exists(select * from jsharmony_meta where aud_seq is null)\\\\\\;"
     ]
   },
   "AUDIT_I" : {
     "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "sql": [
-      "insert into {{schema}}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
+      "insert into {schema}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
       "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
       "  where exists(select * from jsharmony_meta where aud_seq is null)\\;",
-      "update jsharmony_meta set aud_seq = (select aud_seq from {{schema}}_aud_h where rowid = last_insert_rowid())",
+      "update jsharmony_meta set aud_seq = (select aud_seq from {schema}_aud_h where rowid = last_insert_rowid())",
       "  where exists(select * from jsharmony_meta where aud_seq is null)\\;"
     ]
   },
@@ -284,12 +284,12 @@
   "AUDIT_U" : {
     "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "sql": [
-      "insert into {{schema}}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
+      "insert into {schema}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
       "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
       "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%NONEQUAL(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
-      "update jsharmony_meta set aud_seq = (select aud_seq from {{schema}}_aud_h where rowid = last_insert_rowid())",
+      "update jsharmony_meta set aud_seq = (select aud_seq from {schema}_aud_h where rowid = last_insert_rowid())",
       "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%NONEQUAL(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
-      "insert into {{schema}}_aud_d(aud_seq,column_name,column_val)",
+      "insert into {schema}_aud_d(aud_seq,column_name,column_val)",
       "  select (select aud_seq from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%",
       "  where (%%%NONEQUAL(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
       ""
@@ -298,10 +298,10 @@
   "AUDIT_U_CUSTOM" : {
     "params": ["TABLE","ID","CONDITION","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "sql": [
-      "insert into {{schema}}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
+      "insert into {schema}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
       "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
       "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%CONDITION%%%)\\;",
-      "update jsharmony_meta set aud_seq = (select aud_seq from {{schema}}_aud_h where rowid = last_insert_rowid())",
+      "update jsharmony_meta set aud_seq = (select aud_seq from {schema}_aud_h where rowid = last_insert_rowid())",
       "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%CONDITION%%%)\\;",
       ""
     ]
@@ -319,62 +319,62 @@
   "AUDIT_D" : {
     "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
     "sql": [
-      "insert into {{schema}}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
+      "insert into {schema}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
       "  select ",
       "    '%%%TABLE%%%',%%%ID%%%,'D',datetime('now','localtime'),",
-      "    (select ref_name from {{schema}}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
-      "    (select ref_id from {{schema}}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
-      "    (select subj from {{schema}}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
-      "    (select c_id from {{schema}}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
-      "    (select e_id from {{schema}}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
+      "    (select ref_name from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
+      "    (select ref_id from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
+      "    (select subj from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
+      "    (select c_id from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
+      "    (select e_id from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
       "    (select context from jsharmony_meta limit 1)",
       "  where exists(select * from jsharmony_meta where aud_seq is null)\\;",
-      "update jsharmony_meta set aud_seq = (select aud_seq from {{schema}}_aud_h where rowid = last_insert_rowid())",
+      "update jsharmony_meta set aud_seq = (select aud_seq from {schema}_aud_h where rowid = last_insert_rowid())",
       "  where exists(select * from jsharmony_meta where aud_seq is null)\\;",
 
-      "insert into {{schema}}_aud_d(aud_seq,column_name,column_val)",
+      "insert into {schema}_aud_d(aud_seq,column_name,column_val)",
       "  select (select aud_seq from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%\\;",
       ""
     ]
   },
   "CLIENT_SCOPE": "('C','E')",
-  "{{schema}}.getcid":{
+  "{schema}.getcid":{
     "params": ["tabn","tabid"],
     "sql": [
       "(select null)"
     ]
   },
-  "{{schema}}.geteid":{
+  "{schema}.geteid":{
     "params": ["tabn","tabid"],
     "sql": [
       "(select null)"
     ]
   },
-  "{{schema}}.mycuser_c_id":{
+  "{schema}.mycuser_c_id":{
     "params": [],
     "sql": [
-      "(select {{schema}}_cpe.c_id from {{schema}}_cpe where {{schema}}_cpe.pe_id={{schema}}.mycpe())"
+      "(select {schema}_cpe.c_id from {schema}_cpe where {schema}_cpe.pe_id={schema}.mycpe())"
     ]
   },
-  "{{schema}}.dscope_dctgr":"{{schema}}_gcod2_d_scope_d_ctgr",
-  "{{schema}}.mycuser":{
+  "{schema}.dscope_dctgr":"{schema}_gcod2_d_scope_d_ctgr",
+  "{schema}.mycuser":{
     "params": [],
     "sql": [
       "(select context from jsharmony_meta)"
     ]
   },
-  "{{schema}}.mycuser_fmt":{
+  "{schema}.mycuser_fmt":{
     "params": ["u"],
     "sql": [
       "(case substr(%%%u%%%,1,1)",
-      "  when 'S' then (select mycuser_fmt_sname from (select pe_id mycuser_fmt_spe_id,'S-'||pe_lname||', '||pe_fname as mycuser_fmt_sname from {{schema}}.pe) mycuser_fmt_stbl where mycuser_fmt_spe_id=substr(%%%u%%%,2,1024))",
-      "  when 'C' then (select mycuser_fmt_cname from (select pe_id mycuser_fmt_cpe_id,'C-'||pe_lname||', '||pe_fname as mycuser_fmt_cname from {{schema}}.cpe) mycuser_fmt_ctbl where mycuser_fmt_cpe_id=substr(%%%u%%%,2,1024))",
+      "  when 'S' then (select mycuser_fmt_sname from (select pe_id mycuser_fmt_spe_id,'S-'||pe_lname||', '||pe_fname as mycuser_fmt_sname from {schema}.pe) mycuser_fmt_stbl where mycuser_fmt_spe_id=substr(%%%u%%%,2,1024))",
+      "  when 'C' then (select mycuser_fmt_cname from (select pe_id mycuser_fmt_cpe_id,'C-'||pe_lname||', '||pe_fname as mycuser_fmt_cname from {schema}.cpe) mycuser_fmt_ctbl where mycuser_fmt_cpe_id=substr(%%%u%%%,2,1024))",
       "  when 'U' then substr(%%%u%%%,2,2014)",
       "  else 'unknown'",
       "end)"
     ]
   },
-  "{{schema}}.mycpe":{
+  "{schema}.mycpe":{
     "params": [],
     "sql": [
       "(select (case substr(context,1,1)",
@@ -383,66 +383,66 @@
       "end) from jsharmony_meta)"
     ]
   },
-  "{{schema}}.get_pe_name":{
+  "{schema}.get_pe_name":{
     "params": ["id"],
     "sql": [
-      "(select get_pe_name_{{schema}}_pe_name from (select pe_lname||', '||pe_fname get_pe_name_{{schema}}_pe_name,pe_id get_pe_name_{{schema}}_pe_id from {{schema}}_pe) get_pe_name_{{schema}}_pe where get_pe_name_{{schema}}_pe_id = %%%id%%%)"
+      "(select get_pe_name_{schema}_pe_name from (select pe_lname||', '||pe_fname get_pe_name_{schema}_pe_name,pe_id get_pe_name_{schema}_pe_id from {schema}_pe) get_pe_name_{schema}_pe where get_pe_name_{schema}_pe_id = %%%id%%%)"
     ]
   },
-  "{{schema}}.get_ppd_desc":{
+  "{schema}.get_ppd_desc":{
     "params": ["in_ppd_process","in_ppd_attrib"],
     "sql": [
-      "(select get_ppd_desc_{{schema}}_ppd_desc from (select ppd_desc get_ppd_desc_{{schema}}_ppd_desc, ppd_process get_ppd_desc_{{schema}}_ppd_process, ppd_attrib get_ppd_desc_{{schema}}_ppd_attrib from {{schema}}_ppd) get_ppd_desc_{{schema}}_ppd where get_ppd_desc_{{schema}}_ppd_process = %%%in_ppd_process%%% and get_ppd_desc_{{schema}}_ppd_attrib = %%%in_ppd_attrib%%%)"
+      "(select get_ppd_desc_{schema}_ppd_desc from (select ppd_desc get_ppd_desc_{schema}_ppd_desc, ppd_process get_ppd_desc_{schema}_ppd_process, ppd_attrib get_ppd_desc_{schema}_ppd_attrib from {schema}_ppd) get_ppd_desc_{schema}_ppd where get_ppd_desc_{schema}_ppd_process = %%%in_ppd_process%%% and get_ppd_desc_{schema}_ppd_attrib = %%%in_ppd_attrib%%%)"
     ]
   },
-  "{{schema}}.get_cpe_name":{
+  "{schema}.get_cpe_name":{
     "params": ["id"],
     "sql": [
-      "(select get_cpe_name_{{schema}}_cpe_name from (select pe_id get_cpe_name_{{schema}}_cpe_id, pe_lname||', '||pe_fname get_cpe_name_{{schema}}_cpe_name from {{schema}}_cpe) get_cpe_name_{{schema}}_cpe where get_cpe_name_{{schema}}_cpe_id = %%%id%%%)"
+      "(select get_cpe_name_{schema}_cpe_name from (select pe_id get_cpe_name_{schema}_cpe_id, pe_lname||', '||pe_fname get_cpe_name_{schema}_cpe_name from {schema}_cpe) get_cpe_name_{schema}_cpe where get_cpe_name_{schema}_cpe_id = %%%id%%%)"
     ]
   },
-  "{{schema}}.table_type":{
+  "{schema}.table_type":{
     "params": ["schema","table_name"],
     "sql": [
       "(select (SELECT case type when 'table' then 'BASE TABLE' else null end FROM sqlite_master where lower(name)=ifnull(%%%schema%%%||'_','')||lower(%%%table_name%%%)))"
     ]
   },
-  "{{schema}}.audit_info":{
+  "{schema}.audit_info":{
     "params": ["etstmp","eu","mtstmp","mu"],
     "sql": [
       "(select 'INFO'||char(13,10)||",
-      "        '     Entered:  '||%%%etstmp%%%||'  '||{{schema}}.mycuser_fmt(%%%eu%%%)||char(13,10)||",
-      "        'Last Updated:  '||%%%mtstmp%%%||'  '||{{schema}}.mycuser_fmt(%%%mu%%%)",
+      "        '     Entered:  '||%%%etstmp%%%||'  '||{schema}.mycuser_fmt(%%%eu%%%)||char(13,10)||",
+      "        'Last Updated:  '||%%%mtstmp%%%||'  '||{schema}.mycuser_fmt(%%%mu%%%)",
       ")"
     ]
   },
-  "{{schema}}.mype":{
+  "{schema}.mype":{
     "params": [],
     "sql": [
-      "(case substr({{schema}}.mycuser(),1,1)",
-      "  when 'S' then cast(substr({{schema}}.mycuser(),2,1024) as int)",
+      "(case substr({schema}.mycuser(),1,1)",
+      "  when 'S' then cast(substr({schema}.mycuser(),2,1024) as int)",
       "  else  null",
       "end)"
     ]
   },
-  "{{schema}}.mypec":{
+  "{schema}.mypec":{
     "params": [],
     "sql": [
-      "(case substr({{schema}}.mycuser(),1,1)",
-      "  when 'C' then cast(substr({{schema}}.mycuser(),2,1024) as int)",
+      "(case substr({schema}.mycuser(),1,1)",
+      "  when 'C' then cast(substr({schema}.mycuser(),2,1024) as int)",
       "  else  null",
       "end)"
     ]
   },
-  "{{schema}}.mynow":{
+  "{schema}.mynow":{
     "params": [],
     "sql": "datetime('now','localtime')"
   },
-  "{{schema}}.mytodate":{
+  "{schema}.mytodate":{
     "params": ["dt"],
     "sql": "date(%%%dt%%%)"
   },
-  "{{schema}}.d_filename":{
+  "{schema}.d_filename":{
     "params": ["d_id","d_ext"],
     "sql": [
       "(cast(%%%d_id%%% as text)||%%%d_ext%%%)"

@@ -1,15 +1,15 @@
 {
-  "agreement_COD_STATE": "select codeval2 codeval, codeval2 codetxt from {{schema}}.ucod2_country_state where codeval1='USA' and (codetdt is null or (codetdt is not null and codetdt > current_date)) order by codseq,codeval2",
-  "agreement_COD_MONTH": "select month_txt as codeval,month_txt as codetxt from {{schema}}.V_MONTHS order by month_val",
-  "agreement_COD_YEAR": "select year_val as codeval,year_val as codetxt from {{schema}}.V_YEARS order by year_val",
+  "agreement_COD_STATE": "select codeval2 codeval, codeval2 codetxt from {schema}.ucod2_country_state where codeval1='USA' and (codetdt is null or (codetdt is not null and codetdt > current_date)) order by codseq,codeval2",
+  "agreement_COD_MONTH": "select month_txt as codeval,month_txt as codetxt from {schema}.V_MONTHS order by month_val",
+  "agreement_COD_YEAR": "select year_val as codeval,year_val as codetxt from {schema}.V_YEARS order by year_val",
   "agreement_sign": [
     "begin;",
-    "update C set c_atstmp={{schema}}.mytodate({{schema}}.mynow()) where c_id=@c_id;",
-    "insert into {{schema}}.RQST(rqst_source, rqst_atype, rqst_aname, rqst_parms) values('CLIENT', 'REPORT', 'AGREEMENT',@rqst_parms);",
-    "insert into {{schema}}.RQST_D(rqst_id, d_scope, d_scope_id, d_ctgr, d_desc) select (select rqst_id from {{schema}}.RQST where rowid = last_insert_rowid()), 'C',@c_id, 'AGREEMNT', 'Customer Portal Agreement';",
+    "update C set c_atstmp={schema}.mytodate({schema}.mynow()) where c_id=@c_id;",
+    "insert into {schema}.RQST(rqst_source, rqst_atype, rqst_aname, rqst_parms) values('CLIENT', 'REPORT', 'AGREEMENT',@rqst_parms);",
+    "insert into {schema}.RQST_D(rqst_id, d_scope, d_scope_id, d_ctgr, d_desc) select (select rqst_id from {schema}.RQST where rowid = last_insert_rowid()), 'C',@c_id, 'AGREEMNT', 'Customer Portal Agreement';",
     "end;"
   ],
-  "agreement_paymentresult": "select pacc_sts \"pacc_sts\",pacc_pp_result \"pacc_pp_result\",C_PRE.c_id \"c_id\",C_PRE.pe_id \"pe_id\",new_client_result \"new_client_result\",pe_ll_tstmp \"pe_ll_tstmp\" from C_PRE left outer join {{schema}}.CPE on C_PRE.pe_id=CPE.pe_id where C_PRE_ID=@payment_id and pacc_fp_hash=@fp_hash;",
+  "agreement_paymentresult": "select pacc_sts \"pacc_sts\",pacc_pp_result \"pacc_pp_result\",C_PRE.c_id \"c_id\",C_PRE.pe_id \"pe_id\",new_client_result \"new_client_result\",pe_ll_tstmp \"pe_ll_tstmp\" from C_PRE left outer join {schema}.CPE on C_PRE.pe_id=CPE.pe_id where C_PRE_ID=@payment_id and pacc_fp_hash=@fp_hash;",
   "agreement_cod_c_id": "select c_id as codeval,c_name as codetxt from C where 1=1 %%%DATALOCKS%%% order by c_name",
-  "agreement_report_N": "select N.c_id \"c_id\",n_type \"n_type\",n_eu,strftime('%m/%d/%Y',n_etstmp) as n_etstmp,n_note from {{schema}}.N inner join C on C.c_id=N.c_id where N.c_id=@c_id %%%DATALOCKS%%%"
+  "agreement_report_N": "select N.c_id \"c_id\",n_type \"n_type\",n_eu,strftime('%m/%d/%Y',n_etstmp) as n_etstmp,n_note from {schema}.N inner join C on C.c_id=N.c_id where N.c_id=@c_id %%%DATALOCKS%%%"
 }

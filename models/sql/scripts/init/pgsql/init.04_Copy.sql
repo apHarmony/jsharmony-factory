@@ -81,7 +81,7 @@ INSERT INTO dual (dummy, dual_ident, dual_bigint, dual_varchar50) VALUES ('X', 1
 
 
 
-INSERT INTO gcod2_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('d_scope_d_ctgr', 'Scope - Documents', NULL, NULL, NULL, '{{schema}}');
+INSERT INTO gcod2_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('d_scope_d_ctgr', 'Scope - Documents', NULL, NULL, NULL, '{schema}');
 
 
 
@@ -1323,7 +1323,7 @@ INSERT INTO ucod2_country_state (codseq, codeval1, codeval2, codetxt, codecode, 
 
 
 
-INSERT INTO ucod2_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('country_state', 'Country - States', NULL, NULL, NULL, '{{schema}}');
+INSERT INTO ucod2_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('country_state', 'Country - States', NULL, NULL, NULL, '{schema}');
 
 
 
@@ -1352,18 +1352,18 @@ INSERT INTO ucod_d_scope (codseq, codeval, codetxt, codecode, codetdt, codetcm, 
 
 
 
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ac', 'ACTIVE-CLOSED', NULL, NULL, NULL, '{{schema}}');
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ac1', 'ACTIVE-CLOSED 1 Character', NULL, NULL, NULL, '{{schema}}');
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ahc', 'ACTIVE-HOLD-CLOSED', NULL, NULL, NULL, '{{schema}}');
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('country', 'Country', NULL, NULL, NULL, '{{schema}}');
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('d_scope', 'Document Scope', 'Client User Y/N', NULL, NULL, '{{schema}}');
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('n_scope', 'Note Scope', NULL, NULL, NULL, '{{schema}}');
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('n_type', 'Note Type', NULL, NULL, NULL, '{{schema}}');
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ppd_type', 'Parameter Type', NULL, NULL, NULL, '{{schema}}');
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('rqst_atype', 'Request Action Type', NULL, NULL, NULL, '{{schema}}');
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('rqst_source', 'Request Source', NULL, NULL, NULL, '{{schema}}');
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('txt_type', 'Text Type', NULL, NULL, NULL, '{{schema}}');
-INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('v_sts', 'Version Status', NULL, NULL, NULL, '{{schema}}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ac', 'ACTIVE-CLOSED', NULL, NULL, NULL, '{schema}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ac1', 'ACTIVE-CLOSED 1 Character', NULL, NULL, NULL, '{schema}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ahc', 'ACTIVE-HOLD-CLOSED', NULL, NULL, NULL, '{schema}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('country', 'Country', NULL, NULL, NULL, '{schema}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('d_scope', 'Document Scope', 'Client User Y/N', NULL, NULL, '{schema}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('n_scope', 'Note Scope', NULL, NULL, NULL, '{schema}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('n_type', 'Note Type', NULL, NULL, NULL, '{schema}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('ppd_type', 'Parameter Type', NULL, NULL, NULL, '{schema}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('rqst_atype', 'Request Action Type', NULL, NULL, NULL, '{schema}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('rqst_source', 'Request Source', NULL, NULL, NULL, '{schema}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('txt_type', 'Text Type', NULL, NULL, NULL, '{schema}');
+INSERT INTO ucod_h (codename, codemean, codecodemean, cod_snotes, codeattribmean, codeschema) VALUES ('v_sts', 'Version Status', NULL, NULL, NULL, '{schema}');
 
 
 
