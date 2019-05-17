@@ -321,7 +321,7 @@
     "sql": [
       "insert into {schema}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
       "  select ",
-      "    '%%%TABLE%%%',%%%ID%%%,'D',datetime('now','localtime'),",
+      "    '%%%TABLE%%%',%%%ID%%%,'{doc}',datetime('now','localtime'),",
       "    (select ref_name from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
       "    (select ref_id from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
       "    (select subj from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",

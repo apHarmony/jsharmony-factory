@@ -8083,47 +8083,47 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer - Role Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'CRM'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope - UCOD_D_SCOPE' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SCOPE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope - UCOD_D_SCOPE' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_SCOPE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SCOPE_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_SCOPE_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID - C' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'C_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID - C' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'C_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Employee ID - E' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'E_ID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Employee ID - E' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'E_ID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Status - UCOD_AC1' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_STS'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Status - UCOD_AC1' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_STS'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Category - GCOD2_D_SCOPE_D_CTGR' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_CTGR'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Category - GCOD2_D_SCOPE_D_CTGR' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_CTGR'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_Desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_Desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Extension (file suffix)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_EXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Extension (file suffix)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_EXT'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Size in bytes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SIZE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Size in bytes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_SIZE'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document File Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_FileName'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document File Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_FileName'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_ETstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_ETstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_EU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_EU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_MTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_MTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_MU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_MU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_UTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_UTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_UU'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_UU'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Synchronization Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SYNCTstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Synchronization Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_SYNCTstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_SNotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_SNotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Main ID (Synchronization)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D', @level2type=N'COLUMN',@level2name=N'D_ID_MAIN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Main ID (Synchronization)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'D_ID_MAIN'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Documents (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'D'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Documents (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Table (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'DUAL'
 GO
