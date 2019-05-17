@@ -103,16 +103,16 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_GCOD_%%%name%%%_IUD CURSOR LOCAL FOR
-     SELECT  d.GCOD_ID, i.GCOD_ID,
-	         d.CODSEQ, i.CODSEQ,
-	         d.CODETDT, i.CODETDT,
-	         d.CODEVAL, i.CODEVAL,
-	         d.CODETXT, i.CODETXT,
-	         d.CODECODE, i.CODECODE,
-	         d.CODEATTRIB, i.CODEATTRIB,
-	         d.CODETCM, i.CODETCM
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.GCOD_ID = d.GCOD_ID;
+     SELECT  del.GCOD_ID, i.GCOD_ID,
+	         del.CODSEQ, i.CODSEQ,
+	         del.CODETDT, i.CODETDT,
+	         del.CODEVAL, i.CODEVAL,
+	         del.CODETXT, i.CODETXT,
+	         del.CODECODE, i.CODECODE,
+	         del.CODEATTRIB, i.CODEATTRIB,
+	         del.CODETCM, i.CODETCM
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.GCOD_ID = del.GCOD_ID;
   DECLARE @D_GCOD_ID bigint
   DECLARE @I_GCOD_ID bigint
   DECLARE @D_CODSEQ bigint
@@ -432,17 +432,17 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_GCOD2_%%%name%%%_IUD CURSOR LOCAL FOR
-     SELECT  d.GCOD2_ID, i.GCOD2_ID,
-	         d.CODSEQ, i.CODSEQ,
-	         d.CODETDT, i.CODETDT,
-	         d.CODEVAL1, i.CODEVAL1,
-	         d.CODEVAL2, i.CODEVAL2,
-	         d.CODETXT, i.CODETXT,
-	         d.CODECODE, i.CODECODE,
-	         d.CODEATTRIB, i.CODEATTRIB,
-	         d.CODETCM, i.CODETCM
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.GCOD2_ID = d.GCOD2_ID;
+     SELECT  del.GCOD2_ID, i.GCOD2_ID,
+	         del.CODSEQ, i.CODSEQ,
+	         del.CODETDT, i.CODETDT,
+	         del.CODEVAL1, i.CODEVAL1,
+	         del.CODEVAL2, i.CODEVAL2,
+	         del.CODETXT, i.CODETXT,
+	         del.CODECODE, i.CODECODE,
+	         del.CODEATTRIB, i.CODEATTRIB,
+	         del.CODETCM, i.CODETCM
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.GCOD2_ID = del.GCOD2_ID;
   DECLARE @D_GCOD2_ID bigint
   DECLARE @I_GCOD2_ID bigint
   DECLARE @D_CODSEQ bigint

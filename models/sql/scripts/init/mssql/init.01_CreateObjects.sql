@@ -4334,21 +4334,21 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_CPE_IUD CURSOR LOCAL FOR
-     SELECT  d.PE_ID, i.PE_ID,
-	         d.C_ID, i.C_ID,
-	         d.PE_STS, i.PE_STS,
-	         d.PE_FName, i.PE_FName,
-			 d.PE_MName, i.PE_MName,
-			 d.PE_LName, i.PE_LName,
-             d.PE_JTitle, i.PE_JTitle,
-             d.PE_BPhone, i.PE_BPhone,
-             d.PE_CPhone, i.PE_CPhone,
-             d.PE_Email, i.PE_Email,
-             d.PE_PW1, i.PE_PW1,
-             d.PE_PW2, i.PE_PW2,
-			 d.PE_LL_Tstmp, i.PE_LL_Tstmp
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.PE_ID = d.PE_ID;
+     SELECT  del.PE_ID, i.PE_ID,
+	         del.C_ID, i.C_ID,
+	         del.PE_STS, i.PE_STS,
+	         del.PE_FName, i.PE_FName,
+			 del.PE_MName, i.PE_MName,
+			 del.PE_LName, i.PE_LName,
+             del.PE_JTitle, i.PE_JTitle,
+             del.PE_BPhone, i.PE_BPhone,
+             del.PE_CPhone, i.PE_CPhone,
+             del.PE_Email, i.PE_Email,
+             del.PE_PW1, i.PE_PW1,
+             del.PE_PW2, i.PE_PW2,
+			 del.PE_LL_Tstmp, i.PE_LL_Tstmp
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.PE_ID = del.PE_ID;
   DECLARE @D_PE_ID bigint
   DECLARE @I_PE_ID bigint
   DECLARE @D_C_ID bigint
@@ -4729,11 +4729,11 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_CPER_IUD CURSOR LOCAL FOR
-     SELECT  d.CPER_ID, i.CPER_ID,
-	         d.PE_ID, i.PE_ID,
-	         d.CR_NAME, i.CR_NAME
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.CPER_ID = d.CPER_ID;
+     SELECT  del.CPER_ID, i.CPER_ID,
+	         del.PE_ID, i.PE_ID,
+	         del.CR_NAME, i.CR_NAME
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.CPER_ID = del.CPER_ID;
   DECLARE @D_CPER_ID bigint
   DECLARE @I_CPER_ID bigint
   DECLARE @D_PE_ID bigint
@@ -4928,19 +4928,19 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_D_IUD CURSOR LOCAL FOR
-     SELECT  d.D_ID, i.D_ID,
-	         d.D_SCOPE, i.D_SCOPE,
-	         d.D_SCOPE_ID, i.D_SCOPE_ID,
-	         d.D_STS, i.D_STS,
-			 d.D_CTGR, i.D_CTGR,
-			 d.D_Desc, i.D_Desc,
-			 d.D_UTSTMP, i.D_UTSTMP,
-			 d.D_UU, i.D_UU,
-			 d.D_SYNCTSTMP, i.D_SYNCTSTMP,
-			 d.C_ID, i.C_ID,
-			 d.E_ID, i.E_ID
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.D_ID = d.D_ID;
+     SELECT  del.D_ID, i.D_ID,
+	         del.D_SCOPE, i.D_SCOPE,
+	         del.D_SCOPE_ID, i.D_SCOPE_ID,
+	         del.D_STS, i.D_STS,
+			 del.D_CTGR, i.D_CTGR,
+			 del.D_Desc, i.D_Desc,
+			 del.D_UTSTMP, i.D_UTSTMP,
+			 del.D_UU, i.D_UU,
+			 del.D_SYNCTSTMP, i.D_SYNCTSTMP,
+			 del.C_ID, i.C_ID,
+			 del.E_ID, i.E_ID
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.D_ID = del.D_ID;
   DECLARE @D_D_ID bigint
   DECLARE @I_D_ID bigint
   DECLARE @D_D_SCOPE NVARCHAR(MAX)
@@ -5292,17 +5292,17 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_GCOD2_D_SCOPE_D_CTGR_IUD CURSOR LOCAL FOR
-     SELECT  d.GCOD2_ID, i.GCOD2_ID,
-	         d.CODSEQ, i.CODSEQ,
-	         d.CODETDT, i.CODETDT,
-	         d.CODEVAL1, i.CODEVAL1,
-	         d.CODEVAL2, i.CODEVAL2,
-	         d.CODETXT, i.CODETXT,
-	         d.CODECODE, i.CODECODE,
-	         d.CODEATTRIB, i.CODEATTRIB,
-	         d.CODETCM, i.CODETCM
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.GCOD2_ID = d.GCOD2_ID;
+     SELECT  del.GCOD2_ID, i.GCOD2_ID,
+	         del.CODSEQ, i.CODSEQ,
+	         del.CODETDT, i.CODETDT,
+	         del.CODEVAL1, i.CODEVAL1,
+	         del.CODEVAL2, i.CODEVAL2,
+	         del.CODETXT, i.CODETXT,
+	         del.CODECODE, i.CODECODE,
+	         del.CODEATTRIB, i.CODEATTRIB,
+	         del.CODETCM, i.CODETCM
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.GCOD2_ID = del.GCOD2_ID;
   DECLARE @D_GCOD2_ID bigint
   DECLARE @I_GCOD2_ID bigint
   DECLARE @D_CODSEQ bigint
@@ -5560,12 +5560,12 @@ BEGIN
                                             GPP_VAL
                                        FROM INSERTED
   DECLARE CUR_GPP_DU CURSOR LOCAL FOR 
-     SELECT  d.GPP_ID, i.GPP_ID,
-             d.GPP_PROCESS, i.GPP_PROCESS,
-             d.GPP_ATTRIB, i.GPP_ATTRIB,
-             d.GPP_VAL, i.GPP_VAL
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.GPP_ID = d.GPP_ID
+     SELECT  del.GPP_ID, i.GPP_ID,
+             del.GPP_PROCESS, i.GPP_PROCESS,
+             del.GPP_ATTRIB, i.GPP_ATTRIB,
+             del.GPP_VAL, i.GPP_VAL
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.GPP_ID = del.GPP_ID
   DECLARE @D_GPP_ID bigint
   DECLARE @I_GPP_ID bigint
   DECLARE @D_GPP_PROCESS nvarchar(MAX)
@@ -5715,15 +5715,15 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_H_IUD CURSOR LOCAL FOR
-     SELECT  d.H_ID, i.H_ID,
-	         d.HP_CODE, i.HP_CODE,
-	         d.H_TITLE, i.H_TITLE,
-	         d.H_TEXT, i.H_TEXT,
-	         d.H_SEQ, i.H_SEQ,
-	         d.H_INDEX_A, i.H_INDEX_A,
-	         d.H_INDEX_P, i.H_INDEX_P
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.H_ID = d.H_ID;
+     SELECT  del.H_ID, i.H_ID,
+	         del.HP_CODE, i.HP_CODE,
+	         del.H_TITLE, i.H_TITLE,
+	         del.H_TEXT, i.H_TEXT,
+	         del.H_SEQ, i.H_SEQ,
+	         del.H_INDEX_A, i.H_INDEX_A,
+	         del.H_INDEX_P, i.H_INDEX_P
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.H_ID = del.H_ID;
   DECLARE @D_H_ID bigint
   DECLARE @I_H_ID bigint
   DECLARE @D_HP_CODE NVARCHAR(MAX)
@@ -5943,16 +5943,16 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_N_IUD CURSOR LOCAL FOR
-     SELECT  d.N_ID, i.N_ID,
-	         d.N_SCOPE, i.N_SCOPE,
-	         d.N_SCOPE_ID, i.N_SCOPE_ID,
-	         d.N_STS, i.N_STS,
-			 d.N_TYPE, i.N_TYPE,
-			 d.N_Note, i.N_Note,
-			 d.C_ID, i.C_ID,
-			 d.E_ID, i.E_ID
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.N_ID = d.N_ID;
+     SELECT  del.N_ID, i.N_ID,
+	         del.N_SCOPE, i.N_SCOPE,
+	         del.N_SCOPE_ID, i.N_SCOPE_ID,
+	         del.N_STS, i.N_STS,
+			 del.N_TYPE, i.N_TYPE,
+			 del.N_Note, i.N_Note,
+			 del.C_ID, i.C_ID,
+			 del.E_ID, i.E_ID
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.N_ID = del.N_ID;
   DECLARE @D_N_ID bigint
   DECLARE @I_N_ID bigint
   DECLARE @D_N_SCOPE NVARCHAR(MAX)
@@ -6248,20 +6248,20 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_PE_IUD CURSOR LOCAL FOR
-     SELECT  d.PE_ID, i.PE_ID,
-	         d.PE_STS, i.PE_STS,
-	         d.PE_FName, i.PE_FName,
-			 d.PE_MName, i.PE_MName,
-			 d.PE_LName, i.PE_LName,
-             d.PE_JTitle, i.PE_JTitle,
-             d.PE_BPhone, i.PE_BPhone,
-             d.PE_CPhone, i.PE_CPhone,
-             d.PE_Email, i.PE_Email,
-             d.PE_PW1, i.PE_PW1,
-             d.PE_PW2, i.PE_PW2,
-			 d.PE_LL_Tstmp, i.PE_LL_Tstmp
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.PE_ID = d.PE_ID;
+     SELECT  del.PE_ID, i.PE_ID,
+	         del.PE_STS, i.PE_STS,
+	         del.PE_FName, i.PE_FName,
+			 del.PE_MName, i.PE_MName,
+			 del.PE_LName, i.PE_LName,
+             del.PE_JTitle, i.PE_JTitle,
+             del.PE_BPhone, i.PE_BPhone,
+             del.PE_CPhone, i.PE_CPhone,
+             del.PE_Email, i.PE_Email,
+             del.PE_PW1, i.PE_PW1,
+             del.PE_PW2, i.PE_PW2,
+			 del.PE_LL_Tstmp, i.PE_LL_Tstmp
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.PE_ID = del.PE_ID;
   DECLARE @D_PE_ID bigint
   DECLARE @I_PE_ID bigint
   DECLARE @D_PE_STS NVARCHAR(MAX)
@@ -6690,12 +6690,12 @@ BEGIN
                                       PPP_VAL
                                  FROM INSERTED
   DECLARE CUR_PPP_DU CURSOR LOCAL FOR 
-     SELECT  d.PPP_ID, i.PPP_ID,
-             d.PPP_PROCESS, i.PPP_PROCESS,
-             d.PPP_ATTRIB, i.PPP_ATTRIB,
-             d.PPP_VAL, i.PPP_VAL
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.PPP_ID = d.PPP_ID
+     SELECT  del.PPP_ID, i.PPP_ID,
+             del.PPP_PROCESS, i.PPP_PROCESS,
+             del.PPP_ATTRIB, i.PPP_ATTRIB,
+             del.PPP_VAL, i.PPP_VAL
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.PPP_ID = del.PPP_ID
   DECLARE @D_PPP_ID bigint
   DECLARE @I_PPP_ID bigint
   DECLARE @D_PPP_PROCESS nvarchar(MAX)
@@ -6847,11 +6847,11 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_SPEF_IUD CURSOR LOCAL FOR
-     SELECT  d.SPEF_ID, i.SPEF_ID,
-	         d.PE_ID, i.PE_ID,
-	         d.SF_NAME, i.SF_NAME
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.SPEF_ID = d.SPEF_ID;
+     SELECT  del.SPEF_ID, i.SPEF_ID,
+	         del.PE_ID, i.PE_ID,
+	         del.SF_NAME, i.SF_NAME
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.SPEF_ID = del.SPEF_ID;
   DECLARE @D_SPEF_ID bigint
   DECLARE @I_SPEF_ID bigint
   DECLARE @D_PE_ID bigint
@@ -7006,11 +7006,11 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_SPER_IUD CURSOR LOCAL FOR
-     SELECT  d.SPER_ID, i.SPER_ID,
-	         d.PE_ID, i.PE_ID,
-	         d.SR_NAME, i.SR_NAME
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.SPER_ID = d.SPER_ID;
+     SELECT  del.SPER_ID, i.SPER_ID,
+	         del.PE_ID, i.PE_ID,
+	         del.SR_NAME, i.SR_NAME
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.SPER_ID = del.SPER_ID;
   DECLARE @D_SPER_ID bigint
   DECLARE @I_SPER_ID bigint
   DECLARE @D_PE_ID bigint
@@ -7202,16 +7202,16 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_AUD_SEQ NUMERIC(20,0)
   DECLARE CUR_TXT_IUD CURSOR LOCAL FOR
-     SELECT  d.TXT_ID, i.TXT_ID,
-	         d.TXT_PROCESS, i.TXT_PROCESS,
-	         d.TXT_ATTRIB, i.TXT_ATTRIB,
-	         d.TXT_TYPE, i.TXT_TYPE,
-			 d.TXT_TVAL, i.TXT_TVAL,
-			 d.TXT_VAL, i.TXT_VAL,
-             d.TXT_BCC, i.TXT_BCC,
-             d.TXT_DESC, i.TXT_DESC
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.TXT_ID = d.TXT_ID;
+     SELECT  del.TXT_ID, i.TXT_ID,
+	         del.TXT_PROCESS, i.TXT_PROCESS,
+	         del.TXT_ATTRIB, i.TXT_ATTRIB,
+	         del.TXT_TYPE, i.TXT_TYPE,
+			 del.TXT_TVAL, i.TXT_TVAL,
+			 del.TXT_VAL, i.TXT_VAL,
+             del.TXT_BCC, i.TXT_BCC,
+             del.TXT_DESC, i.TXT_DESC
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.TXT_ID = del.TXT_ID;
   DECLARE @D_TXT_ID bigint
   DECLARE @I_TXT_ID bigint
   DECLARE @D_TXT_PROCESS NVARCHAR(MAX)
@@ -7448,12 +7448,12 @@ BEGIN
                                       XPP_VAL
                                  FROM INSERTED
   DECLARE CUR_XPP_DU CURSOR LOCAL FOR 
-     SELECT  d.XPP_ID, i.XPP_ID,
-             d.XPP_PROCESS, i.XPP_PROCESS,
-             d.XPP_ATTRIB, i.XPP_ATTRIB,
-             d.XPP_VAL, i.XPP_VAL
-       FROM deleted d FULL OUTER JOIN inserted i
-                       ON i.XPP_ID = d.XPP_ID
+     SELECT  del.XPP_ID, i.XPP_ID,
+             del.XPP_PROCESS, i.XPP_PROCESS,
+             del.XPP_ATTRIB, i.XPP_ATTRIB,
+             del.XPP_VAL, i.XPP_VAL
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.XPP_ID = del.XPP_ID
   DECLARE @D_XPP_ID bigint
   DECLARE @I_XPP_ID bigint
   DECLARE @D_XPP_PROCESS nvarchar(MAX)
@@ -7607,24 +7607,24 @@ begin
 	 where CRM_ID in (
 	   select i.CRM_ID
 	     from inserted i
-        inner join deleted d on d.SM_ID=i.SM_ID
-        where {schema}.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
+        inner join deleted del on del.SM_ID=i.SM_ID
+        where {schema}.NONEQUALN(del.CRMSEL_SEL, i.CRMSEL_SEL) > 0
 		  and isnull(i.CRMSEL_SEL,0) = 0);
 
 	 
     insert into {schema}.CRM (CR_NAME, SM_ID)
 	   select i.NEW_CR_NAME, i.SM_ID
 	     from inserted i
-        inner join deleted d on d.SM_ID=i.SM_ID
-        where {schema}.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
+        inner join deleted del on del.SM_ID=i.SM_ID
+        where {schema}.NONEQUALN(del.CRMSEL_SEL, i.CRMSEL_SEL) > 0
 		  and isnull(i.CRMSEL_SEL,0) = 1
 		  and isnull(i.NEW_CR_NAME,'')<>'';
 	 
     insert into {schema}.CRM (CR_NAME, SM_ID)
 	   select i.CR_NAME, i.NEW_SM_ID
 	     from inserted i
-        inner join deleted d on d.SM_ID=i.SM_ID
-        where {schema}.NONEQUALN(d.CRMSEL_SEL, i.CRMSEL_SEL) > 0
+        inner join deleted del on del.SM_ID=i.SM_ID
+        where {schema}.NONEQUALN(del.CRMSEL_SEL, i.CRMSEL_SEL) > 0
 		  and isnull(i.CRMSEL_SEL,0) = 1
 		  and isnull(i.NEW_CR_NAME,'')='';
 	 
@@ -7657,24 +7657,24 @@ begin
 	 where SRM_ID in (
 	   select i.SRM_ID
 	     from inserted i
-        inner join deleted d on d.SM_ID=i.SM_ID
-        where {schema}.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
+        inner join deleted del on del.SM_ID=i.SM_ID
+        where {schema}.NONEQUALN(del.SRMSEL_SEL, i.SRMSEL_SEL) > 0
 		  and isnull(i.SRMSEL_SEL,0) = 0);
 
 	 
     insert into {schema}.SRM (SR_NAME, SM_ID)
 	   select i.NEW_SR_NAME, i.SM_ID
 	     from inserted i
-        inner join deleted d on d.SM_ID=i.SM_ID
-        where {schema}.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
+        inner join deleted del on del.SM_ID=i.SM_ID
+        where {schema}.NONEQUALN(del.SRMSEL_SEL, i.SRMSEL_SEL) > 0
 		  and isnull(i.SRMSEL_SEL,0) = 1
 		  and isnull(i.NEW_SR_NAME,'')<>'';
 	 
     insert into {schema}.SRM (SR_NAME, SM_ID)
 	   select i.SR_NAME, i.NEW_SM_ID
 	     from inserted i
-        inner join deleted d on d.SM_ID=i.SM_ID
-        where {schema}.NONEQUALN(d.SRMSEL_SEL, i.SRMSEL_SEL) > 0
+        inner join deleted del on del.SM_ID=i.SM_ID
+        where {schema}.NONEQUALN(del.SRMSEL_SEL, i.SRMSEL_SEL) > 0
 		  and isnull(i.SRMSEL_SEL,0) = 1
 		  and isnull(i.NEW_SR_NAME,'')='';
 	 
