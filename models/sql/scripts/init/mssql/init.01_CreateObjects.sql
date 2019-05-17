@@ -1219,8 +1219,8 @@ GO
 /****** Script for SelectTopNRows command from SSMS  ******/
 CREATE view [jsharmony].[v_months] as
 select number_val month_val,
-       right('0'+convert(nvarchar(50),N),2) month_txt2,
-       right('0'+convert(nvarchar(50),N),2) month_txt
+       right('0'+convert(nvarchar(50),number_val),2) month_txt2,
+       right('0'+convert(nvarchar(50),number_val),2) month_txt
   from {{schema}}.NUMBERS
  where N <=12;
 
