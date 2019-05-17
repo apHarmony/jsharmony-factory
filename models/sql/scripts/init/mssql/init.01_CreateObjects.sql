@@ -499,7 +499,7 @@ AS
 BEGIN
 DECLARE @rslt varbinary(200) = NULL
 DECLARE @seed nvarchar(255) = NULL
-DECLARE @v varchar(255)
+DECLARE @val varchar(255)
 
   if (@TYPE = 'S')
   BEGIN
@@ -520,8 +520,8 @@ DECLARE @v varchar(255)
       and isnull(@PE_ID,0) > 0
 	  and isnull(@PW,'') <> '')
   begin
-    select @v = (convert(varchar(50),@PE_ID)+@PW+@seed)
-    select @rslt = hashbytes('sha1',@v)
+    select @val = (convert(varchar(50),@PE_ID)+@PW+@seed)
+    select @rslt = hashbytes('sha1',@val)
   end
 
   return @rslt
@@ -1198,10 +1198,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[numbers](
-	[n] [smallint] NOT NULL,
+	[number_val] [smallint] NOT NULL,
  CONSTRAINT [PK_NUMBERS] PRIMARY KEY CLUSTERED 
 (
-	[n] ASC
+	[number_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1218,9 +1218,9 @@ GO
 
 /****** Script for SelectTopNRows command from SSMS  ******/
 CREATE view [jsharmony].[v_months] as
-select n, 
-       right('0'+convert(nvarchar(50),N),2) month,
-       right('0'+convert(nvarchar(50),N),2) mth
+select number_val month_val,
+       right('0'+convert(nvarchar(50),N),2) month_txt2,
+       right('0'+convert(nvarchar(50),N),2) month_txt
   from {{schema}}.NUMBERS
  where N <=12;
 
@@ -1240,10 +1240,10 @@ GO
 
 /****** Script for SelectTopNRows command from SSMS  ******/
 CREATE view [jsharmony].[v_years] as
-select datepart(year,sysdatetime())+N-1 year,
-       datepart(year,sysdatetime())+N-1 yr
+select datepart(year,sysdatetime())+number_val-1 year_val,
+       datepart(year,sysdatetime())+number_val-1 year_txt
   from {{schema}}.NUMBERS
- where N <=10;
+ where number_val <=10;
 
 
 

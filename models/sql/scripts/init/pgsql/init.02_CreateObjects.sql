@@ -1985,7 +1985,7 @@ CREATE FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character va
 DECLARE 
   rslt bytea default NULL;
   seed varchar(255) default NULL;
-  v    varchar(255);
+  val    varchar(255);
 BEGIN
 
   if (par_type = 'S') THEN
@@ -2003,9 +2003,9 @@ BEGIN
   if (seed is not null
       and coalesce(par_pe_id,0) > 0
       and coalesce(par_pw,'') <> '') THEN
-    v = par_pe_id::text||par_pw||seed;
-    /* rslt = hashbytes('sha1',v); */
-    rslt = {{schema}}.digest(v, 'sha1'::text);
+    val = par_pe_id::text||par_pw||seed;
+    /* rslt = hashbytes('sha1',val); */
+    rslt = {{schema}}.digest(val, 'sha1'::text);
   end if;
 
   return rslt;
@@ -4684,7 +4684,7 @@ ALTER SEQUENCE n_n_id_seq OWNED BY n.n_id;
 --
 
 CREATE TABLE numbers (
-    n smallint NOT NULL
+    number_val smallint NOT NULL
 );
 
 
@@ -6669,10 +6669,10 @@ ALTER TABLE v_house OWNER TO postgres;
 --
 
 CREATE VIEW v_months AS
- SELECT numbers.n,
-    "right"(('0'::text || ((numbers.n)::character varying)::text), 2) AS mth
+ SELECT numbers.number_val as month_val,
+    "right"(('0'::text || ((numbers.number_val)::character varying)::text), 2) AS month_txt
    FROM numbers
-  WHERE (numbers.n <= 12);
+  WHERE (numbers.number_val <= 12);
 
 
 ALTER TABLE v_months OWNER TO postgres;
@@ -6912,9 +6912,9 @@ ALTER TABLE v_xppl OWNER TO postgres;
 --
 
 CREATE VIEW v_years AS
- SELECT ((date_part('year'::text, mynow()) + (numbers.n)::double precision) - (1)::double precision) AS yr
+ SELECT ((date_part('year'::text, mynow()) + (numbers.number_val)::double precision) - (1)::double precision) AS year_val
    FROM numbers
-  WHERE (numbers.n <= 10);
+  WHERE (numbers.number_val <= 10);
 
 
 ALTER TABLE v_years OWNER TO postgres;
@@ -7914,7 +7914,7 @@ ALTER TABLE ONLY n
 --
 
 ALTER TABLE ONLY numbers
-    ADD CONSTRAINT numbers_pkey PRIMARY KEY (n);
+    ADD CONSTRAINT numbers_pkey PRIMARY KEY (number_val);
 
 
 --

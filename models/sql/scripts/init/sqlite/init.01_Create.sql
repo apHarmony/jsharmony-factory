@@ -600,8 +600,8 @@ CREATE TABLE {{schema}}_xpp (
 
 /***************NUMBERS***************/
 CREATE TABLE {{schema}}_numbers (
-  n integr NOT NULL,
-  PRIMARY KEY (n)
+  number_val integer NOT NULL,
+  PRIMARY KEY (number_val)
 );
 
 end;
