@@ -397,10 +397,10 @@ end;
 
 /***************v_months***************/
 CREATE VIEW {schema}_v_months AS
- SELECT numbers.number_val month_val,
-    substr(('0' || numbers.number_val), -2, 2) AS month_txt
+ SELECT numbers.{number_val} {month_val},
+    substr(('0' || numbers.{number_val}), -2, 2) AS {month_txt}
    FROM {schema}_numbers numbers
-  WHERE (numbers.number_val <= 12);
+  WHERE (numbers.{number_val} <= 12);
 
 /***************v_mype***************/
 CREATE VIEW {schema}_v_mype AS
@@ -666,6 +666,6 @@ end;
 
 /***************v_years***************/
 CREATE VIEW {schema}_v_years AS
- SELECT ((cast(strftime('%Y',{schema}.mynow()) as int) + numbers.number_val) - 1) AS year_val
+ SELECT ((cast(strftime('%Y',{schema}.mynow()) as int) + numbers.{number_val}) - 1) AS {year_val}
    FROM {schema}_numbers numbers
-  WHERE (numbers.number_val <= 10);
+  WHERE (numbers.{number_val} <= 10);

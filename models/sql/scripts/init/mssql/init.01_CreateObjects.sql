@@ -1198,10 +1198,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[numbers](
-	[number_val] [smallint] NOT NULL,
+	[{number_val}] [smallint] NOT NULL,
  CONSTRAINT [PK_NUMBERS] PRIMARY KEY CLUSTERED 
 (
-	[number_val] ASC
+	[{number_val}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1218,11 +1218,11 @@ GO
 
 /****** Script for SelectTopNRows command from SSMS  ******/
 CREATE view [jsharmony].[v_months] as
-select number_val month_val,
-       right('0'+convert(nvarchar(50),number_val),2) month_txt2,
-       right('0'+convert(nvarchar(50),number_val),2) month_txt
+select {number_val} {month_val},
+       right('0'+convert(nvarchar(50),{number_val}),2) {month_txt2},
+       right('0'+convert(nvarchar(50),{number_val}),2) {month_txt}
   from {schema}.NUMBERS
- where N <=12;
+ where {number_val} <=12;
 
 
 
@@ -1240,10 +1240,10 @@ GO
 
 /****** Script for SelectTopNRows command from SSMS  ******/
 CREATE view [jsharmony].[v_years] as
-select datepart(year,sysdatetime())+number_val-1 year_val,
-       datepart(year,sysdatetime())+number_val-1 year_txt
+select datepart(year,sysdatetime())+{number_val}-1 {year_val},
+       datepart(year,sysdatetime())+{number_val}-1 {year_txt}
   from {schema}.NUMBERS
- where number_val <=10;
+ where {number_val} <=10;
 
 
 

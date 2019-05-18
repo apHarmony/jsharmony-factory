@@ -4684,7 +4684,7 @@ ALTER SEQUENCE n_n_id_seq OWNED BY n.n_id;
 --
 
 CREATE TABLE numbers (
-    number_val smallint NOT NULL
+    {number_val} smallint NOT NULL
 );
 
 
@@ -6669,10 +6669,10 @@ ALTER TABLE v_house OWNER TO postgres;
 --
 
 CREATE VIEW v_months AS
- SELECT numbers.number_val as month_val,
-    "right"(('0'::text || ((numbers.number_val)::character varying)::text), 2) AS month_txt
+ SELECT numbers.{number_val} as {month_val},
+    "right"(('0'::text || ((numbers.{number_val})::character varying)::text), 2) AS {month_txt}
    FROM numbers
-  WHERE (numbers.number_val <= 12);
+  WHERE (numbers.{number_val} <= 12);
 
 
 ALTER TABLE v_months OWNER TO postgres;
@@ -6912,9 +6912,9 @@ ALTER TABLE v_xppl OWNER TO postgres;
 --
 
 CREATE VIEW v_years AS
- SELECT ((date_part('year'::text, mynow()) + (numbers.number_val)::double precision) - (1)::double precision) AS year_val
+ SELECT ((date_part('year'::text, mynow()) + (numbers.{number_val})::double precision) - (1)::double precision) AS {year_val}
    FROM numbers
-  WHERE (numbers.number_val <= 10);
+  WHERE (numbers.{number_val} <= 10);
 
 
 ALTER TABLE v_years OWNER TO postgres;
@@ -7914,7 +7914,7 @@ ALTER TABLE ONLY n
 --
 
 ALTER TABLE ONLY numbers
-    ADD CONSTRAINT numbers_pkey PRIMARY KEY (number_val);
+    ADD CONSTRAINT numbers_pkey PRIMARY KEY ({number_val});
 
 
 --

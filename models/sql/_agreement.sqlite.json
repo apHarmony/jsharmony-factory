@@ -1,7 +1,7 @@
 {
   "agreement_COD_STATE": "select codeval2 codeval, codeval2 codetxt from {schema}.ucod2_country_state where codeval1='USA' and (codetdt is null or (codetdt is not null and codetdt > current_date)) order by codseq,codeval2",
-  "agreement_COD_MONTH": "select month_txt as codeval,month_txt as codetxt from {schema}.V_MONTHS order by month_val",
-  "agreement_COD_YEAR": "select year_val as codeval,year_val as codetxt from {schema}.V_YEARS order by year_val",
+  "agreement_COD_MONTH": "select {month_txt} as codeval,{month_txt} as codetxt from {schema}.V_MONTHS order by {month_val}",
+  "agreement_COD_YEAR": "select {year_val} as codeval,{year_val} as codetxt from {schema}.V_YEARS order by {year_val}",
   "agreement_sign": [
     "begin;",
     "update C set c_atstmp={schema}.mytodate({schema}.mynow()) where c_id=@c_id;",
