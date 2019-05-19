@@ -3650,14 +3650,14 @@ BEGIN
          if @@ROWCOUNT = 0
 		 begin
 
-           if (@cid is null and lower(@tname) <> 'c')
+           if (@cid is null and lower(@tname) <> '{cust}')
 		   begin	
 	         SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	         EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
 	         SET @C_ID = @MY_C_ID
            end
 
-           if (@eid is null and lower(@tname) <> 'e')
+           if (@eid is null and lower(@tname) <> '{item}')
 		   begin	
 	         SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	         EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
@@ -3665,10 +3665,10 @@ BEGIN
 		   end
 
 		   select @WK_C_ID = case when @cid is not null then @cid
-		                          when lower(@tname) = 'c' then @tid 
+		                          when lower(@tname) = '{cust}' then @tid 
 							      else @C_ID end,  
 		          @WK_E_ID = case when @eid is not null then @eid
-		                          when lower(@tname)  = 'e' then @tid 
+		                          when lower(@tname)  = '{item}' then @tid 
 								  else @E_ID end, 
 		          @WK_REF_NAME = @ref_name,
 		          @WK_REF_ID = @ref_id,
@@ -3678,14 +3678,14 @@ BEGIN
     ELSE
 	begin
 
-        if (@cid is null and lower(@tname) <> 'c')
+        if (@cid is null and lower(@tname) <> '{cust}')
 		begin	
 	      SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	      EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
 	      SET @C_ID = @MY_C_ID
         end
 
-        if (@eid is null and lower(@tname) <> 'e')
+        if (@eid is null and lower(@tname) <> '{item}')
 		begin	
 	      SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	      EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
@@ -3693,10 +3693,10 @@ BEGIN
 		end
 
 		SET @WK_C_ID = case when @cid is not null then @cid
-		                    when lower(@tname) = 'c' then @tid 
+		                    when lower(@tname) = '{cust}' then @tid 
 							else @C_ID end;  
 		SET @WK_E_ID = case when @eid is not null then @eid
-		                    when lower(@tname) = 'e' then @tid 
+		                    when lower(@tname) = '{item}' then @tid 
 							else @E_ID end; 
 		SET @WK_REF_NAME = @ref_name;
 		SET @WK_REF_ID = @ref_id;
@@ -4488,13 +4488,13 @@ BEGIN
 		@TP='U' AND {schema}.NONEQUALN(@D_C_ID, @I_C_ID) > 0)
 	BEGIN
 		EXEC	@C = [jsharmony].[CHECK_FOREIGN]
-	     	@in_tblname ='C',
+	     	@in_tblname ='{cust}',
 		    @in_tblid = @I_C_ID
 		IF @C <= 0
 		BEGIN
 			CLOSE CUR_CPE_IUD
 			DEALLOCATE CUR_CPE_IUD
-			SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
+			SET @M = 'Table {cust} does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
 			raiserror(@M ,16,1)
 			ROLLBACK TRANSACTION
 			return
