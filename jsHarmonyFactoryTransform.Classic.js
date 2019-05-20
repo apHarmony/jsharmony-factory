@@ -664,7 +664,7 @@ transform.sql = {
   "jobproc_save_queue": "jobproc_saverq",
   "jobproc_save_queue_message": "jobproc_saverq_message",
   "JSEXEC_STR": "jsexec_str",
-  "JSHARMONY_FACTORY_INSTALLED": "jsharmony_factory_installed",
+  "JSHARMONY_FACTORY_INSTALLED": "JSHARMONY_FACTORY_INSTALLED",
   "main_sql_auth": "main_sql_auth",
   "main_sql_check_email": "main_sql_check_email",
   "main_sql_login": "main_sql_login",
