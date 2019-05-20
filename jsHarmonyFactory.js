@@ -36,6 +36,7 @@ var agreement = require('./models/_agreement.js');
 var menu = require('./models/_menu.js');
 var help = require('./models/_help.js');
 var funcs = require('./models/_funcs.js');
+var jsHarmonyFactoryTransform = require('./jsHarmonyFactoryTransform.js');
 
 function jsHarmonyFactory(name, options){
   options = _.extend({
@@ -54,7 +55,8 @@ function jsHarmonyFactory(name, options){
 
   _this.mainRouter = null;
   _this.clientRouter = null;
-  _this.funcs = new funcs(_this);;
+  _this.funcs = new funcs(_this);
+  _this.transform = new jsHarmonyFactoryTransform(_this);
 }
 
 jsHarmonyFactory.prototype = new jsHarmonyModule();
