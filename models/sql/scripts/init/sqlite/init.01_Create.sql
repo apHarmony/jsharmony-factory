@@ -3,603 +3,603 @@ pragma foreign_keys = ON;
 begin;
 
 
-/***************AUD_H***************/
-CREATE TABLE {schema}_aud_h (
-  aud_seq integer primary key autoincrement NOT NULL,
-  table_name text,
-  table_id integer NOT NULL,
-  aud_op text,
-  aud_u text,
-  db_k text NOT NULL DEFAULT '0',
-  aud_tstmp text NOT NULL,
-  c_id integer,
-  e_id integer,
-  ref_name text,
-  ref_id integer,
-  subj text
+/***************{audit}***************/
+CREATE TABLE {schema}_{audit} (
+  {audit_seq} integer primary key autoincrement NOT NULL,
+  {audit_table_name} text,
+  {audit_table_id} integer NOT NULL,
+  {audit_op} text,
+  {audit_user} text,
+  {db_id} text NOT NULL DEFAULT '0',
+  {audit_tstmp} text NOT NULL,
+  {cust_id} integer,
+  {item_id} integer,
+  {audit_ref_name} text,
+  {audit_ref_id} integer,
+  {audit_subject} text
 );
 
-/***************AUD_D***************/
-CREATE TABLE {schema}_aud_d
+/***************{audit_detail}***************/
+CREATE TABLE {schema}_{audit_detail}
 (
-  aud_seq integer NOT NULL,
-  column_name text NOT NULL,
-  column_val text,
-  PRIMARY KEY (aud_seq, column_name),
-  FOREIGN KEY (aud_seq) REFERENCES {schema}_aud_h(aud_seq)
+  {audit_seq} integer NOT NULL,
+  {audit_column_name} text NOT NULL,
+  {audit_column_val} text,
+  PRIMARY KEY ({audit_seq}, {audit_column_name}),
+  FOREIGN KEY ({audit_seq}) REFERENCES {schema}_{audit}({audit_seq})
 );
 
-/*********DUAL*********/
-CREATE TABLE {schema}_dual (
-  dual_ident integer primary key NOT NULL,
-  dummy text NOT NULL,
-  dual_integer integer,
-  dual_text text
+/*********{single}*********/
+CREATE TABLE {schema}_{single} (
+  {single_ident} integer primary key NOT NULL,
+  {single_dummy} text NOT NULL,
+  {single_integer} integer,
+  {single_text} text
 );
 
-/*********UCOD_AC*********/
-{schema}.create_ucod('{schema}','ac','');
+/*********{code_ac}*********/
+{schema}.{create_code_sys}('{schema}','ac','');
 
-/*********UCOD_AC1*********/
-{schema}.create_ucod('{schema}','ac1','');
+/*********{code_ac1}*********/
+{schema}.{create_code_sys}('{schema}','ac1','');
 
-/*********UCOD_AHC*********/
-{schema}.create_ucod('{schema}','ahc','');
+/*********{code_ahc}*********/
+{schema}.{create_code_sys}('{schema}','ahc','');
 
-/*********UCOD_COUNTRY*********/
-{schema}.create_ucod('{schema}','country','');
+/*********{code_country}*********/
+{schema}.{create_code_sys}('{schema}','country','');
 
-/*********UCOD_D_SCOPE*********/
-{schema}.create_ucod('{schema}','d_scope','');
+/*********{code_doc_scope}*********/
+{schema}.{create_code_sys}('{schema}','{doc_scope}','');
 
 
-/*********UCOD_N_SCOPE*********/
-{schema}.create_ucod('{schema}','n_scope','');
+/*********{code_note_scope}*********/
+{schema}.{create_code_sys}('{schema}','{note_scope}','');
 
-/*********UCOD_N_TYPE*********/
-{schema}.create_ucod('{schema}','n_type','');
+/*********{code_note_type}*********/
+{schema}.{create_code_sys}('{schema}','{note_type}','');
 
-/*********UCOD_PPD_TYPE*********/
-{schema}.create_ucod('{schema}','ppd_type','');
+/*********{code_param_type}*********/
+{schema}.{create_code_sys}('{schema}','{param_type}','');
 
-/*********UCOD_RQST_ATYPE*********/
-{schema}.create_ucod('{schema}','rqst_atype','');
+/*********{code_task_action}*********/
+{schema}.{create_code_sys}('{schema}','{job_action}','');
 
-/*********UCOD_RQST_SOURCE*********/
-{schema}.create_ucod('{schema}','rqst_source','');
+/*********{code_task_source}*********/
+{schema}.{create_code_sys}('{schema}','{job_source}','');
 
-/*********UCOD_TXT_TYPE*********/
-{schema}.create_ucod('{schema}','txt_type','');
+/*********{code_txt_type}*********/
+{schema}.{create_code_sys}('{schema}','{txt_type}','');
 
-/*********UCOD_V_STS*********/
-{schema}.create_ucod('{schema}','v_sts','');
+/*********{code_version_sts}*********/
+{schema}.{create_code_sys}('{schema}','{version_sts}','');
 
-/*********UCOD2_COUNTRY_STATE*********/
-{schema}.create_ucod2('{schema}','country_state','');
+/*********{code2_state}*********/
+{schema}.{create_code2_sys}('{schema}','country_state','');
 
-/*********GCOD2_D_SCOPE_D_CTGR*********/
-{schema}.create_gcod2('{schema}','d_scope_d_ctgr','');
+/*********{code2_doc_ctgr}*********/
+{schema}.{create_code2_app}('{schema}','{doc_scope}_{doc_ctgr}','');
 
-/***************CPE***************/
-create table {schema}_cpe (
-    pe_id integer primary key autoincrement NOT NULL,
-    c_id integer NOT NULL,
-    pe_sts text DEFAULT 'ACTIVE' NOT NULL,
-    pe_stsdt text,
-    pe_fname text NOT NULL,
-    pe_mname text,
-    pe_lname text NOT NULL,
-    pe_jtitle text,
-    pe_bphone text,
-    pe_cphone text,
-    pe_email text NOT NULL,
-    pe_etstmp text,
-    pe_eu text,
-    pe_mtstmp text,
-    pe_mu text,
-    pe_pw1 text,
-    pe_pw2 text,
-    pe_hash blob DEFAULT X'00' NOT NULL,
-    pe_ll_ip text,
-    pe_ll_tstmp text,
-    pe_snotes text,
-    FOREIGN KEY (pe_sts) REFERENCES {schema}_ucod_ahc(codeval),
-    CHECK (COALESCE(pe_email,'')<>'')
+/***************{cust_user}***************/
+create table {schema}_{cust_user} (
+    {sys_user_id} integer primary key autoincrement NOT NULL,
+    {cust_id} integer NOT NULL,
+    {sys_user_sts} text DEFAULT 'ACTIVE' NOT NULL,
+    {sys_user_stsdt} text,
+    {sys_user_fname} text NOT NULL,
+    {sys_user_mname} text,
+    {sys_user_lname} text NOT NULL,
+    {sys_user_jobtitle} text,
+    {sys_user_bphone} text,
+    {sys_user_cphone} text,
+    {sys_user_email} text NOT NULL,
+    {sys_user_etstmp} text,
+    {sys_user_euser} text,
+    {sys_user_mtstmp} text,
+    {sys_user_muser} text,
+    {sys_user_pw1} text,
+    {sys_user_pw2} text,
+    {sys_user_hash} blob DEFAULT X'00' NOT NULL,
+    {sys_user_lastlogin_ip} text,
+    {sys_user_lastlogin_tstmp} text,
+    {sys_user_snotes} text,
+    FOREIGN KEY ({sys_user_sts}) REFERENCES {schema}_{code_ahc}({code_val}),
+    CHECK (COALESCE({sys_user_email},'')<>'')
 );
 
-create index idx_{schema}_cpe_c_id on {schema}_cpe(c_id);
+create index idx_{schema}_{cust_user}_{cust_id} on {schema}_{cust_user}({cust_id});
 
-/***************CR***************/
-CREATE TABLE {schema}_cr (
-  cr_id integer primary key autoincrement NOT NULL,
-  cr_seq integer NOT NULL,
-  cr_sts text NOT NULL DEFAULT 'ACTIVE',
-  cr_name text NOT NULL,
-  cr_desc text NOT NULL,
-  cr_snotes text,
-  cr_code text,
-  cr_attrib text,
-  UNIQUE (cr_desc),
-  UNIQUE (cr_name),
-  FOREIGN KEY (cr_sts) REFERENCES {schema}_ucod_ahc(codeval)
+/***************{cust_role}***************/
+CREATE TABLE {schema}_{cust_role} (
+  {cust_role_id} integer primary key autoincrement NOT NULL,
+  {cust_role_seq} integer NOT NULL,
+  {cust_role_sts} text NOT NULL DEFAULT 'ACTIVE',
+  {cust_role_name} text NOT NULL,
+  {cust_role_desc} text NOT NULL,
+  {cust_role_snotes} text,
+  {cust_role_code} text,
+  {cust_role_attrib} text,
+  UNIQUE ({cust_role_desc}),
+  UNIQUE ({cust_role_name}),
+  FOREIGN KEY ({cust_role_sts}) REFERENCES {schema}_{code_ahc}({code_val})
 );
 
-/***************D***************/
-CREATE TABLE {schema}_d (
-  d_id integer primary key autoincrement NOT NULL,
-  d_scope text NOT NULL DEFAULT 'S',
-  d_scope_id integer NOT NULL DEFAULT 0,
-  c_id integer,
-  e_id integer,
-  d_sts text NOT NULL DEFAULT 'A',
-  d_ctgr text NOT NULL,
-  d_desc text,
-  d_ext text,
-  d_size integer,
-  d_etstmp text,
-  d_eu text,
-  d_mtstmp text,
-  d_mu text,
-  d_utstmp text,
-  d_uu text,
-  d_synctstmp text,
-  d_snotes text,
-  d_id_main integer,
-  FOREIGN KEY (d_scope, d_ctgr) REFERENCES {schema}_gcod2_d_scope_d_ctgr (codeval1, codeval2),
-  FOREIGN KEY (d_scope) REFERENCES {schema}_ucod_d_scope (codeval)
+/***************{doc}***************/
+CREATE TABLE {schema}_{doc} (
+  {doc_id} integer primary key autoincrement NOT NULL,
+  {doc_scope} text NOT NULL DEFAULT 'S',
+  {doc_scope_id} integer NOT NULL DEFAULT 0,
+  {cust_id} integer,
+  {item_id} integer,
+  {doc_sts} text NOT NULL DEFAULT 'A',
+  {doc_ctgr} text NOT NULL,
+  {doc_desc} text,
+  {doc_ext} text,
+  {doc_size} integer,
+  {doc_etstmp} text,
+  {doc_euser} text,
+  {doc_mtstmp} text,
+  {doc_muser} text,
+  {doc_utstmp} text,
+  {doc_uuser} text,
+  {doc_sync_tstmp} text,
+  {doc_snotes} text,
+  {doc_sync_id} integer,
+  FOREIGN KEY ({doc_scope}, {doc_ctgr}) REFERENCES {schema}_{code2_doc_ctgr} ({code_val1}, {code_va12}),
+  FOREIGN KEY ({doc_scope}) REFERENCES {schema}_{code_doc_scope} ({code_val})
 );
 
-/***************HP***************/
-CREATE TABLE {schema}_hp (
-  hp_id integer primary key autoincrement NOT NULL,
-  hp_code text NOT NULL,
-  hp_desc text NOT NULL,
-  UNIQUE (hp_code),
-  UNIQUE (hp_desc)
+/***************{help_target}***************/
+CREATE TABLE {schema}_{help_target} (
+  {help_target_id} integer primary key autoincrement NOT NULL,
+  {help_target_code} text NOT NULL,
+  {help_target_desc} text NOT NULL,
+  UNIQUE ({help_target_code}),
+  UNIQUE ({help_target_desc})
 );
 
-/***************H***************/
-CREATE TABLE {schema}_h (
-  h_id integer primary key autoincrement NOT NULL,
-  hp_code text,
-  h_title text NOT NULL,
-  h_text text NOT NULL,
-  h_etstmp text,
-  h_eu text,
-  h_mtstmp text,
-  h_mu text,
-  h_seq integer,
-  h_index_a integer NOT NULL DEFAULT 1,
-  h_index_p integer NOT NULL DEFAULT 1,
-  UNIQUE (h_title),
-  FOREIGN KEY (hp_code) REFERENCES {schema}_hp (hp_code)
+/***************{help}***************/
+CREATE TABLE {schema}_{help} (
+  {help_id} integer primary key autoincrement NOT NULL,
+  {help_target_code} text,
+  {help_title} text NOT NULL,
+  {help_text} text NOT NULL,
+  {help_etstmp} text,
+  {help_euser} text,
+  {help_mtstmp} text,
+  {help_muser} text,
+  {help_seq} integer,
+  {help_listing_main} integer NOT NULL DEFAULT 1,
+  {help_listing_client} integer NOT NULL DEFAULT 1,
+  UNIQUE ({help_title}),
+  FOREIGN KEY ({help_target_code}) REFERENCES {schema}_{help_target} ({help_target_code})
 );
 
-/***************N***************/
-CREATE TABLE {schema}_n (
-  n_id integer primary key autoincrement NOT NULL,
-  n_scope text NOT NULL DEFAULT 'S',
-  n_scope_id integer NOT NULL DEFAULT 0,
-  n_sts text NOT NULL DEFAULT 'A',
-  c_id integer,
-  e_id integer,
-  n_type text NOT NULL,
-  n_note text NOT NULL,
-  n_etstmp text,
-  n_eu text,
-  n_mtstmp text,
-  n_mu text,
-  n_synctstmp text,
-  n_snotes text,
-  n_id_main integer,
-  FOREIGN KEY (n_scope) REFERENCES {schema}_ucod_n_scope (codeval),
-  FOREIGN KEY (n_sts) REFERENCES {schema}_ucod_ac1 (codeval),
-  FOREIGN KEY (n_type) REFERENCES {schema}_ucod_n_type (codeval) 
+/***************{note}***************/
+CREATE TABLE {schema}_{note} (
+  {note_id} integer primary key autoincrement NOT NULL,
+  {note_scope} text NOT NULL DEFAULT 'S',
+  {note_scope_id} integer NOT NULL DEFAULT 0,
+  {note_sts} text NOT NULL DEFAULT 'A',
+  {cust_id} integer,
+  {item_id} integer,
+  {note_type} text NOT NULL,
+  {note_body} text NOT NULL,
+  {note_etstmp} text,
+  {note_euser} text,
+  {note_mtstmp} text,
+  {note_muser} text,
+  {note_sync_tstmp} text,
+  {note_snotes} text,
+  {note_sync_id} integer,
+  FOREIGN KEY ({note_scope}) REFERENCES {schema}_{code_note_scope} ({code_val}),
+  FOREIGN KEY ({note_sts}) REFERENCES {schema}_{code_ac1} ({code_val}),
+  FOREIGN KEY ({note_type}) REFERENCES {schema}_{code_note_type} ({code_val}) 
 );
 
-/***************PE***************/
-create table {schema}_pe (
-    pe_id integer primary key autoincrement NOT NULL,
-    pe_sts text DEFAULT 'ACTIVE' NOT NULL,
-    pe_stsdt text,
-    pe_fname text NOT NULL,
-    pe_mname text,
-    pe_lname text NOT NULL,
-    pe_jtitle text,
-    pe_bphone text,
-    pe_cphone text,
-    pe_country text DEFAULT 'USA' NOT NULL,
-    pe_addr text,
-    pe_city text,
-    pe_state text,
-    pe_zip text,
-    pe_email text NOT NULL,
-    pe_startdt text,
-    pe_enddt date,
-    pe_unotes text,
-    pe_etstmp text,
-    pe_eu text,
-    pe_mtstmp text,
-    pe_mu text,
-    pe_pw1 text,
-    pe_pw2 text,
-    pe_hash blob DEFAULT X'00' NOT NULL,
-    pe_ll_ip text,
-    pe_ll_tstmp text,
-    pe_snotes text,
-    FOREIGN KEY (pe_sts) REFERENCES {schema}_ucod_ahc(codeval),
-    FOREIGN KEY (pe_country) REFERENCES {schema}_ucod_country(codeval),
-    FOREIGN KEY (pe_country, pe_state) REFERENCES {schema}_ucod2_country_state(codeval1,codeval2),
-    CHECK (COALESCE(pe_email,'')<>'')
+/***************{sys_user}***************/
+create table {schema}_{sys_user} (
+    {sys_user_id} integer primary key autoincrement NOT NULL,
+    {sys_user_sts} text DEFAULT 'ACTIVE' NOT NULL,
+    {sys_user_stsdt} text,
+    {sys_user_fname} text NOT NULL,
+    {sys_user_mname} text,
+    {sys_user_lname} text NOT NULL,
+    {sys_user_jobtitle} text,
+    {sys_user_bphone} text,
+    {sys_user_cphone} text,
+    {sys_user_country} text DEFAULT 'USA' NOT NULL,
+    {sys_user_addr} text,
+    {sys_user_city} text,
+    {sys_user_state} text,
+    {sys_user_zip} text,
+    {sys_user_email} text NOT NULL,
+    {sys_user_startdt} text,
+    {sys_user_enddt} date,
+    {sys_user_unotes} text,
+    {sys_user_etstmp} text,
+    {sys_user_euser} text,
+    {sys_user_mtstmp} text,
+    {sys_user_muser} text,
+    {sys_user_pw1} text,
+    {sys_user_pw2} text,
+    {sys_user_hash} blob DEFAULT X'00' NOT NULL,
+    {sys_user_lastlogin_ip} text,
+    {sys_user_lastlogin_tstmp} text,
+    {sys_user_snotes} text,
+    FOREIGN KEY ({sys_user_sts}) REFERENCES {schema}_{code_ahc}({code_val}),
+    FOREIGN KEY ({sys_user_country}) REFERENCES {schema}_{code_country}({code_val}),
+    FOREIGN KEY ({sys_user_country}, {sys_user_state}) REFERENCES {schema}_{code2_state}({code_val1},{code_va12}),
+    CHECK (COALESCE({sys_user_email},'')<>'')
 );
 
-  /***************PPD***************/
-CREATE TABLE {schema}_ppd (
-  ppd_id integer primary key autoincrement NOT NULL,
-  ppd_process text NOT NULL,
-  ppd_attrib text NOT NULL,
-  ppd_desc text NOT NULL,
-  ppd_type text NOT NULL,
-  codename text,
-  ppd_etstmp text,
-  ppd_eu text,
-  ppd_mtstmp text,
-  ppd_mu text,
-  ppd_snotes text,
-  ppd_gpp integer NOT NULL DEFAULT 0,
-  ppd_ppp integer NOT NULL DEFAULT 0,
-  ppd_xpp integer NOT NULL DEFAULT 0,
-  FOREIGN KEY (ppd_type) REFERENCES {schema}_ucod_ppd_type(codeval),
-  UNIQUE (ppd_process, ppd_attrib)
+  /***************{param}***************/
+CREATE TABLE {schema}_{param} (
+  {param_id} integer primary key autoincrement NOT NULL,
+  {param_process} text NOT NULL,
+  {param_attrib} text NOT NULL,
+  {param_desc} text NOT NULL,
+  {param_type} text NOT NULL,
+  {code_name} text,
+  {param_etstmp} text,
+  {param_euser} text,
+  {param_mtstmp} text,
+  {param_muser} text,
+  {param_snotes} text,
+  {is_param_app} integer NOT NULL DEFAULT 0,
+  {is_param_user} integer NOT NULL DEFAULT 0,
+  {is_param_sys} integer NOT NULL DEFAULT 0,
+  FOREIGN KEY ({param_type}) REFERENCES {schema}_{code_param_type}({code_val}),
+  UNIQUE ({param_process}, {param_attrib})
 );
 
-/***************RQ***************/
-CREATE TABLE {schema}_rq (
-  rq_id integer primary key autoincrement NOT NULL,
-  rq_etstmp text,
-  rq_eu text,
-  rq_name text NOT NULL,
-  rq_message text NOT NULL,
-  rq_rslt text,
-  rq_rslt_tstmp text,
-  rq_rslt_u text,
-  rq_snotes text
+/***************{queue}***************/
+CREATE TABLE {schema}_{queue} (
+  {queue_id} integer primary key autoincrement NOT NULL,
+  {queue_etstmp} text,
+  {queue_euser} text,
+  {queue_name} text NOT NULL,
+  {queue_message} text NOT NULL,
+  {queue_rslt} text,
+  {queue_rslt_tstmp} text,
+  {queue_rslt_user} text,
+  {queue_snotes} text
 );
 
-/***************RQST***************/
-CREATE TABLE {schema}_rqst (
-  rqst_id integer primary key autoincrement NOT NULL,
-  rqst_etstmp text,
-  rqst_eu text,
-  rqst_source text NOT NULL,
-  rqst_atype text NOT NULL,
-  rqst_aname text NOT NULL,
-  rqst_parms text,
-  rqst_ident text,
-  rqst_rslt text,
-  rqst_rslt_tstmp text,
-  rqst_rslt_u text,
-  rqst_snotes text,
-  FOREIGN KEY (rqst_atype) REFERENCES {schema}_ucod_rqst_atype (codeval),
-  FOREIGN KEY (rqst_source) REFERENCES {schema}_ucod_rqst_source (codeval)
+/***************{job}***************/
+CREATE TABLE {schema}_{job} (
+  {job_id} integer primary key autoincrement NOT NULL,
+  {job_etstmp} text,
+  {job_user} text,
+  {job_source} text NOT NULL,
+  {job_action} text NOT NULL,
+  {job_action_target} text NOT NULL,
+  {job_params} text,
+  {job_tag} text,
+  {job_rslt} text,
+  {job_rslt_tstmp} text,
+  {job_rslt_user} text,
+  {job_snotes} text,
+  FOREIGN KEY ({job_action}) REFERENCES {schema}_{code_task_action} ({code_val}),
+  FOREIGN KEY ({job_source}) REFERENCES {schema}_{code_task_source} ({code_val})
 );
 
-/***************RQST_D***************/
-CREATE TABLE {schema}_rqst_d (
-  rqst_d_id integer primary key autoincrement NOT NULL,
-  rqst_id integer NOT NULL,
-  d_scope text,
-  d_scope_id integer,
-  d_ctgr text,
-  d_desc text,
-  FOREIGN KEY (rqst_id) REFERENCES {schema}_rqst (rqst_id)
+/***************{job_doc}***************/
+CREATE TABLE {schema}_{job_doc} (
+  {job_doc_id} integer primary key autoincrement NOT NULL,
+  {job_id} integer NOT NULL,
+  {doc_scope} text,
+  {doc_scope_id} integer,
+  {doc_ctgr} text,
+  {doc_desc} text,
+  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job} ({job_id})
 );
 
-/***************RQST_EMAIL***************/
-CREATE TABLE {schema}_rqst_email (
-  rqst_email_id integer primary key autoincrement NOT NULL,
-  rqst_id integer NOT NULL,
-  email_txt_attrib text,
-  email_to text NOT NULL,
-  email_cc text,
-  email_bcc text,
-  email_attach integer,
-  email_subject text,
-  email_text text,
-  email_html text,
-  email_d_id integer,
-  FOREIGN KEY (rqst_id) REFERENCES {schema}_rqst (rqst_id)
+/***************{job_email}***************/
+CREATE TABLE {schema}_{job_email} (
+  {job_email_id} integer primary key autoincrement NOT NULL,
+  {job_id} integer NOT NULL,
+  {email_txt_attrib} text,
+  {email_to} text NOT NULL,
+  {email_cc} text,
+  {email_bcc} text,
+  {email_attach} integer,
+  {email_subject} text,
+  {email_text} text,
+  {email_html} text,
+  {email_doc_id} integer,
+  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job} ({job_id})
 );
 
-/***************RQST_N***************/
-CREATE TABLE {schema}_rqst_n (
-  rqst_n_id integer primary key autoincrement NOT NULL,
-  rqst_id integer NOT NULL,
-  n_scope text,
-  n_scope_id integer,
-  n_type text,
-  n_note text,
-  FOREIGN KEY (rqst_id) REFERENCES {schema}_rqst (rqst_id)
+/***************{job_note}***************/
+CREATE TABLE {schema}_{job_note} (
+  {job_note_id} integer primary key autoincrement NOT NULL,
+  {job_id} integer NOT NULL,
+  {note_scope} text,
+  {note_scope_id} integer,
+  {note_type} text,
+  {note_body} text,
+  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job} ({job_id})
 );
 
-/***************RQST_RQ***************/
-CREATE TABLE {schema}_rqst_rq (
-  rqst_rq_id integer primary key autoincrement NOT NULL,
-  rqst_id integer NOT NULL,
-  rq_name text NOT NULL,
-  rq_message text,
-  FOREIGN KEY (rqst_id) REFERENCES {schema}_rqst (rqst_id)
+/***************{job_queue}***************/
+CREATE TABLE {schema}_{job_queue} (
+  {job_queue_id} integer primary key autoincrement NOT NULL,
+  {job_id} integer NOT NULL,
+  {queue_name} text NOT NULL,
+  {queue_message} text,
+  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job} ({job_id})
 );
 
-/***************RQST_SMS***************/
-CREATE TABLE {schema}_rqst_sms (
-  rqst_sms_id integer primary key autoincrement NOT NULL,
-  rqst_id integer NOT NULL,
-  sms_txt_attrib text,
-  sms_to text NOT NULL,
-  sms_body text,
-  FOREIGN KEY (rqst_id) REFERENCES {schema}_rqst (rqst_id)
+/***************{job_sms}***************/
+CREATE TABLE {schema}_{job_sms} (
+  {job_sms_id} integer primary key autoincrement NOT NULL,
+  {job_id} integer NOT NULL,
+  {sms_txt_attrib} text,
+  {sms_to} text NOT NULL,
+  {sms_body} text,
+  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job} ({job_id})
 );
 
-/***************SM***************/
-CREATE TABLE {schema}_sm (
-  sm_id_auto integer primary key autoincrement NOT NULL,
-  sm_utype text NOT NULL DEFAULT 'S',
-  sm_id integert NOT NULL,
-  sm_sts text NOT NULL DEFAULT 'ACTIVE',
-  sm_id_parent integer,
-  sm_name text NOT NULL,
-  sm_seq integer,
-  sm_desc text NOT NULL,
-  sm_descl text,
-  sm_descvl text,
-  sm_cmd text,
-  sm_image text,
-  sm_snotes text,
-  sm_subcmd text,
-  UNIQUE (sm_id),
-  UNIQUE (sm_id_parent, sm_desc),
-  UNIQUE (sm_id, sm_desc),
-  UNIQUE (sm_name),
-  CHECK (sm_utype in ('S', 'C')),
-  FOREIGN KEY (sm_id_parent) REFERENCES {schema}_sm(sm_id),
-  FOREIGN KEY (sm_sts) REFERENCES {schema}_ucod_ahc(codeval)
+/***************{menu}***************/
+CREATE TABLE {schema}_{menu} (
+  {menu_id_auto} integer primary key autoincrement NOT NULL,
+  {menu_group} text NOT NULL DEFAULT 'S',
+  {menu_id} integert NOT NULL,
+  {menu_sts} text NOT NULL DEFAULT 'ACTIVE',
+  {menu_id_parent} integer,
+  {menu_name} text NOT NULL,
+  {menu_seq} integer,
+  {menu_desc} text NOT NULL,
+  {menu_desc_ext} text,
+  {menu_desc_ext2} text,
+  {menu_cmd} text,
+  {menu_image} text,
+  {menu_snotes} text,
+  {menu_subcmd} text,
+  UNIQUE ({menu_id}),
+  UNIQUE ({menu_id_parent}, {menu_desc}),
+  UNIQUE ({menu_id}, {menu_desc}),
+  UNIQUE ({menu_name}),
+  CHECK ({menu_group} in ('S', 'C')),
+  FOREIGN KEY ({menu_id_parent}) REFERENCES {schema}_{menu}({menu_id}),
+  FOREIGN KEY ({menu_sts}) REFERENCES {schema}_{code_ahc}({code_val})
 );
 
-/***************SR***************/
-CREATE TABLE {schema}_sr (
-  sr_id integer primary key autoincrement NOT NULL,
-  sr_seq integer NOT NULL,
-  sr_sts text NOT NULL DEFAULT 'ACTIVE',
-  sr_name text NOT NULL,
-  sr_desc text NOT NULL,
-  sr_snotes text,
-  sr_code text,
-  sr_attrib text,
-  UNIQUE (sr_desc),
-  UNIQUE (sr_name),
-  FOREIGN KEY (sr_sts) REFERENCES {schema}_ucod_ahc(codeval)
+/***************{sys_role}***************/
+CREATE TABLE {schema}_{sys_role} (
+  {sys_role_id} integer primary key autoincrement NOT NULL,
+  {sys_role_seq} integer NOT NULL,
+  {sys_role_sts} text NOT NULL DEFAULT 'ACTIVE',
+  {sys_role_name} text NOT NULL,
+  {sys_role_desc} text NOT NULL,
+  {sys_role_snotes} text,
+  {sys_role_code} text,
+  {sys_role_attrib} text,
+  UNIQUE ({sys_role_desc}),
+  UNIQUE ({sys_role_name}),
+  FOREIGN KEY ({sys_role_sts}) REFERENCES {schema}_{code_ahc}({code_val})
 );
 
-/***************SF***************/
-CREATE TABLE {schema}_sf (
-  sf_id integer primary key autoincrement NOT NULL,
-  sf_seq integer NOT NULL,
-  sf_sts text NOT NULL DEFAULT 'ACTIVE',
-  sf_name text NOT NULL,
-  sf_desc text NOT NULL,
-  sf_snotes text,
-  sf_code text,
-  sf_attrib text,
-  UNIQUE (sf_desc),
-  UNIQUE (sf_name),
-  FOREIGN KEY (sf_sts) REFERENCES {schema}_ucod_ahc(codeval)
+/***************{sys_func}***************/
+CREATE TABLE {schema}_{sys_func} (
+  {sys_func_id} integer primary key autoincrement NOT NULL,
+  {sys_func_seq} integer NOT NULL,
+  {sys_func_sts} text NOT NULL DEFAULT 'ACTIVE',
+  {sys_func_name} text NOT NULL,
+  {sys_func_desc} text NOT NULL,
+  {sys_func_snotes} text,
+  {sys_func_code} text,
+  {sys_func_attrib} text,
+  UNIQUE ({sys_func_desc}),
+  UNIQUE ({sys_func_name}),
+  FOREIGN KEY ({sys_func_sts}) REFERENCES {schema}_{code_ahc}({code_val})
 );
 
-/***************TXT***************/
-CREATE TABLE {schema}_txt (
-  txt_id integer primary key autoincrement NOT NULL,
-  txt_process text NOT NULL,
-  txt_attrib text NOT NULL,
-  txt_type text NOT NULL DEFAULT 'TEXT',
-  txt_tval text,
-  txt_val text,
-  txt_bcc text,
-  txt_desc text,
-  txt_etstmp text,
-  txt_eu text,
-  txt_mtstmp text,
-  txt_mu text,
-  UNIQUE (txt_process, txt_attrib),
-  FOREIGN KEY (txt_type) REFERENCES {schema}_ucod_txt_type (codeval)
+/***************{txt}***************/
+CREATE TABLE {schema}_{txt} (
+  {txt_id} integer primary key autoincrement NOT NULL,
+  {txt_process} text NOT NULL,
+  {txt_attrib} text NOT NULL,
+  {txt_type} text NOT NULL DEFAULT 'TEXT',
+  {txt_title} text,
+  {txt_body} text,
+  {txt_bcc} text,
+  {txt_desc} text,
+  {txt_etstmp} text,
+  {txt_euser} text,
+  {txt_mtstmp} text,
+  {txt_muser} text,
+  UNIQUE ({txt_process}, {txt_attrib}),
+  FOREIGN KEY ({txt_type}) REFERENCES {schema}_{code_txt_type} ({code_val})
 );
 
-/***************CPER***************/
-CREATE TABLE {schema}_cper (
-  cper_id integer primary key autoincrement NOT NULL,
-  pe_id integer NOT NULL,
-  cr_name text NOT NULL,
-  cper_snotes text,
-  UNIQUE (pe_id, cr_name),
-  FOREIGN KEY (pe_id) REFERENCES {schema}_cpe(pe_id),
-  FOREIGN KEY (cr_name) REFERENCES {schema}_cr(cr_name)
+/***************{cust_user_role}***************/
+CREATE TABLE {schema}_{cust_user_role} (
+  {cust_user_role_id} integer primary key autoincrement NOT NULL,
+  {sys_user_id} integer NOT NULL,
+  {cust_role_name} text NOT NULL,
+  {cust_user_role_snotes} text,
+  UNIQUE ({sys_user_id}, {cust_role_name}),
+  FOREIGN KEY ({sys_user_id}) REFERENCES {schema}_{cust_user}({sys_user_id}),
+  FOREIGN KEY ({cust_role_name}) REFERENCES {schema}_{cust_role}({cust_role_name})
 );
 
-/***************CRM***************/
-CREATE TABLE {schema}_crm (
-  crm_id integer primary key autoincrement NOT NULL,
-  sm_id integer NOT NULL,
-  cr_name text NOT NULL,
-  crm_snotes text,
-  UNIQUE (cr_name, sm_id),
-  FOREIGN KEY (sm_id) REFERENCES {schema}_sm(sm_id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (cr_name) REFERENCES {schema}_cr(cr_name) ON DELETE CASCADE
+/***************{cust_menu_role}***************/
+CREATE TABLE {schema}_{cust_menu_role} (
+  {cust_menu_role_id} integer primary key autoincrement NOT NULL,
+  {menu_id} integer NOT NULL,
+  {cust_role_name} text NOT NULL,
+  {cust_menu_role_snotes} text,
+  UNIQUE ({cust_role_name}, {menu_id}),
+  FOREIGN KEY ({menu_id}) REFERENCES {schema}_{menu}({menu_id}) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY ({cust_role_name}) REFERENCES {schema}_{cust_role}({cust_role_name}) ON DELETE CASCADE
 );
 
-/***************GCOD_H***************/
-CREATE TABLE {schema}_gcod_h (
-    gcod_h_id  integer primary key autoincrement NOT NULL,
-    codename text NOT NULL,
-    codemean text,
-    codecodemean text,
-    cod_h_etstmp text,
-    cod_h_eu text,
-    cod_h_mtstmp text,
-    cod_h_mu text,
-    cod_snotes text,
-    codeattribmean text,
-    codeschema text,
-    UNIQUE (codeschema, codename)
+/***************{code_app}***************/
+CREATE TABLE {schema}_{code_app} (
+    {code_app_h_id}  integer primary key autoincrement NOT NULL,
+    {code_name} text NOT NULL,
+    {code_desc} text,
+    {code_code_desc} text,
+    {code_h_etstmp} text,
+    {code_h_euser} text,
+    {code_h_mtstmp} text,
+    {code_h_muser} text,
+    {code_snotes} text,
+    {code_attrib_desc} text,
+    {code_schema} text,
+    UNIQUE ({code_schema}, {code_name})
 );
 
-/***************GCOD2_H***************/
-CREATE TABLE {schema}_gcod2_h (
-    gcod2_h_id  integer primary key autoincrement NOT NULL,
-    codename text NOT NULL,
-    codemean text,
-    codecodemean text,
-    cod_h_etstmp text,
-    cod_h_eu text,
-    cod_h_mtstmp text,
-    cod_h_mu text,
-    cod_snotes text,
-    codeattribmean text,
-    codeschema text,
-    UNIQUE (codeschema, codename)
+/***************{code2_app}***************/
+CREATE TABLE {schema}_{code2_app} (
+    {code2_app_h_id}  integer primary key autoincrement NOT NULL,
+    {code_name} text NOT NULL,
+    {code_desc} text,
+    {code_code_desc} text,
+    {code_h_etstmp} text,
+    {code_h_euser} text,
+    {code_h_mtstmp} text,
+    {code_h_muser} text,
+    {code_snotes} text,
+    {code_attrib_desc} text,
+    {code_schema} text,
+    UNIQUE ({code_schema}, {code_name})
 );
 
-/***************GPP***************/
-CREATE TABLE {schema}_gpp (
-  gpp_id integer primary key autoincrement NOT NULL,
-  gpp_process text NULL,
-  gpp_attrib text NOT NULL,
-  gpp_val text,
-  gpp_etstmp txt,
-  gpp_eu text,
-  gpp_mtstmp text,
-  gpp_mu text,
-  UNIQUE (gpp_process, gpp_attrib),
-  FOREIGN KEY (gpp_process, gpp_attrib) REFERENCES {schema}_ppd(ppd_process, ppd_attrib)
+/***************{param_app}***************/
+CREATE TABLE {schema}_{param_app} (
+  {param_app_id} integer primary key autoincrement NOT NULL,
+  {param_app_process} text NULL,
+  {param_app_attrib} text NOT NULL,
+  {param_app_val} text,
+  {param_app_etstmp} {txt},
+  {param_app_euser} text,
+  {param_app_mtstmp} text,
+  {param_app_muser} text,
+  UNIQUE ({param_app_process}, {param_app_attrib}),
+  FOREIGN KEY ({param_app_process}, {param_app_attrib}) REFERENCES {schema}_{param}({param_process}, {param_attrib})
 );
 
-/***************PPP***************/
-CREATE TABLE {schema}_ppp (
-  ppp_id integer primary key autoincrement NOT NULL,
-  pe_id integer NOT NULL,
-  ppp_process text NULL,
-  ppp_attrib text NOT NULL,
-  ppp_val text,
-  ppp_etstmp txt,
-  ppp_eu text,
-  ppp_mtstmp text,
-  ppp_mu text,
-  UNIQUE (ppp_process, ppp_attrib),
-  FOREIGN KEY (ppp_process, ppp_attrib) REFERENCES {schema}_ppd(ppd_process, ppd_attrib)
+/***************{param_user}***************/
+CREATE TABLE {schema}_{param_user} (
+  {param_user_id} integer primary key autoincrement NOT NULL,
+  {sys_user_id} integer NOT NULL,
+  {param_user_process} text NULL,
+  {param_user_attrib} text NOT NULL,
+  {param_user_val} text,
+  {param_user_etstmp} {txt},
+  {param_user_euser} text,
+  {param_user_mtstmp} text,
+  {param_user_muser} text,
+  UNIQUE ({param_user_process}, {param_user_attrib}),
+  FOREIGN KEY ({param_user_process}, {param_user_attrib}) REFERENCES {schema}_{param}({param_process}, {param_attrib})
               ON UPDATE NO ACTION ON DELETE CASCADE,
-  FOREIGN KEY (pe_id) REFERENCES {schema}_pe(pe_id)
+  FOREIGN KEY ({sys_user_id}) REFERENCES {schema}_{sys_user}({sys_user_id})
               ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
-/***************SPEF***************/
-CREATE TABLE {schema}_spef (
-  spef_id integer primary key autoincrement NOT NULL,
-  pe_id integer NOT NULL,
-  sf_name text NOT NULL,
-  spef_snotes text,
-  UNIQUE (pe_id, sf_name),
-  FOREIGN KEY (pe_id) REFERENCES {schema}_pe(pe_id),
-  FOREIGN KEY (sf_name) REFERENCES {schema}_sf(sf_name)
+/***************{sys_user_func}***************/
+CREATE TABLE {schema}_{sys_user_func} (
+  {sys_user_func_id} integer primary key autoincrement NOT NULL,
+  {sys_user_id} integer NOT NULL,
+  {sys_func_name} text NOT NULL,
+  {sys_user_func_snotes} text,
+  UNIQUE ({sys_user_id}, {sys_func_name}),
+  FOREIGN KEY ({sys_user_id}) REFERENCES {schema}_{sys_user}({sys_user_id}),
+  FOREIGN KEY ({sys_func_name}) REFERENCES {schema}_{sys_func}({sys_func_name})
 );
 
-/***************SPER***************/
-CREATE TABLE {schema}_sper (
-  sper_id integer primary key autoincrement NOT NULL,
-  pe_id integer NOT NULL,
-  sr_name text NOT NULL,
-  sper_snotes text,
-  UNIQUE (pe_id, sr_name),
-  FOREIGN KEY (pe_id) REFERENCES {schema}_pe(pe_id),
-  FOREIGN KEY (sr_name) REFERENCES {schema}_sr(sr_name)
+/***************{sys_user_role}***************/
+CREATE TABLE {schema}_{sys_user_role} (
+  {sys_user_role_id} integer primary key autoincrement NOT NULL,
+  {sys_user_id} integer NOT NULL,
+  {sys_role_name} text NOT NULL,
+  {sys_user_role_snotes} text,
+  UNIQUE ({sys_user_id}, {sys_role_name}),
+  FOREIGN KEY ({sys_user_id}) REFERENCES {schema}_{sys_user}({sys_user_id}),
+  FOREIGN KEY ({sys_role_name}) REFERENCES {schema}_{sys_role}({sys_role_name})
 );
 
-/***************SRM***************/
-CREATE TABLE {schema}_srm (
-  srm_id integer primary key autoincrement NOT NULL,
-  sm_id integer NOT NULL,
-  sr_name text NOT NULL,
-  srm_snotes text,
-  UNIQUE (sr_name, sm_id),
-  FOREIGN KEY (sm_id) REFERENCES {schema}_sm(sm_id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (sr_name) REFERENCES {schema}_sr(sr_name) ON DELETE CASCADE
+/***************{sys_menu_role}***************/
+CREATE TABLE {schema}_{sys_menu_role} (
+  {sys_menu_role_id} integer primary key autoincrement NOT NULL,
+  {menu_id} integer NOT NULL,
+  {sys_role_name} text NOT NULL,
+  {sys_menu_role_snotes} text,
+  UNIQUE ({sys_role_name}, {menu_id}),
+  FOREIGN KEY ({menu_id}) REFERENCES {schema}_{menu}({menu_id}) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY ({sys_role_name}) REFERENCES {schema}_{sys_role}({sys_role_name}) ON DELETE CASCADE
 );
 
-/***************UCOD_H***************/
-CREATE TABLE {schema}_ucod_h (
-    ucod_h_id  integer primary key autoincrement NOT NULL,
-    codename text NOT NULL,
-    codemean text,
-    codecodemean text,
-    cod_h_etstmp text,
-    cod_h_eu text,
-    cod_h_mtstmp text,
-    cod_h_mu text,
-    cod_snotes text,
-    codeattribmean text,
-    codeschema text,
-    UNIQUE (codeschema, codename)
+/***************{code_sys}***************/
+CREATE TABLE {schema}_{code_sys} (
+    {code_sys_h_id}  integer primary key autoincrement NOT NULL,
+    {code_name} text NOT NULL,
+    {code_desc} text,
+    {code_code_desc} text,
+    {code_h_etstmp} text,
+    {code_h_euser} text,
+    {code_h_mtstmp} text,
+    {code_h_muser} text,
+    {code_snotes} text,
+    {code_attrib_desc} text,
+    {code_schema} text,
+    UNIQUE ({code_schema}, {code_name})
 );
 
-/***************UCOD2_H***************/
-CREATE TABLE {schema}_ucod2_h (
-    ucod2_h_id  integer primary key autoincrement NOT NULL,
-    codename text NOT NULL,
-    codemean text,
-    codecodemean text,
-    cod_h_etstmp text,
-    cod_h_eu text,
-    cod_h_mtstmp text,
-    cod_h_mu text,
-    cod_snotes text,
-    codeattribmean text,
-    codeschema text,
-    UNIQUE (codeschema, codename)
+/***************{code2_sys}***************/
+CREATE TABLE {schema}_{code2_sys} (
+    {code2_sys_h_id}  integer primary key autoincrement NOT NULL,
+    {code_name} text NOT NULL,
+    {code_desc} text,
+    {code_code_desc} text,
+    {code_h_etstmp} text,
+    {code_h_euser} text,
+    {code_h_mtstmp} text,
+    {code_h_muser} text,
+    {code_snotes} text,
+    {code_attrib_desc} text,
+    {code_schema} text,
+    UNIQUE ({code_schema}, {code_name})
 );
 
-/***************V***************/
-CREATE TABLE {schema}_v (
-    v_id integer primary key autoincrement NOT NULL,
-    v_comp text NOT NULL,
-    v_no_major integer DEFAULT 0 NOT NULL,
-    v_no_minor integer DEFAULT 0 NOT NULL,
-    v_no_build integer DEFAULT 0 NOT NULL,
-    v_no_rev integer DEFAULT 0 NOT NULL,
-    v_sts text DEFAULT 'OK' NOT NULL,
-    v_note text,
-    v_etstmp text,
-    v_eu text,
-    v_mtstmp text,
-    v_mu text,
-    v_snotes text,
-    UNIQUE (v_no_major, v_no_minor, v_no_build, v_no_rev),
-    FOREIGN KEY (v_sts) REFERENCES {schema}_ucod_v_sts(codeval)
+/***************{version}***************/
+CREATE TABLE {schema}_{version} (
+    {version_id} integer primary key autoincrement NOT NULL,
+    {version_component} text NOT NULL,
+    {version_no_major} integer DEFAULT 0 NOT NULL,
+    {version_no_minor} integer DEFAULT 0 NOT NULL,
+    {version_no_build} integer DEFAULT 0 NOT NULL,
+    {version_no_rev} integer DEFAULT 0 NOT NULL,
+    {version_sts} text DEFAULT 'OK' NOT NULL,
+    {version_note} text,
+    {version_etstmp} text,
+    {version_euser} text,
+    {version_mtstmp} text,
+    {version_muser} text,
+    {version_snotes} text,
+    UNIQUE ({version_no_major}, {version_no_minor}, {version_no_build}, {version_no_rev}),
+    FOREIGN KEY ({version_sts}) REFERENCES {schema}_{code_version_sts}({code_val})
 );
 
-/***************XPP***************/
-CREATE TABLE {schema}_xpp (
-  xpp_id integer primary key autoincrement NOT NULL,
-  xpp_process text NULL,
-  xpp_attrib text NOT NULL,
-  xpp_val text,
-  xpp_etstmp txt,
-  xpp_eu text,
-  xpp_mtstmp text,
-  xpp_mu text,
-  UNIQUE (xpp_process, xpp_attrib),
-  FOREIGN KEY (xpp_process, xpp_attrib) REFERENCES {schema}_ppd(ppd_process, ppd_attrib)
+/***************{param_sys}***************/
+CREATE TABLE {schema}_{param_sys} (
+  {param_sys_id} integer primary key autoincrement NOT NULL,
+  {param_sys_process} text NULL,
+  {param_sys_attrib} text NOT NULL,
+  {param_sys_val} text,
+  {param_sys_etstmp} {txt},
+  {param_sys_euser} text,
+  {param_sys_mtstmp} text,
+  {param_sys_muser} text,
+  UNIQUE ({param_sys_process}, {param_sys_attrib}),
+  FOREIGN KEY ({param_sys_process}, {param_sys_attrib}) REFERENCES {schema}_{param}({param_process}, {param_attrib})
 );
 
-/***************NUMBERS***************/
-CREATE TABLE {schema}_numbers (
+/***************{number}***************/
+CREATE TABLE {schema}_{number} (
   {number_val} integer NOT NULL,
   PRIMARY KEY ({number_val})
 );

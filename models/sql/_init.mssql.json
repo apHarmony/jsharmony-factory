@@ -1,5 +1,5 @@
 {
-  "init_sysadmin_access": ["select case when count(*)=16 then 1 else 0 end jsinitaccess from (",
+  "{init_sysadmin_access}": ["select case when count(*)=16 then 1 else 0 end jsinitaccess from (",
                             "SELECT * FROM fn_my_permissions(NULL, 'SERVER')",
                             "  where permission_name in ('CREATE SERVER ROLE')",
                             "union all",
@@ -9,5 +9,5 @@
                             "   'create type','create schema','create synonym','create role',",
                             "   'select','insert','update','delete','execute')",
                             ") PERMS"],
-  "init_db_user_exists":"select 1 from sys.server_principals where name = '%%%INIT_DB_USER%%%'"
+  "{init_db_user_exists}":"select 1 from sys.server_principals where name = '%%%INIT_DB_USER%%%'"
 }

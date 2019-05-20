@@ -1,671 +1,671 @@
 /***************VIEWS***************/
 
-/***************V_PPP***************/
-CREATE VIEW {schema}_v_pp AS 
- SELECT ppd.ppd_process AS pp_process,
-        ppd.ppd_attrib AS pp_attrib,
+/***************{version}_{param_user}***************/
+CREATE VIEW {schema}_{v_param_cur} AS 
+ SELECT {param}.{param_process} AS {param_cur_process},
+        {param}.{param_attrib} AS {param_cur_attrib},
         CASE
-            WHEN ppp.ppp_val IS NULL OR ppp.ppp_val = '' THEN
+            WHEN {param_user}.{param_user_val} IS NULL OR {param_user}.{param_user_val} = '' THEN
             CASE
-                WHEN gpp.gpp_val IS NULL OR gpp.gpp_val = '' THEN xpp.xpp_val
-                ELSE gpp.gpp_val
+                WHEN {param_app}.{param_app_val} IS NULL OR {param_app}.{param_app_val} = '' THEN {param_sys}.{param_sys_val}
+                ELSE {param_app}.{param_app_val}
             END
-            ELSE ppp.ppp_val
-        END AS pp_val,
-    ppp.pe_id
-   FROM {schema}_ppd ppd
-     LEFT JOIN {schema}_xpp xpp ON ppd.ppd_process = xpp.xpp_process AND ppd.ppd_attrib = xpp.xpp_attrib
-     LEFT JOIN {schema}_gpp gpp ON ppd.ppd_process = gpp.gpp_process AND ppd.ppd_attrib = gpp.gpp_attrib
-     LEFT JOIN ( SELECT ppp_1.pe_id,
-                        ppp_1.ppp_process,
-                        ppp_1.ppp_attrib,
-                        ppp_1.ppp_val
-                   FROM {schema}_ppp ppp_1
+            ELSE {param_user}.{param_user_val}
+        END AS {param_cur_val},
+    {param_user}.{sys_user_id}
+   FROM {schema}_{param} {param}
+     LEFT JOIN {schema}_{param_sys} {param_sys} ON {param}.{param_process} = {param_sys}.{param_sys_process} AND {param}.{param_attrib} = {param_sys}.{param_sys_attrib}
+     LEFT JOIN {schema}_{param_app} {param_app} ON {param}.{param_process} = {param_app}.{param_app_process} AND {param}.{param_attrib} = {param_app}.{param_app_attrib}
+     LEFT JOIN ( SELECT {param_user}_1.{sys_user_id},
+                        {param_user}_1.{param_user_process},
+                        {param_user}_1.{param_user_attrib},
+                        {param_user}_1.{param_user_val}
+                   FROM {schema}_{param_user} {param_user}_1
                   UNION
-                 SELECT NULL AS pe_id,
-                        ppp_null.ppp_process,
-                        ppp_null.ppp_attrib,
-                        NULL AS ppp_val
-                   FROM {schema}_ppp ppp_null) ppp ON ppd.ppd_process = ppp.ppp_process AND ppd.ppd_attrib = ppp.ppp_attrib;
+                 SELECT NULL AS {sys_user_id},
+                        {param_user}_null.{param_user_process},
+                        {param_user}_null.{param_user_attrib},
+                        NULL AS {param_user_val}
+                   FROM {schema}_{param_user} {param_user}_null) {param_user} ON {param}.{param_process} = {param_user}.{param_user_process} AND {param}.{param_attrib} = {param_user}.{param_user_attrib};
 
-/***************V_HOUSE***************/
-CREATE VIEW {schema}_v_house AS
- SELECT name.pp_val AS house_name,
-    addr.pp_val AS house_addr,
-    city.pp_val AS house_city,
-    state.pp_val AS house_state,
-    zip.pp_val AS house_zip,
-    (((((((COALESCE(addr.pp_val, '')) || ', ') || (COALESCE(city.pp_val, ''))) || ' ') || (COALESCE(state.pp_val, ''))) || ' ') || (COALESCE(zip.pp_val, ''))) AS house_full_addr,
-    bphone.pp_val AS house_bphone,
-    fax.pp_val AS house_fax,
-    email.pp_val AS house_email,
-    contact.pp_val AS house_contact
-   FROM ((((((((({schema}_dual
-     LEFT JOIN {schema}_v_pp name ON ((((name.pp_process) = 'HOUSE') AND ((name.pp_attrib) = 'NAME'))))
-     LEFT JOIN {schema}_v_pp addr ON ((((addr.pp_process) = 'HOUSE') AND ((addr.pp_attrib) = 'ADDR'))))
-     LEFT JOIN {schema}_v_pp city ON ((((city.pp_process) = 'HOUSE') AND ((city.pp_attrib) = 'CITY'))))
-     LEFT JOIN {schema}_v_pp state ON ((((state.pp_process) = 'HOUSE') AND ((state.pp_attrib) = 'STATE'))))
-     LEFT JOIN {schema}_v_pp zip ON ((((zip.pp_process) = 'HOUSE') AND ((zip.pp_attrib) = 'ZIP'))))
-     LEFT JOIN {schema}_v_pp bphone ON ((((bphone.pp_process) = 'HOUSE') AND ((bphone.pp_attrib) = 'BPHONE'))))
-     LEFT JOIN {schema}_v_pp fax ON ((((fax.pp_process) = 'HOUSE') AND ((fax.pp_attrib) = 'FAX'))))
-     LEFT JOIN {schema}_v_pp email ON ((((email.pp_process) = 'HOUSE') AND ((email.pp_attrib) = 'EMAIL'))))
-     LEFT JOIN {schema}_v_pp contact ON ((((contact.pp_process) = 'HOUSE') AND ((contact.pp_attrib) = 'CONTACT'))));
+/***************{v_app_info}***************/
+CREATE VIEW {schema}_{v_app_info} AS
+ SELECT name.{param_cur_val} AS {app_name},
+    addr.{param_cur_val} AS {app_addr},
+    city.{param_cur_val} AS {app_city},
+    state.{param_cur_val} AS {app_state},
+    zip.{param_cur_val} AS {app_zip},
+    (((((((COALESCE(addr.{param_cur_val}, '')) || ', ') || (COALESCE(city.{param_cur_val}, ''))) || ' ') || (COALESCE(state.{param_cur_val}, ''))) || ' ') || (COALESCE(zip.{param_cur_val}, ''))) AS {app_full_addr},
+    bphone.{param_cur_val} AS {app_bphone},
+    fax.{param_cur_val} AS {app_fax},
+    email.{param_cur_val} AS {app_email},
+    contact.{param_cur_val} AS {app_contact}
+   FROM ((((((((({schema}_{single}
+     LEFT JOIN {schema}_{v_param_cur} name ON ((((name.{param_cur_process}) = 'HOUSE') AND ((name.{param_cur_attrib}) = 'NAME'))))
+     LEFT JOIN {schema}_{v_param_cur} addr ON ((((addr.{param_cur_process}) = 'HOUSE') AND ((addr.{param_cur_attrib}) = 'ADDR'))))
+     LEFT JOIN {schema}_{v_param_cur} city ON ((((city.{param_cur_process}) = 'HOUSE') AND ((city.{param_cur_attrib}) = 'CITY'))))
+     LEFT JOIN {schema}_{v_param_cur} state ON ((((state.{param_cur_process}) = 'HOUSE') AND ((state.{param_cur_attrib}) = 'STATE'))))
+     LEFT JOIN {schema}_{v_param_cur} zip ON ((((zip.{param_cur_process}) = 'HOUSE') AND ((zip.{param_cur_attrib}) = 'ZIP'))))
+     LEFT JOIN {schema}_{v_param_cur} bphone ON ((((bphone.{param_cur_process}) = 'HOUSE') AND ((bphone.{param_cur_attrib}) = 'BPHONE'))))
+     LEFT JOIN {schema}_{v_param_cur} fax ON ((((fax.{param_cur_process}) = 'HOUSE') AND ((fax.{param_cur_attrib}) = 'FAX'))))
+     LEFT JOIN {schema}_{v_param_cur} email ON ((((email.{param_cur_process}) = 'HOUSE') AND ((email.{param_cur_attrib}) = 'EMAIL'))))
+     LEFT JOIN {schema}_{v_param_cur} contact ON ((((contact.{param_cur_process}) = 'HOUSE') AND ((contact.{param_cur_attrib}) = 'CONTACT'))));
 
 
-/***************ucod2_gpp_process_attrib_v***************/
-CREATE VIEW {schema}_ucod2_gpp_process_attrib_v AS
- SELECT null AS codseq,
-    ppd.ppd_process AS codeval1,
-    ppd.ppd_attrib AS codeval2,
-    ppd.ppd_desc AS codetxt,
-    null AS codecode,
-    null codetdt,
-    null AS codetcm,
-    null AS cod_etstmp,
-    null AS cod_eu,
-    null AS cod_mtstmp,
-    null AS cod_mu,
-    null AS cod_snotes,
-    null AS cod_notes
-   FROM {schema}_ppd ppd
-  WHERE ppd.ppd_gpp;
+/***************{code2_param_app_attrib}***************/
+CREATE VIEW {schema}_{code2_param_app_attrib} AS
+ SELECT null AS {code_seq},
+    {param}.{param_process} AS {code_val1},
+    {param}.{param_attrib} AS {code_va12},
+    {param}.{param_desc} AS {code_txt},
+    null AS {code_code},
+    null {code_end_dt},
+    null AS {code_end_reason},
+    null AS {code_etstmp},
+    null AS {code_euser},
+    null AS {code_mtstmp},
+    null AS {code_muser},
+    null AS {code_snotes},
+    null AS {code_notes}
+   FROM {schema}_{param} {param}
+  WHERE {param}.{is_param_app};
 
-/***************ucod2_ppp_process_attrib_v***************/
-CREATE VIEW {schema}_ucod2_ppp_process_attrib_v AS
- SELECT null AS codseq,
-    ppd.ppd_process AS codeval1,
-    ppd.ppd_attrib AS codeval2,
-    ppd.ppd_desc AS codetxt,
-    null AS codecode,
-    null AS codetdt,
-    null AS codetcm,
-    null AS cod_etstmp,
-    null AS cod_eu,
-    null AS cod_mtstmp,
-    null AS cod_mu,
-    null AS cod_snotes,
-    null AS cod_notes
-   FROM {schema}_ppd ppd
-  WHERE ppd.ppd_ppp;
+/***************{code2_param_user_attrib}***************/
+CREATE VIEW {schema}_{code2_param_user_attrib} AS
+ SELECT null AS {code_seq},
+    {param}.{param_process} AS {code_val1},
+    {param}.{param_attrib} AS {code_va12},
+    {param}.{param_desc} AS {code_txt},
+    null AS {code_code},
+    null AS {code_end_dt},
+    null AS {code_end_reason},
+    null AS {code_etstmp},
+    null AS {code_euser},
+    null AS {code_mtstmp},
+    null AS {code_muser},
+    null AS {code_snotes},
+    null AS {code_notes}
+   FROM {schema}_{param} {param}
+  WHERE {param}.{is_param_user};
 
-/***************ucod2_xpp_process_attrib_v***************/
-CREATE VIEW {schema}_ucod2_xpp_process_attrib_v AS
- SELECT null AS codseq,
-    ppd.ppd_process AS codeval1,
-    ppd.ppd_attrib AS codeval2,
-    ppd.ppd_desc AS codetxt,
-    null AS codecode,
-    null codetdt,
-    null AS codetcm,
-    null AS cod_etstmp,
-    null AS cod_eu,
-    null AS cod_mtstmp,
-    null AS cod_mu,
-    null AS cod_snotes,
-    null AS cod_notes
-   FROM {schema}_ppd ppd
-  WHERE ppd.ppd_xpp;
+/***************{code2_param_sys_attrib}***************/
+CREATE VIEW {schema}_{code2_param_sys_attrib} AS
+ SELECT null AS {code_seq},
+    {param}.{param_process} AS {code_val1},
+    {param}.{param_attrib} AS {code_va12},
+    {param}.{param_desc} AS {code_txt},
+    null AS {code_code},
+    null {code_end_dt},
+    null AS {code_end_reason},
+    null AS {code_etstmp},
+    null AS {code_euser},
+    null AS {code_mtstmp},
+    null AS {code_muser},
+    null AS {code_snotes},
+    null AS {code_notes}
+   FROM {schema}_{param} {param}
+  WHERE {param}.{is_param_sys};
 
-/***************ucod_gpp_process_v***************/
-CREATE VIEW {schema}_ucod_gpp_process_v AS
- SELECT DISTINCT null AS codseq,
-    ppd.ppd_process AS codeval,
-    ppd.ppd_process AS codetxt,
-    null AS codecode,
-    null AS codetdt,
-    null AS codetcm
-   FROM {schema}_ppd ppd
-  WHERE ppd.ppd_gpp;
+/***************{code_param_app_process}***************/
+CREATE VIEW {schema}_{code_param_app_process} AS
+ SELECT DISTINCT null AS {code_seq},
+    {param}.{param_process} AS {code_val},
+    {param}.{param_process} AS {code_txt},
+    null AS {code_code},
+    null AS {code_end_dt},
+    null AS {code_end_reason}
+   FROM {schema}_{param} {param}
+  WHERE {param}.{is_param_app};
 
-/***************ucod_ppp_process_v***************/
-CREATE VIEW {schema}_ucod_ppp_process_v AS
- SELECT DISTINCT null AS codseq,
-    ppd.ppd_process AS codeval,
-    ppd.ppd_process AS codetxt,
-    null AS codecode,
-    null AS codetdt,
-    null AS codetcm
-   FROM {schema}_ppd ppd
-  WHERE ppd.ppd_ppp;
+/***************{code_param_user_process}***************/
+CREATE VIEW {schema}_{code_param_user_process} AS
+ SELECT DISTINCT null AS {code_seq},
+    {param}.{param_process} AS {code_val},
+    {param}.{param_process} AS {code_txt},
+    null AS {code_code},
+    null AS {code_end_dt},
+    null AS {code_end_reason}
+   FROM {schema}_{param} {param}
+  WHERE {param}.{is_param_user};
 
-/***************ucod_xpp_process_v***************/
-CREATE VIEW {schema}_ucod_xpp_process_v AS
- SELECT DISTINCT null AS codseq,
-    ppd.ppd_process AS codeval,
-    ppd.ppd_process AS codetxt,
-    null AS codecode,
-    null AS codetdt,
-    null AS codetcm
-   FROM {schema}_ppd ppd
-  WHERE ppd.ppd_xpp;
+/***************{code_param_sys_process}***************/
+CREATE VIEW {schema}_{code_param_sys_process} AS
+ SELECT DISTINCT null AS {code_seq},
+    {param}.{param_process} AS {code_val},
+    {param}.{param_process} AS {code_txt},
+    null AS {code_code},
+    null AS {code_end_dt},
+    null AS {code_end_reason}
+   FROM {schema}_{param} {param}
+  WHERE {param}.{is_param_sys};
 
-/***************v_audl_raw***************/
-CREATE VIEW {schema}_v_audl_raw AS
- SELECT aud_h.aud_seq,
-    aud_h.c_id,
-    aud_h.e_id,
-    aud_h.table_name,
-    aud_h.table_id,
-    aud_h.aud_op,
-    aud_h.aud_u,
-    {schema}.mycuser_fmt(aud_h.aud_u) AS pe_name,
-    aud_h.db_k,
-    aud_h.aud_tstmp,
-    aud_h.ref_name,
-    aud_h.ref_id,
-    aud_h.subj,
-    aud_d.column_name,
-    aud_d.column_val
-   FROM ({schema}_aud_h aud_h
-     LEFT JOIN {schema}_aud_d aud_d ON ((aud_h.aud_seq = aud_d.aud_seq)));
+/***************{v_audit_detail}***************/
+CREATE VIEW {schema}_{v_audit_detail} AS
+ SELECT {audit}.{audit_seq},
+    {audit}.{cust_id},
+    {audit}.{item_id},
+    {audit}.{audit_table_name},
+    {audit}.{audit_table_id},
+    {audit}.{audit_op},
+    {audit}.{audit_user},
+    {schema}.{my_db_user_fmt}({audit}.{audit_user}) AS {sys_user_name},
+    {audit}.{db_id},
+    {audit}.{audit_tstmp},
+    {audit}.{audit_ref_name},
+    {audit}.{audit_ref_id},
+    {audit}.{audit_subject},
+    {audit_detail}.{audit_column_name},
+    {audit_detail}.{audit_column_val}
+   FROM ({schema}_{audit} {audit}
+     LEFT JOIN {schema}_{audit_detail} {audit_detail} ON (({audit}.{audit_seq} = {audit_detail}.{audit_seq})));
 
-/***************v_cper_nostar***************/
-CREATE VIEW {schema}_v_cper_nostar AS
- SELECT cper.pe_id,
-    cper.cper_snotes,
-    cper.cper_id,
-    cper.cr_name,
-    cper.rowid rowid
-   FROM {schema}_cper cper
-  WHERE (cper.cr_name <> 'C*');
+/***************{v_cust_user_nostar}***************/
+CREATE VIEW {schema}_{v_cust_user_nostar} AS
+ SELECT {cust_user_role}.{sys_user_id},
+    {cust_user_role}.{cust_user_role_snotes},
+    {cust_user_role}.{cust_user_role_id},
+    {cust_user_role}.{cust_role_name},
+    {cust_user_role}.rowid rowid
+   FROM {schema}_{cust_user_role} {cust_user_role}
+  WHERE ({cust_user_role}.{cust_role_name} <> 'C*');
 
-create trigger {schema}_v_cper_nostar_insert instead of insert on {schema}_v_cper_nostar
+create trigger {schema}_{v_cust_user_nostar}_insert instead of insert on {schema}_{v_cust_user_nostar}
 begin
-  insert into {schema}_cper(pe_id,cper_snotes,cr_name) values (new.pe_id,new.cper_snotes,new.cr_name)\;
+  insert into {schema}_{cust_user_role}({sys_user_id},{cust_user_role_snotes},{cust_role_name}) values (new.{sys_user_id},new.{cust_user_role_snotes},new.{cust_role_name})\;
   update jsharmony_meta set extra_changes=extra_changes+1, last_insert_rowid_override=last_insert_rowid()\;
 end;
 
-create trigger {schema}_v_cper_nostar_update instead of update on {schema}_v_cper_nostar
+create trigger {schema}_{v_cust_user_nostar}_update instead of update on {schema}_{v_cust_user_nostar}
 begin
-  update {schema}_cper set pe_id = new.pe_id, cper_snotes = new.cper_snotes, cr_name = new.cr_name where cper_id=new.cper_id\;
+  update {schema}_{cust_user_role} set {sys_user_id} = new.{sys_user_id}, {cust_user_role_snotes} = new.{cust_user_role_snotes}, {cust_role_name} = new.{cust_role_name} where {cust_user_role_id}=new.{cust_user_role_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-create trigger {schema}_v_cper_nostar_delete instead of delete on {schema}_v_cper_nostar
+create trigger {schema}_{v_cust_user_nostar}_delete instead of delete on {schema}_{v_cust_user_nostar}
 begin
-  delete from {schema}_cper where cper_id = old.cper_id\;
+  delete from {schema}_{cust_user_role} where {cust_user_role_id} = old.{cust_user_role_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-/***************v_crmsel***************/
-CREATE VIEW {schema}_v_crmsel AS
- SELECT crm.crm_id,
-    COALESCE(dual.dual_text, '') AS new_cr_name,
-    dual.dual_integer AS new_sm_id,
+/***************{v_cust_menu_role_selection}***************/
+CREATE VIEW {schema}_{v_cust_menu_role_selection} AS
+ SELECT {cust_menu_role}.{cust_menu_role_id},
+    COALESCE({single}.{single_text}, '') AS {new_cust_role_name},
+    {single}.{single_integer} AS {new_menu_id},
         CASE
-            WHEN (crm.crm_id IS NULL) THEN 0
+            WHEN ({cust_menu_role}.{cust_menu_role_id} IS NULL) THEN 0
             ELSE 1
-        END AS crmsel_sel,
-    m.cr_name,
-    m.cr_seq,
-    m.cr_sts,
-    m.cr_desc,
-    m.cr_id,
-    m.sm_id_auto,
-    m.sm_utype,
-    m.sm_id,
-    m.sm_sts,
-    m.sm_id_parent,
-    m.sm_name,
-    m.sm_seq,
-    m.sm_desc,
-    m.sm_descl,
-    m.sm_descvl,
-    m.sm_cmd,
-    m.sm_image,
-    m.sm_snotes,
-    m.sm_subcmd
-   FROM ((( SELECT cr.cr_name,
-            cr.cr_seq,
-            cr.cr_sts,
-            cr.cr_desc,
-            cr.cr_id,
-            sm.sm_id_auto,
-            sm.sm_utype,
-            sm.sm_id,
-            sm.sm_sts,
-            sm.sm_id_parent,
-            sm.sm_name,
-            sm.sm_seq,
-            sm.sm_desc,
-            sm.sm_descl,
-            sm.sm_descvl,
-            sm.sm_cmd,
-            sm.sm_image,
-            sm.sm_snotes,
-            sm.sm_subcmd
-           FROM ({schema}_cr cr
-             LEFT JOIN {schema}_sm sm ON ((sm.sm_utype = 'C')))) m
-     JOIN {schema}_dual dual ON ((1 = 1)))
-     LEFT JOIN {schema}_crm crm ON (((crm.cr_name = m.cr_name) AND (crm.sm_id = m.sm_id))));
+        END AS {cust_menu_role_selection},
+    m.{cust_role_name},
+    m.{cust_role_seq},
+    m.{cust_role_sts},
+    m.{cust_role_desc},
+    m.{cust_role_id},
+    m.{menu_id_auto},
+    m.{menu_group},
+    m.{menu_id},
+    m.{menu_sts},
+    m.{menu_id_parent},
+    m.{menu_name},
+    m.{menu_seq},
+    m.{menu_desc},
+    m.{menu_desc_ext},
+    m.{menu_desc_ext2},
+    m.{menu_cmd},
+    m.{menu_image},
+    m.{menu_snotes},
+    m.{menu_subcmd}
+   FROM ((( SELECT {cust_role}.{cust_role_name},
+            {cust_role}.{cust_role_seq},
+            {cust_role}.{cust_role_sts},
+            {cust_role}.{cust_role_desc},
+            {cust_role}.{cust_role_id},
+            {menu}.{menu_id_auto},
+            {menu}.{menu_group},
+            {menu}.{menu_id},
+            {menu}.{menu_sts},
+            {menu}.{menu_id_parent},
+            {menu}.{menu_name},
+            {menu}.{menu_seq},
+            {menu}.{menu_desc},
+            {menu}.{menu_desc_ext},
+            {menu}.{menu_desc_ext2},
+            {menu}.{menu_cmd},
+            {menu}.{menu_image},
+            {menu}.{menu_snotes},
+            {menu}.{menu_subcmd}
+           FROM ({schema}_{cust_role} {cust_role}
+             LEFT JOIN {schema}_{menu} {menu} ON (({menu}.{menu_group} = 'C')))) m
+     JOIN {schema}_{single} {single} ON ((1 = 1)))
+     LEFT JOIN {schema}_{cust_menu_role} {cust_menu_role} ON ((({cust_menu_role}.{cust_role_name} = m.{cust_role_name}) AND ({cust_menu_role}.{menu_id} = m.{menu_id}))));
 
-create trigger {schema}_v_crmsel_update instead of update on {schema}_v_crmsel
+create trigger {schema}_{v_cust_menu_role_selection}_update instead of update on {schema}_{v_cust_menu_role_selection}
 begin
-  delete from {schema}_crm where crm_id=new.crm_id and (%%%NONEQUAL("NEW.crmsel_sel","OLD.crmsel_sel")%%%) and coalesce(new.crmsel_sel,0)=0\;
-  insert into {schema}_crm (cr_name, sm_id)
-    select new.new_cr_name, new.sm_id where (%%%NONEQUAL("NEW.crmsel_sel","OLD.crmsel_sel")%%%) and coalesce(new.crmsel_sel,0)=1 and coalesce(new.new_cr_name,'')<>''\;
-  insert into {schema}_crm (cr_name, sm_id)
-    select new.cr_name, new.new_sm_id where (%%%NONEQUAL("NEW.crmsel_sel","OLD.crmsel_sel")%%%) and coalesce(new.crmsel_sel,0)=1 and coalesce(new.new_cr_name,'')=''\;
+  delete from {schema}_{cust_menu_role} where {cust_menu_role_id}=new.{cust_menu_role_id} and (%%%{nequal}("NEW.{cust_menu_role_selection}","OLD.{cust_menu_role_selection}")%%%) and coalesce(new.{cust_menu_role_selection},0)=0\;
+  insert into {schema}_{cust_menu_role} ({cust_role_name}, {menu_id})
+    select new.{new_cust_role_name}, new.{menu_id} where (%%%{nequal}("NEW.{cust_menu_role_selection}","OLD.{cust_menu_role_selection}")%%%) and coalesce(new.{cust_menu_role_selection},0)=1 and coalesce(new.{new_cust_role_name},'')<>''\;
+  insert into {schema}_{cust_menu_role} ({cust_role_name}, {menu_id})
+    select new.{cust_role_name}, new.{new_menu_id} where (%%%{nequal}("NEW.{cust_menu_role_selection}","OLD.{cust_menu_role_selection}")%%%) and coalesce(new.{cust_menu_role_selection},0)=1 and coalesce(new.{new_cust_role_name},'')=''\;
   update jsharmony_meta set extra_changes=extra_changes+1
-    where (%%%NONEQUAL("NEW.crmsel_sel","OLD.crmsel_sel")%%%)\;
+    where (%%%{nequal}("NEW.{cust_menu_role_selection}","OLD.{cust_menu_role_selection}")%%%)\;
 end;
 
-/***************v_dl***************/
-CREATE VIEW {schema}_v_dl AS
- SELECT d.d_id,
-    d.d_scope,
-    d.d_scope_id,
-    d.c_id,
-    d.e_id,
-    d.d_sts,
-    d.d_ctgr,
-    gdd.codetxt AS d_ctgr_txt,
-    d.d_desc,
-    d.d_ext,
-    d.d_size,
-    ('D' || (d.d_id) || COALESCE(d.d_ext, '')) AS d_filename,
-    d.d_etstmp,
-    d.d_eu,
-    {schema}.mycuser_fmt(d.d_eu) AS d_eu_fmt,
-    d.d_mtstmp,
-    d.d_mu,
-    {schema}.mycuser_fmt(d.d_mu) AS d_mu_fmt,
-    d.d_utstmp,
-    d.d_uu,
-    {schema}.mycuser_fmt(d.d_uu) AS d_uu_fmt,
-    d.d_snotes,
-    NULL AS title_h,
-    NULL AS title_b
-   FROM ({schema}_d d
-     LEFT JOIN {schema}_gcod2_d_scope_d_ctgr gdd ON (((gdd.codeval1 = d.d_scope) AND (gdd.codeval2 = d.d_ctgr))));
+/***************{v_doc}***************/
+CREATE VIEW {schema}_{v_doc} AS
+ SELECT {doc}.{doc_id},
+    {doc}.{doc_scope},
+    {doc}.{doc_scope_id},
+    {doc}.{cust_id},
+    {doc}.{item_id},
+    {doc}.{doc_sts},
+    {doc}.{doc_ctgr},
+    gdd.{code_txt} AS {doc_ctgr_txt},
+    {doc}.{doc_desc},
+    {doc}.{doc_ext},
+    {doc}.{doc_size},
+    ('D' || ({doc}.{doc_id}) || COALESCE({doc}.{doc_ext}, '')) AS {doc_filename},
+    {doc}.{doc_etstmp},
+    {doc}.{doc_euser},
+    {schema}.{my_db_user_fmt}({doc}.{doc_euser}) AS {doc_euser_fmt},
+    {doc}.{doc_mtstmp},
+    {doc}.{doc_muser},
+    {schema}.{my_db_user_fmt}({doc}.{doc_muser}) AS {doc_muser_fmt},
+    {doc}.{doc_utstmp},
+    {doc}.{doc_uuser},
+    {schema}.{my_db_user_fmt}({doc}.{doc_uuser}) AS {doc_uuser}_fmt,
+    {doc}.{doc_snotes},
+    NULL AS {title_head},
+    NULL AS {title_detail}
+   FROM ({schema}_{doc} {doc}
+     LEFT JOIN {schema}_{code2_doc_ctgr} gdd ON (((gdd.{code_val1} = {doc}.{doc_scope}) AND (gdd.{code_va12} = {doc}.{doc_ctgr}))));
 
-/***************v_d_ext***************/
-CREATE VIEW {schema}_v_d_ext AS
- SELECT d.d_id,
-    d.d_scope,
-    d.d_scope_id,
-    d.c_id,
-    d.e_id,
-    d.d_sts,
-    d.d_ctgr,
-    d.d_desc,
-    d.d_ext,
-    d.d_size,
-    ('D' || d.d_id || COALESCE(d.d_ext, '')) AS d_filename,
-    d.d_etstmp,
-    d.d_eu,
-    {schema}.mycuser_fmt(d.d_eu) AS d_eu_fmt,
-    d.d_mtstmp,
-    d.d_mu,
-    {schema}.mycuser_fmt(d.d_mu) AS d_mu_fmt,
-    d.d_utstmp,
-    d.d_uu,
-    {schema}.mycuser_fmt(d.d_uu) AS d_uu_fmt,
-    d.d_snotes,
-    null AS title_h,
-    null AS title_b,
-    d.d_scope AS d_lock,
-    null AS c_name,
-    null AS c_name_ext,
-    null AS e_name,
-    d.rowid rowid
-   FROM {schema}_d d;
+/***************{v_doc_ext}***************/
+CREATE VIEW {schema}_{v_doc_ext} AS
+ SELECT {doc}.{doc_id},
+    {doc}.{doc_scope},
+    {doc}.{doc_scope_id},
+    {doc}.{cust_id},
+    {doc}.{item_id},
+    {doc}.{doc_sts},
+    {doc}.{doc_ctgr},
+    {doc}.{doc_desc},
+    {doc}.{doc_ext},
+    {doc}.{doc_size},
+    ('D' || {doc}.{doc_id} || COALESCE({doc}.{doc_ext}, '')) AS {doc_filename},
+    {doc}.{doc_etstmp},
+    {doc}.{doc_euser},
+    {schema}.{my_db_user_fmt}({doc}.{doc_euser}) AS {doc_euser_fmt},
+    {doc}.{doc_mtstmp},
+    {doc}.{doc_muser},
+    {schema}.{my_db_user_fmt}({doc}.{doc_muser}) AS {doc_muser_fmt},
+    {doc}.{doc_utstmp},
+    {doc}.{doc_uuser},
+    {schema}.{my_db_user_fmt}({doc}.{doc_uuser}) AS {doc_uuser}_fmt,
+    {doc}.{doc_snotes},
+    null AS {title_head},
+    null AS {title_detail},
+    {doc}.{doc_scope} AS {doc_datalock},
+    null AS {cust_name},
+    null AS {cust_name_ext},
+    null AS {item_name},
+    {doc}.rowid rowid
+   FROM {schema}_{doc} {doc};
 
-create trigger {schema}_v_d_ext_insert instead of insert on {schema}_v_d_ext
+create trigger {schema}_{v_doc_ext}_insert instead of insert on {schema}_{v_doc_ext}
 begin
-  insert into {schema}_d(d_scope, d_scope_id, d_sts, c_id, e_id, d_ctgr, d_desc, d_ext, d_size, d_etstmp, d_eu, d_mtstmp, d_mu, d_utstmp, d_uu, d_snotes)
-                    values (coalesce(new.d_scope,'S'), coalesce(new.d_scope_id,0), coalesce(new.d_sts,'A'), new.c_id, new.e_id, new.d_ctgr, new.d_desc, new.d_ext, new.d_size, new.d_etstmp, new.d_eu, new.d_mtstmp, new.d_mu, new.d_utstmp, new.d_uu, new.d_snotes)\;
+  insert into {schema}_{doc}({doc_scope}, {doc_scope_id}, {doc_sts}, {cust_id}, {item_id}, {doc_ctgr}, {doc_desc}, {doc_ext}, {doc_size}, {doc_etstmp}, {doc_euser}, {doc_mtstmp}, {doc_muser}, {doc_utstmp}, {doc_uuser}, {doc_snotes})
+                    values (coalesce(new.{doc_scope},'S'), coalesce(new.{doc_scope_id},0), coalesce(new.{doc_sts},'A'), new.{cust_id}, new.{item_id}, new.{doc_ctgr}, new.{doc_desc}, new.{doc_ext}, new.{doc_size}, new.{doc_etstmp}, new.{doc_euser}, new.{doc_mtstmp}, new.{doc_muser}, new.{doc_utstmp}, new.{doc_uuser}, new.{doc_snotes})\;
   update jsharmony_meta set extra_changes=extra_changes+1, last_insert_rowid_override=last_insert_rowid()\;
 end;
 
-create trigger {schema}_v_d_ext_update instead of update on {schema}_v_d_ext
+create trigger {schema}_{v_doc_ext}_update instead of update on {schema}_{v_doc_ext}
 begin
-  update {schema}_d set d_scope = new.d_scope, d_scope_id = new.d_scope_id, d_sts = new.d_sts,
-                           c_id = new.c_id, e_id = new.e_id, d_ctgr = new.d_ctgr, d_desc = new.d_desc,
-                           d_ext = new.d_ext, d_size = new.d_size,
-                           d_etstmp = new.d_etstmp,d_eu = new.d_eu, d_mtstmp = new.d_mtstmp, d_mu = new.d_mu,
-                           d_utstmp = new.d_utstmp, d_uu = new.d_uu, d_snotes =  new.d_snotes
-                           where d_id=new.d_id\;
+  update {schema}_{doc} set {doc_scope} = new.{doc_scope}, {doc_scope_id} = new.{doc_scope_id}, {doc_sts} = new.{doc_sts},
+                           {cust_id} = new.{cust_id}, {item_id} = new.{item_id}, {doc_ctgr} = new.{doc_ctgr}, {doc_desc} = new.{doc_desc},
+                           {doc_ext} = new.{doc_ext}, {doc_size} = new.{doc_size},
+                           {doc_etstmp} = new.{doc_etstmp},{doc_euser} = new.{doc_euser}, {doc_mtstmp} = new.{doc_mtstmp}, {doc_muser} = new.{doc_muser},
+                           {doc_utstmp} = new.{doc_utstmp}, {doc_uuser} = new.{doc_uuser}, {doc_snotes} =  new.{doc_snotes}
+                           where {doc_id}=new.{doc_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-create trigger {schema}_v_d_ext_delete instead of delete on {schema}_v_d_ext
+create trigger {schema}_{v_doc_ext}_delete instead of delete on {schema}_{v_doc_ext}
 begin
-  delete from {schema}_d where d_id = old.d_id\;
+  delete from {schema}_{doc} where {doc_id} = old.{doc_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-/***************v_d_x***************/
-CREATE VIEW {schema}_v_d_x AS
- SELECT d.d_id,
-    d.d_scope,
-    d.d_scope_id,
-    d.c_id,
-    d.e_id,
-    d.d_sts,
-    d.d_ctgr,
-    d.d_desc,
-    d.d_ext,
-    d.d_size,
-    d.d_etstmp,
-    d.d_eu,
-    d.d_mtstmp,
-    d.d_mu,
-    d.d_utstmp,
-    d.d_uu,
-    d.d_synctstmp,
-    d.d_snotes,
-    d.d_id_main,
-    ('D' || d.d_id || COALESCE(d.d_ext, '')) AS d_filename
-   FROM {schema}_d d;
+/***************{v_doc_filename}***************/
+CREATE VIEW {schema}_{v_doc_filename} AS
+ SELECT {doc}.{doc_id},
+    {doc}.{doc_scope},
+    {doc}.{doc_scope_id},
+    {doc}.{cust_id},
+    {doc}.{item_id},
+    {doc}.{doc_sts},
+    {doc}.{doc_ctgr},
+    {doc}.{doc_desc},
+    {doc}.{doc_ext},
+    {doc}.{doc_size},
+    {doc}.{doc_etstmp},
+    {doc}.{doc_euser},
+    {doc}.{doc_mtstmp},
+    {doc}.{doc_muser},
+    {doc}.{doc_utstmp},
+    {doc}.{doc_uuser},
+    {doc}.{doc_sync_tstmp},
+    {doc}.{doc_snotes},
+    {doc}.{doc_sync_id},
+    ('D' || {doc}.{doc_id} || COALESCE({doc}.{doc_ext}, '')) AS {doc_filename}
+   FROM {schema}_{doc} {doc};
 
-/***************v_gppl***************/
-CREATE VIEW {schema}_v_gppl AS
- SELECT gpp.gpp_id,
-    gpp.gpp_process,
-    gpp.gpp_attrib,
-    gpp.gpp_val,
-    gpp.gpp_etstmp,
-    gpp.gpp_eu,
-    gpp.gpp_mtstmp,
-    gpp.gpp_mu,
-    {schema}.get_ppd_desc(gpp.gpp_process, gpp.gpp_attrib) AS ppd_desc,
-    {schema}.audit_info(gpp.gpp_etstmp, gpp.gpp_eu, gpp.gpp_mtstmp, gpp.gpp_mu) AS gpp_info,
-    gpp.rowid rowid
-   FROM {schema}_gpp gpp;
+/***************{v_param_app}***************/
+CREATE VIEW {schema}_{v_param_app} AS
+ SELECT {param_app}.{param_app_id},
+    {param_app}.{param_app_process},
+    {param_app}.{param_app_attrib},
+    {param_app}.{param_app_val},
+    {param_app}.{param_app_etstmp},
+    {param_app}.{param_app_euser},
+    {param_app}.{param_app_mtstmp},
+    {param_app}.{param_app_muser},
+    {schema}.{get_param_desc}({param_app}.{param_app_process}, {param_app}.{param_app_attrib}) AS {param_desc},
+    {schema}.{log_audit_info}({param_app}.{param_app_etstmp}, {param_app}.{param_app_euser}, {param_app}.{param_app_mtstmp}, {param_app}.{param_app_muser}) AS {param_app_info},
+    {param_app}.rowid rowid
+   FROM {schema}_{param_app} {param_app};
 
-create trigger {schema}_v_gppl_insert instead of insert on {schema}_v_gppl
+create trigger {schema}_{v_param_app}_insert instead of insert on {schema}_{v_param_app}
 begin
-  insert into {schema}_gpp(gpp_process, gpp_attrib, gpp_val, gpp_etstmp, gpp_eu, gpp_mtstmp, gpp_mu)
-                    values (new.gpp_process, new.gpp_attrib, new.gpp_val, new.gpp_etstmp, new.gpp_eu, new.gpp_mtstmp, new.gpp_mu)\;
+  insert into {schema}_{param_app}({param_app_process}, {param_app_attrib}, {param_app_val}, {param_app_etstmp}, {param_app_euser}, {param_app_mtstmp}, {param_app_muser})
+                    values (new.{param_app_process}, new.{param_app_attrib}, new.{param_app_val}, new.{param_app_etstmp}, new.{param_app_euser}, new.{param_app_mtstmp}, new.{param_app_muser})\;
   update jsharmony_meta set extra_changes=extra_changes+1, last_insert_rowid_override=last_insert_rowid()\;
 end;
 
-create trigger {schema}_v_gppl_update instead of update on {schema}_v_gppl
+create trigger {schema}_{v_param_app}_update instead of update on {schema}_{v_param_app}
 begin
-  update {schema}_gpp set gpp_process = new.gpp_process, gpp_attrib = new.gpp_attrib, gpp_val = new.gpp_val,
-                           gpp_etstmp = new.gpp_etstmp,gpp_eu = new.gpp_eu, gpp_mtstmp = new.gpp_mtstmp, gpp_mu = new.gpp_mu
-                           where gpp_id=new.gpp_id\;
+  update {schema}_{param_app} set {param_app_process} = new.{param_app_process}, {param_app_attrib} = new.{param_app_attrib}, {param_app_val} = new.{param_app_val},
+                           {param_app_etstmp} = new.{param_app_etstmp},{param_app_euser} = new.{param_app_euser}, {param_app_mtstmp} = new.{param_app_mtstmp}, {param_app_muser} = new.{param_app_muser}
+                           where {param_app_id}=new.{param_app_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-create trigger {schema}_v_gppl_delete instead of delete on {schema}_v_gppl
+create trigger {schema}_{v_param_app}_delete instead of delete on {schema}_{v_param_app}
 begin
-  delete from {schema}_gpp where gpp_id = old.gpp_id\;
+  delete from {schema}_{param_app} where {param_app_id} = old.{param_app_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-/***************v_months***************/
-CREATE VIEW {schema}_v_months AS
- SELECT numbers.{number_val} {month_val},
-    substr(('0' || numbers.{number_val}), -2, 2) AS {month_txt}
-   FROM {schema}_numbers numbers
-  WHERE (numbers.{number_val} <= 12);
+/***************{v_month}***************/
+CREATE VIEW {schema}_{v_month} AS
+ SELECT {number}.{number_val} {month_val},
+    substr(('0' || {number}.{number_val}), -2, 2) AS {month_txt}
+   FROM {schema}_{number} {number}
+  WHERE ({number}.{number_val} <= 12);
 
-/***************v_mype***************/
-CREATE VIEW {schema}_v_mype AS
- SELECT {schema}.mype() AS mype;
+/***************{v_my_user}***************/
+CREATE VIEW {schema}_{v_my_user} AS
+ SELECT {schema}.{my_sys_user_id}() AS {my_sys_user_id};
 
-/***************v_my_roles***************/
-CREATE VIEW {schema}_v_my_roles AS
- SELECT sper.sr_name
-   FROM {schema}_sper sper
-  WHERE (sper.pe_id = {schema}.mype());
+/***************{v_my_roles}***************/
+CREATE VIEW {schema}_{v_my_roles} AS
+ SELECT {sys_user_role}.{sys_role_name}
+   FROM {schema}_{sys_user_role} {sys_user_role}
+  WHERE ({sys_user_role}.{sys_user_id} = {schema}.{my_sys_user_id}());
 
-/***************v_nl***************/
-CREATE VIEW {schema}_v_nl AS
- SELECT n.n_id,
-    n.n_scope,
-    n.n_scope_id,
-    n.n_sts,
-    n.c_id,
-    null AS c_name,
-    null AS c_name_ext,
-    n.e_id,
-    null AS e_name,
-    n.n_type,
-    n.n_note,
-    {schema}.mytodate(n.n_etstmp) AS n_dt,
-    n.n_etstmp,
-    n.n_eu,
-    {schema}.mycuser_fmt(n.n_eu) AS n_eu_fmt,
-    n.n_mtstmp,
-    n.n_mu,
-    {schema}.mycuser_fmt(n.n_mu) AS n_mu_fmt,
-    n.n_snotes,
-    null AS title_h,
-    null AS title_b
-   FROM {schema}_n n;
+/***************{v_note}***************/
+CREATE VIEW {schema}_{v_note} AS
+ SELECT {note}.{note_id},
+    {note}.{note_scope},
+    {note}.{note_scope_id},
+    {note}.{note_sts},
+    {note}.{cust_id},
+    null AS {cust_name},
+    null AS {cust_name_ext},
+    {note}.{item_id},
+    null AS {item_name},
+    {note}.{note_type},
+    {note}.{note_body},
+    {schema}.{my_to_date}({note}.{note_etstmp}) AS {note_dt},
+    {note}.{note_etstmp},
+    {note}.{note_euser},
+    {schema}.{my_db_user_fmt}({note}.{note_euser}) AS {note_euser_fmt},
+    {note}.{note_mtstmp},
+    {note}.{note_muser},
+    {schema}.{my_db_user_fmt}({note}.{note_muser}) AS {note_muser_fmt},
+    {note}.{note_snotes},
+    null AS {title_head},
+    null AS {title_detail}
+   FROM {schema}_{note} {note};
 
-/***************v_n_ext***************/
-CREATE VIEW {schema}_v_n_ext AS
- SELECT n.n_id,
-    n.n_scope,
-    n.n_scope_id,
-    n.n_sts,
-    n.c_id,
-    n.e_id,
-    n.n_type,
-    n.n_note,
-    n.n_etstmp,
-    n.n_eu,
-    {schema}.mycuser_fmt(n.n_eu) AS n_eu_fmt,
-    n.n_mtstmp,
-    n.n_mu,
-    {schema}.mycuser_fmt(n.n_mu) AS n_mu_fmt,
-    n.n_snotes,
-    null AS title_h,
-    null AS title_b,
-    null AS c_name,
-    null AS c_name_ext,
-    null AS e_name,
-    n.rowid rowid
-   FROM {schema}_n n;
+/***************{v_note_ext}***************/
+CREATE VIEW {schema}_{v_note_ext} AS
+ SELECT {note}.{note_id},
+    {note}.{note_scope},
+    {note}.{note_scope_id},
+    {note}.{note_sts},
+    {note}.{cust_id},
+    {note}.{item_id},
+    {note}.{note_type},
+    {note}.{note_body},
+    {note}.{note_etstmp},
+    {note}.{note_euser},
+    {schema}.{my_db_user_fmt}({note}.{note_euser}) AS {note_euser_fmt},
+    {note}.{note_mtstmp},
+    {note}.{note_muser},
+    {schema}.{my_db_user_fmt}({note}.{note_muser}) AS {note_muser_fmt},
+    {note}.{note_snotes},
+    null AS {title_head},
+    null AS {title_detail},
+    null AS {cust_name},
+    null AS {cust_name_ext},
+    null AS {item_name},
+    {note}.rowid rowid
+   FROM {schema}_{note} {note};
 
-create trigger {schema}_v_n_ext_insert instead of insert on {schema}_v_n_ext
+create trigger {schema}_{v_note_ext}_insert instead of insert on {schema}_{v_note_ext}
 begin
-  insert into {schema}_n(n_scope, n_scope_id, n_sts, c_id, e_id, n_type, n_note, n_etstmp, n_eu, n_mtstmp, n_mu, n_snotes)
-                    values (coalesce(new.n_scope,'S'), coalesce(new.n_scope_id,0), coalesce(new.n_sts,'A'), new.c_id, new.e_id, new.n_type, new.n_note, new.n_etstmp, new.n_eu, new.n_mtstmp, new.n_mu, new.n_snotes)\;
+  insert into {schema}_{note}({note_scope}, {note_scope_id}, {note_sts}, {cust_id}, {item_id}, {note_type}, {note_body}, {note_etstmp}, {note_euser}, {note_mtstmp}, {note_muser}, {note_snotes})
+                    values (coalesce(new.{note_scope},'S'), coalesce(new.{note_scope_id},0), coalesce(new.{note_sts},'A'), new.{cust_id}, new.{item_id}, new.{note_type}, new.{note_body}, new.{note_etstmp}, new.{note_euser}, new.{note_mtstmp}, new.{note_muser}, new.{note_snotes})\;
   update jsharmony_meta set extra_changes=extra_changes+1, last_insert_rowid_override=last_insert_rowid()\;
 end;
 
-create trigger {schema}_v_n_ext_update instead of update on {schema}_v_n_ext
+create trigger {schema}_{v_note_ext}_update instead of update on {schema}_{v_note_ext}
 begin
-  update {schema}_n set n_scope = new.n_scope, n_scope_id = new.n_scope_id, n_sts = new.n_sts,
-                           c_id = new.c_id, e_id = new.e_id, n_type = new.n_type, n_note = new.n_note,
-                           n_etstmp = new.n_etstmp,n_eu = new.n_eu, n_mtstmp = new.n_mtstmp, n_mu = new.n_mu,
-                           n_snotes =  new.n_snotes
-                           where n_id=new.n_id\;
+  update {schema}_{note} set {note_scope} = new.{note_scope}, {note_scope_id} = new.{note_scope_id}, {note_sts} = new.{note_sts},
+                           {cust_id} = new.{cust_id}, {item_id} = new.{item_id}, {note_type} = new.{note_type}, {note_body} = new.{note_body},
+                           {note_etstmp} = new.{note_etstmp},{note_euser} = new.{note_euser}, {note_mtstmp} = new.{note_mtstmp}, {note_muser} = new.{note_muser},
+                           {note_snotes} =  new.{note_snotes}
+                           where {note_id}=new.{note_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-create trigger {schema}_v_n_ext_delete instead of delete on {schema}_v_n_ext
+create trigger {schema}_{v_note_ext}_delete instead of delete on {schema}_{v_note_ext}
 begin
-  delete from {schema}_n where n_id = old.n_id\;
+  delete from {schema}_{note} where {note_id} = old.{note_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-/***************v_ppdl***************/
-CREATE VIEW {schema}_v_ppdl AS
- SELECT ppd.ppd_id,
-    ppd.ppd_process,
-    ppd.ppd_attrib,
-    ppd.ppd_desc,
-    ppd.ppd_type,
-    ppd.codename,
-    ppd.ppd_gpp,
-    ppd.ppd_ppp,
-    ppd.ppd_xpp,
-    ppd.ppd_etstmp,
-    ppd.ppd_eu,
-    ppd.ppd_mtstmp,
-    ppd.ppd_mu,
-    ppd.ppd_snotes,
-    {schema}.audit_info(ppd.ppd_etstmp, ppd.ppd_eu, ppd.ppd_mtstmp, ppd.ppd_mu) AS ppd_info,
-    ppd.rowid rowid
-   FROM {schema}_ppd ppd;
+/***************{v_param}***************/
+CREATE VIEW {schema}_{v_param} AS
+ SELECT {param}.{param_id},
+    {param}.{param_process},
+    {param}.{param_attrib},
+    {param}.{param_desc},
+    {param}.{param_type},
+    {param}.{code_name},
+    {param}.{is_param_app},
+    {param}.{is_param_user},
+    {param}.{is_param_sys},
+    {param}.{param_etstmp},
+    {param}.{param_euser},
+    {param}.{param_mtstmp},
+    {param}.{param_muser},
+    {param}.{param_snotes},
+    {schema}.{log_audit_info}({param}.{param_etstmp}, {param}.{param_euser}, {param}.{param_mtstmp}, {param}.{param_muser}) AS {param_info},
+    {param}.rowid rowid
+   FROM {schema}_{param} {param};
 
-create trigger {schema}_v_ppdl_insert instead of insert on {schema}_v_ppdl
+create trigger {schema}_{v_param}_insert instead of insert on {schema}_{v_param}
 begin
-  insert into {schema}_ppd(ppd_process, ppd_attrib, ppd_desc, ppd_type, codename, ppd_gpp, ppd_ppp, ppd_xpp, ppd_etstmp, ppd_eu, ppd_mtstmp, ppd_mu, ppd_snotes)
-                    values (new.ppd_process, new.ppd_attrib, new.ppd_desc, new.ppd_type, new.codename, coalesce(new.ppd_gpp,0), coalesce(new.ppd_ppp,0), coalesce(new.ppd_xpp,0), new.ppd_etstmp, new.ppd_eu, new.ppd_mtstmp, new.ppd_mu, new.ppd_snotes)\;
+  insert into {schema}_{param}({param_process}, {param_attrib}, {param_desc}, {param_type}, {code_name}, {is_param_app}, {is_param_user}, {is_param_sys}, {param_etstmp}, {param_euser}, {param_mtstmp}, {param_muser}, {param_snotes})
+                    values (new.{param_process}, new.{param_attrib}, new.{param_desc}, new.{param_type}, new.{code_name}, coalesce(new.{is_param_app},0), coalesce(new.{is_param_user},0), coalesce(new.{is_param_sys},0), new.{param_etstmp}, new.{param_euser}, new.{param_mtstmp}, new.{param_muser}, new.{param_snotes})\;
   update jsharmony_meta set extra_changes=extra_changes+1, last_insert_rowid_override=last_insert_rowid()\;
 end;
 
-create trigger {schema}_v_ppdl_update instead of update on {schema}_v_ppdl
+create trigger {schema}_{v_param}_update instead of update on {schema}_{v_param}
 begin
-  update {schema}_ppd set ppd_process = new.ppd_process, ppd_attrib = new.ppd_attrib, ppd_desc = new.ppd_desc,
-                           ppd_type = new.ppd_type, codename = new.codename, 
-                           ppd_gpp = new.ppd_gpp, ppd_ppp = new.ppd_ppp, ppd_xpp = new.ppd_xpp, 
-                           ppd_etstmp = new.ppd_etstmp,ppd_eu = new.ppd_eu, ppd_mtstmp = new.ppd_mtstmp, ppd_mu = new.ppd_mu,
-                           ppd_snotes = new.ppd_snotes where ppd_id=new.ppd_id\;
+  update {schema}_{param} set {param_process} = new.{param_process}, {param_attrib} = new.{param_attrib}, {param_desc} = new.{param_desc},
+                           {param_type} = new.{param_type}, {code_name} = new.{code_name}, 
+                           {is_param_app} = new.{is_param_app}, {is_param_user} = new.{is_param_user}, {is_param_sys} = new.{is_param_sys}, 
+                           {param_etstmp} = new.{param_etstmp},{param_euser} = new.{param_euser}, {param_mtstmp} = new.{param_mtstmp}, {param_muser} = new.{param_muser},
+                           {param_snotes} = new.{param_snotes} where {param_id}=new.{param_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-create trigger {schema}_v_ppdl_delete instead of delete on {schema}_v_ppdl
+create trigger {schema}_{v_param}_delete instead of delete on {schema}_{v_param}
 begin
-  delete from {schema}_ppd where ppd_id = old.ppd_id\;
+  delete from {schema}_{param} where {param_id} = old.{param_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-/***************v_pppl***************/
-CREATE VIEW {schema}_v_pppl AS
- SELECT ppp.ppp_id,
-    ppp.pe_id,
-    ppp.ppp_process,
-    ppp.ppp_attrib,
-    ppp.ppp_val,
-    ppp.ppp_etstmp,
-    ppp.ppp_eu,
-    ppp.ppp_mtstmp,
-    ppp.ppp_mu,
-    {schema}.get_ppd_desc(ppp.ppp_process, ppp.ppp_attrib) AS ppd_desc,
-    {schema}.audit_info(ppp.ppp_etstmp, ppp.ppp_eu, ppp.ppp_mtstmp, ppp.ppp_mu) AS ppp_info,
-    ppp.rowid rowid
-   FROM {schema}_ppp ppp;
+/***************{v_param_user}***************/
+CREATE VIEW {schema}_{v_param_user} AS
+ SELECT {param_user}.{param_user_id},
+    {param_user}.{sys_user_id},
+    {param_user}.{param_user_process},
+    {param_user}.{param_user_attrib},
+    {param_user}.{param_user_val},
+    {param_user}.{param_user_etstmp},
+    {param_user}.{param_user_euser},
+    {param_user}.{param_user_mtstmp},
+    {param_user}.{param_user_muser},
+    {schema}.{get_param_desc}({param_user}.{param_user_process}, {param_user}.{param_user_attrib}) AS {param_desc},
+    {schema}.{log_audit_info}({param_user}.{param_user_etstmp}, {param_user}.{param_user_euser}, {param_user}.{param_user_mtstmp}, {param_user}.{param_user_muser}) AS {param_user_info},
+    {param_user}.rowid rowid
+   FROM {schema}_{param_user} {param_user};
 
-create trigger {schema}_v_pppl_insert instead of insert on {schema}_v_pppl
+create trigger {schema}_{v_param_user}_insert instead of insert on {schema}_{v_param_user}
 begin
-  insert into {schema}_ppp(pe_id, ppp_process, ppp_attrib, ppp_val, ppp_etstmp, ppp_eu, ppp_mtstmp, ppp_mu)
-                    values (new.pe_id, new.ppp_process, new.ppp_attrib, new.ppp_val, new.ppp_etstmp, new.ppp_eu, new.ppp_mtstmp, new.ppp_mu)\;
+  insert into {schema}_{param_user}({sys_user_id}, {param_user_process}, {param_user_attrib}, {param_user_val}, {param_user_etstmp}, {param_user_euser}, {param_user_mtstmp}, {param_user_muser})
+                    values (new.{sys_user_id}, new.{param_user_process}, new.{param_user_attrib}, new.{param_user_val}, new.{param_user_etstmp}, new.{param_user_euser}, new.{param_user_mtstmp}, new.{param_user_muser})\;
   update jsharmony_meta set extra_changes=extra_changes+1, last_insert_rowid_override=last_insert_rowid()\;
 end;
 
-create trigger {schema}_v_pppl_update instead of update on {schema}_v_pppl
+create trigger {schema}_{v_param_user}_update instead of update on {schema}_{v_param_user}
 begin
-  update {schema}_ppp set pe_id = new.pe_id, ppp_process = new.ppp_process, ppp_attrib = new.ppp_attrib, ppp_val = new.ppp_val,
-                           ppp_etstmp = new.ppp_etstmp,ppp_eu = new.ppp_eu, ppp_mtstmp = new.ppp_mtstmp, ppp_mu = new.ppp_mu
-                           where ppp_id=new.ppp_id\;
+  update {schema}_{param_user} set {sys_user_id} = new.{sys_user_id}, {param_user_process} = new.{param_user_process}, {param_user_attrib} = new.{param_user_attrib}, {param_user_val} = new.{param_user_val},
+                           {param_user_etstmp} = new.{param_user_etstmp},{param_user_euser} = new.{param_user_euser}, {param_user_mtstmp} = new.{param_user_mtstmp}, {param_user_muser} = new.{param_user_muser}
+                           where {param_user_id}=new.{param_user_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-create trigger {schema}_v_pppl_delete instead of delete on {schema}_v_pppl
+create trigger {schema}_{v_param_user}_delete instead of delete on {schema}_{v_param_user}
 begin
-  delete from {schema}_ppp where ppp_id = old.ppp_id\;
+  delete from {schema}_{param_user} where {param_user_id} = old.{param_user_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-/***************v_srmsel***************/
-CREATE VIEW {schema}_v_srmsel AS
- SELECT srm.srm_id,
-    COALESCE(dual.dual_text, '') AS new_sr_name,
-    dual.dual_integer AS new_sm_id,
+/***************{v_sys_menu_role_selection}***************/
+CREATE VIEW {schema}_{v_sys_menu_role_selection} AS
+ SELECT {sys_menu_role}.{sys_menu_role_id},
+    COALESCE({single}.{single_text}, '') AS {new_sys_role_name},
+    {single}.{single_integer} AS {new_menu_id},
         CASE
-            WHEN (srm.srm_id IS NULL) THEN 0
+            WHEN ({sys_menu_role}.{sys_menu_role_id} IS NULL) THEN 0
             ELSE 1
-        END AS srmsel_sel,
-    m.sr_name,
-    m.sr_seq,
-    m.sr_sts,
-    m.sr_desc,
-    m.sr_id,
-    m.sm_id_auto,
-    m.sm_utype,
-    m.sm_id,
-    m.sm_sts,
-    m.sm_id_parent,
-    m.sm_name,
-    m.sm_seq,
-    m.sm_desc,
-    m.sm_descl,
-    m.sm_descvl,
-    m.sm_cmd,
-    m.sm_image,
-    m.sm_snotes,
-    m.sm_subcmd
-   FROM ((( SELECT sr.sr_name,
-            sr.sr_seq,
-            sr.sr_sts,
-            sr.sr_desc,
-            sr.sr_id,
-            sm.sm_id_auto,
-            sm.sm_utype,
-            sm.sm_id,
-            sm.sm_sts,
-            sm.sm_id_parent,
-            sm.sm_name,
-            sm.sm_seq,
-            sm.sm_desc,
-            sm.sm_descl,
-            sm.sm_descvl,
-            sm.sm_cmd,
-            sm.sm_image,
-            sm.sm_snotes,
-            sm.sm_subcmd
-           FROM ({schema}_sr sr
-             LEFT JOIN {schema}_sm sm ON (sm.sm_utype = 'S'))) m
-     JOIN {schema}_dual dual ON (1 = 1))
-     LEFT JOIN {schema}_srm srm ON (((srm.sr_name = m.sr_name) AND (srm.sm_id = m.sm_id))));
+        END AS {sys_menu_role_selection},
+    m.{sys_role_name},
+    m.{sys_role_seq},
+    m.{sys_role_sts},
+    m.{sys_role_desc},
+    m.{sys_role_id},
+    m.{menu_id_auto},
+    m.{menu_group},
+    m.{menu_id},
+    m.{menu_sts},
+    m.{menu_id_parent},
+    m.{menu_name},
+    m.{menu_seq},
+    m.{menu_desc},
+    m.{menu_desc_ext},
+    m.{menu_desc_ext2},
+    m.{menu_cmd},
+    m.{menu_image},
+    m.{menu_snotes},
+    m.{menu_subcmd}
+   FROM ((( SELECT {sys_role}.{sys_role_name},
+            {sys_role}.{sys_role_seq},
+            {sys_role}.{sys_role_sts},
+            {sys_role}.{sys_role_desc},
+            {sys_role}.{sys_role_id},
+            {menu}.{menu_id_auto},
+            {menu}.{menu_group},
+            {menu}.{menu_id},
+            {menu}.{menu_sts},
+            {menu}.{menu_id_parent},
+            {menu}.{menu_name},
+            {menu}.{menu_seq},
+            {menu}.{menu_desc},
+            {menu}.{menu_desc_ext},
+            {menu}.{menu_desc_ext2},
+            {menu}.{menu_cmd},
+            {menu}.{menu_image},
+            {menu}.{menu_snotes},
+            {menu}.{menu_subcmd}
+           FROM ({schema}_{sys_role} {sys_role}
+             LEFT JOIN {schema}_{menu} {menu} ON ({menu}.{menu_group} = 'S'))) m
+     JOIN {schema}_{single} {single} ON (1 = 1))
+     LEFT JOIN {schema}_{sys_menu_role} {sys_menu_role} ON ((({sys_menu_role}.{sys_role_name} = m.{sys_role_name}) AND ({sys_menu_role}.{menu_id} = m.{menu_id}))));
 
-create trigger {schema}_v_srmsel_update instead of update on {schema}_v_srmsel
+create trigger {schema}_{v_sys_menu_role_selection}_update instead of update on {schema}_{v_sys_menu_role_selection}
 begin
-  delete from {schema}_srm where srm_id=new.srm_id and (%%%NONEQUAL("NEW.srmsel_sel","OLD.srmsel_sel")%%%) and coalesce(new.srmsel_sel,0)=0\;
-  insert into {schema}_srm (sr_name, sm_id)
-    select new.new_sr_name, new.sm_id where (%%%NONEQUAL("NEW.srmsel_sel","OLD.srmsel_sel")%%%) and coalesce(new.srmsel_sel,0)=1 and coalesce(new.new_sr_name,'')<>''\;
-  insert into {schema}_srm (sr_name, sm_id)
-    select new.sr_name, new.new_sm_id where (%%%NONEQUAL("NEW.srmsel_sel","OLD.srmsel_sel")%%%) and coalesce(new.srmsel_sel,0)=1 and coalesce(new.new_sr_name,'')=''\;
+  delete from {schema}_{sys_menu_role} where {sys_menu_role_id}=new.{sys_menu_role_id} and (%%%{nequal}("NEW.{sys_menu_role_selection}","OLD.{sys_menu_role_selection}")%%%) and coalesce(new.{sys_menu_role_selection},0)=0\;
+  insert into {schema}_{sys_menu_role} ({sys_role_name}, {menu_id})
+    select new.{new_sys_role_name}, new.{menu_id} where (%%%{nequal}("NEW.{sys_menu_role_selection}","OLD.{sys_menu_role_selection}")%%%) and coalesce(new.{sys_menu_role_selection},0)=1 and coalesce(new.{new_sys_role_name},'')<>''\;
+  insert into {schema}_{sys_menu_role} ({sys_role_name}, {menu_id})
+    select new.{sys_role_name}, new.{new_menu_id} where (%%%{nequal}("NEW.{sys_menu_role_selection}","OLD.{sys_menu_role_selection}")%%%) and coalesce(new.{sys_menu_role_selection},0)=1 and coalesce(new.{new_sys_role_name},'')=''\;
   update jsharmony_meta set extra_changes=extra_changes+1
-    where (%%%NONEQUAL("NEW.srmsel_sel","OLD.srmsel_sel")%%%)\;
+    where (%%%{nequal}("NEW.{sys_menu_role_selection}","OLD.{sys_menu_role_selection}")%%%)\;
 end;
 
-/***************v_xppl***************/
-CREATE VIEW {schema}_v_xppl AS
- SELECT xpp.xpp_id,
-    xpp.xpp_process,
-    xpp.xpp_attrib,
-    xpp.xpp_val,
-    xpp.xpp_etstmp,
-    xpp.xpp_eu,
-    xpp.xpp_mtstmp,
-    xpp.xpp_mu,
-    {schema}.get_ppd_desc(xpp.xpp_process, xpp.xpp_attrib) AS ppd_desc,
-    {schema}.audit_info(xpp.xpp_etstmp, xpp.xpp_eu, xpp.xpp_mtstmp, xpp.xpp_mu) AS xpp_info,
-    xpp.rowid rowid
-   FROM {schema}_xpp xpp;
+/***************{v_param_sys}***************/
+CREATE VIEW {schema}_{v_param_sys} AS
+ SELECT {param_sys}.{param_sys_id},
+    {param_sys}.{param_sys_process},
+    {param_sys}.{param_sys_attrib},
+    {param_sys}.{param_sys_val},
+    {param_sys}.{param_sys_etstmp},
+    {param_sys}.{param_sys_euser},
+    {param_sys}.{param_sys_mtstmp},
+    {param_sys}.{param_sys_muser},
+    {schema}.{get_param_desc}({param_sys}.{param_sys_process}, {param_sys}.{param_sys_attrib}) AS {param_desc},
+    {schema}.{log_audit_info}({param_sys}.{param_sys_etstmp}, {param_sys}.{param_sys_euser}, {param_sys}.{param_sys_mtstmp}, {param_sys}.{param_sys_muser}) AS {param_sys_info},
+    {param_sys}.rowid rowid
+   FROM {schema}_{param_sys} {param_sys};
 
-create trigger {schema}_v_xppl_insert instead of insert on {schema}_v_xppl
+create trigger {schema}_{v_param_sys}_insert instead of insert on {schema}_{v_param_sys}
 begin
-  insert into {schema}_xpp(xpp_process, xpp_attrib, xpp_val, xpp_etstmp, xpp_eu, xpp_mtstmp, xpp_mu)
-                    values (new.xpp_process, new.xpp_attrib, new.xpp_val, new.xpp_etstmp, new.xpp_eu, new.xpp_mtstmp, new.xpp_mu)\;
+  insert into {schema}_{param_sys}({param_sys_process}, {param_sys_attrib}, {param_sys_val}, {param_sys_etstmp}, {param_sys_euser}, {param_sys_mtstmp}, {param_sys_muser})
+                    values (new.{param_sys_process}, new.{param_sys_attrib}, new.{param_sys_val}, new.{param_sys_etstmp}, new.{param_sys_euser}, new.{param_sys_mtstmp}, new.{param_sys_muser})\;
   update jsharmony_meta set extra_changes=extra_changes+1, last_insert_rowid_override=last_insert_rowid()\;
 end;
 
-create trigger {schema}_v_xppl_update instead of update on {schema}_v_xppl
+create trigger {schema}_{v_param_sys}_update instead of update on {schema}_{v_param_sys}
 begin
-  update {schema}_xpp set xpp_process = new.xpp_process, xpp_attrib = new.xpp_attrib, xpp_val = new.xpp_val,
-                           xpp_etstmp = new.xpp_etstmp,xpp_eu = new.xpp_eu, xpp_mtstmp = new.xpp_mtstmp, xpp_mu = new.xpp_mu
-                           where xpp_id=new.xpp_id\;
+  update {schema}_{param_sys} set {param_sys_process} = new.{param_sys_process}, {param_sys_attrib} = new.{param_sys_attrib}, {param_sys_val} = new.{param_sys_val},
+                           {param_sys_etstmp} = new.{param_sys_etstmp},{param_sys_euser} = new.{param_sys_euser}, {param_sys_mtstmp} = new.{param_sys_mtstmp}, {param_sys_muser} = new.{param_sys_muser}
+                           where {param_sys_id}=new.{param_sys_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-create trigger {schema}_v_xppl_delete instead of delete on {schema}_v_xppl
+create trigger {schema}_{v_param_sys}_delete instead of delete on {schema}_{v_param_sys}
 begin
-  delete from {schema}_xpp where xpp_id = old.xpp_id\;
+  delete from {schema}_{param_sys} where {param_sys_id} = old.{param_sys_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
-/***************v_years***************/
-CREATE VIEW {schema}_v_years AS
- SELECT ((cast(strftime('%Y',{schema}.mynow()) as int) + numbers.{number_val}) - 1) AS {year_val}
-   FROM {schema}_numbers numbers
-  WHERE (numbers.{number_val} <= 10);
+/***************{v_year}***************/
+CREATE VIEW {schema}_{v_year} AS
+ SELECT ((cast(strftime('%Y',{schema}.{my_now}()) as int) + {number}.{number_val}) - 1) AS {year_val}
+   FROM {schema}_{number} {number}
+  WHERE ({number}.{number_val} <= 10);

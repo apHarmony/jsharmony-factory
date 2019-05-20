@@ -27,12 +27,12 @@ SET search_path = jsharmony, pg_catalog;
 
 CREATE TYPE toaudit AS (
 	op text,
-	table_name text,
-	c_id bigint,
-	e_id bigint,
-	ref_name text,
-	ref_id bigint,
-	subj text
+	{audit_table_name} text,
+	{cust_id} bigint,
+	{item_id} bigint,
+	{audit_ref_name} text,
+	{audit_ref_id} bigint,
+	{audit_subject} text
 );
 
 
@@ -42,159 +42,159 @@ ALTER TYPE toaudit OWNER TO postgres;
 -- Name: audit(toaudit, bigint, bigint, character varying, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying DEFAULT NULL::character varying, par_column_val text DEFAULT NULL::text) RETURNS bigint
+CREATE FUNCTION audit(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying DEFAULT NULL::character varying, par_{audit_column_val} text DEFAULT NULL::text) RETURNS bigint
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm     timestamp default {schema}.mynow();
-      myuser      text default {schema}.mycuser();
-      my_c_id     bigint default null;
-      my_e_id     bigint default null;
-      my_ref_name text default null;
-      my_ref_id   bigint default null;
-      my_subj     text default null;
-      d_aud_seq   bigint default null;
+      curdttm     timestamp default {schema}.{my_now}();
+      myuser      text default {schema}.{my_db_user}();
+      my_{cust_id}     bigint default null;
+      my_{item_id}     bigint default null;
+      my_{audit_ref_name} text default null;
+      my_{audit_ref_id}   bigint default null;
+      my_{audit_subject}     text default null;
+      {doc}_{audit_seq}   bigint default null;
     BEGIN
-        IF par_aud_seq is null THEN
+        IF par_{audit_seq} is null THEN
 
           if (toa.op = 'DELETE') then
-		select aud_seq,
-		       C_ID,
-		       E_ID,
-		       REF_NAME,
-		       REF_ID,
-		       SUBJ
-		  into d_aud_seq,
-		       my_C_ID,
-		       my_E_ID,
-		       my_REF_NAME,
-		       my_REF_ID,
-		       my_SUBJ
-		  from {schema}.aud_h
-                 where TABLE_NAME = toa.table_name
-		   and TABLE_ID = par_table_id
-		   and AUD_OP = 'I'
-                 order by AUD_SEQ desc
+		select {audit_seq},
+		       {cust_id},
+		       {item_id},
+		       {audit_ref_name},
+		       {audit_ref_id},
+		       {audit_subject}
+		  into {doc}_{audit_seq},
+		       my_{cust_id},
+		       my_{item_id},
+		       my_{audit_ref_name},
+		       my_{audit_ref_id},
+		       my_{audit_subject}
+		  from {schema}.{audit}
+                 where {audit_table_name} = toa.{audit_table_name}
+		   and {audit_table_id} = par_{audit_table_id}
+		   and {audit_op} = 'I'
+                 order by {audit_seq} desc
 		 fetch first 1 rows only;
           ELSE
-            my_c_id = toa.c_id;
-            my_e_id = toa.e_id;
-            my_ref_name = toa.ref_name;
-            my_ref_id = toa.ref_id;
-            my_subj = toa.subj;
+            my_{cust_id} = toa.{cust_id};
+            my_{item_id} = toa.{item_id};
+            my_{audit_ref_name} = toa.{audit_ref_name};
+            my_{audit_ref_id} = toa.{audit_ref_id};
+            my_{audit_subject} = toa.{audit_subject};
           END if;
         
-          insert into {schema}.aud_h 
-                            (table_name, table_id, aud_op, aud_u, aud_tstmp, c_id, e_id, ref_name, ref_id, subj)
-                     values (toa.table_name,
-                             par_table_id,
+          insert into {schema}.{audit} 
+                            ({audit_table_name}, {audit_table_id}, {audit_op}, {audit_user}, {audit_tstmp}, {cust_id}, {item_id}, {audit_ref_name}, {audit_ref_id}, {audit_subject})
+                     values (toa.{audit_table_name},
+                             par_{audit_table_id},
                              case toa.op when 'INSERT' then 'I'
                                          when 'UPDATE' then 'U'
                                          when 'DELETE' then 'D'
                                          else NULL end,
                              myuser,
                              curdttm,
-                             my_c_id,
-                             my_e_id,
-                             my_ref_name,
-                             my_ref_id,
-                             my_subj)
-                     returning aud_seq into par_aud_seq; 
+                             my_{cust_id},
+                             my_{item_id},
+                             my_{audit_ref_name},
+                             my_{audit_ref_id},
+                             my_{audit_subject})
+                     returning {audit_seq} into par_{audit_seq}; 
         END IF;
         IF toa.op in ('UPDATE','DELETE') THEN
-          insert into {schema}.aud_d 
-                            (aud_seq, column_name, column_val)
-                     values (par_aud_seq, upper(par_column_name), par_column_val);
+          insert into {schema}.{audit_detail} 
+                            ({audit_seq}, {audit_column_name}, {audit_column_val})
+                     values (par_{audit_seq}, upper(par_{audit_column_name}), par_{audit_column_val});
         END IF;           
     END;
 $$;
 
 
-ALTER FUNCTION {schema}.audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) OWNER TO postgres;
+ALTER FUNCTION {schema}.audit(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) OWNER TO postgres;
 
 --
 -- Name: audit_base(toaudit, bigint, bigint, character varying, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying DEFAULT NULL::character varying, par_column_val text DEFAULT NULL::text) RETURNS bigint
+CREATE FUNCTION audit_base(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying DEFAULT NULL::character varying, par_{audit_column_val} text DEFAULT NULL::text) RETURNS bigint
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm     timestamp default {schema}.mynow();
-      myuser      text default {schema}.mycuser();
-      my_ref_name text default null;
-      my_ref_id   bigint default null;
-      my_subj     text default null;
-      d_aud_seq   bigint default null;
+      curdttm     timestamp default {schema}.{my_now}();
+      myuser      text default {schema}.{my_db_user}();
+      my_{audit_ref_name} text default null;
+      my_{audit_ref_id}   bigint default null;
+      my_{audit_subject}     text default null;
+      {doc}_{audit_seq}   bigint default null;
     BEGIN
-        IF par_aud_seq is null THEN
+        IF par_{audit_seq} is null THEN
 
           if (toa.op = 'DELETE') then
-		select aud_seq,
-		       REF_NAME,
-		       REF_ID,
-		       SUBJ
-		  into d_aud_seq,
-		       my_REF_NAME,
-		       my_REF_ID,
-		       my_SUBJ
-		  from {schema}.AUD_H
-                 where TABLE_NAME = toa.table_name
-		   and TABLE_ID = par_table_id
-		   and AUD_OP = 'I'
-                 order by AUD_SEQ desc
+		select {audit_seq},
+		       {audit_ref_name},
+		       {audit_ref_id},
+		       {audit_subject}
+		  into {doc}_{audit_seq},
+		       my_{audit_ref_name},
+		       my_{audit_ref_id},
+		       my_{audit_subject}
+		  from {schema}.{audit}
+                 where {audit_table_name} = toa.{audit_table_name}
+		   and {audit_table_id} = par_{audit_table_id}
+		   and {audit_op} = 'I'
+                 order by {audit_seq} desc
 		 fetch first 1 rows only;
           ELSE
-            my_ref_name = toa.ref_name;
-            my_ref_id = toa.ref_id;
-            my_subj = toa.subj;
+            my_{audit_ref_name} = toa.{audit_ref_name};
+            my_{audit_ref_id} = toa.{audit_ref_id};
+            my_{audit_subject} = toa.{audit_subject};
           END if;
         
-          insert into {schema}.AUD_H 
-                            (table_name, table_id, aud_op, aud_u, aud_tstmp, ref_name, ref_id, subj)
-                     values (toa.table_name,
-                             par_table_id,
+          insert into {schema}.{audit} 
+                            ({audit_table_name}, {audit_table_id}, {audit_op}, {audit_user}, {audit_tstmp}, {audit_ref_name}, {audit_ref_id}, {audit_subject})
+                     values (toa.{audit_table_name},
+                             par_{audit_table_id},
                              case toa.op when 'INSERT' then 'I'
                                          when 'UPDATE' then 'U'
                                          when 'DELETE' then 'D'
                                          else NULL end,
                              myuser,
                              curdttm,
-                             my_ref_name,
-                             my_ref_id,
-                             my_subj)
-                     returning aud_seq into par_aud_seq; 
+                             my_{audit_ref_name},
+                             my_{audit_ref_id},
+                             my_{audit_subject})
+                     returning {audit_seq} into par_{audit_seq}; 
         END IF;
         IF toa.op in ('UPDATE','DELETE') THEN
-          insert into {schema}.aud_d 
-                             (aud_seq, column_name, column_val)
-                     values (par_aud_seq, upper(par_column_name), par_column_val);
+          insert into {schema}.{audit_detail} 
+                             ({audit_seq}, {audit_column_name}, {audit_column_val})
+                     values (par_{audit_seq}, upper(par_{audit_column_name}), par_{audit_column_val});
         END IF;           
     END;
 $$;
 
 
-ALTER FUNCTION {schema}.audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) OWNER TO postgres;
+ALTER FUNCTION {schema}.audit_base(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) OWNER TO postgres;
 
 --
--- Name: audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {log_audit_info}(timestamp without time zone, character varying, timestamp without time zone, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) RETURNS character varying
+CREATE FUNCTION {log_audit_info}(timestamp without time zone, character varying, timestamp without time zone, character varying) RETURNS character varying
     LANGUAGE sql
     AS $_$select 'INFO'||chr(13)||chr(10)|| 
-               '     Entered:  '||{schema}.mymmddyyhhmi($1)||'  '||{schema}.mycuser_fmt($2)||
+               '     Entered:  '||{schema}.{my_mmddyyhhmi}($1)||'  '||{schema}.{my_db_user_fmt}($2)||
 			   chr(13)||chr(10)|| 
-               'Last Updated:  '||{schema}.mymmddyyhhmi($3)||'  '||{schema}.mycuser_fmt($4);$_$;
+               'Last Updated:  '||{schema}.{my_mmddyyhhmi}($3)||'  '||{schema}.{my_db_user_fmt}($4);$_$;
 
 
-ALTER FUNCTION {schema}.audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{log_audit_info}(timestamp without time zone, character varying, timestamp without time zone, character varying) OWNER TO postgres;
 
 --
--- Name: check_code(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {check_code}(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION check_code(in_tblname character varying, in_codeval character varying) RETURNS bigint
+CREATE FUNCTION {check_code}(in_tblname character varying, in_{code_val} character varying) RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
@@ -202,7 +202,7 @@ DECLARE
     runmesql text;
 BEGIN
 
-  rslt := {schema}.check_code_p(in_tblname, in_codeval);
+  rslt := {schema}.{check_code_exec}(in_tblname, in_{code_val});
 
   RETURN rslt;
 
@@ -214,13 +214,13 @@ END;
 $$;
 
 
-ALTER FUNCTION {schema}.check_code(in_tblname character varying, in_codeval character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{check_code}(in_tblname character varying, in_{code_val} character varying) OWNER TO postgres;
 
 --
--- Name: check_code2(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {check_code2}(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) RETURNS bigint
+CREATE FUNCTION {check_code2}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
@@ -228,7 +228,7 @@ DECLARE
     runmesql text;
 BEGIN
 
-  rslt := {schema}.check_code2_p(in_tblname, in_codeval1, in_codeval2);
+  rslt := {schema}.{check_code2_exec}(in_tblname, in_{code_val1}, in_{code_va12});
 
   RETURN rslt;
 
@@ -240,13 +240,13 @@ END;
 $$;
 
 
-ALTER FUNCTION {schema}.check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{check_code2}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) OWNER TO postgres;
 
 --
--- Name: check_code2_p(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {check_code2_exec}(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) RETURNS bigint
+CREATE FUNCTION {check_code2_exec}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $_$
 DECLARE
@@ -257,27 +257,27 @@ BEGIN
   rslt := 0;
 
   select 'select count(*) from ' || schemaname || '.' || tablename ||
-           ' where codeval1 = $1 and codeval2 = $2;'
+           ' where {code_val1} = $1 and {code_va12} = $2;'
     into runmesql
     from pg_tables
    where tablename = lower(in_tblname) 
    order by (case schemaname when '{schema}' then 1 else 2 end), schemaname
    limit 1;
 
-  EXECUTE runmesql INTO rslt USING in_codeval1, in_codeval2;
+  EXECUTE runmesql INTO rslt USING in_{code_val1}, in_{code_va12};
   
   RETURN rslt;
 END;
 $_$;
 
 
-ALTER FUNCTION {schema}.check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{check_code2_exec}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) OWNER TO postgres;
 
 --
--- Name: check_code_p(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {check_code_exec}(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) RETURNS bigint
+CREATE FUNCTION {check_code_exec}(in_tblname character varying, in_{code_val} character varying) RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $_$
 DECLARE
@@ -287,27 +287,27 @@ BEGIN
 
   rslt := 0;
 
-  select 'select count(*) from ' || schemaname || '.' || tablename || ' where codeval = $1 ;'
+  select 'select count(*) from ' || schemaname || '.' || tablename || ' where {code_val} = $1 ;'
     into runmesql
     from pg_tables
    where tablename = lower(in_tblname) 
    order by (case schemaname when '{schema}' then 1 else 2 end), schemaname
    limit 1;
 
-  EXECUTE runmesql INTO rslt USING in_codeval;
+  EXECUTE runmesql INTO rslt USING in_{code_val};
   
   RETURN rslt;
 END;
 $_$;
 
 
-ALTER FUNCTION {schema}.check_code_p(in_tblname character varying, in_codeval character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{check_code_exec}(in_tblname character varying, in_{code_val} character varying) OWNER TO postgres;
 
 --
--- Name: check_foreign(character varying, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {check_foreign_key}(character varying, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) RETURNS bigint
+CREATE FUNCTION {check_foreign_key}(in_tblname character varying, in_tblid bigint) RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
@@ -315,7 +315,7 @@ DECLARE
     runmesql text;
 BEGIN
 
-  rslt := {schema}.check_foreign_p(in_tblname, in_tblid);
+  rslt := {schema}.{check_foreign_key_exec}(in_tblname, in_tblid);
 
   RETURN rslt;
 
@@ -327,13 +327,13 @@ END;
 $$;
 
 
-ALTER FUNCTION {schema}.check_foreign(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
+ALTER FUNCTION {schema}.{check_foreign_key}(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
 
 --
--- Name: check_foreign_p(character varying, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {check_foreign_key_exec}(character varying, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) RETURNS bigint
+CREATE FUNCTION {check_foreign_key_exec}(in_tblname character varying, in_tblid bigint) RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $_$
 DECLARE
@@ -358,51 +358,51 @@ END;
 $_$;
 
 
-ALTER FUNCTION {schema}.check_foreign_p(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
+ALTER FUNCTION {schema}.{check_foreign_key_exec}(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
 
 --
--- Name: check_pp(character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {check_param}(character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) RETURNS text
+CREATE FUNCTION {check_param}(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) RETURNS text
     LANGUAGE plpgsql
     AS $$
 DECLARE 
-  C bigint = 0;
-  ppd_type VARCHAR(8) = NULL;
-  codename VARCHAR(16);
-  ppd_gpp boolean;
-  ppd_ppp boolean;
-  ppd_xpp boolean;
+  {cust} bigint = 0;
+  {param_type} VARCHAR(8) = NULL;
+  {code_name} VARCHAR(16);
+  {is_param_app} boolean;
+  {is_param_user} boolean;
+  {is_param_sys} boolean;
 BEGIN
 
-  SELECT ppd.ppd_type,
-         ppd.codename,
-         ppd.ppd_gpp,
-         ppd.ppd_ppp,
-         ppd.ppd_xpp
-    INTO ppd_type,
-         codename,
-         ppd_gpp,
-         ppd_ppp,
-         ppd_xpp
-    FROM {schema}.PPD
-   WHERE ppd.ppd_process = in_process
-     AND ppd.ppd_attrib = in_attrib;      
+  SELECT {param}.{param_type},
+         {param}.{code_name},
+         {param}.{is_param_app},
+         {param}.{is_param_user},
+         {param}.{is_param_sys}
+    INTO {param_type},
+         {code_name},
+         {is_param_app},
+         {is_param_user},
+         {is_param_sys}
+    FROM {schema}.{param}
+   WHERE {param}.{param_process} = in_process
+     AND {param}.{param_attrib} = in_attrib;      
 
-  IF ppd_type IS NULL THEN
-    RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not defined in PPD';
+  IF {param_type} IS NULL THEN
+    RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not defined in {param}';
   END IF;  
   
-  IF upper(in_table) NOT IN ('GPP','PPP','XPP') THEN
+  IF upper(in_table) NOT IN ('{param_app}','{param_user}','{param_sys}') THEN
     RETURN 'Table '||upper(in_table) || ' is not defined';
   END IF;  
  
-  IF upper(in_table)='GPP' AND ppd_gpp=false THEN
+  IF upper(in_table)='{param_app}' AND {is_param_app}=false THEN
     RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||upper(in_table);
-  ELSIF upper(in_table)='PPP' AND ppd_ppp=false THEN
+  ELSIF upper(in_table)='{param_user}' AND {is_param_user}=false THEN
     RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||upper(in_table);
-  ELSIF upper(in_table)='XPP' AND ppd_xpp=false THEN
+  ELSIF upper(in_table)='{param_sys}' AND {is_param_sys}=false THEN
     RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||upper(in_table);
   END IF;  
 
@@ -410,19 +410,19 @@ BEGIN
     RETURN 'Value has to be present';
   END IF;  
 
-  IF ppd_type='N' AND not {schema}.myISNUMERIC(in_val) THEN
+  IF {param_type}='{note}' AND not {schema}.myISNUMERIC(in_val) THEN
     RETURN 'Value '||in_val||' is not numeric';
   END IF;  
 
-  IF coalesce(codename,'') != '' THEN
+  IF coalesce({code_name},'') != '' THEN
 
     select count(*)
-      into c
+      into {cust}
       from {schema}.ucod
-     where codename = codename
-       and codeval = in_val; 
+     where {code_name} = {code_name}
+       and {code_val} = in_val; 
        
-    IF c=0 THEN
+    IF {cust}=0 THEN
       RETURN 'Incorrect value '||in_val;
     END IF;     
        
@@ -438,20 +438,20 @@ END;
 $$;
 
 
-ALTER FUNCTION {schema}.check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{check_param}(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) OWNER TO postgres;
 
 --
--- Name: cpe_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION cpe_iud() RETURNS trigger
+CREATE FUNCTION {cust_user}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm   timestamp default {schema}.mynow();
-      myuser    text default {schema}.mycuser();
-      aud_seq   bigint default NULL;
-      my_id     bigint default case TG_OP when 'DELETE' then OLD.PE_ID else NEW.PE_ID end;
+      curdttm   timestamp default {schema}.{my_now}();
+      myuser    text default {schema}.{my_db_user}();
+      {audit_seq}   bigint default NULL;
+      my_id     bigint default case TG_OP when 'DELETE' then OLD.{sys_user_id} else NEW.{sys_user_id} end;
       newpw     text default NULL;
       hash      bytea default NULL;
       my_toa    {schema}.toaudit;
@@ -462,12 +462,12 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := case when TG_OP = 'DELETE' then NULL else NEW.c_id end;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := case when TG_OP = 'DELETE' then NULL else coalesce(NEW.PE_LNAME,'')||', '||coalesce(NEW.PE_FNAME,'') end;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := case when TG_OP = 'DELETE' then NULL else NEW.{cust_id} end;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := case when TG_OP = 'DELETE' then NULL else coalesce(NEW.{sys_user_lname},'')||', '||coalesce(NEW.{sys_user_fname},'') end;
          
 
         /**********************************/
@@ -476,20 +476,20 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
 
         IF TG_OP = 'UPDATE'
            and
-           {schema}.nonequal(NEW.pe_id, OLD.pe_id) THEN
+           {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) THEN
           RAISE EXCEPTION  'Application Error - ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'UPDATE'
            and
-           {schema}.nonequal(NEW.c_id, OLD.c_id) THEN
+           {schema}.{nequal}(NEW.{cust_id}, OLD.{cust_id}) THEN
           RAISE EXCEPTION  'Application Error - Customer ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'INSERT' or TG_OP = 'UPDATE' THEN
-	  IF {schema}.nonequal(NEW.PE_PW1, NEW.PE_PW2) THEN
+	  IF {schema}.{nequal}(NEW.{sys_user_pw1}, NEW.{sys_user_pw2}) THEN
             RAISE EXCEPTION  'Application Error - New Password and Repeat Password are different.';
-          ELSIF (TG_OP='INSERT' or NEW.pe_pw1 is not null)  AND length(btrim(NEW.pe_pw1::text)) < 6  THEN
+          ELSIF (TG_OP='INSERT' or NEW.{sys_user_pw1} is not null)  AND length(btrim(NEW.{sys_user_pw1}::text)) < 6  THEN
             RAISE EXCEPTION  'Application Error - Password length - at least 6 characters required.';
           END IF;            
         END IF;
@@ -497,9 +497,9 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
 
         IF (TG_OP='INSERT' 
             OR 
-            TG_OP='UPDATE' AND {schema}.nonequal(NEW.C_ID, OLD.C_ID)) THEN
-          IF {schema}.check_foreign('C', NEW.C_ID) <= 0THEN
-            RAISE EXCEPTION  'Table C does not contain record % .', NEW.C_ID::text ;
+            TG_OP='UPDATE' AND {schema}.{nequal}(NEW.{cust_id}, OLD.{cust_id})) THEN
+          IF {schema}.{check_foreign_key}('C', NEW.{cust_id}) <= 0THEN
+            RAISE EXCEPTION  'Table {cust} does not contain record % .', NEW.{cust_id}::text ;
 	  END IF;
 	END IF;   
 
@@ -509,68 +509,68 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
 
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_ID is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_ID, OLD.PE_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_ID', OLD.PE_ID::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_id}', OLD.{sys_user_id}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.C_ID is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.C_ID, OLD.C_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'C_ID', OLD.C_ID::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{cust_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{cust_id}, OLD.{cust_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{cust_id}', OLD.{cust_id}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_STS is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_STS, OLD.PE_STS) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_STS', OLD.PE_STS::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_sts} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_sts}, OLD.{sys_user_sts}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_sts}', OLD.{sys_user_sts}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_FNAME is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_FNAME, OLD.PE_FNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_FNAME', OLD.PE_FNAME::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_fname} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_fname}, OLD.{sys_user_fname}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_fname}', OLD.{sys_user_fname}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_MNAME is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_MNAME, OLD.PE_MNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_MNAME', OLD.PE_MNAME::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_mname} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_mname}, OLD.{sys_user_mname}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_mname}', OLD.{sys_user_mname}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_LNAME is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_LNAME, OLD.PE_LNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_LNAME', OLD.PE_LNAME::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_lname} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_lname}, OLD.{sys_user_lname}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_lname}', OLD.{sys_user_lname}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_JTITLE is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_JTITLE, OLD.PE_JTITLE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_JTITLE', OLD.PE_JTITLE::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_jobtitle} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_jobtitle}, OLD.{sys_user_jobtitle}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_jobtitle}', OLD.{sys_user_jobtitle}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_BPHONE is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_BPHONE, OLD.PE_BPHONE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_BPHONE', OLD.PE_BPHONE::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_bphone} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_bphone}, OLD.{sys_user_bphone}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_bphone}', OLD.{sys_user_bphone}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_CPHONE is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_CPHONE, OLD.PE_CPHONE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_CPHONE', OLD.PE_CPHONE::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_cphone} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_cphone}, OLD.{sys_user_cphone}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_cphone}', OLD.{sys_user_cphone}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_EMAIL is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_EMAIL, OLD.PE_EMAIL) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_EMAIL', OLD.PE_EMAIL::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_email} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_email}, OLD.{sys_user_email}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_email}', OLD.{sys_user_email}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_LL_TSTMP is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_LL_TSTMP, OLD.PE_LL_TSTMP) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_LL_TSTMP', OLD.PE_LL_TSTMP::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_lastlogin_tstmp} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_lastlogin_tstmp}, OLD.{sys_user_lastlogin_tstmp}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_lastlogin_tstmp}', OLD.{sys_user_lastlogin_tstmp}::text);  
         END IF;
 
       
-        IF TG_OP = 'UPDATE' and coalesce(NEW.pe_pw1,'') <> '' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_PW','*');  
+        IF TG_OP = 'UPDATE' and coalesce(NEW.{sys_user_pw1},'') <> '' THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user}_PW','*');  
         END IF;
 
 
@@ -580,32 +580,32 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
 
         IF TG_OP in ('INSERT', 'UPDATE') THEN
         
-          newpw = btrim(NEW.pe_pw1);
+          newpw = btrim(NEW.{sys_user_pw1});
           if newpw is not null then
-            hash = myhash('C', NEW.pe_id, newpw);
+            hash = {my_hash}('C', NEW.{sys_user_id}, newpw);
             if (hash is null) then
               RAISE EXCEPTION  'Application Error - Missing or Incorrect Password.';
             end if;
-	    NEW.pe_hash := hash;
-	    NEW.pe_pw1 = NULL;
-	    NEW.pe_pw2 = NULL;
+	    NEW.{sys_user_hash} := hash;
+	    NEW.{sys_user_pw1} = NULL;
+	    NEW.{sys_user_pw2} = NULL;
           else
             hash = NULL;
           end if;
             
           IF TG_OP = 'INSERT' THEN
-            NEW.pe_stsdt := curdttm;
-	    NEW.pe_etstmp := curdttm;
-	    NEW.pe_eu := myuser;
-	    NEW.pe_mtstmp := curdttm;
-	    NEW.pe_mu := myuser;
+            NEW.{sys_user_stsdt} := curdttm;
+	    NEW.{sys_user_etstmp} := curdttm;
+	    NEW.{sys_user_euser} := myuser;
+	    NEW.{sys_user_mtstmp} := curdttm;
+	    NEW.{sys_user_muser} := myuser;
           ELSIF TG_OP = 'UPDATE' THEN
-            IF aud_seq is not NULL THEN
-              if {schema}.nonequal(OLD.PE_STS, NEW.PE_STS) then
-                NEW.pe_stsdt := curdttm;
+            IF {audit_seq} is not NULL THEN
+              if {schema}.{nequal}(OLD.{sys_user_sts}, NEW.{sys_user_sts}) then
+                NEW.{sys_user_stsdt} := curdttm;
               end if;
-	      NEW.pe_mtstmp := curdttm;
-	      NEW.pe_mu := myuser;
+	      NEW.{sys_user_mtstmp} := curdttm;
+	      NEW.{sys_user_muser} := myuser;
 	    END IF;  
           END IF;
         END IF;
@@ -627,18 +627,18 @@ CREATE FUNCTION cpe_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.cpe_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{cust_user}_iud() OWNER TO postgres;
 
 --
--- Name: cpe_iud_after_insert(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user}_iud_after_insert(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION cpe_iud_after_insert() RETURNS trigger
+CREATE FUNCTION {cust_user}_iud_after_insert() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     BEGIN
         IF TG_OP = 'INSERT' THEN
-          insert into {schema}.cper (pe_id, cr_name) values(NEW.pe_id, 'C*');
+          insert into {schema}.{cust_user_role} ({sys_user_id}, {cust_role_name}) values(NEW.{sys_user_id}, 'C*');
         END IF;
 
         RETURN NEW;   
@@ -647,26 +647,26 @@ CREATE FUNCTION cpe_iud_after_insert() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.cpe_iud_after_insert() OWNER TO postgres;
+ALTER FUNCTION {schema}.{cust_user}_iud_after_insert() OWNER TO postgres;
 
 --
--- Name: cper_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user_role}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION cper_iud() RETURNS trigger
+CREATE FUNCTION {cust_user_role}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $_$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.cper_id else NEW.cper_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{cust_user_role_id} else NEW.{cust_user_role_id} end;
       my_toa     {schema}.toaudit;
 
       sqlcmd     text;
-      getcid     text;
-      wk_c_id    bigint;
-      wk_pe_id   bigint;
+      {get_cust_id}     text;
+      wk_{cust_id}    bigint;
+      wk_{sys_user_id}   bigint;
       
     BEGIN
 
@@ -674,25 +674,25 @@ CREATE FUNCTION cper_iud() RETURNS trigger
         /* INITIALIZE                     */ 
         /**********************************/
 
-        select pp_val
-          into getcid
-          from {schema}.v_pp 
-         where pp_process = 'SQL'
-           and pp_attrib = 'GETCID'; 
-        wk_pe_id := case TG_OP when 'DELETE' then OLD.pe_id else NEW.pe_id end;  
-        sqlcmd := 'select '||getcid||'(''CPE'',$1);';
-        EXECUTE sqlcmd INTO wk_c_id USING wk_pe_id;
+        select {param_cur_val}
+          into {get_cust_id}
+          from {schema}.{v_param_cur} 
+         where {param_cur_process} = 'SQL'
+           and {param_cur_attrib} = '{get_cust_id}'; 
+        wk_{sys_user_id} := case TG_OP when 'DELETE' then OLD.{sys_user_id} else NEW.{sys_user_id} end;  
+        sqlcmd := 'select '||{get_cust_id}||'(''{cust_user}'',$1);';
+        EXECUTE sqlcmd INTO wk_{cust_id} USING wk_{sys_user_id};
 
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := wk_c_id;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := case when TG_OP = 'DELETE' then NULL else (select coalesce(PE_LNAME,'')||', '||coalesce(PE_FNAME,'') 
-                                                                    from {schema}.CPE 
-                                                                   where pe_id = NEW.PE_ID) end;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := wk_{cust_id};
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := case when TG_OP = 'DELETE' then NULL else (select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') 
+                                                                    from {schema}.{cust_user} 
+                                                                   where {sys_user_id} = NEW.{sys_user_id}) end;
          
 
         /**********************************/
@@ -701,13 +701,13 @@ CREATE FUNCTION cper_iud() RETURNS trigger
 
         IF TG_OP = 'UPDATE'
            and
-           {schema}.nonequal(NEW.cper_id, OLD.cper_id) THEN
+           {schema}.{nequal}(NEW.{cust_user_role_id}, OLD.{cust_user_role_id}) THEN
           RAISE EXCEPTION  'Application Error - ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'UPDATE'
            and
-           {schema}.nonequal(NEW.pe_id, OLD.pe_id) THEN
+           {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) THEN
           RAISE EXCEPTION  'Application Error - Customer User ID cannot be updated.';
         END IF;
 
@@ -722,17 +722,17 @@ CREATE FUNCTION cper_iud() RETURNS trigger
 
 	  IF EXISTS (select 1
 	               from CF
-                      inner join CPE on CPE.C_ID = CF.C_ID
-                      where CPE.PE_ID = NEW.PE_ID
+                      inner join {cust_user} on {cust_user}.{cust_id} = CF.{cust_id}
+                      where {cust_user}.{sys_user_id} = NEW.{sys_user_id}
 		        and CF.CF_TYPE = 'LVL2') THEN
-	    IF NEW.CR_NAME not in ('C*','CUSER','CMGR','CADMIN') THEN
-              RAISE EXCEPTION  'Role % not compatible with LVL2', coalesce(NEW.cr_name,'');
+	    IF NEW.{cust_role_name} not in ('C*','{context_user}','CMGR','CADMIN') THEN
+              RAISE EXCEPTION  'Role % not compatible with LVL2', coalesce(NEW.{cust_role_name},'');
             END IF;
             
 	  ELSE
 	  
-	    IF NEW.CR_NAME not in ('C*','CL1') THEN
-              RAISE EXCEPTION  'Role % not compatible with LVL1', coalesce(NEW.cr_name,'');
+	    IF NEW.{cust_role_name} not in ('C*','CL1') THEN
+              RAISE EXCEPTION  'Role % not compatible with LVL1', coalesce(NEW.{cust_role_name},'');
             END IF;
 
 	  END IF;
@@ -746,23 +746,23 @@ CREATE FUNCTION cper_iud() RETURNS trigger
         /* AUDIT TRAIL                    */ 
         /**********************************/
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
 
 
-        IF (case when TG_OP = 'DELETE' then OLD.CPER_ID is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.CPER_ID, OLD.CPER_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id, 'CPER_ID', OLD.CPER_ID::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{cust_user_role_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{cust_user_role_id}, OLD.{cust_user_role_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id, '{cust_user_role_id}', OLD.{cust_user_role_id}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_ID is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_ID, OLD.PE_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id, 'PE_ID', OLD.PE_ID::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_id}', OLD.{sys_user_id}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.CR_NAME is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.CR_NAME, OLD.CR_NAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id, 'CR_NAME', OLD.CR_NAME::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{cust_role_name} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{cust_role_name}, OLD.{cust_role_name}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id, '{cust_role_name}', OLD.{cust_role_name}::text);  
         END IF;
 
 
@@ -786,32 +786,32 @@ CREATE FUNCTION cper_iud() RETURNS trigger
 $_$;
 
 
-ALTER FUNCTION {schema}.cper_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{cust_user_role}_iud() OWNER TO postgres;
 
 --
--- Name: create_gcod(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {create_code_app}(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) RETURNS bigint
+CREATE FUNCTION {create_code_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) RETURNS bigint
     LANGUAGE plpgsql SECURITY DEFINER COST 10
     AS $$
 DECLARE
     rslt          bigint;
-    wk_codeschema text;
+    wk_{code_schema} text;
     runmesql      text;
 BEGIN
 
   rslt := 0;
 
-  wk_codeschema = coalesce(in_codeschema, 'public');
+  wk_{code_schema} = coalesce(in_{code_schema}, 'public');
 
   SET client_min_messages to ERROR;
 
-  runmesql := 'CREATE TABLE '||wk_codeschema||'.gcod_'||in_codename||' '
+  runmesql := 'CREATE TABLE '||wk_{code_schema}||'.gcod_'||in_{code_name}||' '
             ||'( '
-            ||'  CONSTRAINT gcod_'||in_codename||'_pkey PRIMARY KEY (gcod_id), '
-            ||'  CONSTRAINT gcod_'||in_codename||'_codeval_key UNIQUE (codeval), '
-            ||'  CONSTRAINT gcod_'||in_codename||'_codetxt_key UNIQUE (codetxt) '
+            ||'  CONSTRAINT gcod_'||in_{code_name}||'_pkey PRIMARY KEY (gcod_id), '
+            ||'  CONSTRAINT gcod_'||in_{code_name}||'_{code_val}_key UNIQUE ({code_val}), '
+            ||'  CONSTRAINT gcod_'||in_{code_name}||'_{code_txt}_key UNIQUE ({code_txt}) '
             ||') '
             ||'INHERITS ('||'{schema}'||'.gcod) '
             ||'WITH ( '
@@ -819,20 +819,20 @@ BEGIN
             ||');';
   EXECUTE runmesql ; 
 
-  runmesql := 'CREATE TRIGGER gcod_'||in_codename||' '
+  runmesql := 'CREATE TRIGGER gcod_'||in_{code_name}||' '
             ||'BEFORE INSERT OR UPDATE OR DELETE '
-            ||'ON '||wk_codeschema||'.gcod_'||in_codename||' ' 
+            ||'ON '||wk_{code_schema}||'.gcod_'||in_{code_name}||' ' 
             ||'FOR EACH ROW '
             ||'EXECUTE PROCEDURE '||'{schema}'||'.gcod_iud();';
   EXECUTE runmesql ; 
 
-  runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.gcod_'||in_codename||' IS ''User Codes - '||coalesce(in_codemean,'')||''';';
+  runmesql := 'COMMENT ON TABLE '||wk_{code_schema}||'.gcod_'||in_{code_name}||' IS ''User Codes - '||coalesce(in_{code_desc},'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod_'||in_codename||' TO {schema}_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_{code_schema}||'.gcod_'||in_{code_name}||' TO {schema}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod_'||in_codename||' TO {schema}_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_{code_schema}||'.gcod_'||in_{code_name}||' TO {schema}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -845,32 +845,32 @@ END;
 $$;
 
 
-ALTER FUNCTION {schema}.create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{create_code_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) OWNER TO postgres;
 
 --
--- Name: create_gcod2(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {create_code2_app}(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) RETURNS bigint
+CREATE FUNCTION {create_code2_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) RETURNS bigint
     LANGUAGE plpgsql SECURITY DEFINER COST 10
     AS $$
 DECLARE
     rslt          bigint;
-    wk_codeschema text;
+    wk_{code_schema} text;
     runmesql      text;
 BEGIN
 
   rslt := 0;
 
-  wk_codeschema = coalesce(in_codeschema, 'public');
+  wk_{code_schema} = coalesce(in_{code_schema}, 'public');
 
   SET client_min_messages to ERROR;
 
-  runmesql := 'CREATE TABLE '||wk_codeschema||'.gcod2_'||in_codename||' '
+  runmesql := 'CREATE TABLE '||wk_{code_schema}||'.gcod2_'||in_{code_name}||' '
             ||'( '
-            ||'  CONSTRAINT gcod2_'||in_codename||'_pkey PRIMARY KEY (gcod2_id), '
-            ||'  CONSTRAINT gcod2_'||in_codename||'_codeval1_codeval2_key UNIQUE (codeval1,codeval2), '
-            ||'  CONSTRAINT gcod2_'||in_codename||'_codeval1_codetxt_key UNIQUE (codeval1,codetxt) '
+            ||'  CONSTRAINT gcod2_'||in_{code_name}||'_pkey PRIMARY KEY ({code2_app_id}), '
+            ||'  CONSTRAINT gcod2_'||in_{code_name}||'_{code_val1}_{code_va12}_key UNIQUE ({code_val1},{code_va12}), '
+            ||'  CONSTRAINT gcod2_'||in_{code_name}||'_{code_val1}_{code_txt}_key UNIQUE ({code_val1},{code_txt}) '
             ||') '
             ||'INHERITS ('||'{schema}'||'.gcod2) '
             ||'WITH ( '
@@ -879,20 +879,20 @@ BEGIN
 
   EXECUTE runmesql ; 
 
-  runmesql := 'CREATE TRIGGER gcod2_'||in_codename||' '
+  runmesql := 'CREATE TRIGGER gcod2_'||in_{code_name}||' '
             ||'BEFORE INSERT OR UPDATE OR DELETE '
-            ||'ON '||wk_codeschema||'.gcod2_'||in_codename||' ' 
+            ||'ON '||wk_{code_schema}||'.gcod2_'||in_{code_name}||' ' 
             ||'FOR EACH ROW '
             ||'EXECUTE PROCEDURE '||'{schema}'||'.gcod2_iud();';
   EXECUTE runmesql ; 
 
-  runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.gcod2_'||in_codename||' IS ''User Codes 2 - '||coalesce(in_codemean,'')||''';';
+  runmesql := 'COMMENT ON TABLE '||wk_{code_schema}||'.gcod2_'||in_{code_name}||' IS ''User Codes 2 - '||coalesce(in_{code_desc},'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod2_'||in_codename||' TO {schema}_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_{code_schema}||'.gcod2_'||in_{code_name}||' TO {schema}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.gcod2_'||in_codename||' TO {schema}_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_{code_schema}||'.gcod2_'||in_{code_name}||' TO {schema}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -905,32 +905,32 @@ END;
 $$;
 
 
-ALTER FUNCTION {schema}.create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{create_code2_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) OWNER TO postgres;
 
 --
--- Name: create_ucod(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {create_code_sys}(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) RETURNS bigint
+CREATE FUNCTION {create_code_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) RETURNS bigint
     LANGUAGE plpgsql SECURITY DEFINER COST 10
     AS $$
 DECLARE
     rslt          bigint;
-    wk_codeschema text;
+    wk_{code_schema} text;
     runmesql      text;
 BEGIN
 
   rslt := 0;
 
-  wk_codeschema = coalesce(in_codeschema, 'public');
+  wk_{code_schema} = coalesce(in_{code_schema}, 'public');
 
   SET client_min_messages to ERROR;
 
-  runmesql := 'CREATE TABLE '||wk_codeschema||'.ucod_'||in_codename||' '
+  runmesql := 'CREATE TABLE '||wk_{code_schema}||'.ucod_'||in_{code_name}||' '
             ||'( '
-            ||'  CONSTRAINT ucod_'||in_codename||'_pkey PRIMARY KEY (ucod_id), '
-            ||'  CONSTRAINT ucod_'||in_codename||'_codeval_key UNIQUE (codeval), '
-            ||'  CONSTRAINT ucod_'||in_codename||'_codetxt_key UNIQUE (codetxt) '
+            ||'  CONSTRAINT ucod_'||in_{code_name}||'_pkey PRIMARY KEY ({code_sys_id}), '
+            ||'  CONSTRAINT ucod_'||in_{code_name}||'_{code_val}_key UNIQUE ({code_val}), '
+            ||'  CONSTRAINT ucod_'||in_{code_name}||'_{code_txt}_key UNIQUE ({code_txt}) '
             ||') '
             ||'INHERITS ('||'{schema}'||'.ucod) '
             ||'WITH ( '
@@ -939,13 +939,13 @@ BEGIN
 
   EXECUTE runmesql ; 
 
-  runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.ucod_'||in_codename||' IS ''System Codes - '||coalesce(in_codemean,'')||''';';
+  runmesql := 'COMMENT ON TABLE '||wk_{code_schema}||'.ucod_'||in_{code_name}||' IS ''System Codes - '||coalesce(in_{code_desc},'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod_'||in_codename||' TO {schema}_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_{code_schema}||'.ucod_'||in_{code_name}||' TO {schema}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod_'||in_codename||' TO {schema}_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_{code_schema}||'.ucod_'||in_{code_name}||' TO {schema}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -958,32 +958,32 @@ END;
 $$;
 
 
-ALTER FUNCTION {schema}.create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{create_code_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) OWNER TO postgres;
 
 --
--- Name: create_ucod2(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {create_code2_sys}(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) RETURNS bigint
+CREATE FUNCTION {create_code2_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) RETURNS bigint
     LANGUAGE plpgsql SECURITY DEFINER COST 10
     AS $$
 DECLARE
     rslt          bigint;
-    wk_codeschema text;
+    wk_{code_schema} text;
     runmesql      text;
 BEGIN
 
   rslt := 0;
 
-  wk_codeschema = coalesce(in_codeschema, 'public');
+  wk_{code_schema} = coalesce(in_{code_schema}, 'public');
 
   SET client_min_messages to ERROR;
 
-  runmesql := 'CREATE TABLE '||wk_codeschema||'.ucod2_'||in_codename||' '
+  runmesql := 'CREATE TABLE '||wk_{code_schema}||'.ucod2_'||in_{code_name}||' '
             ||'( '
-            ||'  CONSTRAINT ucod2_'||in_codename||'_pkey PRIMARY KEY (ucod2_id), '
-            ||'  CONSTRAINT ucod2_'||in_codename||'_codeval1_codeval2_key UNIQUE (codeval1, codeval2), '
-            ||'  CONSTRAINT ucod2_'||in_codename||'_codeval1_codetxt_key UNIQUE (codeval1, codetxt) '
+            ||'  CONSTRAINT ucod2_'||in_{code_name}||'_pkey PRIMARY KEY ({code2_sys_id}), '
+            ||'  CONSTRAINT ucod2_'||in_{code_name}||'_{code_val1}_{code_va12}_key UNIQUE ({code_val1}, {code_va12}), '
+            ||'  CONSTRAINT ucod2_'||in_{code_name}||'_{code_val1}_{code_txt}_key UNIQUE ({code_val1}, {code_txt}) '
             ||') '
             ||'INHERITS ('||'{schema}'||'.ucod2) '
             ||'WITH ( '
@@ -992,13 +992,13 @@ BEGIN
 
   EXECUTE runmesql ; 
 
-  runmesql := 'COMMENT ON TABLE '||wk_codeschema||'.ucod2_'||in_codename||' IS ''System Codes 2 - '||coalesce(in_codemean,'')||''';';
+  runmesql := 'COMMENT ON TABLE '||wk_{code_schema}||'.ucod2_'||in_{code_name}||' IS ''System Codes 2 - '||coalesce(in_{code_desc},'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod2_'||in_codename||' TO {schema}_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_{code_schema}||'.ucod2_'||in_{code_name}||' TO {schema}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_codeschema||'.ucod2_'||in_codename||' TO {schema}_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_{code_schema}||'.ucod2_'||in_{code_name}||' TO {schema}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -1011,88 +1011,88 @@ END;
 $$;
 
 
-ALTER FUNCTION {schema}.create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{create_code2_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) OWNER TO postgres;
 
 --
--- Name: d_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {doc}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION d_iud() RETURNS trigger
+CREATE FUNCTION {doc}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $_$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.d_id else NEW.d_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{doc_id} else NEW.{doc_id} end;
       my_toa     {schema}.toaudit;
 
       sqlcmd     text;
-      getcid     text = NULL;
-      geteid     text = NULL;
-      dscope_dctgr text = NULL;
+      {get_cust_id}     text = NULL;
+      {get_item_id}     text = NULL;
+      {doc_ctgr_table} text = NULL;
 
-      my_c_id    bigint = NULL;
-      my_e_id    bigint = NULL;
-      user_c_id  bigint = NULL;
-      my_d_scope text = NULL;
-      my_d_scope_id bigint = NULL;
-      cpe_user   boolean;
+      my_{cust_id}    bigint = NULL;
+      my_{item_id}    bigint = NULL;
+      user_{cust_id}  bigint = NULL;
+      my_{doc_scope} text = NULL;
+      my_{doc_scope_id} bigint = NULL;
+      {cust_user}_user   boolean;
     BEGIN
 
         /**********************************/
         /* INITIALIZE                     */ 
         /**********************************/
-        select pp_val
-          into getcid
-          from {schema}.v_pp 
-         where pp_process = 'SQL'
-           and pp_attrib = 'GETCID'; 
+        select {param_cur_val}
+          into {get_cust_id}
+          from {schema}.{v_param_cur} 
+         where {param_cur_process} = 'SQL'
+           and {param_cur_attrib} = '{get_cust_id}'; 
 
-        select pp_val
-          into geteid
-          from {schema}.v_pp 
-         where pp_process = 'SQL'
-           and pp_attrib = 'GETEID'; 
+        select {param_cur_val}
+          into {get_item_id}
+          from {schema}.{v_param_cur} 
+         where {param_cur_process} = 'SQL'
+           and {param_cur_attrib} = '{get_item_id}'; 
 
-        select pp_val
-          into dscope_dctgr
-          from {schema}.v_pp 
-         where pp_process = 'SQL'
-           and pp_attrib = 'DSCOPE_DCTGR'; 
+        select {param_cur_val}
+          into {doc_ctgr_table}
+          from {schema}.{v_param_cur} 
+         where {param_cur_process} = 'SQL'
+           and {param_cur_attrib} = '{doc_ctgr_table}'; 
 
-        my_d_scope = case TG_OP when 'DELETE' then OLD.D_SCOPE else NEW.D_SCOPE end;
-        my_d_scope_id = case TG_OP when 'DELETE' then OLD.D_SCOPE_ID else NEW.D_SCOPE_ID end;
+        my_{doc_scope} = case TG_OP when 'DELETE' then OLD.{doc_scope} else NEW.{doc_scope} end;
+        my_{doc_scope_id} = case TG_OP when 'DELETE' then OLD.{doc_scope_id} else NEW.{doc_scope_id} end;
 
-        if getcid is not null and my_d_scope not in ('PE') then
-          sqlcmd := 'select '||getcid||'($1,$2);';
-          EXECUTE sqlcmd INTO my_c_id USING my_d_scope, my_d_scope_id;
+        if {get_cust_id} is not null and my_{doc_scope} not in ('{sys_user}') then
+          sqlcmd := 'select '||{get_cust_id}||'($1,$2);';
+          EXECUTE sqlcmd INTO my_{cust_id} USING my_{doc_scope}, my_{doc_scope_id};
         end if;
 
-        if geteid is not null and my_d_scope not in ('PE') then
-          sqlcmd := 'select '||geteid||'($1,$2);';
-          EXECUTE sqlcmd INTO my_e_id USING my_d_scope, my_d_scope_id;
+        if {get_item_id} is not null and my_{doc_scope} not in ('{sys_user}') then
+          sqlcmd := 'select '||{get_item_id}||'($1,$2);';
+          EXECUTE sqlcmd INTO my_{item_id} USING my_{doc_scope}, my_{doc_scope_id};
         end if;
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := case when TG_OP = 'DELETE' then NULL else my_c_id end;
-        my_toa.e_id := case when TG_OP = 'DELETE' then NULL else my_e_id end;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := NULL;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := case when TG_OP = 'DELETE' then NULL else my_{cust_id} end;
+        my_toa.{item_id} := case when TG_OP = 'DELETE' then NULL else my_{item_id} end;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := NULL;
 
         /* RECOGNIZE IF CLIENT USER */
         IF SUBSTRING(MYUSER,1,1) = 'C' THEN
-          select c_id
-	    into user_c_id
-	    from {schema}.CPE
-           where substring(MYUSER,2,1024)=PE_ID::text
-	     and C_ID = my_c_id;
-          IF user_c_id is not null THEN		  
-            CPE_USER = TRUE;
+          select {cust_id}
+	    into user_{cust_id}
+	    from {schema}.{cust_user}
+           where substring(MYUSER,2,1024)={sys_user_id}::text
+	     and {cust_id} = my_{cust_id};
+          IF user_{cust_id} is not null THEN		  
+            {cust_user}_USER = TRUE;
           ELSE
-	    CPE_USER = FALSE;
+	    {cust_user}_USER = FALSE;
 	  END IF;
         END IF; 
 
@@ -1101,49 +1101,49 @@ CREATE FUNCTION d_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF {schema}.nonequal(NEW.d_id, OLD.d_id) THEN
+          IF {schema}.{nequal}(NEW.{doc_id}, OLD.{doc_id}) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF {schema}.nonequal(NEW.d_scope, OLD.d_scope) THEN
+          IF {schema}.{nequal}(NEW.{doc_scope}, OLD.{doc_scope}) THEN
             RAISE EXCEPTION  'Application Error - Scope cannot be updated..';
           END IF;
-          IF {schema}.nonequal(NEW.d_scope_id, OLD.d_scope_id) THEN
+          IF {schema}.{nequal}(NEW.{doc_scope_id}, OLD.{doc_scope_id}) THEN
             RAISE EXCEPTION  'Application Error - Scope ID cannot be updated..';
           END IF;
-          IF {schema}.nonequal(NEW.d_ctgr, OLD.d_ctgr) THEN
+          IF {schema}.{nequal}(NEW.{doc_ctgr}, OLD.{doc_ctgr}) THEN
             RAISE EXCEPTION  'Application Error - Document Category cannot be updated..';
           END IF;
         END IF;
 
         IF (TG_OP = 'INSERT' 
 	    OR 
-	    TG_OP = 'UPDATE' AND ({schema}.nonequal(OLD.D_SCOPE, NEW.D_SCOPE)
+	    TG_OP = 'UPDATE' AND ({schema}.{nequal}(OLD.{doc_scope}, NEW.{doc_scope})
 		                  OR
-				  {schema}.nonequal(OLD.D_SCOPE_ID, NEW.D_SCOPE_ID))) THEN
-	  IF NEW.D_SCOPE = 'S' AND NEW.D_SCOPE_ID <> 0
+				  {schema}.{nequal}(OLD.{doc_scope_id}, NEW.{doc_scope_id}))) THEN
+	  IF NEW.{doc_scope} = 'S' AND NEW.{doc_scope_id} <> 0
 	     OR
-	     NEW.D_SCOPE <> 'S' AND NEW.D_SCOPE_ID is NULL THEN
+	     NEW.{doc_scope} <> 'S' AND NEW.{doc_scope_id} is NULL THEN
             RAISE EXCEPTION  'Application Error - SCOPE_ID inconsistent with SCOPE';
           END IF; 
 	END IF;   
 
-        IF (cpe_user) THEN
-	  IF coalesce(USER_C_ID,0) <> coalesce(my_c_id,0)
+        IF ({cust_user}_user) THEN
+	  IF coalesce(USER_{cust_id},0) <> coalesce(my_{cust_id},0)
 	     OR
-             my_d_scope not in ('C','E','J','O') THEN
+             my_{doc_scope} not in ('C','E','J','O') THEN
             RAISE EXCEPTION  'Application Error - Client User has no rights to perform this operation';
 	  END IF; 
         END IF;
 
         IF (TG_OP='INSERT' OR TG_OP='UPDATE') THEN
-          IF NOT {schema}.check_foreign(NEW.D_SCOPE, NEW.D_SCOPE_ID)>0 THEN
-            RAISE EXCEPTION  'Table % does not contain record % .', NEW.D_SCOPE, NEW.D_SCOPE_ID::text ;
+          IF NOT {schema}.{check_foreign_key}(NEW.{doc_scope}, NEW.{doc_scope_id})>0 THEN
+            RAISE EXCEPTION  'Table % does not contain record % .', NEW.{doc_scope}, NEW.{doc_scope_id}::text ;
 	  END IF;
 	END IF;   
 
         IF (TG_OP='INSERT' OR TG_OP='UPDATE') THEN
-          IF NOT {schema}.check_code2(dscope_dctgr, NEW.D_SCOPE, NEW.D_CTGR)>0 THEN
-            RAISE EXCEPTION  'Document type % not allowed for selected scope: % .', NEW.D_ctgr, NEW.D_SCOPE ;
+          IF NOT {schema}.{check_code2}({doc_ctgr_table}, NEW.{doc_scope}, NEW.{doc_ctgr})>0 THEN
+            RAISE EXCEPTION  'Document type % not allowed for selected scope: % .', NEW.{doc_ctgr}, NEW.{doc_scope} ;
 	  END IF;
 	END IF;   
 
@@ -1152,62 +1152,62 @@ CREATE FUNCTION d_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.d_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.d_id, OLD.d_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'd_id',OLD.d_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{doc_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{doc_id}, OLD.{doc_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{doc_id}',OLD.{doc_id}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.C_ID is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.C_ID, OLD.C_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'C_ID',OLD.C_ID::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{cust_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{cust_id}, OLD.{cust_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{cust_id}',OLD.{cust_id}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.d_scope is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.d_scope, OLD.d_scope) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'd_scope',OLD.d_scope::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{doc_scope} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{doc_scope}, OLD.{doc_scope}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{doc_scope}',OLD.{doc_scope}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.d_scope_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.d_scope_id, OLD.d_scope_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'd_scope_id',OLD.d_scope_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{doc_scope_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{doc_scope_id}, OLD.{doc_scope_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{doc_scope_id}',OLD.{doc_scope_id}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.e_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.e_id, OLD.e_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'e_id',OLD.e_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{item_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{item_id}, OLD.{item_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{item_id}',OLD.{item_id}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.d_sts is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.d_sts, OLD.d_sts) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'd_sts',OLD.d_sts::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{doc_sts} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{doc_sts}, OLD.{doc_sts}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{doc_sts}',OLD.{doc_sts}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.d_ctgr is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.d_ctgr, OLD.d_ctgr) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'd_ctgr',OLD.d_ctgr::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{doc_ctgr} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{doc_ctgr}, OLD.{doc_ctgr}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{doc_ctgr}',OLD.{doc_ctgr}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.d_desc is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.d_desc, OLD.d_desc) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'd_desc',OLD.d_desc::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{doc_desc} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{doc_desc}, OLD.{doc_desc}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{doc_desc}',OLD.{doc_desc}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.d_utstmp is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.d_utstmp, OLD.d_utstmp) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'd_utstmp',OLD.d_utstmp::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{doc_utstmp} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{doc_utstmp}, OLD.{doc_utstmp}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{doc_utstmp}',OLD.{doc_utstmp}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.d_uu is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.d_uu, OLD.d_uu) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'd_uu',OLD.d_uu::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{doc_uuser} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{doc_uuser}, OLD.{doc_uuser}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{doc_uuser}',OLD.{doc_uuser}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.d_synctstmp is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.d_synctstmp, OLD.d_synctstmp) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'd_synctstmp',OLD.d_synctstmp::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{doc_sync_tstmp} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{doc_sync_tstmp}, OLD.{doc_sync_tstmp}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{doc_sync_tstmp}',OLD.{doc_sync_tstmp}::text);  
         END IF;
 
  
@@ -1216,18 +1216,18 @@ CREATE FUNCTION d_iud() RETURNS trigger
         /**********************************/
      
         IF TG_OP = 'INSERT' THEN
-          NEW.C_ID = my_c_id;
-          NEW.E_ID = my_e_id;
-	  NEW.d_etstmp := curdttm;
-	  NEW.d_eu := myuser;
-	  NEW.d_mtstmp := curdttm;
-	  NEW.d_mu := myuser;
+          NEW.{cust_id} = my_{cust_id};
+          NEW.{item_id} = my_{item_id};
+	  NEW.{doc_etstmp} := curdttm;
+	  NEW.{doc_euser} := myuser;
+	  NEW.{doc_mtstmp} := curdttm;
+	  NEW.{doc_muser} := myuser;
         ELSIF TG_OP = 'UPDATE' THEN
-          IF aud_seq is not NULL THEN
-            NEW.C_ID = my_c_id;
-            NEW.E_ID = my_e_id;
-	    NEW.d_mtstmp := curdttm;
-	    NEW.d_mu := myuser;
+          IF {audit_seq} is not NULL THEN
+            NEW.{cust_id} = my_{cust_id};
+            NEW.{item_id} = my_{item_id};
+	    NEW.{doc_mtstmp} := curdttm;
+	    NEW.{doc_muser} := myuser;
 	  END IF;  
         END IF;
 
@@ -1248,27 +1248,27 @@ CREATE FUNCTION d_iud() RETURNS trigger
 $_$;
 
 
-ALTER FUNCTION {schema}.d_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{doc}_iud() OWNER TO postgres;
 
 
--- Function: {schema}.d_filename(bigint, text)
+-- Function: {schema}.{doc_filename}(bigint, text)
 
-CREATE OR REPLACE FUNCTION {schema}.d_filename(
-    d_id bigint,
-    d_ext text)
+CREATE OR REPLACE FUNCTION {schema}.{doc_filename}(
+    {doc_id} bigint,
+    {doc_ext} text)
   RETURNS text AS
 $BODY$
 DECLARE
     rslt    text = NULL;
 BEGIN
-  rslt = 'D'::text || d_id::character varying::text || COALESCE(d_ext, ''::character varying);
+  rslt = 'D'::text || {doc_id}::character varying::text || COALESCE({doc_ext}, ''::character varying);
   
   RETURN rslt;
 END;$BODY$
   LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER
   COST 10;
 
-ALTER FUNCTION {schema}.d_filename(bigint, text) OWNER TO postgres;
+ALTER FUNCTION {schema}.{doc_filename}(bigint, text) OWNER TO postgres;
 
 
 --
@@ -1276,7 +1276,7 @@ ALTER FUNCTION {schema}.d_filename(bigint, text) OWNER TO postgres;
 --
 
 CREATE FUNCTION digest(bytea, text) RETURNS bytea
-    LANGUAGE c IMMUTABLE STRICT
+    LANGUAGE {cust} IMMUTABLE STRICT
     AS '$libdir/pgcrypto', 'pg_digest';
 
 
@@ -1287,7 +1287,7 @@ ALTER FUNCTION {schema}.digest(bytea, text) OWNER TO postgres;
 --
 
 CREATE FUNCTION digest(text, text) RETURNS bytea
-    LANGUAGE c IMMUTABLE STRICT
+    LANGUAGE {cust} IMMUTABLE STRICT
     AS '$libdir/pgcrypto', 'pg_digest';
 
 
@@ -1301,10 +1301,10 @@ CREATE FUNCTION gcod2_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.gcod2_id else NEW.gcod2_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{code2_app_id} else NEW.{code2_app_id} end;
       my_toa     {schema}.toaudit;
     BEGIN
 
@@ -1313,12 +1313,12 @@ CREATE FUNCTION gcod2_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := NULL;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := NULL;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := NULL;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := NULL;
 
 
         /**********************************/
@@ -1326,13 +1326,13 @@ CREATE FUNCTION gcod2_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF {schema}.nonequal(NEW.gcod2_id, OLD.gcod2_id) THEN
+          IF {schema}.{nequal}(NEW.{code2_app_id}, OLD.{code2_app_id}) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF {schema}.nonequal(NEW.codeval1, OLD.codeval1) THEN
+          IF {schema}.{nequal}(NEW.{code_val1}, OLD.{code_val1}) THEN
             RAISE EXCEPTION  'Application Error - Code Value 1 cannot be updated..';
           END IF;
-          IF {schema}.nonequal(NEW.codeval2, OLD.codeval2) THEN
+          IF {schema}.{nequal}(NEW.{code_va12}, OLD.{code_va12}) THEN
             RAISE EXCEPTION  'Application Error - Code Value 2 cannot be updated..';
           END IF;
         END IF;
@@ -1343,52 +1343,52 @@ CREATE FUNCTION gcod2_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.gcod2_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.gcod2_id, OLD.gcod2_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'gcod2_id',OLD.gcod2_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code2_app_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code2_app_id}, OLD.{code2_app_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code2_app_id}',OLD.{code2_app_id}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codseq is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codseq, OLD.codseq) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codseq',OLD.codseq::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_seq} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_seq}, OLD.{code_seq}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_seq}',OLD.{code_seq}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codeval1 is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codeval1, OLD.codeval1) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codeval1',OLD.codeval1::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_val1} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_val1}, OLD.{code_val1}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_val1}',OLD.{code_val1}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codeval2 is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codeval2, OLD.codeval2) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codeval2',OLD.codeval2::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_va12} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_va12}, OLD.{code_va12}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_va12}',OLD.{code_va12}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codetxt is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codetxt, OLD.codetxt) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codetxt',OLD.codetxt::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_txt} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_txt}, OLD.{code_txt}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_txt}',OLD.{code_txt}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codecode is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codecode, OLD.codecode) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codecode',OLD.codecode::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_code} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_code}, OLD.{code_code}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_code}',OLD.{code_code}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codetdt is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codetdt, OLD.codetdt) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codetdt',OLD.codetdt::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_end_dt} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_end_dt}, OLD.{code_end_dt}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_end_dt}',OLD.{code_end_dt}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codetcm is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codetcm, OLD.codetcm) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codetcm',OLD.codetcm::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_end_reason} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_end_reason}, OLD.{code_end_reason}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_end_reason}',OLD.{code_end_reason}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.COD_NOTES is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.COD_NOTES, OLD.COD_NOTES) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'COD_NOTES',OLD.COD_NOTES::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_notes} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_notes}, OLD.{code_notes}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_notes}',OLD.{code_notes}::text);  
         END IF;
 
  
@@ -1397,14 +1397,14 @@ CREATE FUNCTION gcod2_iud() RETURNS trigger
         /**********************************/
      
         IF TG_OP = 'INSERT' THEN
-	  NEW.cod_etstmp := curdttm;
-	  NEW.cod_eu := myuser;
-	  NEW.cod_mtstmp := curdttm;
-	  NEW.cod_mu := myuser;
+	  NEW.{code_etstmp} := curdttm;
+	  NEW.{code_euser} := myuser;
+	  NEW.{code_mtstmp} := curdttm;
+	  NEW.{code_muser} := myuser;
         ELSIF TG_OP = 'UPDATE' THEN
-          IF aud_seq is not NULL THEN
-	    NEW.cod_mtstmp := curdttm;
-	    NEW.cod_mu := myuser;
+          IF {audit_seq} is not NULL THEN
+	    NEW.{code_mtstmp} := curdttm;
+	    NEW.{code_muser} := myuser;
 	  END IF;  
         END IF;
 
@@ -1435,9 +1435,9 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
       my_id      bigint default case TG_OP when 'DELETE' then OLD.gcod_id else NEW.gcod_id end;
       my_toa     {schema}.toaudit;
     BEGIN
@@ -1447,12 +1447,12 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := NULL;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := NULL;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := NULL;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := NULL;
 
 
         /**********************************/
@@ -1460,10 +1460,10 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF {schema}.nonequal(NEW.gcod_id, OLD.gcod_id) THEN
+          IF {schema}.{nequal}(NEW.gcod_id, OLD.gcod_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF {schema}.nonequal(NEW.codeval, OLD.codeval) THEN
+          IF {schema}.{nequal}(NEW.{code_val}, OLD.{code_val}) THEN
             RAISE EXCEPTION  'Application Error - Code Value 1 cannot be updated..';
           END IF;
         END IF;
@@ -1474,47 +1474,47 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.gcod_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.gcod_id, OLD.gcod_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'gcod_id',OLD.gcod_id::text);  
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.gcod_id, OLD.gcod_id) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, 'gcod_id',OLD.gcod_id::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codseq is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codseq, OLD.codseq) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codseq',OLD.codseq::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_seq} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_seq}, OLD.{code_seq}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_seq}',OLD.{code_seq}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codeval is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codeval, OLD.codeval) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codeval',OLD.codeval::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_val} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_val}, OLD.{code_val}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_val}',OLD.{code_val}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codetxt is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codetxt, OLD.codetxt) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codetxt',OLD.codetxt::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_txt} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_txt}, OLD.{code_txt}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_txt}',OLD.{code_txt}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codecode is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codecode, OLD.codecode) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codecode',OLD.codecode::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_code} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_code}, OLD.{code_code}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_code}',OLD.{code_code}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codetdt is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codetdt, OLD.codetdt) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codetdt',OLD.codetdt::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_end_dt} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_end_dt}, OLD.{code_end_dt}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_end_dt}',OLD.{code_end_dt}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codetcm is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codetcm, OLD.codetcm) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codetcm',OLD.codetcm::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_end_reason} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_end_reason}, OLD.{code_end_reason}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_end_reason}',OLD.{code_end_reason}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.COD_NOTES is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.COD_NOTES, OLD.COD_NOTES) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'COD_NOTES',OLD.COD_NOTES::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_notes} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_notes}, OLD.{code_notes}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_notes}',OLD.{code_notes}::text);  
         END IF;
 
  
@@ -1523,14 +1523,14 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
         /**********************************/
      
         IF TG_OP = 'INSERT' THEN
-	  NEW.cod_etstmp := curdttm;
-	  NEW.cod_eu := myuser;
-	  NEW.cod_mtstmp := curdttm;
-	  NEW.cod_mu := myuser;
+	  NEW.{code_etstmp} := curdttm;
+	  NEW.{code_euser} := myuser;
+	  NEW.{code_mtstmp} := curdttm;
+	  NEW.{code_muser} := myuser;
         ELSIF TG_OP = 'UPDATE' THEN
-          IF aud_seq is not NULL THEN
-	    NEW.cod_mtstmp := curdttm;
-	    NEW.cod_mu := myuser;
+          IF {audit_seq} is not NULL THEN
+	    NEW.{code_mtstmp} := curdttm;
+	    NEW.{code_muser} := myuser;
 	  END IF;  
         END IF;
 
@@ -1554,74 +1554,74 @@ $$;
 ALTER FUNCTION {schema}.gcod_iud() OWNER TO postgres;
 
 --
--- Name: get_cpe_name(bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {get_cust_user_name}(bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION get_cpe_name(in_pe_id bigint) RETURNS character varying
+CREATE FUNCTION {get_cust_user_name}(in_{sys_user_id} bigint) RETURNS character varying
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
     rslt    text = NULL;
 BEGIN
 
-  select cpe.pe_lname::text || ', '::text || cpe.pe_fname::text
+  select {cust_user}.{sys_user_lname}::text || ', '::text || {cust_user}.{sys_user_fname}::text
     into rslt
-    from {schema}.cpe
-   where cpe.pe_id = in_pe_id; 
+    from {schema}.{cust_user}
+   where {cust_user}.{sys_user_id} = in_{sys_user_id}; 
   
   RETURN rslt;
 END;
 $$;
 
 
-ALTER FUNCTION {schema}.get_cpe_name(in_pe_id bigint) OWNER TO postgres;
+ALTER FUNCTION {schema}.{get_cust_user_name}(in_{sys_user_id} bigint) OWNER TO postgres;
 
 --
--- Name: get_pe_name(bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {get_sys_user_name}(bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION get_pe_name(in_pe_id bigint) RETURNS character varying
+CREATE FUNCTION {get_sys_user_name}(in_{sys_user_id} bigint) RETURNS character varying
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
     rslt    text = NULL;
 BEGIN
 
-  select pe.pe_lname::text || ', '::text || pe.pe_fname::text
+  select {sys_user}.{sys_user_lname}::text || ', '::text || {sys_user}.{sys_user_fname}::text
     into rslt
-    from {schema}.pe
-   where pe_id = in_pe_id; 
+    from {schema}.{sys_user}
+   where {sys_user_id} = in_{sys_user_id}; 
   
   RETURN rslt;
 END;
 $$;
 
 
-ALTER FUNCTION {schema}.get_pe_name(in_pe_id bigint) OWNER TO postgres;
+ALTER FUNCTION {schema}.{get_sys_user_name}(in_{sys_user_id} bigint) OWNER TO postgres;
 
 --
--- Name: get_ppd_desc(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {get_param_desc}(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) RETURNS character varying
+CREATE FUNCTION {get_param_desc}(in_{param_process} character varying, in_{param_attrib} character varying) RETURNS character varying
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
     rslt    text = NULL;
 BEGIN
 
-  select ppd_desc
+  select {param_desc}
     into rslt
-    from {schema}.ppd
-   where ppd.ppd_process = in_ppd_process
-     and ppd.ppd_attrib = in_ppd_attrib;
+    from {schema}.{param}
+   where {param}.{param_process} = in_{param_process}
+     and {param}.{param_attrib} = in_{param_attrib};
   
   RETURN rslt;
 END;
 $$;
 
 
-ALTER FUNCTION {schema}.get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{get_param_desc}(in_{param_process} character varying, in_{param_attrib} character varying) OWNER TO postgres;
 
 --
 -- Name: good_email(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -1635,17 +1635,17 @@ CREATE FUNCTION good_email(x text) RETURNS boolean
 ALTER FUNCTION {schema}.good_email(x text) OWNER TO postgres;
 
 --
--- Name: gpp_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {param_app}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION gpp_iud() RETURNS trigger
+CREATE FUNCTION {param_app}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.gpp_id else NEW.gpp_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{param_app_id} else NEW.{param_app_id} end;
       my_toa     {schema}.toaudit;
       m          text;
     BEGIN
@@ -1655,12 +1655,12 @@ CREATE FUNCTION gpp_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := NULL;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := NULL;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := NULL;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := NULL;
 
 
         /**********************************/
@@ -1668,20 +1668,20 @@ CREATE FUNCTION gpp_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF {schema}.nonequal(NEW.gpp_id, OLD.gpp_id) THEN
+          IF {schema}.{nequal}(NEW.{param_app_id}, OLD.{param_app_id}) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF {schema}.nonequal(NEW.gpp_process, OLD.gpp_process) THEN
+          IF {schema}.{nequal}(NEW.{param_app_process}, OLD.{param_app_process}) THEN
             RAISE EXCEPTION  'Application Error - Process cannot be updated..';
           END IF;
-          IF {schema}.nonequal(NEW.gpp_attrib, OLD.gpp_attrib) THEN
+          IF {schema}.{nequal}(NEW.{param_app_attrib}, OLD.{param_app_attrib}) THEN
             RAISE EXCEPTION  'Application Error - Attribute cannot be updated..';
           END IF;
         END IF;
           
 
         IF (TG_OP = 'INSERT' or TG_OP = 'UPDATE') THEN
-          m := {schema}.CHECK_PP('GPP', NEW.GPP_PROCESS, NEW.GPP_ATTRIB, NEW.GPP_VAL);
+          m := {schema}.{check_param}('{param_app}', NEW.{param_app_process}, NEW.{param_app_attrib}, NEW.{param_app_val});
           IF m IS NOT null THEN 
             RAISE EXCEPTION '%', m;
           END IF;
@@ -1694,27 +1694,27 @@ CREATE FUNCTION gpp_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.gpp_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.gpp_id, OLD.gpp_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'gpp_id',OLD.gpp_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_app_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_app_id}, OLD.{param_app_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_app_id}',OLD.{param_app_id}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.gpp_process is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.gpp_process, OLD.gpp_process) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'gpp_process',OLD.gpp_process::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_app_process} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_app_process}, OLD.{param_app_process}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_app_process}',OLD.{param_app_process}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.gpp_attrib is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.gpp_attrib, OLD.gpp_attrib) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'gpp_attrib',OLD.gpp_attrib::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_app_attrib} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_app_attrib}, OLD.{param_app_attrib}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_app_attrib}',OLD.{param_app_attrib}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.gpp_val is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.gpp_val, OLD.gpp_val) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'gpp_val',OLD.gpp_val::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_app_val} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_app_val}, OLD.{param_app_val}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_app_val}',OLD.{param_app_val}::text);  
         END IF;
 
  
@@ -1723,14 +1723,14 @@ CREATE FUNCTION gpp_iud() RETURNS trigger
         /**********************************/
      
         IF TG_OP = 'INSERT' THEN
-	  NEW.gpp_etstmp := curdttm;
-	  NEW.gpp_eu := myuser;
-	  NEW.gpp_mtstmp := curdttm;
-	  NEW.gpp_mu := myuser;
+	  NEW.{param_app_etstmp} := curdttm;
+	  NEW.{param_app_euser} := myuser;
+	  NEW.{param_app_mtstmp} := curdttm;
+	  NEW.{param_app_muser} := myuser;
         ELSIF TG_OP = 'UPDATE' THEN
-          IF aud_seq is not NULL THEN
-	    NEW.gpp_mtstmp := curdttm;
-	    NEW.gpp_mu := myuser;
+          IF {audit_seq} is not NULL THEN
+	    NEW.{param_app_mtstmp} := curdttm;
+	    NEW.{param_app_muser} := myuser;
 	  END IF;  
         END IF;
 
@@ -1751,23 +1751,23 @@ CREATE FUNCTION gpp_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.gpp_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{param_app}_iud() OWNER TO postgres;
 
 --
--- Name: h_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {help}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION h_iud() RETURNS trigger
+CREATE FUNCTION {help}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.h_id else NEW.h_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{help_id} else NEW.{help_id} end;
       my_toa     {schema}.toaudit;
-      my_hp_code text = NULL;
-      my_hp_desc text = NULL;
+      my_{help_target_code} text = NULL;
+      my_{help_target_desc} text = NULL;
     BEGIN
 
         /**********************************/
@@ -1775,34 +1775,34 @@ CREATE FUNCTION h_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'DELETE' THEN
-          my_hp_code = OLD.hp_code;
+          my_{help_target_code} = OLD.{help_target_code};
         ELSE
-          my_hp_code = NEW.hp_code;
+          my_{help_target_code} = NEW.{help_target_code};
         END IF;
 
-        select HP.hp_desc
-          into my_hp_desc
-          from {schema}.HP
-         where HP.hp_code = hp_code;           
+        select {help_target}.{help_target_desc}
+          into my_{help_target_desc}
+          from {schema}.{help_target}
+         where {help_target}.{help_target_code} = {help_target_code};           
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := NULL;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := my_hp_desc;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := NULL;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := my_{help_target_desc};
 
         /**********************************/
         /* PERFORM CHECKS                 */ 
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF {schema}.nonequal(NEW.h_id, OLD.h_id) THEN
+          IF {schema}.{nequal}(NEW.{help_id}, OLD.{help_id}) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF {schema}.nonequal(NEW.hp_code, OLD.hp_code) THEN
-            RAISE EXCEPTION  'Application Error - HP Code cannot be updated..';
+          IF {schema}.{nequal}(NEW.{help_target_code}, OLD.{help_target_code}) THEN
+            RAISE EXCEPTION  'Application Error - {help_target} Code cannot be updated..';
           END IF;
         END IF;
           
@@ -1812,42 +1812,42 @@ CREATE FUNCTION h_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.h_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.h_id, OLD.h_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'h_id',OLD.h_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{help_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{help_id}, OLD.{help_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{help_id}',OLD.{help_id}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.hp_code is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.hp_code, OLD.hp_code) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'hp_code',OLD.hp_code::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{help_target_code} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{help_target_code}, OLD.{help_target_code}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{help_target_code}',OLD.{help_target_code}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.h_title is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.h_title, OLD.h_title) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'h_title',OLD.h_title::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{help_title} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{help_title}, OLD.{help_title}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{help_title}',OLD.{help_title}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.h_text is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.h_text, OLD.h_text) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'h_text',OLD.h_text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{help_text} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{help_text}, OLD.{help_text}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{help_text}',OLD.{help_text});  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.h_seq is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.h_seq, OLD.h_seq) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'h_seq',OLD.h_seq::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{help_seq} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{help_seq}, OLD.{help_seq}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{help_seq}',OLD.{help_seq}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.h_index_a is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.h_index_a, OLD.h_index_a) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'h_index_a',OLD.h_index_a::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{help_listing_main} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{help_listing_main}, OLD.{help_listing_main}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{help_listing_main}',OLD.{help_listing_main}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.h_index_p is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.h_index_p, OLD.h_index_p) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'h_index_p',OLD.h_index_p::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{help_listing_client} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{help_listing_client}, OLD.{help_listing_client}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{help_listing_client}',OLD.{help_listing_client}::text);  
         END IF;
 
  
@@ -1856,14 +1856,14 @@ CREATE FUNCTION h_iud() RETURNS trigger
         /**********************************/
      
         IF TG_OP = 'INSERT' THEN
-	  NEW.h_etstmp := curdttm;
-	  NEW.h_eu := myuser;
-	  NEW.h_mtstmp := curdttm;
-	  NEW.h_mu := myuser;
+	  NEW.{help_etstmp} := curdttm;
+	  NEW.{help_euser} := myuser;
+	  NEW.{help_mtstmp} := curdttm;
+	  NEW.{help_muser} := myuser;
         ELSIF TG_OP = 'UPDATE' THEN
-          IF aud_seq is not NULL THEN
-	    NEW.h_mtstmp := curdttm;
-	    NEW.h_mu := myuser;
+          IF {audit_seq} is not NULL THEN
+	    NEW.{help_mtstmp} := curdttm;
+	    NEW.{help_muser} := myuser;
 	  END IF;  
         END IF;
 
@@ -1884,13 +1884,13 @@ CREATE FUNCTION h_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.h_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{help}_iud() OWNER TO postgres;
 
 --
--- Name: mycuser(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {my_db_user}(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION {schema}.mycuser() RETURNS text
+CREATE FUNCTION {schema}.{my_db_user}() RETURNS text
     LANGUAGE plpgsql
     AS $$
 BEGIN 
@@ -1903,13 +1903,13 @@ EXCEPTION
     return 'U'||current_user::text;
 END;$$;
 
-ALTER FUNCTION {schema}.mycuser() OWNER TO postgres;
+ALTER FUNCTION {schema}.{my_db_user}() OWNER TO postgres;
 
 --
--- Name: mycuser_email(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {my_db_user}_email(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION mycuser_email(u text) RETURNS text
+CREATE FUNCTION {my_db_user}_email(u text) RETURNS text
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
@@ -1918,16 +1918,16 @@ DECLARE
 BEGIN
   case substring(u,1,1)
     when 'S' then
-      select pe_email
+      select {sys_user_email}
         into wk
-        from {schema}.pe
-       where pe_id::text = substring(u,2,1024);  
+        from {schema}.{sys_user}
+       where {sys_user_id}::text = substring(u,2,1024);  
       rslt = wk;
     when 'C' then
-      select pe_email
+      select {sys_user_email}
         into wk
-        from {schema}.cpe
-       where pe_id::text = substring(u,2,1024);  
+        from {schema}.{cust_user}
+       where {sys_user_id}::text = substring(u,2,1024);  
       rslt = wk;
     else
       rslt = NULL;
@@ -1937,13 +1937,13 @@ BEGIN
 END;$$;
 
 
-ALTER FUNCTION {schema}.mycuser_email(u text) OWNER TO postgres;
+ALTER FUNCTION {schema}.{my_db_user}_email(u text) OWNER TO postgres;
 
 --
--- Name: mycuser_fmt(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {my_db_user_fmt}(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION mycuser_fmt(u text) RETURNS text
+CREATE FUNCTION {my_db_user_fmt}(u text) RETURNS text
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
@@ -1952,16 +1952,16 @@ DECLARE
 BEGIN
   case substring(u,1,1)
     when 'S' then
-      select 'S-'||pe_lname||', '||pe_fname
+      select 'S-'||{sys_user_lname}||', '||{sys_user_fname}
         into wk
-        from {schema}.pe
-       where pe_id::text = substring(u,2,1024);  
+        from {schema}.{sys_user}
+       where {sys_user_id}::text = substring(u,2,1024);  
       rslt = coalesce(wk, u);
     when 'C' then
-      select 'C-'||pe_lname||', '||pe_fname
+      select 'C-'||{sys_user_lname}||', '||{sys_user_fname}
         into wk
-        from {schema}.cpe
-       where pe_id::text = substring(u,2,1024);  
+        from {schema}.{cust_user}
+       where {sys_user_id}::text = substring(u,2,1024);  
       rslt = coalesce(wk, u);
     when 'U' then
       rslt = coalesce(substring(u,2,1024), u);
@@ -1973,13 +1973,13 @@ BEGIN
 END;$$;
 
 
-ALTER FUNCTION {schema}.mycuser_fmt(u text) OWNER TO postgres;
+ALTER FUNCTION {schema}.{my_db_user_fmt}(u text) OWNER TO postgres;
 
 --
--- Name: myhash(character, bigint, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {my_hash}(character, bigint, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) RETURNS bytea
+CREATE FUNCTION {my_hash}(par_type character, par_{sys_user_id} bigint, par_pw character varying) RETURNS bytea
     LANGUAGE plpgsql
     AS $$
 DECLARE 
@@ -1989,21 +1989,21 @@ DECLARE
 BEGIN
 
   if (par_type = 'S') THEN
-    select PP_VAL into seed
-      from {schema}.V_PP
-     where PP_PROCESS = 'USERS'
-       and PP_ATTRIB = 'HASH_SEED_S';
+    select {param_cur_val} into seed
+      from {schema}.{v_param_cur}
+     where {param_cur_process} = 'USERS'
+       and {param_cur_attrib} = 'HASH_SEED_S';
   elsif (par_type = 'C') THEN
-    select PP_VAL into seed
-      from {schema}.V_PP
-     where PP_PROCESS = 'USERS'
-       and PP_ATTRIB = 'HASH_SEED_C';
+    select {param_cur_val} into seed
+      from {schema}.{v_param_cur}
+     where {param_cur_process} = 'USERS'
+       and {param_cur_attrib} = 'HASH_SEED_C';
   END IF;
   
   if (seed is not null
-      and coalesce(par_pe_id,0) > 0
+      and coalesce(par_{sys_user_id},0) > 0
       and coalesce(par_pw,'') <> '') THEN
-    val = par_pe_id::text||par_pw||seed;
+    val = par_{sys_user_id}::text||par_pw||seed;
     /* rslt = hashbytes('sha1',val); */
     rslt = {schema}.digest(val, 'sha1'::text);
   end if;
@@ -2014,7 +2014,7 @@ END;
 $$;
 
 
-ALTER FUNCTION {schema}.myhash(par_type character, par_pe_id bigint, par_pw character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{my_hash}(par_type character, par_{sys_user_id} bigint, par_pw character varying) OWNER TO postgres;
 
 --
 -- Name: myisnumeric(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2047,15 +2047,15 @@ CREATE FUNCTION mymmddyy(timestamp without time zone) RETURNS character varying
 ALTER FUNCTION {schema}.mymmddyy(timestamp without time zone) OWNER TO postgres;
 
 --
--- Name: mymmddyyhhmi(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {my_mmddyyhhmi}(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION mymmddyyhhmi(timestamp without time zone) RETURNS character varying
+CREATE FUNCTION {my_mmddyyhhmi}(timestamp without time zone) RETURNS character varying
     LANGUAGE sql
     AS $_$select to_char($1, 'MM/DD/YY HH24:MI');$_$;
 
 
-ALTER FUNCTION {schema}.mymmddyyhhmi(timestamp without time zone) OWNER TO postgres;
+ALTER FUNCTION {schema}.{my_mmddyyhhmi}(timestamp without time zone) OWNER TO postgres;
 
 --
 -- Name: mymmddyyyyhhmi(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -2069,25 +2069,25 @@ CREATE FUNCTION mymmddyyyyhhmi(timestamp without time zone) RETURNS character va
 ALTER FUNCTION {schema}.mymmddyyyyhhmi(timestamp without time zone) OWNER TO postgres;
 
 --
--- Name: mynow(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {my_now}(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION mynow() RETURNS timestamp without time zone
+CREATE FUNCTION {my_now}() RETURNS timestamp without time zone
     LANGUAGE sql
     AS $$select localtimestamp;$$;
 
 
-ALTER FUNCTION {schema}.mynow() OWNER TO postgres;
+ALTER FUNCTION {schema}.{my_now}() OWNER TO postgres;
 
 --
--- Name: mype(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {my_sys_user_id}(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION mype() RETURNS bigint
+CREATE FUNCTION {my_sys_user_id}() RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
-    u       text = {schema}.mycuser();
+    u       text = {schema}.{my_db_user}();
     rslt    bigint = NULL;
     wk      text = NULL;
 BEGIN
@@ -2103,17 +2103,17 @@ BEGIN
 END;$$;
 
 
-ALTER FUNCTION {schema}.mype() OWNER TO postgres;
+ALTER FUNCTION {schema}.{my_sys_user_id}() OWNER TO postgres;
 
 --
--- Name: mypec(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {my_cust_user_id}(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION mypec() RETURNS bigint
+CREATE FUNCTION {my_cust_user_id}() RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
-    u       text = {schema}.mycuser();
+    u       text = {schema}.{my_db_user}();
     rslt    bigint = NULL;
     wk      text = NULL;
 BEGIN
@@ -2129,48 +2129,48 @@ BEGIN
 END;$$;
 
 
-ALTER FUNCTION {schema}.mypec() OWNER TO postgres;
+ALTER FUNCTION {schema}.{my_cust_user_id}() OWNER TO postgres;
 
 --
--- Name: mytodate(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {my_to_date}(timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION mytodate(timestamp without time zone) RETURNS date
+CREATE FUNCTION {my_to_date}(timestamp without time zone) RETURNS date
     LANGUAGE sql
     AS $_$select date_trunc('day',$1)::date;$_$;
 
 
-ALTER FUNCTION {schema}.mytodate(timestamp without time zone) OWNER TO postgres;
+ALTER FUNCTION {schema}.{my_to_date}(timestamp without time zone) OWNER TO postgres;
 
 --
--- Name: mytoday(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {my_today}(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION mytoday() RETURNS date
+CREATE FUNCTION {my_today}() RETURNS date
     LANGUAGE sql
     AS $$select current_date;$$;
 
 
-ALTER FUNCTION {schema}.mytoday() OWNER TO postgres;
+ALTER FUNCTION {schema}.{my_today}() OWNER TO postgres;
 
 --
--- Name: n_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {note}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION n_iud() RETURNS trigger
+CREATE FUNCTION {note}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.n_id else NEW.n_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{note_id} else NEW.{note_id} end;
       my_toa     {schema}.toaudit;
 
-      my_c_id    bigint = NULL;
-      user_c_id  bigint = NULL;
-      my_n_scope text = NULL;
-      cpe_user   boolean;
+      my_{cust_id}    bigint = NULL;
+      user_{cust_id}  bigint = NULL;
+      my_{note_scope} text = NULL;
+      {cust_user}_user   boolean;
     BEGIN
 
         /**********************************/
@@ -2178,53 +2178,53 @@ CREATE FUNCTION n_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
 
         if TG_OP = 'DELETE' then
-          my_toa.c_id := NULL;
+          my_toa.{cust_id} := NULL;
         else
-          if NEW.n_scope in ('PE')
+          if NEW.{note_scope} in ('{sys_user}')
           then 
-            my_toa.c_id := NULL;
+            my_toa.{cust_id} := NULL;
           else  
-            my_toa.c_id := get_c_id(NEW.n_scope, NEW.n_scope_ID);
+            my_toa.{cust_id} := get_{cust_id}(NEW.{note_scope}, NEW.{note_scope_id});
           end if;  
         end if; 
         
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := NULL;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := NULL;
 
         if TG_OP = 'DELETE' then
-          if OLD.n_scope in ('PE')
+          if OLD.{note_scope} in ('{sys_user}')
           then 
-            my_C_ID := NULL;
+            my_{cust_id} := NULL;
           else  
-            my_c_id := get_c_id(OLD.n_scope, OLD.n_scope_ID);
+            my_{cust_id} := get_{cust_id}(OLD.{note_scope}, OLD.{note_scope_id});
           end if;  
-          my_n_scope := OLD.n_scope;
+          my_{note_scope} := OLD.{note_scope};
         else
-          if NEW.n_scope in ('PE')
+          if NEW.{note_scope} in ('{sys_user}')
           then 
-            my_C_ID := NULL;
+            my_{cust_id} := NULL;
           else  
-            my_c_id := get_c_id(NEW.n_scope, NEW.n_scope_ID);
+            my_{cust_id} := get_{cust_id}(NEW.{note_scope}, NEW.{note_scope_id});
           end if;  
-          my_n_scope := NEW.n_scope;
+          my_{note_scope} := NEW.{note_scope};
         end if; 
 
         /* RECOGNIZE IF CLIENT USER */
         IF SUBSTRING(MYUSER,1,1) = 'C' THEN
-          select c_id
-	    into user_c_id
-	    from {schema}.CPE
-           where substring(MYUSER,2,1024)=PE_ID::text
-	     and C_ID = my_c_id;
-          IF user_c_id is not null THEN		  
-            CPE_USER = TRUE;
+          select {cust_id}
+	    into user_{cust_id}
+	    from {schema}.{cust_user}
+           where substring(MYUSER,2,1024)={sys_user_id}::text
+	     and {cust_id} = my_{cust_id};
+          IF user_{cust_id} is not null THEN		  
+            {cust_user}_USER = TRUE;
           ELSE
-	    CPE_USER = FALSE;
+	    {cust_user}_USER = FALSE;
 	  END IF;
         END IF; 
 
@@ -2232,34 +2232,34 @@ CREATE FUNCTION n_iud() RETURNS trigger
         /* PERFORM CHECKS                 */ 
         /**********************************/
 
-        IF (cpe_user) THEN
-	  IF coalesce(USER_C_ID,0) <> coalesce(my_c_id,0)
+        IF ({cust_user}_user) THEN
+	  IF coalesce(USER_{cust_id},0) <> coalesce(my_{cust_id},0)
 	     OR
-             my_n_scope not in ('C','E','J','O') THEN
+             my_{note_scope} not in ('C','E','J','O') THEN
             RAISE EXCEPTION  'Application Error - Client User has no rights to perform this operation';
 	  END IF; 
         END IF;
 
             
         IF TG_OP = 'UPDATE' THEN
-          IF {schema}.nonequal(NEW.n_id, OLD.n_id) THEN
+          IF {schema}.{nequal}(NEW.{note_id}, OLD.{note_id}) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF {schema}.nonequal(NEW.n_scope, OLD.n_scope) THEN
+          IF {schema}.{nequal}(NEW.{note_scope}, OLD.{note_scope}) THEN
             RAISE EXCEPTION  'Application Error - Scope cannot be updated..';
           END IF;
-          IF {schema}.nonequal(NEW.n_scope_id, OLD.n_scope_id) THEN
+          IF {schema}.{nequal}(NEW.{note_scope_id}, OLD.{note_scope_id}) THEN
             RAISE EXCEPTION  'Application Error - Scope ID cannot be updated..';
           END IF;
-          IF {schema}.nonequal(NEW.n_type, OLD.n_type) THEN
+          IF {schema}.{nequal}(NEW.{note_type}, OLD.{note_type}) THEN
             RAISE EXCEPTION  'Application Error - Note Type cannot be updated..';
           END IF;
         END IF;
           
 
         IF (TG_OP='INSERT' OR TG_OP='UPDATE') THEN
-          IF NOT {schema}.check_foreign(NEW.n_scope, NEW.n_scope_ID)>0 THEN
-            RAISE EXCEPTION  'Table % does not contain record % .', NEW.n_scope, NEW.n_scope_ID::text ;
+          IF NOT {schema}.{check_foreign_key}(NEW.{note_scope}, NEW.{note_scope_id})>0 THEN
+            RAISE EXCEPTION  'Table % does not contain record % .', NEW.{note_scope}, NEW.{note_scope_id}::text ;
 	  END IF;
 	END IF;   
 
@@ -2272,47 +2272,47 @@ CREATE FUNCTION n_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.n_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.n_id, OLD.n_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id, 'n_id',OLD.n_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{note_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{note_id}, OLD.{note_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id, '{note_id}',OLD.{note_id}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.c_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.c_id, OLD.c_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id, 'c_id',OLD.c_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{cust_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{cust_id}, OLD.{cust_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id, '{cust_id}',OLD.{cust_id}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.n_scope is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.n_scope, OLD.n_scope) end) THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id, 'n_scope',OLD.n_scope::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{note_scope} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{note_scope}, OLD.{note_scope}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id, '{note_scope}',OLD.{note_scope}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.n_scope_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.n_scope_id, OLD.n_scope_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id, 'n_scope_id',OLD.n_scope_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{note_scope_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{note_scope_id}, OLD.{note_scope_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id, '{note_scope_id}',OLD.{note_scope_id}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.e_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.e_id, OLD.e_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id, 'e_id',OLD.e_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{item_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{item_id}, OLD.{item_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id, '{item_id}',OLD.{item_id}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.n_sts is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.n_sts, OLD.n_sts) end) THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id, 'n_sts',OLD.n_sts::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{note_sts} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{note_sts}, OLD.{note_sts}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id, '{note_sts}',OLD.{note_sts}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.n_type is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.n_type, OLD.n_type) end) THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id, 'n_type',OLD.n_type::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{note_type} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{note_type}, OLD.{note_type}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id, '{note_type}',OLD.{note_type}::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.n_note is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.n_note, OLD.n_note) end) THEN
-          SELECT par_aud_seq INTO aud_seq from {schema}.audit(my_toa, aud_seq, my_id, 'n_note',OLD.n_note::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{note_body} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{note_body}, OLD.{note_body}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} from {schema}.audit(my_toa, {audit_seq}, my_id, '{note_body}',OLD.{note_body}::text);  
         END IF;
 
  
@@ -2321,18 +2321,18 @@ CREATE FUNCTION n_iud() RETURNS trigger
         /**********************************/
      
         IF TG_OP = 'INSERT' THEN
-          NEW.C_ID = my_c_id;
-          NEW.E_ID = NULL::text;
-	  NEW.n_etstmp := curdttm;
-	  NEW.n_eu := myuser;
-	  NEW.n_mtstmp := curdttm;
-	  NEW.n_mu := myuser;
+          NEW.{cust_id} = my_{cust_id};
+          NEW.{item_id} = NULL::text;
+	  NEW.{note_etstmp} := curdttm;
+	  NEW.{note_euser} := myuser;
+	  NEW.{note_mtstmp} := curdttm;
+	  NEW.{note_muser} := myuser;
         ELSIF TG_OP = 'UPDATE' THEN
-          IF aud_seq is not NULL THEN
-            NEW.C_ID = my_c_id;
-            NEW.E_ID = NULL::text;
-	    NEW.n_mtstmp := curdttm;
-	    NEW.n_mu := myuser;
+          IF {audit_seq} is not NULL THEN
+            NEW.{cust_id} = my_{cust_id};
+            NEW.{item_id} = NULL::text;
+	    NEW.{note_mtstmp} := curdttm;
+	    NEW.{note_muser} := myuser;
 	  END IF;  
         END IF;
 
@@ -2353,13 +2353,13 @@ CREATE FUNCTION n_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.n_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{note}_iud() OWNER TO postgres;
 
 --
--- Name: nonequal(bit, bit); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {nequal}(bit, bit); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION nonequal(x1 bit, x2 bit) RETURNS boolean
+CREATE FUNCTION {nequal}(x1 bit, x2 bit) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
     BEGIN
@@ -2376,13 +2376,13 @@ CREATE FUNCTION nonequal(x1 bit, x2 bit) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION {schema}.nonequal(x1 bit, x2 bit) OWNER TO postgres;
+ALTER FUNCTION {schema}.{nequal}(x1 bit, x2 bit) OWNER TO postgres;
 
 --
--- Name: nonequal(boolean, boolean); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {nequal}(boolean, boolean); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION nonequal(x1 boolean, x2 boolean) RETURNS boolean
+CREATE FUNCTION {nequal}(x1 boolean, x2 boolean) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
     BEGIN
@@ -2399,13 +2399,13 @@ CREATE FUNCTION nonequal(x1 boolean, x2 boolean) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION {schema}.nonequal(x1 boolean, x2 boolean) OWNER TO postgres;
+ALTER FUNCTION {schema}.{nequal}(x1 boolean, x2 boolean) OWNER TO postgres;
 
 --
--- Name: nonequal(smallint, smallint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {nequal}(smallint, smallint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION nonequal(x1 smallint, x2 smallint) RETURNS boolean
+CREATE FUNCTION {nequal}(x1 smallint, x2 smallint) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
     BEGIN
@@ -2422,13 +2422,13 @@ CREATE FUNCTION nonequal(x1 smallint, x2 smallint) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION {schema}.nonequal(x1 smallint, x2 smallint) OWNER TO postgres;
+ALTER FUNCTION {schema}.{nequal}(x1 smallint, x2 smallint) OWNER TO postgres;
 
 --
--- Name: nonequal(integer, integer); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {nequal}(integer, integer); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION nonequal(x1 integer, x2 integer) RETURNS boolean
+CREATE FUNCTION {nequal}(x1 integer, x2 integer) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
     BEGIN
@@ -2445,13 +2445,13 @@ CREATE FUNCTION nonequal(x1 integer, x2 integer) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION {schema}.nonequal(x1 integer, x2 integer) OWNER TO postgres;
+ALTER FUNCTION {schema}.{nequal}(x1 integer, x2 integer) OWNER TO postgres;
 
 --
--- Name: nonequal(bigint, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {nequal}(bigint, bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION nonequal(x1 bigint, x2 bigint) RETURNS boolean
+CREATE FUNCTION {nequal}(x1 bigint, x2 bigint) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
     BEGIN
@@ -2468,13 +2468,13 @@ CREATE FUNCTION nonequal(x1 bigint, x2 bigint) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION {schema}.nonequal(x1 bigint, x2 bigint) OWNER TO postgres;
+ALTER FUNCTION {schema}.{nequal}(x1 bigint, x2 bigint) OWNER TO postgres;
 
 --
--- Name: nonequal(numeric, numeric); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {nequal}(numeric, numeric); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION nonequal(x1 numeric, x2 numeric) RETURNS boolean
+CREATE FUNCTION {nequal}(x1 numeric, x2 numeric) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
     BEGIN
@@ -2491,13 +2491,13 @@ CREATE FUNCTION nonequal(x1 numeric, x2 numeric) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION {schema}.nonequal(x1 numeric, x2 numeric) OWNER TO postgres;
+ALTER FUNCTION {schema}.{nequal}(x1 numeric, x2 numeric) OWNER TO postgres;
 
 --
--- Name: nonequal(text, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {nequal}(text, text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION nonequal(x1 text, x2 text) RETURNS boolean
+CREATE FUNCTION {nequal}(x1 text, x2 text) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
     BEGIN
@@ -2514,13 +2514,13 @@ CREATE FUNCTION nonequal(x1 text, x2 text) RETURNS boolean
 $$;
 
 
-ALTER FUNCTION {schema}.nonequal(x1 text, x2 text) OWNER TO postgres;
+ALTER FUNCTION {schema}.{nequal}(x1 text, x2 text) OWNER TO postgres;
 
 --
--- Name: nonequal(timestamp without time zone, timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {nequal}(timestamp without time zone, timestamp without time zone); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) RETURNS boolean
+CREATE FUNCTION {nequal}(x1 timestamp without time zone, x2 timestamp without time zone) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
     BEGIN
@@ -2537,20 +2537,20 @@ CREATE FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without ti
 $$;
 
 
-ALTER FUNCTION {schema}.nonequal(x1 timestamp without time zone, x2 timestamp without time zone) OWNER TO postgres;
+ALTER FUNCTION {schema}.{nequal}(x1 timestamp without time zone, x2 timestamp without time zone) OWNER TO postgres;
 
 --
--- Name: pe_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION pe_iud() RETURNS trigger
+CREATE FUNCTION {sys_user}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm   timestamp default {schema}.mynow();
-      myuser    text default {schema}.mycuser();
-      aud_seq   bigint default NULL;
-      my_id     bigint default case TG_OP when 'DELETE' then OLD.pe_id else NEW.pe_id end;
+      curdttm   timestamp default {schema}.{my_now}();
+      myuser    text default {schema}.{my_db_user}();
+      {audit_seq}   bigint default NULL;
+      my_id     bigint default case TG_OP when 'DELETE' then OLD.{sys_user_id} else NEW.{sys_user_id} end;
       newpw     text default NULL;
       hash      bytea default NULL;
       my_toa    {schema}.toaudit;
@@ -2561,12 +2561,12 @@ CREATE FUNCTION pe_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := NULL;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := case when TG_OP = 'DELETE' then NULL else coalesce(NEW.PE_LNAME,'')||', '||coalesce(NEW.PE_FNAME,'') end;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := NULL;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := case when TG_OP = 'DELETE' then NULL else coalesce(NEW.{sys_user_lname},'')||', '||coalesce(NEW.{sys_user_fname},'') end;
          
 
         /**********************************/
@@ -2575,14 +2575,14 @@ CREATE FUNCTION pe_iud() RETURNS trigger
 
         IF TG_OP = 'UPDATE'
            and
-           {schema}.nonequal(NEW.pe_id, OLD.pe_id) THEN
+           {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) THEN
           RAISE EXCEPTION  'Application Error - ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'INSERT' or TG_OP = 'UPDATE' THEN
-	  IF {schema}.nonequal(NEW.PE_PW1, NEW.PE_PW2) THEN
+	  IF {schema}.{nequal}(NEW.{sys_user_pw1}, NEW.{sys_user_pw2}) THEN
             RAISE EXCEPTION  'Application Error - New Password and Repeat Password are different.';
-          ELSIF (TG_OP='INSERT' or NEW.pe_pw1 is not null)  AND length(btrim(NEW.pe_pw1::text)) < 6  THEN
+          ELSIF (TG_OP='INSERT' or NEW.{sys_user_pw1} is not null)  AND length(btrim(NEW.{sys_user_pw1}::text)) < 6  THEN
             RAISE EXCEPTION  'Application Error - Password length - at least 6 characters required.';
           END IF;            
         END IF;
@@ -2593,103 +2593,103 @@ CREATE FUNCTION pe_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
 
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_ID is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_ID, OLD.PE_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_ID', OLD.PE_ID::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_id}', OLD.{sys_user_id}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_STS is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_STS, OLD.PE_STS) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_STS', OLD.PE_STS::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_sts} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_sts}, OLD.{sys_user_sts}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_sts}', OLD.{sys_user_sts}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_FNAME is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_FNAME, OLD.PE_FNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_FNAME', OLD.PE_FNAME::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_fname} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_fname}, OLD.{sys_user_fname}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_fname}', OLD.{sys_user_fname}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_MNAME is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_MNAME, OLD.PE_MNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_MNAME', OLD.PE_MNAME::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_mname} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_mname}, OLD.{sys_user_mname}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_mname}', OLD.{sys_user_mname}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_LNAME is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_LNAME, OLD.PE_LNAME) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_LNAME', OLD.PE_LNAME::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_lname} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_lname}, OLD.{sys_user_lname}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_lname}', OLD.{sys_user_lname}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_JTITLE is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_JTITLE, OLD.PE_JTITLE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_JTITLE', OLD.PE_JTITLE::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_jobtitle} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_jobtitle}, OLD.{sys_user_jobtitle}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_jobtitle}', OLD.{sys_user_jobtitle}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_BPHONE is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_BPHONE, OLD.PE_BPHONE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_BPHONE', OLD.PE_BPHONE::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_bphone} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_bphone}, OLD.{sys_user_bphone}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_bphone}', OLD.{sys_user_bphone}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_CPHONE is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_CPHONE, OLD.PE_CPHONE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_CPHONE', OLD.PE_CPHONE::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_cphone} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_cphone}, OLD.{sys_user_cphone}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_cphone}', OLD.{sys_user_cphone}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_COUNTRY is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_COUNTRY, OLD.PE_COUNTRY) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_COUNTRY', OLD.PE_COUNTRY::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_country} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_country}, OLD.{sys_user_country}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_country}', OLD.{sys_user_country}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_ADDR is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_ADDR, OLD.PE_ADDR) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_ADDR', OLD.PE_ADDR::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_addr} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_addr}, OLD.{sys_user_addr}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_addr}', OLD.{sys_user_addr}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_CITY is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_CITY, OLD.PE_CITY) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_CITY', OLD.PE_CITY::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_city} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_city}, OLD.{sys_user_city}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_city}', OLD.{sys_user_city}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_STATE is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_STATE, OLD.PE_STATE) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_STATE', OLD.PE_STATE::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_state} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_state}, OLD.{sys_user_state}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_state}', OLD.{sys_user_state}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_ZIP is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_ZIP, OLD.PE_ZIP) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_ZIP', OLD.PE_ZIP::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_zip} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_zip}, OLD.{sys_user_zip}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_zip}', OLD.{sys_user_zip}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_EMAIL is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_EMAIL, OLD.PE_EMAIL) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_EMAIL', OLD.PE_EMAIL::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_email} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_email}, OLD.{sys_user_email}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_email}', OLD.{sys_user_email}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_STARTDT is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_STARTDT, OLD.PE_STARTDT) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_STARTDT', OLD.PE_STARTDT::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_startdt} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_startdt}, OLD.{sys_user_startdt}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_startdt}', OLD.{sys_user_startdt}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_ENDDT is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_ENDDT, OLD.PE_ENDDT) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_ENDDT', OLD.PE_ENDDT::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_enddt} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_enddt}, OLD.{sys_user_enddt}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_enddt}', OLD.{sys_user_enddt}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_UNOTES is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_UNOTES, OLD.PE_UNOTES) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_UNOTES', OLD.PE_UNOTES::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_unotes} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_unotes}, OLD.{sys_user_unotes}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_unotes}', OLD.{sys_user_unotes}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.PE_LL_TSTMP is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.PE_LL_TSTMP, OLD.PE_LL_TSTMP) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_LL_TSTMP', OLD.PE_LL_TSTMP::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_lastlogin_tstmp} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_lastlogin_tstmp}, OLD.{sys_user_lastlogin_tstmp}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_lastlogin_tstmp}', OLD.{sys_user_lastlogin_tstmp}::text);  
         END IF;
 
       
-        IF TG_OP = 'UPDATE' and coalesce(NEW.pe_pw1,'') <> '' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'PE_PW','*');  
+        IF TG_OP = 'UPDATE' and coalesce(NEW.{sys_user_pw1},'') <> '' THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user}_PW','*');  
         END IF;
 
 
@@ -2699,32 +2699,32 @@ CREATE FUNCTION pe_iud() RETURNS trigger
 
         IF TG_OP in ('INSERT', 'UPDATE') THEN
         
-          newpw = btrim(NEW.pe_pw1);
+          newpw = btrim(NEW.{sys_user_pw1});
           if newpw is not null then
-            hash = {schema}.myhash('S', NEW.pe_id, newpw);
+            hash = {schema}.{my_hash}('S', NEW.{sys_user_id}, newpw);
             if (hash is null) then
               RAISE EXCEPTION  'Application Error - Missing or Incorrect Password.';
             end if;
-	    NEW.pe_hash := hash;
-	    NEW.pe_pw1 = NULL;
-	    NEW.pe_pw2 = NULL;
+	    NEW.{sys_user_hash} := hash;
+	    NEW.{sys_user_pw1} = NULL;
+	    NEW.{sys_user_pw2} = NULL;
           else
             hash = NULL;
           end if;
             
           IF TG_OP = 'INSERT' THEN
-            NEW.pe_stsdt := curdttm;
-	    NEW.pe_etstmp := curdttm;
-	    NEW.pe_eu := myuser;
-	    NEW.pe_mtstmp := curdttm;
-	    NEW.pe_mu := myuser;
+            NEW.{sys_user_stsdt} := curdttm;
+	    NEW.{sys_user_etstmp} := curdttm;
+	    NEW.{sys_user_euser} := myuser;
+	    NEW.{sys_user_mtstmp} := curdttm;
+	    NEW.{sys_user_muser} := myuser;
           ELSIF TG_OP = 'UPDATE' THEN
-            IF aud_seq is not NULL THEN
-              if {schema}.nonequal(OLD.PE_STS, NEW.PE_STS) then
-                NEW.pe_stsdt := curdttm;
+            IF {audit_seq} is not NULL THEN
+              if {schema}.{nequal}(OLD.{sys_user_sts}, NEW.{sys_user_sts}) then
+                NEW.{sys_user_stsdt} := curdttm;
               end if;
-	      NEW.pe_mtstmp := curdttm;
-	      NEW.pe_mu := myuser;
+	      NEW.{sys_user_mtstmp} := curdttm;
+	      NEW.{sys_user_muser} := myuser;
 	    END IF;  
           END IF;
         END IF;
@@ -2746,20 +2746,20 @@ CREATE FUNCTION pe_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.pe_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{sys_user}_iud() OWNER TO postgres;
 
 --
--- Name: ppd_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {param}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION ppd_iud() RETURNS trigger
+CREATE FUNCTION {param}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.ppd_id else NEW.ppd_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{param_id} else NEW.{param_id} end;
       my_toa     {schema}.toaudit;
     BEGIN
 
@@ -2768,12 +2768,12 @@ CREATE FUNCTION ppd_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := NULL;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := NULL;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := NULL;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := NULL;
 
 
         /**********************************/
@@ -2781,7 +2781,7 @@ CREATE FUNCTION ppd_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF {schema}.nonequal(NEW.ppd_id, OLD.ppd_id) THEN
+          IF {schema}.{nequal}(NEW.{param_id}, OLD.{param_id}) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
         END IF;
@@ -2792,52 +2792,52 @@ CREATE FUNCTION ppd_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppd_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppd_id, OLD.ppd_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppd_id',OLD.ppd_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_id}, OLD.{param_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_id}',OLD.{param_id}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppd_process is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppd_process, OLD.ppd_process) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppd_process',OLD.ppd_process::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_process} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_process}, OLD.{param_process}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_process}',OLD.{param_process}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppd_attrib is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppd_attrib, OLD.ppd_attrib) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppd_attrib',OLD.ppd_attrib::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_attrib} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_attrib}, OLD.{param_attrib}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_attrib}',OLD.{param_attrib}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppd_desc is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppd_desc, OLD.ppd_desc) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppd_desc',OLD.ppd_desc::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_desc} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_desc}, OLD.{param_desc}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_desc}',OLD.{param_desc}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppd_type is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppd_type, OLD.ppd_type) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppd_type',OLD.ppd_type::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_type} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_type}, OLD.{param_type}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_type}',OLD.{param_type}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.codename is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.codename, OLD.codename) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'codename',OLD.codename::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{code_name} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{code_name}, OLD.{code_name}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{code_name}',OLD.{code_name}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppd_gpp is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppd_gpp, OLD.ppd_gpp) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppd_gpp',OLD.ppd_gpp::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{is_param_app} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{is_param_app}, OLD.{is_param_app}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{is_param_app}',OLD.{is_param_app}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppd_ppp is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppd_ppp, OLD.ppd_ppp) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppd_ppp',OLD.ppd_ppp::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{is_param_user} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{is_param_user}, OLD.{is_param_user}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{is_param_user}',OLD.{is_param_user}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppd_xpp is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppd_xpp, OLD.ppd_xpp) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppd_xpp',OLD.ppd_xpp::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{is_param_sys} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{is_param_sys}, OLD.{is_param_sys}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{is_param_sys}',OLD.{is_param_sys}::text);  
         END IF;
 
  
@@ -2846,14 +2846,14 @@ CREATE FUNCTION ppd_iud() RETURNS trigger
         /**********************************/
      
         IF TG_OP = 'INSERT' THEN
-	  NEW.ppd_etstmp := curdttm;
-	  NEW.ppd_eu := myuser;
-	  NEW.ppd_mtstmp := curdttm;
-	  NEW.ppd_mu := myuser;
+	  NEW.{param_etstmp} := curdttm;
+	  NEW.{param_euser} := myuser;
+	  NEW.{param_mtstmp} := curdttm;
+	  NEW.{param_muser} := myuser;
         ELSIF TG_OP = 'UPDATE' THEN
-          IF aud_seq is not NULL THEN
-	    NEW.ppd_mtstmp := curdttm;
-	    NEW.ppd_mu := myuser;
+          IF {audit_seq} is not NULL THEN
+	    NEW.{param_mtstmp} := curdttm;
+	    NEW.{param_muser} := myuser;
 	  END IF;  
         END IF;
 
@@ -2874,20 +2874,20 @@ CREATE FUNCTION ppd_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.ppd_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{param}_iud() OWNER TO postgres;
 
 --
--- Name: ppp_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {param_user}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION ppp_iud() RETURNS trigger
+CREATE FUNCTION {param_user}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.ppp_id else NEW.ppp_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{param_user_id} else NEW.{param_user_id} end;
       my_toa     {schema}.toaudit;
       m          text;
     BEGIN
@@ -2897,10 +2897,10 @@ CREATE FUNCTION ppp_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := case when TG_OP = 'DELETE' then NULL else (select coalesce(PE_LNAME,'')||', '||coalesce(PE_FNAME,'') from {schema}.PE where pe_id = NEW.PE_ID) end;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := case when TG_OP = 'DELETE' then NULL else (select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') from {schema}.{sys_user} where {sys_user_id} = NEW.{sys_user_id}) end;
 
 
         /**********************************/
@@ -2908,23 +2908,23 @@ CREATE FUNCTION ppp_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF {schema}.nonequal(NEW.ppp_id, OLD.ppp_id) THEN
+          IF {schema}.{nequal}(NEW.{param_user_id}, OLD.{param_user_id}) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF {schema}.nonequal(NEW.pe_id, OLD.pe_id) THEN
+          IF {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) THEN
             RAISE EXCEPTION  'Application Error - Personnel cannot be updated.';
           END IF;
-          IF {schema}.nonequal(NEW.ppp_process, OLD.ppp_process) THEN
+          IF {schema}.{nequal}(NEW.{param_user_process}, OLD.{param_user_process}) THEN
             RAISE EXCEPTION  'Application Error - Process cannot be updated..';
           END IF;
-          IF {schema}.nonequal(NEW.ppp_attrib, OLD.ppp_attrib) THEN
+          IF {schema}.{nequal}(NEW.{param_user_attrib}, OLD.{param_user_attrib}) THEN
             RAISE EXCEPTION  'Application Error - Attribute cannot be updated..';
           END IF;
         END IF;
           
 
         IF (TG_OP = 'INSERT' or TG_OP = 'UPDATE') THEN
-          m := {schema}.CHECK_PP('PPP', NEW.PPP_PROCESS, NEW.PPP_ATTRIB, NEW.PPP_VAL);
+          m := {schema}.{check_param}('{param_user}', NEW.{param_user_process}, NEW.{param_user_attrib}, NEW.{param_user_val});
           IF m IS NOT null THEN 
             RAISE EXCEPTION '%', m;
           END IF;
@@ -2937,32 +2937,32 @@ CREATE FUNCTION ppp_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppp_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppp_id, OLD.ppp_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppp_id',OLD.ppp_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_user_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_user_id}, OLD.{param_user_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_user_id}',OLD.{param_user_id}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.pe_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.pe_id, OLD.pe_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'pe_id',OLD.pe_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_id}',OLD.{sys_user_id}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppp_process is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppp_process, OLD.ppp_process) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppp_process',OLD.ppp_process::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_user_process} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_user_process}, OLD.{param_user_process}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_user_process}',OLD.{param_user_process}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppp_attrib is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppp_attrib, OLD.ppp_attrib) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppp_attrib',OLD.ppp_attrib::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_user_attrib} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_user_attrib}, OLD.{param_user_attrib}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_user_attrib}',OLD.{param_user_attrib}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.ppp_val is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.ppp_val, OLD.ppp_val) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'ppp_val',OLD.ppp_val::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_user_val} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_user_val}, OLD.{param_user_val}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_user_val}',OLD.{param_user_val}::text);  
         END IF;
 
  
@@ -2971,14 +2971,14 @@ CREATE FUNCTION ppp_iud() RETURNS trigger
         /**********************************/
      
         IF TG_OP = 'INSERT' THEN
-	  NEW.ppp_etstmp := curdttm;
-	  NEW.ppp_eu := myuser;
-	  NEW.ppp_mtstmp := curdttm;
-	  NEW.ppp_mu := myuser;
+	  NEW.{param_user_etstmp} := curdttm;
+	  NEW.{param_user_euser} := myuser;
+	  NEW.{param_user_mtstmp} := curdttm;
+	  NEW.{param_user_muser} := myuser;
         ELSIF TG_OP = 'UPDATE' THEN
-          IF aud_seq is not NULL THEN
-	    NEW.ppp_mtstmp := curdttm;
-	    NEW.ppp_mu := myuser;
+          IF {audit_seq} is not NULL THEN
+	    NEW.{param_user_mtstmp} := curdttm;
+	    NEW.{param_user_muser} := myuser;
 	  END IF;  
         END IF;
 
@@ -2999,7 +2999,7 @@ CREATE FUNCTION ppp_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.ppp_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{param_user}_iud() OWNER TO postgres;
 
 --
 -- Name: sanit(text); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -3060,17 +3060,17 @@ $$;
 ALTER FUNCTION {schema}.sanit_json(x text) OWNER TO postgres;
 
 --
--- Name: spef_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION spef_iud() RETURNS trigger
+CREATE FUNCTION {sys_user_func}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.spef_id else NEW.spef_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{sys_user_func_id} else NEW.{sys_user_func_id} end;
       my_toa     {schema}.toaudit;
     BEGIN
 
@@ -3079,14 +3079,14 @@ CREATE FUNCTION spef_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := NULL;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := case when TG_OP = 'DELETE' then NULL else (select coalesce(PE_LNAME,'')||', '||coalesce(PE_FNAME,'') 
-                                                                    from {schema}.CPE 
-                                                                   where pe_id = NEW.PE_ID) end;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := NULL;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := case when TG_OP = 'DELETE' then NULL else (select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') 
+                                                                    from {schema}.{cust_user} 
+                                                                   where {sys_user_id} = NEW.{sys_user_id}) end;
          
 
         /**********************************/
@@ -3095,13 +3095,13 @@ CREATE FUNCTION spef_iud() RETURNS trigger
 
         IF TG_OP = 'UPDATE'
            and
-           {schema}.nonequal(NEW.spef_id, OLD.spef_id) THEN
+           {schema}.{nequal}(NEW.{sys_user_func_id}, OLD.{sys_user_func_id}) THEN
           RAISE EXCEPTION  'Application Error - ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'UPDATE'
            and
-           {schema}.nonequal(NEW.pe_id, OLD.pe_id) THEN
+           {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) THEN
           RAISE EXCEPTION  'Application Error - User ID cannot be updated.';
         END IF;
 
@@ -3113,23 +3113,23 @@ CREATE FUNCTION spef_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
 
 
-        IF (case when TG_OP = 'DELETE' then OLD.spef_ID is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.spef_ID, OLD.spef_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'spef_ID', OLD.spef_ID::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_func_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_func_id}, OLD.{sys_user_func_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_func_id}', OLD.{sys_user_func_id}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.pe_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.pe_id, OLD.pe_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'pe_id', OLD.pe_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_id}', OLD.{sys_user_id}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.sf_name is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.sf_name, OLD.sf_name) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'sf_name', OLD.sf_name::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_func_name} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_func_name}, OLD.{sys_func_name}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_func_name}', OLD.{sys_func_name}::text);  
         END IF;
 
 
@@ -3153,20 +3153,20 @@ CREATE FUNCTION spef_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.spef_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{sys_user_func}_iud() OWNER TO postgres;
 
 --
--- Name: sper_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION sper_iud() RETURNS trigger
+CREATE FUNCTION {sys_user_role}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.sper_id else NEW.sper_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{sys_user_role_id} else NEW.{sys_user_role_id} end;
       my_toa     {schema}.toaudit;
     BEGIN
 
@@ -3175,14 +3175,14 @@ CREATE FUNCTION sper_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := NULL;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := case when TG_OP = 'DELETE' then NULL else (select coalesce(PE_LNAME,'')||', '||coalesce(PE_FNAME,'') 
-                                                                    from {schema}.CPE 
-                                                                   where pe_id = NEW.PE_ID) end;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := NULL;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := case when TG_OP = 'DELETE' then NULL else (select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') 
+                                                                    from {schema}.{cust_user} 
+                                                                   where {sys_user_id} = NEW.{sys_user_id}) end;
          
 
         /**********************************/
@@ -3191,23 +3191,23 @@ CREATE FUNCTION sper_iud() RETURNS trigger
 
         IF TG_OP = 'UPDATE'
            and
-           {schema}.nonequal(NEW.sper_id, OLD.sper_id) THEN
+           {schema}.{nequal}(NEW.{sys_user_role_id}, OLD.{sys_user_role_id}) THEN
           RAISE EXCEPTION  'Application Error - ID cannot be updated.';
         END IF;
 
         IF TG_OP = 'UPDATE'
            and
-           {schema}.nonequal(NEW.pe_id, OLD.pe_id) THEN
+           {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) THEN
           RAISE EXCEPTION  'Application Error - User ID cannot be updated.';
         END IF;
 
-        IF {schema}.mype() is not null
+        IF {schema}.{my_sys_user_id}() is not null
            and 
-           (case when TG_OP = 'DELETE' then OLD.sr_name else NEW.sr_name end) = 'DEV' THEN
+           (case when TG_OP = 'DELETE' then OLD.{sys_role_name} else NEW.{sys_role_name} end) = 'DEV' THEN
           
-          IF not exists (select sr_name
-                           from {schema}.V_MY_ROLES
-                          where SR_NAME = 'DEV') THEN
+          IF not exists (select {sys_role_name}
+                           from {schema}.{v_my_roles}
+                          where {sys_role_name} = 'DEV') THEN
             RAISE EXCEPTION  'Application Error - Only Developer can maintain Developer Role.';
           END IF;                 
            
@@ -3218,23 +3218,23 @@ CREATE FUNCTION sper_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
 
 
-        IF (case when TG_OP = 'DELETE' then OLD.sper_ID is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.sper_ID, OLD.sper_ID) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'sper_ID', OLD.sper_ID::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_role_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_role_id}, OLD.{sys_user_role_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_role_id}', OLD.{sys_user_role_id}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.pe_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.pe_id, OLD.pe_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'pe_id', OLD.pe_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_user_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_user_id}, OLD.{sys_user_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_user_id}', OLD.{sys_user_id}::text);  
         END IF;
 
-        IF (case when TG_OP = 'DELETE' then OLD.sr_name is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.sr_name, OLD.sr_name) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'sr_name', OLD.sr_name::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{sys_role_name} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{sys_role_name}, OLD.{sys_role_name}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{sys_role_name}', OLD.{sys_role_name}::text);  
         END IF;
 
 
@@ -3258,13 +3258,13 @@ CREATE FUNCTION sper_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.sper_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{sys_user_role}_iud() OWNER TO postgres;
 
 --
--- Name: table_type(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {table_type}(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION table_type(in_schema character varying, in_name character varying) RETURNS character varying
+CREATE FUNCTION {table_type}(in_schema character varying, in_name character varying) RETURNS character varying
     LANGUAGE plpgsql SECURITY DEFINER COST 10
     AS $$
 DECLARE
@@ -3273,11 +3273,11 @@ BEGIN
 
   rslt := NULL;
 
-  select table_type
+  select {table_type}
     into rslt
     from information_schema.tables
    where table_schema = lower(coalesce(in_schema,'public'))
-     and table_name = lower(in_name); 
+     and {audit_table_name} = lower(in_name); 
 
   RETURN rslt;
 
@@ -3289,20 +3289,20 @@ END;
 $$;
 
 
-ALTER FUNCTION {schema}.table_type(in_schema character varying, in_name character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.{table_type}(in_schema character varying, in_name character varying) OWNER TO postgres;
 
 --
--- Name: txt_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {txt}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION txt_iud() RETURNS trigger
+CREATE FUNCTION {txt}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.txt_id else NEW.txt_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{txt_id} else NEW.{txt_id} end;
       my_toa     {schema}.toaudit;
     BEGIN
 
@@ -3311,12 +3311,12 @@ CREATE FUNCTION txt_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := NULL;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := NULL;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := NULL;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := NULL;
 
 
         /**********************************/
@@ -3324,7 +3324,7 @@ CREATE FUNCTION txt_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF {schema}.nonequal(NEW.txt_id, OLD.txt_id) THEN
+          IF {schema}.{nequal}(NEW.{txt_id}, OLD.{txt_id}) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
         END IF;
@@ -3335,47 +3335,47 @@ CREATE FUNCTION txt_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.txt_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.txt_id, OLD.txt_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'txt_id',OLD.txt_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{txt_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{txt_id}, OLD.{txt_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{txt_id}',OLD.{txt_id}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.txt_process is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.txt_process, OLD.txt_process) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'txt_process',OLD.txt_process::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{txt_process} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{txt_process}, OLD.{txt_process}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{txt_process}',OLD.{txt_process}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.txt_attrib is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.txt_attrib, OLD.txt_attrib) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'txt_attrib',OLD.txt_attrib::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{txt_attrib} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{txt_attrib}, OLD.{txt_attrib}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{txt_attrib}',OLD.{txt_attrib}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.txt_type is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.txt_type, OLD.txt_type) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'txt_type',OLD.txt_type::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{txt_type} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{txt_type}, OLD.{txt_type}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{txt_type}',OLD.{txt_type}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.txt_tval is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.txt_tval, OLD.txt_tval) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'txt_tval',OLD.txt_tval::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{txt_title} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{txt_title}, OLD.{txt_title}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{txt_title}',OLD.{txt_title}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.txt_val is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.txt_val, OLD.txt_val) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'txt_val',OLD.txt_val::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{txt_body} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{txt_body}, OLD.{txt_body}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{txt_body}',OLD.{txt_body}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.txt_bcc is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.txt_bcc, OLD.txt_bcc) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'txt_bcc',OLD.txt_bcc::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{txt_bcc} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{txt_bcc}, OLD.{txt_bcc}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{txt_bcc}',OLD.{txt_bcc}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.txt_desc is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.txt_desc, OLD.txt_desc) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'txt_desc',OLD.txt_desc::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{txt_desc} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{txt_desc}, OLD.{txt_desc}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{txt_desc}',OLD.{txt_desc}::text);  
         END IF;
  
         /**********************************/
@@ -3383,14 +3383,14 @@ CREATE FUNCTION txt_iud() RETURNS trigger
         /**********************************/
      
         IF TG_OP = 'INSERT' THEN
-	  NEW.txt_etstmp := curdttm;
-	  NEW.txt_eu := myuser;
-	  NEW.txt_mtstmp := curdttm;
-	  NEW.txt_mu := myuser;
+	  NEW.{txt_etstmp} := curdttm;
+	  NEW.{txt_euser} := myuser;
+	  NEW.{txt_mtstmp} := curdttm;
+	  NEW.{txt_muser} := myuser;
         ELSIF TG_OP = 'UPDATE' THEN
-          IF aud_seq is not NULL THEN
-	    NEW.txt_mtstmp := curdttm;
-	    NEW.txt_mu := myuser;
+          IF {audit_seq} is not NULL THEN
+	    NEW.{txt_mtstmp} := curdttm;
+	    NEW.{txt_muser} := myuser;
 	  END IF;  
         END IF;
 
@@ -3411,40 +3411,40 @@ CREATE FUNCTION txt_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.txt_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{txt}_iud() OWNER TO postgres;
 
 --
--- Name: v_crmsel_iud_insteadof_update(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {v_cust_menu_role_selection}_iud_insteadof_update(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION v_crmsel_iud_insteadof_update() RETURNS trigger
+CREATE FUNCTION {v_cust_menu_role_selection}_iud_insteadof_update() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm   timestamp default {schema}.mynow();
-      myuser    text default {schema}.mycuser();
+      curdttm   timestamp default {schema}.{my_now}();
+      myuser    text default {schema}.{my_db_user}();
       M         text; 
     BEGIN
 
-        IF ({schema}.nonequal(NEW.crmsel_sel, OLD.crmsel_sel)
+        IF ({schema}.{nequal}(NEW.{cust_menu_role_selection}, OLD.{cust_menu_role_selection})
             and
-            coalesce(NEW.crmsel_sel,0) = 0) THEN
+            coalesce(NEW.{cust_menu_role_selection},0) = 0) THEN
 
-          delete from {schema}.crm
-                where crm_id = NEW.crm_id;
+          delete from {schema}.{cust_menu_role}
+                where {cust_menu_role_id} = NEW.{cust_menu_role_id};
             
         END IF;    
 
-        IF ({schema}.nonequal(NEW.crmsel_sel, OLD.crmsel_sel)
+        IF ({schema}.{nequal}(NEW.{cust_menu_role_selection}, OLD.{cust_menu_role_selection})
             and
-            coalesce(NEW.crmsel_sel,0) = 1) THEN
+            coalesce(NEW.{cust_menu_role_selection},0) = 1) THEN
 
-          IF coalesce(NEW.new_cr_name,'')<>'' THEN
-            insert into {schema}.crm (cr_name, sm_id)
-                             values (NEW.new_cr_name, NEW.sm_id);
+          IF coalesce(NEW.{new_cust_role_name},'')<>'' THEN
+            insert into {schema}.{cust_menu_role} ({cust_role_name}, {menu_id})
+                             values (NEW.{new_cust_role_name}, NEW.{menu_id});
 	  ELSE
-            insert into {schema}.crm (cr_name, sm_id)
-                             values (NEW.cr_name, NEW.new_sm_id);
+            insert into {schema}.{cust_menu_role} ({cust_role_name}, {menu_id})
+                             values (NEW.{cust_role_name}, NEW.{new_menu_id});
           END IF;                     
             
         END IF;    
@@ -3456,39 +3456,39 @@ CREATE FUNCTION v_crmsel_iud_insteadof_update() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.v_crmsel_iud_insteadof_update() OWNER TO postgres;
+ALTER FUNCTION {schema}.{v_cust_menu_role_selection}_iud_insteadof_update() OWNER TO postgres;
 
 --
--- Name: v_srmsel_iud_insteadof_update(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {v_sys_menu_role_selection}_iud_insteadof_update(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION v_srmsel_iud_insteadof_update() RETURNS trigger
+CREATE FUNCTION {v_sys_menu_role_selection}_iud_insteadof_update() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm   timestamp default {schema}.mynow();
-      myuser    text default {schema}.mycuser();
+      curdttm   timestamp default {schema}.{my_now}();
+      myuser    text default {schema}.{my_db_user}();
       M         text; 
     BEGIN
 
-        IF ({schema}.nonequal(NEW.srmsel_sel, OLD.srmsel_sel)
+        IF ({schema}.{nequal}(NEW.{sys_menu_role_selection}, OLD.{sys_menu_role_selection})
             and
-            coalesce(NEW.srmsel_sel,0) = 0) THEN
+            coalesce(NEW.{sys_menu_role_selection},0) = 0) THEN
 
-          delete from {schema}.SRM 
-                where SRM_ID = NEW.srm_id;
+          delete from {schema}.{sys_menu_role} 
+                where {sys_menu_role_id} = NEW.{sys_menu_role_id};
             
         END IF;    
 
-        IF ({schema}.nonequal(NEW.srmsel_sel, OLD.srmsel_sel)
+        IF ({schema}.{nequal}(NEW.{sys_menu_role_selection}, OLD.{sys_menu_role_selection})
             and
-            coalesce(NEW.srmsel_sel,0) = 1) THEN
-          IF coalesce(NEW.new_sr_name,'')<>'' THEN
-            insert into {schema}.SRM (SR_NAME, SM_ID)
-                             values (NEW.new_sr_name, NEW.sm_id);
+            coalesce(NEW.{sys_menu_role_selection},0) = 1) THEN
+          IF coalesce(NEW.{new_sys_role_name},'')<>'' THEN
+            insert into {schema}.{sys_menu_role} ({sys_role_name}, {menu_id})
+                             values (NEW.{new_sys_role_name}, NEW.{menu_id});
 	  ELSE
-            insert into {schema}.SRM (SR_NAME, SM_ID)
-                             values (NEW.sr_name, NEW.new_sm_id);
+            insert into {schema}.{sys_menu_role} ({sys_role_name}, {menu_id})
+                             values (NEW.{sys_role_name}, NEW.{new_menu_id});
           END IF;                     
             
         END IF;    
@@ -3500,20 +3500,20 @@ CREATE FUNCTION v_srmsel_iud_insteadof_update() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.v_srmsel_iud_insteadof_update() OWNER TO postgres;
+ALTER FUNCTION {schema}.{v_sys_menu_role_selection}_iud_insteadof_update() OWNER TO postgres;
 
 --
--- Name: xpp_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: {param_sys}_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION xpp_iud() RETURNS trigger
+CREATE FUNCTION {param_sys}_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
-      curdttm    timestamp default {schema}.mynow();
-      myuser     text default {schema}.mycuser();
-      aud_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.xpp_id else NEW.xpp_id end;
+      curdttm    timestamp default {schema}.{my_now}();
+      myuser     text default {schema}.{my_db_user}();
+      {audit_seq}    bigint default NULL;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.{param_sys_id} else NEW.{param_sys_id} end;
       my_toa     {schema}.toaudit;
       m          text;
     BEGIN
@@ -3523,12 +3523,12 @@ CREATE FUNCTION xpp_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.table_name := upper(TG_TABLE_NAME::text);
-        my_toa.c_id := NULL;
-        my_toa.e_id := NULL;
-        my_toa.ref_name := NULL;
-        my_toa.ref_id := NULL;
-        my_toa.subj := NULL;
+        my_toa.{audit_table_name} := upper(TG_{audit_table_name}::text);
+        my_toa.{cust_id} := NULL;
+        my_toa.{item_id} := NULL;
+        my_toa.{audit_ref_name} := NULL;
+        my_toa.{audit_ref_id} := NULL;
+        my_toa.{audit_subject} := NULL;
 
 
         /**********************************/
@@ -3536,20 +3536,20 @@ CREATE FUNCTION xpp_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF {schema}.nonequal(NEW.xpp_id, OLD.xpp_id) THEN
+          IF {schema}.{nequal}(NEW.{param_sys_id}, OLD.{param_sys_id}) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF {schema}.nonequal(NEW.xpp_process, OLD.xpp_process) THEN
+          IF {schema}.{nequal}(NEW.{param_sys_process}, OLD.{param_sys_process}) THEN
             RAISE EXCEPTION  'Application Error - Process cannot be updated..';
           END IF;
-          IF {schema}.nonequal(NEW.xpp_attrib, OLD.xpp_attrib) THEN
+          IF {schema}.{nequal}(NEW.{param_sys_attrib}, OLD.{param_sys_attrib}) THEN
             RAISE EXCEPTION  'Application Error - Attribute cannot be updated..';
           END IF;
         END IF;
           
 
         IF (TG_OP = 'INSERT' or TG_OP = 'UPDATE') THEN
-          m := {schema}.CHECK_PP('XPP', NEW.xpp_PROCESS, NEW.xpp_ATTRIB, NEW.xpp_VAL);
+          m := {schema}.{check_param}('{param_sys}', NEW.{param_sys_process}, NEW.{param_sys_attrib}, NEW.{param_sys_val});
           IF m IS NOT null THEN 
             RAISE EXCEPTION '%', m;
           END IF;
@@ -3562,27 +3562,27 @@ CREATE FUNCTION xpp_iud() RETURNS trigger
         /**********************************/
 
         IF TG_OP = 'INSERT' THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id);  
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.xpp_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.xpp_id, OLD.xpp_id) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'xpp_id',OLD.xpp_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_sys_id} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_sys_id}, OLD.{param_sys_id}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_sys_id}',OLD.{param_sys_id}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.xpp_process is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.xpp_process, OLD.xpp_process) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'xpp_process',OLD.xpp_process::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_sys_process} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_sys_process}, OLD.{param_sys_process}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_sys_process}',OLD.{param_sys_process}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.xpp_attrib is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.xpp_attrib, OLD.xpp_attrib) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'xpp_attrib',OLD.xpp_attrib::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_sys_attrib} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_sys_attrib}, OLD.{param_sys_attrib}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_sys_attrib}',OLD.{param_sys_attrib}::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.xpp_val is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nonequal(NEW.xpp_val, OLD.xpp_val) end) THEN
-          SELECT par_aud_seq INTO aud_seq FROM {schema}.audit(my_toa, aud_seq, my_id, 'xpp_val',OLD.xpp_val::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.{param_sys_val} is not null 
+                 else TG_OP = 'UPDATE' and {schema}.{nequal}(NEW.{param_sys_val}, OLD.{param_sys_val}) end) THEN
+          SELECT par_{audit_seq} INTO {audit_seq} FROM {schema}.audit(my_toa, {audit_seq}, my_id, '{param_sys_val}',OLD.{param_sys_val}::text);  
         END IF;
 
  
@@ -3591,14 +3591,14 @@ CREATE FUNCTION xpp_iud() RETURNS trigger
         /**********************************/
      
         IF TG_OP = 'INSERT' THEN
-	  NEW.xpp_etstmp := curdttm;
-	  NEW.xpp_eu := myuser;
-	  NEW.xpp_mtstmp := curdttm;
-	  NEW.xpp_mu := myuser;
+	  NEW.{param_sys_etstmp} := curdttm;
+	  NEW.{param_sys_euser} := myuser;
+	  NEW.{param_sys_mtstmp} := curdttm;
+	  NEW.{param_sys_muser} := myuser;
         ELSIF TG_OP = 'UPDATE' THEN
-          IF aud_seq is not NULL THEN
-	    NEW.xpp_mtstmp := curdttm;
-	    NEW.xpp_mu := myuser;
+          IF {audit_seq} is not NULL THEN
+	    NEW.{param_sys_mtstmp} := curdttm;
+	    NEW.{param_sys_muser} := myuser;
 	  END IF;  
         END IF;
 
@@ -3619,171 +3619,171 @@ CREATE FUNCTION xpp_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.xpp_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.{param_sys}_iud() OWNER TO postgres;
 
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- Name: aud_d; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {audit_detail}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE aud_d (
-    aud_seq bigint NOT NULL,
-    column_name character varying(30) NOT NULL,
-    column_val text
+CREATE TABLE {audit_detail} (
+    {audit_seq} bigint NOT NULL,
+    {audit_column_name} character varying(30) NOT NULL,
+    {audit_column_val} text
 );
 
 
-ALTER TABLE aud_d OWNER TO postgres;
+ALTER TABLE {audit_detail} OWNER TO postgres;
 
 --
--- Name: TABLE aud_d; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {audit_detail}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE aud_d IS 'Audit Trail Detail (CONTROL)';
-
-
---
--- Name: COLUMN aud_d.aud_seq; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN aud_d.aud_seq IS 'Audit Sequence';
+COMMENT ON TABLE {audit_detail} IS 'Audit Trail Detail (CONTROL)';
 
 
 --
--- Name: COLUMN aud_d.column_name; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {audit_detail}.{audit_seq}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN aud_d.column_name IS 'Audit Detail Column Name';
-
-
---
--- Name: COLUMN aud_d.column_val; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN aud_d.column_val IS 'Audit Detail Column Value';
+COMMENT ON COLUMN {audit_detail}.{audit_seq} IS 'Audit Sequence';
 
 
 --
--- Name: aud_h; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {audit_detail}.{audit_column_name}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE aud_h (
-    aud_seq bigint NOT NULL,
-    table_name character varying(32) NOT NULL,
-    table_id bigint NOT NULL,
-    aud_op character(10) NOT NULL,
-    aud_u character varying(20) NOT NULL,
-    db_k character(1) DEFAULT 0 NOT NULL,
-    aud_tstmp timestamp without time zone NOT NULL,
-    c_id bigint,
-    e_id bigint,
-    ref_name character varying(32),
-    ref_id bigint,
-    subj character varying(255)
+COMMENT ON COLUMN {audit_detail}.{audit_column_name} IS 'Audit Detail Column Name';
+
+
+--
+-- Name: COLUMN {audit_detail}.{audit_column_val}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {audit_detail}.{audit_column_val} IS 'Audit Detail Column Value';
+
+
+--
+-- Name: {audit}; Type: TABLE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE TABLE {audit} (
+    {audit_seq} bigint NOT NULL,
+    {audit_table_name} character varying(32) NOT NULL,
+    {audit_table_id} bigint NOT NULL,
+    {audit_op} character(10) NOT NULL,
+    {audit_user} character varying(20) NOT NULL,
+    {db_id} character(1) DEFAULT 0 NOT NULL,
+    {audit_tstmp} timestamp without time zone NOT NULL,
+    {cust_id} bigint,
+    {item_id} bigint,
+    {audit_ref_name} character varying(32),
+    {audit_ref_id} bigint,
+    {audit_subject} character varying(255)
 );
 
 
-ALTER TABLE aud_h OWNER TO postgres;
+ALTER TABLE {audit} OWNER TO postgres;
 
 --
--- Name: TABLE aud_h; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {audit}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE aud_h IS 'Audit Trail Header (CONTROL)';
-
-
---
--- Name: COLUMN aud_h.aud_seq; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN aud_h.aud_seq IS 'Audit Sequence';
+COMMENT ON TABLE {audit} IS 'Audit Trail Header (CONTROL)';
 
 
 --
--- Name: COLUMN aud_h.table_name; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {audit}.{audit_seq}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN aud_h.table_name IS 'Audit Header Table Name';
-
-
---
--- Name: COLUMN aud_h.table_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN aud_h.table_id IS 'Audit Header Table ID Value';
+COMMENT ON COLUMN {audit}.{audit_seq} IS 'Audit Sequence';
 
 
 --
--- Name: COLUMN aud_h.aud_op; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {audit}.{audit_table_name}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN aud_h.aud_op IS 'Audit Header Operation (I, U or D)';
-
-
---
--- Name: COLUMN aud_h.aud_u; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN aud_h.aud_u IS 'Audit Header User';
+COMMENT ON COLUMN {audit}.{audit_table_name} IS 'Audit Header Table Name';
 
 
 --
--- Name: COLUMN aud_h.db_k; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {audit}.{audit_table_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN aud_h.db_k IS 'Audit Header ???';
-
-
---
--- Name: COLUMN aud_h.aud_tstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN aud_h.aud_tstmp IS 'Audit Header Timestamp';
+COMMENT ON COLUMN {audit}.{audit_table_id} IS 'Audit Header Table ID Value';
 
 
 --
--- Name: COLUMN aud_h.c_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {audit}.{audit_op}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN aud_h.c_id IS 'Audit Header Customer ID';
-
-
---
--- Name: COLUMN aud_h.e_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN aud_h.e_id IS 'Audit Header E ID';
+COMMENT ON COLUMN {audit}.{audit_op} IS 'Audit Header Operation (I, U or {doc})';
 
 
 --
--- Name: COLUMN aud_h.ref_name; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {audit}.{audit_user}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN aud_h.ref_name IS 'Audit Header Reference Name';
-
-
---
--- Name: COLUMN aud_h.ref_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN aud_h.ref_id IS 'Audit Header Reference ID';
+COMMENT ON COLUMN {audit}.{audit_user} IS 'Audit Header User';
 
 
 --
--- Name: COLUMN aud_h.subj; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {audit}.{db_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN aud_h.subj IS 'Audit Header Subject';
+COMMENT ON COLUMN {audit}.{db_id} IS 'Audit Header ???';
 
 
 --
--- Name: aud_h_aud_seq_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {audit}.{audit_tstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE aud_h_aud_seq_seq
+COMMENT ON COLUMN {audit}.{audit_tstmp} IS 'Audit Header Timestamp';
+
+
+--
+-- Name: COLUMN {audit}.{cust_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {audit}.{cust_id} IS 'Audit Header Customer ID';
+
+
+--
+-- Name: COLUMN {audit}.{item_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {audit}.{item_id} IS 'Audit Header {item} ID';
+
+
+--
+-- Name: COLUMN {audit}.{audit_ref_name}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {audit}.{audit_ref_name} IS 'Audit Header Reference Name';
+
+
+--
+-- Name: COLUMN {audit}.{audit_ref_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {audit}.{audit_ref_id} IS 'Audit Header Reference ID';
+
+
+--
+-- Name: COLUMN {audit}.{audit_subject}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {audit}.{audit_subject} IS 'Audit Header Subject';
+
+
+--
+-- Name: {audit}_{audit_seq}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE SEQUENCE {audit}_{audit_seq}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3791,59 +3791,59 @@ CREATE SEQUENCE aud_h_aud_seq_seq
     CACHE 1;
 
 
-ALTER TABLE aud_h_aud_seq_seq OWNER TO postgres;
+ALTER TABLE {audit}_{audit_seq}_seq OWNER TO postgres;
 
 --
--- Name: aud_h_aud_seq_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {audit}_{audit_seq}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE aud_h_aud_seq_seq OWNED BY aud_h.aud_seq;
+ALTER SEQUENCE {audit}_{audit_seq}_seq OWNED BY {audit}.{audit_seq};
 
 
 --
--- Name: cpe; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE cpe (
-    pe_id bigint NOT NULL,
-    c_id bigint NOT NULL,
-    pe_sts character varying(8) NOT NULL,
-    pe_stsdt date DEFAULT mynow() NOT NULL,
-    pe_fname character varying(35) NOT NULL,
-    pe_mname character varying(35),
-    pe_lname character varying(35) NOT NULL,
-    pe_jtitle character varying(35),
-    pe_bphone character varying(30),
-    pe_cphone character varying(30),
-    pe_email character varying(255) NOT NULL,
-    pe_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    pe_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    pe_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    pe_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    pe_pw1 character varying(255),
-    pe_pw2 character varying(255),
-    pe_hash bytea DEFAULT '\x00'::bytea NOT NULL,
-    pe_ll_ip character varying(255),
-    pe_ll_tstmp timestamp without time zone,
-    pe_snotes character varying(255),
-    CONSTRAINT cpe_pe_email_check CHECK (((COALESCE(pe_email, ''::character varying))::text <> ''::text))
+CREATE TABLE {cust_user} (
+    {sys_user_id} bigint NOT NULL,
+    {cust_id} bigint NOT NULL,
+    {sys_user_sts} character varying(8) NOT NULL,
+    {sys_user_stsdt} date DEFAULT {my_now}() NOT NULL,
+    {sys_user_fname} character varying(35) NOT NULL,
+    {sys_user_mname} character varying(35),
+    {sys_user_lname} character varying(35) NOT NULL,
+    {sys_user_jobtitle} character varying(35),
+    {sys_user_bphone} character varying(30),
+    {sys_user_cphone} character varying(30),
+    {sys_user_email} character varying(255) NOT NULL,
+    {sys_user_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {sys_user_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {sys_user_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {sys_user_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {sys_user_pw1} character varying(255),
+    {sys_user_pw2} character varying(255),
+    {sys_user_hash} bytea DEFAULT '\x00'::bytea NOT NULL,
+    {sys_user_lastlogin_ip} character varying(255),
+    {sys_user_lastlogin_tstmp} timestamp without time zone,
+    {sys_user_snotes} character varying(255),
+    CONSTRAINT {cust_user}_{sys_user_email}_check CHECK (((COALESCE({sys_user_email}, ''::character varying))::text <> ''::text))
 );
 
 
-ALTER TABLE cpe OWNER TO postgres;
+ALTER TABLE {cust_user} OWNER TO postgres;
 
 --
--- Name: TABLE cpe; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {cust_user}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE cpe IS '	Customer Personnel (CONTROL)';
+COMMENT ON TABLE {cust_user} IS '	Customer Personnel (CONTROL)';
 
 
 --
--- Name: cpe_pe_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user}_{sys_user_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE cpe_pe_id_seq
+CREATE SEQUENCE {cust_user}_{sys_user_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3851,41 +3851,41 @@ CREATE SEQUENCE cpe_pe_id_seq
     CACHE 1;
 
 
-ALTER TABLE cpe_pe_id_seq OWNER TO postgres;
+ALTER TABLE {cust_user}_{sys_user_id}_seq OWNER TO postgres;
 
 --
--- Name: cpe_pe_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user}_{sys_user_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE cpe_pe_id_seq OWNED BY cpe.pe_id;
+ALTER SEQUENCE {cust_user}_{sys_user_id}_seq OWNED BY {cust_user}.{sys_user_id};
 
 
 --
--- Name: cper; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user_role}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE cper (
-    pe_id bigint NOT NULL,
-    cper_snotes character varying(255),
-    cper_id bigint NOT NULL,
-    cr_name character varying(16) NOT NULL
+CREATE TABLE {cust_user_role} (
+    {sys_user_id} bigint NOT NULL,
+    {cust_user_role_snotes} character varying(255),
+    {cust_user_role_id} bigint NOT NULL,
+    {cust_role_name} character varying(16) NOT NULL
 );
 
 
-ALTER TABLE cper OWNER TO postgres;
+ALTER TABLE {cust_user_role} OWNER TO postgres;
 
 --
--- Name: TABLE cper; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {cust_user_role}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE cper IS '	Customer - Personnel Roles (CONTROL)';
+COMMENT ON TABLE {cust_user_role} IS '	Customer - Personnel Roles (CONTROL)';
 
 
 --
--- Name: cper_cper_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user_role}_{cust_user_role_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE cper_cper_id_seq
+CREATE SEQUENCE {cust_user_role}_{cust_user_role_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3893,45 +3893,45 @@ CREATE SEQUENCE cper_cper_id_seq
     CACHE 1;
 
 
-ALTER TABLE cper_cper_id_seq OWNER TO postgres;
+ALTER TABLE {cust_user_role}_{cust_user_role_id}_seq OWNER TO postgres;
 
 --
--- Name: cper_cper_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user_role}_{cust_user_role_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE cper_cper_id_seq OWNED BY cper.cper_id;
+ALTER SEQUENCE {cust_user_role}_{cust_user_role_id}_seq OWNED BY {cust_user_role}.{cust_user_role_id};
 
 
 --
--- Name: cr; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {cust_role}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE cr (
-    cr_id bigint NOT NULL,
-    cr_seq smallint NOT NULL,
-    cr_sts character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
-    cr_name character varying(16) NOT NULL,
-    cr_desc character varying(255) NOT NULL,
-    cr_snotes character varying(255),
-    cr_code character varying(50),
-    cr_attrib character varying(50)
+CREATE TABLE {cust_role} (
+    {cust_role_id} bigint NOT NULL,
+    {cust_role_seq} smallint NOT NULL,
+    {cust_role_sts} character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    {cust_role_name} character varying(16) NOT NULL,
+    {cust_role_desc} character varying(255) NOT NULL,
+    {cust_role_snotes} character varying(255),
+    {cust_role_code} character varying(50),
+    {cust_role_attrib} character varying(50)
 );
 
 
-ALTER TABLE cr OWNER TO postgres;
+ALTER TABLE {cust_role} OWNER TO postgres;
 
 --
--- Name: TABLE cr; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {cust_role}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE cr IS 'Customer - Roles (CONTROL)';
+COMMENT ON TABLE {cust_role} IS 'Customer - Roles (CONTROL)';
 
 
 --
--- Name: cr_cr_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {cust_role}_{cust_role_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE cr_cr_id_seq
+CREATE SEQUENCE {cust_role}_{cust_role_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3939,41 +3939,41 @@ CREATE SEQUENCE cr_cr_id_seq
     CACHE 1;
 
 
-ALTER TABLE cr_cr_id_seq OWNER TO postgres;
+ALTER TABLE {cust_role}_{cust_role_id}_seq OWNER TO postgres;
 
 --
--- Name: cr_cr_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {cust_role}_{cust_role_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE cr_cr_id_seq OWNED BY cr.cr_id;
+ALTER SEQUENCE {cust_role}_{cust_role_id}_seq OWNED BY {cust_role}.{cust_role_id};
 
 
 --
--- Name: crm; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {cust_menu_role}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE crm (
-    sm_id bigint NOT NULL,
-    crm_snotes character varying(255),
-    crm_id bigint NOT NULL,
-    cr_name character varying(16) NOT NULL
+CREATE TABLE {cust_menu_role} (
+    {menu_id} bigint NOT NULL,
+    {cust_menu_role_snotes} character varying(255),
+    {cust_menu_role_id} bigint NOT NULL,
+    {cust_role_name} character varying(16) NOT NULL
 );
 
 
-ALTER TABLE crm OWNER TO postgres;
+ALTER TABLE {cust_menu_role} OWNER TO postgres;
 
 --
--- Name: TABLE crm; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {cust_menu_role}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE crm IS 'Customer - Role Menu Items (CONTROL)';
+COMMENT ON TABLE {cust_menu_role} IS 'Customer - Role Menu Items (CONTROL)';
 
 
 --
--- Name: crm_crm_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {cust_menu_role}_{cust_menu_role_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE crm_crm_id_seq
+CREATE SEQUENCE {cust_menu_role}_{cust_menu_role_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3981,189 +3981,189 @@ CREATE SEQUENCE crm_crm_id_seq
     CACHE 1;
 
 
-ALTER TABLE crm_crm_id_seq OWNER TO postgres;
+ALTER TABLE {cust_menu_role}_{cust_menu_role_id}_seq OWNER TO postgres;
 
 --
--- Name: crm_crm_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {cust_menu_role}_{cust_menu_role_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE crm_crm_id_seq OWNED BY crm.crm_id;
+ALTER SEQUENCE {cust_menu_role}_{cust_menu_role_id}_seq OWNED BY {cust_menu_role}.{cust_menu_role_id};
 
 
 --
--- Name: d; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {doc}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE d (
-    d_id bigint NOT NULL,
-    d_scope character varying(8) DEFAULT 'S'::character varying NOT NULL,
-    d_scope_id bigint DEFAULT 0 NOT NULL,
-    c_id bigint,
-    e_id bigint,
-    d_sts character varying(8) DEFAULT 'A'::character varying NOT NULL,
-    d_ctgr character varying(8) NOT NULL,
-    d_desc character varying(255),
-    d_ext character varying(16),
-    d_size bigint,
-    d_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    d_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    d_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    d_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    d_utstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    d_uu character varying(20) DEFAULT mycuser() NOT NULL,
-    d_synctstmp timestamp without time zone,
-    d_snotes character varying(255),
-    d_id_main bigint
+CREATE TABLE {doc} (
+    {doc_id} bigint NOT NULL,
+    {doc_scope} character varying(8) DEFAULT 'S'::character varying NOT NULL,
+    {doc_scope_id} bigint DEFAULT 0 NOT NULL,
+    {cust_id} bigint,
+    {item_id} bigint,
+    {doc_sts} character varying(8) DEFAULT 'A'::character varying NOT NULL,
+    {doc_ctgr} character varying(8) NOT NULL,
+    {doc_desc} character varying(255),
+    {doc_ext} character varying(16),
+    {doc_size} bigint,
+    {doc_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {doc_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {doc_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {doc_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {doc_utstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {doc_uuser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {doc_sync_tstmp} timestamp without time zone,
+    {doc_snotes} character varying(255),
+    {doc_sync_id} bigint
 );
 
 
-ALTER TABLE d OWNER TO postgres;
+ALTER TABLE {doc} OWNER TO postgres;
 
 --
--- Name: TABLE d; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {doc}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE d IS 'Documents (CONTROL)';
-
-
---
--- Name: COLUMN d.d_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN d.d_id IS 'Document ID';
+COMMENT ON TABLE {doc} IS 'Documents (CONTROL)';
 
 
 --
--- Name: COLUMN d.d_scope; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {doc}.{doc_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN d.d_scope IS 'Document Scope - UCOD_D_SCOPE';
-
-
---
--- Name: COLUMN d.d_scope_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN d.d_scope_id IS 'Document Scope ID';
+COMMENT ON COLUMN {doc}.{doc_id} IS 'Document ID';
 
 
 --
--- Name: COLUMN d.c_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {doc}.{doc_scope}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN d.c_id IS 'Customer ID - C';
-
-
---
--- Name: COLUMN d.e_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN d.e_id IS 'E ID - E';
+COMMENT ON COLUMN {doc}.{doc_scope} IS 'Document Scope - {code_doc_scope}';
 
 
 --
--- Name: COLUMN d.d_sts; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {doc}.{doc_scope_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN d.d_sts IS 'Document Status - UCOD_AC1';
-
-
---
--- Name: COLUMN d.d_ctgr; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN d.d_ctgr IS 'Document Category - GCOD2_D_SCOPE_D_CTGR';
+COMMENT ON COLUMN {doc}.{doc_scope_id} IS 'Document Scope ID';
 
 
 --
--- Name: COLUMN d.d_desc; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {doc}.{cust_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN d.d_desc IS 'Document Description';
-
-
---
--- Name: COLUMN d.d_ext; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN d.d_ext IS 'Document Extension (file suffix)';
+COMMENT ON COLUMN {doc}.{cust_id} IS 'Customer ID - C';
 
 
 --
--- Name: COLUMN d.d_size; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {doc}.{item_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN d.d_size IS 'Document Size in bytes';
-
-
---
--- Name: COLUMN d.d_etstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN d.d_etstmp IS 'Document Entry Timestamp';
+COMMENT ON COLUMN {doc}.{item_id} IS 'E ID - E';
 
 
 --
--- Name: COLUMN d.d_eu; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {doc}.{doc_sts}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN d.d_eu IS 'Document Entry User';
-
-
---
--- Name: COLUMN d.d_mtstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN d.d_mtstmp IS 'Document Last Modification Timestamp';
+COMMENT ON COLUMN {doc}.{doc_sts} IS 'Document Status - {code_ac1}';
 
 
 --
--- Name: COLUMN d.d_mu; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {doc}.{doc_ctgr}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN d.d_mu IS 'Document Last Modification User';
-
-
---
--- Name: COLUMN d.d_utstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN d.d_utstmp IS 'Document Last Upload Timestamp';
+COMMENT ON COLUMN {doc}.{doc_ctgr} IS 'Document Category - {code2_doc_ctgr}';
 
 
 --
--- Name: COLUMN d.d_uu; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {doc}.{doc_desc}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN d.d_uu IS 'Document Last Upload User';
-
-
---
--- Name: COLUMN d.d_synctstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN d.d_synctstmp IS 'Document Synchronization Timestamp';
+COMMENT ON COLUMN {doc}.{doc_desc} IS 'Document Description';
 
 
 --
--- Name: COLUMN d.d_snotes; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {doc}.{doc_ext}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN d.d_snotes IS 'Document System Notes';
-
-
---
--- Name: COLUMN d.d_id_main; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN d.d_id_main IS 'Document Main ID (Synchronization)';
+COMMENT ON COLUMN {doc}.{doc_ext} IS 'Document Extension (file suffix)';
 
 
 --
--- Name: d_d_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {doc}.{doc_size}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE d_d_id_seq
+COMMENT ON COLUMN {doc}.{doc_size} IS 'Document Size in bytes';
+
+
+--
+-- Name: COLUMN {doc}.{doc_etstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {doc}.{doc_etstmp} IS 'Document Entry Timestamp';
+
+
+--
+-- Name: COLUMN {doc}.{doc_euser}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {doc}.{doc_euser} IS 'Document Entry User';
+
+
+--
+-- Name: COLUMN {doc}.{doc_mtstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {doc}.{doc_mtstmp} IS 'Document Last Modification Timestamp';
+
+
+--
+-- Name: COLUMN {doc}.{doc_muser}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {doc}.{doc_muser} IS 'Document Last Modification User';
+
+
+--
+-- Name: COLUMN {doc}.{doc_utstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {doc}.{doc_utstmp} IS 'Document Last Upload Timestamp';
+
+
+--
+-- Name: COLUMN {doc}.{doc_uuser}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {doc}.{doc_uuser} IS 'Document Last Upload User';
+
+
+--
+-- Name: COLUMN {doc}.{doc_sync_tstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {doc}.{doc_sync_tstmp} IS 'Document Synchronization Timestamp';
+
+
+--
+-- Name: COLUMN {doc}.{doc_snotes}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {doc}.{doc_snotes} IS 'Document System Notes';
+
+
+--
+-- Name: COLUMN {doc}.{doc_sync_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {doc}.{doc_sync_id} IS 'Document Main ID (Synchronization)';
+
+
+--
+-- Name: {doc}_{doc_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE SEQUENCE {doc}_{doc_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4171,41 +4171,41 @@ CREATE SEQUENCE d_d_id_seq
     CACHE 1;
 
 
-ALTER TABLE d_d_id_seq OWNER TO postgres;
+ALTER TABLE {doc}_{doc_id}_seq OWNER TO postgres;
 
 --
--- Name: d_d_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {doc}_{doc_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE d_d_id_seq OWNED BY d.d_id;
+ALTER SEQUENCE {doc}_{doc_id}_seq OWNED BY {doc}.{doc_id};
 
 
 --
--- Name: dual; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {single}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE dual (
-    dummy character varying(1) NOT NULL,
-    dual_ident bigint NOT NULL,
-    dual_bigint bigint,
-    dual_varchar50 character varying(50)
+CREATE TABLE {single} (
+    {single_dummy} character varying(1) NOT NULL,
+    {single_ident} bigint NOT NULL,
+    {dual_bigint} bigint,
+    {single}_varchar50 character varying(50)
 );
 
 
-ALTER TABLE dual OWNER TO postgres;
+ALTER TABLE {single} OWNER TO postgres;
 
 --
--- Name: TABLE dual; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {single}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE dual IS 'System Table (CONTROL)';
+COMMENT ON TABLE {single} IS 'System Table (CONTROL)';
 
 
 --
--- Name: dual_dual_ident_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {single}_{single_ident}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE dual_dual_ident_seq
+CREATE SEQUENCE {single}_{single_ident}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4213,13 +4213,13 @@ CREATE SEQUENCE dual_dual_ident_seq
     CACHE 1;
 
 
-ALTER TABLE dual_dual_ident_seq OWNER TO postgres;
+ALTER TABLE {single}_{single_ident}_seq OWNER TO postgres;
 
 --
--- Name: dual_dual_ident_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {single}_{single_ident}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE dual_dual_ident_seq OWNED BY dual.dual_ident;
+ALTER SEQUENCE {single}_{single_ident}_seq OWNED BY {single}.{single_ident};
 
 
 --
@@ -4242,19 +4242,19 @@ ALTER TABLE gcod_gcod_id_seq OWNER TO postgres;
 
 CREATE TABLE gcod (
     gcod_id bigint DEFAULT nextval('gcod_gcod_id_seq'::regclass) NOT NULL,
-    codseq smallint,
-    codeval character varying(8) NOT NULL,
-    codetxt character varying(50) NOT NULL,
-    codecode character varying(50),
-    codetdt date,
-    codetcm character varying(50),
-    cod_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    cod_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    cod_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    cod_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    cod_snotes character varying(255),
-    cod_notes character varying(255),
-    codeattrib character varying(50)
+    {code_seq} smallint,
+    {code_val} character varying(8) NOT NULL,
+    {code_txt} character varying(50) NOT NULL,
+    {code_code} character varying(50),
+    {code_end_dt} date,
+    {code_end_reason} character varying(50),
+    {code_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {code_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {code_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {code_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {code_snotes} character varying(255),
+    {code_notes} character varying(255),
+    {code_attrib} character varying(50)
 );
 
 
@@ -4268,10 +4268,10 @@ COMMENT ON TABLE gcod IS 'User Codes - TEMPLATE';
 
 
 --
--- Name: gcod2_gcod2_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: gcod2_{code2_app_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE gcod2_gcod2_id_seq
+CREATE SEQUENCE gcod2_{code2_app_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4279,28 +4279,28 @@ CREATE SEQUENCE gcod2_gcod2_id_seq
     CACHE 1;
 
 
-ALTER TABLE gcod2_gcod2_id_seq OWNER TO postgres;
+ALTER TABLE gcod2_{code2_app_id}_seq OWNER TO postgres;
 
 --
 -- Name: gcod2; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
 CREATE TABLE gcod2 (
-    gcod2_id bigint DEFAULT nextval('gcod2_gcod2_id_seq'::regclass) NOT NULL,
-    codseq smallint,
-    codeval1 character varying(8) NOT NULL,
-    codeval2 character varying(8) NOT NULL,
-    codetxt character varying(50),
-    codecode character varying(50),
-    codetdt date,
-    codetcm character varying(50),
-    cod_etstmp timestamp without time zone DEFAULT mynow(),
-    cod_eu character varying(20) DEFAULT mycuser(),
-    cod_mtstmp timestamp without time zone DEFAULT mynow(),
-    cod_mu character varying(20) DEFAULT mycuser(),
-    cod_snotes character varying(255),
-    cod_notes character varying(255),
-    codeattrib character varying(50)
+    {code2_app_id} bigint DEFAULT nextval('gcod2_{code2_app_id}_seq'::regclass) NOT NULL,
+    {code_seq} smallint,
+    {code_val1} character varying(8) NOT NULL,
+    {code_va12} character varying(8) NOT NULL,
+    {code_txt} character varying(50),
+    {code_code} character varying(50),
+    {code_end_dt} date,
+    {code_end_reason} character varying(50),
+    {code_etstmp} timestamp without time zone DEFAULT {my_now}(),
+    {code_euser} character varying(20) DEFAULT {my_db_user}(),
+    {code_mtstmp} timestamp without time zone DEFAULT {my_now}(),
+    {code_muser} character varying(20) DEFAULT {my_db_user}(),
+    {code_snotes} character varying(255),
+    {code_notes} character varying(255),
+    {code_attrib} character varying(50)
 );
 
 
@@ -4314,107 +4314,107 @@ COMMENT ON TABLE gcod2 IS 'User Codes 2 - TEMPLATE';
 
 
 --
--- Name: gcod2_d_scope_d_ctgr; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code2_doc_ctgr}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE gcod2_d_scope_d_ctgr (
+CREATE TABLE {code2_doc_ctgr} (
 )
 INHERITS (gcod2);
 
 
-ALTER TABLE gcod2_d_scope_d_ctgr OWNER TO postgres;
+ALTER TABLE {code2_doc_ctgr} OWNER TO postgres;
 
 --
--- Name: TABLE gcod2_d_scope_d_ctgr; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code2_doc_ctgr}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE gcod2_d_scope_d_ctgr IS 'User Codes 2 - Document Scope / Category';
+COMMENT ON TABLE {code2_doc_ctgr} IS 'User Codes 2 - Document Scope / Category';
 
 
 --
--- Name: gcod2_h; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code2_app}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE gcod2_h (
-    codename character varying(16) NOT NULL,
-    codemean character varying(128),
-    codecodemean character varying(128),
-    cod_h_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    cod_h_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    cod_h_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    cod_h_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    cod_snotes character varying(255),
-    codeattribmean character varying(128),
-    codeschema character varying(16)
+CREATE TABLE {code2_app} (
+    {code_name} character varying(16) NOT NULL,
+    {code_desc} character varying(128),
+    {code_code_desc} character varying(128),
+    {code_h_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {code_h_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {code_h_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {code_h_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {code_snotes} character varying(255),
+    {code_attrib_desc} character varying(128),
+    {code_schema} character varying(16)
 );
 
 
-ALTER TABLE gcod2_h OWNER TO postgres;
+ALTER TABLE {code2_app} OWNER TO postgres;
 
 --
--- Name: TABLE gcod2_h; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code2_app}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE gcod2_h IS 'User Codes 2 Header (CONTROL)';
+COMMENT ON TABLE {code2_app} IS 'User Codes 2 Header (CONTROL)';
 
 
 --
--- Name: gcod_h; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_app}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE gcod_h (
-    codename character varying(16) NOT NULL,
-    codemean character varying(128),
-    codecodemean character varying(128),
-    cod_h_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    cod_h_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    cod_h_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    cod_h_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    cod_snotes character varying(255),
-    codeattribmean character varying(128),
-    codeschema character varying(16)
+CREATE TABLE {code_app} (
+    {code_name} character varying(16) NOT NULL,
+    {code_desc} character varying(128),
+    {code_code_desc} character varying(128),
+    {code_h_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {code_h_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {code_h_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {code_h_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {code_snotes} character varying(255),
+    {code_attrib_desc} character varying(128),
+    {code_schema} character varying(16)
 );
 
 
-ALTER TABLE gcod_h OWNER TO postgres;
+ALTER TABLE {code_app} OWNER TO postgres;
 
 --
--- Name: TABLE gcod_h; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_app}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE gcod_h IS 'User Codes Header (CONTROL)';
+COMMENT ON TABLE {code_app} IS 'User Codes Header (CONTROL)';
 
 
 --
--- Name: gpp; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {param_app}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE gpp (
-    gpp_id bigint NOT NULL,
-    gpp_process character varying(32) NOT NULL,
-    gpp_attrib character varying(16) NOT NULL,
-    gpp_val character varying(256),
-    gpp_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    gpp_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    gpp_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    gpp_mu character varying(20) DEFAULT mycuser() NOT NULL
+CREATE TABLE {param_app} (
+    {param_app_id} bigint NOT NULL,
+    {param_app_process} character varying(32) NOT NULL,
+    {param_app_attrib} character varying(16) NOT NULL,
+    {param_app_val} character varying(256),
+    {param_app_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {param_app_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {param_app_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {param_app_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL
 );
 
 
-ALTER TABLE gpp OWNER TO postgres;
+ALTER TABLE {param_app} OWNER TO postgres;
 
 --
--- Name: TABLE gpp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {param_app}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE gpp IS 'Process Parameters - Global (CONTROL)';
+COMMENT ON TABLE {param_app} IS 'Process Parameters - Global (CONTROL)';
 
 
 --
--- Name: gpp_gpp_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {param_app}_{param_app_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE gpp_gpp_id_seq
+CREATE SEQUENCE {param_app}_{param_app_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4422,48 +4422,48 @@ CREATE SEQUENCE gpp_gpp_id_seq
     CACHE 1;
 
 
-ALTER TABLE gpp_gpp_id_seq OWNER TO postgres;
+ALTER TABLE {param_app}_{param_app_id}_seq OWNER TO postgres;
 
 --
--- Name: gpp_gpp_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {param_app}_{param_app_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE gpp_gpp_id_seq OWNED BY gpp.gpp_id;
+ALTER SEQUENCE {param_app}_{param_app_id}_seq OWNED BY {param_app}.{param_app_id};
 
 
 --
--- Name: h; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {help}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE h (
-    h_id bigint NOT NULL,
-    hp_code character varying(50),
-    h_title character varying(70) NOT NULL,
-    h_text text NOT NULL,
-    h_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    h_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    h_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    h_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    h_seq integer,
-    h_index_a boolean DEFAULT true NOT NULL,
-    h_index_p boolean DEFAULT true NOT NULL
+CREATE TABLE {help} (
+    {help_id} bigint NOT NULL,
+    {help_target_code} character varying(50),
+    {help_title} character varying(70) NOT NULL,
+    {help_text} text NOT NULL,
+    {help_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {help_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {help_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {help_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {help_seq} integer,
+    {help_listing_main} boolean DEFAULT true NOT NULL,
+    {help_listing_client} boolean DEFAULT true NOT NULL
 );
 
 
-ALTER TABLE h OWNER TO postgres;
+ALTER TABLE {help} OWNER TO postgres;
 
 --
--- Name: TABLE h; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {help}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE h IS 'Help (CONTROL)';
+COMMENT ON TABLE {help} IS 'Help (CONTROL)';
 
 
 --
--- Name: h_h_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {help}_{help_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE h_h_id_seq
+CREATE SEQUENCE {help}_{help_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4471,40 +4471,40 @@ CREATE SEQUENCE h_h_id_seq
     CACHE 1;
 
 
-ALTER TABLE h_h_id_seq OWNER TO postgres;
+ALTER TABLE {help}_{help_id}_seq OWNER TO postgres;
 
 --
--- Name: h_h_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {help}_{help_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE h_h_id_seq OWNED BY h.h_id;
+ALTER SEQUENCE {help}_{help_id}_seq OWNED BY {help}.{help_id};
 
 
 --
--- Name: hp; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {help_target}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE hp (
-    hp_id bigint NOT NULL,
-    hp_code character varying(50) NOT NULL,
-    hp_desc character varying(50) NOT NULL
+CREATE TABLE {help_target} (
+    {help_target_id} bigint NOT NULL,
+    {help_target_code} character varying(50) NOT NULL,
+    {help_target_desc} character varying(50) NOT NULL
 );
 
 
-ALTER TABLE hp OWNER TO postgres;
+ALTER TABLE {help_target} OWNER TO postgres;
 
 --
--- Name: TABLE hp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {help_target}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE hp IS 'Help Header (CONTROL)';
+COMMENT ON TABLE {help_target} IS 'Help Header (CONTROL)';
 
 
 --
--- Name: hp_hp_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {help_target}_{help_target_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE hp_hp_id_seq
+CREATE SEQUENCE {help_target}_{help_target_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4512,157 +4512,157 @@ CREATE SEQUENCE hp_hp_id_seq
     CACHE 1;
 
 
-ALTER TABLE hp_hp_id_seq OWNER TO postgres;
+ALTER TABLE {help_target}_{help_target_id}_seq OWNER TO postgres;
 
 --
--- Name: hp_hp_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {help_target}_{help_target_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE hp_hp_id_seq OWNED BY hp.hp_id;
+ALTER SEQUENCE {help_target}_{help_target_id}_seq OWNED BY {help_target}.{help_target_id};
 
 
 --
--- Name: n; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {note}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE n (
-    n_id bigint NOT NULL,
-    n_scope character varying(8) DEFAULT 'S'::character varying NOT NULL,
-    n_scope_id bigint DEFAULT 0 NOT NULL,
-    n_sts character varying(8) DEFAULT 'A'::character varying NOT NULL,
-    c_id bigint,
-    e_id bigint,
-    n_type character varying(8) NOT NULL,
-    n_note text NOT NULL,
-    n_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    n_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    n_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    n_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    n_synctstmp timestamp without time zone,
-    n_snotes character varying(255),
-    n_id_main bigint
+CREATE TABLE {note} (
+    {note_id} bigint NOT NULL,
+    {note_scope} character varying(8) DEFAULT 'S'::character varying NOT NULL,
+    {note_scope_id} bigint DEFAULT 0 NOT NULL,
+    {note_sts} character varying(8) DEFAULT 'A'::character varying NOT NULL,
+    {cust_id} bigint,
+    {item_id} bigint,
+    {note_type} character varying(8) NOT NULL,
+    {note_body} text NOT NULL,
+    {note_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {note_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {note_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {note_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {note_sync_tstmp} timestamp without time zone,
+    {note_snotes} character varying(255),
+    {note_sync_id} bigint
 );
 
 
-ALTER TABLE n OWNER TO postgres;
+ALTER TABLE {note} OWNER TO postgres;
 
 --
--- Name: TABLE n; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {note}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE n IS 'Notes (CONTROL)';
-
-
---
--- Name: COLUMN n.n_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN n.n_id IS 'Note ID';
+COMMENT ON TABLE {note} IS 'Notes (CONTROL)';
 
 
 --
--- Name: COLUMN n.n_scope; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {note}.{note_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN n.n_scope IS 'Note Scope - UCOD_N_SCOPE';
-
-
---
--- Name: COLUMN n.n_scope_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN n.n_scope_id IS 'Note Scope ID';
+COMMENT ON COLUMN {note}.{note_id} IS 'Note ID';
 
 
 --
--- Name: COLUMN n.n_sts; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {note}.{note_scope}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN n.n_sts IS 'Note Status - UCOD_AC1';
-
-
---
--- Name: COLUMN n.c_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN n.c_id IS 'Customer ID - C';
+COMMENT ON COLUMN {note}.{note_scope} IS 'Note Scope - {code_note_scope}';
 
 
 --
--- Name: COLUMN n.e_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {note}.{note_scope_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN n.e_id IS 'E ID - E';
-
-
---
--- Name: COLUMN n.n_type; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN n.n_type IS 'Note Type - UCOD_N_TYPE - C, S, U';
+COMMENT ON COLUMN {note}.{note_scope_id} IS 'Note Scope ID';
 
 
 --
--- Name: COLUMN n.n_note; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {note}.{note_sts}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN n.n_note IS 'Note NOTE';
-
-
---
--- Name: COLUMN n.n_etstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN n.n_etstmp IS 'Note Entry Timestamp';
+COMMENT ON COLUMN {note}.{note_sts} IS 'Note Status - {code_ac1}';
 
 
 --
--- Name: COLUMN n.n_eu; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {note}.{cust_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN n.n_eu IS 'Note Entry User';
-
-
---
--- Name: COLUMN n.n_mtstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN n.n_mtstmp IS 'Note Last Modification Timestamp';
+COMMENT ON COLUMN {note}.{cust_id} IS 'Customer ID - C';
 
 
 --
--- Name: COLUMN n.n_mu; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {note}.{item_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN n.n_mu IS 'Note Last Modification User';
-
-
---
--- Name: COLUMN n.n_synctstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN n.n_synctstmp IS 'Note Synchronization Timestamp';
+COMMENT ON COLUMN {note}.{item_id} IS 'E ID - E';
 
 
 --
--- Name: COLUMN n.n_snotes; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {note}.{note_type}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN n.n_snotes IS 'Note System Notes';
-
-
---
--- Name: COLUMN n.n_id_main; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN n.n_id_main IS 'Note Main ID (Synchronization)';
+COMMENT ON COLUMN {note}.{note_type} IS 'Note Type - {code_note_type} - C, S, U';
 
 
 --
--- Name: n_n_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {note}.{note_body}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE n_n_id_seq
+COMMENT ON COLUMN {note}.{note_body} IS 'Note NOTE';
+
+
+--
+-- Name: COLUMN {note}.{note_etstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {note}.{note_etstmp} IS 'Note Entry Timestamp';
+
+
+--
+-- Name: COLUMN {note}.{note_euser}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {note}.{note_euser} IS 'Note Entry User';
+
+
+--
+-- Name: COLUMN {note}.{note_mtstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {note}.{note_mtstmp} IS 'Note Last Modification Timestamp';
+
+
+--
+-- Name: COLUMN {note}.{note_muser}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {note}.{note_muser} IS 'Note Last Modification User';
+
+
+--
+-- Name: COLUMN {note}.{note_sync_tstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {note}.{note_sync_tstmp} IS 'Note Synchronization Timestamp';
+
+
+--
+-- Name: COLUMN {note}.{note_snotes}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {note}.{note_snotes} IS 'Note System Notes';
+
+
+--
+-- Name: COLUMN {note}.{note_sync_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {note}.{note_sync_id} IS 'Note Main ID (Synchronization)';
+
+
+--
+-- Name: {note}_{note_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE SEQUENCE {note}_{note_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4670,105 +4670,105 @@ CREATE SEQUENCE n_n_id_seq
     CACHE 1;
 
 
-ALTER TABLE n_n_id_seq OWNER TO postgres;
+ALTER TABLE {note}_{note_id}_seq OWNER TO postgres;
 
 --
--- Name: n_n_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {note}_{note_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE n_n_id_seq OWNED BY n.n_id;
+ALTER SEQUENCE {note}_{note_id}_seq OWNED BY {note}.{note_id};
 
 
 --
--- Name: numbers; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {number}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE numbers (
+CREATE TABLE {number} (
     {number_val} smallint NOT NULL
 );
 
 
-ALTER TABLE numbers OWNER TO postgres;
+ALTER TABLE {number} OWNER TO postgres;
 
 --
--- Name: TABLE numbers; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {number}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE numbers IS 'System Table (CONTROL)';
+COMMENT ON TABLE {number} IS 'System Table (CONTROL)';
 
 
 --
--- Name: pe; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE pe (
-    pe_id bigint NOT NULL,
-    pe_sts character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
-    pe_stsdt date DEFAULT mynow() NOT NULL,
-    pe_fname character varying(35) NOT NULL,
-    pe_mname character varying(35),
-    pe_lname character varying(35) NOT NULL,
-    pe_jtitle character varying(35),
-    pe_bphone character varying(30),
-    pe_cphone character varying(30),
-    pe_country character varying(8) DEFAULT 'USA'::character varying NOT NULL,
-    pe_addr character varying(200),
-    pe_city character varying(50),
-    pe_state character varying(8),
-    pe_zip character varying(20),
-    pe_email character varying(255) NOT NULL,
-    pe_startdt date DEFAULT mynow() NOT NULL,
-    pe_enddt date,
-    pe_unotes character varying(4000),
-    pe_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    pe_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    pe_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    pe_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    pe_pw1 character varying(255),
-    pe_pw2 character varying(255),
-    pe_hash bytea DEFAULT '\x00'::bytea NOT NULL,
-    pe_ll_ip character varying(255),
-    pe_ll_tstmp timestamp without time zone,
-    pe_snotes character varying(255),
-    CONSTRAINT pe_pe_email_check CHECK (((COALESCE(pe_email, ''::character varying))::text <> ''::text))
+CREATE TABLE {sys_user} (
+    {sys_user_id} bigint NOT NULL,
+    {sys_user_sts} character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    {sys_user_stsdt} date DEFAULT {my_now}() NOT NULL,
+    {sys_user_fname} character varying(35) NOT NULL,
+    {sys_user_mname} character varying(35),
+    {sys_user_lname} character varying(35) NOT NULL,
+    {sys_user_jobtitle} character varying(35),
+    {sys_user_bphone} character varying(30),
+    {sys_user_cphone} character varying(30),
+    {sys_user_country} character varying(8) DEFAULT 'USA'::character varying NOT NULL,
+    {sys_user_addr} character varying(200),
+    {sys_user_city} character varying(50),
+    {sys_user_state} character varying(8),
+    {sys_user_zip} character varying(20),
+    {sys_user_email} character varying(255) NOT NULL,
+    {sys_user_startdt} date DEFAULT {my_now}() NOT NULL,
+    {sys_user_enddt} date,
+    {sys_user_unotes} character varying(4000),
+    {sys_user_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {sys_user_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {sys_user_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {sys_user_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {sys_user_pw1} character varying(255),
+    {sys_user_pw2} character varying(255),
+    {sys_user_hash} bytea DEFAULT '\x00'::bytea NOT NULL,
+    {sys_user_lastlogin_ip} character varying(255),
+    {sys_user_lastlogin_tstmp} timestamp without time zone,
+    {sys_user_snotes} character varying(255),
+    CONSTRAINT {sys_user}_{sys_user_email}_check CHECK (((COALESCE({sys_user_email}, ''::character varying))::text <> ''::text))
 );
 
 
-ALTER TABLE pe OWNER TO postgres;
+ALTER TABLE {sys_user} OWNER TO postgres;
 
 --
--- Name: TABLE pe; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {sys_user}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE pe IS 'Personnel (CONTROL)';
-
-
---
--- Name: COLUMN pe.pe_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN pe.pe_id IS 'Personnel ID';
+COMMENT ON TABLE {sys_user} IS 'Personnel (CONTROL)';
 
 
 --
--- Name: COLUMN pe.pe_sts; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {sys_user}.{sys_user_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN pe.pe_sts IS 'Personnel Status';
-
-
---
--- Name: COLUMN pe.pe_stsdt; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN pe.pe_stsdt IS 'Personnel Status Date';
+COMMENT ON COLUMN {sys_user}.{sys_user_id} IS 'Personnel ID';
 
 
 --
--- Name: pe_pe_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {sys_user}.{sys_user_sts}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE pe_pe_id_seq
+COMMENT ON COLUMN {sys_user}.{sys_user_sts} IS 'Personnel Status';
+
+
+--
+-- Name: COLUMN {sys_user}.{sys_user_stsdt}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN {sys_user}.{sys_user_stsdt} IS 'Personnel Status Date';
+
+
+--
+-- Name: {sys_user}_{sys_user_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE SEQUENCE {sys_user}_{sys_user_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4776,51 +4776,51 @@ CREATE SEQUENCE pe_pe_id_seq
     CACHE 1;
 
 
-ALTER TABLE pe_pe_id_seq OWNER TO postgres;
+ALTER TABLE {sys_user}_{sys_user_id}_seq OWNER TO postgres;
 
 --
--- Name: pe_pe_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user}_{sys_user_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE pe_pe_id_seq OWNED BY pe.pe_id;
+ALTER SEQUENCE {sys_user}_{sys_user_id}_seq OWNED BY {sys_user}.{sys_user_id};
 
 
 --
--- Name: ppd; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {param}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ppd (
-    ppd_id bigint NOT NULL,
-    ppd_process character varying(32) NOT NULL,
-    ppd_attrib character varying(16) NOT NULL,
-    ppd_desc character varying(255) NOT NULL,
-    ppd_type character varying(8) NOT NULL,
-    codename character varying(16),
-    ppd_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    ppd_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    ppd_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    ppd_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    ppd_snotes text,
-    ppd_gpp boolean DEFAULT false NOT NULL,
-    ppd_ppp boolean DEFAULT false NOT NULL,
-    ppd_xpp boolean DEFAULT false NOT NULL
+CREATE TABLE {param} (
+    {param_id} bigint NOT NULL,
+    {param_process} character varying(32) NOT NULL,
+    {param_attrib} character varying(16) NOT NULL,
+    {param_desc} character varying(255) NOT NULL,
+    {param_type} character varying(8) NOT NULL,
+    {code_name} character varying(16),
+    {param_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {param_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {param_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {param_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {param_snotes} text,
+    {is_param_app} boolean DEFAULT false NOT NULL,
+    {is_param_user} boolean DEFAULT false NOT NULL,
+    {is_param_sys} boolean DEFAULT false NOT NULL
 );
 
 
-ALTER TABLE ppd OWNER TO postgres;
+ALTER TABLE {param} OWNER TO postgres;
 
 --
--- Name: TABLE ppd; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {param}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ppd IS 'Process Parameters Dictionary (CONTROL)';
+COMMENT ON TABLE {param} IS 'Process Parameters Dictionary (CONTROL)';
 
 
 --
--- Name: ppd_ppd_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {param}_{param_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE ppd_ppd_id_seq
+CREATE SEQUENCE {param}_{param_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4828,46 +4828,46 @@ CREATE SEQUENCE ppd_ppd_id_seq
     CACHE 1;
 
 
-ALTER TABLE ppd_ppd_id_seq OWNER TO postgres;
+ALTER TABLE {param}_{param_id}_seq OWNER TO postgres;
 
 --
--- Name: ppd_ppd_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {param}_{param_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE ppd_ppd_id_seq OWNED BY ppd.ppd_id;
+ALTER SEQUENCE {param}_{param_id}_seq OWNED BY {param}.{param_id};
 
 
 --
--- Name: ppp; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {param_user}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ppp (
-    ppp_id bigint NOT NULL,
-    pe_id bigint NOT NULL,
-    ppp_process character varying(32) NOT NULL,
-    ppp_attrib character varying(16) NOT NULL,
-    ppp_val character varying(256),
-    ppp_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    ppp_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    ppp_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    ppp_mu character varying(20) DEFAULT mycuser() NOT NULL
+CREATE TABLE {param_user} (
+    {param_user_id} bigint NOT NULL,
+    {sys_user_id} bigint NOT NULL,
+    {param_user_process} character varying(32) NOT NULL,
+    {param_user_attrib} character varying(16) NOT NULL,
+    {param_user_val} character varying(256),
+    {param_user_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {param_user_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {param_user_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {param_user_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL
 );
 
 
-ALTER TABLE ppp OWNER TO postgres;
+ALTER TABLE {param_user} OWNER TO postgres;
 
 --
--- Name: TABLE ppp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {param_user}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ppp IS 'Process Parameters - Personal (CONTROL)';
+COMMENT ON TABLE {param_user} IS 'Process Parameters - Personal (CONTROL)';
 
 
 --
--- Name: ppp_ppp_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {param_user}_{param_user_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE ppp_ppp_id_seq
+CREATE SEQUENCE {param_user}_{param_user_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4875,46 +4875,46 @@ CREATE SEQUENCE ppp_ppp_id_seq
     CACHE 1;
 
 
-ALTER TABLE ppp_ppp_id_seq OWNER TO postgres;
+ALTER TABLE {param_user}_{param_user_id}_seq OWNER TO postgres;
 
 --
--- Name: ppp_ppp_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {param_user}_{param_user_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE ppp_ppp_id_seq OWNED BY ppp.ppp_id;
+ALTER SEQUENCE {param_user}_{param_user_id}_seq OWNED BY {param_user}.{param_user_id};
 
 
 --
--- Name: rq; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {queue}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE rq (
-    rq_id bigint NOT NULL,
-    rq_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    rq_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    rq_name character varying(255) NOT NULL,
-    rq_message text NOT NULL,
-    rq_rslt character varying(8),
-    rq_rslt_tstmp timestamp without time zone,
-    rq_rslt_u character varying(20),
-    rq_snotes text
+CREATE TABLE {queue} (
+    {queue_id} bigint NOT NULL,
+    {queue_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {queue_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {queue_name} character varying(255) NOT NULL,
+    {queue_message} text NOT NULL,
+    {queue_rslt} character varying(8),
+    {queue_rslt_tstmp} timestamp without time zone,
+    {queue_rslt_user} character varying(20),
+    {queue_snotes} text
 );
 
 
-ALTER TABLE rq OWNER TO postgres;
+ALTER TABLE {queue} OWNER TO postgres;
 
 --
--- Name: TABLE rq; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {queue}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE rq IS 'Queue Request (CONTROL)';
+COMMENT ON TABLE {queue} IS 'Queue Request (CONTROL)';
 
 
 --
--- Name: rq_rq_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {queue}_{queue_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE rq_rq_id_seq
+CREATE SEQUENCE {queue}_{queue_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4922,72 +4922,72 @@ CREATE SEQUENCE rq_rq_id_seq
     CACHE 1;
 
 
-ALTER TABLE rq_rq_id_seq OWNER TO postgres;
+ALTER TABLE {queue}_{queue_id}_seq OWNER TO postgres;
 
 --
--- Name: rq_rq_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {queue}_{queue_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE rq_rq_id_seq OWNED BY rq.rq_id;
+ALTER SEQUENCE {queue}_{queue_id}_seq OWNED BY {queue}.{queue_id};
 
 
 --
--- Name: rqst; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {job}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE rqst (
-    rqst_id bigint NOT NULL,
-    rqst_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    rqst_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    rqst_source character varying(8) NOT NULL,
-    rqst_atype character varying(8) NOT NULL,
-    rqst_aname character varying(50) NOT NULL,
-    rqst_parms text,
-    rqst_ident character varying(255),
-    rqst_rslt character varying(8),
-    rqst_rslt_tstmp timestamp without time zone,
-    rqst_rslt_u character varying(20),
-    rqst_snotes text
+CREATE TABLE {job} (
+    {job_id} bigint NOT NULL,
+    {job_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {job_user} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {job_source} character varying(8) NOT NULL,
+    {job_action} character varying(8) NOT NULL,
+    {job_action_target} character varying(50) NOT NULL,
+    {job_params} text,
+    {job_tag} character varying(255),
+    {job_rslt} character varying(8),
+    {job_rslt_tstmp} timestamp without time zone,
+    {job_rslt_user} character varying(20),
+    {job_snotes} text
 );
 
 
-ALTER TABLE rqst OWNER TO postgres;
+ALTER TABLE {job} OWNER TO postgres;
 
 --
--- Name: TABLE rqst; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {job}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE rqst IS 'Request (CONTROL)';
+COMMENT ON TABLE {job} IS 'Request (CONTROL)';
 
 
 --
--- Name: rqst_d; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {job_doc}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE rqst_d (
-    rqst_d_id bigint NOT NULL,
-    rqst_id bigint NOT NULL,
-    d_scope character varying(8),
-    d_scope_id bigint,
-    d_ctgr character varying(8),
-    d_desc character varying(255)
+CREATE TABLE {job_doc} (
+    {job_doc_id} bigint NOT NULL,
+    {job_id} bigint NOT NULL,
+    {doc_scope} character varying(8),
+    {doc_scope_id} bigint,
+    {doc_ctgr} character varying(8),
+    {doc_desc} character varying(255)
 );
 
 
-ALTER TABLE rqst_d OWNER TO postgres;
+ALTER TABLE {job_doc} OWNER TO postgres;
 
 --
--- Name: TABLE rqst_d; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {job_doc}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE rqst_d IS 'Request - Document (CONTROL)';
+COMMENT ON TABLE {job_doc} IS 'Request - Document (CONTROL)';
 
 
 --
--- Name: rqst_d_rqst_d_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {job_doc}_{job_doc_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE rqst_d_rqst_d_id_seq
+CREATE SEQUENCE {job_doc}_{job_doc_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4995,48 +4995,48 @@ CREATE SEQUENCE rqst_d_rqst_d_id_seq
     CACHE 1;
 
 
-ALTER TABLE rqst_d_rqst_d_id_seq OWNER TO postgres;
+ALTER TABLE {job_doc}_{job_doc_id}_seq OWNER TO postgres;
 
 --
--- Name: rqst_d_rqst_d_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {job_doc}_{job_doc_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE rqst_d_rqst_d_id_seq OWNED BY rqst_d.rqst_d_id;
+ALTER SEQUENCE {job_doc}_{job_doc_id}_seq OWNED BY {job_doc}.{job_doc_id};
 
 
 --
--- Name: rqst_email; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {job_email}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE rqst_email (
-    rqst_email_id bigint NOT NULL,
-    rqst_id bigint NOT NULL,
-    email_txt_attrib character varying(32),
-    email_to character varying(255) NOT NULL,
-    email_cc character varying(255),
-    email_bcc character varying(255),
-    email_attach smallint,
-    email_subject character varying(500),
-    email_text text,
-    email_html text,
-    email_d_id bigint
+CREATE TABLE {job_email} (
+    {job_email_id} bigint NOT NULL,
+    {job_id} bigint NOT NULL,
+    {email_txt_attrib} character varying(32),
+    {email_to} character varying(255) NOT NULL,
+    {email_cc} character varying(255),
+    {email_bcc} character varying(255),
+    {email_attach} smallint,
+    {email_subject} character varying(500),
+    {email_text} text,
+    {email_html} text,
+    {email_doc_id} bigint
 );
 
 
-ALTER TABLE rqst_email OWNER TO postgres;
+ALTER TABLE {job_email} OWNER TO postgres;
 
 --
--- Name: TABLE rqst_email; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {job_email}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE rqst_email IS 'Request - EMail (CONTROL)';
+COMMENT ON TABLE {job_email} IS 'Request - EMail (CONTROL)';
 
 
 --
--- Name: rqst_email_rqst_email_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {job_email}_{job_email_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE rqst_email_rqst_email_id_seq
+CREATE SEQUENCE {job_email}_{job_email_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5044,43 +5044,43 @@ CREATE SEQUENCE rqst_email_rqst_email_id_seq
     CACHE 1;
 
 
-ALTER TABLE rqst_email_rqst_email_id_seq OWNER TO postgres;
+ALTER TABLE {job_email}_{job_email_id}_seq OWNER TO postgres;
 
 --
--- Name: rqst_email_rqst_email_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {job_email}_{job_email_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE rqst_email_rqst_email_id_seq OWNED BY rqst_email.rqst_email_id;
+ALTER SEQUENCE {job_email}_{job_email_id}_seq OWNED BY {job_email}.{job_email_id};
 
 
 --
--- Name: rqst_n; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {job_note}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE rqst_n (
-    rqst_n_id bigint NOT NULL,
-    rqst_id bigint NOT NULL,
-    n_scope character varying(8),
-    n_scope_id bigint,
-    n_type character varying(8),
-    n_note text
+CREATE TABLE {job_note} (
+    {job_note_id} bigint NOT NULL,
+    {job_id} bigint NOT NULL,
+    {note_scope} character varying(8),
+    {note_scope_id} bigint,
+    {note_type} character varying(8),
+    {note_body} text
 );
 
 
-ALTER TABLE rqst_n OWNER TO postgres;
+ALTER TABLE {job_note} OWNER TO postgres;
 
 --
--- Name: TABLE rqst_n; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {job_note}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE rqst_n IS 'Request - Note (CONTROL)';
+COMMENT ON TABLE {job_note} IS 'Request - Note (CONTROL)';
 
 
 --
--- Name: rqst_n_rqst_n_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {job_note}_{job_note_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE rqst_n_rqst_n_id_seq
+CREATE SEQUENCE {job_note}_{job_note_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5088,41 +5088,41 @@ CREATE SEQUENCE rqst_n_rqst_n_id_seq
     CACHE 1;
 
 
-ALTER TABLE rqst_n_rqst_n_id_seq OWNER TO postgres;
+ALTER TABLE {job_note}_{job_note_id}_seq OWNER TO postgres;
 
 --
--- Name: rqst_n_rqst_n_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {job_note}_{job_note_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE rqst_n_rqst_n_id_seq OWNED BY rqst_n.rqst_n_id;
+ALTER SEQUENCE {job_note}_{job_note_id}_seq OWNED BY {job_note}.{job_note_id};
 
 
 --
--- Name: rqst_rq; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {job_queue}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE rqst_rq (
-    rqst_rq_id bigint NOT NULL,
-    rqst_id bigint NOT NULL,
-    rq_name character varying(255) NOT NULL,
-    rq_message text
+CREATE TABLE {job_queue} (
+    {job_queue_id} bigint NOT NULL,
+    {job_id} bigint NOT NULL,
+    {queue_name} character varying(255) NOT NULL,
+    {queue_message} text
 );
 
 
-ALTER TABLE rqst_rq OWNER TO postgres;
+ALTER TABLE {job_queue} OWNER TO postgres;
 
 --
--- Name: TABLE rqst_rq; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {job_queue}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE rqst_rq IS 'Request - RQ (CONTROL)';
+COMMENT ON TABLE {job_queue} IS 'Request - {queue} (CONTROL)';
 
 
 --
--- Name: rqst_rq_rqst_rq_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {job_queue}_{job_queue_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE rqst_rq_rqst_rq_id_seq
+CREATE SEQUENCE {job_queue}_{job_queue_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5130,20 +5130,20 @@ CREATE SEQUENCE rqst_rq_rqst_rq_id_seq
     CACHE 1;
 
 
-ALTER TABLE rqst_rq_rqst_rq_id_seq OWNER TO postgres;
+ALTER TABLE {job_queue}_{job_queue_id}_seq OWNER TO postgres;
 
 --
--- Name: rqst_rq_rqst_rq_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {job_queue}_{job_queue_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE rqst_rq_rqst_rq_id_seq OWNED BY rqst_rq.rqst_rq_id;
+ALTER SEQUENCE {job_queue}_{job_queue_id}_seq OWNED BY {job_queue}.{job_queue_id};
 
 
 --
--- Name: rqst_rqst_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {job}_{job_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE rqst_rqst_id_seq
+CREATE SEQUENCE {job}_{job_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5151,42 +5151,42 @@ CREATE SEQUENCE rqst_rqst_id_seq
     CACHE 1;
 
 
-ALTER TABLE rqst_rqst_id_seq OWNER TO postgres;
+ALTER TABLE {job}_{job_id}_seq OWNER TO postgres;
 
 --
--- Name: rqst_rqst_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {job}_{job_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE rqst_rqst_id_seq OWNED BY rqst.rqst_id;
+ALTER SEQUENCE {job}_{job_id}_seq OWNED BY {job}.{job_id};
 
 
 --
--- Name: rqst_sms; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {job_sms}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE rqst_sms (
-    rqst_sms_id bigint NOT NULL,
-    rqst_id bigint NOT NULL,
-    sms_txt_attrib character varying(32),
-    sms_to character varying(255) NOT NULL,
-    sms_body text
+CREATE TABLE {job_sms} (
+    {job_sms_id} bigint NOT NULL,
+    {job_id} bigint NOT NULL,
+    {sms_txt_attrib} character varying(32),
+    {sms_to} character varying(255) NOT NULL,
+    {sms_body} text
 );
 
 
-ALTER TABLE rqst_sms OWNER TO postgres;
+ALTER TABLE {job_sms} OWNER TO postgres;
 
 --
--- Name: TABLE rqst_sms; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {job_sms}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE rqst_sms IS 'Request - SMS (CONTROL)';
+COMMENT ON TABLE {job_sms} IS 'Request - SMS (CONTROL)';
 
 
 --
--- Name: rqst_sms_rqst_sms_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {job_sms}_{job_sms_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE rqst_sms_rqst_sms_id_seq
+CREATE SEQUENCE {job_sms}_{job_sms_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5194,59 +5194,59 @@ CREATE SEQUENCE rqst_sms_rqst_sms_id_seq
     CACHE 1;
 
 
-ALTER TABLE rqst_sms_rqst_sms_id_seq OWNER TO postgres;
+ALTER TABLE {job_sms}_{job_sms_id}_seq OWNER TO postgres;
 
 --
--- Name: rqst_sms_rqst_sms_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {job_sms}_{job_sms_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE rqst_sms_rqst_sms_id_seq OWNED BY rqst_sms.rqst_sms_id;
+ALTER SEQUENCE {job_sms}_{job_sms_id}_seq OWNED BY {job_sms}.{job_sms_id};
 
 
 --
--- Name: sf; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {sys_func}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE sf (
-    sf_id bigint NOT NULL,
-    sf_seq smallint NOT NULL,
-    sf_sts character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
-    sf_name character varying(16) NOT NULL,
-    sf_desc character varying(255) NOT NULL,
-    sf_snotes character varying(255),
-    sf_code character varying(50),
-    sf_attrib character varying(50)
+CREATE TABLE {sys_func} (
+    {sys_func_id} bigint NOT NULL,
+    {sys_func_seq} smallint NOT NULL,
+    {sys_func_sts} character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    {sys_func_name} character varying(16) NOT NULL,
+    {sys_func_desc} character varying(255) NOT NULL,
+    {sys_func_snotes} character varying(255),
+    {sys_func_code} character varying(50),
+    {sys_func_attrib} character varying(50)
 );
 
 
-ALTER TABLE sf OWNER TO postgres;
+ALTER TABLE {sys_func} OWNER TO postgres;
 
 --
--- Name: TABLE sf; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {sys_func}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE sf IS 'Security - Functions (CONTROL)';
-
-
---
--- Name: COLUMN sf.sf_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN sf.sf_id IS 'Function ID';
+COMMENT ON TABLE {sys_func} IS 'Security - Functions (CONTROL)';
 
 
 --
--- Name: COLUMN sf.sf_name; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {sys_func}.{sys_func_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN sf.sf_name IS 'Function Name';
+COMMENT ON COLUMN {sys_func}.{sys_func_id} IS 'Function ID';
 
 
 --
--- Name: sf_sf_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN {sys_func}.{sys_func_name}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE sf_sf_id_seq
+COMMENT ON COLUMN {sys_func}.{sys_func_name} IS 'Function Name';
+
+
+--
+-- Name: {sys_func}_{sys_func_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE SEQUENCE {sys_func}_{sys_func_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5254,52 +5254,52 @@ CREATE SEQUENCE sf_sf_id_seq
     CACHE 1;
 
 
-ALTER TABLE sf_sf_id_seq OWNER TO postgres;
+ALTER TABLE {sys_func}_{sys_func_id}_seq OWNER TO postgres;
 
 --
--- Name: sf_sf_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {sys_func}_{sys_func_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE sf_sf_id_seq OWNED BY sf.sf_id;
+ALTER SEQUENCE {sys_func}_{sys_func_id}_seq OWNED BY {sys_func}.{sys_func_id};
 
 
 --
--- Name: sm; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {menu}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE sm (
-    sm_id_auto bigint NOT NULL,
-    sm_utype character(1) DEFAULT 'S'::bpchar NOT NULL,
-    sm_id bigint NOT NULL,
-    sm_sts character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
-    sm_id_parent bigint,
-    sm_name character varying(30) NOT NULL,
-    sm_seq integer,
-    sm_desc character varying(255) NOT NULL,
-    sm_descl text,
-    sm_descvl text,
-    sm_cmd character varying(255),
-    sm_image character varying(255),
-    sm_snotes character varying(255),
-    sm_subcmd character varying(255),
-    CONSTRAINT ck_sm_sm_utype CHECK ((sm_utype = ANY (ARRAY['S'::bpchar, 'C'::bpchar])))
+CREATE TABLE {menu} (
+    {menu_id_auto} bigint NOT NULL,
+    {menu_group} character(1) DEFAULT 'S'::bpchar NOT NULL,
+    {menu_id} bigint NOT NULL,
+    {menu_sts} character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    {menu_id_parent} bigint,
+    {menu_name} character varying(30) NOT NULL,
+    {menu_seq} integer,
+    {menu_desc} character varying(255) NOT NULL,
+    {menu_desc_ext} text,
+    {menu_desc_ext2} text,
+    {menu_cmd} character varying(255),
+    {menu_image} character varying(255),
+    {menu_snotes} character varying(255),
+    {menu_subcmd} character varying(255),
+    CONSTRAINT ck_{menu}_{menu_group} CHECK (({menu_group} = ANY (ARRAY['S'::bpchar, 'C'::bpchar])))
 );
 
 
-ALTER TABLE sm OWNER TO postgres;
+ALTER TABLE {menu} OWNER TO postgres;
 
 --
--- Name: TABLE sm; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {menu}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE sm IS 'Security - Menu Items (CONTROL)';
+COMMENT ON TABLE {menu} IS 'Security - Menu Items (CONTROL)';
 
 
 --
--- Name: sm_sm_id_auto_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {menu}_{menu_id_auto}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE sm_sm_id_auto_seq
+CREATE SEQUENCE {menu}_{menu_id_auto}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5307,41 +5307,41 @@ CREATE SEQUENCE sm_sm_id_auto_seq
     CACHE 1;
 
 
-ALTER TABLE sm_sm_id_auto_seq OWNER TO postgres;
+ALTER TABLE {menu}_{menu_id_auto}_seq OWNER TO postgres;
 
 --
--- Name: sm_sm_id_auto_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {menu}_{menu_id_auto}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE sm_sm_id_auto_seq OWNED BY sm.sm_id_auto;
+ALTER SEQUENCE {menu}_{menu_id_auto}_seq OWNED BY {menu}.{menu_id_auto};
 
 
 --
--- Name: spef; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE spef (
-    pe_id bigint NOT NULL,
-    spef_snotes character varying(255),
-    spef_id bigint NOT NULL,
-    sf_name character varying(16) NOT NULL
+CREATE TABLE {sys_user_func} (
+    {sys_user_id} bigint NOT NULL,
+    {sys_user_func_snotes} character varying(255),
+    {sys_user_func_id} bigint NOT NULL,
+    {sys_func_name} character varying(16) NOT NULL
 );
 
 
-ALTER TABLE spef OWNER TO postgres;
+ALTER TABLE {sys_user_func} OWNER TO postgres;
 
 --
--- Name: TABLE spef; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {sys_user_func}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE spef IS 'Security - Personnel Functions (CONTROL)';
+COMMENT ON TABLE {sys_user_func} IS 'Security - Personnel Functions (CONTROL)';
 
 
 --
--- Name: spef_spef_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}_{sys_user_func_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE spef_spef_id_seq
+CREATE SEQUENCE {sys_user_func}_{sys_user_func_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5349,41 +5349,41 @@ CREATE SEQUENCE spef_spef_id_seq
     CACHE 1;
 
 
-ALTER TABLE spef_spef_id_seq OWNER TO postgres;
+ALTER TABLE {sys_user_func}_{sys_user_func_id}_seq OWNER TO postgres;
 
 --
--- Name: spef_spef_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}_{sys_user_func_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE spef_spef_id_seq OWNED BY spef.spef_id;
+ALTER SEQUENCE {sys_user_func}_{sys_user_func_id}_seq OWNED BY {sys_user_func}.{sys_user_func_id};
 
 
 --
--- Name: sper; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE sper (
-    pe_id bigint NOT NULL,
-    sper_snotes character varying(255),
-    sper_id bigint NOT NULL,
-    sr_name character varying(16) NOT NULL
+CREATE TABLE {sys_user_role} (
+    {sys_user_id} bigint NOT NULL,
+    {sys_user_role_snotes} character varying(255),
+    {sys_user_role_id} bigint NOT NULL,
+    {sys_role_name} character varying(16) NOT NULL
 );
 
 
-ALTER TABLE sper OWNER TO postgres;
+ALTER TABLE {sys_user_role} OWNER TO postgres;
 
 --
--- Name: TABLE sper; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {sys_user_role}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE sper IS 'Security - Personnel Roles (CONTROL)';
+COMMENT ON TABLE {sys_user_role} IS 'Security - Personnel Roles (CONTROL)';
 
 
 --
--- Name: sper_sper_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}_{sys_user_role_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE sper_sper_id_seq
+CREATE SEQUENCE {sys_user_role}_{sys_user_role_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5391,45 +5391,45 @@ CREATE SEQUENCE sper_sper_id_seq
     CACHE 1;
 
 
-ALTER TABLE sper_sper_id_seq OWNER TO postgres;
+ALTER TABLE {sys_user_role}_{sys_user_role_id}_seq OWNER TO postgres;
 
 --
--- Name: sper_sper_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}_{sys_user_role_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE sper_sper_id_seq OWNED BY sper.sper_id;
+ALTER SEQUENCE {sys_user_role}_{sys_user_role_id}_seq OWNED BY {sys_user_role}.{sys_user_role_id};
 
 
 --
--- Name: sr; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {sys_role}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE sr (
-    sr_id bigint NOT NULL,
-    sr_seq smallint NOT NULL,
-    sr_sts character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
-    sr_name character varying(16) NOT NULL,
-    sr_desc character varying(255) NOT NULL,
-    sr_snotes character varying(255),
-    sr_code character varying(50),
-    sr_attrib character varying(50)
+CREATE TABLE {sys_role} (
+    {sys_role_id} bigint NOT NULL,
+    {sys_role_seq} smallint NOT NULL,
+    {sys_role_sts} character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    {sys_role_name} character varying(16) NOT NULL,
+    {sys_role_desc} character varying(255) NOT NULL,
+    {sys_role_snotes} character varying(255),
+    {sys_role_code} character varying(50),
+    {sys_role_attrib} character varying(50)
 );
 
 
-ALTER TABLE sr OWNER TO postgres;
+ALTER TABLE {sys_role} OWNER TO postgres;
 
 --
--- Name: TABLE sr; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {sys_role}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE sr IS 'Security - Roles (CONTROL)';
+COMMENT ON TABLE {sys_role} IS 'Security - Roles (CONTROL)';
 
 
 --
--- Name: sr_sr_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {sys_role}_{sys_role_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE sr_sr_id_seq
+CREATE SEQUENCE {sys_role}_{sys_role_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5437,41 +5437,41 @@ CREATE SEQUENCE sr_sr_id_seq
     CACHE 1;
 
 
-ALTER TABLE sr_sr_id_seq OWNER TO postgres;
+ALTER TABLE {sys_role}_{sys_role_id}_seq OWNER TO postgres;
 
 --
--- Name: sr_sr_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {sys_role}_{sys_role_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE sr_sr_id_seq OWNED BY sr.sr_id;
+ALTER SEQUENCE {sys_role}_{sys_role_id}_seq OWNED BY {sys_role}.{sys_role_id};
 
 
 --
--- Name: srm; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {sys_menu_role}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE srm (
-    sm_id bigint NOT NULL,
-    srm_snotes character varying(255),
-    srm_id bigint NOT NULL,
-    sr_name character varying(16) NOT NULL
+CREATE TABLE {sys_menu_role} (
+    {menu_id} bigint NOT NULL,
+    {sys_menu_role_snotes} character varying(255),
+    {sys_menu_role_id} bigint NOT NULL,
+    {sys_role_name} character varying(16) NOT NULL
 );
 
 
-ALTER TABLE srm OWNER TO postgres;
+ALTER TABLE {sys_menu_role} OWNER TO postgres;
 
 --
--- Name: TABLE srm; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {sys_menu_role}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE srm IS 'Security - Role Menu Items (CONTROL)';
+COMMENT ON TABLE {sys_menu_role} IS 'Security - Role Menu Items (CONTROL)';
 
 
 --
--- Name: srm_srm_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {sys_menu_role}_{sys_menu_role_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE srm_srm_id_seq
+CREATE SEQUENCE {sys_menu_role}_{sys_menu_role_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5479,49 +5479,49 @@ CREATE SEQUENCE srm_srm_id_seq
     CACHE 1;
 
 
-ALTER TABLE srm_srm_id_seq OWNER TO postgres;
+ALTER TABLE {sys_menu_role}_{sys_menu_role_id}_seq OWNER TO postgres;
 
 --
--- Name: srm_srm_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {sys_menu_role}_{sys_menu_role_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE srm_srm_id_seq OWNED BY srm.srm_id;
+ALTER SEQUENCE {sys_menu_role}_{sys_menu_role_id}_seq OWNED BY {sys_menu_role}.{sys_menu_role_id};
 
 
 --
--- Name: txt; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {txt}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE txt (
-    txt_id bigint NOT NULL,
-    txt_process character varying(32) NOT NULL,
-    txt_attrib character varying(32) NOT NULL,
-    txt_type character varying(8) DEFAULT 'TEXT'::character varying NOT NULL,
-    txt_tval text,
-    txt_val text,
-    txt_bcc character varying(255),
-    txt_desc character varying(255),
-    txt_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    txt_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    txt_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    txt_mu character varying(20) DEFAULT mycuser() NOT NULL
+CREATE TABLE {txt} (
+    {txt_id} bigint NOT NULL,
+    {txt_process} character varying(32) NOT NULL,
+    {txt_attrib} character varying(32) NOT NULL,
+    {txt_type} character varying(8) DEFAULT 'TEXT'::character varying NOT NULL,
+    {txt_title} text,
+    {txt_body} text,
+    {txt_bcc} character varying(255),
+    {txt_desc} character varying(255),
+    {txt_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {txt_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {txt_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {txt_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL
 );
 
 
-ALTER TABLE txt OWNER TO postgres;
+ALTER TABLE {txt} OWNER TO postgres;
 
 --
--- Name: TABLE txt; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {txt}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE txt IS 'String Process Parameters (CONTROL)';
+COMMENT ON TABLE {txt} IS 'String Process Parameters (CONTROL)';
 
 
 --
--- Name: txt_txt_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {txt}_{txt_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE txt_txt_id_seq
+CREATE SEQUENCE {txt}_{txt_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5529,13 +5529,13 @@ CREATE SEQUENCE txt_txt_id_seq
     CACHE 1;
 
 
-ALTER TABLE txt_txt_id_seq OWNER TO postgres;
+ALTER TABLE {txt}_{txt_id}_seq OWNER TO postgres;
 
 --
--- Name: txt_txt_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {txt}_{txt_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE txt_txt_id_seq OWNED BY txt.txt_id;
+ALTER SEQUENCE {txt}_{txt_id}_seq OWNED BY {txt}.{txt_id};
 
 
 --
@@ -5543,20 +5543,20 @@ ALTER SEQUENCE txt_txt_id_seq OWNED BY txt.txt_id;
 --
 
 CREATE TABLE ucod (
-    ucod_id bigint NOT NULL,
-    codseq smallint,
-    codeval character varying(8) NOT NULL,
-    codetxt character varying(50),
-    codecode character varying(50),
-    codetdt date,
-    codetcm character varying(50),
-    cod_etstmp timestamp without time zone DEFAULT mynow(),
-    cod_eu character varying(20) DEFAULT mycuser(),
-    cod_mtstmp timestamp without time zone DEFAULT mynow(),
-    cod_mu character varying(20) DEFAULT mycuser(),
-    cod_snotes character varying(255),
-    cod_notes character varying(255),
-    codeattrib character varying(50)
+    {code_sys_id} bigint NOT NULL,
+    {code_seq} smallint,
+    {code_val} character varying(8) NOT NULL,
+    {code_txt} character varying(50),
+    {code_code} character varying(50),
+    {code_end_dt} date,
+    {code_end_reason} character varying(50),
+    {code_etstmp} timestamp without time zone DEFAULT {my_now}(),
+    {code_euser} character varying(20) DEFAULT {my_db_user}(),
+    {code_mtstmp} timestamp without time zone DEFAULT {my_now}(),
+    {code_muser} character varying(20) DEFAULT {my_db_user}(),
+    {code_snotes} character varying(255),
+    {code_notes} character varying(255),
+    {code_attrib} character varying(50)
 );
 
 
@@ -5570,108 +5570,108 @@ COMMENT ON TABLE ucod IS 'System Codes - TEMPLATE';
 
 
 --
--- Name: COLUMN ucod.ucod_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod.{code_sys_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.ucod_id IS 'Code Value ID';
-
-
---
--- Name: COLUMN ucod.codseq; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.codseq IS 'Code Value Sequence';
+COMMENT ON COLUMN ucod.{code_sys_id} IS 'Code Value ID';
 
 
 --
--- Name: COLUMN ucod.codeval; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod.{code_seq}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.codeval IS 'Code Value';
-
-
---
--- Name: COLUMN ucod.codetxt; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.codetxt IS 'Code Value Description';
+COMMENT ON COLUMN ucod.{code_seq} IS 'Code Value Sequence';
 
 
 --
--- Name: COLUMN ucod.codecode; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod.{code_val}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.codecode IS 'Code Value Additional Code';
-
-
---
--- Name: COLUMN ucod.codetdt; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.codetdt IS 'Code Value Termination Date';
+COMMENT ON COLUMN ucod.{code_val} IS 'Code Value';
 
 
 --
--- Name: COLUMN ucod.codetcm; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod.{code_txt}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.codetcm IS 'Code Value Termination Comment';
-
-
---
--- Name: COLUMN ucod.cod_etstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.cod_etstmp IS 'Code Value Entry Timestamp';
+COMMENT ON COLUMN ucod.{code_txt} IS 'Code Value Description';
 
 
 --
--- Name: COLUMN ucod.cod_eu; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod.{code_code}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.cod_eu IS 'Code Value Entry User';
-
-
---
--- Name: COLUMN ucod.cod_mtstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.cod_mtstmp IS 'Code Value Last Modification Timestamp';
+COMMENT ON COLUMN ucod.{code_code} IS 'Code Value Additional Code';
 
 
 --
--- Name: COLUMN ucod.cod_mu; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod.{code_end_dt}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.cod_mu IS 'Code Value Last Modification User';
-
-
---
--- Name: COLUMN ucod.cod_snotes; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.cod_snotes IS 'Code Value System Notes';
+COMMENT ON COLUMN ucod.{code_end_dt} IS 'Code Value Termination Date';
 
 
 --
--- Name: COLUMN ucod.cod_notes; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod.{code_end_reason}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.cod_notes IS 'Code Value Notes';
-
-
---
--- Name: COLUMN ucod.codeattrib; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.codeattrib IS 'Code Value Additional Attribute';
+COMMENT ON COLUMN ucod.{code_end_reason} IS 'Code Value Termination Comment';
 
 
 --
--- Name: ucod2_ucod2_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod.{code_etstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE ucod2_ucod2_id_seq
+COMMENT ON COLUMN ucod.{code_etstmp} IS 'Code Value Entry Timestamp';
+
+
+--
+-- Name: COLUMN ucod.{code_euser}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod.{code_euser} IS 'Code Value Entry User';
+
+
+--
+-- Name: COLUMN ucod.{code_mtstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod.{code_mtstmp} IS 'Code Value Last Modification Timestamp';
+
+
+--
+-- Name: COLUMN ucod.{code_muser}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod.{code_muser} IS 'Code Value Last Modification User';
+
+
+--
+-- Name: COLUMN ucod.{code_snotes}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod.{code_snotes} IS 'Code Value System Notes';
+
+
+--
+-- Name: COLUMN ucod.{code_notes}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod.{code_notes} IS 'Code Value Notes';
+
+
+--
+-- Name: COLUMN ucod.{code_attrib}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod.{code_attrib} IS 'Code Value Additional Attribute';
+
+
+--
+-- Name: ucod2_{code2_sys_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE SEQUENCE ucod2_{code2_sys_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5679,28 +5679,28 @@ CREATE SEQUENCE ucod2_ucod2_id_seq
     CACHE 1;
 
 
-ALTER TABLE ucod2_ucod2_id_seq OWNER TO postgres;
+ALTER TABLE ucod2_{code2_sys_id}_seq OWNER TO postgres;
 
 --
 -- Name: ucod2; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
 CREATE TABLE ucod2 (
-    ucod2_id bigint DEFAULT nextval('ucod2_ucod2_id_seq'::regclass) NOT NULL,
-    codseq smallint,
-    codeval1 character varying(8) NOT NULL,
-    codeval2 character varying(8) NOT NULL,
-    codetxt character varying(50),
-    codecode character varying(50),
-    codetdt date,
-    codetcm character varying(50),
-    cod_etstmp timestamp without time zone DEFAULT mynow(),
-    cod_eu character varying(20) DEFAULT mycuser(),
-    cod_mtstmp timestamp without time zone DEFAULT mynow(),
-    cod_mu character varying(20) DEFAULT mycuser(),
-    cod_snotes character varying(255),
-    cod_notes character varying(255),
-    codeattrib character varying(50)
+    {code2_sys_id} bigint DEFAULT nextval('ucod2_{code2_sys_id}_seq'::regclass) NOT NULL,
+    {code_seq} smallint,
+    {code_val1} character varying(8) NOT NULL,
+    {code_va12} character varying(8) NOT NULL,
+    {code_txt} character varying(50),
+    {code_code} character varying(50),
+    {code_end_dt} date,
+    {code_end_reason} character varying(50),
+    {code_etstmp} timestamp without time zone DEFAULT {my_now}(),
+    {code_euser} character varying(20) DEFAULT {my_db_user}(),
+    {code_mtstmp} timestamp without time zone DEFAULT {my_now}(),
+    {code_muser} character varying(20) DEFAULT {my_db_user}(),
+    {code_snotes} character varying(255),
+    {code_notes} character varying(255),
+    {code_attrib} character varying(50)
 );
 
 
@@ -5714,185 +5714,185 @@ COMMENT ON TABLE ucod2 IS 'System Codes 2 - TEMPLATE';
 
 
 --
--- Name: COLUMN ucod2.ucod2_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod2.{code2_sys_id}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.ucod2_id IS 'Code Value ID';
-
-
---
--- Name: COLUMN ucod2.codseq; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.codseq IS 'Code Value Sequence';
+COMMENT ON COLUMN ucod2.{code2_sys_id} IS 'Code Value ID';
 
 
 --
--- Name: COLUMN ucod2.codeval1; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod2.{code_seq}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.codeval1 IS 'Code Value 1';
-
-
---
--- Name: COLUMN ucod2.codeval2; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.codeval2 IS 'Code Value 2';
+COMMENT ON COLUMN ucod2.{code_seq} IS 'Code Value Sequence';
 
 
 --
--- Name: COLUMN ucod2.codetxt; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod2.{code_val1}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.codetxt IS 'Code Value Description';
-
-
---
--- Name: COLUMN ucod2.codecode; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.codecode IS 'Code Value Additional Code';
+COMMENT ON COLUMN ucod2.{code_val1} IS 'Code Value 1';
 
 
 --
--- Name: COLUMN ucod2.codetdt; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod2.{code_va12}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.codetdt IS 'Code Value Termination Date';
-
-
---
--- Name: COLUMN ucod2.codetcm; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.codetcm IS 'Code Value Termination Comment';
+COMMENT ON COLUMN ucod2.{code_va12} IS 'Code Value 2';
 
 
 --
--- Name: COLUMN ucod2.cod_etstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod2.{code_txt}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.cod_etstmp IS 'Code Value Entry Timestamp';
-
-
---
--- Name: COLUMN ucod2.cod_eu; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.cod_eu IS 'Code Value Entry User';
+COMMENT ON COLUMN ucod2.{code_txt} IS 'Code Value Description';
 
 
 --
--- Name: COLUMN ucod2.cod_mtstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod2.{code_code}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.cod_mtstmp IS 'Code Value Last Modification Timestamp';
-
-
---
--- Name: COLUMN ucod2.cod_mu; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.cod_mu IS 'Code Value Last Modification User';
+COMMENT ON COLUMN ucod2.{code_code} IS 'Code Value Additional Code';
 
 
 --
--- Name: COLUMN ucod2.cod_snotes; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod2.{code_end_dt}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.cod_snotes IS 'Code Value System Notes';
-
-
---
--- Name: COLUMN ucod2.cod_notes; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.cod_notes IS 'Code Value Notes';
+COMMENT ON COLUMN ucod2.{code_end_dt} IS 'Code Value Termination Date';
 
 
 --
--- Name: COLUMN ucod2.codeattrib; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod2.{code_end_reason}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.codeattrib IS 'Code Value Additional Attribute';
+COMMENT ON COLUMN ucod2.{code_end_reason} IS 'Code Value Termination Comment';
 
 
 --
--- Name: ucod2_country_state; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN ucod2.{code_etstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod2_country_state (
+COMMENT ON COLUMN ucod2.{code_etstmp} IS 'Code Value Entry Timestamp';
+
+
+--
+-- Name: COLUMN ucod2.{code_euser}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod2.{code_euser} IS 'Code Value Entry User';
+
+
+--
+-- Name: COLUMN ucod2.{code_mtstmp}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod2.{code_mtstmp} IS 'Code Value Last Modification Timestamp';
+
+
+--
+-- Name: COLUMN ucod2.{code_muser}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod2.{code_muser} IS 'Code Value Last Modification User';
+
+
+--
+-- Name: COLUMN ucod2.{code_snotes}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod2.{code_snotes} IS 'Code Value System Notes';
+
+
+--
+-- Name: COLUMN ucod2.{code_notes}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod2.{code_notes} IS 'Code Value Notes';
+
+
+--
+-- Name: COLUMN ucod2.{code_attrib}; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN ucod2.{code_attrib} IS 'Code Value Additional Attribute';
+
+
+--
+-- Name: {code2_state}; Type: TABLE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE TABLE {code2_state} (
 )
 INHERITS (ucod2);
 
 
-ALTER TABLE ucod2_country_state OWNER TO postgres;
+ALTER TABLE {code2_state} OWNER TO postgres;
 
 --
--- Name: TABLE ucod2_country_state; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code2_state}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod2_country_state IS 'System Codes 2 - Country / State';
+COMMENT ON TABLE {code2_state} IS 'System Codes 2 - Country / State';
 
 
 --
--- Name: ucod2_gpp_process_attrib_v; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {code2_param_app_attrib}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW ucod2_gpp_process_attrib_v AS
- SELECT NULL::smallint AS codseq,
-    ppd.ppd_process AS codeval1,
-    ppd.ppd_attrib AS codeval2,
-    ppd.ppd_desc AS codetxt,
-    NULL::character varying(50) AS codecode,
-    NULL::date AS codetdt,
-    NULL::character varying(50) AS codetcm,
-    NULL::timestamp without time zone AS cod_etstmp,
-    NULL::character varying(20) AS cod_eu,
-    NULL::timestamp without time zone AS cod_mtstmp,
-    NULL::character varying(20) AS cod_mu,
-    NULL::character varying(255) AS cod_snotes,
-    NULL::character varying(255) AS cod_notes
-   FROM ppd
-  WHERE ppd.ppd_gpp;
+CREATE VIEW {code2_param_app_attrib} AS
+ SELECT NULL::smallint AS {code_seq},
+    {param}.{param_process} AS {code_val1},
+    {param}.{param_attrib} AS {code_va12},
+    {param}.{param_desc} AS {code_txt},
+    NULL::character varying(50) AS {code_code},
+    NULL::date AS {code_end_dt},
+    NULL::character varying(50) AS {code_end_reason},
+    NULL::timestamp without time zone AS {code_etstmp},
+    NULL::character varying(20) AS {code_euser},
+    NULL::timestamp without time zone AS {code_mtstmp},
+    NULL::character varying(20) AS {code_muser},
+    NULL::character varying(255) AS {code_snotes},
+    NULL::character varying(255) AS {code_notes}
+   FROM {param}
+  WHERE {param}.{is_param_app};
 
 
-ALTER TABLE ucod2_gpp_process_attrib_v OWNER TO postgres;
+ALTER TABLE {code2_param_app_attrib} OWNER TO postgres;
 
 --
--- Name: ucod2_h; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code2_sys}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod2_h (
-    codename character varying(16) NOT NULL,
-    codemean character varying(128),
-    codecodemean character varying(128),
-    cod_h_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    cod_h_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    cod_h_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    cod_h_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    cod_snotes character varying(255),
-    codeattribmean character varying(128),
-    codeschema character varying(16),
-    ucod2_h_id bigint NOT NULL
+CREATE TABLE {code2_sys} (
+    {code_name} character varying(16) NOT NULL,
+    {code_desc} character varying(128),
+    {code_code_desc} character varying(128),
+    {code_h_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {code_h_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {code_h_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {code_h_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {code_snotes} character varying(255),
+    {code_attrib_desc} character varying(128),
+    {code_schema} character varying(16),
+    {code2_sys_h_id} bigint NOT NULL
 );
 
 
-ALTER TABLE ucod2_h OWNER TO postgres;
+ALTER TABLE {code2_sys} OWNER TO postgres;
 
 --
--- Name: TABLE ucod2_h; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code2_sys}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod2_h IS 'System Codes 2 Header (CONTROL)';
+COMMENT ON TABLE {code2_sys} IS 'System Codes 2 Header (CONTROL)';
 
 
 --
--- Name: ucod2_h_ucod2_h_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {code2_sys}_{code2_sys_h_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE ucod2_h_ucod2_h_id_seq
+CREATE SEQUENCE {code2_sys}_{code2_sys_h_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5900,203 +5900,203 @@ CREATE SEQUENCE ucod2_h_ucod2_h_id_seq
     CACHE 1;
 
 
-ALTER TABLE ucod2_h_ucod2_h_id_seq OWNER TO postgres;
+ALTER TABLE {code2_sys}_{code2_sys_h_id}_seq OWNER TO postgres;
 
 --
--- Name: ucod2_h_ucod2_h_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {code2_sys}_{code2_sys_h_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE ucod2_h_ucod2_h_id_seq OWNED BY ucod2_h.ucod2_h_id;
+ALTER SEQUENCE {code2_sys}_{code2_sys_h_id}_seq OWNED BY {code2_sys}.{code2_sys_h_id};
 
 
 --
--- Name: ucod2_ppp_process_attrib_v; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {code2_param_user_attrib}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW ucod2_ppp_process_attrib_v AS
- SELECT NULL::smallint AS codseq,
-    ppd.ppd_process AS codeval1,
-    ppd.ppd_attrib AS codeval2,
-    ppd.ppd_desc AS codetxt,
-    NULL::character varying(50) AS codecode,
-    NULL::date AS codetdt,
-    NULL::character varying(50) AS codetcm,
-    NULL::timestamp without time zone AS cod_etstmp,
-    NULL::character varying(20) AS cod_eu,
-    NULL::timestamp without time zone AS cod_mtstmp,
-    NULL::character varying(20) AS cod_mu,
-    NULL::character varying(255) AS cod_snotes,
-    NULL::character varying(255) AS cod_notes
-   FROM ppd
-  WHERE ppd.ppd_ppp;
+CREATE VIEW {code2_param_user_attrib} AS
+ SELECT NULL::smallint AS {code_seq},
+    {param}.{param_process} AS {code_val1},
+    {param}.{param_attrib} AS {code_va12},
+    {param}.{param_desc} AS {code_txt},
+    NULL::character varying(50) AS {code_code},
+    NULL::date AS {code_end_dt},
+    NULL::character varying(50) AS {code_end_reason},
+    NULL::timestamp without time zone AS {code_etstmp},
+    NULL::character varying(20) AS {code_euser},
+    NULL::timestamp without time zone AS {code_mtstmp},
+    NULL::character varying(20) AS {code_muser},
+    NULL::character varying(255) AS {code_snotes},
+    NULL::character varying(255) AS {code_notes}
+   FROM {param}
+  WHERE {param}.{is_param_user};
 
 
-ALTER TABLE ucod2_ppp_process_attrib_v OWNER TO postgres;
-
---
--- Name: ucod2_xpp_process_attrib_v; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW ucod2_xpp_process_attrib_v AS
- SELECT NULL::smallint AS codseq,
-    ppd.ppd_process AS codeval1,
-    ppd.ppd_attrib AS codeval2,
-    ppd.ppd_desc AS codetxt,
-    NULL::character varying(50) AS codecode,
-    NULL::date AS codetdt,
-    NULL::character varying(50) AS codetcm,
-    NULL::timestamp without time zone AS cod_etstmp,
-    NULL::character varying(20) AS cod_eu,
-    NULL::timestamp without time zone AS cod_mtstmp,
-    NULL::character varying(20) AS cod_mu,
-    NULL::character varying(255) AS cod_snotes,
-    NULL::character varying(255) AS cod_notes
-   FROM ppd
-  WHERE ppd.ppd_xpp;
-
-
-ALTER TABLE ucod2_xpp_process_attrib_v OWNER TO postgres;
+ALTER TABLE {code2_param_user_attrib} OWNER TO postgres;
 
 --
--- Name: ucod_ac; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code2_param_sys_attrib}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_ac (
+CREATE VIEW {code2_param_sys_attrib} AS
+ SELECT NULL::smallint AS {code_seq},
+    {param}.{param_process} AS {code_val1},
+    {param}.{param_attrib} AS {code_va12},
+    {param}.{param_desc} AS {code_txt},
+    NULL::character varying(50) AS {code_code},
+    NULL::date AS {code_end_dt},
+    NULL::character varying(50) AS {code_end_reason},
+    NULL::timestamp without time zone AS {code_etstmp},
+    NULL::character varying(20) AS {code_euser},
+    NULL::timestamp without time zone AS {code_mtstmp},
+    NULL::character varying(20) AS {code_muser},
+    NULL::character varying(255) AS {code_snotes},
+    NULL::character varying(255) AS {code_notes}
+   FROM {param}
+  WHERE {param}.{is_param_sys};
+
+
+ALTER TABLE {code2_param_sys_attrib} OWNER TO postgres;
+
+--
+-- Name: {code_ac}; Type: TABLE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE TABLE {code_ac} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_ac OWNER TO postgres;
+ALTER TABLE {code_ac} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_ac; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_ac}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_ac IS 'System Codes - Active / Closed';
+COMMENT ON TABLE {code_ac} IS 'System Codes - Active / Closed';
 
 
 --
--- Name: ucod_ac1; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_ac1}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_ac1 (
+CREATE TABLE {code_ac1} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_ac1 OWNER TO postgres;
+ALTER TABLE {code_ac1} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_ac1; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_ac1}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_ac1 IS 'System Codes - A / C';
+COMMENT ON TABLE {code_ac1} IS 'System Codes - A / C';
 
 
 --
--- Name: ucod_ahc; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_ahc}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_ahc (
+CREATE TABLE {code_ahc} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_ahc OWNER TO postgres;
+ALTER TABLE {code_ahc} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_ahc; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_ahc}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_ahc IS 'System Codes - Active / Hold / Closed';
+COMMENT ON TABLE {code_ahc} IS 'System Codes - Active / Hold / Closed';
 
 
 --
--- Name: ucod_country; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_country}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_country (
+CREATE TABLE {code_country} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_country OWNER TO postgres;
+ALTER TABLE {code_country} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_country; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_country}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_country IS 'System Codes - Countries';
+COMMENT ON TABLE {code_country} IS 'System Codes - Countries';
 
 
 --
--- Name: ucod_d_scope; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_doc_scope}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_d_scope (
+CREATE TABLE {code_doc_scope} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_d_scope OWNER TO postgres;
+ALTER TABLE {code_doc_scope} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_d_scope; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_doc_scope}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_d_scope IS 'System Codes - Document Scope';
+COMMENT ON TABLE {code_doc_scope} IS 'System Codes - Document Scope';
 
 
 --
--- Name: ucod_gpp_process_v; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {code_param_app_process}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW ucod_gpp_process_v AS
- SELECT DISTINCT NULL::smallint AS codseq,
-    ppd.ppd_process AS codeval,
-    ppd.ppd_process AS codetxt,
-    NULL::text AS codecode,
-    NULL::date AS codetdt,
-    NULL::text AS codetcm
-   FROM ppd
-  WHERE ppd.ppd_gpp;
+CREATE VIEW {code_param_app_process} AS
+ SELECT DISTINCT NULL::smallint AS {code_seq},
+    {param}.{param_process} AS {code_val},
+    {param}.{param_process} AS {code_txt},
+    NULL::text AS {code_code},
+    NULL::date AS {code_end_dt},
+    NULL::text AS {code_end_reason}
+   FROM {param}
+  WHERE {param}.{is_param_app};
 
 
-ALTER TABLE ucod_gpp_process_v OWNER TO postgres;
+ALTER TABLE {code_param_app_process} OWNER TO postgres;
 
 --
--- Name: ucod_h; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_h (
-    codename character varying(16) NOT NULL,
-    codemean character varying(128),
-    codecodemean character varying(128),
-    cod_h_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    cod_h_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    cod_h_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    cod_h_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    cod_snotes character varying(255),
-    codeattribmean character varying(128),
-    codeschema character varying(16),
-    ucod_h_id bigint NOT NULL
+CREATE TABLE {code_sys} (
+    {code_name} character varying(16) NOT NULL,
+    {code_desc} character varying(128),
+    {code_code_desc} character varying(128),
+    {code_h_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {code_h_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {code_h_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {code_h_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {code_snotes} character varying(255),
+    {code_attrib_desc} character varying(128),
+    {code_schema} character varying(16),
+    {code_sys_h_id} bigint NOT NULL
 );
 
 
-ALTER TABLE ucod_h OWNER TO postgres;
+ALTER TABLE {code_sys} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_h; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_sys}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_h IS 'System Codes Header (CONTROL)';
+COMMENT ON TABLE {code_sys} IS 'System Codes Header (CONTROL)';
 
 
 --
--- Name: ucod_h_ucod_h_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys}_{code_sys_h_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE ucod_h_ucod_h_id_seq
+CREATE SEQUENCE {code_sys}_{code_sys_h_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -6104,145 +6104,145 @@ CREATE SEQUENCE ucod_h_ucod_h_id_seq
     CACHE 1;
 
 
-ALTER TABLE ucod_h_ucod_h_id_seq OWNER TO postgres;
+ALTER TABLE {code_sys}_{code_sys_h_id}_seq OWNER TO postgres;
 
 --
--- Name: ucod_h_ucod_h_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys}_{code_sys_h_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE ucod_h_ucod_h_id_seq OWNED BY ucod_h.ucod_h_id;
+ALTER SEQUENCE {code_sys}_{code_sys_h_id}_seq OWNED BY {code_sys}.{code_sys_h_id};
 
 
 --
--- Name: ucod_n_scope; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_note_scope}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_n_scope (
+CREATE TABLE {code_note_scope} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_n_scope OWNER TO postgres;
+ALTER TABLE {code_note_scope} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_n_scope; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_note_scope}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_n_scope IS 'System Codes - Note Scope';
+COMMENT ON TABLE {code_note_scope} IS 'System Codes - Note Scope';
 
 
 --
--- Name: ucod_n_type; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_note_type}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_n_type (
+CREATE TABLE {code_note_type} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_n_type OWNER TO postgres;
+ALTER TABLE {code_note_type} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_n_type; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_note_type}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_n_type IS 'System Codes - Note Type';
+COMMENT ON TABLE {code_note_type} IS 'System Codes - Note Type';
 
 
 --
--- Name: ucod_ppd_type; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_param_type}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_ppd_type (
+CREATE TABLE {code_param_type} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_ppd_type OWNER TO postgres;
+ALTER TABLE {code_param_type} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_ppd_type; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_param_type}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_ppd_type IS 'System Codes - Process Parameter Type';
+COMMENT ON TABLE {code_param_type} IS 'System Codes - Process Parameter Type';
 
 
 --
--- Name: ucod_ppp_process_v; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {code_param_user_process}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW ucod_ppp_process_v AS
- SELECT DISTINCT NULL::smallint AS codseq,
-    ppd.ppd_process AS codeval,
-    ppd.ppd_process AS codetxt,
-    NULL::text AS codecode,
-    NULL::date AS codetdt,
-    NULL::text AS codetcm
-   FROM ppd
-  WHERE ppd.ppd_ppp;
+CREATE VIEW {code_param_user_process} AS
+ SELECT DISTINCT NULL::smallint AS {code_seq},
+    {param}.{param_process} AS {code_val},
+    {param}.{param_process} AS {code_txt},
+    NULL::text AS {code_code},
+    NULL::date AS {code_end_dt},
+    NULL::text AS {code_end_reason}
+   FROM {param}
+  WHERE {param}.{is_param_user};
 
 
-ALTER TABLE ucod_ppp_process_v OWNER TO postgres;
+ALTER TABLE {code_param_user_process} OWNER TO postgres;
 
 --
--- Name: ucod_rqst_atype; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_task_action}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_rqst_atype (
+CREATE TABLE {code_task_action} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_rqst_atype OWNER TO postgres;
+ALTER TABLE {code_task_action} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_rqst_atype; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_task_action}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_rqst_atype IS 'System Codes - Request Type (CONTROL)';
+COMMENT ON TABLE {code_task_action} IS 'System Codes - Request Type (CONTROL)';
 
 
 --
--- Name: ucod_rqst_source; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_task_source}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_rqst_source (
+CREATE TABLE {code_task_source} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_rqst_source OWNER TO postgres;
+ALTER TABLE {code_task_source} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_rqst_source; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_task_source}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_rqst_source IS 'System Codes - Request Source (CONTROL)';
+COMMENT ON TABLE {code_task_source} IS 'System Codes - Request Source (CONTROL)';
 
 
 --
--- Name: ucod_txt_type; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_txt_type}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_txt_type (
+CREATE TABLE {code_txt_type} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_txt_type OWNER TO postgres;
+ALTER TABLE {code_txt_type} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_txt_type; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_txt_type}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_txt_type IS 'System Codes - Text Type (Control)';
+COMMENT ON TABLE {code_txt_type} IS 'System Codes - Text Type (Control)';
 
 
 --
--- Name: ucod_ucod_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: ucod_{code_sys_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE ucod_ucod_id_seq
+CREATE SEQUENCE ucod_{code_sys_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -6250,627 +6250,627 @@ CREATE SEQUENCE ucod_ucod_id_seq
     CACHE 1;
 
 
-ALTER TABLE ucod_ucod_id_seq OWNER TO postgres;
+ALTER TABLE ucod_{code_sys_id}_seq OWNER TO postgres;
 
 --
--- Name: ucod_ucod_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: ucod_{code_sys_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE ucod_ucod_id_seq OWNED BY ucod.ucod_id;
+ALTER SEQUENCE ucod_{code_sys_id}_seq OWNED BY ucod.{code_sys_id};
 
 
 --
--- Name: ucod_v_sts; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {code_version_sts}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod_v_sts (
+CREATE TABLE {code_version_sts} (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE ucod_v_sts OWNER TO postgres;
+ALTER TABLE {code_version_sts} OWNER TO postgres;
 
 --
--- Name: TABLE ucod_v_sts; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {code_version_sts}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod_v_sts IS 'System Codes - Version Status';
+COMMENT ON TABLE {code_version_sts} IS 'System Codes - Version Status';
 
 
 --
--- Name: ucod_xpp_process_v; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {code_param_sys_process}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW ucod_xpp_process_v AS
- SELECT DISTINCT NULL::smallint AS codseq,
-    ppd.ppd_process AS codeval,
-    ppd.ppd_process AS codetxt,
-    NULL::text AS codecode,
-    NULL::date AS codetdt,
-    NULL::text AS codetcm
-   FROM ppd
-  WHERE ppd.ppd_xpp;
+CREATE VIEW {code_param_sys_process} AS
+ SELECT DISTINCT NULL::smallint AS {code_seq},
+    {param}.{param_process} AS {code_val},
+    {param}.{param_process} AS {code_txt},
+    NULL::text AS {code_code},
+    NULL::date AS {code_end_dt},
+    NULL::text AS {code_end_reason}
+   FROM {param}
+  WHERE {param}.{is_param_sys};
 
 
-ALTER TABLE ucod_xpp_process_v OWNER TO postgres;
+ALTER TABLE {code_param_sys_process} OWNER TO postgres;
 
 --
--- Name: v; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {version}; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE v (
-    v_id bigint NOT NULL,
-    v_comp character varying(50) NOT NULL,
-    v_no_major integer DEFAULT 0 NOT NULL,
-    v_no_minor integer DEFAULT 0 NOT NULL,
-    v_no_build integer DEFAULT 0 NOT NULL,
-    v_no_rev integer DEFAULT 0 NOT NULL,
-    v_sts character varying(8) DEFAULT 'OK'::character varying NOT NULL,
-    v_note text,
-    v_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    v_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    v_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    v_mu character varying(20) DEFAULT mycuser() NOT NULL,
-    v_snotes character varying(255)
+CREATE TABLE {version} (
+    {version_id} bigint NOT NULL,
+    {version_component} character varying(50) NOT NULL,
+    {version_no_major} integer DEFAULT 0 NOT NULL,
+    {version_no_minor} integer DEFAULT 0 NOT NULL,
+    {version_no_build} integer DEFAULT 0 NOT NULL,
+    {version_no_rev} integer DEFAULT 0 NOT NULL,
+    {version_sts} character varying(8) DEFAULT 'OK'::character varying NOT NULL,
+    {version_note} text,
+    {version_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {version_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {version_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {version_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {version_snotes} character varying(255)
 );
 
 
-ALTER TABLE v OWNER TO postgres;
+ALTER TABLE {version} OWNER TO postgres;
 
 --
--- Name: TABLE v; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {version}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE v IS 'Versions (CONTROL)';
-
-
---
--- Name: v_audl_raw; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW v_audl_raw AS
- SELECT aud_h.aud_seq,
-    aud_h.c_id,
-    aud_h.e_id,
-    aud_h.table_name,
-    aud_h.table_id,
-    aud_h.aud_op,
-    aud_h.aud_u,
-    mycuser_fmt((aud_h.aud_u)::text) AS pe_name,
-    aud_h.db_k,
-    aud_h.aud_tstmp,
-    aud_h.ref_name,
-    aud_h.ref_id,
-    aud_h.subj,
-    aud_d.column_name,
-    aud_d.column_val
-   FROM (aud_h
-     LEFT JOIN aud_d ON ((aud_h.aud_seq = aud_d.aud_seq)));
-
-
-ALTER TABLE v_audl_raw OWNER TO postgres;
-
---
--- Name: v_cper_nostar; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW v_cper_nostar AS
- SELECT cper.pe_id,
-    cper.cper_snotes,
-    cper.cper_id,
-    cper.cr_name
-   FROM cper
-  WHERE ((cper.cr_name)::text <> 'C*'::text);
-
-
-ALTER TABLE v_cper_nostar OWNER TO postgres;
-
--- Rule: v_cper_nostar_delete ON {schema}.v_cper_nostar
-
-CREATE OR REPLACE RULE v_cper_nostar_delete AS
-    ON DELETE TO {schema}.v_cper_nostar DO INSTEAD  DELETE FROM {schema}.cper
-  WHERE cper.cper_id = old.cper_id
-  RETURNING cper.pe_id,
-    cper.cper_snotes,
-    cper.cper_id,
-    cper.cr_name;
-
--- Rule: v_cper_nostar_insert ON {schema}.v_cper_nostar
-
-CREATE OR REPLACE RULE v_cper_nostar_insert AS
-    ON INSERT TO {schema}.v_cper_nostar DO INSTEAD  INSERT INTO {schema}.cper (pe_id, cper_snotes, cr_name)
-  VALUES (new.pe_id, new.cper_snotes, new.cr_name)
-  RETURNING cper.pe_id,
-    cper.cper_snotes,
-    cper.cper_id,
-    cper.cr_name;
-
--- Rule: v_cper_nostar_update ON {schema}.v_cper_nostar
-
-CREATE OR REPLACE RULE v_cper_nostar_update AS
-    ON UPDATE TO {schema}.v_cper_nostar DO INSTEAD  UPDATE {schema}.cper SET pe_id = new.pe_id, cper_snotes = new.cper_snotes, cr_name = new.cr_name
-  WHERE cper.cper_id = old.cper_id
-  RETURNING cper.pe_id,
-    cper.cper_snotes,
-    cper.cper_id,
-    cper.cr_name;
+COMMENT ON TABLE {version} IS 'Versions (CONTROL)';
 
 
 --
--- Name: v_crmsel; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {v_audit_detail}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW v_crmsel AS
- SELECT crm.crm_id,
-    COALESCE(dual.dual_varchar50, ''::character varying) AS new_cr_name,
-    dual.dual_bigint AS new_sm_id,
+CREATE VIEW {v_audit_detail} AS
+ SELECT {audit}.{audit_seq},
+    {audit}.{cust_id},
+    {audit}.{item_id},
+    {audit}.{audit_table_name},
+    {audit}.{audit_table_id},
+    {audit}.{audit_op},
+    {audit}.{audit_user},
+    {my_db_user_fmt}(({audit}.{audit_user})::text) AS {sys_user_name},
+    {audit}.{db_id},
+    {audit}.{audit_tstmp},
+    {audit}.{audit_ref_name},
+    {audit}.{audit_ref_id},
+    {audit}.{audit_subject},
+    {audit_detail}.{audit_column_name},
+    {audit_detail}.{audit_column_val}
+   FROM ({audit}
+     LEFT JOIN {audit_detail} ON (({audit}.{audit_seq} = {audit_detail}.{audit_seq})));
+
+
+ALTER TABLE {v_audit_detail} OWNER TO postgres;
+
+--
+-- Name: {v_cust_user_nostar}; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW {v_cust_user_nostar} AS
+ SELECT {cust_user_role}.{sys_user_id},
+    {cust_user_role}.{cust_user_role_snotes},
+    {cust_user_role}.{cust_user_role_id},
+    {cust_user_role}.{cust_role_name}
+   FROM {cust_user_role}
+  WHERE (({cust_user_role}.{cust_role_name})::text <> 'C*'::text);
+
+
+ALTER TABLE {v_cust_user_nostar} OWNER TO postgres;
+
+-- Rule: {v_cust_user_nostar}_delete ON {schema}.{v_cust_user_nostar}
+
+CREATE OR REPLACE RULE {v_cust_user_nostar}_delete AS
+    ON DELETE TO {schema}.{v_cust_user_nostar} DO INSTEAD  DELETE FROM {schema}.{cust_user_role}
+  WHERE {cust_user_role}.{cust_user_role_id} = old.{cust_user_role_id}
+  RETURNING {cust_user_role}.{sys_user_id},
+    {cust_user_role}.{cust_user_role_snotes},
+    {cust_user_role}.{cust_user_role_id},
+    {cust_user_role}.{cust_role_name};
+
+-- Rule: {v_cust_user_nostar}_insert ON {schema}.{v_cust_user_nostar}
+
+CREATE OR REPLACE RULE {v_cust_user_nostar}_insert AS
+    ON INSERT TO {schema}.{v_cust_user_nostar} DO INSTEAD  INSERT INTO {schema}.{cust_user_role} ({sys_user_id}, {cust_user_role_snotes}, {cust_role_name})
+  VALUES (new.{sys_user_id}, new.{cust_user_role_snotes}, new.{cust_role_name})
+  RETURNING {cust_user_role}.{sys_user_id},
+    {cust_user_role}.{cust_user_role_snotes},
+    {cust_user_role}.{cust_user_role_id},
+    {cust_user_role}.{cust_role_name};
+
+-- Rule: {v_cust_user_nostar}_update ON {schema}.{v_cust_user_nostar}
+
+CREATE OR REPLACE RULE {v_cust_user_nostar}_update AS
+    ON UPDATE TO {schema}.{v_cust_user_nostar} DO INSTEAD  UPDATE {schema}.{cust_user_role} SET {sys_user_id} = new.{sys_user_id}, {cust_user_role_snotes} = new.{cust_user_role_snotes}, {cust_role_name} = new.{cust_role_name}
+  WHERE {cust_user_role}.{cust_user_role_id} = old.{cust_user_role_id}
+  RETURNING {cust_user_role}.{sys_user_id},
+    {cust_user_role}.{cust_user_role_snotes},
+    {cust_user_role}.{cust_user_role_id},
+    {cust_user_role}.{cust_role_name};
+
+
+--
+-- Name: {v_cust_menu_role_selection}; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW {v_cust_menu_role_selection} AS
+ SELECT {cust_menu_role}.{cust_menu_role_id},
+    COALESCE({single}.{single}_varchar50, ''::character varying) AS {new_cust_role_name},
+    {single}.{dual_bigint} AS {new_menu_id},
         CASE
-            WHEN (crm.crm_id IS NULL) THEN 0
+            WHEN ({cust_menu_role}.{cust_menu_role_id} IS NULL) THEN 0
             ELSE 1
-        END AS crmsel_sel,
-    m.cr_id,
-    m.cr_seq,
-    m.cr_sts,
-    m.cr_name,
-    m.cr_desc,
-    m.sm_id_auto,
-    m.sm_utype,
-    m.sm_id,
-    m.sm_sts,
-    m.sm_id_parent,
-    m.sm_name,
-    m.sm_seq,
-    m.sm_desc,
-    m.sm_descl,
-    m.sm_descvl,
-    m.sm_cmd,
-    m.sm_image,
-    m.sm_snotes,
-    m.sm_subcmd
-   FROM ((( SELECT cr.cr_id,
-            cr.cr_seq,
-            cr.cr_sts,
-            cr.cr_name,
-            cr.cr_desc,
-            sm.sm_id_auto,
-            sm.sm_utype,
-            sm.sm_id,
-            sm.sm_sts,
-            sm.sm_id_parent,
-            sm.sm_name,
-            sm.sm_seq,
-            sm.sm_desc,
-            sm.sm_descl,
-            sm.sm_descvl,
-            sm.sm_cmd,
-            sm.sm_image,
-            sm.sm_snotes,
-            sm.sm_subcmd
-           FROM (cr
-             LEFT JOIN sm ON ((sm.sm_utype = 'C'::bpchar)))) m
-     JOIN dual ON ((1 = 1)))
-     LEFT JOIN crm ON ((((crm.cr_name)::text = (m.cr_name)::text) AND (crm.sm_id = m.sm_id))));
+        END AS {cust_menu_role_selection},
+    m.{cust_role_id},
+    m.{cust_role_seq},
+    m.{cust_role_sts},
+    m.{cust_role_name},
+    m.{cust_role_desc},
+    m.{menu_id_auto},
+    m.{menu_group},
+    m.{menu_id},
+    m.{menu_sts},
+    m.{menu_id_parent},
+    m.{menu_name},
+    m.{menu_seq},
+    m.{menu_desc},
+    m.{menu_desc_ext},
+    m.{menu_desc_ext2},
+    m.{menu_cmd},
+    m.{menu_image},
+    m.{menu_snotes},
+    m.{menu_subcmd}
+   FROM ((( SELECT {cust_role}.{cust_role_id},
+            {cust_role}.{cust_role_seq},
+            {cust_role}.{cust_role_sts},
+            {cust_role}.{cust_role_name},
+            {cust_role}.{cust_role_desc},
+            {menu}.{menu_id_auto},
+            {menu}.{menu_group},
+            {menu}.{menu_id},
+            {menu}.{menu_sts},
+            {menu}.{menu_id_parent},
+            {menu}.{menu_name},
+            {menu}.{menu_seq},
+            {menu}.{menu_desc},
+            {menu}.{menu_desc_ext},
+            {menu}.{menu_desc_ext2},
+            {menu}.{menu_cmd},
+            {menu}.{menu_image},
+            {menu}.{menu_snotes},
+            {menu}.{menu_subcmd}
+           FROM ({cust_role}
+             LEFT JOIN {menu} ON (({menu}.{menu_group} = 'C'::bpchar)))) m
+     JOIN {single} ON ((1 = 1)))
+     LEFT JOIN {cust_menu_role} ON (((({cust_menu_role}.{cust_role_name})::text = (m.{cust_role_name})::text) AND ({cust_menu_role}.{menu_id} = m.{menu_id}))));
 
 
-ALTER TABLE v_crmsel OWNER TO postgres;
-
---
--- Name: v_d_ext; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW v_d_ext AS
- SELECT d.d_id,
-    d.d_scope,
-    d.d_scope_id,
-    d.c_id,
-    d.e_id,
-    d.d_sts,
-    d.d_ctgr,
-    d.d_desc,
-    d.d_ext,
-    d.d_size,
-    (('D'::text || ((d.d_id)::character varying)::text) || (COALESCE(d.d_ext, ''::character varying))::text) AS d_filename,
-    d.d_etstmp,
-    d.d_eu,
-    mycuser_fmt((d.d_eu)::text) AS d_eu_fmt,
-    d.d_mtstmp,
-    d.d_mu,
-    mycuser_fmt((d.d_mu)::text) AS d_mu_fmt,
-    d.d_utstmp,
-    d.d_uu,
-    mycuser_fmt((d.d_uu)::text) AS d_uu_fmt,
-    d.d_snotes,
-    NULL::text AS title_h,
-    NULL::text AS title_b,
-    d.d_scope AS d_lock,
-    NULL::text AS c_name,
-    NULL::text AS c_name_ext,
-    NULL::text AS e_name
-   FROM d;
-
-
-ALTER TABLE v_d_ext OWNER TO postgres;
+ALTER TABLE {v_cust_menu_role_selection} OWNER TO postgres;
 
 --
--- Name: v_d_x; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {v_doc_ext}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW v_d_x AS
- SELECT d.d_id,
-    d.d_scope,
-    d.d_scope_id,
-    d.c_id,
-    d.e_id,
-    d.d_sts,
-    d.d_ctgr,
-    d.d_desc,
-    d.d_ext,
-    d.d_size,
-    d.d_etstmp,
-    d.d_eu,
-    d.d_mtstmp,
-    d.d_mu,
-    d.d_utstmp,
-    d.d_uu,
-    d.d_synctstmp,
-    d.d_snotes,
-    d.d_id_main,
-    (('D'::text || ((d.d_id)::character varying)::text) || (COALESCE(d.d_ext, ''::character varying))::text) AS d_filename
-   FROM d;
+CREATE VIEW {v_doc_ext} AS
+ SELECT {doc}.{doc_id},
+    {doc}.{doc_scope},
+    {doc}.{doc_scope_id},
+    {doc}.{cust_id},
+    {doc}.{item_id},
+    {doc}.{doc_sts},
+    {doc}.{doc_ctgr},
+    {doc}.{doc_desc},
+    {doc}.{doc_ext},
+    {doc}.{doc_size},
+    (('D'::text || (({doc}.{doc_id})::character varying)::text) || (COALESCE({doc}.{doc_ext}, ''::character varying))::text) AS {doc_filename},
+    {doc}.{doc_etstmp},
+    {doc}.{doc_euser},
+    {my_db_user_fmt}(({doc}.{doc_euser})::text) AS {doc_euser_fmt},
+    {doc}.{doc_mtstmp},
+    {doc}.{doc_muser},
+    {my_db_user_fmt}(({doc}.{doc_muser})::text) AS {doc_muser_fmt},
+    {doc}.{doc_utstmp},
+    {doc}.{doc_uuser},
+    {my_db_user_fmt}(({doc}.{doc_uuser})::text) AS {doc_uuser}_fmt,
+    {doc}.{doc_snotes},
+    NULL::text AS {title_head},
+    NULL::text AS {title_detail},
+    {doc}.{doc_scope} AS {doc_datalock},
+    NULL::text AS {cust_name},
+    NULL::text AS {cust_name_ext},
+    NULL::text AS {item_name}
+   FROM {doc};
 
 
-ALTER TABLE v_d_x OWNER TO postgres;
-
---
--- Name: v_dl; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW v_dl AS
- SELECT d.d_id,
-    d.d_scope,
-    d.d_scope_id,
-    d.c_id,
-    d.e_id,
-    d.d_sts,
-    d.d_ctgr,
-    gdd.codetxt AS d_ctgr_txt,
-    d.d_desc,
-    d.d_ext,
-    d.d_size,
-    (('D'::text || ((d.d_id)::character varying)::text) || (COALESCE(d.d_ext, ''::character varying))::text) AS d_filename,
-    d.d_etstmp,
-    d.d_eu,
-    mycuser_fmt((d.d_eu)::text) AS d_eu_fmt,
-    d.d_mtstmp,
-    d.d_mu,
-    mycuser_fmt((d.d_mu)::text) AS d_mu_fmt,
-    d.d_utstmp,
-    d.d_uu,
-    mycuser_fmt((d.d_uu)::text) AS d_uu_fmt,
-    d.d_snotes,
-    NULL::text AS title_h,
-    NULL::text AS title_b
-   FROM (d
-     LEFT JOIN gcod2_d_scope_d_ctgr gdd ON ((((gdd.codeval1)::text = (d.d_scope)::text) AND ((gdd.codeval2)::text = (d.d_ctgr)::text))));
-
-
-ALTER TABLE v_dl OWNER TO postgres;
+ALTER TABLE {v_doc_ext} OWNER TO postgres;
 
 --
--- Name: v_gppl; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {v_doc_filename}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW v_gppl AS
- SELECT gpp.gpp_id,
-    gpp.gpp_process,
-    gpp.gpp_attrib,
-    gpp.gpp_val,
-    gpp.gpp_etstmp,
-    gpp.gpp_eu,
-    gpp.gpp_mtstmp,
-    gpp.gpp_mu,
-    get_ppd_desc(gpp.gpp_process, gpp.gpp_attrib) AS ppd_desc,
-    audit_info(gpp.gpp_etstmp, gpp.gpp_eu, gpp.gpp_mtstmp, gpp.gpp_mu) AS gpp_info
-   FROM gpp;
+CREATE VIEW {v_doc_filename} AS
+ SELECT {doc}.{doc_id},
+    {doc}.{doc_scope},
+    {doc}.{doc_scope_id},
+    {doc}.{cust_id},
+    {doc}.{item_id},
+    {doc}.{doc_sts},
+    {doc}.{doc_ctgr},
+    {doc}.{doc_desc},
+    {doc}.{doc_ext},
+    {doc}.{doc_size},
+    {doc}.{doc_etstmp},
+    {doc}.{doc_euser},
+    {doc}.{doc_mtstmp},
+    {doc}.{doc_muser},
+    {doc}.{doc_utstmp},
+    {doc}.{doc_uuser},
+    {doc}.{doc_sync_tstmp},
+    {doc}.{doc_snotes},
+    {doc}.{doc_sync_id},
+    (('D'::text || (({doc}.{doc_id})::character varying)::text) || (COALESCE({doc}.{doc_ext}, ''::character varying))::text) AS {doc_filename}
+   FROM {doc};
 
 
-ALTER TABLE v_gppl OWNER TO postgres;
+ALTER TABLE {v_doc_filename} OWNER TO postgres;
 
 --
--- Name: xpp; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: {v_doc}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE xpp (
-    xpp_id bigint NOT NULL,
-    xpp_process character varying(32) NOT NULL,
-    xpp_attrib character varying(16) NOT NULL,
-    xpp_val character varying(256),
-    xpp_etstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    xpp_eu character varying(20) DEFAULT mycuser() NOT NULL,
-    xpp_mtstmp timestamp without time zone DEFAULT mynow() NOT NULL,
-    xpp_mu character varying(20) DEFAULT mycuser() NOT NULL
+CREATE VIEW {v_doc} AS
+ SELECT {doc}.{doc_id},
+    {doc}.{doc_scope},
+    {doc}.{doc_scope_id},
+    {doc}.{cust_id},
+    {doc}.{item_id},
+    {doc}.{doc_sts},
+    {doc}.{doc_ctgr},
+    gdd.{code_txt} AS {doc_ctgr_txt},
+    {doc}.{doc_desc},
+    {doc}.{doc_ext},
+    {doc}.{doc_size},
+    (('D'::text || (({doc}.{doc_id})::character varying)::text) || (COALESCE({doc}.{doc_ext}, ''::character varying))::text) AS {doc_filename},
+    {doc}.{doc_etstmp},
+    {doc}.{doc_euser},
+    {my_db_user_fmt}(({doc}.{doc_euser})::text) AS {doc_euser_fmt},
+    {doc}.{doc_mtstmp},
+    {doc}.{doc_muser},
+    {my_db_user_fmt}(({doc}.{doc_muser})::text) AS {doc_muser_fmt},
+    {doc}.{doc_utstmp},
+    {doc}.{doc_uuser},
+    {my_db_user_fmt}(({doc}.{doc_uuser})::text) AS {doc_uuser}_fmt,
+    {doc}.{doc_snotes},
+    NULL::text AS {title_head},
+    NULL::text AS {title_detail}
+   FROM ({doc}
+     LEFT JOIN {code2_doc_ctgr} gdd ON ((((gdd.{code_val1})::text = ({doc}.{doc_scope})::text) AND ((gdd.{code_va12})::text = ({doc}.{doc_ctgr})::text))));
+
+
+ALTER TABLE {v_doc} OWNER TO postgres;
+
+--
+-- Name: {v_param_app}; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW {v_param_app} AS
+ SELECT {param_app}.{param_app_id},
+    {param_app}.{param_app_process},
+    {param_app}.{param_app_attrib},
+    {param_app}.{param_app_val},
+    {param_app}.{param_app_etstmp},
+    {param_app}.{param_app_euser},
+    {param_app}.{param_app_mtstmp},
+    {param_app}.{param_app_muser},
+    {get_param_desc}({param_app}.{param_app_process}, {param_app}.{param_app_attrib}) AS {param_desc},
+    {log_audit_info}({param_app}.{param_app_etstmp}, {param_app}.{param_app_euser}, {param_app}.{param_app_mtstmp}, {param_app}.{param_app_muser}) AS {param_app_info}
+   FROM {param_app};
+
+
+ALTER TABLE {v_param_app} OWNER TO postgres;
+
+--
+-- Name: {param_sys}; Type: TABLE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE TABLE {param_sys} (
+    {param_sys_id} bigint NOT NULL,
+    {param_sys_process} character varying(32) NOT NULL,
+    {param_sys_attrib} character varying(16) NOT NULL,
+    {param_sys_val} character varying(256),
+    {param_sys_etstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {param_sys_euser} character varying(20) DEFAULT {my_db_user}() NOT NULL,
+    {param_sys_mtstmp} timestamp without time zone DEFAULT {my_now}() NOT NULL,
+    {param_sys_muser} character varying(20) DEFAULT {my_db_user}() NOT NULL
 );
 
 
-ALTER TABLE xpp OWNER TO postgres;
+ALTER TABLE {param_sys} OWNER TO postgres;
 
 --
--- Name: TABLE xpp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE {param_sys}; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE xpp IS 'Process Parameters - System (CONTROL)';
+COMMENT ON TABLE {param_sys} IS 'Process Parameters - System (CONTROL)';
 
 
 --
--- Name: v_pp; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {v_param_cur}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW v_pp AS
- SELECT ppd.ppd_process AS pp_process,
-    ppd.ppd_attrib AS pp_attrib,
+CREATE VIEW {v_param_cur} AS
+ SELECT {param}.{param_process} AS {param_cur_process},
+    {param}.{param_attrib} AS {param_cur_attrib},
         CASE
-            WHEN ((ppp.ppp_val IS NULL) OR ((ppp.ppp_val)::text = ''::text)) THEN
+            WHEN (({param_user}.{param_user_val} IS NULL) OR (({param_user}.{param_user_val})::text = ''::text)) THEN
             CASE
-                WHEN ((gpp.gpp_val IS NULL) OR ((gpp.gpp_val)::text = ''::text)) THEN xpp.xpp_val
-                ELSE gpp.gpp_val
+                WHEN (({param_app}.{param_app_val} IS NULL) OR (({param_app}.{param_app_val})::text = ''::text)) THEN {param_sys}.{param_sys_val}
+                ELSE {param_app}.{param_app_val}
             END
-            ELSE ppp.ppp_val
-        END AS pp_val,
-    ppp.pe_id
-   FROM (((ppd
-     LEFT JOIN xpp ON ((((ppd.ppd_process)::text = (xpp.xpp_process)::text) AND ((ppd.ppd_attrib)::text = (xpp.xpp_attrib)::text))))
-     LEFT JOIN gpp ON ((((ppd.ppd_process)::text = (gpp.gpp_process)::text) AND ((ppd.ppd_attrib)::text = (gpp.gpp_attrib)::text))))
-     LEFT JOIN ( SELECT ppp_1.pe_id,
-            ppp_1.ppp_process,
-            ppp_1.ppp_attrib,
-            ppp_1.ppp_val
-           FROM ppp ppp_1
+            ELSE {param_user}.{param_user_val}
+        END AS {param_cur_val},
+    {param_user}.{sys_user_id}
+   FROM ((({param}
+     LEFT JOIN {param_sys} ON (((({param}.{param_process})::text = ({param_sys}.{param_sys_process})::text) AND (({param}.{param_attrib})::text = ({param_sys}.{param_sys_attrib})::text))))
+     LEFT JOIN {param_app} ON (((({param}.{param_process})::text = ({param_app}.{param_app_process})::text) AND (({param}.{param_attrib})::text = ({param_app}.{param_app_attrib})::text))))
+     LEFT JOIN ( SELECT {param_user}_1.{sys_user_id},
+            {param_user}_1.{param_user_process},
+            {param_user}_1.{param_user_attrib},
+            {param_user}_1.{param_user_val}
+           FROM {param_user} {param_user}_1
         UNION
-         SELECT NULL::bigint AS pe_id,
-            ppp_null.ppp_process,
-            ppp_null.ppp_attrib,
-            NULL::character varying AS ppp_val
-           FROM ppp ppp_null) ppp ON ((((ppd.ppd_process)::text = (ppp.ppp_process)::text) AND ((ppd.ppd_attrib)::text = (ppp.ppp_attrib)::text))));
+         SELECT NULL::bigint AS {sys_user_id},
+            {param_user}_null.{param_user_process},
+            {param_user}_null.{param_user_attrib},
+            NULL::character varying AS {param_user_val}
+           FROM {param_user} {param_user}_null) {param_user} ON (((({param}.{param_process})::text = ({param_user}.{param_user_process})::text) AND (({param}.{param_attrib})::text = ({param_user}.{param_user_attrib})::text))));
 
 
-ALTER TABLE v_pp OWNER TO postgres;
-
---
--- Name: v_house; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW v_house AS
- SELECT name.pp_val AS house_name,
-    addr.pp_val AS house_addr,
-    city.pp_val AS house_city,
-    state.pp_val AS house_state,
-    zip.pp_val AS house_zip,
-    (((((((COALESCE(addr.pp_val, ''::character varying))::text || ', '::text) || (COALESCE(city.pp_val, ''::character varying))::text) || ' '::text) || (COALESCE(state.pp_val, ''::character varying))::text) || ' '::text) || (COALESCE(zip.pp_val, ''::character varying))::text) AS house_full_addr,
-    bphone.pp_val AS house_bphone,
-    fax.pp_val AS house_fax,
-    email.pp_val AS house_email,
-    contact.pp_val AS house_contact
-   FROM (((((((((dual
-     LEFT JOIN v_pp name ON ((((name.pp_process)::text = 'HOUSE'::text) AND ((name.pp_attrib)::text = 'NAME'::text))))
-     LEFT JOIN v_pp addr ON ((((addr.pp_process)::text = 'HOUSE'::text) AND ((addr.pp_attrib)::text = 'ADDR'::text))))
-     LEFT JOIN v_pp city ON ((((city.pp_process)::text = 'HOUSE'::text) AND ((city.pp_attrib)::text = 'CITY'::text))))
-     LEFT JOIN v_pp state ON ((((state.pp_process)::text = 'HOUSE'::text) AND ((state.pp_attrib)::text = 'STATE'::text))))
-     LEFT JOIN v_pp zip ON ((((zip.pp_process)::text = 'HOUSE'::text) AND ((zip.pp_attrib)::text = 'ZIP'::text))))
-     LEFT JOIN v_pp bphone ON ((((bphone.pp_process)::text = 'HOUSE'::text) AND ((bphone.pp_attrib)::text = 'BPHONE'::text))))
-     LEFT JOIN v_pp fax ON ((((fax.pp_process)::text = 'HOUSE'::text) AND ((fax.pp_attrib)::text = 'FAX'::text))))
-     LEFT JOIN v_pp email ON ((((email.pp_process)::text = 'HOUSE'::text) AND ((email.pp_attrib)::text = 'EMAIL'::text))))
-     LEFT JOIN v_pp contact ON ((((contact.pp_process)::text = 'HOUSE'::text) AND ((contact.pp_attrib)::text = 'CONTACT'::text))));
-
-
-ALTER TABLE v_house OWNER TO postgres;
+ALTER TABLE {v_param_cur} OWNER TO postgres;
 
 --
--- Name: v_months; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {v_app_info}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW v_months AS
- SELECT numbers.{number_val} as {month_val},
-    "right"(('0'::text || ((numbers.{number_val})::character varying)::text), 2) AS {month_txt}
-   FROM numbers
-  WHERE (numbers.{number_val} <= 12);
+CREATE VIEW {v_app_info} AS
+ SELECT name.{param_cur_val} AS {app_name},
+    addr.{param_cur_val} AS {app_addr},
+    city.{param_cur_val} AS {app_city},
+    state.{param_cur_val} AS {app_state},
+    zip.{param_cur_val} AS {app_zip},
+    (((((((COALESCE(addr.{param_cur_val}, ''::character varying))::text || ', '::text) || (COALESCE(city.{param_cur_val}, ''::character varying))::text) || ' '::text) || (COALESCE(state.{param_cur_val}, ''::character varying))::text) || ' '::text) || (COALESCE(zip.{param_cur_val}, ''::character varying))::text) AS {app_full_addr},
+    bphone.{param_cur_val} AS {app_bphone},
+    fax.{param_cur_val} AS {app_fax},
+    email.{param_cur_val} AS {app_email},
+    contact.{param_cur_val} AS {app_contact}
+   FROM ((((((((({single}
+     LEFT JOIN {v_param_cur} name ON ((((name.{param_cur_process})::text = 'HOUSE'::text) AND ((name.{param_cur_attrib})::text = 'NAME'::text))))
+     LEFT JOIN {v_param_cur} addr ON ((((addr.{param_cur_process})::text = 'HOUSE'::text) AND ((addr.{param_cur_attrib})::text = 'ADDR'::text))))
+     LEFT JOIN {v_param_cur} city ON ((((city.{param_cur_process})::text = 'HOUSE'::text) AND ((city.{param_cur_attrib})::text = 'CITY'::text))))
+     LEFT JOIN {v_param_cur} state ON ((((state.{param_cur_process})::text = 'HOUSE'::text) AND ((state.{param_cur_attrib})::text = 'STATE'::text))))
+     LEFT JOIN {v_param_cur} zip ON ((((zip.{param_cur_process})::text = 'HOUSE'::text) AND ((zip.{param_cur_attrib})::text = 'ZIP'::text))))
+     LEFT JOIN {v_param_cur} bphone ON ((((bphone.{param_cur_process})::text = 'HOUSE'::text) AND ((bphone.{param_cur_attrib})::text = 'BPHONE'::text))))
+     LEFT JOIN {v_param_cur} fax ON ((((fax.{param_cur_process})::text = 'HOUSE'::text) AND ((fax.{param_cur_attrib})::text = 'FAX'::text))))
+     LEFT JOIN {v_param_cur} email ON ((((email.{param_cur_process})::text = 'HOUSE'::text) AND ((email.{param_cur_attrib})::text = 'EMAIL'::text))))
+     LEFT JOIN {v_param_cur} contact ON ((((contact.{param_cur_process})::text = 'HOUSE'::text) AND ((contact.{param_cur_attrib})::text = 'CONTACT'::text))));
 
 
-ALTER TABLE v_months OWNER TO postgres;
-
---
--- Name: v_my_roles; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW v_my_roles AS
- SELECT sper.sr_name
-   FROM sper
-  WHERE (sper.pe_id = mype());
-
-
-ALTER TABLE v_my_roles OWNER TO postgres;
-
---
--- Name: v_mype; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW v_mype AS
- SELECT mype() AS mype;
-
-
-ALTER TABLE v_mype OWNER TO postgres;
+ALTER TABLE {v_app_info} OWNER TO postgres;
 
 --
--- Name: v_n_ext; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {v_month}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW v_n_ext AS
- SELECT n.n_id,
-    n.n_scope,
-    n.n_scope_id,
-    n.n_sts,
-    n.c_id,
-    n.e_id,
-    n.n_type,
-    n.n_note,
-    n.n_etstmp,
-    n.n_eu,
-    mycuser_fmt((n.n_eu)::text) AS n_eu_fmt,
-    n.n_mtstmp,
-    n.n_mu,
-    mycuser_fmt((n.n_mu)::text) AS n_mu_fmt,
-    n.n_snotes,
-    NULL::text AS title_h,
-    NULL::text AS title_b,
-    NULL::text AS c_name,
-    NULL::text AS c_name_ext,
-    NULL::text AS e_name
-   FROM n;
+CREATE VIEW {v_month} AS
+ SELECT {number}.{number_val} as {month_val},
+    "right"(('0'::text || (({number}.{number_val})::character varying)::text), 2) AS {month_txt}
+   FROM {number}
+  WHERE ({number}.{number_val} <= 12);
 
 
-ALTER TABLE v_n_ext OWNER TO postgres;
+ALTER TABLE {v_month} OWNER TO postgres;
 
 --
--- Name: v_nl; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {v_my_roles}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW v_nl AS
- SELECT n.n_id,
-    n.n_scope,
-    n.n_scope_id,
-    n.n_sts,
-    n.c_id,
-    NULL::text AS c_name,
-    NULL::text AS c_name_ext,
-    n.e_id,
-    NULL::text AS e_name,
-    n.n_type,
-    n.n_note,
-    mytodate(n.n_etstmp) AS n_dt,
-    n.n_etstmp,
-    mymmddyyhhmi(n.n_etstmp) AS n_etstmp_fmt,
-    n.n_eu,
-    mycuser_fmt((n.n_eu)::text) AS n_eu_fmt,
-    n.n_mtstmp,
-    mymmddyyhhmi(n.n_mtstmp) AS n_mtstmp_fmt,
-    n.n_mu,
-    mycuser_fmt((n.n_mu)::text) AS n_mu_fmt,
-    n.n_snotes,
-    NULL::text AS title_h,
-    NULL::text AS title_b
-   FROM n;
+CREATE VIEW {v_my_roles} AS
+ SELECT {sys_user_role}.{sys_role_name}
+   FROM {sys_user_role}
+  WHERE ({sys_user_role}.{sys_user_id} = {my_sys_user_id}());
 
 
-ALTER TABLE v_nl OWNER TO postgres;
+ALTER TABLE {v_my_roles} OWNER TO postgres;
 
 --
--- Name: v_ppdl; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {v_my_user}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW v_ppdl AS
- SELECT ppd.ppd_id,
-    ppd.ppd_process,
-    ppd.ppd_attrib,
-    ppd.ppd_desc,
-    ppd.ppd_type,
-    ppd.codename,
-    ppd.ppd_gpp,
-    ppd.ppd_ppp,
-    ppd.ppd_xpp,
-    ppd.ppd_etstmp,
-    ppd.ppd_eu,
-    ppd.ppd_mtstmp,
-    ppd.ppd_mu,
-    ppd.ppd_snotes,
-    audit_info(ppd.ppd_etstmp, ppd.ppd_eu, ppd.ppd_mtstmp, ppd.ppd_mu) AS ppd_info
-   FROM ppd;
+CREATE VIEW {v_my_user} AS
+ SELECT {my_sys_user_id}() AS {my_sys_user_id};
 
 
-ALTER TABLE v_ppdl OWNER TO postgres;
+ALTER TABLE {v_my_user} OWNER TO postgres;
 
 --
--- Name: v_pppl; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {v_note_ext}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW v_pppl AS
- SELECT ppp.ppp_id,
-    ppp.pe_id,
-    ppp.ppp_process,
-    ppp.ppp_attrib,
-    ppp.ppp_val,
-    ppp.ppp_etstmp,
-    ppp.ppp_eu,
-    ppp.ppp_mtstmp,
-    ppp.ppp_mu,
-    get_ppd_desc(ppp.ppp_process, ppp.ppp_attrib) AS ppd_desc,
-    audit_info(ppp.ppp_etstmp, ppp.ppp_eu, ppp.ppp_mtstmp, ppp.ppp_mu) AS ppp_info
-   FROM ppp;
+CREATE VIEW {v_note_ext} AS
+ SELECT {note}.{note_id},
+    {note}.{note_scope},
+    {note}.{note_scope_id},
+    {note}.{note_sts},
+    {note}.{cust_id},
+    {note}.{item_id},
+    {note}.{note_type},
+    {note}.{note_body},
+    {note}.{note_etstmp},
+    {note}.{note_euser},
+    {my_db_user_fmt}(({note}.{note_euser})::text) AS {note_euser_fmt},
+    {note}.{note_mtstmp},
+    {note}.{note_muser},
+    {my_db_user_fmt}(({note}.{note_muser})::text) AS {note_muser_fmt},
+    {note}.{note_snotes},
+    NULL::text AS {title_head},
+    NULL::text AS {title_detail},
+    NULL::text AS {cust_name},
+    NULL::text AS {cust_name_ext},
+    NULL::text AS {item_name}
+   FROM {note};
 
 
-ALTER TABLE v_pppl OWNER TO postgres;
+ALTER TABLE {v_note_ext} OWNER TO postgres;
 
 --
--- Name: v_srmsel; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {v_note}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW v_srmsel AS
- SELECT srm.srm_id,
-    COALESCE(dual.dual_varchar50, ''::character varying) AS new_sr_name,
-    dual.dual_bigint AS new_sm_id,
+CREATE VIEW {v_note} AS
+ SELECT {note}.{note_id},
+    {note}.{note_scope},
+    {note}.{note_scope_id},
+    {note}.{note_sts},
+    {note}.{cust_id},
+    NULL::text AS {cust_name},
+    NULL::text AS {cust_name_ext},
+    {note}.{item_id},
+    NULL::text AS {item_name},
+    {note}.{note_type},
+    {note}.{note_body},
+    {my_to_date}({note}.{note_etstmp}) AS {note_dt},
+    {note}.{note_etstmp},
+    {my_mmddyyhhmi}({note}.{note_etstmp}) AS {note_etstmp_fmt},
+    {note}.{note_euser},
+    {my_db_user_fmt}(({note}.{note_euser})::text) AS {note_euser_fmt},
+    {note}.{note_mtstmp},
+    {my_mmddyyhhmi}({note}.{note_mtstmp}) AS {note_mtstmp_fmt},
+    {note}.{note_muser},
+    {my_db_user_fmt}(({note}.{note_muser})::text) AS {note_muser_fmt},
+    {note}.{note_snotes},
+    NULL::text AS {title_head},
+    NULL::text AS {title_detail}
+   FROM {note};
+
+
+ALTER TABLE {v_note} OWNER TO postgres;
+
+--
+-- Name: {v_param}; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW {v_param} AS
+ SELECT {param}.{param_id},
+    {param}.{param_process},
+    {param}.{param_attrib},
+    {param}.{param_desc},
+    {param}.{param_type},
+    {param}.{code_name},
+    {param}.{is_param_app},
+    {param}.{is_param_user},
+    {param}.{is_param_sys},
+    {param}.{param_etstmp},
+    {param}.{param_euser},
+    {param}.{param_mtstmp},
+    {param}.{param_muser},
+    {param}.{param_snotes},
+    {log_audit_info}({param}.{param_etstmp}, {param}.{param_euser}, {param}.{param_mtstmp}, {param}.{param_muser}) AS {param_info}
+   FROM {param};
+
+
+ALTER TABLE {v_param} OWNER TO postgres;
+
+--
+-- Name: {v_param_user}; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW {v_param_user} AS
+ SELECT {param_user}.{param_user_id},
+    {param_user}.{sys_user_id},
+    {param_user}.{param_user_process},
+    {param_user}.{param_user_attrib},
+    {param_user}.{param_user_val},
+    {param_user}.{param_user_etstmp},
+    {param_user}.{param_user_euser},
+    {param_user}.{param_user_mtstmp},
+    {param_user}.{param_user_muser},
+    {get_param_desc}({param_user}.{param_user_process}, {param_user}.{param_user_attrib}) AS {param_desc},
+    {log_audit_info}({param_user}.{param_user_etstmp}, {param_user}.{param_user_euser}, {param_user}.{param_user_mtstmp}, {param_user}.{param_user_muser}) AS {param_user_info}
+   FROM {param_user};
+
+
+ALTER TABLE {v_param_user} OWNER TO postgres;
+
+--
+-- Name: {v_sys_menu_role_selection}; Type: VIEW; Schema: jsharmony; Owner: postgres
+--
+
+CREATE VIEW {v_sys_menu_role_selection} AS
+ SELECT {sys_menu_role}.{sys_menu_role_id},
+    COALESCE({single}.{single}_varchar50, ''::character varying) AS {new_sys_role_name},
+    {single}.{dual_bigint} AS {new_menu_id},
         CASE
-            WHEN (srm.srm_id IS NULL) THEN 0
+            WHEN ({sys_menu_role}.{sys_menu_role_id} IS NULL) THEN 0
             ELSE 1
-        END AS srmsel_sel,
-    m.sr_id,
-    m.sr_seq,
-    m.sr_sts,
-    m.sr_name,
-    m.sr_desc,
-    m.sm_id_auto,
-    m.sm_utype,
-    m.sm_id,
-    m.sm_sts,
-    m.sm_id_parent,
-    m.sm_name,
-    m.sm_seq,
-    m.sm_desc,
-    m.sm_descl,
-    m.sm_descvl,
-    m.sm_cmd,
-    m.sm_image,
-    m.sm_snotes,
-    m.sm_subcmd
-   FROM ((( SELECT sr.sr_id,
-            sr.sr_seq,
-            sr.sr_sts,
-            sr.sr_name,
-            sr.sr_desc,
-            sm.sm_id_auto,
-            sm.sm_utype,
-            sm.sm_id,
-            sm.sm_sts,
-            sm.sm_id_parent,
-            sm.sm_name,
-            sm.sm_seq,
-            sm.sm_desc,
-            sm.sm_descl,
-            sm.sm_descvl,
-            sm.sm_cmd,
-            sm.sm_image,
-            sm.sm_snotes,
-            sm.sm_subcmd
-           FROM (sr
-             LEFT JOIN sm ON ((sm.sm_utype = 'S'::bpchar)))) m
-     JOIN dual ON ((1 = 1)))
-     LEFT JOIN srm ON ((((srm.sr_name)::text = (m.sr_name)::text) AND (srm.sm_id = m.sm_id))));
+        END AS {sys_menu_role_selection},
+    m.{sys_role_id},
+    m.{sys_role_seq},
+    m.{sys_role_sts},
+    m.{sys_role_name},
+    m.{sys_role_desc},
+    m.{menu_id_auto},
+    m.{menu_group},
+    m.{menu_id},
+    m.{menu_sts},
+    m.{menu_id_parent},
+    m.{menu_name},
+    m.{menu_seq},
+    m.{menu_desc},
+    m.{menu_desc_ext},
+    m.{menu_desc_ext2},
+    m.{menu_cmd},
+    m.{menu_image},
+    m.{menu_snotes},
+    m.{menu_subcmd}
+   FROM ((( SELECT {sys_role}.{sys_role_id},
+            {sys_role}.{sys_role_seq},
+            {sys_role}.{sys_role_sts},
+            {sys_role}.{sys_role_name},
+            {sys_role}.{sys_role_desc},
+            {menu}.{menu_id_auto},
+            {menu}.{menu_group},
+            {menu}.{menu_id},
+            {menu}.{menu_sts},
+            {menu}.{menu_id_parent},
+            {menu}.{menu_name},
+            {menu}.{menu_seq},
+            {menu}.{menu_desc},
+            {menu}.{menu_desc_ext},
+            {menu}.{menu_desc_ext2},
+            {menu}.{menu_cmd},
+            {menu}.{menu_image},
+            {menu}.{menu_snotes},
+            {menu}.{menu_subcmd}
+           FROM ({sys_role}
+             LEFT JOIN {menu} ON (({menu}.{menu_group} = 'S'::bpchar)))) m
+     JOIN {single} ON ((1 = 1)))
+     LEFT JOIN {sys_menu_role} ON (((({sys_menu_role}.{sys_role_name})::text = (m.{sys_role_name})::text) AND ({sys_menu_role}.{menu_id} = m.{menu_id}))));
 
 
-ALTER TABLE v_srmsel OWNER TO postgres;
+ALTER TABLE {v_sys_menu_role_selection} OWNER TO postgres;
 
 --
--- Name: v_v_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {version}_{version_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE v_v_id_seq
+CREATE SEQUENCE {version}_{version_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -6878,52 +6878,52 @@ CREATE SEQUENCE v_v_id_seq
     CACHE 1;
 
 
-ALTER TABLE v_v_id_seq OWNER TO postgres;
+ALTER TABLE {version}_{version_id}_seq OWNER TO postgres;
 
 --
--- Name: v_v_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {version}_{version_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE v_v_id_seq OWNED BY v.v_id;
+ALTER SEQUENCE {version}_{version_id}_seq OWNED BY {version}.{version_id};
 
 
 --
--- Name: v_xppl; Type: VIEW; Schema: jsharmony; Owner: postgres
+-- Name: {v_param_sys}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE VIEW v_xppl AS
- SELECT xpp.xpp_id,
-    xpp.xpp_process,
-    xpp.xpp_attrib,
-    xpp.xpp_val,
-    xpp.xpp_etstmp,
-    xpp.xpp_eu,
-    xpp.xpp_mtstmp,
-    xpp.xpp_mu,
-    get_ppd_desc(xpp.xpp_process, xpp.xpp_attrib) AS ppd_desc,
-    audit_info(xpp.xpp_etstmp, xpp.xpp_eu, xpp.xpp_mtstmp, xpp.xpp_mu) AS xpp_info
-   FROM xpp;
+CREATE VIEW {v_param_sys} AS
+ SELECT {param_sys}.{param_sys_id},
+    {param_sys}.{param_sys_process},
+    {param_sys}.{param_sys_attrib},
+    {param_sys}.{param_sys_val},
+    {param_sys}.{param_sys_etstmp},
+    {param_sys}.{param_sys_euser},
+    {param_sys}.{param_sys_mtstmp},
+    {param_sys}.{param_sys_muser},
+    {get_param_desc}({param_sys}.{param_sys_process}, {param_sys}.{param_sys_attrib}) AS {param_desc},
+    {log_audit_info}({param_sys}.{param_sys_etstmp}, {param_sys}.{param_sys_euser}, {param_sys}.{param_sys_mtstmp}, {param_sys}.{param_sys_muser}) AS {param_sys_info}
+   FROM {param_sys};
 
 
-ALTER TABLE v_xppl OWNER TO postgres;
-
---
--- Name: v_years; Type: VIEW; Schema: jsharmony; Owner: postgres
---
-
-CREATE VIEW v_years AS
- SELECT ((date_part('year'::text, mynow()) + (numbers.{number_val})::double precision) - (1)::double precision) AS {year_val}
-   FROM numbers
-  WHERE (numbers.{number_val} <= 10);
-
-
-ALTER TABLE v_years OWNER TO postgres;
+ALTER TABLE {v_param_sys} OWNER TO postgres;
 
 --
--- Name: xpp_xpp_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: {v_year}; Type: VIEW; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE xpp_xpp_id_seq
+CREATE VIEW {v_year} AS
+ SELECT ((date_part('{year_txt}'::text, {my_now}()) + ({number}.{number_val})::double precision) - (1)::double precision) AS {year_val}
+   FROM {number}
+  WHERE ({number}.{number_val} <= 10);
+
+
+ALTER TABLE {v_year} OWNER TO postgres;
+
+--
+-- Name: {param_sys}_{param_sys_id}_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE SEQUENCE {param_sys}_{param_sys_id}_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -6931,878 +6931,878 @@ CREATE SEQUENCE xpp_xpp_id_seq
     CACHE 1;
 
 
-ALTER TABLE xpp_xpp_id_seq OWNER TO postgres;
+ALTER TABLE {param_sys}_{param_sys_id}_seq OWNER TO postgres;
 
 --
--- Name: xpp_xpp_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: {param_sys}_{param_sys_id}_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE xpp_xpp_id_seq OWNED BY xpp.xpp_id;
+ALTER SEQUENCE {param_sys}_{param_sys_id}_seq OWNED BY {param_sys}.{param_sys_id};
 
 
 --
--- Name: aud_seq; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {audit_seq}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY aud_h ALTER COLUMN aud_seq SET DEFAULT nextval('aud_h_aud_seq_seq'::regclass);
+ALTER TABLE ONLY {audit} ALTER COLUMN {audit_seq} SET DEFAULT nextval('{audit}_{audit_seq}_seq'::regclass);
 
 
 --
--- Name: pe_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cpe ALTER COLUMN pe_id SET DEFAULT nextval('cpe_pe_id_seq'::regclass);
+ALTER TABLE ONLY {cust_user} ALTER COLUMN {sys_user_id} SET DEFAULT nextval('{cust_user}_{sys_user_id}_seq'::regclass);
 
 
 --
--- Name: cper_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user_role_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cper ALTER COLUMN cper_id SET DEFAULT nextval('cper_cper_id_seq'::regclass);
+ALTER TABLE ONLY {cust_user_role} ALTER COLUMN {cust_user_role_id} SET DEFAULT nextval('{cust_user_role}_{cust_user_role_id}_seq'::regclass);
 
 
 --
--- Name: cr_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_role_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cr ALTER COLUMN cr_id SET DEFAULT nextval('cr_cr_id_seq'::regclass);
+ALTER TABLE ONLY {cust_role} ALTER COLUMN {cust_role_id} SET DEFAULT nextval('{cust_role}_{cust_role_id}_seq'::regclass);
 
 
 --
--- Name: crm_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_menu_role_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY crm ALTER COLUMN crm_id SET DEFAULT nextval('crm_crm_id_seq'::regclass);
+ALTER TABLE ONLY {cust_menu_role} ALTER COLUMN {cust_menu_role_id} SET DEFAULT nextval('{cust_menu_role}_{cust_menu_role_id}_seq'::regclass);
 
 
 --
--- Name: d_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {doc_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY d ALTER COLUMN d_id SET DEFAULT nextval('d_d_id_seq'::regclass);
+ALTER TABLE ONLY {doc} ALTER COLUMN {doc_id} SET DEFAULT nextval('{doc}_{doc_id}_seq'::regclass);
 
 
 --
--- Name: dual_ident; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {single_ident}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY dual ALTER COLUMN dual_ident SET DEFAULT nextval('dual_dual_ident_seq'::regclass);
+ALTER TABLE ONLY {single} ALTER COLUMN {single_ident} SET DEFAULT nextval('{single}_{single_ident}_seq'::regclass);
 
 
 --
--- Name: gcod2_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code2_app_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod2_d_scope_d_ctgr ALTER COLUMN gcod2_id SET DEFAULT nextval('gcod2_gcod2_id_seq'::regclass);
+ALTER TABLE ONLY {code2_doc_ctgr} ALTER COLUMN {code2_app_id} SET DEFAULT nextval('gcod2_{code2_app_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod2_d_scope_d_ctgr ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code2_doc_ctgr} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod2_d_scope_d_ctgr ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code2_doc_ctgr} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod2_d_scope_d_ctgr ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code2_doc_ctgr} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod2_d_scope_d_ctgr ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code2_doc_ctgr} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: gpp_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {param_app_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gpp ALTER COLUMN gpp_id SET DEFAULT nextval('gpp_gpp_id_seq'::regclass);
+ALTER TABLE ONLY {param_app} ALTER COLUMN {param_app_id} SET DEFAULT nextval('{param_app}_{param_app_id}_seq'::regclass);
 
 
 --
--- Name: h_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {help_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY h ALTER COLUMN h_id SET DEFAULT nextval('h_h_id_seq'::regclass);
+ALTER TABLE ONLY {help} ALTER COLUMN {help_id} SET DEFAULT nextval('{help}_{help_id}_seq'::regclass);
 
 
 --
--- Name: hp_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {help_target_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY hp ALTER COLUMN hp_id SET DEFAULT nextval('hp_hp_id_seq'::regclass);
+ALTER TABLE ONLY {help_target} ALTER COLUMN {help_target_id} SET DEFAULT nextval('{help_target}_{help_target_id}_seq'::regclass);
 
 
 --
--- Name: n_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {note_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY n ALTER COLUMN n_id SET DEFAULT nextval('n_n_id_seq'::regclass);
+ALTER TABLE ONLY {note} ALTER COLUMN {note_id} SET DEFAULT nextval('{note}_{note_id}_seq'::regclass);
 
 
 --
--- Name: pe_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY pe ALTER COLUMN pe_id SET DEFAULT nextval('pe_pe_id_seq'::regclass);
+ALTER TABLE ONLY {sys_user} ALTER COLUMN {sys_user_id} SET DEFAULT nextval('{sys_user}_{sys_user_id}_seq'::regclass);
 
 
 --
--- Name: ppd_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {param_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ppd ALTER COLUMN ppd_id SET DEFAULT nextval('ppd_ppd_id_seq'::regclass);
+ALTER TABLE ONLY {param} ALTER COLUMN {param_id} SET DEFAULT nextval('{param}_{param_id}_seq'::regclass);
 
 
 --
--- Name: ppp_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {param_user_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ppp ALTER COLUMN ppp_id SET DEFAULT nextval('ppp_ppp_id_seq'::regclass);
+ALTER TABLE ONLY {param_user} ALTER COLUMN {param_user_id} SET DEFAULT nextval('{param_user}_{param_user_id}_seq'::regclass);
 
 
 --
--- Name: rq_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {queue_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rq ALTER COLUMN rq_id SET DEFAULT nextval('rq_rq_id_seq'::regclass);
+ALTER TABLE ONLY {queue} ALTER COLUMN {queue_id} SET DEFAULT nextval('{queue}_{queue_id}_seq'::regclass);
 
 
 --
--- Name: rqst_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {job_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst ALTER COLUMN rqst_id SET DEFAULT nextval('rqst_rqst_id_seq'::regclass);
+ALTER TABLE ONLY {job} ALTER COLUMN {job_id} SET DEFAULT nextval('{job}_{job_id}_seq'::regclass);
 
 
 --
--- Name: rqst_d_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {job_doc_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_d ALTER COLUMN rqst_d_id SET DEFAULT nextval('rqst_d_rqst_d_id_seq'::regclass);
+ALTER TABLE ONLY {job_doc} ALTER COLUMN {job_doc_id} SET DEFAULT nextval('{job_doc}_{job_doc_id}_seq'::regclass);
 
 
 --
--- Name: rqst_email_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {job_email_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_email ALTER COLUMN rqst_email_id SET DEFAULT nextval('rqst_email_rqst_email_id_seq'::regclass);
+ALTER TABLE ONLY {job_email} ALTER COLUMN {job_email_id} SET DEFAULT nextval('{job_email}_{job_email_id}_seq'::regclass);
 
 
 --
--- Name: rqst_n_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {job_note_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_n ALTER COLUMN rqst_n_id SET DEFAULT nextval('rqst_n_rqst_n_id_seq'::regclass);
+ALTER TABLE ONLY {job_note} ALTER COLUMN {job_note_id} SET DEFAULT nextval('{job_note}_{job_note_id}_seq'::regclass);
 
 
 --
--- Name: rqst_rq_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {job_queue_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_rq ALTER COLUMN rqst_rq_id SET DEFAULT nextval('rqst_rq_rqst_rq_id_seq'::regclass);
+ALTER TABLE ONLY {job_queue} ALTER COLUMN {job_queue_id} SET DEFAULT nextval('{job_queue}_{job_queue_id}_seq'::regclass);
 
 
 --
--- Name: rqst_sms_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {job_sms_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_sms ALTER COLUMN rqst_sms_id SET DEFAULT nextval('rqst_sms_rqst_sms_id_seq'::regclass);
+ALTER TABLE ONLY {job_sms} ALTER COLUMN {job_sms_id} SET DEFAULT nextval('{job_sms}_{job_sms_id}_seq'::regclass);
 
 
 --
--- Name: sf_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_func_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sf ALTER COLUMN sf_id SET DEFAULT nextval('sf_sf_id_seq'::regclass);
+ALTER TABLE ONLY {sys_func} ALTER COLUMN {sys_func_id} SET DEFAULT nextval('{sys_func}_{sys_func_id}_seq'::regclass);
 
 
 --
--- Name: sm_id_auto; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {menu_id_auto}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sm ALTER COLUMN sm_id_auto SET DEFAULT nextval('sm_sm_id_auto_seq'::regclass);
+ALTER TABLE ONLY {menu} ALTER COLUMN {menu_id_auto} SET DEFAULT nextval('{menu}_{menu_id_auto}_seq'::regclass);
 
 
 --
--- Name: spef_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY spef ALTER COLUMN spef_id SET DEFAULT nextval('spef_spef_id_seq'::regclass);
+ALTER TABLE ONLY {sys_user_func} ALTER COLUMN {sys_user_func_id} SET DEFAULT nextval('{sys_user_func}_{sys_user_func_id}_seq'::regclass);
 
 
 --
--- Name: sper_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sper ALTER COLUMN sper_id SET DEFAULT nextval('sper_sper_id_seq'::regclass);
+ALTER TABLE ONLY {sys_user_role} ALTER COLUMN {sys_user_role_id} SET DEFAULT nextval('{sys_user_role}_{sys_user_role_id}_seq'::regclass);
 
 
 --
--- Name: sr_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_role_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sr ALTER COLUMN sr_id SET DEFAULT nextval('sr_sr_id_seq'::regclass);
+ALTER TABLE ONLY {sys_role} ALTER COLUMN {sys_role_id} SET DEFAULT nextval('{sys_role}_{sys_role_id}_seq'::regclass);
 
 
 --
--- Name: srm_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_menu_role_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY srm ALTER COLUMN srm_id SET DEFAULT nextval('srm_srm_id_seq'::regclass);
+ALTER TABLE ONLY {sys_menu_role} ALTER COLUMN {sys_menu_role_id} SET DEFAULT nextval('{sys_menu_role}_{sys_menu_role_id}_seq'::regclass);
 
 
 --
--- Name: txt_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {txt_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY txt ALTER COLUMN txt_id SET DEFAULT nextval('txt_txt_id_seq'::regclass);
+ALTER TABLE ONLY {txt} ALTER COLUMN {txt_id} SET DEFAULT nextval('{txt}_{txt_id}_seq'::regclass);
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY ucod ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: ucod2_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code2_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2_country_state ALTER COLUMN ucod2_id SET DEFAULT nextval('ucod2_ucod2_id_seq'::regclass);
+ALTER TABLE ONLY {code2_state} ALTER COLUMN {code2_sys_id} SET DEFAULT nextval('ucod2_{code2_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2_country_state ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code2_state} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2_country_state ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code2_state} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2_country_state ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code2_state} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2_country_state ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code2_state} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod2_h_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code2_sys_h_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2_h ALTER COLUMN ucod2_h_id SET DEFAULT nextval('ucod2_h_ucod2_h_id_seq'::regclass);
+ALTER TABLE ONLY {code2_sys} ALTER COLUMN {code2_sys_h_id} SET DEFAULT nextval('{code2_sys}_{code2_sys_h_id}_seq'::regclass);
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ac ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_ac} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ac ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_ac} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ac ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_ac} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ac ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_ac} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ac ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_ac} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ac1 ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_ac1} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ac1 ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_ac1} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ac1 ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_ac1} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ac1 ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_ac1} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ac1 ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_ac1} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ahc ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_ahc} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ahc ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_ahc} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ahc ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_ahc} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ahc ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_ahc} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ahc ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_ahc} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_country ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_country} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_country ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_country} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_country ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_country} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_country ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_country} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_country ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_country} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_d_scope ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_doc_scope} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_d_scope ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_doc_scope} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_d_scope ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_doc_scope} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_d_scope ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_doc_scope} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_d_scope ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_doc_scope} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod_h_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_h_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_h ALTER COLUMN ucod_h_id SET DEFAULT nextval('ucod_h_ucod_h_id_seq'::regclass);
+ALTER TABLE ONLY {code_sys} ALTER COLUMN {code_sys_h_id} SET DEFAULT nextval('{code_sys}_{code_sys_h_id}_seq'::regclass);
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_n_scope ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_note_scope} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_n_scope ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_note_scope} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_n_scope ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_note_scope} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_n_scope ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_note_scope} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_n_scope ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_note_scope} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_n_type ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_note_type} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_n_type ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_note_type} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_n_type ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_note_type} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_n_type ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_note_type} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_n_type ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_note_type} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ppd_type ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_param_type} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ppd_type ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_param_type} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ppd_type ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_param_type} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ppd_type ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_param_type} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_ppd_type ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_param_type} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_rqst_atype ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_task_action} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_rqst_atype ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_task_action} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_rqst_atype ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_task_action} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_rqst_atype ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_task_action} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_rqst_atype ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_task_action} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_rqst_source ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_task_source} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_rqst_source ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_task_source} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_rqst_source ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_task_source} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_rqst_source ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_task_source} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_rqst_source ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_task_source} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_txt_type ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_txt_type} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_txt_type ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_txt_type} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_txt_type ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_txt_type} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_txt_type ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_txt_type} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_txt_type ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_txt_type} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: ucod_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_v_sts ALTER COLUMN ucod_id SET DEFAULT nextval('ucod_ucod_id_seq'::regclass);
+ALTER TABLE ONLY {code_version_sts} ALTER COLUMN {code_sys_id} SET DEFAULT nextval('ucod_{code_sys_id}_seq'::regclass);
 
 
 --
--- Name: cod_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_etstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_v_sts ALTER COLUMN cod_etstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_version_sts} ALTER COLUMN {code_etstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_eu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_euser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_v_sts ALTER COLUMN cod_eu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_version_sts} ALTER COLUMN {code_euser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: cod_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_mtstmp}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_v_sts ALTER COLUMN cod_mtstmp SET DEFAULT mynow();
+ALTER TABLE ONLY {code_version_sts} ALTER COLUMN {code_mtstmp} SET DEFAULT {my_now}();
 
 
 --
--- Name: cod_mu; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {code_muser}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_v_sts ALTER COLUMN cod_mu SET DEFAULT mycuser();
+ALTER TABLE ONLY {code_version_sts} ALTER COLUMN {code_muser} SET DEFAULT {my_db_user}();
 
 
 --
--- Name: v_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {version_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY v ALTER COLUMN v_id SET DEFAULT nextval('v_v_id_seq'::regclass);
+ALTER TABLE ONLY {version} ALTER COLUMN {version_id} SET DEFAULT nextval('{version}_{version_id}_seq'::regclass);
 
 
 --
--- Name: xpp_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
+-- Name: {param_sys_id}; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY xpp ALTER COLUMN xpp_id SET DEFAULT nextval('xpp_xpp_id_seq'::regclass);
+ALTER TABLE ONLY {param_sys} ALTER COLUMN {param_sys_id} SET DEFAULT nextval('{param_sys}_{param_sys_id}_seq'::regclass);
 
 
 --
--- Name: aud_d_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {audit_detail}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY aud_d
-    ADD CONSTRAINT aud_d_pkey PRIMARY KEY (aud_seq, column_name);
+ALTER TABLE ONLY {audit_detail}
+    ADD CONSTRAINT {audit_detail}_pkey PRIMARY KEY ({audit_seq}, {audit_column_name});
 
 
 --
--- Name: aud_h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {audit}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY aud_h
-    ADD CONSTRAINT aud_h_pkey PRIMARY KEY (aud_seq);
+ALTER TABLE ONLY {audit}
+    ADD CONSTRAINT {audit}_pkey PRIMARY KEY ({audit_seq});
 
 
 --
--- Name: cpe_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cpe
-    ADD CONSTRAINT cpe_pkey PRIMARY KEY (pe_id);
+ALTER TABLE ONLY {cust_user}
+    ADD CONSTRAINT {cust_user}_pkey PRIMARY KEY ({sys_user_id});
 
 
 --
--- Name: cper_cper_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user_role}_{cust_user_role_id}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cper
-    ADD CONSTRAINT cper_cper_id_key UNIQUE (cper_id);
+ALTER TABLE ONLY {cust_user_role}
+    ADD CONSTRAINT {cust_user_role}_{cust_user_role_id}_key UNIQUE ({cust_user_role_id});
 
 
 --
--- Name: cper_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user_role}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cper
-    ADD CONSTRAINT cper_pkey PRIMARY KEY (pe_id, cr_name);
+ALTER TABLE ONLY {cust_user_role}
+    ADD CONSTRAINT {cust_user_role}_pkey PRIMARY KEY ({sys_user_id}, {cust_role_name});
 
 
 --
--- Name: cr_cr_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_role}_{cust_role_desc}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cr
-    ADD CONSTRAINT cr_cr_desc_key UNIQUE (cr_desc);
+ALTER TABLE ONLY {cust_role}
+    ADD CONSTRAINT {cust_role}_{cust_role_desc}_key UNIQUE ({cust_role_desc});
 
 
 --
--- Name: cr_cr_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_role}_{cust_role_id}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cr
-    ADD CONSTRAINT cr_cr_id_key UNIQUE (cr_id);
+ALTER TABLE ONLY {cust_role}
+    ADD CONSTRAINT {cust_role}_{cust_role_id}_key UNIQUE ({cust_role_id});
 
 
 --
--- Name: cr_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_role}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cr
-    ADD CONSTRAINT cr_pkey PRIMARY KEY (cr_name);
+ALTER TABLE ONLY {cust_role}
+    ADD CONSTRAINT {cust_role}_pkey PRIMARY KEY ({cust_role_name});
 
 
 --
--- Name: crm_crm_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_menu_role}_{cust_menu_role_id}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY crm
-    ADD CONSTRAINT crm_crm_id_key UNIQUE (crm_id);
+ALTER TABLE ONLY {cust_menu_role}
+    ADD CONSTRAINT {cust_menu_role}_{cust_menu_role_id}_key UNIQUE ({cust_menu_role_id});
 
 
 --
--- Name: crm_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_menu_role}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY crm
-    ADD CONSTRAINT crm_pkey PRIMARY KEY (cr_name, sm_id);
+ALTER TABLE ONLY {cust_menu_role}
+    ADD CONSTRAINT {cust_menu_role}_pkey PRIMARY KEY ({cust_role_name}, {menu_id});
 
 
 --
--- Name: d_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {doc}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY d
-    ADD CONSTRAINT d_pkey PRIMARY KEY (d_id);
+ALTER TABLE ONLY {doc}
+    ADD CONSTRAINT {doc}_pkey PRIMARY KEY ({doc_id});
 
 
 --
--- Name: dual_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {single}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY dual
-    ADD CONSTRAINT dual_pkey PRIMARY KEY (dual_ident);
+ALTER TABLE ONLY {single}
+    ADD CONSTRAINT {single}_pkey PRIMARY KEY ({single_ident});
 
 
 --
--- Name: gcod2_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: gcod2_{code_val1}_{code_txt}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY gcod2
-    ADD CONSTRAINT gcod2_codeval1_codetxt_key UNIQUE (codeval1, codetxt);
+    ADD CONSTRAINT gcod2_{code_val1}_{code_txt}_key UNIQUE ({code_val1}, {code_txt});
 
 
 --
--- Name: gcod2_codeval1_codeval2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: gcod2_{code_val1}_{code_va12}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY gcod2
-    ADD CONSTRAINT gcod2_codeval1_codeval2_key UNIQUE (codeval1, codeval2);
+    ADD CONSTRAINT gcod2_{code_val1}_{code_va12}_key UNIQUE ({code_val1}, {code_va12});
 
 
 --
--- Name: gcod2_d_scope_d_ctgr_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {code2_doc_ctgr}_{code_val1}_{code_txt}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod2_d_scope_d_ctgr
-    ADD CONSTRAINT gcod2_d_scope_d_ctgr_codeval1_codetxt_key UNIQUE (codeval1, codetxt);
-
-
---
--- Name: gcod2_d_scope_d_ctgr_codeval1_codeval2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY gcod2_d_scope_d_ctgr
-    ADD CONSTRAINT gcod2_d_scope_d_ctgr_codeval1_codeval2_key UNIQUE (codeval1, codeval2);
+ALTER TABLE ONLY {code2_doc_ctgr}
+    ADD CONSTRAINT {code2_doc_ctgr}_{code_val1}_{code_txt}_key UNIQUE ({code_val1}, {code_txt});
 
 
 --
--- Name: gcod2_d_scope_d_ctgr_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {code2_doc_ctgr}_{code_val1}_{code_va12}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod2_d_scope_d_ctgr
-    ADD CONSTRAINT gcod2_d_scope_d_ctgr_pkey PRIMARY KEY (gcod2_id);
+ALTER TABLE ONLY {code2_doc_ctgr}
+    ADD CONSTRAINT {code2_doc_ctgr}_{code_val1}_{code_va12}_key UNIQUE ({code_val1}, {code_va12});
 
 
 --
--- Name: gcod2_h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {code2_doc_ctgr}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod2_h
-    ADD CONSTRAINT gcod2_h_pkey PRIMARY KEY (codename);
+ALTER TABLE ONLY {code2_doc_ctgr}
+    ADD CONSTRAINT {code2_doc_ctgr}_pkey PRIMARY KEY ({code2_app_id});
+
+
+--
+-- Name: {code2_app}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY {code2_app}
+    ADD CONSTRAINT {code2_app}_pkey PRIMARY KEY ({code_name});
 
 
 --
@@ -7810,31 +7810,31 @@ ALTER TABLE ONLY gcod2_h
 --
 
 ALTER TABLE ONLY gcod2
-    ADD CONSTRAINT gcod2_pkey PRIMARY KEY (gcod2_id);
+    ADD CONSTRAINT gcod2_pkey PRIMARY KEY ({code2_app_id});
 
 
 --
--- Name: gcod_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY gcod
-    ADD CONSTRAINT gcod_codetxt_key UNIQUE (codetxt);
-
-
---
--- Name: gcod_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: gcod_{code_txt}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY gcod
-    ADD CONSTRAINT gcod_codeval_key UNIQUE (codeval);
+    ADD CONSTRAINT gcod_{code_txt}_key UNIQUE ({code_txt});
 
 
 --
--- Name: gcod_h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: gcod_{code_val}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod_h
-    ADD CONSTRAINT gcod_h_pkey PRIMARY KEY (codename);
+ALTER TABLE ONLY gcod
+    ADD CONSTRAINT gcod_{code_val}_key UNIQUE ({code_val});
+
+
+--
+-- Name: {code_app}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY {code_app}
+    ADD CONSTRAINT {code_app}_pkey PRIMARY KEY ({code_name});
 
 
 --
@@ -7846,383 +7846,383 @@ ALTER TABLE ONLY gcod
 
 
 --
--- Name: gpp_gpp_process_gpp_attrib_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {param_app}_{param_app_process}_{param_app_attrib}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gpp
-    ADD CONSTRAINT gpp_gpp_process_gpp_attrib_key UNIQUE (gpp_process, gpp_attrib);
+ALTER TABLE ONLY {param_app}
+    ADD CONSTRAINT {param_app}_{param_app_process}_{param_app_attrib}_key UNIQUE ({param_app_process}, {param_app_attrib});
 
 
 --
--- Name: gpp_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {param_app}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gpp
-    ADD CONSTRAINT gpp_pkey PRIMARY KEY (gpp_id);
+ALTER TABLE ONLY {param_app}
+    ADD CONSTRAINT {param_app}_pkey PRIMARY KEY ({param_app_id});
 
 
 --
--- Name: h_h_title_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {help}_{help_title}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY h
-    ADD CONSTRAINT h_h_title_key UNIQUE (h_title);
+ALTER TABLE ONLY {help}
+    ADD CONSTRAINT {help}_{help_title}_key UNIQUE ({help_title});
 
 
 --
--- Name: h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {help}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY h
-    ADD CONSTRAINT h_pkey PRIMARY KEY (h_id);
+ALTER TABLE ONLY {help}
+    ADD CONSTRAINT {help}_pkey PRIMARY KEY ({help_id});
 
 
 --
--- Name: hp_hp_code_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {help_target}_{help_target_code}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY hp
-    ADD CONSTRAINT hp_hp_code_key UNIQUE (hp_code);
+ALTER TABLE ONLY {help_target}
+    ADD CONSTRAINT {help_target}_{help_target_code}_key UNIQUE ({help_target_code});
 
 
 --
--- Name: hp_hp_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {help_target}_{help_target_desc}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY hp
-    ADD CONSTRAINT hp_hp_desc_key UNIQUE (hp_desc);
+ALTER TABLE ONLY {help_target}
+    ADD CONSTRAINT {help_target}_{help_target_desc}_key UNIQUE ({help_target_desc});
 
 
 --
--- Name: hp_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {help_target}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY hp
-    ADD CONSTRAINT hp_pkey PRIMARY KEY (hp_id);
+ALTER TABLE ONLY {help_target}
+    ADD CONSTRAINT {help_target}_pkey PRIMARY KEY ({help_target_id});
 
 
 --
--- Name: n_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {note}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY n
-    ADD CONSTRAINT n_pkey PRIMARY KEY (n_id);
+ALTER TABLE ONLY {note}
+    ADD CONSTRAINT {note}_pkey PRIMARY KEY ({note_id});
 
 
 --
--- Name: numbers_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {number}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY numbers
-    ADD CONSTRAINT numbers_pkey PRIMARY KEY ({number_val});
+ALTER TABLE ONLY {number}
+    ADD CONSTRAINT {number}_pkey PRIMARY KEY ({number_val});
 
 
 --
--- Name: pe_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY pe
-    ADD CONSTRAINT pe_pkey PRIMARY KEY (pe_id);
+ALTER TABLE ONLY {sys_user}
+    ADD CONSTRAINT {sys_user}_pkey PRIMARY KEY ({sys_user_id});
 
 
 --
--- Name: ppd_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {param}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ppd
-    ADD CONSTRAINT ppd_pkey PRIMARY KEY (ppd_id);
+ALTER TABLE ONLY {param}
+    ADD CONSTRAINT {param}_pkey PRIMARY KEY ({param_id});
 
 
 --
--- Name: ppd_ppd_process_ppd_attrib_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {param}_{param_process}_{param_attrib}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ppd
-    ADD CONSTRAINT ppd_ppd_process_ppd_attrib_key UNIQUE (ppd_process, ppd_attrib);
+ALTER TABLE ONLY {param}
+    ADD CONSTRAINT {param}_{param_process}_{param_attrib}_key UNIQUE ({param_process}, {param_attrib});
 
 
 --
--- Name: ppp_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {param_user}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ppp
-    ADD CONSTRAINT ppp_pkey PRIMARY KEY (ppp_id);
+ALTER TABLE ONLY {param_user}
+    ADD CONSTRAINT {param_user}_pkey PRIMARY KEY ({param_user_id});
 
 
 --
--- Name: ppp_ppp_process_ppp_attrib_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {param_user}_{param_user_process}_{param_user_attrib}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ppp
-    ADD CONSTRAINT ppp_ppp_process_ppp_attrib_key UNIQUE (pe_id, ppp_process, ppp_attrib);
+ALTER TABLE ONLY {param_user}
+    ADD CONSTRAINT {param_user}_{param_user_process}_{param_user_attrib}_key UNIQUE ({sys_user_id}, {param_user_process}, {param_user_attrib});
 
 
 --
--- Name: rq_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {queue}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rq
-    ADD CONSTRAINT rq_pkey PRIMARY KEY (rq_id);
+ALTER TABLE ONLY {queue}
+    ADD CONSTRAINT {queue}_pkey PRIMARY KEY ({queue_id});
 
 
 --
--- Name: rqst_d_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job_doc}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_d
-    ADD CONSTRAINT rqst_d_pkey PRIMARY KEY (rqst_d_id);
+ALTER TABLE ONLY {job_doc}
+    ADD CONSTRAINT {job_doc}_pkey PRIMARY KEY ({job_doc_id});
 
 
 --
--- Name: rqst_email_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job_email}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_email
-    ADD CONSTRAINT rqst_email_pkey PRIMARY KEY (rqst_email_id);
+ALTER TABLE ONLY {job_email}
+    ADD CONSTRAINT {job_email}_pkey PRIMARY KEY ({job_email_id});
 
 
 --
--- Name: rqst_n_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job_note}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_n
-    ADD CONSTRAINT rqst_n_pkey PRIMARY KEY (rqst_n_id);
+ALTER TABLE ONLY {job_note}
+    ADD CONSTRAINT {job_note}_pkey PRIMARY KEY ({job_note_id});
 
 
 --
--- Name: rqst_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst
-    ADD CONSTRAINT rqst_pkey PRIMARY KEY (rqst_id);
+ALTER TABLE ONLY {job}
+    ADD CONSTRAINT {job}_pkey PRIMARY KEY ({job_id});
 
 
 --
--- Name: rqst_rq_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job_queue}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_rq
-    ADD CONSTRAINT rqst_rq_pkey PRIMARY KEY (rqst_rq_id);
+ALTER TABLE ONLY {job_queue}
+    ADD CONSTRAINT {job_queue}_pkey PRIMARY KEY ({job_queue_id});
 
 
 --
--- Name: rqst_sms_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job_sms}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_sms
-    ADD CONSTRAINT rqst_sms_pkey PRIMARY KEY (rqst_sms_id);
+ALTER TABLE ONLY {job_sms}
+    ADD CONSTRAINT {job_sms}_pkey PRIMARY KEY ({job_sms_id});
 
 
 --
--- Name: sf_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_func}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sf
-    ADD CONSTRAINT sf_pkey PRIMARY KEY (sf_name);
+ALTER TABLE ONLY {sys_func}
+    ADD CONSTRAINT {sys_func}_pkey PRIMARY KEY ({sys_func_name});
 
 
 --
--- Name: sf_sf_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_func}_{sys_func_desc}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sf
-    ADD CONSTRAINT sf_sf_desc_key UNIQUE (sf_desc);
+ALTER TABLE ONLY {sys_func}
+    ADD CONSTRAINT {sys_func}_{sys_func_desc}_key UNIQUE ({sys_func_desc});
 
 
 --
--- Name: sf_sf_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_func}_{sys_func_id}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sf
-    ADD CONSTRAINT sf_sf_id_key UNIQUE (sf_id);
+ALTER TABLE ONLY {sys_func}
+    ADD CONSTRAINT {sys_func}_{sys_func_id}_key UNIQUE ({sys_func_id});
 
 
 --
--- Name: sm_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {menu}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sm
-    ADD CONSTRAINT sm_pkey PRIMARY KEY (sm_id_auto);
+ALTER TABLE ONLY {menu}
+    ADD CONSTRAINT {menu}_pkey PRIMARY KEY ({menu_id_auto});
 
 
 --
--- Name: sm_sm_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {menu}_{menu_id}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sm
-    ADD CONSTRAINT sm_sm_id_key UNIQUE (sm_id);
+ALTER TABLE ONLY {menu}
+    ADD CONSTRAINT {menu}_{menu_id}_key UNIQUE ({menu_id});
 
 
 --
--- Name: sm_sm_id_parent_sm_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {menu}_{menu_id_parent}_{menu_desc}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sm
-    ADD CONSTRAINT sm_sm_id_parent_sm_desc_key UNIQUE (sm_id_parent, sm_desc);
+ALTER TABLE ONLY {menu}
+    ADD CONSTRAINT {menu}_{menu_id_parent}_{menu_desc}_key UNIQUE ({menu_id_parent}, {menu_desc});
 
 
 --
--- Name: sm_sm_id_sm_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {menu}_{menu_id}_{menu_desc}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sm
-    ADD CONSTRAINT sm_sm_id_sm_desc_key UNIQUE (sm_id, sm_desc);
+ALTER TABLE ONLY {menu}
+    ADD CONSTRAINT {menu}_{menu_id}_{menu_desc}_key UNIQUE ({menu_id}, {menu_desc});
 
 
 --
--- Name: sm_sm_name_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {menu}_{menu_name}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sm
-    ADD CONSTRAINT sm_sm_name_key UNIQUE (sm_name);
+ALTER TABLE ONLY {menu}
+    ADD CONSTRAINT {menu}_{menu_name}_key UNIQUE ({menu_name});
 
 
 --
--- Name: spef_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY spef
-    ADD CONSTRAINT spef_pkey PRIMARY KEY (pe_id, sf_name);
+ALTER TABLE ONLY {sys_user_func}
+    ADD CONSTRAINT {sys_user_func}_pkey PRIMARY KEY ({sys_user_id}, {sys_func_name});
 
 
 --
--- Name: spef_spef_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}_{sys_user_func_id}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY spef
-    ADD CONSTRAINT spef_spef_id_key UNIQUE (spef_id);
+ALTER TABLE ONLY {sys_user_func}
+    ADD CONSTRAINT {sys_user_func}_{sys_user_func_id}_key UNIQUE ({sys_user_func_id});
 
 
 --
--- Name: sper_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sper
-    ADD CONSTRAINT sper_pkey PRIMARY KEY (pe_id, sr_name);
+ALTER TABLE ONLY {sys_user_role}
+    ADD CONSTRAINT {sys_user_role}_pkey PRIMARY KEY ({sys_user_id}, {sys_role_name});
 
 
 --
--- Name: sper_sper_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}_{sys_user_role_id}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sper
-    ADD CONSTRAINT sper_sper_id_key UNIQUE (sper_id);
+ALTER TABLE ONLY {sys_user_role}
+    ADD CONSTRAINT {sys_user_role}_{sys_user_role_id}_key UNIQUE ({sys_user_role_id});
 
 
 --
--- Name: sr_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_role}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sr
-    ADD CONSTRAINT sr_pkey PRIMARY KEY (sr_name);
+ALTER TABLE ONLY {sys_role}
+    ADD CONSTRAINT {sys_role}_pkey PRIMARY KEY ({sys_role_name});
 
 
 --
--- Name: sr_sr_desc_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_role}_{sys_role_desc}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sr
-    ADD CONSTRAINT sr_sr_desc_key UNIQUE (sr_desc);
+ALTER TABLE ONLY {sys_role}
+    ADD CONSTRAINT {sys_role}_{sys_role_desc}_key UNIQUE ({sys_role_desc});
 
 
 --
--- Name: sr_sr_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_role}_{sys_role_id}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sr
-    ADD CONSTRAINT sr_sr_id_key UNIQUE (sr_id);
+ALTER TABLE ONLY {sys_role}
+    ADD CONSTRAINT {sys_role}_{sys_role_id}_key UNIQUE ({sys_role_id});
 
 
 --
--- Name: srm_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_menu_role}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY srm
-    ADD CONSTRAINT srm_pkey PRIMARY KEY (sr_name, sm_id);
+ALTER TABLE ONLY {sys_menu_role}
+    ADD CONSTRAINT {sys_menu_role}_pkey PRIMARY KEY ({sys_role_name}, {menu_id});
 
 
 --
--- Name: srm_srm_id_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_menu_role}_{sys_menu_role_id}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY srm
-    ADD CONSTRAINT srm_srm_id_key UNIQUE (srm_id);
+ALTER TABLE ONLY {sys_menu_role}
+    ADD CONSTRAINT {sys_menu_role}_{sys_menu_role_id}_key UNIQUE ({sys_menu_role_id});
 
 
 --
--- Name: txt_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {txt}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY txt
-    ADD CONSTRAINT txt_pkey PRIMARY KEY (txt_id);
+ALTER TABLE ONLY {txt}
+    ADD CONSTRAINT {txt}_pkey PRIMARY KEY ({txt_id});
 
 
 --
--- Name: txt_txt_process_txt_attrib_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {txt}_{txt_process}_{txt_attrib}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY txt
-    ADD CONSTRAINT txt_txt_process_txt_attrib_key UNIQUE (txt_process, txt_attrib);
+ALTER TABLE ONLY {txt}
+    ADD CONSTRAINT {txt}_{txt_process}_{txt_attrib}_key UNIQUE ({txt_process}, {txt_attrib});
 
 
 --
--- Name: ucod2_codeval1_codeval2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: ucod2_{code_val1}_{code_va12}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY ucod2
-    ADD CONSTRAINT ucod2_codeval1_codeval2_key UNIQUE (codeval1, codeval2);
+    ADD CONSTRAINT ucod2_{code_val1}_{code_va12}_key UNIQUE ({code_val1}, {code_va12});
 
 
 
 
 --
--- Name: ucod2_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: ucod2_{code_val1}_{code_txt}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY ucod2
-    ADD CONSTRAINT ucod2_codeval1_codetxt_key UNIQUE (codeval1, codetxt);
+    ADD CONSTRAINT ucod2_{code_val1}_{code_txt}_key UNIQUE ({code_val1}, {code_txt});
 
 
 --
--- Name: ucod2_country_state_codeval1_codeval2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {code2_state}_{code_val1}_{code_va12}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2_country_state
-    ADD CONSTRAINT ucod2_country_state_codeval1_codeval2_key UNIQUE (codeval1, codeval2);
+ALTER TABLE ONLY {code2_state}
+    ADD CONSTRAINT {code2_state}_{code_val1}_{code_va12}_key UNIQUE ({code_val1}, {code_va12});
 
 
-
-
---
--- Name: ucod2_country_state_codeval1_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod2_country_state
-    ADD CONSTRAINT ucod2_country_state_codeval1_codetxt_key UNIQUE (codeval1, codetxt);
 
 
 --
--- Name: ucod2_country_state_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {code2_state}_{code_val1}_{code_txt}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2_country_state
-    ADD CONSTRAINT ucod2_country_state_pkey PRIMARY KEY (ucod2_id);
-
-
---
--- Name: ucod2_h_codeschema_codename_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod2_h
-    ADD CONSTRAINT ucod2_h_codeschema_codename_key UNIQUE (codeschema, codename);
+ALTER TABLE ONLY {code2_state}
+    ADD CONSTRAINT {code2_state}_{code_val1}_{code_txt}_key UNIQUE ({code_val1}, {code_txt});
 
 
 --
--- Name: ucod2_h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {code2_state}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2_h
-    ADD CONSTRAINT ucod2_h_pkey PRIMARY KEY (ucod2_h_id);
+ALTER TABLE ONLY {code2_state}
+    ADD CONSTRAINT {code2_state}_pkey PRIMARY KEY ({code2_sys_id});
+
+
+--
+-- Name: {code2_sys}_{code_schema}_{code_name}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY {code2_sys}
+    ADD CONSTRAINT {code2_sys}_{code_schema}_{code_name}_key UNIQUE ({code_schema}, {code_name});
+
+
+--
+-- Name: {code2_sys}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY {code2_sys}
+    ADD CONSTRAINT {code2_sys}_pkey PRIMARY KEY ({code2_sys_h_id});
 
 
 --
@@ -8230,249 +8230,249 @@ ALTER TABLE ONLY ucod2_h
 --
 
 ALTER TABLE ONLY ucod2
-    ADD CONSTRAINT ucod2_pkey PRIMARY KEY (ucod2_id);
+    ADD CONSTRAINT ucod2_pkey PRIMARY KEY ({code2_sys_id});
 
 
-ALTER TABLE ONLY ucod_ac1
-    ADD CONSTRAINT ucod_ac1_pkey PRIMARY KEY (ucod_id);
-ALTER TABLE ONLY ucod_ac1
-    ADD CONSTRAINT ucod_ac1_codetxt_key UNIQUE (codetxt);
-ALTER TABLE ONLY ucod_ac1
-    ADD CONSTRAINT ucod_ac1_codeval_key UNIQUE (codeval);
+ALTER TABLE ONLY {code_ac1}
+    ADD CONSTRAINT {code_ac1}_pkey PRIMARY KEY ({code_sys_id});
+ALTER TABLE ONLY {code_ac1}
+    ADD CONSTRAINT {code_ac1}_{code_txt}_key UNIQUE ({code_txt});
+ALTER TABLE ONLY {code_ac1}
+    ADD CONSTRAINT {code_ac1}_{code_val}_key UNIQUE ({code_val});
 
-ALTER TABLE ONLY ucod_ac
-    ADD CONSTRAINT ucod_ac_pkey PRIMARY KEY (ucod_id);
-ALTER TABLE ONLY ucod_ac
-    ADD CONSTRAINT ucod_ac_codetxt_key UNIQUE (codetxt);
-ALTER TABLE ONLY ucod_ac
-    ADD CONSTRAINT ucod_ac_codeval_key UNIQUE (codeval);
+ALTER TABLE ONLY {code_ac}
+    ADD CONSTRAINT {code_ac}_pkey PRIMARY KEY ({code_sys_id});
+ALTER TABLE ONLY {code_ac}
+    ADD CONSTRAINT {code_ac}_{code_txt}_key UNIQUE ({code_txt});
+ALTER TABLE ONLY {code_ac}
+    ADD CONSTRAINT {code_ac}_{code_val}_key UNIQUE ({code_val});
 
-ALTER TABLE ONLY ucod_ahc
-    ADD CONSTRAINT ucod_ahc_pkey PRIMARY KEY (ucod_id);
-ALTER TABLE ONLY ucod_ahc
-    ADD CONSTRAINT ucod_ahc_codetxt_key UNIQUE (codetxt);
-ALTER TABLE ONLY ucod_ahc
-    ADD CONSTRAINT ucod_ahc_codeval_key UNIQUE (codeval);
+ALTER TABLE ONLY {code_ahc}
+    ADD CONSTRAINT {code_ahc}_pkey PRIMARY KEY ({code_sys_id});
+ALTER TABLE ONLY {code_ahc}
+    ADD CONSTRAINT {code_ahc}_{code_txt}_key UNIQUE ({code_txt});
+ALTER TABLE ONLY {code_ahc}
+    ADD CONSTRAINT {code_ahc}_{code_val}_key UNIQUE ({code_val});
 
 ALTER TABLE ONLY ucod
-    ADD CONSTRAINT ucod_pkey PRIMARY KEY (ucod_id);
+    ADD CONSTRAINT ucod_pkey PRIMARY KEY ({code_sys_id});
 ALTER TABLE ONLY ucod
-    ADD CONSTRAINT ucod_codetxt_key UNIQUE (codetxt);
+    ADD CONSTRAINT ucod_{code_txt}_key UNIQUE ({code_txt});
 ALTER TABLE ONLY ucod
-    ADD CONSTRAINT ucod_codeval_key UNIQUE (codeval);
+    ADD CONSTRAINT ucod_{code_val}_key UNIQUE ({code_val});
 
-ALTER TABLE ONLY ucod_country
-    ADD CONSTRAINT ucod_country_pkey PRIMARY KEY (ucod_id);
-ALTER TABLE ONLY ucod_country
-    ADD CONSTRAINT ucod_country_codetxt_key UNIQUE (codetxt);
-ALTER TABLE ONLY ucod_country
-    ADD CONSTRAINT ucod_country_codeval_key UNIQUE (codeval);
+ALTER TABLE ONLY {code_country}
+    ADD CONSTRAINT {code_country}_pkey PRIMARY KEY ({code_sys_id});
+ALTER TABLE ONLY {code_country}
+    ADD CONSTRAINT {code_country}_{code_txt}_key UNIQUE ({code_txt});
+ALTER TABLE ONLY {code_country}
+    ADD CONSTRAINT {code_country}_{code_val}_key UNIQUE ({code_val});
 
-ALTER TABLE ONLY ucod_d_scope
-    ADD CONSTRAINT ucod_d_scope_pkey PRIMARY KEY (ucod_id);
-ALTER TABLE ONLY ucod_d_scope
-    ADD CONSTRAINT ucod_d_scope_codetxt_key UNIQUE (codetxt);
-ALTER TABLE ONLY ucod_d_scope
-    ADD CONSTRAINT ucod_d_scope_codeval_key UNIQUE (codeval);
-
-
---
--- Name: ucod_h_codeschema_codename_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY ucod_h
-    ADD CONSTRAINT ucod_h_codeschema_codename_key UNIQUE (codeschema, codename);
+ALTER TABLE ONLY {code_doc_scope}
+    ADD CONSTRAINT {code_doc_scope}_pkey PRIMARY KEY ({code_sys_id});
+ALTER TABLE ONLY {code_doc_scope}
+    ADD CONSTRAINT {code_doc_scope}_{code_txt}_key UNIQUE ({code_txt});
+ALTER TABLE ONLY {code_doc_scope}
+    ADD CONSTRAINT {code_doc_scope}_{code_val}_key UNIQUE ({code_val});
 
 
 --
--- Name: ucod_h_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys}_{code_schema}_{code_name}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_h
-    ADD CONSTRAINT ucod_h_pkey PRIMARY KEY (ucod_h_id);
-
-
-ALTER TABLE ONLY ucod_n_scope
-    ADD CONSTRAINT ucod_n_scope_pkey PRIMARY KEY (ucod_id);
-ALTER TABLE ONLY ucod_n_scope
-    ADD CONSTRAINT ucod_n_scope_codetxt_key UNIQUE (codetxt);
-ALTER TABLE ONLY ucod_n_scope
-    ADD CONSTRAINT ucod_n_scope_codeval_key UNIQUE (codeval);
-
-ALTER TABLE ONLY ucod_n_type
-    ADD CONSTRAINT ucod_n_type_pkey PRIMARY KEY (ucod_id);
-ALTER TABLE ONLY ucod_n_type
-    ADD CONSTRAINT ucod_n_type_codetxt_key UNIQUE (codetxt);
-ALTER TABLE ONLY ucod_n_type
-    ADD CONSTRAINT ucod_n_type_codeval_key UNIQUE (codeval);
-
-ALTER TABLE ONLY ucod_ppd_type
-    ADD CONSTRAINT ucod_ppd_type_pkey PRIMARY KEY (ucod_id);
-ALTER TABLE ONLY ucod_ppd_type
-    ADD CONSTRAINT ucod_ppd_type_codetxt_key UNIQUE (codetxt);
-ALTER TABLE ONLY ucod_ppd_type
-    ADD CONSTRAINT ucod_ppd_type_codeval_key UNIQUE (codeval);
-
-ALTER TABLE ONLY ucod_rqst_atype
-    ADD CONSTRAINT ucod_rqst_atype_pkey PRIMARY KEY (ucod_id);
-ALTER TABLE ONLY ucod_rqst_atype
-    ADD CONSTRAINT ucod_rqst_atype_codetxt_key UNIQUE (codetxt);
-ALTER TABLE ONLY ucod_rqst_atype
-    ADD CONSTRAINT ucod_rqst_atype_codeval_key UNIQUE (codeval);
-
-ALTER TABLE ONLY ucod_rqst_source
-    ADD CONSTRAINT ucod_rqst_source_pkey PRIMARY KEY (ucod_id);
-ALTER TABLE ONLY ucod_rqst_source
-    ADD CONSTRAINT ucod_rqst_source_codetxt_key UNIQUE (codetxt);
-ALTER TABLE ONLY ucod_rqst_source
-    ADD CONSTRAINT ucod_rqst_source_codeval_key UNIQUE (codeval);
-
-ALTER TABLE ONLY ucod_txt_type
-    ADD CONSTRAINT ucod_txt_type_pkey PRIMARY KEY (ucod_id);
-ALTER TABLE ONLY ucod_txt_type
-    ADD CONSTRAINT ucod_txt_type_codetxt_key UNIQUE (codetxt);
-ALTER TABLE ONLY ucod_txt_type
-    ADD CONSTRAINT ucod_txt_type_codeval_key UNIQUE (codeval);
+ALTER TABLE ONLY {code_sys}
+    ADD CONSTRAINT {code_sys}_{code_schema}_{code_name}_key UNIQUE ({code_schema}, {code_name});
 
 
 --
--- Name: ucod_v_sts_codetxt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod_v_sts
-    ADD CONSTRAINT ucod_v_sts_codetxt_key UNIQUE (codetxt);
+ALTER TABLE ONLY {code_sys}
+    ADD CONSTRAINT {code_sys}_pkey PRIMARY KEY ({code_sys_h_id});
 
 
---
--- Name: ucod_v_sts_codeval_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
+ALTER TABLE ONLY {code_note_scope}
+    ADD CONSTRAINT {code_note_scope}_pkey PRIMARY KEY ({code_sys_id});
+ALTER TABLE ONLY {code_note_scope}
+    ADD CONSTRAINT {code_note_scope}_{code_txt}_key UNIQUE ({code_txt});
+ALTER TABLE ONLY {code_note_scope}
+    ADD CONSTRAINT {code_note_scope}_{code_val}_key UNIQUE ({code_val});
 
-ALTER TABLE ONLY ucod_v_sts
-    ADD CONSTRAINT ucod_v_sts_codeval_key UNIQUE (codeval);
+ALTER TABLE ONLY {code_note_type}
+    ADD CONSTRAINT {code_note_type}_pkey PRIMARY KEY ({code_sys_id});
+ALTER TABLE ONLY {code_note_type}
+    ADD CONSTRAINT {code_note_type}_{code_txt}_key UNIQUE ({code_txt});
+ALTER TABLE ONLY {code_note_type}
+    ADD CONSTRAINT {code_note_type}_{code_val}_key UNIQUE ({code_val});
 
+ALTER TABLE ONLY {code_param_type}
+    ADD CONSTRAINT {code_param_type}_pkey PRIMARY KEY ({code_sys_id});
+ALTER TABLE ONLY {code_param_type}
+    ADD CONSTRAINT {code_param_type}_{code_txt}_key UNIQUE ({code_txt});
+ALTER TABLE ONLY {code_param_type}
+    ADD CONSTRAINT {code_param_type}_{code_val}_key UNIQUE ({code_val});
 
---
--- Name: ucod_v_sts_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
+ALTER TABLE ONLY {code_task_action}
+    ADD CONSTRAINT {code_task_action}_pkey PRIMARY KEY ({code_sys_id});
+ALTER TABLE ONLY {code_task_action}
+    ADD CONSTRAINT {code_task_action}_{code_txt}_key UNIQUE ({code_txt});
+ALTER TABLE ONLY {code_task_action}
+    ADD CONSTRAINT {code_task_action}_{code_val}_key UNIQUE ({code_val});
 
-ALTER TABLE ONLY ucod_v_sts
-    ADD CONSTRAINT ucod_v_sts_pkey PRIMARY KEY (ucod_id);
+ALTER TABLE ONLY {code_task_source}
+    ADD CONSTRAINT {code_task_source}_pkey PRIMARY KEY ({code_sys_id});
+ALTER TABLE ONLY {code_task_source}
+    ADD CONSTRAINT {code_task_source}_{code_txt}_key UNIQUE ({code_txt});
+ALTER TABLE ONLY {code_task_source}
+    ADD CONSTRAINT {code_task_source}_{code_val}_key UNIQUE ({code_val});
 
-
---
--- Name: v_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY v
-    ADD CONSTRAINT v_pkey PRIMARY KEY (v_id);
-
-
---
--- Name: v_v_no_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY v
-    ADD CONSTRAINT v_v_no_key UNIQUE (v_no_major, v_no_minor, v_no_build, v_no_rev);
-
-
---
--- Name: xpp_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY xpp
-    ADD CONSTRAINT xpp_pkey PRIMARY KEY (xpp_id);
-
-
---
--- Name: xpp_xpp_process_xpp_attrib_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY xpp
-    ADD CONSTRAINT xpp_xpp_process_xpp_attrib_key UNIQUE (xpp_process, xpp_attrib);
+ALTER TABLE ONLY {code_txt_type}
+    ADD CONSTRAINT {code_txt_type}_pkey PRIMARY KEY ({code_sys_id});
+ALTER TABLE ONLY {code_txt_type}
+    ADD CONSTRAINT {code_txt_type}_{code_txt}_key UNIQUE ({code_txt});
+ALTER TABLE ONLY {code_txt_type}
+    ADD CONSTRAINT {code_txt_type}_{code_val}_key UNIQUE ({code_val});
 
 
 --
--- Name: cpe_pe_email_unique; Type: INDEX; Schema: jsharmony; Owner: postgres
+-- Name: {code_version_sts}_{code_txt}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE UNIQUE INDEX cpe_pe_email_unique ON cpe USING btree (lower((pe_email)::text)) WHERE ((pe_sts)::text = 'ACTIVE'::text);
-
-
---
--- Name: fki_cpe_c_id_c_Fkey; Type: INDEX; Schema: jsharmony; Owner: postgres
---
-
-CREATE INDEX "fki_cpe_c_id_c_Fkey" ON cpe USING btree (c_id);
+ALTER TABLE ONLY {code_version_sts}
+    ADD CONSTRAINT {code_version_sts}_{code_txt}_key UNIQUE ({code_txt});
 
 
 --
--- Name: fki_d_d_scope_d_ctgr; Type: INDEX; Schema: jsharmony; Owner: postgres
+-- Name: {code_version_sts}_{code_val}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE INDEX fki_d_d_scope_d_ctgr ON d USING btree (d_scope, d_ctgr);
-
-
---
--- Name: h_hp_code_unique; Type: INDEX; Schema: jsharmony; Owner: postgres
---
-
-CREATE UNIQUE INDEX h_hp_code_unique ON h USING btree (hp_code) WHERE (hp_code IS NOT NULL);
+ALTER TABLE ONLY {code_version_sts}
+    ADD CONSTRAINT {code_version_sts}_{code_val}_key UNIQUE ({code_val});
 
 
 --
--- Name: pe_pe_email_unique; Type: INDEX; Schema: jsharmony; Owner: postgres
+-- Name: {code_version_sts}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE UNIQUE INDEX pe_pe_email_unique ON pe USING btree (lower((pe_email)::text)) WHERE ((pe_sts)::text = 'ACTIVE'::text);
-
-
---
--- Name: ucod2_h_coalesce_codename_idx; Type: INDEX; Schema: jsharmony; Owner: postgres
---
-
-CREATE UNIQUE INDEX ucod2_h_coalesce_codename_idx ON ucod2_h USING btree ((COALESCE(codeschema, '*** NULL IS HERE ***'::character varying)), codename);
+ALTER TABLE ONLY {code_version_sts}
+    ADD CONSTRAINT {code_version_sts}_pkey PRIMARY KEY ({code_sys_id});
 
 
 --
--- Name: ucod_h_coalesce_codename_idx; Type: INDEX; Schema: jsharmony; Owner: postgres
+-- Name: {version}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE UNIQUE INDEX ucod_h_coalesce_codename_idx ON ucod_h USING btree ((COALESCE(codeschema, '*** NULL IS HERE ***'::character varying)), codename);
-
-
---
--- Name: cpe_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
---
-
-CREATE TRIGGER cpe_iud BEFORE INSERT OR DELETE OR UPDATE ON cpe FOR EACH ROW EXECUTE PROCEDURE cpe_iud();
+ALTER TABLE ONLY {version}
+    ADD CONSTRAINT {version}_pkey PRIMARY KEY ({version_id});
 
 
 --
--- Name: cpe_iud_after_insert; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {version}_{version}_no_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER cpe_iud_after_insert AFTER INSERT ON cpe FOR EACH ROW EXECUTE PROCEDURE cpe_iud_after_insert();
-
-
---
--- Name: cper_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
---
-
-CREATE TRIGGER cper_iud BEFORE INSERT OR DELETE OR UPDATE ON cper FOR EACH ROW EXECUTE PROCEDURE cper_iud();
+ALTER TABLE ONLY {version}
+    ADD CONSTRAINT {version}_{version}_no_key UNIQUE ({version_no_major}, {version_no_minor}, {version_no_build}, {version_no_rev});
 
 
 --
--- Name: d_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {param_sys}_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER d_iud BEFORE INSERT OR DELETE OR UPDATE ON d FOR EACH ROW EXECUTE PROCEDURE d_iud();
+ALTER TABLE ONLY {param_sys}
+    ADD CONSTRAINT {param_sys}_pkey PRIMARY KEY ({param_sys_id});
 
 
 --
--- Name: gcod2_d_scope_d_ctgr_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {param_sys}_{param_sys_process}_{param_sys_attrib}_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER gcod2_d_scope_d_ctgr_iud BEFORE INSERT OR DELETE OR UPDATE ON gcod2_d_scope_d_ctgr FOR EACH ROW EXECUTE PROCEDURE gcod2_iud();
+ALTER TABLE ONLY {param_sys}
+    ADD CONSTRAINT {param_sys}_{param_sys_process}_{param_sys_attrib}_key UNIQUE ({param_sys_process}, {param_sys_attrib});
+
+
+--
+-- Name: {cust_user}_{sys_user_email}_unique; Type: INDEX; Schema: jsharmony; Owner: postgres
+--
+
+CREATE UNIQUE INDEX {cust_user}_{sys_user_email}_unique ON {cust_user} USING btree (lower(({sys_user_email})::text)) WHERE (({sys_user_sts})::text = 'ACTIVE'::text);
+
+
+--
+-- Name: fki_{cust_user}_{cust_id}_{cust}_Fkey; Type: INDEX; Schema: jsharmony; Owner: postgres
+--
+
+CREATE INDEX "fki_{cust_user}_{cust_id}_{cust}_Fkey" ON {cust_user} USING btree ({cust_id});
+
+
+--
+-- Name: fki_{doc}_{doc_scope}_{doc_ctgr}; Type: INDEX; Schema: jsharmony; Owner: postgres
+--
+
+CREATE INDEX fki_{doc}_{doc_scope}_{doc_ctgr} ON {doc} USING btree ({doc_scope}, {doc_ctgr});
+
+
+--
+-- Name: {help}_{help_target_code}_unique; Type: INDEX; Schema: jsharmony; Owner: postgres
+--
+
+CREATE UNIQUE INDEX {help}_{help_target_code}_unique ON {help} USING btree ({help_target_code}) WHERE ({help_target_code} IS NOT NULL);
+
+
+--
+-- Name: {sys_user}_{sys_user_email}_unique; Type: INDEX; Schema: jsharmony; Owner: postgres
+--
+
+CREATE UNIQUE INDEX {sys_user}_{sys_user_email}_unique ON {sys_user} USING btree (lower(({sys_user_email})::text)) WHERE (({sys_user_sts})::text = 'ACTIVE'::text);
+
+
+--
+-- Name: {code2_sys}_coalesce_{code_name}_idx; Type: INDEX; Schema: jsharmony; Owner: postgres
+--
+
+CREATE UNIQUE INDEX {code2_sys}_coalesce_{code_name}_idx ON {code2_sys} USING btree ((COALESCE({code_schema}, '*** NULL IS HERE ***'::character varying)), {code_name});
+
+
+--
+-- Name: {code_sys}_coalesce_{code_name}_idx; Type: INDEX; Schema: jsharmony; Owner: postgres
+--
+
+CREATE UNIQUE INDEX {code_sys}_coalesce_{code_name}_idx ON {code_sys} USING btree ((COALESCE({code_schema}, '*** NULL IS HERE ***'::character varying)), {code_name});
+
+
+--
+-- Name: {cust_user}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+--
+
+CREATE TRIGGER {cust_user}_iud BEFORE INSERT OR DELETE OR UPDATE ON {cust_user} FOR EACH ROW EXECUTE PROCEDURE {cust_user}_iud();
+
+
+--
+-- Name: {cust_user}_iud_after_insert; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+--
+
+CREATE TRIGGER {cust_user}_iud_after_insert AFTER INSERT ON {cust_user} FOR EACH ROW EXECUTE PROCEDURE {cust_user}_iud_after_insert();
+
+
+--
+-- Name: {cust_user_role}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+--
+
+CREATE TRIGGER {cust_user_role}_iud BEFORE INSERT OR DELETE OR UPDATE ON {cust_user_role} FOR EACH ROW EXECUTE PROCEDURE {cust_user_role}_iud();
+
+
+--
+-- Name: {doc}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+--
+
+CREATE TRIGGER {doc}_iud BEFORE INSERT OR DELETE OR UPDATE ON {doc} FOR EACH ROW EXECUTE PROCEDURE {doc}_iud();
+
+
+--
+-- Name: {code2_doc_ctgr}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+--
+
+CREATE TRIGGER {code2_doc_ctgr}_iud BEFORE INSERT OR DELETE OR UPDATE ON {code2_doc_ctgr} FOR EACH ROW EXECUTE PROCEDURE gcod2_iud();
 
 
 --
@@ -8490,407 +8490,407 @@ CREATE TRIGGER gcod_iud BEFORE INSERT OR DELETE OR UPDATE ON gcod FOR EACH ROW E
 
 
 --
--- Name: gpp_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {param_app}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER gpp_iud BEFORE INSERT OR DELETE OR UPDATE ON gpp FOR EACH ROW EXECUTE PROCEDURE gpp_iud();
+CREATE TRIGGER {param_app}_iud BEFORE INSERT OR DELETE OR UPDATE ON {param_app} FOR EACH ROW EXECUTE PROCEDURE {param_app}_iud();
 
 
 --
--- Name: h_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {help}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER h_iud BEFORE INSERT OR DELETE OR UPDATE ON h FOR EACH ROW EXECUTE PROCEDURE h_iud();
+CREATE TRIGGER {help}_iud BEFORE INSERT OR DELETE OR UPDATE ON {help} FOR EACH ROW EXECUTE PROCEDURE {help}_iud();
 
 
 --
--- Name: n_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {note}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER n_iud BEFORE INSERT OR DELETE OR UPDATE ON n FOR EACH ROW EXECUTE PROCEDURE n_iud();
+CREATE TRIGGER {note}_iud BEFORE INSERT OR DELETE OR UPDATE ON {note} FOR EACH ROW EXECUTE PROCEDURE {note}_iud();
 
 
 --
--- Name: pe_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER pe_iud BEFORE INSERT OR DELETE OR UPDATE ON pe FOR EACH ROW EXECUTE PROCEDURE pe_iud();
+CREATE TRIGGER {sys_user}_iud BEFORE INSERT OR DELETE OR UPDATE ON {sys_user} FOR EACH ROW EXECUTE PROCEDURE {sys_user}_iud();
 
 
 --
--- Name: ppd_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {param}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER ppd_iud BEFORE INSERT OR DELETE OR UPDATE ON ppd FOR EACH ROW EXECUTE PROCEDURE ppd_iud();
+CREATE TRIGGER {param}_iud BEFORE INSERT OR DELETE OR UPDATE ON {param} FOR EACH ROW EXECUTE PROCEDURE {param}_iud();
 
 
 --
--- Name: ppp_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {param_user}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER ppp_iud BEFORE INSERT OR DELETE OR UPDATE ON ppp FOR EACH ROW EXECUTE PROCEDURE ppp_iud();
+CREATE TRIGGER {param_user}_iud BEFORE INSERT OR DELETE OR UPDATE ON {param_user} FOR EACH ROW EXECUTE PROCEDURE {param_user}_iud();
 
 
 --
--- Name: spef_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER spef_iud BEFORE INSERT OR DELETE OR UPDATE ON spef FOR EACH ROW EXECUTE PROCEDURE spef_iud();
+CREATE TRIGGER {sys_user_func}_iud BEFORE INSERT OR DELETE OR UPDATE ON {sys_user_func} FOR EACH ROW EXECUTE PROCEDURE {sys_user_func}_iud();
 
 
 --
--- Name: sper_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER sper_iud BEFORE INSERT OR DELETE OR UPDATE ON sper FOR EACH ROW EXECUTE PROCEDURE sper_iud();
+CREATE TRIGGER {sys_user_role}_iud BEFORE INSERT OR DELETE OR UPDATE ON {sys_user_role} FOR EACH ROW EXECUTE PROCEDURE {sys_user_role}_iud();
 
 
 --
--- Name: txt_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {txt}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER txt_iud BEFORE INSERT OR DELETE OR UPDATE ON txt FOR EACH ROW EXECUTE PROCEDURE txt_iud();
+CREATE TRIGGER {txt}_iud BEFORE INSERT OR DELETE OR UPDATE ON {txt} FOR EACH ROW EXECUTE PROCEDURE {txt}_iud();
 
 
 --
--- Name: v_crmsel_iud_insteadof_update; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {v_cust_menu_role_selection}_iud_insteadof_update; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER v_crmsel_iud_insteadof_update INSTEAD OF UPDATE ON v_crmsel FOR EACH ROW EXECUTE PROCEDURE v_crmsel_iud_insteadof_update();
+CREATE TRIGGER {v_cust_menu_role_selection}_iud_insteadof_update INSTEAD OF UPDATE ON {v_cust_menu_role_selection} FOR EACH ROW EXECUTE PROCEDURE {v_cust_menu_role_selection}_iud_insteadof_update();
 
 
 --
--- Name: v_srmsel_iud_insteadof_update; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {v_sys_menu_role_selection}_iud_insteadof_update; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER v_srmsel_iud_insteadof_update INSTEAD OF UPDATE ON v_srmsel FOR EACH ROW EXECUTE PROCEDURE v_srmsel_iud_insteadof_update();
+CREATE TRIGGER {v_sys_menu_role_selection}_iud_insteadof_update INSTEAD OF UPDATE ON {v_sys_menu_role_selection} FOR EACH ROW EXECUTE PROCEDURE {v_sys_menu_role_selection}_iud_insteadof_update();
 
 
 --
--- Name: xpp_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: {param_sys}_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER xpp_iud BEFORE INSERT OR DELETE OR UPDATE ON xpp FOR EACH ROW EXECUTE PROCEDURE xpp_iud();
+CREATE TRIGGER {param_sys}_iud BEFORE INSERT OR DELETE OR UPDATE ON {param_sys} FOR EACH ROW EXECUTE PROCEDURE {param_sys}_iud();
 
 
 --
--- Name: aud_d_aud_seq_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {audit_detail}_{audit_seq}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY aud_d
-    ADD CONSTRAINT aud_d_aud_seq_fkey FOREIGN KEY (aud_seq) REFERENCES aud_h(aud_seq);
+ALTER TABLE ONLY {audit_detail}
+    ADD CONSTRAINT {audit_detail}_{audit_seq}_fkey FOREIGN KEY ({audit_seq}) REFERENCES {audit}({audit_seq});
 
 
 --
--- Name: cpe_pe_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user}_{sys_user_sts}_{code_ahc}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cpe
-    ADD CONSTRAINT cpe_pe_sts_ucod_ahc_fkey FOREIGN KEY (pe_sts) REFERENCES ucod_ahc(codeval);
+ALTER TABLE ONLY {cust_user}
+    ADD CONSTRAINT {cust_user}_{sys_user_sts}_{code_ahc}_fkey FOREIGN KEY ({sys_user_sts}) REFERENCES {code_ahc}({code_val});
 
 
 --
--- Name: cper_cr_name_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user_role}_{cust_role_name}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cper
-    ADD CONSTRAINT cper_cr_name_fkey FOREIGN KEY (cr_name) REFERENCES cr(cr_name);
+ALTER TABLE ONLY {cust_user_role}
+    ADD CONSTRAINT {cust_user_role}_{cust_role_name}_fkey FOREIGN KEY ({cust_role_name}) REFERENCES {cust_role}({cust_role_name});
 
 
 --
--- Name: cper_pe_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user_role}_{sys_user_id}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cper
-    ADD CONSTRAINT cper_pe_id_fkey FOREIGN KEY (pe_id) REFERENCES cpe(pe_id) ON DELETE CASCADE;
+ALTER TABLE ONLY {cust_user_role}
+    ADD CONSTRAINT {cust_user_role}_{sys_user_id}_fkey FOREIGN KEY ({sys_user_id}) REFERENCES {cust_user}({sys_user_id}) ON DELETE CASCADE;
 
 
 --
--- Name: cr_cr_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_role}_{cust_role_sts}_{code_ahc}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY cr
-    ADD CONSTRAINT cr_cr_sts_ucod_ahc_fkey FOREIGN KEY (cr_sts) REFERENCES ucod_ahc(codeval);
+ALTER TABLE ONLY {cust_role}
+    ADD CONSTRAINT {cust_role}_{cust_role_sts}_{code_ahc}_fkey FOREIGN KEY ({cust_role_sts}) REFERENCES {code_ahc}({code_val});
 
 
 --
--- Name: crm_cr_name_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_menu_role}_{cust_role_name}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY crm
-    ADD CONSTRAINT crm_cr_name_fkey FOREIGN KEY (cr_name) REFERENCES cr(cr_name) ON DELETE CASCADE;
+ALTER TABLE ONLY {cust_menu_role}
+    ADD CONSTRAINT {cust_menu_role}_{cust_role_name}_fkey FOREIGN KEY ({cust_role_name}) REFERENCES {cust_role}({cust_role_name}) ON DELETE CASCADE;
 
 
 --
--- Name: crm_sm_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {cust_menu_role}_{menu_id}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY crm
-    ADD CONSTRAINT crm_sm_id_fkey FOREIGN KEY (sm_id) REFERENCES sm(sm_id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY {cust_menu_role}
+    ADD CONSTRAINT {cust_menu_role}_{menu_id}_fkey FOREIGN KEY ({menu_id}) REFERENCES {menu}({menu_id}) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
--- Name: d_d_scope_d_ctgr; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {doc}_{doc_scope}_{doc_ctgr}; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY d
-    ADD CONSTRAINT d_d_scope_d_ctgr FOREIGN KEY (d_scope, d_ctgr) REFERENCES gcod2_d_scope_d_ctgr(codeval1, codeval2);
+ALTER TABLE ONLY {doc}
+    ADD CONSTRAINT {doc}_{doc_scope}_{doc_ctgr} FOREIGN KEY ({doc_scope}, {doc_ctgr}) REFERENCES {code2_doc_ctgr}({code_val1}, {code_va12});
 
 
 --
--- Name: d_d_scope_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {doc}_{doc_scope}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY d
-    ADD CONSTRAINT d_d_scope_fkey FOREIGN KEY (d_scope) REFERENCES ucod_d_scope(codeval);
+ALTER TABLE ONLY {doc}
+    ADD CONSTRAINT {doc}_{doc_scope}_fkey FOREIGN KEY ({doc_scope}) REFERENCES {code_doc_scope}({code_val});
 
 
 --
--- Name: gpp_ppd_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {param_app}_{param}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gpp
-    ADD CONSTRAINT gpp_ppd_fkey FOREIGN KEY (gpp_process, gpp_attrib) REFERENCES ppd(ppd_process, ppd_attrib);
+ALTER TABLE ONLY {param_app}
+    ADD CONSTRAINT {param_app}_{param}_fkey FOREIGN KEY ({param_app_process}, {param_app_attrib}) REFERENCES {param}({param_process}, {param_attrib});
 
 
 --
--- Name: h_hp_code_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {help}_{help_target_code}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY h
-    ADD CONSTRAINT h_hp_code_fkey FOREIGN KEY (hp_code) REFERENCES hp(hp_code);
+ALTER TABLE ONLY {help}
+    ADD CONSTRAINT {help}_{help_target_code}_fkey FOREIGN KEY ({help_target_code}) REFERENCES {help_target}({help_target_code});
 
 
 --
--- Name: n_n_scope_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {note}_{note_scope}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY n
-    ADD CONSTRAINT n_n_scope_fkey FOREIGN KEY (n_scope) REFERENCES ucod_n_scope(codeval);
+ALTER TABLE ONLY {note}
+    ADD CONSTRAINT {note}_{note_scope}_fkey FOREIGN KEY ({note_scope}) REFERENCES {code_note_scope}({code_val});
 
 
 --
--- Name: n_n_sts_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {note}_{note_sts}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY n
-    ADD CONSTRAINT n_n_sts_fkey FOREIGN KEY (n_sts) REFERENCES ucod_ac1(codeval);
+ALTER TABLE ONLY {note}
+    ADD CONSTRAINT {note}_{note_sts}_fkey FOREIGN KEY ({note_sts}) REFERENCES {code_ac1}({code_val});
 
 
 --
--- Name: n_n_type_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {note}_{note_type}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY n
-    ADD CONSTRAINT n_n_type_fkey FOREIGN KEY (n_type) REFERENCES ucod_n_type(codeval);
+ALTER TABLE ONLY {note}
+    ADD CONSTRAINT {note}_{note_type}_fkey FOREIGN KEY ({note_type}) REFERENCES {code_note_type}({code_val});
 
 
 --
--- Name: pe_pe_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user}_{sys_user_sts}_{code_ahc}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY pe
-    ADD CONSTRAINT pe_pe_sts_ucod_ahc_fkey FOREIGN KEY (pe_sts) REFERENCES ucod_ahc(codeval);
+ALTER TABLE ONLY {sys_user}
+    ADD CONSTRAINT {sys_user}_{sys_user_sts}_{code_ahc}_fkey FOREIGN KEY ({sys_user_sts}) REFERENCES {code_ahc}({code_val});
 
 
 --
--- Name: pe_ucod2_country_state_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user}_{code2_state}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY pe
-    ADD CONSTRAINT pe_ucod2_country_state_fkey FOREIGN KEY (pe_country, pe_state) REFERENCES ucod2_country_state(codeval1, codeval2);
+ALTER TABLE ONLY {sys_user}
+    ADD CONSTRAINT {sys_user}_{code2_state}_fkey FOREIGN KEY ({sys_user_country}, {sys_user_state}) REFERENCES {code2_state}({code_val1}, {code_va12});
 
 
 --
--- Name: pe_ucod_country_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user}_{code_country}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY pe
-    ADD CONSTRAINT pe_ucod_country_fkey FOREIGN KEY (pe_country) REFERENCES ucod_country(codeval);
+ALTER TABLE ONLY {sys_user}
+    ADD CONSTRAINT {sys_user}_{code_country}_fkey FOREIGN KEY ({sys_user_country}) REFERENCES {code_country}({code_val});
 
 
 --
--- Name: ppd_ucod_ppd_type_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {param}_{code_param_type}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ppd
-    ADD CONSTRAINT ppd_ucod_ppd_type_fkey FOREIGN KEY (ppd_type) REFERENCES ucod_ppd_type(codeval);
+ALTER TABLE ONLY {param}
+    ADD CONSTRAINT {param}_{code_param_type}_fkey FOREIGN KEY ({param_type}) REFERENCES {code_param_type}({code_val});
 
 
 --
--- Name: ppp_pe_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {param_user}_{sys_user_id}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ppp
-    ADD CONSTRAINT ppp_pe_id_fkey FOREIGN KEY (pe_id) REFERENCES pe(pe_id) ON DELETE CASCADE;
+ALTER TABLE ONLY {param_user}
+    ADD CONSTRAINT {param_user}_{sys_user_id}_fkey FOREIGN KEY ({sys_user_id}) REFERENCES {sys_user}({sys_user_id}) ON DELETE CASCADE;
 
 
 --
--- Name: ppp_ppd_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {param_user}_{param}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ppp
-    ADD CONSTRAINT ppp_ppd_fkey FOREIGN KEY (ppp_process, ppp_attrib) REFERENCES ppd(ppd_process, ppd_attrib) ON DELETE CASCADE;
+ALTER TABLE ONLY {param_user}
+    ADD CONSTRAINT {param_user}_{param}_fkey FOREIGN KEY ({param_user_process}, {param_user_attrib}) REFERENCES {param}({param_process}, {param_attrib}) ON DELETE CASCADE;
 
 
 --
--- Name: rqst_d_rqst_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job_doc}_{job_id}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_d
-    ADD CONSTRAINT rqst_d_rqst_id_fkey FOREIGN KEY (rqst_id) REFERENCES rqst(rqst_id);
+ALTER TABLE ONLY {job_doc}
+    ADD CONSTRAINT {job_doc}_{job_id}_fkey FOREIGN KEY ({job_id}) REFERENCES {job}({job_id});
 
 
 --
--- Name: rqst_email_rqst_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job_email}_{job_id}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_email
-    ADD CONSTRAINT rqst_email_rqst_id_fkey FOREIGN KEY (rqst_id) REFERENCES rqst(rqst_id);
+ALTER TABLE ONLY {job_email}
+    ADD CONSTRAINT {job_email}_{job_id}_fkey FOREIGN KEY ({job_id}) REFERENCES {job}({job_id});
 
 
 --
--- Name: rqst_n_rqst_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job_note}_{job_id}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_n
-    ADD CONSTRAINT rqst_n_rqst_id_fkey FOREIGN KEY (rqst_id) REFERENCES rqst(rqst_id);
+ALTER TABLE ONLY {job_note}
+    ADD CONSTRAINT {job_note}_{job_id}_fkey FOREIGN KEY ({job_id}) REFERENCES {job}({job_id});
 
 
 --
--- Name: rqst_rq_rqst_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job_queue}_{job_id}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_rq
-    ADD CONSTRAINT rqst_rq_rqst_id_fkey FOREIGN KEY (rqst_id) REFERENCES rqst(rqst_id);
+ALTER TABLE ONLY {job_queue}
+    ADD CONSTRAINT {job_queue}_{job_id}_fkey FOREIGN KEY ({job_id}) REFERENCES {job}({job_id});
 
 
 --
--- Name: rqst_sms_rqst_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job_sms}_{job_id}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst_sms
-    ADD CONSTRAINT rqst_sms_rqst_id_fkey FOREIGN KEY (rqst_id) REFERENCES rqst(rqst_id);
+ALTER TABLE ONLY {job_sms}
+    ADD CONSTRAINT {job_sms}_{job_id}_fkey FOREIGN KEY ({job_id}) REFERENCES {job}({job_id});
 
 
 --
--- Name: rqst_ucod_rqst_atype_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job}_{code_task_action}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst
-    ADD CONSTRAINT rqst_ucod_rqst_atype_fkey FOREIGN KEY (rqst_atype) REFERENCES ucod_rqst_atype(codeval);
+ALTER TABLE ONLY {job}
+    ADD CONSTRAINT {job}_{code_task_action}_fkey FOREIGN KEY ({job_action}) REFERENCES {code_task_action}({code_val});
 
 
 --
--- Name: rqst_ucod_rqst_source_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {job}_{code_task_source}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY rqst
-    ADD CONSTRAINT rqst_ucod_rqst_source_fkey FOREIGN KEY (rqst_source) REFERENCES ucod_rqst_source(codeval);
+ALTER TABLE ONLY {job}
+    ADD CONSTRAINT {job}_{code_task_source}_fkey FOREIGN KEY ({job_source}) REFERENCES {code_task_source}({code_val});
 
 
 --
--- Name: sf_sf_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_func}_{sys_func_sts}_{code_ahc}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sf
-    ADD CONSTRAINT sf_sf_sts_ucod_ahc_fkey FOREIGN KEY (sf_sts) REFERENCES ucod_ahc(codeval);
+ALTER TABLE ONLY {sys_func}
+    ADD CONSTRAINT {sys_func}_{sys_func_sts}_{code_ahc}_fkey FOREIGN KEY ({sys_func_sts}) REFERENCES {code_ahc}({code_val});
 
 
 --
--- Name: sm_sm_id_parent_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {menu}_{menu_id_parent}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sm
-    ADD CONSTRAINT sm_sm_id_parent_fkey FOREIGN KEY (sm_id_parent) REFERENCES sm(sm_id);
+ALTER TABLE ONLY {menu}
+    ADD CONSTRAINT {menu}_{menu_id_parent}_fkey FOREIGN KEY ({menu_id_parent}) REFERENCES {menu}({menu_id});
 
 
 --
--- Name: sm_sm_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {menu}_{menu_sts}_{code_ahc}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sm
-    ADD CONSTRAINT sm_sm_sts_ucod_ahc_fkey FOREIGN KEY (sm_sts) REFERENCES ucod_ahc(codeval);
+ALTER TABLE ONLY {menu}
+    ADD CONSTRAINT {menu}_{menu_sts}_{code_ahc}_fkey FOREIGN KEY ({menu_sts}) REFERENCES {code_ahc}({code_val});
 
 
 --
--- Name: spef_pe_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}_{sys_user_id}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY spef
-    ADD CONSTRAINT spef_pe_id_fkey FOREIGN KEY (pe_id) REFERENCES pe(pe_id);
+ALTER TABLE ONLY {sys_user_func}
+    ADD CONSTRAINT {sys_user_func}_{sys_user_id}_fkey FOREIGN KEY ({sys_user_id}) REFERENCES {sys_user}({sys_user_id});
 
 
 --
--- Name: spef_sf_name_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}_{sys_func_name}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY spef
-    ADD CONSTRAINT spef_sf_name_fkey FOREIGN KEY (sf_name) REFERENCES sf(sf_name);
+ALTER TABLE ONLY {sys_user_func}
+    ADD CONSTRAINT {sys_user_func}_{sys_func_name}_fkey FOREIGN KEY ({sys_func_name}) REFERENCES {sys_func}({sys_func_name});
 
 
 --
--- Name: sper_pe_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}_{sys_user_id}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sper
-    ADD CONSTRAINT sper_pe_id_fkey FOREIGN KEY (pe_id) REFERENCES pe(pe_id);
+ALTER TABLE ONLY {sys_user_role}
+    ADD CONSTRAINT {sys_user_role}_{sys_user_id}_fkey FOREIGN KEY ({sys_user_id}) REFERENCES {sys_user}({sys_user_id});
 
 
 --
--- Name: sper_sr_name_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}_{sys_role_name}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sper
-    ADD CONSTRAINT sper_sr_name_fkey FOREIGN KEY (sr_name) REFERENCES sr(sr_name);
+ALTER TABLE ONLY {sys_user_role}
+    ADD CONSTRAINT {sys_user_role}_{sys_role_name}_fkey FOREIGN KEY ({sys_role_name}) REFERENCES {sys_role}({sys_role_name});
 
 
 --
--- Name: sr_sr_sts_ucod_ahc_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_role}_{sys_role_sts}_{code_ahc}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY sr
-    ADD CONSTRAINT sr_sr_sts_ucod_ahc_fkey FOREIGN KEY (sr_sts) REFERENCES ucod_ahc(codeval);
+ALTER TABLE ONLY {sys_role}
+    ADD CONSTRAINT {sys_role}_{sys_role_sts}_{code_ahc}_fkey FOREIGN KEY ({sys_role_sts}) REFERENCES {code_ahc}({code_val});
 
 
 --
--- Name: srm_sm_id_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_menu_role}_{menu_id}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY srm
-    ADD CONSTRAINT srm_sm_id_fkey FOREIGN KEY (sm_id) REFERENCES sm(sm_id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY {sys_menu_role}
+    ADD CONSTRAINT {sys_menu_role}_{menu_id}_fkey FOREIGN KEY ({menu_id}) REFERENCES {menu}({menu_id}) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
--- Name: srm_sr_name_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {sys_menu_role}_{sys_role_name}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY srm
-    ADD CONSTRAINT srm_sr_name_fkey FOREIGN KEY (sr_name) REFERENCES sr(sr_name) ON DELETE CASCADE;
+ALTER TABLE ONLY {sys_menu_role}
+    ADD CONSTRAINT {sys_menu_role}_{sys_role_name}_fkey FOREIGN KEY ({sys_role_name}) REFERENCES {sys_role}({sys_role_name}) ON DELETE CASCADE;
 
 
 --
--- Name: txt_ucod_txt_type_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {txt}_{code_txt_type}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY txt
-    ADD CONSTRAINT txt_ucod_txt_type_fkey FOREIGN KEY (txt_type) REFERENCES ucod_txt_type(codeval);
+ALTER TABLE ONLY {txt}
+    ADD CONSTRAINT {txt}_{code_txt_type}_fkey FOREIGN KEY ({txt_type}) REFERENCES {code_txt_type}({code_val});
 
 
 --
--- Name: v_v_sts_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {version}_{version_sts}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY v
-    ADD CONSTRAINT v_v_sts_fkey FOREIGN KEY (v_sts) REFERENCES ucod_v_sts(codeval);
+ALTER TABLE ONLY {version}
+    ADD CONSTRAINT {version}_{version_sts}_fkey FOREIGN KEY ({version_sts}) REFERENCES {code_version_sts}({code_val});
 
 
 --
--- Name: xpp_ppd_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: {param_sys}_{param}_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY xpp
-    ADD CONSTRAINT xpp_ppd_fkey FOREIGN KEY (xpp_process, xpp_attrib) REFERENCES ppd(ppd_process, ppd_attrib);
+ALTER TABLE ONLY {param_sys}
+    ADD CONSTRAINT {param_sys}_{param}_fkey FOREIGN KEY ({param_sys_process}, {param_sys_attrib}) REFERENCES {param}({param_process}, {param_attrib});
 
 
 --
@@ -8908,217 +8908,217 @@ GRANT USAGE ON SCHEMA jsharmony TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 -- Name: audit(toaudit, bigint, bigint, character varying, text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) FROM PUBLIC;
-REVOKE ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) FROM postgres;
-GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO postgres;
-GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO PUBLIC;
-GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION audit(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION audit(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) FROM postgres;
+GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) TO postgres;
+GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) TO PUBLIC;
+GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION audit(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
 -- Name: audit_base(toaudit, bigint, bigint, character varying, text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) FROM PUBLIC;
-REVOKE ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) FROM postgres;
-GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO postgres;
-GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO PUBLIC;
-GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_aud_seq bigint, par_table_id bigint, par_column_name character varying, par_column_val text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION audit_base(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION audit_base(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) FROM postgres;
+GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) TO postgres;
+GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) TO PUBLIC;
+GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION audit_base(toa toaudit, INOUT par_{audit_seq} bigint, par_{audit_table_id} bigint, par_{audit_column_name} character varying, par_{audit_column_val} text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {log_audit_info}(timestamp without time zone, character varying, timestamp without time zone, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) FROM postgres;
-GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO postgres;
-GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION audit_info(timestamp without time zone, character varying, timestamp without time zone, character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: check_code(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) FROM postgres;
-GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO postgres;
-GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_codeval character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {log_audit_info}(timestamp without time zone, character varying, timestamp without time zone, character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {log_audit_info}(timestamp without time zone, character varying, timestamp without time zone, character varying) FROM postgres;
+GRANT ALL ON FUNCTION {log_audit_info}(timestamp without time zone, character varying, timestamp without time zone, character varying) TO postgres;
+GRANT ALL ON FUNCTION {log_audit_info}(timestamp without time zone, character varying, timestamp without time zone, character varying) TO PUBLIC;
+GRANT ALL ON FUNCTION {log_audit_info}(timestamp without time zone, character varying, timestamp without time zone, character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {log_audit_info}(timestamp without time zone, character varying, timestamp without time zone, character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: check_code2(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {check_code}(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) FROM postgres;
-GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO postgres;
-GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: check_code2_p(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) FROM postgres;
-GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO postgres;
-GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_code2_p(in_tblname character varying, in_codeval1 character varying, in_codeval2 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {check_code}(in_tblname character varying, in_{code_val} character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {check_code}(in_tblname character varying, in_{code_val} character varying) FROM postgres;
+GRANT ALL ON FUNCTION {check_code}(in_tblname character varying, in_{code_val} character varying) TO postgres;
+GRANT ALL ON FUNCTION {check_code}(in_tblname character varying, in_{code_val} character varying) TO PUBLIC;
+GRANT ALL ON FUNCTION {check_code}(in_tblname character varying, in_{code_val} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {check_code}(in_tblname character varying, in_{code_val} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: check_code_p(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {check_code2}(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) FROM postgres;
-GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO postgres;
-GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_code_p(in_tblname character varying, in_codeval character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: check_foreign(character varying, bigint); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) FROM PUBLIC;
-REVOKE ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) FROM postgres;
-GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO postgres;
-GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_foreign(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {check_code2}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {check_code2}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) FROM postgres;
+GRANT ALL ON FUNCTION {check_code2}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) TO postgres;
+GRANT ALL ON FUNCTION {check_code2}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) TO PUBLIC;
+GRANT ALL ON FUNCTION {check_code2}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {check_code2}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: check_foreign_p(character varying, bigint); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {check_code2_exec}(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) FROM PUBLIC;
-REVOKE ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) FROM postgres;
-GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO postgres;
-GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_foreign_p(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: check_pp(character varying, character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) FROM postgres;
-GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO postgres;
-GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_pp(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {check_code2_exec}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {check_code2_exec}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) FROM postgres;
+GRANT ALL ON FUNCTION {check_code2_exec}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) TO postgres;
+GRANT ALL ON FUNCTION {check_code2_exec}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) TO PUBLIC;
+GRANT ALL ON FUNCTION {check_code2_exec}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {check_code2_exec}(in_tblname character varying, in_{code_val1} character varying, in_{code_va12} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: cpe_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {check_code_exec}(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION cpe_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION cpe_iud() FROM postgres;
-GRANT ALL ON FUNCTION cpe_iud() TO postgres;
-GRANT ALL ON FUNCTION cpe_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION cpe_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION cpe_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: cpe_iud_after_insert(); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION cpe_iud_after_insert() FROM PUBLIC;
-REVOKE ALL ON FUNCTION cpe_iud_after_insert() FROM postgres;
-GRANT ALL ON FUNCTION cpe_iud_after_insert() TO postgres;
-GRANT ALL ON FUNCTION cpe_iud_after_insert() TO PUBLIC;
-GRANT ALL ON FUNCTION cpe_iud_after_insert() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION cpe_iud_after_insert() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {check_code_exec}(in_tblname character varying, in_{code_val} character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {check_code_exec}(in_tblname character varying, in_{code_val} character varying) FROM postgres;
+GRANT ALL ON FUNCTION {check_code_exec}(in_tblname character varying, in_{code_val} character varying) TO postgres;
+GRANT ALL ON FUNCTION {check_code_exec}(in_tblname character varying, in_{code_val} character varying) TO PUBLIC;
+GRANT ALL ON FUNCTION {check_code_exec}(in_tblname character varying, in_{code_val} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {check_code_exec}(in_tblname character varying, in_{code_val} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: cper_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {check_foreign_key}(character varying, bigint); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION cper_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION cper_iud() FROM postgres;
-GRANT ALL ON FUNCTION cper_iud() TO postgres;
-GRANT ALL ON FUNCTION cper_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION cper_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION cper_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: create_gcod(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM postgres;
-GRANT ALL ON FUNCTION create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO postgres;
-GRANT ALL ON FUNCTION create_gcod(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {check_foreign_key}(in_tblname character varying, in_tblid bigint) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {check_foreign_key}(in_tblname character varying, in_tblid bigint) FROM postgres;
+GRANT ALL ON FUNCTION {check_foreign_key}(in_tblname character varying, in_tblid bigint) TO postgres;
+GRANT ALL ON FUNCTION {check_foreign_key}(in_tblname character varying, in_tblid bigint) TO PUBLIC;
+GRANT ALL ON FUNCTION {check_foreign_key}(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {check_foreign_key}(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: create_gcod2(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {check_foreign_key_exec}(character varying, bigint); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM postgres;
-GRANT ALL ON FUNCTION create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO postgres;
-GRANT ALL ON FUNCTION create_gcod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: create_ucod(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM postgres;
-GRANT ALL ON FUNCTION create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO postgres;
-GRANT ALL ON FUNCTION create_ucod(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {check_foreign_key_exec}(in_tblname character varying, in_tblid bigint) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {check_foreign_key_exec}(in_tblname character varying, in_tblid bigint) FROM postgres;
+GRANT ALL ON FUNCTION {check_foreign_key_exec}(in_tblname character varying, in_tblid bigint) TO postgres;
+GRANT ALL ON FUNCTION {check_foreign_key_exec}(in_tblname character varying, in_tblid bigint) TO PUBLIC;
+GRANT ALL ON FUNCTION {check_foreign_key_exec}(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {check_foreign_key_exec}(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: create_ucod2(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {check_param}(character varying, character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) FROM postgres;
-GRANT ALL ON FUNCTION create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO postgres;
-GRANT ALL ON FUNCTION create_ucod2(in_codeschema character varying, in_codename character varying, in_codemean character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {check_param}(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {check_param}(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) FROM postgres;
+GRANT ALL ON FUNCTION {check_param}(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO postgres;
+GRANT ALL ON FUNCTION {check_param}(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO PUBLIC;
+GRANT ALL ON FUNCTION {check_param}(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {check_param}(in_table character varying, in_process character varying, in_attrib character varying, in_val character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: d_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION d_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION d_iud() FROM postgres;
-GRANT ALL ON FUNCTION d_iud() TO postgres;
-GRANT ALL ON FUNCTION d_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION d_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION d_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {cust_user}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {cust_user}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {cust_user}_iud() TO postgres;
+GRANT ALL ON FUNCTION {cust_user}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {cust_user}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {cust_user}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {cust_user}_iud_after_insert(); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {cust_user}_iud_after_insert() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {cust_user}_iud_after_insert() FROM postgres;
+GRANT ALL ON FUNCTION {cust_user}_iud_after_insert() TO postgres;
+GRANT ALL ON FUNCTION {cust_user}_iud_after_insert() TO PUBLIC;
+GRANT ALL ON FUNCTION {cust_user}_iud_after_insert() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {cust_user}_iud_after_insert() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {cust_user_role}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {cust_user_role}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {cust_user_role}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {cust_user_role}_iud() TO postgres;
+GRANT ALL ON FUNCTION {cust_user_role}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {cust_user_role}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {cust_user_role}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {create_code_app}(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {create_code_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {create_code_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) FROM postgres;
+GRANT ALL ON FUNCTION {create_code_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) TO postgres;
+GRANT ALL ON FUNCTION {create_code_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {create_code2_app}(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {create_code2_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {create_code2_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) FROM postgres;
+GRANT ALL ON FUNCTION {create_code2_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) TO postgres;
+GRANT ALL ON FUNCTION {create_code2_app}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {create_code_sys}(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {create_code_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {create_code_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) FROM postgres;
+GRANT ALL ON FUNCTION {create_code_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) TO postgres;
+GRANT ALL ON FUNCTION {create_code_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {create_code2_sys}(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {create_code2_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {create_code2_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) FROM postgres;
+GRANT ALL ON FUNCTION {create_code2_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) TO postgres;
+GRANT ALL ON FUNCTION {create_code2_sys}(in_{code_schema} character varying, in_{code_name} character varying, in_{code_desc} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {doc}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {doc}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {doc}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {doc}_iud() TO postgres;
+GRANT ALL ON FUNCTION {doc}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {doc}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {doc}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 
-REVOKE ALL ON FUNCTION {schema}.d_filename(bigint, text) FROM PUBLIC;
-REVOKE ALL ON FUNCTION {schema}.d_filename(bigint, text) FROM postgres;
-GRANT ALL ON FUNCTION {schema}.d_filename(bigint, text) TO postgres;
-GRANT ALL ON FUNCTION {schema}.d_filename(bigint, text) TO PUBLIC;
-GRANT ALL ON FUNCTION {schema}.d_filename(bigint, text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION {schema}.d_filename(bigint, text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {schema}.{doc_filename}(bigint, text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {schema}.{doc_filename}(bigint, text) FROM postgres;
+GRANT ALL ON FUNCTION {schema}.{doc_filename}(bigint, text) TO postgres;
+GRANT ALL ON FUNCTION {schema}.{doc_filename}(bigint, text) TO PUBLIC;
+GRANT ALL ON FUNCTION {schema}.{doc_filename}(bigint, text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {schema}.{doc_filename}(bigint, text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9170,39 +9170,39 @@ GRANT ALL ON FUNCTION gcod_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: get_cpe_name(bigint); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {get_cust_user_name}(bigint); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION get_cpe_name(in_pe_id bigint) FROM PUBLIC;
-REVOKE ALL ON FUNCTION get_cpe_name(in_pe_id bigint) FROM postgres;
-GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO postgres;
-GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION get_cpe_name(in_pe_id bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: get_pe_name(bigint); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION get_pe_name(in_pe_id bigint) FROM PUBLIC;
-REVOKE ALL ON FUNCTION get_pe_name(in_pe_id bigint) FROM postgres;
-GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO postgres;
-GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION get_pe_name(in_pe_id bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {get_cust_user_name}(in_{sys_user_id} bigint) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {get_cust_user_name}(in_{sys_user_id} bigint) FROM postgres;
+GRANT ALL ON FUNCTION {get_cust_user_name}(in_{sys_user_id} bigint) TO postgres;
+GRANT ALL ON FUNCTION {get_cust_user_name}(in_{sys_user_id} bigint) TO PUBLIC;
+GRANT ALL ON FUNCTION {get_cust_user_name}(in_{sys_user_id} bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {get_cust_user_name}(in_{sys_user_id} bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: get_ppd_desc(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {get_sys_user_name}(bigint); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) FROM postgres;
-GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO postgres;
-GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION get_ppd_desc(in_ppd_process character varying, in_ppd_attrib character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {get_sys_user_name}(in_{sys_user_id} bigint) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {get_sys_user_name}(in_{sys_user_id} bigint) FROM postgres;
+GRANT ALL ON FUNCTION {get_sys_user_name}(in_{sys_user_id} bigint) TO postgres;
+GRANT ALL ON FUNCTION {get_sys_user_name}(in_{sys_user_id} bigint) TO PUBLIC;
+GRANT ALL ON FUNCTION {get_sys_user_name}(in_{sys_user_id} bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {get_sys_user_name}(in_{sys_user_id} bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {get_param_desc}(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {get_param_desc}(in_{param_process} character varying, in_{param_attrib} character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {get_param_desc}(in_{param_process} character varying, in_{param_attrib} character varying) FROM postgres;
+GRANT ALL ON FUNCTION {get_param_desc}(in_{param_process} character varying, in_{param_attrib} character varying) TO postgres;
+GRANT ALL ON FUNCTION {get_param_desc}(in_{param_process} character varying, in_{param_attrib} character varying) TO PUBLIC;
+GRANT ALL ON FUNCTION {get_param_desc}(in_{param_process} character varying, in_{param_attrib} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {get_param_desc}(in_{param_process} character varying, in_{param_attrib} character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9218,75 +9218,75 @@ GRANT ALL ON FUNCTION good_email(x text) TO {schema}_%%%INIT_DB_LCASE%%%_role_de
 
 
 --
--- Name: gpp_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {param_app}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION gpp_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION gpp_iud() FROM postgres;
-GRANT ALL ON FUNCTION gpp_iud() TO postgres;
-GRANT ALL ON FUNCTION gpp_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION gpp_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION gpp_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: h_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION h_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION h_iud() FROM postgres;
-GRANT ALL ON FUNCTION h_iud() TO postgres;
-GRANT ALL ON FUNCTION h_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION h_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION h_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {param_app}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {param_app}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {param_app}_iud() TO postgres;
+GRANT ALL ON FUNCTION {param_app}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {param_app}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {param_app}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: mycuser(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {help}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION mycuser() FROM PUBLIC;
-REVOKE ALL ON FUNCTION mycuser() FROM postgres;
-GRANT ALL ON FUNCTION mycuser() TO postgres;
-GRANT ALL ON FUNCTION mycuser() TO PUBLIC;
-GRANT ALL ON FUNCTION mycuser() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mycuser() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: mycuser_email(text); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION mycuser_email(u text) FROM PUBLIC;
-REVOKE ALL ON FUNCTION mycuser_email(u text) FROM postgres;
-GRANT ALL ON FUNCTION mycuser_email(u text) TO postgres;
-GRANT ALL ON FUNCTION mycuser_email(u text) TO PUBLIC;
-GRANT ALL ON FUNCTION mycuser_email(u text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mycuser_email(u text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {help}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {help}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {help}_iud() TO postgres;
+GRANT ALL ON FUNCTION {help}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {help}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {help}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: mycuser_fmt(text); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {my_db_user}(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION mycuser_fmt(u text) FROM PUBLIC;
-REVOKE ALL ON FUNCTION mycuser_fmt(u text) FROM postgres;
-GRANT ALL ON FUNCTION mycuser_fmt(u text) TO postgres;
-GRANT ALL ON FUNCTION mycuser_fmt(u text) TO PUBLIC;
-GRANT ALL ON FUNCTION mycuser_fmt(u text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mycuser_fmt(u text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {my_db_user}() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {my_db_user}() FROM postgres;
+GRANT ALL ON FUNCTION {my_db_user}() TO postgres;
+GRANT ALL ON FUNCTION {my_db_user}() TO PUBLIC;
+GRANT ALL ON FUNCTION {my_db_user}() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {my_db_user}() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: myhash(character, bigint, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {my_db_user}_email(text); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) FROM postgres;
-GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO postgres;
-GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION myhash(par_type character, par_pe_id bigint, par_pw character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {my_db_user}_email(u text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {my_db_user}_email(u text) FROM postgres;
+GRANT ALL ON FUNCTION {my_db_user}_email(u text) TO postgres;
+GRANT ALL ON FUNCTION {my_db_user}_email(u text) TO PUBLIC;
+GRANT ALL ON FUNCTION {my_db_user}_email(u text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {my_db_user}_email(u text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {my_db_user_fmt}(text); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {my_db_user_fmt}(u text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {my_db_user_fmt}(u text) FROM postgres;
+GRANT ALL ON FUNCTION {my_db_user_fmt}(u text) TO postgres;
+GRANT ALL ON FUNCTION {my_db_user_fmt}(u text) TO PUBLIC;
+GRANT ALL ON FUNCTION {my_db_user_fmt}(u text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {my_db_user_fmt}(u text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {my_hash}(character, bigint, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {my_hash}(par_type character, par_{sys_user_id} bigint, par_pw character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {my_hash}(par_type character, par_{sys_user_id} bigint, par_pw character varying) FROM postgres;
+GRANT ALL ON FUNCTION {my_hash}(par_type character, par_{sys_user_id} bigint, par_pw character varying) TO postgres;
+GRANT ALL ON FUNCTION {my_hash}(par_type character, par_{sys_user_id} bigint, par_pw character varying) TO PUBLIC;
+GRANT ALL ON FUNCTION {my_hash}(par_type character, par_{sys_user_id} bigint, par_pw character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {my_hash}(par_type character, par_{sys_user_id} bigint, par_pw character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9314,15 +9314,15 @@ GRANT ALL ON FUNCTION mymmddyy(timestamp without time zone) TO {schema}_%%%INIT_
 
 
 --
--- Name: mymmddyyhhmi(timestamp without time zone); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {my_mmddyyhhmi}(timestamp without time zone); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) FROM PUBLIC;
-REVOKE ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) FROM postgres;
-GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO postgres;
-GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO PUBLIC;
-GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mymmddyyhhmi(timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {my_mmddyyhhmi}(timestamp without time zone) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {my_mmddyyhhmi}(timestamp without time zone) FROM postgres;
+GRANT ALL ON FUNCTION {my_mmddyyhhmi}(timestamp without time zone) TO postgres;
+GRANT ALL ON FUNCTION {my_mmddyyhhmi}(timestamp without time zone) TO PUBLIC;
+GRANT ALL ON FUNCTION {my_mmddyyhhmi}(timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {my_mmddyyhhmi}(timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9338,207 +9338,207 @@ GRANT ALL ON FUNCTION mymmddyyyyhhmi(timestamp without time zone) TO {schema}_%%
 
 
 --
--- Name: mynow(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {my_now}(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION mynow() FROM PUBLIC;
-REVOKE ALL ON FUNCTION mynow() FROM postgres;
-GRANT ALL ON FUNCTION mynow() TO postgres;
-GRANT ALL ON FUNCTION mynow() TO PUBLIC;
-GRANT ALL ON FUNCTION mynow() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mynow() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: mype(); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION mype() FROM PUBLIC;
-REVOKE ALL ON FUNCTION mype() FROM postgres;
-GRANT ALL ON FUNCTION mype() TO postgres;
-GRANT ALL ON FUNCTION mype() TO PUBLIC;
-GRANT ALL ON FUNCTION mype() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mype() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {my_now}() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {my_now}() FROM postgres;
+GRANT ALL ON FUNCTION {my_now}() TO postgres;
+GRANT ALL ON FUNCTION {my_now}() TO PUBLIC;
+GRANT ALL ON FUNCTION {my_now}() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {my_now}() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: mypec(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {my_sys_user_id}(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION mypec() FROM PUBLIC;
-REVOKE ALL ON FUNCTION mypec() FROM postgres;
-GRANT ALL ON FUNCTION mypec() TO postgres;
-GRANT ALL ON FUNCTION mypec() TO PUBLIC;
-GRANT ALL ON FUNCTION mypec() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mypec() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: mytodate(timestamp without time zone); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION mytodate(timestamp without time zone) FROM PUBLIC;
-REVOKE ALL ON FUNCTION mytodate(timestamp without time zone) FROM postgres;
-GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO postgres;
-GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO PUBLIC;
-GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mytodate(timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {my_sys_user_id}() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {my_sys_user_id}() FROM postgres;
+GRANT ALL ON FUNCTION {my_sys_user_id}() TO postgres;
+GRANT ALL ON FUNCTION {my_sys_user_id}() TO PUBLIC;
+GRANT ALL ON FUNCTION {my_sys_user_id}() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {my_sys_user_id}() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: mytoday(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {my_cust_user_id}(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION mytoday() FROM PUBLIC;
-REVOKE ALL ON FUNCTION mytoday() FROM postgres;
-GRANT ALL ON FUNCTION mytoday() TO postgres;
-GRANT ALL ON FUNCTION mytoday() TO PUBLIC;
-GRANT ALL ON FUNCTION mytoday() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION mytoday() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: n_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION n_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION n_iud() FROM postgres;
-GRANT ALL ON FUNCTION n_iud() TO postgres;
-GRANT ALL ON FUNCTION n_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION n_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION n_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {my_cust_user_id}() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {my_cust_user_id}() FROM postgres;
+GRANT ALL ON FUNCTION {my_cust_user_id}() TO postgres;
+GRANT ALL ON FUNCTION {my_cust_user_id}() TO PUBLIC;
+GRANT ALL ON FUNCTION {my_cust_user_id}() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {my_cust_user_id}() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: nonequal(bit, bit); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {my_to_date}(timestamp without time zone); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION nonequal(x1 bit, x2 bit) FROM PUBLIC;
-REVOKE ALL ON FUNCTION nonequal(x1 bit, x2 bit) FROM postgres;
-GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO postgres;
-GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 bit, x2 bit) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: nonequal(boolean, boolean); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) FROM PUBLIC;
-REVOKE ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) FROM postgres;
-GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO postgres;
-GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 boolean, x2 boolean) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {my_to_date}(timestamp without time zone) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {my_to_date}(timestamp without time zone) FROM postgres;
+GRANT ALL ON FUNCTION {my_to_date}(timestamp without time zone) TO postgres;
+GRANT ALL ON FUNCTION {my_to_date}(timestamp without time zone) TO PUBLIC;
+GRANT ALL ON FUNCTION {my_to_date}(timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {my_to_date}(timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: nonequal(smallint, smallint); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {my_today}(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) FROM PUBLIC;
-REVOKE ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) FROM postgres;
-GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO postgres;
-GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 smallint, x2 smallint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: nonequal(integer, integer); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION nonequal(x1 integer, x2 integer) FROM PUBLIC;
-REVOKE ALL ON FUNCTION nonequal(x1 integer, x2 integer) FROM postgres;
-GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO postgres;
-GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 integer, x2 integer) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {my_today}() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {my_today}() FROM postgres;
+GRANT ALL ON FUNCTION {my_today}() TO postgres;
+GRANT ALL ON FUNCTION {my_today}() TO PUBLIC;
+GRANT ALL ON FUNCTION {my_today}() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {my_today}() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: nonequal(bigint, bigint); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {note}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) FROM PUBLIC;
-REVOKE ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) FROM postgres;
-GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO postgres;
-GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 bigint, x2 bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: nonequal(numeric, numeric); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) FROM PUBLIC;
-REVOKE ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) FROM postgres;
-GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO postgres;
-GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 numeric, x2 numeric) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {note}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {note}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {note}_iud() TO postgres;
+GRANT ALL ON FUNCTION {note}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {note}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {note}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: nonequal(text, text); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {nequal}(bit, bit); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION nonequal(x1 text, x2 text) FROM PUBLIC;
-REVOKE ALL ON FUNCTION nonequal(x1 text, x2 text) FROM postgres;
-GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO postgres;
-GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 text, x2 text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: nonequal(timestamp without time zone, timestamp without time zone); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) FROM PUBLIC;
-REVOKE ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) FROM postgres;
-GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO postgres;
-GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO PUBLIC;
-GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION nonequal(x1 timestamp without time zone, x2 timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {nequal}(x1 bit, x2 bit) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {nequal}(x1 bit, x2 bit) FROM postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 bit, x2 bit) TO postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 bit, x2 bit) TO PUBLIC;
+GRANT ALL ON FUNCTION {nequal}(x1 bit, x2 bit) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {nequal}(x1 bit, x2 bit) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: pe_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {nequal}(boolean, boolean); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION pe_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION pe_iud() FROM postgres;
-GRANT ALL ON FUNCTION pe_iud() TO postgres;
-GRANT ALL ON FUNCTION pe_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION pe_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION pe_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: ppd_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION ppd_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION ppd_iud() FROM postgres;
-GRANT ALL ON FUNCTION ppd_iud() TO postgres;
-GRANT ALL ON FUNCTION ppd_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION ppd_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION ppd_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {nequal}(x1 boolean, x2 boolean) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {nequal}(x1 boolean, x2 boolean) FROM postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 boolean, x2 boolean) TO postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 boolean, x2 boolean) TO PUBLIC;
+GRANT ALL ON FUNCTION {nequal}(x1 boolean, x2 boolean) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {nequal}(x1 boolean, x2 boolean) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: ppp_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {nequal}(smallint, smallint); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION ppp_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION ppp_iud() FROM postgres;
-GRANT ALL ON FUNCTION ppp_iud() TO postgres;
-GRANT ALL ON FUNCTION ppp_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION ppp_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION ppp_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {nequal}(x1 smallint, x2 smallint) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {nequal}(x1 smallint, x2 smallint) FROM postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 smallint, x2 smallint) TO postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 smallint, x2 smallint) TO PUBLIC;
+GRANT ALL ON FUNCTION {nequal}(x1 smallint, x2 smallint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {nequal}(x1 smallint, x2 smallint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {nequal}(integer, integer); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {nequal}(x1 integer, x2 integer) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {nequal}(x1 integer, x2 integer) FROM postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 integer, x2 integer) TO postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 integer, x2 integer) TO PUBLIC;
+GRANT ALL ON FUNCTION {nequal}(x1 integer, x2 integer) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {nequal}(x1 integer, x2 integer) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {nequal}(bigint, bigint); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {nequal}(x1 bigint, x2 bigint) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {nequal}(x1 bigint, x2 bigint) FROM postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 bigint, x2 bigint) TO postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 bigint, x2 bigint) TO PUBLIC;
+GRANT ALL ON FUNCTION {nequal}(x1 bigint, x2 bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {nequal}(x1 bigint, x2 bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {nequal}(numeric, numeric); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {nequal}(x1 numeric, x2 numeric) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {nequal}(x1 numeric, x2 numeric) FROM postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 numeric, x2 numeric) TO postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 numeric, x2 numeric) TO PUBLIC;
+GRANT ALL ON FUNCTION {nequal}(x1 numeric, x2 numeric) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {nequal}(x1 numeric, x2 numeric) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {nequal}(text, text); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {nequal}(x1 text, x2 text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {nequal}(x1 text, x2 text) FROM postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 text, x2 text) TO postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 text, x2 text) TO PUBLIC;
+GRANT ALL ON FUNCTION {nequal}(x1 text, x2 text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {nequal}(x1 text, x2 text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {nequal}(timestamp without time zone, timestamp without time zone); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {nequal}(x1 timestamp without time zone, x2 timestamp without time zone) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {nequal}(x1 timestamp without time zone, x2 timestamp without time zone) FROM postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 timestamp without time zone, x2 timestamp without time zone) TO postgres;
+GRANT ALL ON FUNCTION {nequal}(x1 timestamp without time zone, x2 timestamp without time zone) TO PUBLIC;
+GRANT ALL ON FUNCTION {nequal}(x1 timestamp without time zone, x2 timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {nequal}(x1 timestamp without time zone, x2 timestamp without time zone) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {sys_user}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {sys_user}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {sys_user}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {sys_user}_iud() TO postgres;
+GRANT ALL ON FUNCTION {sys_user}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {sys_user}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {sys_user}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {param}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {param}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {param}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {param}_iud() TO postgres;
+GRANT ALL ON FUNCTION {param}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {param}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {param}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: {param_user}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION {param_user}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {param_user}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {param_user}_iud() TO postgres;
+GRANT ALL ON FUNCTION {param_user}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {param_user}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {param_user}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9566,237 +9566,237 @@ GRANT ALL ON FUNCTION sanit_json(x text) TO {schema}_%%%INIT_DB_LCASE%%%_role_de
 
 
 --
--- Name: spef_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION spef_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION spef_iud() FROM postgres;
-GRANT ALL ON FUNCTION spef_iud() TO postgres;
-GRANT ALL ON FUNCTION spef_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION spef_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION spef_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: sper_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION sper_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION sper_iud() FROM postgres;
-GRANT ALL ON FUNCTION sper_iud() TO postgres;
-GRANT ALL ON FUNCTION sper_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION sper_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION sper_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {sys_user_func}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {sys_user_func}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {sys_user_func}_iud() TO postgres;
+GRANT ALL ON FUNCTION {sys_user_func}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {sys_user_func}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {sys_user_func}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: table_type(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) FROM postgres;
-GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO postgres;
-GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION table_type(in_schema character varying, in_name character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: txt_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION txt_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION txt_iud() FROM postgres;
-GRANT ALL ON FUNCTION txt_iud() TO postgres;
-GRANT ALL ON FUNCTION txt_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION txt_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION txt_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {sys_user_role}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {sys_user_role}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {sys_user_role}_iud() TO postgres;
+GRANT ALL ON FUNCTION {sys_user_role}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {sys_user_role}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {sys_user_role}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: v_crmsel_iud_insteadof_update(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {table_type}(character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION v_crmsel_iud_insteadof_update() FROM PUBLIC;
-REVOKE ALL ON FUNCTION v_crmsel_iud_insteadof_update() FROM postgres;
-GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO postgres;
-GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO PUBLIC;
-GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION v_crmsel_iud_insteadof_update() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: v_srmsel_iud_insteadof_update(); Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION v_srmsel_iud_insteadof_update() FROM PUBLIC;
-REVOKE ALL ON FUNCTION v_srmsel_iud_insteadof_update() FROM postgres;
-GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO postgres;
-GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO PUBLIC;
-GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION v_srmsel_iud_insteadof_update() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION {table_type}(in_schema character varying, in_name character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION {table_type}(in_schema character varying, in_name character varying) FROM postgres;
+GRANT ALL ON FUNCTION {table_type}(in_schema character varying, in_name character varying) TO postgres;
+GRANT ALL ON FUNCTION {table_type}(in_schema character varying, in_name character varying) TO PUBLIC;
+GRANT ALL ON FUNCTION {table_type}(in_schema character varying, in_name character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {table_type}(in_schema character varying, in_name character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: xpp_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {txt}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION xpp_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION xpp_iud() FROM postgres;
-GRANT ALL ON FUNCTION xpp_iud() TO postgres;
-GRANT ALL ON FUNCTION xpp_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION xpp_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION xpp_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: aud_d; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON TABLE aud_d FROM PUBLIC;
-REVOKE ALL ON TABLE aud_d FROM postgres;
-GRANT ALL ON TABLE aud_d TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE aud_d TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON FUNCTION {txt}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {txt}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {txt}_iud() TO postgres;
+GRANT ALL ON FUNCTION {txt}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {txt}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {txt}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: aud_h; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_cust_menu_role_selection}_iud_insteadof_update(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE aud_h FROM PUBLIC;
-REVOKE ALL ON TABLE aud_h FROM postgres;
-GRANT ALL ON TABLE aud_h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE aud_h TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- Name: aud_h_aud_seq_seq; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON SEQUENCE aud_h_aud_seq_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE aud_h_aud_seq_seq FROM postgres;
-GRANT ALL ON SEQUENCE aud_h_aud_seq_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE aud_h_aud_seq_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON FUNCTION {v_cust_menu_role_selection}_iud_insteadof_update() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {v_cust_menu_role_selection}_iud_insteadof_update() FROM postgres;
+GRANT ALL ON FUNCTION {v_cust_menu_role_selection}_iud_insteadof_update() TO postgres;
+GRANT ALL ON FUNCTION {v_cust_menu_role_selection}_iud_insteadof_update() TO PUBLIC;
+GRANT ALL ON FUNCTION {v_cust_menu_role_selection}_iud_insteadof_update() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {v_cust_menu_role_selection}_iud_insteadof_update() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: cpe; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_sys_menu_role_selection}_iud_insteadof_update(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE cpe FROM PUBLIC;
-REVOKE ALL ON TABLE cpe FROM postgres;
-GRANT ALL ON TABLE cpe TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cpe TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- Name: cpe_pe_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON SEQUENCE cpe_pe_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE cpe_pe_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE cpe_pe_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE cpe_pe_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON FUNCTION {v_sys_menu_role_selection}_iud_insteadof_update() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {v_sys_menu_role_selection}_iud_insteadof_update() FROM postgres;
+GRANT ALL ON FUNCTION {v_sys_menu_role_selection}_iud_insteadof_update() TO postgres;
+GRANT ALL ON FUNCTION {v_sys_menu_role_selection}_iud_insteadof_update() TO PUBLIC;
+GRANT ALL ON FUNCTION {v_sys_menu_role_selection}_iud_insteadof_update() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {v_sys_menu_role_selection}_iud_insteadof_update() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: cper; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {param_sys}_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE cper FROM PUBLIC;
-REVOKE ALL ON TABLE cper FROM postgres;
-GRANT ALL ON TABLE cper TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cper TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- Name: cper_cper_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON SEQUENCE cper_cper_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE cper_cper_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE cper_cper_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE cper_cper_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON FUNCTION {param_sys}_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION {param_sys}_iud() FROM postgres;
+GRANT ALL ON FUNCTION {param_sys}_iud() TO postgres;
+GRANT ALL ON FUNCTION {param_sys}_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION {param_sys}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION {param_sys}_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: cr; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {audit_detail}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE cr FROM PUBLIC;
-REVOKE ALL ON TABLE cr FROM postgres;
-GRANT ALL ON TABLE cr TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE cr TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- Name: cr_cr_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON SEQUENCE cr_cr_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE cr_cr_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE cr_cr_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE cr_cr_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {audit_detail} FROM PUBLIC;
+REVOKE ALL ON TABLE {audit_detail} FROM postgres;
+GRANT ALL ON TABLE {audit_detail} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {audit_detail} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: crm; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {audit}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE crm FROM PUBLIC;
-REVOKE ALL ON TABLE crm FROM postgres;
-GRANT ALL ON TABLE crm TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE crm TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- Name: crm_crm_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON SEQUENCE crm_crm_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE crm_crm_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE crm_crm_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE crm_crm_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {audit} FROM PUBLIC;
+REVOKE ALL ON TABLE {audit} FROM postgres;
+GRANT ALL ON TABLE {audit} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {audit} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: d; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {audit}_{audit_seq}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE d FROM PUBLIC;
-REVOKE ALL ON TABLE d FROM postgres;
-GRANT ALL ON TABLE d TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE d TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- Name: d_d_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON SEQUENCE d_d_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE d_d_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE d_d_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE d_d_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {audit}_{audit_seq}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {audit}_{audit_seq}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {audit}_{audit_seq}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {audit}_{audit_seq}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: dual; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE dual FROM PUBLIC;
-REVOKE ALL ON TABLE dual FROM postgres;
-GRANT ALL ON TABLE dual TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE dual TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {cust_user} FROM PUBLIC;
+REVOKE ALL ON TABLE {cust_user} FROM postgres;
+GRANT ALL ON TABLE {cust_user} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {cust_user} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: dual_dual_ident_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {cust_user}_{sys_user_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE dual_dual_ident_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE dual_dual_ident_seq FROM postgres;
-GRANT ALL ON SEQUENCE dual_dual_ident_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE dual_dual_ident_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {cust_user}_{sys_user_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {cust_user}_{sys_user_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {cust_user}_{sys_user_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {cust_user}_{sys_user_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: {cust_user_role}; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE {cust_user_role} FROM PUBLIC;
+REVOKE ALL ON TABLE {cust_user_role} FROM postgres;
+GRANT ALL ON TABLE {cust_user_role} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {cust_user_role} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: {cust_user_role}_{cust_user_role_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE {cust_user_role}_{cust_user_role_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {cust_user_role}_{cust_user_role_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {cust_user_role}_{cust_user_role_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {cust_user_role}_{cust_user_role_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: {cust_role}; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE {cust_role} FROM PUBLIC;
+REVOKE ALL ON TABLE {cust_role} FROM postgres;
+GRANT ALL ON TABLE {cust_role} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {cust_role} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: {cust_role}_{cust_role_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE {cust_role}_{cust_role_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {cust_role}_{cust_role_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {cust_role}_{cust_role_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {cust_role}_{cust_role_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: {cust_menu_role}; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE {cust_menu_role} FROM PUBLIC;
+REVOKE ALL ON TABLE {cust_menu_role} FROM postgres;
+GRANT ALL ON TABLE {cust_menu_role} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {cust_menu_role} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: {cust_menu_role}_{cust_menu_role_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE {cust_menu_role}_{cust_menu_role_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {cust_menu_role}_{cust_menu_role_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {cust_menu_role}_{cust_menu_role_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {cust_menu_role}_{cust_menu_role_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: {doc}; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE {doc} FROM PUBLIC;
+REVOKE ALL ON TABLE {doc} FROM postgres;
+GRANT ALL ON TABLE {doc} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {doc} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: {doc}_{doc_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE {doc}_{doc_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {doc}_{doc_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {doc}_{doc_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {doc}_{doc_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: {single}; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE {single} FROM PUBLIC;
+REVOKE ALL ON TABLE {single} FROM postgres;
+GRANT ALL ON TABLE {single} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {single} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: {single}_{single_ident}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE {single}_{single_ident}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {single}_{single_ident}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {single}_{single_ident}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {single}_{single_ident}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9820,13 +9820,13 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod TO {schema}_%%%INIT_DB_LCASE%%%_
 
 
 --
--- Name: gcod2_gcod2_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: gcod2_{code2_app_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE gcod2_gcod2_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE gcod2_gcod2_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE gcod2_gcod2_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE gcod2_gcod2_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE gcod2_{code2_app_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE gcod2_{code2_app_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE gcod2_{code2_app_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE gcod2_{code2_app_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -9840,463 +9840,463 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2 TO {schema}_%%%INIT_DB_LCASE%%%
 
 
 --
--- Name: gcod2_d_scope_d_ctgr; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code2_doc_ctgr}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE gcod2_d_scope_d_ctgr FROM PUBLIC;
-REVOKE ALL ON TABLE gcod2_d_scope_d_ctgr FROM postgres;
-GRANT ALL ON TABLE gcod2_d_scope_d_ctgr TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2_d_scope_d_ctgr TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code2_doc_ctgr} FROM PUBLIC;
+REVOKE ALL ON TABLE {code2_doc_ctgr} FROM postgres;
+GRANT ALL ON TABLE {code2_doc_ctgr} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code2_doc_ctgr} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: gcod2_h; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code2_app}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE gcod2_h FROM PUBLIC;
-REVOKE ALL ON TABLE gcod2_h FROM postgres;
-GRANT ALL ON TABLE gcod2_h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2_h TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code2_app} FROM PUBLIC;
+REVOKE ALL ON TABLE {code2_app} FROM postgres;
+GRANT ALL ON TABLE {code2_app} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code2_app} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: gcod_h; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_app}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE gcod_h FROM PUBLIC;
-REVOKE ALL ON TABLE gcod_h FROM postgres;
-GRANT ALL ON TABLE gcod_h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod_h TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_app} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_app} FROM postgres;
+GRANT ALL ON TABLE {code_app} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_app} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: gpp; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {param_app}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE gpp FROM PUBLIC;
-REVOKE ALL ON TABLE gpp FROM postgres;
-GRANT ALL ON TABLE gpp TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gpp TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {param_app} FROM PUBLIC;
+REVOKE ALL ON TABLE {param_app} FROM postgres;
+GRANT ALL ON TABLE {param_app} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {param_app} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: gpp_gpp_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {param_app}_{param_app_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE gpp_gpp_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE gpp_gpp_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE gpp_gpp_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE gpp_gpp_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {param_app}_{param_app_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {param_app}_{param_app_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {param_app}_{param_app_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {param_app}_{param_app_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: h; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {help}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE h FROM PUBLIC;
-REVOKE ALL ON TABLE h FROM postgres;
-GRANT ALL ON TABLE h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE h TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {help} FROM PUBLIC;
+REVOKE ALL ON TABLE {help} FROM postgres;
+GRANT ALL ON TABLE {help} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {help} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: h_h_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {help}_{help_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE h_h_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE h_h_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE h_h_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE h_h_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {help}_{help_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {help}_{help_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {help}_{help_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {help}_{help_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: hp; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {help_target}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE hp FROM PUBLIC;
-REVOKE ALL ON TABLE hp FROM postgres;
-GRANT ALL ON TABLE hp TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE hp TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {help_target} FROM PUBLIC;
+REVOKE ALL ON TABLE {help_target} FROM postgres;
+GRANT ALL ON TABLE {help_target} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {help_target} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: hp_hp_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {help_target}_{help_target_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE hp_hp_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE hp_hp_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE hp_hp_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE hp_hp_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {help_target}_{help_target_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {help_target}_{help_target_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {help_target}_{help_target_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {help_target}_{help_target_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: n; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {note}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE n FROM PUBLIC;
-REVOKE ALL ON TABLE n FROM postgres;
-GRANT ALL ON TABLE n TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE n TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {note} FROM PUBLIC;
+REVOKE ALL ON TABLE {note} FROM postgres;
+GRANT ALL ON TABLE {note} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {note} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: n_n_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {note}_{note_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE n_n_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE n_n_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE n_n_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE n_n_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {note}_{note_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {note}_{note_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {note}_{note_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {note}_{note_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: numbers; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {number}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE numbers FROM PUBLIC;
-REVOKE ALL ON TABLE numbers FROM postgres;
-GRANT ALL ON TABLE numbers TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE numbers TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {number} FROM PUBLIC;
+REVOKE ALL ON TABLE {number} FROM postgres;
+GRANT ALL ON TABLE {number} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {number} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: pe; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE pe FROM PUBLIC;
-REVOKE ALL ON TABLE pe FROM postgres;
-GRANT ALL ON TABLE pe TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE pe TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {sys_user} FROM PUBLIC;
+REVOKE ALL ON TABLE {sys_user} FROM postgres;
+GRANT ALL ON TABLE {sys_user} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {sys_user} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: pe_pe_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user}_{sys_user_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE pe_pe_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE pe_pe_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE pe_pe_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE pe_pe_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {sys_user}_{sys_user_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {sys_user}_{sys_user_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {sys_user}_{sys_user_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {sys_user}_{sys_user_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ppd; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {param}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ppd FROM PUBLIC;
-REVOKE ALL ON TABLE ppd FROM postgres;
-GRANT ALL ON TABLE ppd TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ppd TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {param} FROM PUBLIC;
+REVOKE ALL ON TABLE {param} FROM postgres;
+GRANT ALL ON TABLE {param} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {param} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ppd_ppd_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {param}_{param_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE ppd_ppd_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE ppd_ppd_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE ppd_ppd_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ppd_ppd_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {param}_{param_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {param}_{param_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {param}_{param_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {param}_{param_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ppp; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {param_user}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ppp FROM PUBLIC;
-REVOKE ALL ON TABLE ppp FROM postgres;
-GRANT ALL ON TABLE ppp TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ppp TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {param_user} FROM PUBLIC;
+REVOKE ALL ON TABLE {param_user} FROM postgres;
+GRANT ALL ON TABLE {param_user} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {param_user} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ppp_ppp_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {param_user}_{param_user_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE ppp_ppp_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE ppp_ppp_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE ppp_ppp_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ppp_ppp_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {param_user}_{param_user_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {param_user}_{param_user_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {param_user}_{param_user_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {param_user}_{param_user_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {queue}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE rq FROM PUBLIC;
-REVOKE ALL ON TABLE rq FROM postgres;
-GRANT ALL ON TABLE rq TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {queue} FROM PUBLIC;
+REVOKE ALL ON TABLE {queue} FROM postgres;
+GRANT ALL ON TABLE {queue} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {queue} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rq_rq_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {queue}_{queue_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE rq_rq_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE rq_rq_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE rq_rq_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rq_rq_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {queue}_{queue_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {queue}_{queue_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {queue}_{queue_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {queue}_{queue_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE rqst FROM PUBLIC;
-REVOKE ALL ON TABLE rqst FROM postgres;
-GRANT ALL ON TABLE rqst TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {job} FROM PUBLIC;
+REVOKE ALL ON TABLE {job} FROM postgres;
+GRANT ALL ON TABLE {job} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {job} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst_d; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job_doc}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE rqst_d FROM PUBLIC;
-REVOKE ALL ON TABLE rqst_d FROM postgres;
-GRANT ALL ON TABLE rqst_d TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_d TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {job_doc} FROM PUBLIC;
+REVOKE ALL ON TABLE {job_doc} FROM postgres;
+GRANT ALL ON TABLE {job_doc} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {job_doc} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst_d_rqst_d_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job_doc}_{job_doc_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE rqst_d_rqst_d_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE rqst_d_rqst_d_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE rqst_d_rqst_d_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_d_rqst_d_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {job_doc}_{job_doc_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {job_doc}_{job_doc_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {job_doc}_{job_doc_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {job_doc}_{job_doc_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst_email; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job_email}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE rqst_email FROM PUBLIC;
-REVOKE ALL ON TABLE rqst_email FROM postgres;
-GRANT ALL ON TABLE rqst_email TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_email TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {job_email} FROM PUBLIC;
+REVOKE ALL ON TABLE {job_email} FROM postgres;
+GRANT ALL ON TABLE {job_email} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {job_email} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst_email_rqst_email_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job_email}_{job_email_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE rqst_email_rqst_email_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE rqst_email_rqst_email_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE rqst_email_rqst_email_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_email_rqst_email_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {job_email}_{job_email_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {job_email}_{job_email_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {job_email}_{job_email_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {job_email}_{job_email_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst_n; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job_note}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE rqst_n FROM PUBLIC;
-REVOKE ALL ON TABLE rqst_n FROM postgres;
-GRANT ALL ON TABLE rqst_n TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_n TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {job_note} FROM PUBLIC;
+REVOKE ALL ON TABLE {job_note} FROM postgres;
+GRANT ALL ON TABLE {job_note} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {job_note} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst_n_rqst_n_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job_note}_{job_note_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE rqst_n_rqst_n_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE rqst_n_rqst_n_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE rqst_n_rqst_n_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_n_rqst_n_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {job_note}_{job_note_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {job_note}_{job_note_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {job_note}_{job_note_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {job_note}_{job_note_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst_rq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job_queue}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE rqst_rq FROM PUBLIC;
-REVOKE ALL ON TABLE rqst_rq FROM postgres;
-GRANT ALL ON TABLE rqst_rq TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_rq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {job_queue} FROM PUBLIC;
+REVOKE ALL ON TABLE {job_queue} FROM postgres;
+GRANT ALL ON TABLE {job_queue} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {job_queue} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst_rq_rqst_rq_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job_queue}_{job_queue_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE rqst_rq_rqst_rq_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE rqst_rq_rqst_rq_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE rqst_rq_rqst_rq_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_rq_rqst_rq_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {job_queue}_{job_queue_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {job_queue}_{job_queue_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {job_queue}_{job_queue_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {job_queue}_{job_queue_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst_rqst_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job}_{job_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE rqst_rqst_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE rqst_rqst_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE rqst_rqst_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_rqst_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {job}_{job_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {job}_{job_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {job}_{job_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {job}_{job_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst_sms; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job_sms}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE rqst_sms FROM PUBLIC;
-REVOKE ALL ON TABLE rqst_sms FROM postgres;
-GRANT ALL ON TABLE rqst_sms TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE rqst_sms TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {job_sms} FROM PUBLIC;
+REVOKE ALL ON TABLE {job_sms} FROM postgres;
+GRANT ALL ON TABLE {job_sms} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {job_sms} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: rqst_sms_rqst_sms_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {job_sms}_{job_sms_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE rqst_sms_rqst_sms_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE rqst_sms_rqst_sms_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE rqst_sms_rqst_sms_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE rqst_sms_rqst_sms_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {job_sms}_{job_sms_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {job_sms}_{job_sms_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {job_sms}_{job_sms_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {job_sms}_{job_sms_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: sf; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_func}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE sf FROM PUBLIC;
-REVOKE ALL ON TABLE sf FROM postgres;
-GRANT ALL ON TABLE sf TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sf TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {sys_func} FROM PUBLIC;
+REVOKE ALL ON TABLE {sys_func} FROM postgres;
+GRANT ALL ON TABLE {sys_func} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {sys_func} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: sf_sf_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_func}_{sys_func_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE sf_sf_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE sf_sf_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE sf_sf_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE sf_sf_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {sys_func}_{sys_func_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {sys_func}_{sys_func_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {sys_func}_{sys_func_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {sys_func}_{sys_func_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: sm; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {menu}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE sm FROM PUBLIC;
-REVOKE ALL ON TABLE sm FROM postgres;
-GRANT ALL ON TABLE sm TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sm TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {menu} FROM PUBLIC;
+REVOKE ALL ON TABLE {menu} FROM postgres;
+GRANT ALL ON TABLE {menu} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {menu} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: sm_sm_id_auto_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {menu}_{menu_id_auto}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE sm_sm_id_auto_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE sm_sm_id_auto_seq FROM postgres;
-GRANT ALL ON SEQUENCE sm_sm_id_auto_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE sm_sm_id_auto_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {menu}_{menu_id_auto}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {menu}_{menu_id_auto}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {menu}_{menu_id_auto}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {menu}_{menu_id_auto}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: spef; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE spef FROM PUBLIC;
-REVOKE ALL ON TABLE spef FROM postgres;
-GRANT ALL ON TABLE spef TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spef TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {sys_user_func} FROM PUBLIC;
+REVOKE ALL ON TABLE {sys_user_func} FROM postgres;
+GRANT ALL ON TABLE {sys_user_func} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {sys_user_func} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: spef_spef_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_func}_{sys_user_func_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE spef_spef_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE spef_spef_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE spef_spef_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE spef_spef_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {sys_user_func}_{sys_user_func_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {sys_user_func}_{sys_user_func_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {sys_user_func}_{sys_user_func_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {sys_user_func}_{sys_user_func_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: sper; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE sper FROM PUBLIC;
-REVOKE ALL ON TABLE sper FROM postgres;
-GRANT ALL ON TABLE sper TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sper TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {sys_user_role} FROM PUBLIC;
+REVOKE ALL ON TABLE {sys_user_role} FROM postgres;
+GRANT ALL ON TABLE {sys_user_role} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {sys_user_role} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: sper_sper_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_user_role}_{sys_user_role_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE sper_sper_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE sper_sper_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE sper_sper_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE sper_sper_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {sys_user_role}_{sys_user_role_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {sys_user_role}_{sys_user_role_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {sys_user_role}_{sys_user_role_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {sys_user_role}_{sys_user_role_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: sr; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_role}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE sr FROM PUBLIC;
-REVOKE ALL ON TABLE sr FROM postgres;
-GRANT ALL ON TABLE sr TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE sr TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {sys_role} FROM PUBLIC;
+REVOKE ALL ON TABLE {sys_role} FROM postgres;
+GRANT ALL ON TABLE {sys_role} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {sys_role} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: sr_sr_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_role}_{sys_role_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE sr_sr_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE sr_sr_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE sr_sr_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE sr_sr_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {sys_role}_{sys_role_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {sys_role}_{sys_role_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {sys_role}_{sys_role_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {sys_role}_{sys_role_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: srm; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_menu_role}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE srm FROM PUBLIC;
-REVOKE ALL ON TABLE srm FROM postgres;
-GRANT ALL ON TABLE srm TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE srm TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {sys_menu_role} FROM PUBLIC;
+REVOKE ALL ON TABLE {sys_menu_role} FROM postgres;
+GRANT ALL ON TABLE {sys_menu_role} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {sys_menu_role} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: srm_srm_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {sys_menu_role}_{sys_menu_role_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE srm_srm_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE srm_srm_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE srm_srm_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE srm_srm_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {sys_menu_role}_{sys_menu_role_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {sys_menu_role}_{sys_menu_role_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {sys_menu_role}_{sys_menu_role_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {sys_menu_role}_{sys_menu_role_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: txt; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {txt}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE txt FROM PUBLIC;
-REVOKE ALL ON TABLE txt FROM postgres;
-GRANT ALL ON TABLE txt TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE txt TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {txt} FROM PUBLIC;
+REVOKE ALL ON TABLE {txt} FROM postgres;
+GRANT ALL ON TABLE {txt} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {txt} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: txt_txt_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {txt}_{txt_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE txt_txt_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE txt_txt_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE txt_txt_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE txt_txt_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {txt}_{txt_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {txt}_{txt_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {txt}_{txt_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {txt}_{txt_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10310,13 +10310,13 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod TO {schema}_%%%INIT_DB_LCASE%%%_
 
 
 --
--- Name: ucod2_ucod2_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: ucod2_{code2_sys_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE ucod2_ucod2_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE ucod2_ucod2_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE ucod2_ucod2_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ucod2_ucod2_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE ucod2_{code2_sys_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE ucod2_{code2_sys_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE ucod2_{code2_sys_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE ucod2_{code2_sys_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10330,473 +10330,473 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2 TO {schema}_%%%INIT_DB_LCASE%%%
 
 
 --
--- Name: ucod2_country_state; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code2_state}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod2_country_state FROM PUBLIC;
-REVOKE ALL ON TABLE ucod2_country_state FROM postgres;
-GRANT ALL ON TABLE ucod2_country_state TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_country_state TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code2_state} FROM PUBLIC;
+REVOKE ALL ON TABLE {code2_state} FROM postgres;
+GRANT ALL ON TABLE {code2_state} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code2_state} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod2_gpp_process_attrib_v; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code2_param_app_attrib}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod2_gpp_process_attrib_v FROM PUBLIC;
-REVOKE ALL ON TABLE ucod2_gpp_process_attrib_v FROM postgres;
-GRANT ALL ON TABLE ucod2_gpp_process_attrib_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_gpp_process_attrib_v TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code2_param_app_attrib} FROM PUBLIC;
+REVOKE ALL ON TABLE {code2_param_app_attrib} FROM postgres;
+GRANT ALL ON TABLE {code2_param_app_attrib} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code2_param_app_attrib} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod2_h; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code2_sys}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod2_h FROM PUBLIC;
-REVOKE ALL ON TABLE ucod2_h FROM postgres;
-GRANT ALL ON TABLE ucod2_h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_h TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code2_sys} FROM PUBLIC;
+REVOKE ALL ON TABLE {code2_sys} FROM postgres;
+GRANT ALL ON TABLE {code2_sys} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code2_sys} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod2_h_ucod2_h_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code2_sys}_{code2_sys_h_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE ucod2_h_ucod2_h_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE ucod2_h_ucod2_h_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE ucod2_h_ucod2_h_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ucod2_h_ucod2_h_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {code2_sys}_{code2_sys_h_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {code2_sys}_{code2_sys_h_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {code2_sys}_{code2_sys_h_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {code2_sys}_{code2_sys_h_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod2_ppp_process_attrib_v; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code2_param_user_attrib}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod2_ppp_process_attrib_v FROM PUBLIC;
-REVOKE ALL ON TABLE ucod2_ppp_process_attrib_v FROM postgres;
-GRANT ALL ON TABLE ucod2_ppp_process_attrib_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_ppp_process_attrib_v TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code2_param_user_attrib} FROM PUBLIC;
+REVOKE ALL ON TABLE {code2_param_user_attrib} FROM postgres;
+GRANT ALL ON TABLE {code2_param_user_attrib} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code2_param_user_attrib} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod2_xpp_process_attrib_v; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code2_param_sys_attrib}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod2_xpp_process_attrib_v FROM PUBLIC;
-REVOKE ALL ON TABLE ucod2_xpp_process_attrib_v FROM postgres;
-GRANT ALL ON TABLE ucod2_xpp_process_attrib_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2_xpp_process_attrib_v TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code2_param_sys_attrib} FROM PUBLIC;
+REVOKE ALL ON TABLE {code2_param_sys_attrib} FROM postgres;
+GRANT ALL ON TABLE {code2_param_sys_attrib} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code2_param_sys_attrib} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_ac; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_ac}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_ac FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_ac FROM postgres;
-GRANT ALL ON TABLE ucod_ac TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ac TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_ac} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_ac} FROM postgres;
+GRANT ALL ON TABLE {code_ac} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_ac} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_ac1; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_ac1}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_ac1 FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_ac1 FROM postgres;
-GRANT ALL ON TABLE ucod_ac1 TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ac1 TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_ac1} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_ac1} FROM postgres;
+GRANT ALL ON TABLE {code_ac1} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_ac1} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_ahc; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_ahc}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_ahc FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_ahc FROM postgres;
-GRANT ALL ON TABLE ucod_ahc TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ahc TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_ahc} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_ahc} FROM postgres;
+GRANT ALL ON TABLE {code_ahc} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_ahc} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_country; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_country}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_country FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_country FROM postgres;
-GRANT ALL ON TABLE ucod_country TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_country TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_country} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_country} FROM postgres;
+GRANT ALL ON TABLE {code_country} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_country} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_d_scope; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_doc_scope}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_d_scope FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_d_scope FROM postgres;
-GRANT ALL ON TABLE ucod_d_scope TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_d_scope TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_doc_scope} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_doc_scope} FROM postgres;
+GRANT ALL ON TABLE {code_doc_scope} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_doc_scope} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_gpp_process_v; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_param_app_process}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_gpp_process_v FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_gpp_process_v FROM postgres;
-GRANT ALL ON TABLE ucod_gpp_process_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_gpp_process_v TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_param_app_process} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_param_app_process} FROM postgres;
+GRANT ALL ON TABLE {code_param_app_process} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_param_app_process} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_h; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_h FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_h FROM postgres;
-GRANT ALL ON TABLE ucod_h TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_h TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_sys} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_sys} FROM postgres;
+GRANT ALL ON TABLE {code_sys} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_sys} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_h_ucod_h_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_sys}_{code_sys_h_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE ucod_h_ucod_h_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE ucod_h_ucod_h_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE ucod_h_ucod_h_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ucod_h_ucod_h_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {code_sys}_{code_sys_h_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {code_sys}_{code_sys_h_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {code_sys}_{code_sys_h_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {code_sys}_{code_sys_h_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_n_scope; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_note_scope}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_n_scope FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_n_scope FROM postgres;
-GRANT ALL ON TABLE ucod_n_scope TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_n_scope TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_note_scope} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_note_scope} FROM postgres;
+GRANT ALL ON TABLE {code_note_scope} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_note_scope} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_n_type; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_note_type}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_n_type FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_n_type FROM postgres;
-GRANT ALL ON TABLE ucod_n_type TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_n_type TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_note_type} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_note_type} FROM postgres;
+GRANT ALL ON TABLE {code_note_type} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_note_type} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_ppd_type; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_param_type}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_ppd_type FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_ppd_type FROM postgres;
-GRANT ALL ON TABLE ucod_ppd_type TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ppd_type TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_param_type} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_param_type} FROM postgres;
+GRANT ALL ON TABLE {code_param_type} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_param_type} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_ppp_process_v; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_param_user_process}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_ppp_process_v FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_ppp_process_v FROM postgres;
-GRANT ALL ON TABLE ucod_ppp_process_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_ppp_process_v TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_param_user_process} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_param_user_process} FROM postgres;
+GRANT ALL ON TABLE {code_param_user_process} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_param_user_process} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_rqst_atype; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_task_action}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_rqst_atype FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_rqst_atype FROM postgres;
-GRANT ALL ON TABLE ucod_rqst_atype TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_rqst_atype TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_task_action} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_task_action} FROM postgres;
+GRANT ALL ON TABLE {code_task_action} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_task_action} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_rqst_source; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_task_source}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_rqst_source FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_rqst_source FROM postgres;
-GRANT ALL ON TABLE ucod_rqst_source TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_rqst_source TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_task_source} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_task_source} FROM postgres;
+GRANT ALL ON TABLE {code_task_source} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_task_source} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_txt_type; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_txt_type}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_txt_type FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_txt_type FROM postgres;
-GRANT ALL ON TABLE ucod_txt_type TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_txt_type TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_txt_type} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_txt_type} FROM postgres;
+GRANT ALL ON TABLE {code_txt_type} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_txt_type} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_ucod_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: ucod_{code_sys_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE ucod_ucod_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE ucod_ucod_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE ucod_ucod_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ucod_ucod_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE ucod_{code_sys_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE ucod_{code_sys_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE ucod_{code_sys_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE ucod_{code_sys_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_v_sts; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_version_sts}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_v_sts FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_v_sts FROM postgres;
-GRANT ALL ON TABLE ucod_v_sts TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_v_sts TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_version_sts} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_version_sts} FROM postgres;
+GRANT ALL ON TABLE {code_version_sts} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_version_sts} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod_xpp_process_v; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {code_param_sys_process}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod_xpp_process_v FROM PUBLIC;
-REVOKE ALL ON TABLE ucod_xpp_process_v FROM postgres;
-GRANT ALL ON TABLE ucod_xpp_process_v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod_xpp_process_v TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {code_param_sys_process} FROM PUBLIC;
+REVOKE ALL ON TABLE {code_param_sys_process} FROM postgres;
+GRANT ALL ON TABLE {code_param_sys_process} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {code_param_sys_process} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {version}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v FROM PUBLIC;
-REVOKE ALL ON TABLE v FROM postgres;
-GRANT ALL ON TABLE v TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {version} FROM PUBLIC;
+REVOKE ALL ON TABLE {version} FROM postgres;
+GRANT ALL ON TABLE {version} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {version} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_audl_raw; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_audit_detail}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_audl_raw FROM PUBLIC;
-REVOKE ALL ON TABLE v_audl_raw FROM postgres;
-GRANT ALL ON TABLE v_audl_raw TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_audl_raw TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_audit_detail} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_audit_detail} FROM postgres;
+GRANT ALL ON TABLE {v_audit_detail} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_audit_detail} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_cper_nostar; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_cust_user_nostar}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_cper_nostar FROM PUBLIC;
-REVOKE ALL ON TABLE v_cper_nostar FROM postgres;
-GRANT ALL ON TABLE v_cper_nostar TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_cper_nostar TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_cust_user_nostar} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_cust_user_nostar} FROM postgres;
+GRANT ALL ON TABLE {v_cust_user_nostar} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_cust_user_nostar} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_crmsel; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_cust_menu_role_selection}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_crmsel FROM PUBLIC;
-REVOKE ALL ON TABLE v_crmsel FROM postgres;
-GRANT ALL ON TABLE v_crmsel TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_crmsel TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_cust_menu_role_selection} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_cust_menu_role_selection} FROM postgres;
+GRANT ALL ON TABLE {v_cust_menu_role_selection} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_cust_menu_role_selection} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_d_ext; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_doc_ext}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_d_ext FROM PUBLIC;
-REVOKE ALL ON TABLE v_d_ext FROM postgres;
-GRANT ALL ON TABLE v_d_ext TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_d_ext TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_doc_ext} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_doc_ext} FROM postgres;
+GRANT ALL ON TABLE {v_doc_ext} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_doc_ext} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_d_x; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_doc_filename}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_d_x FROM PUBLIC;
-REVOKE ALL ON TABLE v_d_x FROM postgres;
-GRANT ALL ON TABLE v_d_x TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_d_x TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_doc_filename} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_doc_filename} FROM postgres;
+GRANT ALL ON TABLE {v_doc_filename} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_doc_filename} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_dl; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_doc}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_dl FROM PUBLIC;
-REVOKE ALL ON TABLE v_dl FROM postgres;
-GRANT ALL ON TABLE v_dl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_dl TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_doc} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_doc} FROM postgres;
+GRANT ALL ON TABLE {v_doc} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_doc} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_gppl; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_param_app}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_gppl FROM PUBLIC;
-REVOKE ALL ON TABLE v_gppl FROM postgres;
-GRANT ALL ON TABLE v_gppl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_gppl TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_param_app} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_param_app} FROM postgres;
+GRANT ALL ON TABLE {v_param_app} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_param_app} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: xpp; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {param_sys}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE xpp FROM PUBLIC;
-REVOKE ALL ON TABLE xpp FROM postgres;
-GRANT ALL ON TABLE xpp TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE xpp TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {param_sys} FROM PUBLIC;
+REVOKE ALL ON TABLE {param_sys} FROM postgres;
+GRANT ALL ON TABLE {param_sys} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {param_sys} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_pp; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_param_cur}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_pp FROM PUBLIC;
-REVOKE ALL ON TABLE v_pp FROM postgres;
-GRANT ALL ON TABLE v_pp TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_pp TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_param_cur} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_param_cur} FROM postgres;
+GRANT ALL ON TABLE {v_param_cur} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_param_cur} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_house; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_app_info}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_house FROM PUBLIC;
-REVOKE ALL ON TABLE v_house FROM postgres;
-GRANT ALL ON TABLE v_house TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_house TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_app_info} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_app_info} FROM postgres;
+GRANT ALL ON TABLE {v_app_info} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_app_info} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_months; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_month}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_months FROM PUBLIC;
-REVOKE ALL ON TABLE v_months FROM postgres;
-GRANT ALL ON TABLE v_months TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_months TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_month} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_month} FROM postgres;
+GRANT ALL ON TABLE {v_month} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_month} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_my_roles; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_my_roles}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_my_roles FROM PUBLIC;
-REVOKE ALL ON TABLE v_my_roles FROM postgres;
-GRANT ALL ON TABLE v_my_roles TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_my_roles TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_my_roles} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_my_roles} FROM postgres;
+GRANT ALL ON TABLE {v_my_roles} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_my_roles} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_mype; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_my_user}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_mype FROM PUBLIC;
-REVOKE ALL ON TABLE v_mype FROM postgres;
-GRANT ALL ON TABLE v_mype TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_mype TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_my_user} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_my_user} FROM postgres;
+GRANT ALL ON TABLE {v_my_user} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_my_user} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_n_ext; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_note_ext}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_n_ext FROM PUBLIC;
-REVOKE ALL ON TABLE v_n_ext FROM postgres;
-GRANT ALL ON TABLE v_n_ext TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_n_ext TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_note_ext} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_note_ext} FROM postgres;
+GRANT ALL ON TABLE {v_note_ext} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_note_ext} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_nl; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_note}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_nl FROM PUBLIC;
-REVOKE ALL ON TABLE v_nl FROM postgres;
-GRANT ALL ON TABLE v_nl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_nl TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_note} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_note} FROM postgres;
+GRANT ALL ON TABLE {v_note} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_note} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_ppdl; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_param}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_ppdl FROM PUBLIC;
-REVOKE ALL ON TABLE v_ppdl FROM postgres;
-GRANT ALL ON TABLE v_ppdl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_ppdl TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_param} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_param} FROM postgres;
+GRANT ALL ON TABLE {v_param} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_param} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_pppl; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_param_user}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_pppl FROM PUBLIC;
-REVOKE ALL ON TABLE v_pppl FROM postgres;
-GRANT ALL ON TABLE v_pppl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_pppl TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_param_user} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_param_user} FROM postgres;
+GRANT ALL ON TABLE {v_param_user} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_param_user} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_srmsel; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_sys_menu_role_selection}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_srmsel FROM PUBLIC;
-REVOKE ALL ON TABLE v_srmsel FROM postgres;
-GRANT ALL ON TABLE v_srmsel TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_srmsel TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_sys_menu_role_selection} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_sys_menu_role_selection} FROM postgres;
+GRANT ALL ON TABLE {v_sys_menu_role_selection} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_sys_menu_role_selection} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_v_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {version}_{version_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE v_v_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE v_v_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE v_v_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE v_v_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {version}_{version_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {version}_{version_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {version}_{version_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {version}_{version_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_xppl; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_param_sys}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_xppl FROM PUBLIC;
-REVOKE ALL ON TABLE v_xppl FROM postgres;
-GRANT ALL ON TABLE v_xppl TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_xppl TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_param_sys} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_param_sys} FROM postgres;
+GRANT ALL ON TABLE {v_param_sys} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_param_sys} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: v_years; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {v_year}; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE v_years FROM PUBLIC;
-REVOKE ALL ON TABLE v_years FROM postgres;
-GRANT ALL ON TABLE v_years TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE v_years TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE {v_year} FROM PUBLIC;
+REVOKE ALL ON TABLE {v_year} FROM postgres;
+GRANT ALL ON TABLE {v_year} TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE {v_year} TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: xpp_xpp_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: {param_sys}_{param_sys_id}_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE xpp_xpp_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE xpp_xpp_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE xpp_xpp_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE xpp_xpp_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE {param_sys}_{param_sys_id}_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE {param_sys}_{param_sys_id}_seq FROM postgres;
+GRANT ALL ON SEQUENCE {param_sys}_{param_sys_id}_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE {param_sys}_{param_sys_id}_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --

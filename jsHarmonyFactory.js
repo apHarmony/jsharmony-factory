@@ -43,6 +43,7 @@ function jsHarmonyFactory(name, options){
     mainSiteID: 'main',
     clientSiteID: 'client',
     clientPortal: false,
+    schema: 'jsharmony'
   }, options);
   var _this = this;
   if(name) _this.name = name;
@@ -53,10 +54,13 @@ function jsHarmonyFactory(name, options){
   _this.clientSiteID = options.clientSiteID;
   _this.clientPortal = options.clientPortal;
 
+  _this.schema = options.schema;
+
   _this.mainRouter = null;
   _this.clientRouter = null;
   _this.funcs = new funcs(_this);
   _this.transform = new jsHarmonyFactoryTransform(_this);
+  _this.transform.Add(require('./jsHarmonyFactoryTransform.Classic.js'));
 }
 
 jsHarmonyFactory.prototype = new jsHarmonyModule();

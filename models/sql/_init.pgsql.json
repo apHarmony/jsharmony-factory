@@ -1,8 +1,8 @@
 {
-  "init_sysadmin_access": ["select",
+  "{init_sysadmin_access}": ["select",
                    "(case when (rolcreaterole and rolcreatedb and rolcanlogin and ",
                    "  ((not exists(SELECT 1 AS result FROM pg_database WHERE datname='%%%INIT_DB%%%')) or has_database_privilege('%%%INIT_DB%%%', 'CREATE')))",
                    "then 1 else 0 end) sysadmin_access",
                    "from pg_authid where rolname = current_user"],
-  "init_db_user_exists":"SELECT 1 FROM pg_roles WHERE rolname='%%%INIT_DB_USER%%%'"
+  "{init_db_user_exists}":"SELECT 1 FROM pg_roles WHERE rolname='%%%INIT_DB_USER%%%'"
 }

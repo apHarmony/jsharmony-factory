@@ -1,380 +1,380 @@
 {
-  "TSTMP": "datetime('now','localtime')",
-  "CUSER": "(select context from jsharmony_meta limit 1)",
-  "SMS_SendTXTSMS": "select txt_tval,txt_val,txt_bcc from {schema}_txt where txt_process='SMS' and txt_attrib=@txt_attrib",
-  "CONCAT":"||",
-  "FUN_PREFIX":"",
-  "PROC_RUN":"",
-  "PAR_LIST_BEG":"(",
-  "PAR_LIST_END":")",
-  "X_SMLW_TOP":"select case when @cur_sm_id_auto <> 0 then @cur_sm_id_auto else (select sm_id_auto from {schema}.sm where 1=1 order by sm_utype desc,coalesce(SM.sm_seq,SM.sm_id),sm_name,SM.sm_id limit 1) end sm_id_auto from {schema}.dual",
-  "X_SMLW_INSERT":["update {schema}.sm set sm_seq=coalesce(sm_seq,sm_id)+1",
-                  "  where coalesce(sm_seq,sm_id) > (select coalesce(sm_seq,sm_id) from {schema}.sm where sm_id=@sm_id_parent) ",
-                  "    and sm_utype = (select sm_utype from {schema}.sm where sm_id=@sm_id_parent)",
-                  "    and (coalesce(sm_seq,sm_id)-(select coalesce(sm_seq,sm_id) from {schema}.sm where sm_id=@sm_id_parent))/(select count(*) from {schema}.sm sm2 where coalesce(sm2.sm_seq,sm2.sm_id) > (select coalesce(sm_seq,sm_id) from {schema}.sm where sm_id=@sm_id_parent) and coalesce(sm2.sm_seq,sm2.sm_id) <= coalesce(sm.sm_seq,sm.sm_id))<=1.0;",
-                  "insert into {schema}.SM (sm_id,sm_id_parent,sm_utype,sm_seq,sm_name,sm_desc,sm_sts)",
-                  "  select (select max(sm_id)+1 from {schema}.SM),sm_id,sm_utype,coalesce(sm_seq,sm_id)+1,@sm_name,@sm_desc,'ACTIVE' from {schema}.SM where sm_id=@sm_id_parent;",
-                  "select sm_id_auto from {schema}_sm where rowid=last_insert_rowid();"],
-  "X_SMLW_LOV":"select sm_id as codeid,sm_id_parent as codeparentid,sm_id_auto as codeval,sm_desc as codetxt,'folder' as codeicon from {schema}.sm where 1=1 %%%DATALOCKS%%% order by sm_utype desc,coalesce(SM.sm_seq,SM.sm_id),sm_name,SM.sm_id",
-  "SM_UTYPE_LOV":"select 'S' as codeval,'Main' as codetxt union all select 'C','Client'",
-  "JSHARMONY_FACTORY_INSTALLED":"select case when ifnull((SELECT count(*)FROM sqlite_master WHERE name='{schema}_dual' and type='table'),0) > 0 then 1 else 0 end jsharmony_factory_installed",
-  "JSEXEC_STR": {
+  "{tstmp}": "datetime('now','localtime')",
+  "{context_user}": "(select context from jsharmony_meta limit 1)",
+  "{sms_send_txt}": "select {txt_title},{txt_body},{txt_bcc} from {schema}_{txt} where {txt_process}='SMS' and {txt_attrib}={@txt_attrib}",
+  "{concat}":"||",
+  "{func_prefix}":"",
+  "{proc_run}":"",
+  "{par_list_beg}":"(",
+  "{par_list_end}":")",
+  "{menu_editor_top}":"select case when @cur_{menu_id_auto} <> 0 then @cur_{menu_id_auto} else (select {menu_id_auto} from {schema}.{menu} where 1=1 order by {menu_group} desc,coalesce({menu}.{menu_seq},{menu}.{menu_id}),{menu_name},{menu}.{menu_id} limit 1) end {menu_id_auto} from {schema}.{single}",
+  "{menu_editor_insert}":["update {schema}.{menu} set {menu_seq}=coalesce({menu_seq},{menu_id})+1",
+                  "  where coalesce({menu_seq},{menu_id}) > (select coalesce({menu_seq},{menu_id}) from {schema}.{menu} where {menu_id}={@menu_id_parent}) ",
+                  "    and {menu_group} = (select {menu_group} from {schema}.{menu} where {menu_id}={@menu_id_parent})",
+                  "    and (coalesce({menu_seq},{menu_id})-(select coalesce({menu_seq},{menu_id}) from {schema}.{menu} where {menu_id}={@menu_id_parent}))/(select count(*) from {schema}.{menu} sm2 where coalesce(sm2.{menu_seq},sm2.{menu_id}) > (select coalesce({menu_seq},{menu_id}) from {schema}.{menu} where {menu_id}={@menu_id_parent}) and coalesce(sm2.{menu_seq},sm2.{menu_id}) <= coalesce({menu}.{menu_seq},{menu}.{menu_id}))<=1.0;",
+                  "insert into {schema}.{menu} ({menu_id},{menu_id_parent},{menu_group},{menu_seq},{menu_name},{menu_desc},{menu_sts})",
+                  "  select (select max({menu_id})+1 from {schema}.{menu}),{menu_id},{menu_group},coalesce({menu_seq},{menu_id})+1,{@menu_name},{@menu_desc},'ACTIVE' from {schema}.{menu} where {menu_id}={@menu_id_parent};",
+                  "select {menu_id_auto} from {schema}_{menu} where rowid=last_insert_rowid();"],
+  "{menu_editor_lov}":"select {menu_id} as codeid,{menu_id_parent} as codeparentid,{menu_id_auto} as {code_val},{menu_desc} as {code_txt},'folder' as codeicon from {schema}.{menu} where 1=1 %%%DATALOCKS%%% order by {menu_group} desc,coalesce({menu}.{menu_seq},{menu}.{menu_id}),{menu_name},{menu}.{menu_id}",
+  "{menu_group_lov}":"select 'S' as {code_val},'Main' as {code_txt} union all select 'C','Client'",
+  "{JSHARMONY_FACTORY_INSTALLED}":"select case when ifnull((SELECT count(*)FROM sqlite_master WHERE name='{schema}_{single}' and type='table'),0) > 0 then 1 else 0 end {JSHARMONY_FACTORY_INSTALLED}",
+  "{JSEXEC_STR}": {
     "params": [],
     "exec": [
       "var rslt = arguments[0];",
       "return rslt.replace(/'/g,\"''\").replace(/\\;/g,\"\\\\\\\\;\").replace(/\\r/g,\" \").replace(/\\n/g,\"\\\\n \");"
     ]
   },
-  "{schema}.create_gcod" : {
+  "{schema}.{create_code_app}" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_gcod(ifnull(%%%SCHEMA%%%||'_','')||'gcod_'||%%%ID%%%)"]
+    "sql": ["{create_code_app}(ifnull(%%%SCHEMA%%%||'_','')||'gcod_'||%%%ID%%%)"]
   },
-  "create_gcod" : {
-    "params": ["TABLE_NAME"],
+  "{create_code_app}" : {
+    "params": ["{audit_table_name}"],
     "sql": [
       "update jsharmony_meta set jsexec = '{ \"function\": \"exec\", \"sql\": \"",
-      "  create table '||%%%TABLE_NAME%%%||' (",
+      "  create table '||%%%{audit_table_name}%%%||' (",
       "    gcod_id integer primary key autoincrement not null,",
-      "    codseq integer,",
-      "    codeval text unique not null,",
-      "    codetxt text,",
-      "    codecode text,",
-      "    codetdt text,",
-      "    codetcm text,",
-      "    cod_etstmp text,",
-      "    cod_eu text,",
-      "    cod_mtstmp text,",
-      "    cod_mu text,",
-      "    cod_snotes text,",
-      "    cod_notes text,",
-      "    codeattrib text",
+      "    {code_seq} integer,",
+      "    {code_val} text unique not null,",
+      "    {code_txt} text,",
+      "    {code_code} text,",
+      "    {code_end_dt} text,",
+      "    {code_end_reason} text,",
+      "    {code_etstmp} text,",
+      "    {code_euser} text,",
+      "    {code_mtstmp} text,",
+      "    {code_muser} text,",
+      "    {code_snotes} text,",
+      "    {code_notes} text,",
+      "    {code_attrib} text",
       "  )\\;",
-      "  create trigger '||%%%TABLE_NAME%%%||'_after_insert after insert on '||%%%TABLE_NAME%%%||'",
+      "  create trigger '||%%%{audit_table_name}%%%||'_after_insert after insert on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    update '||%%%TABLE_NAME%%%||' set ",
-      "      cod_eu = (select context from jsharmony_meta limit 1),cod_etstmp=datetime(''now'',''localtime''),",
-      "      cod_mu = (select context from jsharmony_meta limit 1),cod_mtstmp=datetime(''now'',''localtime'')",
+      "    update '||%%%{audit_table_name}%%%||' set ",
+      "      {code_euser} = (select context from jsharmony_meta limit 1),{code_etstmp}=datetime(''now'',''localtime''),",
+      "      {code_muser} = (select context from jsharmony_meta limit 1),{code_mtstmp}=datetime(''now'',''localtime'')",
       "      where rowid = new.rowid\\\\\\;",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_I(\"'||%%%TABLE_NAME%%%||'\",\"new.gcod_id\",\"gcod_id\",\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_insert}(\"'||%%%{audit_table_name}%%%||'\",\"new.gcod_id\",\"gcod_id\",\"null\",\"null\",\"null\")%%%)%%%",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_before_update before update on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_before_update before update on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    select case when %%%NONEQUAL(\"NEW.gcod_id\",\"OLD.gcod_id\")%%% then raise(FAIL,''Application Error - ID cannot be updated.'') end\\\\\\;",
-      "    select case when %%%NONEQUAL(\"NEW.codeval\",\"OLD.codeval\")%%% then raise(FAIL,''Application Error - Code Value 1 cannot be updated..'') end\\\\\\;",
+      "    select case when %%%{nequal}(\"NEW.gcod_id\",\"OLD.gcod_id\")%%% then raise(FAIL,''Application Error - ID cannot be updated.'') end\\\\\\;",
+      "    select case when %%%{nequal}(\"NEW.{code_val}\",\"OLD.{code_val}\")%%% then raise(FAIL,''Application Error - Code Value 1 cannot be updated..'') end\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_after_update after update on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_after_update after update on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_U_MULT(\"'||%%%TABLE_NAME%%%||'\",\"new.gcod_id\",[\"gcod_id\",\"codseq\",\"codeval\",\"codetxt\",\"codecode\",\"codetdt\",\"codetcm\",\"cod_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update '||%%%TABLE_NAME%%%||' set ",
-      "      cod_mu = (select context from jsharmony_meta limit 1),cod_mtstmp=datetime(''now'',''localtime'') ",
-      "      where rowid = new.rowid and exists(select * from jsharmony_meta where aud_seq is not null)\\\\\\;",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_update_mult}(\"'||%%%{audit_table_name}%%%||'\",\"new.gcod_id\",[\"gcod_id\",\"{code_seq}\",\"{code_val}\",\"{code_txt}\",\"{code_code}\",\"{code_end_dt}\",\"{code_end_reason}\",\"{code_notes}\"],\"null\",\"null\",\"null\")%%%)%%%",
+      "    update '||%%%{audit_table_name}%%%||' set ",
+      "      {code_muser} = (select context from jsharmony_meta limit 1),{code_mtstmp}=datetime(''now'',''localtime'') ",
+      "      where rowid = new.rowid and exists(select * from jsharmony_meta where {audit_seq} is not null)\\\\\\;",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_delete before delete on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_delete before delete on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_D_MULT(\"'||%%%TABLE_NAME%%%||'\",\"old.gcod_id\",[\"gcod_id\",\"codseq\",\"codeval\",\"codetxt\",\"codecode\",\"codetdt\",\"codetcm\",\"cod_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_delete_mult}(\"'||%%%{audit_table_name}%%%||'\",\"old.gcod_id\",[\"gcod_id\",\"{code_seq}\",\"{code_val}\",\"{code_txt}\",\"{code_code}\",\"{code_end_dt}\",\"{code_end_reason}\",\"{code_notes}\"],\"null\",\"null\",\"null\")%%%)%%%",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
       "\" }';"
     ]
   },
-  "{schema}.create_gcod2" : {
+  "{schema}.{create_code2_app}" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_gcod2(ifnull(%%%SCHEMA%%%||'_','')||'gcod2_'||%%%ID%%%)"]
+    "sql": ["{create_code2_app}(ifnull(%%%SCHEMA%%%||'_','')||'gcod2_'||%%%ID%%%)"]
   },
-  "create_gcod2" : {
-    "params": ["TABLE_NAME"],
+  "{create_code2_app}" : {
+    "params": ["{audit_table_name}"],
     "sql": [
       "update jsharmony_meta set jsexec = '{ \"function\": \"exec\", \"sql\": \"",
-      "  create table '||%%%TABLE_NAME%%%||' (",
-      "    gcod2_id integer primary key autoincrement not null,",
-      "    codseq integer,",
-      "    codeval1 text not null,",
-      "    codeval2 text not null,",
-      "    codetxt text,",
-      "    codecode text,",
-      "    codetdt text,",
-      "    codetcm text,",
-      "    cod_etstmp text,",
-      "    cod_eu text,",
-      "    cod_mtstmp text,",
-      "    cod_mu text,",
-      "    cod_snotes text,",
-      "    cod_notes text,",
-      "    codeattrib text,",
-      "    unique(codeval1,codeval2)",
+      "  create table '||%%%{audit_table_name}%%%||' (",
+      "    {code2_app_id} integer primary key autoincrement not null,",
+      "    {code_seq} integer,",
+      "    {code_val1} text not null,",
+      "    {code_va12} text not null,",
+      "    {code_txt} text,",
+      "    {code_code} text,",
+      "    {code_end_dt} text,",
+      "    {code_end_reason} text,",
+      "    {code_etstmp} text,",
+      "    {code_euser} text,",
+      "    {code_mtstmp} text,",
+      "    {code_muser} text,",
+      "    {code_snotes} text,",
+      "    {code_notes} text,",
+      "    {code_attrib} text,",
+      "    unique({code_val1},{code_va12})",
       "  )\\;",
-      "  create trigger '||%%%TABLE_NAME%%%||'_after_insert after insert on '||%%%TABLE_NAME%%%||'",
+      "  create trigger '||%%%{audit_table_name}%%%||'_after_insert after insert on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    update '||%%%TABLE_NAME%%%||' set ",
-      "      cod_eu = (select context from jsharmony_meta limit 1),cod_etstmp=datetime(''now'',''localtime''),",
-      "      cod_mu = (select context from jsharmony_meta limit 1),cod_mtstmp=datetime(''now'',''localtime'')",
+      "    update '||%%%{audit_table_name}%%%||' set ",
+      "      {code_euser} = (select context from jsharmony_meta limit 1),{code_etstmp}=datetime(''now'',''localtime''),",
+      "      {code_muser} = (select context from jsharmony_meta limit 1),{code_mtstmp}=datetime(''now'',''localtime'')",
       "      where rowid = new.rowid\\\\\\;",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_I(\"'||%%%TABLE_NAME%%%||'\",\"new.gcod2_id\",\"gcod2_id\",\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_insert}(\"'||%%%{audit_table_name}%%%||'\",\"new.{code2_app_id}\",\"{code2_app_id}\",\"null\",\"null\",\"null\")%%%)%%%",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_before_update before update on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_before_update before update on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    select case when %%%NONEQUAL(\"NEW.gcod2_id\",\"OLD.gcod2_id\")%%% then raise(FAIL,''Application Error - ID cannot be updated.'') end\\\\\\;",
-      "    select case when %%%NONEQUAL(\"NEW.codeval1\",\"OLD.codeval1\")%%% then raise(FAIL,''Application Error - Code Value 1 cannot be updated..'') end\\\\\\;",
-      "    select case when %%%NONEQUAL(\"NEW.codeval2\",\"OLD.codeval2\")%%% then raise(FAIL,''Application Error - Code Value 2 cannot be updated..'') end\\\\\\;",
+      "    select case when %%%{nequal}(\"NEW.{code2_app_id}\",\"OLD.{code2_app_id}\")%%% then raise(FAIL,''Application Error - ID cannot be updated.'') end\\\\\\;",
+      "    select case when %%%{nequal}(\"NEW.{code_val1}\",\"OLD.{code_val1}\")%%% then raise(FAIL,''Application Error - Code Value 1 cannot be updated..'') end\\\\\\;",
+      "    select case when %%%{nequal}(\"NEW.{code_va12}\",\"OLD.{code_va12}\")%%% then raise(FAIL,''Application Error - Code Value 2 cannot be updated..'') end\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_after_update after update on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_after_update after update on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_U_MULT(\"'||%%%TABLE_NAME%%%||'\",\"new.gcod2_id\",[\"gcod2_id\",\"codseq\",\"codeval1\",\"codeval2\",\"codetxt\",\"codecode\",\"codetdt\",\"codetcm\",\"cod_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update '||%%%TABLE_NAME%%%||' set ",
-      "      cod_mu = (select context from jsharmony_meta limit 1),cod_mtstmp=datetime(''now'',''localtime'') ",
-      "      where rowid = new.rowid and exists(select * from jsharmony_meta where aud_seq is not null)\\\\\\;",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_update_mult}(\"'||%%%{audit_table_name}%%%||'\",\"new.{code2_app_id}\",[\"{code2_app_id}\",\"{code_seq}\",\"{code_val1}\",\"{code_va12}\",\"{code_txt}\",\"{code_code}\",\"{code_end_dt}\",\"{code_end_reason}\",\"{code_notes}\"],\"null\",\"null\",\"null\")%%%)%%%",
+      "    update '||%%%{audit_table_name}%%%||' set ",
+      "      {code_muser} = (select context from jsharmony_meta limit 1),{code_mtstmp}=datetime(''now'',''localtime'') ",
+      "      where rowid = new.rowid and exists(select * from jsharmony_meta where {audit_seq} is not null)\\\\\\;",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_delete before delete on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_delete before delete on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_D_MULT(\"'||%%%TABLE_NAME%%%||'\",\"old.gcod2_id\",[\"gcod2_id\",\"codseq\",\"codeval1\",\"codeval2\",\"codetxt\",\"codecode\",\"codetdt\",\"codetcm\",\"cod_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_delete_mult}(\"'||%%%{audit_table_name}%%%||'\",\"old.{code2_app_id}\",[\"{code2_app_id}\",\"{code_seq}\",\"{code_val1}\",\"{code_va12}\",\"{code_txt}\",\"{code_code}\",\"{code_end_dt}\",\"{code_end_reason}\",\"{code_notes}\"],\"null\",\"null\",\"null\")%%%)%%%",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
       "\" }';"
     ]
   },
-  "{schema}.create_ucod" : {
+  "{schema}.{create_code_sys}" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_ucod(ifnull(%%%SCHEMA%%%||'_','')||'ucod_'||%%%ID%%%)"]
+    "sql": ["{create_code_sys}(ifnull(%%%SCHEMA%%%||'_','')||'ucod_'||%%%ID%%%)"]
   },
-  "create_ucod" : {
-    "params": ["TABLE_NAME"],
+  "{create_code_sys}" : {
+    "params": ["{audit_table_name}"],
     "sql": [
       "update jsharmony_meta set jsexec = '{ \"function\": \"exec\", \"sql\": \"",
-      "  create table '||%%%TABLE_NAME%%%||' (",
-      "    ucod_id integer primary key autoincrement not null,",
-      "    codseq integer,",
-      "    codeval text unique not null,",
-      "    codetxt text,",
-      "    codecode text,",
-      "    codetdt text,",
-      "    codetcm text,",
-      "    cod_etstmp text,",
-      "    cod_eu text,",
-      "    cod_mtstmp text,",
-      "    cod_mu text,",
-      "    cod_snotes text,",
-      "    cod_notes text,",
-      "    codeattrib text",
+      "  create table '||%%%{audit_table_name}%%%||' (",
+      "    {code_sys_id} integer primary key autoincrement not null,",
+      "    {code_seq} integer,",
+      "    {code_val} text unique not null,",
+      "    {code_txt} text,",
+      "    {code_code} text,",
+      "    {code_end_dt} text,",
+      "    {code_end_reason} text,",
+      "    {code_etstmp} text,",
+      "    {code_euser} text,",
+      "    {code_mtstmp} text,",
+      "    {code_muser} text,",
+      "    {code_snotes} text,",
+      "    {code_notes} text,",
+      "    {code_attrib} text",
       "  )\\;",
-      "  create trigger '||%%%TABLE_NAME%%%||'_after_insert after insert on '||%%%TABLE_NAME%%%||'",
+      "  create trigger '||%%%{audit_table_name}%%%||'_after_insert after insert on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    update '||%%%TABLE_NAME%%%||' set ",
-      "      cod_eu = (select context from jsharmony_meta limit 1),cod_etstmp=datetime(''now'',''localtime''),",
-      "      cod_mu = (select context from jsharmony_meta limit 1),cod_mtstmp=datetime(''now'',''localtime'')",
+      "    update '||%%%{audit_table_name}%%%||' set ",
+      "      {code_euser} = (select context from jsharmony_meta limit 1),{code_etstmp}=datetime(''now'',''localtime''),",
+      "      {code_muser} = (select context from jsharmony_meta limit 1),{code_mtstmp}=datetime(''now'',''localtime'')",
       "      where rowid = new.rowid\\\\\\;",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_I(\"'||%%%TABLE_NAME%%%||'\",\"new.ucod_id\",\"ucod_id\",\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_insert}(\"'||%%%{audit_table_name}%%%||'\",\"new.{code_sys_id}\",\"{code_sys_id}\",\"null\",\"null\",\"null\")%%%)%%%",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_before_update before update on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_before_update before update on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    select case when %%%NONEQUAL(\"NEW.ucod_id\",\"OLD.ucod_id\")%%% then raise(FAIL,''Application Error - ID cannot be updated.'') end\\\\\\;",
-      "    select case when %%%NONEQUAL(\"NEW.codeval\",\"OLD.codeval\")%%% then raise(FAIL,''Application Error - Code Value 1 cannot be updated..'') end\\\\\\;",
+      "    select case when %%%{nequal}(\"NEW.{code_sys_id}\",\"OLD.{code_sys_id}\")%%% then raise(FAIL,''Application Error - ID cannot be updated.'') end\\\\\\;",
+      "    select case when %%%{nequal}(\"NEW.{code_val}\",\"OLD.{code_val}\")%%% then raise(FAIL,''Application Error - Code Value 1 cannot be updated..'') end\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_after_update after update on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_after_update after update on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_U_MULT(\"'||%%%TABLE_NAME%%%||'\",\"new.ucod_id\",[\"ucod_id\",\"codseq\",\"codeval\",\"codetxt\",\"codecode\",\"codetdt\",\"codetcm\",\"cod_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update '||%%%TABLE_NAME%%%||' set ",
-      "      cod_mu = (select context from jsharmony_meta limit 1),cod_mtstmp=datetime(''now'',''localtime'') ",
-      "      where rowid = new.rowid and exists(select * from jsharmony_meta where aud_seq is not null)\\\\\\;",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_update_mult}(\"'||%%%{audit_table_name}%%%||'\",\"new.{code_sys_id}\",[\"{code_sys_id}\",\"{code_seq}\",\"{code_val}\",\"{code_txt}\",\"{code_code}\",\"{code_end_dt}\",\"{code_end_reason}\",\"{code_notes}\"],\"null\",\"null\",\"null\")%%%)%%%",
+      "    update '||%%%{audit_table_name}%%%||' set ",
+      "      {code_muser} = (select context from jsharmony_meta limit 1),{code_mtstmp}=datetime(''now'',''localtime'') ",
+      "      where rowid = new.rowid and exists(select * from jsharmony_meta where {audit_seq} is not null)\\\\\\;",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_delete before delete on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_delete before delete on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_D_MULT(\"'||%%%TABLE_NAME%%%||'\",\"old.ucod_id\",[\"ucod_id\",\"codseq\",\"codeval\",\"codetxt\",\"codecode\",\"codetdt\",\"codetcm\",\"cod_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_delete_mult}(\"'||%%%{audit_table_name}%%%||'\",\"old.{code_sys_id}\",[\"{code_sys_id}\",\"{code_seq}\",\"{code_val}\",\"{code_txt}\",\"{code_code}\",\"{code_end_dt}\",\"{code_end_reason}\",\"{code_notes}\"],\"null\",\"null\",\"null\")%%%)%%%",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
       "\" }';"
     ]
   },
-  "{schema}.create_ucod2" : {
+  "{schema}.{create_code2_sys}" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_ucod2(ifnull(%%%SCHEMA%%%||'_','')||'ucod2_'||%%%ID%%%)"]
+    "sql": ["{create_code2_sys}(ifnull(%%%SCHEMA%%%||'_','')||'ucod2_'||%%%ID%%%)"]
   },
-  "create_ucod2" : {
-    "params": ["TABLE_NAME"],
+  "{create_code2_sys}" : {
+    "params": ["{audit_table_name}"],
     "sql": [
       "update jsharmony_meta set jsexec = '{ \"function\": \"exec\", \"sql\": \"",
-      "  create table '||%%%TABLE_NAME%%%||' (",
-      "    ucod2_id integer primary key autoincrement not null,",
-      "    codseq integer,",
-      "    codeval1 text not null,",
-      "    codeval2 text not null,",
-      "    codetxt text,",
-      "    codecode text,",
-      "    codetdt text,",
-      "    codetcm text,",
-      "    cod_etstmp text,",
-      "    cod_eu text,",
-      "    cod_mtstmp text,",
-      "    cod_mu text,",
-      "    cod_snotes text,",
-      "    cod_notes text,",
-      "    codeattrib text,",
-      "    unique(codeval1,codeval2)",
+      "  create table '||%%%{audit_table_name}%%%||' (",
+      "    {code2_sys_id} integer primary key autoincrement not null,",
+      "    {code_seq} integer,",
+      "    {code_val1} text not null,",
+      "    {code_va12} text not null,",
+      "    {code_txt} text,",
+      "    {code_code} text,",
+      "    {code_end_dt} text,",
+      "    {code_end_reason} text,",
+      "    {code_etstmp} text,",
+      "    {code_euser} text,",
+      "    {code_mtstmp} text,",
+      "    {code_muser} text,",
+      "    {code_snotes} text,",
+      "    {code_notes} text,",
+      "    {code_attrib} text,",
+      "    unique({code_val1},{code_va12})",
       "  )\\;",
-      "  create trigger '||%%%TABLE_NAME%%%||'_after_insert after insert on '||%%%TABLE_NAME%%%||'",
+      "  create trigger '||%%%{audit_table_name}%%%||'_after_insert after insert on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    update '||%%%TABLE_NAME%%%||' set ",
-      "      cod_eu = (select context from jsharmony_meta limit 1),cod_etstmp=datetime(''now'',''localtime''),",
-      "      cod_mu = (select context from jsharmony_meta limit 1),cod_mtstmp=datetime(''now'',''localtime'')",
+      "    update '||%%%{audit_table_name}%%%||' set ",
+      "      {code_euser} = (select context from jsharmony_meta limit 1),{code_etstmp}=datetime(''now'',''localtime''),",
+      "      {code_muser} = (select context from jsharmony_meta limit 1),{code_mtstmp}=datetime(''now'',''localtime'')",
       "      where rowid = new.rowid\\\\\\;",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_I(\"'||%%%TABLE_NAME%%%||'\",\"new.ucod2_id\",\"ucod2_id\",\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_insert}(\"'||%%%{audit_table_name}%%%||'\",\"new.{code2_sys_id}\",\"{code2_sys_id}\",\"null\",\"null\",\"null\")%%%)%%%",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_before_update before update on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_before_update before update on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    select case when %%%NONEQUAL(\"NEW.ucod2_id\",\"OLD.ucod2_id\")%%% then raise(FAIL,''Application Error - ID cannot be updated.'') end\\\\\\;",
-      "    select case when %%%NONEQUAL(\"NEW.codeval1\",\"OLD.codeval1\")%%% then raise(FAIL,''Application Error - Code Value 1 cannot be updated..'') end\\\\\\;",
-      "    select case when %%%NONEQUAL(\"NEW.codeval2\",\"OLD.codeval2\")%%% then raise(FAIL,''Application Error - Code Value 2 cannot be updated..'') end\\\\\\;",
+      "    select case when %%%{nequal}(\"NEW.{code2_sys_id}\",\"OLD.{code2_sys_id}\")%%% then raise(FAIL,''Application Error - ID cannot be updated.'') end\\\\\\;",
+      "    select case when %%%{nequal}(\"NEW.{code_val1}\",\"OLD.{code_val1}\")%%% then raise(FAIL,''Application Error - Code Value 1 cannot be updated..'') end\\\\\\;",
+      "    select case when %%%{nequal}(\"NEW.{code_va12}\",\"OLD.{code_va12}\")%%% then raise(FAIL,''Application Error - Code Value 2 cannot be updated..'') end\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_after_update after update on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_after_update after update on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_U_MULT(\"'||%%%TABLE_NAME%%%||'\",\"new.ucod2_id\",[\"ucod2_id\",\"codseq\",\"codeval1\",\"codeval2\",\"codetxt\",\"codecode\",\"codetdt\",\"codetcm\",\"cod_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update '||%%%TABLE_NAME%%%||' set ",
-      "      cod_mu = (select context from jsharmony_meta limit 1),cod_mtstmp=datetime(''now'',''localtime'') ",
-      "      where rowid = new.rowid and exists(select * from jsharmony_meta where aud_seq is not null)\\\\\\;",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_update_mult}(\"'||%%%{audit_table_name}%%%||'\",\"new.{code2_sys_id}\",[\"{code2_sys_id}\",\"{code_seq}\",\"{code_val1}\",\"{code_va12}\",\"{code_txt}\",\"{code_code}\",\"{code_end_dt}\",\"{code_end_reason}\",\"{code_notes}\"],\"null\",\"null\",\"null\")%%%)%%%",
+      "    update '||%%%{audit_table_name}%%%||' set ",
+      "      {code_muser} = (select context from jsharmony_meta limit 1),{code_mtstmp}=datetime(''now'',''localtime'') ",
+      "      where rowid = new.rowid and exists(select * from jsharmony_meta where {audit_seq} is not null)\\\\\\;",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
-      " create trigger '||%%%TABLE_NAME%%%||'_delete before delete on '||%%%TABLE_NAME%%%||'",
+      " create trigger '||%%%{audit_table_name}%%%||'_delete before delete on '||%%%{audit_table_name}%%%||'",
       "  begin",
-      "    %%%JSEXEC_ESCAPE(%%%AUDIT_D_MULT(\"'||%%%TABLE_NAME%%%||'\",\"old.ucod2_id\",[\"ucod2_id\",\"codseq\",\"codeval1\",\"codeval2\",\"codetxt\",\"codecode\",\"codetdt\",\"codetcm\",\"cod_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set aud_seq = null\\\\\\;",
+      "    %%%JSEXEC_ESCAPE(%%%{log_audit_delete_mult}(\"'||%%%{audit_table_name}%%%||'\",\"old.{code2_sys_id}\",[\"{code2_sys_id}\",\"{code_seq}\",\"{code_val1}\",\"{code_va12}\",\"{code_txt}\",\"{code_code}\",\"{code_end_dt}\",\"{code_end_reason}\",\"{code_notes}\"],\"null\",\"null\",\"null\")%%%)%%%",
+      "    update jsharmony_meta set {audit_seq} = null\\\\\\;",
       "  end\\;",
       "\" }';"
     ]
   },
-  "NONEQUAL" : {
+  "{nequal}" : {
     "params": ["A","B"],
     "sql": ["(%%%A%%% is null and %%%B%%% is not null or %%%B%%% is null and %%%A%%% is not null or %%%A%%%<>%%%B%%%)"]
   },
-  "AUDIT_I_EXT" : {
-    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
+  "{log_audit_insert_ext}" : {
+    "params": ["TABLE","ID","COL_NAME","{audit_ref_name}","{audit_ref_id}","{audit_subject}","{cust_id}","{item_id}"],
     "sql": [
-      "insert into {schema}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
-      "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
-      "  where exists(select * from jsharmony_meta where aud_seq is null)\\\\\\;",
-      "update jsharmony_meta set aud_seq = (select aud_seq from {schema}_aud_h where rowid = last_insert_rowid())",
-      "  where exists(select * from jsharmony_meta where aud_seq is null)\\\\\\;"
+      "insert into {schema}_{audit}({audit_table_name},{audit_table_id},{audit_op},{audit_tstmp},{audit_ref_name},{audit_ref_id},{audit_subject},{cust_id},{item_id},{audit_user})",
+      "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%{audit_ref_name}%%%,%%%{audit_ref_id}%%%,%%%{audit_subject}%%%,%%%{cust_id}%%%,%%%{item_id}%%%,(select context from jsharmony_meta limit 1)",
+      "  where exists(select * from jsharmony_meta where {audit_seq} is null)\\\\\\;",
+      "update jsharmony_meta set {audit_seq} = (select {audit_seq} from {schema}_{audit} where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {audit_seq} is null)\\\\\\;"
     ]
   },
-  "AUDIT_I" : {
-    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
+  "{log_audit_insert}" : {
+    "params": ["TABLE","ID","COL_NAME","{audit_ref_name}","{audit_ref_id}","{audit_subject}","{cust_id}","{item_id}"],
     "sql": [
-      "insert into {schema}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
-      "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
-      "  where exists(select * from jsharmony_meta where aud_seq is null)\\;",
-      "update jsharmony_meta set aud_seq = (select aud_seq from {schema}_aud_h where rowid = last_insert_rowid())",
-      "  where exists(select * from jsharmony_meta where aud_seq is null)\\;"
+      "insert into {schema}_{audit}({audit_table_name},{audit_table_id},{audit_op},{audit_tstmp},{audit_ref_name},{audit_ref_id},{audit_subject},{cust_id},{item_id},{audit_user})",
+      "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%{audit_ref_name}%%%,%%%{audit_ref_id}%%%,%%%{audit_subject}%%%,%%%{cust_id}%%%,%%%{item_id}%%%,(select context from jsharmony_meta limit 1)",
+      "  where exists(select * from jsharmony_meta where {audit_seq} is null)\\;",
+      "update jsharmony_meta set {audit_seq} = (select {audit_seq} from {schema}_{audit} where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {audit_seq} is null)\\;"
     ]
   },
-  "AUDIT_U_MULT" : {
-    "params": ["TABLE","ID","COL_ARRAY","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
+  "{log_audit_update_mult}" : {
+    "params": ["TABLE","ID","COL_ARRAY","{audit_ref_name}","{audit_ref_id}","{audit_subject}","{cust_id}","{item_id}"],
     "exec": [
       "var rslt = '';",
       "for(var i=0;i<COL_ARRAY.length;i++){",
-      "  rslt += '%%%AUDIT_U('+JSON.stringify(TABLE)+','+JSON.stringify(ID)+','+JSON.stringify(COL_ARRAY[i])+','+JSON.stringify(REF_NAME)+','+JSON.stringify(REF_ID)+','+JSON.stringify(SUBJ)+','+JSON.stringify(C_ID)+','+JSON.stringify(E_ID)+')%%%\\r\\n';",
+      "  rslt += '%%%{log_audit_update}('+JSON.stringify(TABLE)+','+JSON.stringify(ID)+','+JSON.stringify(COL_ARRAY[i])+','+JSON.stringify({audit_ref_name})+','+JSON.stringify({audit_ref_id})+','+JSON.stringify({audit_subject})+','+JSON.stringify({cust_id})+','+JSON.stringify({item_id})+')%%%\\r\\n';",
       "}",
       "return rslt;"
     ]
   },
-  "AUDIT_U" : {
-    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
+  "{log_audit_update}" : {
+    "params": ["TABLE","ID","COL_NAME","{audit_ref_name}","{audit_ref_id}","{audit_subject}","{cust_id}","{item_id}"],
     "sql": [
-      "insert into {schema}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
-      "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
-      "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%NONEQUAL(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
-      "update jsharmony_meta set aud_seq = (select aud_seq from {schema}_aud_h where rowid = last_insert_rowid())",
-      "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%NONEQUAL(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
-      "insert into {schema}_aud_d(aud_seq,column_name,column_val)",
-      "  select (select aud_seq from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%",
-      "  where (%%%NONEQUAL(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
+      "insert into {schema}_{audit}({audit_table_name},{audit_table_id},{audit_op},{audit_tstmp},{audit_ref_name},{audit_ref_id},{audit_subject},{cust_id},{item_id},{audit_user})",
+      "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%{audit_ref_name}%%%,%%%{audit_ref_id}%%%,%%%{audit_subject}%%%,%%%{cust_id}%%%,%%%{item_id}%%%,(select context from jsharmony_meta limit 1)",
+      "  where exists(select * from jsharmony_meta where {audit_seq} is null) and (%%%{nequal}(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
+      "update jsharmony_meta set {audit_seq} = (select {audit_seq} from {schema}_{audit} where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {audit_seq} is null) and (%%%{nequal}(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
+      "insert into {schema}_{audit_detail}({audit_seq},{audit_column_name},{audit_column_val})",
+      "  select (select {audit_seq} from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%",
+      "  where (%%%{nequal}(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
       ""
     ]
   },
-  "AUDIT_U_CUSTOM" : {
-    "params": ["TABLE","ID","CONDITION","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
+  "{log_audit_update_custom}" : {
+    "params": ["TABLE","ID","CONDITION","{audit_ref_name}","{audit_ref_id}","{audit_subject}","{cust_id}","{item_id}"],
     "sql": [
-      "insert into {schema}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
-      "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%REF_NAME%%%,%%%REF_ID%%%,%%%SUBJ%%%,%%%C_ID%%%,%%%E_ID%%%,(select context from jsharmony_meta limit 1)",
-      "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%CONDITION%%%)\\;",
-      "update jsharmony_meta set aud_seq = (select aud_seq from {schema}_aud_h where rowid = last_insert_rowid())",
-      "  where exists(select * from jsharmony_meta where aud_seq is null) and (%%%CONDITION%%%)\\;",
+      "insert into {schema}_{audit}({audit_table_name},{audit_table_id},{audit_op},{audit_tstmp},{audit_ref_name},{audit_ref_id},{audit_subject},{cust_id},{item_id},{audit_user})",
+      "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%{audit_ref_name}%%%,%%%{audit_ref_id}%%%,%%%{audit_subject}%%%,%%%{cust_id}%%%,%%%{item_id}%%%,(select context from jsharmony_meta limit 1)",
+      "  where exists(select * from jsharmony_meta where {audit_seq} is null) and (%%%CONDITION%%%)\\;",
+      "update jsharmony_meta set {audit_seq} = (select {audit_seq} from {schema}_{audit} where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {audit_seq} is null) and (%%%CONDITION%%%)\\;",
       ""
     ]
   },
-  "AUDIT_D_MULT" : {
-    "params": ["TABLE","ID","COL_ARRAY","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
+  "{log_audit_delete_mult}" : {
+    "params": ["TABLE","ID","COL_ARRAY","{audit_ref_name}","{audit_ref_id}","{audit_subject}","{cust_id}","{item_id}"],
     "exec": [
       "var rslt = '';",
       "for(var i=0;i<COL_ARRAY.length;i++){",
-      "  rslt += '%%%AUDIT_D('+JSON.stringify(TABLE)+','+JSON.stringify(ID)+','+JSON.stringify(COL_ARRAY[i])+','+JSON.stringify(REF_NAME)+','+JSON.stringify(REF_ID)+','+JSON.stringify(SUBJ)+','+JSON.stringify(C_ID)+','+JSON.stringify(E_ID)+')%%%\\r\\n';",
+      "  rslt += '%%%{log_audit_delete}('+JSON.stringify(TABLE)+','+JSON.stringify(ID)+','+JSON.stringify(COL_ARRAY[i])+','+JSON.stringify({audit_ref_name})+','+JSON.stringify({audit_ref_id})+','+JSON.stringify({audit_subject})+','+JSON.stringify({cust_id})+','+JSON.stringify({item_id})+')%%%\\r\\n';",
       "}",
       "return rslt;"
     ]
   },
-  "AUDIT_D" : {
-    "params": ["TABLE","ID","COL_NAME","REF_NAME","REF_ID","SUBJ","C_ID","E_ID"],
+  "{log_audit_delete}" : {
+    "params": ["TABLE","ID","COL_NAME","{audit_ref_name}","{audit_ref_id}","{audit_subject}","{cust_id}","{item_id}"],
     "sql": [
-      "insert into {schema}_aud_h(table_name,table_id,aud_op,aud_tstmp,ref_name,ref_id,subj,c_id,e_id,aud_u)",
+      "insert into {schema}_{audit}({audit_table_name},{audit_table_id},{audit_op},{audit_tstmp},{audit_ref_name},{audit_ref_id},{audit_subject},{cust_id},{item_id},{audit_user})",
       "  select ",
       "    '%%%TABLE%%%',%%%ID%%%,'{doc}',datetime('now','localtime'),",
-      "    (select ref_name from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
-      "    (select ref_id from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
-      "    (select subj from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
-      "    (select c_id from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
-      "    (select e_id from {schema}_aud_h where table_name='%%%TABLE%%%' and table_id=%%%ID%%% and aud_op='I' order by aud_seq desc),",
+      "    (select {audit_ref_name} from {schema}_{audit} where {audit_table_name}='%%%TABLE%%%' and {audit_table_id}=%%%ID%%% and {audit_op}='I' order by {audit_seq} desc),",
+      "    (select {audit_ref_id} from {schema}_{audit} where {audit_table_name}='%%%TABLE%%%' and {audit_table_id}=%%%ID%%% and {audit_op}='I' order by {audit_seq} desc),",
+      "    (select {audit_subject} from {schema}_{audit} where {audit_table_name}='%%%TABLE%%%' and {audit_table_id}=%%%ID%%% and {audit_op}='I' order by {audit_seq} desc),",
+      "    (select {cust_id} from {schema}_{audit} where {audit_table_name}='%%%TABLE%%%' and {audit_table_id}=%%%ID%%% and {audit_op}='I' order by {audit_seq} desc),",
+      "    (select {item_id} from {schema}_{audit} where {audit_table_name}='%%%TABLE%%%' and {audit_table_id}=%%%ID%%% and {audit_op}='I' order by {audit_seq} desc),",
       "    (select context from jsharmony_meta limit 1)",
-      "  where exists(select * from jsharmony_meta where aud_seq is null)\\;",
-      "update jsharmony_meta set aud_seq = (select aud_seq from {schema}_aud_h where rowid = last_insert_rowid())",
-      "  where exists(select * from jsharmony_meta where aud_seq is null)\\;",
+      "  where exists(select * from jsharmony_meta where {audit_seq} is null)\\;",
+      "update jsharmony_meta set {audit_seq} = (select {audit_seq} from {schema}_{audit} where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {audit_seq} is null)\\;",
 
-      "insert into {schema}_aud_d(aud_seq,column_name,column_val)",
-      "  select (select aud_seq from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%\\;",
+      "insert into {schema}_{audit_detail}({audit_seq},{audit_column_name},{audit_column_val})",
+      "  select (select {audit_seq} from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%\\;",
       ""
     ]
   },
-  "CLIENT_SCOPE": "('C','E')",
-  "{schema}.getcid":{
+  "{client_scope}": "('C','E')",
+  "{schema}.{get_cust_id}":{
     "params": ["tabn","tabid"],
     "sql": [
       "(select null)"
     ]
   },
-  "{schema}.geteid":{
+  "{schema}.{get_item_id}":{
     "params": ["tabn","tabid"],
     "sql": [
       "(select null)"
     ]
   },
-  "{schema}.mycuser_c_id":{
+  "{schema}.{my_cust_id}":{
     "params": [],
     "sql": [
-      "(select {schema}_cpe.c_id from {schema}_cpe where {schema}_cpe.pe_id={schema}.mycpe())"
+      "(select {schema}_{cust_user}.{cust_id} from {schema}_{cust_user} where {schema}_{cust_user}.{sys_user_id}={schema}.{my_cust_user}())"
     ]
   },
-  "{schema}.dscope_dctgr":"{schema}_gcod2_d_scope_d_ctgr",
-  "{schema}.mycuser":{
+  "{schema}.{doc_ctgr_table}":"{schema}_{code2_doc_ctgr}",
+  "{schema}.{my_db_user}":{
     "params": [],
     "sql": [
       "(select context from jsharmony_meta)"
     ]
   },
-  "{schema}.mycuser_fmt":{
+  "{schema}.{my_db_user_fmt}":{
     "params": ["u"],
     "sql": [
       "(case substr(%%%u%%%,1,1)",
-      "  when 'S' then (select mycuser_fmt_sname from (select pe_id mycuser_fmt_spe_id,'S-'||pe_lname||', '||pe_fname as mycuser_fmt_sname from {schema}.pe) mycuser_fmt_stbl where mycuser_fmt_spe_id=substr(%%%u%%%,2,1024))",
-      "  when 'C' then (select mycuser_fmt_cname from (select pe_id mycuser_fmt_cpe_id,'C-'||pe_lname||', '||pe_fname as mycuser_fmt_cname from {schema}.cpe) mycuser_fmt_ctbl where mycuser_fmt_cpe_id=substr(%%%u%%%,2,1024))",
+      "  when 'S' then (select {my_db_user_fmt}_sname from (select {sys_user_id} {my_db_user_fmt}_spe_id,'S-'||{sys_user_lname}||', '||{sys_user_fname} as {my_db_user_fmt}_sname from {schema}.{sys_user}) {my_db_user_fmt}_stbl where {my_db_user_fmt}_spe_id=substr(%%%u%%%,2,1024))",
+      "  when 'C' then (select {my_db_user_fmt}_cname from (select {sys_user_id} {my_db_user_fmt}_{cust_user}_id,'C-'||{sys_user_lname}||', '||{sys_user_fname} as {my_db_user_fmt}_cname from {schema}.{cust_user}) {my_db_user_fmt}_ctbl where {my_db_user_fmt}_{cust_user}_id=substr(%%%u%%%,2,1024))",
       "  when 'U' then substr(%%%u%%%,2,2014)",
       "  else 'unknown'",
       "end)"
     ]
   },
-  "{schema}.mycpe":{
+  "{schema}.{my_cust_user}":{
     "params": [],
     "sql": [
       "(select (case substr(context,1,1)",
@@ -383,72 +383,72 @@
       "end) from jsharmony_meta)"
     ]
   },
-  "{schema}.get_pe_name":{
+  "{schema}.{get_sys_user_name}":{
     "params": ["id"],
     "sql": [
-      "(select get_pe_name_{schema}_pe_name from (select pe_lname||', '||pe_fname get_pe_name_{schema}_pe_name,pe_id get_pe_name_{schema}_pe_id from {schema}_pe) get_pe_name_{schema}_pe where get_pe_name_{schema}_pe_id = %%%id%%%)"
+      "(select {get_sys_user_name}_{schema}_{sys_user_name} from (select {sys_user_lname}||', '||{sys_user_fname} {get_sys_user_name}_{schema}_{sys_user_name},{sys_user_id} {get_sys_user_name}_{schema}_{sys_user_id} from {schema}_{sys_user}) {get_sys_user_name}_{schema}_{sys_user} where {get_sys_user_name}_{schema}_{sys_user_id} = %%%id%%%)"
     ]
   },
-  "{schema}.get_ppd_desc":{
-    "params": ["in_ppd_process","in_ppd_attrib"],
+  "{schema}.{get_param_desc}":{
+    "params": ["in_{param_process}","in_{param_attrib}"],
     "sql": [
-      "(select get_ppd_desc_{schema}_ppd_desc from (select ppd_desc get_ppd_desc_{schema}_ppd_desc, ppd_process get_ppd_desc_{schema}_ppd_process, ppd_attrib get_ppd_desc_{schema}_ppd_attrib from {schema}_ppd) get_ppd_desc_{schema}_ppd where get_ppd_desc_{schema}_ppd_process = %%%in_ppd_process%%% and get_ppd_desc_{schema}_ppd_attrib = %%%in_ppd_attrib%%%)"
+      "(select {get_param_desc}_{schema}_{param_desc} from (select {param_desc} {get_param_desc}_{schema}_{param_desc}, {param_process} {get_param_desc}_{schema}_{param_process}, {param_attrib} {get_param_desc}_{schema}_{param_attrib} from {schema}_{param}) {get_param_desc}_{schema}_{param} where {get_param_desc}_{schema}_{param_process} = %%%in_{param_process}%%% and {get_param_desc}_{schema}_{param_attrib} = %%%in_{param_attrib}%%%)"
     ]
   },
-  "{schema}.get_cpe_name":{
+  "{schema}.{get_cust_user_name}":{
     "params": ["id"],
     "sql": [
-      "(select get_cpe_name_{schema}_cpe_name from (select pe_id get_cpe_name_{schema}_cpe_id, pe_lname||', '||pe_fname get_cpe_name_{schema}_cpe_name from {schema}_cpe) get_cpe_name_{schema}_cpe where get_cpe_name_{schema}_cpe_id = %%%id%%%)"
+      "(select {get_cust_user_name}_{schema}_{cust_user}_name from (select {sys_user_id} {get_cust_user_name}_{schema}_{cust_user}_id, {sys_user_lname}||', '||{sys_user_fname} {get_cust_user_name}_{schema}_{cust_user}_name from {schema}_{cust_user}) {get_cust_user_name}_{schema}_{cust_user} where {get_cust_user_name}_{schema}_{cust_user}_id = %%%id%%%)"
     ]
   },
-  "{schema}.table_type":{
-    "params": ["schema","table_name"],
+  "{schema}.{table_type}":{
+    "params": ["schema","{audit_table_name}"],
     "sql": [
-      "(select (SELECT case type when 'table' then 'BASE TABLE' else null end FROM sqlite_master where lower(name)=ifnull(%%%schema%%%||'_','')||lower(%%%table_name%%%)))"
+      "(select (SELECT case type when 'table' then 'BASE TABLE' else null end FROM sqlite_master where lower(name)=ifnull(%%%schema%%%||'_','')||lower(%%%{audit_table_name}%%%)))"
     ]
   },
-  "{schema}.audit_info":{
+  "{schema}.{log_audit_info}":{
     "params": ["etstmp","eu","mtstmp","mu"],
     "sql": [
       "(select 'INFO'||char(13,10)||",
-      "        '     Entered:  '||%%%etstmp%%%||'  '||{schema}.mycuser_fmt(%%%eu%%%)||char(13,10)||",
-      "        'Last Updated:  '||%%%mtstmp%%%||'  '||{schema}.mycuser_fmt(%%%mu%%%)",
+      "        '     Entered:  '||%%%etstmp%%%||'  '||{schema}.{my_db_user_fmt}(%%%eu%%%)||char(13,10)||",
+      "        'Last Updated:  '||%%%mtstmp%%%||'  '||{schema}.{my_db_user_fmt}(%%%mu%%%)",
       ")"
     ]
   },
-  "{schema}.mype":{
+  "{schema}.{my_sys_user_id}":{
     "params": [],
     "sql": [
-      "(case substr({schema}.mycuser(),1,1)",
-      "  when 'S' then cast(substr({schema}.mycuser(),2,1024) as int)",
+      "(case substr({schema}.{my_db_user}(),1,1)",
+      "  when 'S' then cast(substr({schema}.{my_db_user}(),2,1024) as int)",
       "  else  null",
       "end)"
     ]
   },
-  "{schema}.mypec":{
+  "{schema}.{my_cust_user_id}":{
     "params": [],
     "sql": [
-      "(case substr({schema}.mycuser(),1,1)",
-      "  when 'C' then cast(substr({schema}.mycuser(),2,1024) as int)",
+      "(case substr({schema}.{my_db_user}(),1,1)",
+      "  when 'C' then cast(substr({schema}.{my_db_user}(),2,1024) as int)",
       "  else  null",
       "end)"
     ]
   },
-  "{schema}.mynow":{
+  "{schema}.{my_now}":{
     "params": [],
     "sql": "datetime('now','localtime')"
   },
-  "{schema}.mytodate":{
+  "{schema}.{my_to_date}":{
     "params": ["dt"],
     "sql": "date(%%%dt%%%)"
   },
-  "{schema}.d_filename":{
-    "params": ["d_id","d_ext"],
+  "{schema}.{doc_filename}":{
+    "params": ["{doc_id}","{doc_ext}"],
     "sql": [
-      "(cast(%%%d_id%%% as text)||%%%d_ext%%%)"
+      "(cast(%%%{doc_id}%%% as text)||%%%{doc_ext}%%%)"
     ]
   },
-  "concat":{
+  "{concat}":{
     "params": ["a","b"],
     "sql": [
       "(%%%a%%%||%%%b%%%)"

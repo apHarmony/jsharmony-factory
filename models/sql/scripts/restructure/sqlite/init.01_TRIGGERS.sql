@@ -1,592 +1,592 @@
 /***************TABLE TRIGGERS***************/
 
-/***************CPER***************/
+/***************{cust_user_role}***************/
 
-create trigger {schema}_cper_insert after insert on {schema}_cper
+create trigger {schema}_{cust_user_role}_insert after insert on {schema}_{cust_user_role}
 begin
-  %%%AUDIT_I("{schema}_cper","new.cper_id","cper_id","null","null","(select coalesce(pe_lname,'')||', '||coalesce(pe_fname,'') from {schema}_cpe where {schema}_cpe.pe_id = new.pe_id)","{schema}.getcid('CPE',new.pe_id)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{schema}_{cust_user_role}","new.{cust_user_role_id}","{cust_user_role_id}","null","null","(select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') from {schema}_{cust_user} where {schema}_{cust_user}.{sys_user_id} = new.{sys_user_id})","{schema}.{get_cust_id}('{cust_user}',new.{sys_user_id})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_cper_update before update on {schema}_cper
+create trigger {schema}_{cust_user_role}_update before update on {schema}_{cust_user_role}
 begin
-  select case when ifnull(old.cper_id,'')<>ifnull(NEW.cper_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when ifnull(old.pe_id,'')<>ifnull(NEW.pe_id,'') then raise(FAIL,'Application Error - Customer User ID cannot be updated.') end\;
+  select case when ifnull(old.{cust_user_role_id},'')<>ifnull(NEW.{cust_user_role_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(old.{sys_user_id},'')<>ifnull(NEW.{sys_user_id},'') then raise(FAIL,'Application Error - Customer User ID cannot be updated.') end\;
 
-  %%%AUDIT_U_MULT("{schema}_cper","old.cper_id",["pe_id","cr_name"],"null","null","(select coalesce(pe_lname,'')||', '||coalesce(pe_fname,'') from {schema}_cpe where {schema}_cpe.pe_id = new.pe_id)","{schema}.getcid('CPE',new.pe_id)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_update_mult}("{schema}_{cust_user_role}","old.{cust_user_role_id}",["{sys_user_id}","{cust_role_name}"],"null","null","(select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') from {schema}_{cust_user} where {schema}_{cust_user}.{sys_user_id} = new.{sys_user_id})","{schema}.{get_cust_id}('{cust_user}',new.{sys_user_id})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_cper_delete before delete on {schema}_cper
+create trigger {schema}_{cust_user_role}_delete before delete on {schema}_{cust_user_role}
 begin
-  %%%AUDIT_D_MULT("{schema}_cper","old.cper_id",["pe_id","cr_name"],"null","null","null","{schema}.getcid('CPE',old.pe_id)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{schema}_{cust_user_role}","old.{cust_user_role_id}",["{sys_user_id}","{cust_role_name}"],"null","null","null","{schema}.{get_cust_id}('{cust_user}',old.{sys_user_id})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
 
-/***************D***************/
+/***************{doc}***************/
 
-create trigger {schema}_d_before_insert before insert on {schema}_d
+create trigger {schema}_{doc}_before_insert before insert on {schema}_{doc}
 begin
-  select case when new.d_scope='S' and new.d_scope_id<>0 then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
-  select case when new.d_scope<>'S' and new.d_scope_id is null then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
-  select case when ({schema}.mycuser_c_id() is not null) and 
-    (({schema}.getcid(new.d_scope,new.d_scope_id)<>{schema}.mycuser_c_id()) or
-     (new.d_scope not in %%%CLIENT_SCOPE%%%))
+  select case when new.{doc_scope}='S' and new.{doc_scope_id}<>0 then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
+  select case when new.{doc_scope}<>'S' and new.{doc_scope_id} is null then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
+  select case when ({schema}.{my_cust_id}() is not null) and 
+    (({schema}.{get_cust_id}(new.{doc_scope},new.{doc_scope_id})<>{schema}.{my_cust_id}()) or
+     (new.{doc_scope} not in %%%{client_scope}%%%))
     then raise(FAIL,'Application Error - Client User has no rights to perform this operation') end\;
-  select case when not exists (select * from {schema}_gcod2_d_scope_d_ctgr where codeval1=new.d_scope and codeval2=new.d_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
+  select case when not exists (select * from {schema}_{code2_doc_ctgr} where {code_val1}=new.{doc_scope} and {code_va12}=new.{doc_ctgr}) then raise(FAIL,'Document type not allowed for selected scope') end\;
 end;
 
-create trigger {schema}_d_after_insert after insert on {schema}_d
+create trigger {schema}_{doc}_after_insert after insert on {schema}_{doc}
 begin
-  update {schema}_d set 
-    c_id     = {schema}.getcid(new.d_scope,new.d_scope_id),
-    e_id     = {schema}.geteid(new.d_scope,new.d_scope_id),
-    d_eu     = (select context from jsharmony_meta limit 1),
-    d_etstmp = datetime('now','localtime'),
-    d_mu     = (select context from jsharmony_meta limit 1),
-    d_mtstmp = datetime('now','localtime')
+  update {schema}_{doc} set 
+    {cust_id}     = {schema}.{get_cust_id}(new.{doc_scope},new.{doc_scope_id}),
+    {item_id}     = {schema}.{get_item_id}(new.{doc_scope},new.{doc_scope_id}),
+    {doc_euser}     = (select context from jsharmony_meta limit 1),
+    {doc_etstmp} = datetime('now','localtime'),
+    {doc_muser}     = (select context from jsharmony_meta limit 1),
+    {doc_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%AUDIT_I("{schema}_d","new.d_id","d_id","null","null","null","{schema}.getcid(new.d_scope,new.d_scope_id)","{schema}.geteid(new.d_scope,new.d_scope_id)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{schema}_{doc}","new.{doc_id}","{doc_id}","null","null","null","{schema}.{get_cust_id}(new.{doc_scope},new.{doc_scope_id})","{schema}.{get_item_id}(new.{doc_scope},new.{doc_scope_id})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_d_before_update before update on {schema}_d
+create trigger {schema}_{doc}_before_update before update on {schema}_{doc}
 begin
-  select case when ifnull(old.d_id,'')<>ifnull(NEW.d_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when ifnull(old.d_scope,'')<>ifnull(NEW.d_scope,'') then raise(FAIL,'Application Error - Scope cannot be updated.') end\;
-  select case when ifnull(old.d_scope_id,'')<>ifnull(NEW.d_scope_id,'') then raise(FAIL,'Application Error - Scope ID cannot be updated.') end\;
-  select case when ifnull(old.d_ctgr,'')<>ifnull(NEW.d_ctgr,'') then raise(FAIL,'Application Error - Document Category cannot be updated.') end\;
-  select case when not exists (select * from {schema}_gcod2_d_scope_d_ctgr where codeval1=new.d_scope and codeval2=new.d_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
+  select case when ifnull(old.{doc_id},'')<>ifnull(NEW.{doc_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(old.{doc_scope},'')<>ifnull(NEW.{doc_scope},'') then raise(FAIL,'Application Error - Scope cannot be updated.') end\;
+  select case when ifnull(old.{doc_scope_id},'')<>ifnull(NEW.{doc_scope_id},'') then raise(FAIL,'Application Error - Scope ID cannot be updated.') end\;
+  select case when ifnull(old.{doc_ctgr},'')<>ifnull(NEW.{doc_ctgr},'') then raise(FAIL,'Application Error - Document Category cannot be updated.') end\;
+  select case when not exists (select * from {schema}_{code2_doc_ctgr} where {code_val1}=new.{doc_scope} and {code_va12}=new.{doc_ctgr}) then raise(FAIL,'Document type not allowed for selected scope') end\;
 end;
 
-create trigger {schema}_d_after_update after update on {schema}_d
+create trigger {schema}_{doc}_after_update after update on {schema}_{doc}
 begin
-  %%%AUDIT_U_MULT("{schema}_d","old.d_id",["d_id","c_id","d_scope","d_scope_id","e_id","d_sts","d_ctgr","d_desc","d_utstmp","d_uu","d_synctstmp"],"null","null","null","{schema}.getcid(new.d_scope,new.d_scope_id)","{schema}.geteid(new.d_scope,new.d_scope_id)")%%%
+  %%%{log_audit_update_mult}("{schema}_{doc}","old.{doc_id}",["{doc_id}","{cust_id}","{doc_scope}","{doc_scope_id}","{item_id}","{doc_sts}","{doc_ctgr}","{doc_desc}","{doc_utstmp}","{doc_uuser}","{doc_sync_tstmp}"],"null","null","null","{schema}.{get_cust_id}(new.{doc_scope},new.{doc_scope_id})","{schema}.{get_item_id}(new.{doc_scope},new.{doc_scope_id})")%%%
 
-  update {schema}_d set 
-    c_id     = {schema}.getcid(new.d_scope,new.d_scope_id),
-    e_id     = {schema}.geteid(new.d_scope,new.d_scope_id),
-    d_mu     = (select context from jsharmony_meta limit 1),
-    d_mtstmp = datetime('now','localtime')
-    where d_id = new.d_id and exists(select * from jsharmony_meta where aud_seq is not null)\; 
+  update {schema}_{doc} set 
+    {cust_id}     = {schema}.{get_cust_id}(new.{doc_scope},new.{doc_scope_id}),
+    {item_id}     = {schema}.{get_item_id}(new.{doc_scope},new.{doc_scope_id}),
+    {doc_muser}     = (select context from jsharmony_meta limit 1),
+    {doc_mtstmp} = datetime('now','localtime')
+    where {doc_id} = new.{doc_id} and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
 
-  update jsharmony_meta set aud_seq = null\;
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_d_delete before delete on {schema}_d
+create trigger {schema}_{doc}_delete before delete on {schema}_{doc}
 begin
-  %%%AUDIT_D_MULT("{schema}_d","old.d_id",["d_id","c_id","d_scope","d_scope_id","e_id","d_sts","d_ctgr","d_desc","d_utstmp","d_uu","d_synctstmp"],"null","null","null")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{schema}_{doc}","old.{doc_id}",["{doc_id}","{cust_id}","{doc_scope}","{doc_scope_id}","{item_id}","{doc_sts}","{doc_ctgr}","{doc_desc}","{doc_utstmp}","{doc_uuser}","{doc_sync_tstmp}"],"null","null","null")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************N***************/
+/***************{note}***************/
 
-create trigger {schema}_n_before_insert before insert on {schema}_n
+create trigger {schema}_{note}_before_insert before insert on {schema}_{note}
 begin
-  select case when new.n_scope='S' and new.n_scope_id<>0 then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
-  select case when new.n_scope<>'S' and new.n_scope_id is null then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
-  select case when ({schema}.mycuser_c_id() is not null) and 
-    (({schema}.getcid(new.n_scope,new.n_scope_id)<>{schema}.mycuser_c_id()) or
-     (new.n_scope not in %%%CLIENT_SCOPE%%%))
+  select case when new.{note_scope}='S' and new.{note_scope_id}<>0 then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
+  select case when new.{note_scope}<>'S' and new.{note_scope_id} is null then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
+  select case when ({schema}.{my_cust_id}() is not null) and 
+    (({schema}.{get_cust_id}(new.{note_scope},new.{note_scope_id})<>{schema}.{my_cust_id}()) or
+     (new.{note_scope} not in %%%{client_scope}%%%))
     then raise(FAIL,'Application Error - Client User has no rights to perform this operation') end\;
 end;
 
-create trigger {schema}_n_after_insert after insert on {schema}_n
+create trigger {schema}_{note}_after_insert after insert on {schema}_{note}
 begin
-  update {schema}_n set 
-    c_id     = {schema}.getcid(new.n_scope,new.n_scope_id),
-    e_id     = {schema}.geteid(new.n_scope,new.n_scope_id),
-    n_eu     = (select context from jsharmony_meta limit 1),
-    n_etstmp = datetime('now','localtime'),
-    n_mu     = (select context from jsharmony_meta limit 1),
-    n_mtstmp = datetime('now','localtime')
+  update {schema}_{note} set 
+    {cust_id}     = {schema}.{get_cust_id}(new.{note_scope},new.{note_scope_id}),
+    {item_id}     = {schema}.{get_item_id}(new.{note_scope},new.{note_scope_id}),
+    {note_euser}     = (select context from jsharmony_meta limit 1),
+    {note_etstmp} = datetime('now','localtime'),
+    {note_muser}     = (select context from jsharmony_meta limit 1),
+    {note_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%AUDIT_I("{schema}_n","new.n_id","n_id","null","null","null","{schema}.getcid(new.n_scope,new.n_scope_id)","{schema}.geteid(new.n_scope,new.n_scope_id)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{schema}_{note}","new.{note_id}","{note_id}","null","null","null","{schema}.{get_cust_id}(new.{note_scope},new.{note_scope_id})","{schema}.{get_item_id}(new.{note_scope},new.{note_scope_id})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_n_before_update before update on {schema}_n
+create trigger {schema}_{note}_before_update before update on {schema}_{note}
 begin
-  select case when ifnull(old.n_id,'')<>ifnull(NEW.n_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when ifnull(old.n_scope,'')<>ifnull(NEW.n_scope,'') then raise(FAIL,'Application Error - Scope cannot be updated.') end\;
-  select case when ifnull(old.n_scope_id,'')<>ifnull(NEW.n_scope_id,'') then raise(FAIL,'Application Error - Scope ID cannot be updated.') end\;
-  select case when ifnull(old.n_type,'')<>ifnull(NEW.n_type,'') then raise(FAIL,'Application Error - Note Type cannot be updated.') end\;
+  select case when ifnull(old.{note_id},'')<>ifnull(NEW.{note_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(old.{note_scope},'')<>ifnull(NEW.{note_scope},'') then raise(FAIL,'Application Error - Scope cannot be updated.') end\;
+  select case when ifnull(old.{note_scope_id},'')<>ifnull(NEW.{note_scope_id},'') then raise(FAIL,'Application Error - Scope ID cannot be updated.') end\;
+  select case when ifnull(old.{note_type},'')<>ifnull(NEW.{note_type},'') then raise(FAIL,'Application Error - Note Type cannot be updated.') end\;
 end;
 
-create trigger {schema}_n_after_update after update on {schema}_n
+create trigger {schema}_{note}_after_update after update on {schema}_{note}
 begin
-  %%%AUDIT_U_MULT("{schema}_n","old.n_id",["n_id","c_id","n_scope","n_scope_id","e_id","n_sts","n_type","n_note"],"null","null","null","{schema}.getcid(new.n_scope,new.n_scope_id)","{schema}.geteid(new.n_scope,new.n_scope_id)")%%%
+  %%%{log_audit_update_mult}("{schema}_{note}","old.{note_id}",["{note_id}","{cust_id}","{note_scope}","{note_scope_id}","{item_id}","{note_sts}","{note_type}","{note_body}"],"null","null","null","{schema}.{get_cust_id}(new.{note_scope},new.{note_scope_id})","{schema}.{get_item_id}(new.{note_scope},new.{note_scope_id})")%%%
 
-  update {schema}_n set 
-    c_id     = {schema}.getcid(new.n_scope,new.n_scope_id),
-    e_id     = {schema}.geteid(new.n_scope,new.n_scope_id),
-    n_mu     = (select context from jsharmony_meta limit 1),
-    n_mtstmp = datetime('now','localtime')
-    where n_id = new.n_id and exists(select * from jsharmony_meta where aud_seq is not null)\; 
+  update {schema}_{note} set 
+    {cust_id}     = {schema}.{get_cust_id}(new.{note_scope},new.{note_scope_id}),
+    {item_id}     = {schema}.{get_item_id}(new.{note_scope},new.{note_scope_id}),
+    {note_muser}     = (select context from jsharmony_meta limit 1),
+    {note_mtstmp} = datetime('now','localtime')
+    where {note_id} = new.{note_id} and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
 
-  update jsharmony_meta set aud_seq = null\;
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_n_delete before delete on {schema}_n
+create trigger {schema}_{note}_delete before delete on {schema}_{note}
 begin
-  %%%AUDIT_D_MULT("{schema}_n","old.n_id",["n_id","c_id","n_scope","n_scope_id","e_id","n_sts","n_type","n_note"],"null","null","null")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{schema}_{note}","old.{note_id}",["{note_id}","{cust_id}","{note_scope}","{note_scope_id}","{item_id}","{note_sts}","{note_type}","{note_body}"],"null","null","null")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
 
-/***************PE***************/
+/***************{sys_user}***************/
 
-create trigger {schema}_pe_before_insert before insert on {schema}_pe
+create trigger {schema}_{sys_user}_before_insert before insert on {schema}_{sys_user}
 begin
-  select case when ifnull(NEW.pe_pw1,'')<>ifnull(NEW.pe_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
-  select case when length(ifnull(NEW.pe_pw1,''))< 6 then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
+  select case when ifnull(NEW.{sys_user_pw1},'')<>ifnull(NEW.{sys_user_pw2},'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
+  select case when length(ifnull(NEW.{sys_user_pw1},''))< 6 then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
 end;
 
-create trigger {schema}_pe_after_insert after insert on {schema}_pe
+create trigger {schema}_{sys_user}_after_insert after insert on {schema}_{sys_user}
 begin
-  update {schema}_pe set 
-    pe_startdt = ifnull(NEW.pe_startdt,date('now','localtime')),
-    pe_stsdt  = datetime('now','localtime'),
-    pe_eu     = (select context from jsharmony_meta limit 1),
-    pe_etstmp = datetime('now','localtime'),
-    pe_mu     = (select context from jsharmony_meta limit 1),
-    pe_mtstmp = datetime('now','localtime')
+  update {schema}_{sys_user} set 
+    {sys_user_startdt} = ifnull(NEW.{sys_user_startdt},date('now','localtime')),
+    {sys_user_stsdt}  = datetime('now','localtime'),
+    {sys_user_euser}     = (select context from jsharmony_meta limit 1),
+    {sys_user_etstmp} = datetime('now','localtime'),
+    {sys_user_muser}     = (select context from jsharmony_meta limit 1),
+    {sys_user_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "{schema}_pe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select pp_val from {schema}_v_pp where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_S'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update {schema}_pe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'\;
+  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "{schema}_{sys_user}", "rowid": '||NEW.rowid||', "source":"{sys_user_id}||{sys_user_pw1}||(select {param_cur_val} from {schema}_{v_param_cur} where {param_cur_process}=''USERS'' and {param_cur_attrib}=''HASH_SEED_S'')", "dest":"{sys_user_hash}" }, { "function": "exec", "sql": "update {schema}_{sys_user} set {sys_user_pw1}=null,{sys_user_pw2}=null where rowid='||NEW.rowid||'" }'\;
 
-  %%%AUDIT_I("PE","new.PE_ID","PE_ID","null","null","null")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{sys_user}","new.{sys_user_id}","{sys_user_id}","null","null","null")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_pe_before_update before update on {schema}_pe
+create trigger {schema}_{sys_user}_before_update before update on {schema}_{sys_user}
 begin
-  select case when NEW.pe_stsdt is null then raise(FAIL,'pe_stsdt cannot be null') end\;
-  select case when NEW.pe_id <> OLD.pe_id then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when ifnull(NEW.pe_pw1,'')<>ifnull(NEW.pe_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
-  select case when (NEW.pe_pw1 is not null) and (length(ifnull(NEW.pe_pw1,''))< 6) then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
+  select case when NEW.{sys_user_stsdt} is null then raise(FAIL,'{sys_user_stsdt} cannot be null') end\;
+  select case when NEW.{sys_user_id} <> OLD.{sys_user_id} then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(NEW.{sys_user_pw1},'')<>ifnull(NEW.{sys_user_pw2},'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
+  select case when (NEW.{sys_user_pw1} is not null) and (length(ifnull(NEW.{sys_user_pw1},''))< 6) then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
 end;
 
-create trigger {schema}_pe_after_update after update on {schema}_pe
+create trigger {schema}_{sys_user}_after_update after update on {schema}_{sys_user}
 begin
-  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "{schema}_pe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select pp_val from {schema}_v_pp where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_S'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update {schema}_pe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'
-    where NEW.pe_pw1 is not null\;
+  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "{schema}_{sys_user}", "rowid": '||NEW.rowid||', "source":"{sys_user_id}||{sys_user_pw1}||(select {param_cur_val} from {schema}_{v_param_cur} where {param_cur_process}=''USERS'' and {param_cur_attrib}=''HASH_SEED_S'')", "dest":"{sys_user_hash}" }, { "function": "exec", "sql": "update {schema}_{sys_user} set {sys_user_pw1}=null,{sys_user_pw2}=null where rowid='||NEW.rowid||'" }'
+    where NEW.{sys_user_pw1} is not null\;
 
-  %%%AUDIT_U_MULT("PE","old.PE_ID",["PE_ID","PE_STS","PE_FNAME","PE_MNAME","PE_LNAME","PE_JTITLE","PE_BPHONE","PE_CPHONE","PE_COUNTRY","PE_ADDR","PE_CITY","PE_STATE","PE_ZIP","PE_EMAIL","PE_STARTDT","PE_ENDDT","PE_UNOTES","PE_LL_TSTMP"],"null","null","null")%%%
+  %%%{log_audit_update_mult}("{sys_user}","old.{sys_user_id}",["{sys_user_id}","{sys_user_sts}","{sys_user_fname}","{sys_user_mname}","{sys_user_lname}","{sys_user_jobtitle}","{sys_user_bphone}","{sys_user_cphone}","{sys_user_country}","{sys_user_addr}","{sys_user_city}","{sys_user_state}","{sys_user_zip}","{sys_user_email}","{sys_user_startdt}","{sys_user_enddt}","{sys_user_unotes}","{sys_user_lastlogin_tstmp}"],"null","null","null")%%%
 
-  %%%AUDIT_U_CUSTOM("PE","old.PE_ID","coalesce(NEW.pe_pw1,'') <> '' and coalesce(NEW.pe_pw1,'') <> coalesce(OLD.pe_pw1,'')","null","null","null")%%%
-  insert into {schema}_aud_d(aud_seq,column_name,column_val)
-    select (select aud_seq from jsharmony_meta),'PE_PW1','*'
-    where (coalesce(NEW.pe_pw1,'') <> '' and coalesce(NEW.pe_pw1,'') <> coalesce(OLD.pe_pw1,''))\;
+  %%%{log_audit_update_custom}("{sys_user}","old.{sys_user_id}","coalesce(NEW.{sys_user_pw1},'') <> '' and coalesce(NEW.{sys_user_pw1},'') <> coalesce(OLD.{sys_user_pw1},'')","null","null","null")%%%
+  insert into {schema}_{audit_detail}({audit_seq},{audit_column_name},{audit_column_val})
+    select (select {audit_seq} from jsharmony_meta),'{sys_user_pw1}','*'
+    where (coalesce(NEW.{sys_user_pw1},'') <> '' and coalesce(NEW.{sys_user_pw1},'') <> coalesce(OLD.{sys_user_pw1},''))\;
 
-  update {schema}_pe set
-    pe_stsdt  = case when (%%%NONEQUAL("NEW.pe_sts","OLD.pe_sts")%%%) then datetime('now','localtime') else NEW.pe_stsdt end,
-    pe_mu     = (select context from jsharmony_meta limit 1),
-    pe_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid and exists(select * from jsharmony_meta where aud_seq is not null)\; 
+  update {schema}_{sys_user} set
+    {sys_user_stsdt}  = case when (%%%{nequal}("NEW.{sys_user_sts}","OLD.{sys_user_sts}")%%%) then datetime('now','localtime') else NEW.{sys_user_stsdt} end,
+    {sys_user_muser}     = (select context from jsharmony_meta limit 1),
+    {sys_user_mtstmp} = datetime('now','localtime')
+    where rowid = new.rowid and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
 
-  update jsharmony_meta set aud_seq = null\;
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_pe_delete before delete on {schema}_pe
+create trigger {schema}_{sys_user}_delete before delete on {schema}_{sys_user}
 begin
-  %%%AUDIT_D_MULT("PE","old.PE_ID",["PE_ID","PE_STS","PE_FNAME","PE_MNAME","PE_LNAME","PE_JTITLE","PE_BPHONE","PE_CPHONE","PE_COUNTRY","PE_ADDR","PE_CITY","PE_STATE","PE_ZIP","PE_EMAIL","PE_STARTDT","PE_ENDDT","PE_UNOTES","PE_LL_TSTMP"],"null","null","null")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{sys_user}","old.{sys_user_id}",["{sys_user_id}","{sys_user_sts}","{sys_user_fname}","{sys_user_mname}","{sys_user_lname}","{sys_user_jobtitle}","{sys_user_bphone}","{sys_user_cphone}","{sys_user_country}","{sys_user_addr}","{sys_user_city}","{sys_user_state}","{sys_user_zip}","{sys_user_email}","{sys_user_startdt}","{sys_user_enddt}","{sys_user_unotes}","{sys_user_lastlogin_tstmp}"],"null","null","null")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************CPE***************/
+/***************{cust_user}***************/
 
-create trigger {schema}_cpe_before_insert before insert on {schema}_cpe
+create trigger {schema}_{cust_user}_before_insert before insert on {schema}_{cust_user}
 begin
-  select case when ifnull(NEW.pe_pw1,'')<>ifnull(NEW.pe_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
-  select case when length(ifnull(NEW.pe_pw1,''))< 6 then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
+  select case when ifnull(NEW.{sys_user_pw1},'')<>ifnull(NEW.{sys_user_pw2},'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
+  select case when length(ifnull(NEW.{sys_user_pw1},''))< 6 then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
 end;
 
-create trigger {schema}_cpe_after_insert after insert on {schema}_cpe
+create trigger {schema}_{cust_user}_after_insert after insert on {schema}_{cust_user}
 begin
-  update {schema}_cpe set 
-    pe_stsdt  = datetime('now','localtime'),
-    pe_eu     = (select context from jsharmony_meta limit 1),
-    pe_etstmp = datetime('now','localtime'),
-    pe_mu     = (select context from jsharmony_meta limit 1),
-    pe_mtstmp = datetime('now','localtime')
+  update {schema}_{cust_user} set 
+    {sys_user_stsdt}  = datetime('now','localtime'),
+    {sys_user_euser}     = (select context from jsharmony_meta limit 1),
+    {sys_user_etstmp} = datetime('now','localtime'),
+    {sys_user_muser}     = (select context from jsharmony_meta limit 1),
+    {sys_user_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "{schema}_cpe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select pp_val from {schema}_v_pp where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_C'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update {schema}_cpe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'\;
+  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "{schema}_{cust_user}", "rowid": '||NEW.rowid||', "source":"{sys_user_id}||{sys_user_pw1}||(select {param_cur_val} from {schema}_{v_param_cur} where {param_cur_process}=''USERS'' and {param_cur_attrib}=''HASH_SEED_C'')", "dest":"{sys_user_hash}" }, { "function": "exec", "sql": "update {schema}_{cust_user} set {sys_user_pw1}=null,{sys_user_pw2}=null where rowid='||NEW.rowid||'" }'\;
 
-  %%%AUDIT_I("CPE","new.pe_id","pe_id","null","null","(select coalesce(new.pe_lname,'')||', '||coalesce(new.pe_fname,''))","new.c_id")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{cust_user}","new.{sys_user_id}","{sys_user_id}","null","null","(select coalesce(new.{sys_user_lname},'')||', '||coalesce(new.{sys_user_fname},''))","new.{cust_id}")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 
-  insert into {schema}_cper(pe_id, cr_name) values(new.pe_id, 'C*')\;
+  insert into {schema}_{cust_user_role}({sys_user_id}, {cust_role_name}) values(new.{sys_user_id}, 'C*')\;
 
 end;
 
-create trigger {schema}_cpe_before_update before update on {schema}_cpe
+create trigger {schema}_{cust_user}_before_update before update on {schema}_{cust_user}
 begin
-  select case when NEW.pe_stsdt is null then raise(FAIL,'pe_stsdt cannot be null') end\;
-  select case when NEW.pe_id <> OLD.pe_id then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when NEW.c_id <> OLD.c_id then raise(FAIL,'Application Error - Customer ID cannot be updated.') end\;
-  select case when ifnull(NEW.pe_pw1,'')<>ifnull(NEW.pe_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
-  select case when (NEW.pe_pw1 is not null) and (length(ifnull(NEW.pe_pw1,''))< 6) then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
+  select case when NEW.{sys_user_stsdt} is null then raise(FAIL,'{sys_user_stsdt} cannot be null') end\;
+  select case when NEW.{sys_user_id} <> OLD.{sys_user_id} then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when NEW.{cust_id} <> OLD.{cust_id} then raise(FAIL,'Application Error - Customer ID cannot be updated.') end\;
+  select case when ifnull(NEW.{sys_user_pw1},'')<>ifnull(NEW.{sys_user_pw2},'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
+  select case when (NEW.{sys_user_pw1} is not null) and (length(ifnull(NEW.{sys_user_pw1},''))< 6) then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
 end;
 
-create trigger {schema}_cpe_after_update after update on {schema}_cpe
+create trigger {schema}_{cust_user}_after_update after update on {schema}_{cust_user}
 begin
-  %%%AUDIT_U_MULT("CPE","new.pe_id",["pe_id","c_id","pe_sts","pe_fname","pe_mname","pe_lname","pe_jtitle","pe_bphone","pe_cphone","pe_email","pe_ll_tstmp"],"null","null","(select coalesce(new.pe_lname,'')||', '||coalesce(new.pe_fname,''))","new.c_id")%%%
+  %%%{log_audit_update_mult}("{cust_user}","new.{sys_user_id}",["{sys_user_id}","{cust_id}","{sys_user_sts}","{sys_user_fname}","{sys_user_mname}","{sys_user_lname}","{sys_user_jobtitle}","{sys_user_bphone}","{sys_user_cphone}","{sys_user_email}","{sys_user_lastlogin_tstmp}"],"null","null","(select coalesce(new.{sys_user_lname},'')||', '||coalesce(new.{sys_user_fname},''))","new.{cust_id}")%%%
 
-  %%%AUDIT_U_CUSTOM("CPE","new.pe_id","coalesce(NEW.pe_pw1,'') <> '' and coalesce(NEW.pe_pw1,'') <> coalesce(OLD.pe_pw1,'')","null","null","(select coalesce(new.pe_lname,'')||', '||coalesce(new.pe_fname,''))","new.c_id")%%%
-  insert into {schema}_aud_d(aud_seq,column_name,column_val)
-    select (select aud_seq from jsharmony_meta),'pe_pw1','*'
-    where (coalesce(NEW.pe_pw1,'') <> '' and coalesce(NEW.pe_pw1,'') <> coalesce(OLD.pe_pw1,''))\;
+  %%%{log_audit_update_custom}("{cust_user}","new.{sys_user_id}","coalesce(NEW.{sys_user_pw1},'') <> '' and coalesce(NEW.{sys_user_pw1},'') <> coalesce(OLD.{sys_user_pw1},'')","null","null","(select coalesce(new.{sys_user_lname},'')||', '||coalesce(new.{sys_user_fname},''))","new.{cust_id}")%%%
+  insert into {schema}_{audit_detail}({audit_seq},{audit_column_name},{audit_column_val})
+    select (select {audit_seq} from jsharmony_meta),'{sys_user_pw1}','*'
+    where (coalesce(NEW.{sys_user_pw1},'') <> '' and coalesce(NEW.{sys_user_pw1},'') <> coalesce(OLD.{sys_user_pw1},''))\;
 
 
-  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "{schema}_cpe", "rowid": '||NEW.rowid||', "source":"pe_id||pe_pw1||(select pp_val from {schema}_v_pp where PP_PROCESS=''USERS'' and PP_ATTRIB=''HASH_SEED_C'')", "dest":"pe_hash" }, { "function": "exec", "sql": "update {schema}_cpe set pe_pw1=null,pe_pw2=null where rowid='||NEW.rowid||'" }'
-    where NEW.pe_pw1 is not null\;
+  update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "{schema}_{cust_user}", "rowid": '||NEW.rowid||', "source":"{sys_user_id}||{sys_user_pw1}||(select {param_cur_val} from {schema}_{v_param_cur} where {param_cur_process}=''USERS'' and {param_cur_attrib}=''HASH_SEED_C'')", "dest":"{sys_user_hash}" }, { "function": "exec", "sql": "update {schema}_{cust_user} set {sys_user_pw1}=null,{sys_user_pw2}=null where rowid='||NEW.rowid||'" }'
+    where NEW.{sys_user_pw1} is not null\;
 
-  update {schema}_cpe set
-    pe_stsdt  = case when (%%%NONEQUAL("NEW.pe_sts","OLD.pe_sts")%%%) then datetime('now','localtime') else NEW.pe_stsdt end,
-    pe_mu     = (select context from jsharmony_meta limit 1),
-    pe_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid and exists(select * from jsharmony_meta where aud_seq is not null)\; 
+  update {schema}_{cust_user} set
+    {sys_user_stsdt}  = case when (%%%{nequal}("NEW.{sys_user_sts}","OLD.{sys_user_sts}")%%%) then datetime('now','localtime') else NEW.{sys_user_stsdt} end,
+    {sys_user_muser}     = (select context from jsharmony_meta limit 1),
+    {sys_user_mtstmp} = datetime('now','localtime')
+    where rowid = new.rowid and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
 
-  update jsharmony_meta set aud_seq = null\;
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_cpe_delete before delete on {schema}_cpe
+create trigger {schema}_{cust_user}_delete before delete on {schema}_{cust_user}
 begin
-  %%%AUDIT_D_MULT("CPE","old.pe_id",["pe_id","c_id","pe_sts","pe_fname","pe_mname","pe_lname","pe_jtitle","pe_bphone","pe_cphone","pe_email","pe_ll_tstmp"],"null","null","null","null")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{cust_user}","old.{sys_user_id}",["{sys_user_id}","{cust_id}","{sys_user_sts}","{sys_user_fname}","{sys_user_mname}","{sys_user_lname}","{sys_user_jobtitle}","{sys_user_bphone}","{sys_user_cphone}","{sys_user_email}","{sys_user_lastlogin_tstmp}"],"null","null","null","null")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************GPP***************/
+/***************{param_app}***************/
 
-create trigger {schema}_gpp_before_insert before insert on {schema}_gpp
+create trigger {schema}_{param_app}_before_insert before insert on {schema}_{param_app}
 begin
-  select case when not exists(select * from {schema}_ppd where ppd_process=new.gpp_process and ppd_attrib = new.gpp_attrib and ppd_gpp=1) then raise(FAIL,'Application Error - Process parameter is not assigned for GPP in PPD') end\;
-  select case when new.gpp_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select ppd_type from {schema}_ppd where ppd_process=new.gpp_process and ppd_attrib = new.gpp_attrib))='N') and (cast(new.gpp_val as float)<>new.gpp_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib} and {is_param_app}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_app} in {param}') end\;
+  select case when new.{param_app_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
+  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib}))='{note}') and (cast(new.{param_app_val} as float)<>new.{param_app_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
-create trigger {schema}_gpp_after_insert after insert on {schema}_gpp
+create trigger {schema}_{param_app}_after_insert after insert on {schema}_{param_app}
 begin
-  update {schema}_gpp set 
-    gpp_eu     = (select context from jsharmony_meta limit 1),
-    gpp_etstmp = datetime('now','localtime'),
-    gpp_mu     = (select context from jsharmony_meta limit 1),
-    gpp_mtstmp = datetime('now','localtime')
+  update {schema}_{param_app} set 
+    {param_app_euser}     = (select context from jsharmony_meta limit 1),
+    {param_app_etstmp} = datetime('now','localtime'),
+    {param_app_muser}     = (select context from jsharmony_meta limit 1),
+    {param_app_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%AUDIT_I("{schema}_gpp","new.gpp_id","gpp_id")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{schema}_{param_app}","new.{param_app_id}","{param_app_id}")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_gpp_before_update before update on {schema}_gpp
+create trigger {schema}_{param_app}_before_update before update on {schema}_{param_app}
 begin
-  select case when ifnull(old.gpp_id,'')<>ifnull(NEW.gpp_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when ifnull(old.gpp_process,'')<>ifnull(NEW.gpp_process,'') then raise(FAIL,'Application Error - Process cannot be updated.') end\;
-  select case when ifnull(old.gpp_attrib,'')<>ifnull(NEW.gpp_attrib,'') then raise(FAIL,'Application Error - Attribute cannot be updated.') end\;
+  select case when ifnull(old.{param_app_id},'')<>ifnull(NEW.{param_app_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(old.{param_app_process},'')<>ifnull(NEW.{param_app_process},'') then raise(FAIL,'Application Error - Process cannot be updated.') end\;
+  select case when ifnull(old.{param_app_attrib},'')<>ifnull(NEW.{param_app_attrib},'') then raise(FAIL,'Application Error - Attribute cannot be updated.') end\;
 
-  select case when not exists(select * from {schema}_ppd where ppd_process=new.gpp_process and ppd_attrib = new.gpp_attrib and ppd_gpp=1) then raise(FAIL,'Application Error - Process parameter is not assigned for GPP in PPD') end\;
-  select case when new.gpp_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select ppd_type from {schema}_ppd where ppd_process=new.gpp_process and ppd_attrib = new.gpp_attrib))='N') and (cast(new.gpp_val as float)<>new.gpp_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib} and {is_param_app}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_app} in {param}') end\;
+  select case when new.{param_app_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
+  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib}))='{note}') and (cast(new.{param_app_val} as float)<>new.{param_app_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
-create trigger {schema}_gpp_after_update after update on {schema}_gpp
+create trigger {schema}_{param_app}_after_update after update on {schema}_{param_app}
 begin
-  %%%AUDIT_U_MULT("{schema}_gpp","old.gpp_id",["gpp_id","gpp_process","gpp_attrib","gpp_val"])%%%
+  %%%{log_audit_update_mult}("{schema}_{param_app}","old.{param_app_id}",["{param_app_id}","{param_app_process}","{param_app_attrib}","{param_app_val}"])%%%
 
-  update {schema}_gpp set 
-    gpp_mu     = (select context from jsharmony_meta limit 1),
-    gpp_mtstmp = datetime('now','localtime')
-    where gpp_id = new.gpp_id and exists(select * from jsharmony_meta where aud_seq is not null)\; 
+  update {schema}_{param_app} set 
+    {param_app_muser}     = (select context from jsharmony_meta limit 1),
+    {param_app_mtstmp} = datetime('now','localtime')
+    where {param_app_id} = new.{param_app_id} and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
 
-  update jsharmony_meta set aud_seq = null\;
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_gpp_delete before delete on {schema}_gpp
+create trigger {schema}_{param_app}_delete before delete on {schema}_{param_app}
 begin
-  %%%AUDIT_D_MULT("{schema}_gpp","old.gpp_id",["gpp_id","gpp_process","gpp_attrib","gpp_val"])%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{schema}_{param_app}","old.{param_app_id}",["{param_app_id}","{param_app_process}","{param_app_attrib}","{param_app_val}"])%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************XPP***************/
+/***************{param_sys}***************/
 
-create trigger {schema}_xpp_before_insert before insert on {schema}_xpp
+create trigger {schema}_{param_sys}_before_insert before insert on {schema}_{param_sys}
 begin
-  select case when not exists(select * from {schema}_ppd where ppd_process=new.xpp_process and ppd_attrib = new.xpp_attrib and ppd_xpp=1) then raise(FAIL,'Application Error - Process parameter is not assigned for XPP in PPD') end\;
-  select case when new.xpp_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select ppd_type from {schema}_ppd where ppd_process=new.xpp_process and ppd_attrib = new.xpp_attrib))='N') and (cast(new.xpp_val as float)<>new.xpp_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib} and {is_param_sys}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_sys} in {param}') end\;
+  select case when new.{param_sys_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
+  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib}))='{note}') and (cast(new.{param_sys_val} as float)<>new.{param_sys_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
-create trigger {schema}_xpp_after_insert after insert on {schema}_xpp
+create trigger {schema}_{param_sys}_after_insert after insert on {schema}_{param_sys}
 begin
-  update {schema}_xpp set 
-    xpp_eu     = (select context from jsharmony_meta limit 1),
-    xpp_etstmp = datetime('now','localtime'),
-    xpp_mu     = (select context from jsharmony_meta limit 1),
-    xpp_mtstmp = datetime('now','localtime')
+  update {schema}_{param_sys} set 
+    {param_sys_euser}     = (select context from jsharmony_meta limit 1),
+    {param_sys_etstmp} = datetime('now','localtime'),
+    {param_sys_muser}     = (select context from jsharmony_meta limit 1),
+    {param_sys_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%AUDIT_I("{schema}_xpp","new.xpp_id","xpp_id")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{schema}_{param_sys}","new.{param_sys_id}","{param_sys_id}")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_xpp_before_update before update on {schema}_xpp
+create trigger {schema}_{param_sys}_before_update before update on {schema}_{param_sys}
 begin
-  select case when ifnull(old.xpp_id,'')<>ifnull(NEW.xpp_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when ifnull(old.xpp_process,'')<>ifnull(NEW.xpp_process,'') then raise(FAIL,'Application Error - Process cannot be updated.') end\;
-  select case when ifnull(old.xpp_attrib,'')<>ifnull(NEW.xpp_attrib,'') then raise(FAIL,'Application Error - Attribute cannot be updated.') end\;
+  select case when ifnull(old.{param_sys_id},'')<>ifnull(NEW.{param_sys_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(old.{param_sys_process},'')<>ifnull(NEW.{param_sys_process},'') then raise(FAIL,'Application Error - Process cannot be updated.') end\;
+  select case when ifnull(old.{param_sys_attrib},'')<>ifnull(NEW.{param_sys_attrib},'') then raise(FAIL,'Application Error - Attribute cannot be updated.') end\;
 
-  select case when not exists(select * from {schema}_ppd where ppd_process=new.xpp_process and ppd_attrib = new.xpp_attrib and ppd_xpp=1) then raise(FAIL,'Application Error - Process parameter is not assigned for XPP in PPD') end\;
-  select case when new.xpp_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select ppd_type from {schema}_ppd where ppd_process=new.xpp_process and ppd_attrib = new.xpp_attrib))='N') and (cast(new.xpp_val as float)<>new.xpp_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib} and {is_param_sys}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_sys} in {param}') end\;
+  select case when new.{param_sys_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
+  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib}))='{note}') and (cast(new.{param_sys_val} as float)<>new.{param_sys_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
-create trigger {schema}_xpp_after_update after update on {schema}_xpp
+create trigger {schema}_{param_sys}_after_update after update on {schema}_{param_sys}
 begin
-  %%%AUDIT_U_MULT("{schema}_xpp","old.xpp_id",["xpp_id","xpp_process","xpp_attrib","xpp_val"])%%%
+  %%%{log_audit_update_mult}("{schema}_{param_sys}","old.{param_sys_id}",["{param_sys_id}","{param_sys_process}","{param_sys_attrib}","{param_sys_val}"])%%%
 
-  update {schema}_xpp set 
-    xpp_mu     = (select context from jsharmony_meta limit 1),
-    xpp_mtstmp = datetime('now','localtime')
-    where xpp_id = new.xpp_id and exists(select * from jsharmony_meta where aud_seq is not null)\; 
+  update {schema}_{param_sys} set 
+    {param_sys_muser}     = (select context from jsharmony_meta limit 1),
+    {param_sys_mtstmp} = datetime('now','localtime')
+    where {param_sys_id} = new.{param_sys_id} and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
 
-  update jsharmony_meta set aud_seq = null\;
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_xpp_delete before delete on {schema}_xpp
+create trigger {schema}_{param_sys}_delete before delete on {schema}_{param_sys}
 begin
-  %%%AUDIT_D_MULT("{schema}_xpp","old.xpp_id",["xpp_id","xpp_process","xpp_attrib","xpp_val"])%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{schema}_{param_sys}","old.{param_sys_id}",["{param_sys_id}","{param_sys_process}","{param_sys_attrib}","{param_sys_val}"])%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************PPP***************/
+/***************{param_user}***************/
 
-create trigger {schema}_ppp_before_insert before insert on {schema}_ppp
+create trigger {schema}_{param_user}_before_insert before insert on {schema}_{param_user}
 begin
-  select case when not exists(select * from {schema}_ppd where ppd_process=new.ppp_process and ppd_attrib = new.ppp_attrib and ppd_ppp=1) then raise(FAIL,'Application Error - Process parameter is not assigned for PPP in PPD') end\;
-  select case when new.ppp_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select ppd_type from {schema}_ppd where ppd_process=new.ppp_process and ppd_attrib = new.ppp_attrib))='N') and (cast(new.ppp_val as float)<>new.ppp_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib} and {is_param_user}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_user} in {param}') end\;
+  select case when new.{param_user_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
+  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib}))='{note}') and (cast(new.{param_user_val} as float)<>new.{param_user_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
-create trigger {schema}_ppp_after_insert after insert on {schema}_ppp
+create trigger {schema}_{param_user}_after_insert after insert on {schema}_{param_user}
 begin
-  update {schema}_ppp set 
-    ppp_eu     = (select context from jsharmony_meta limit 1),
-    ppp_etstmp = datetime('now','localtime'),
-    ppp_mu     = (select context from jsharmony_meta limit 1),
-    ppp_mtstmp = datetime('now','localtime')
+  update {schema}_{param_user} set 
+    {param_user_euser}     = (select context from jsharmony_meta limit 1),
+    {param_user_etstmp} = datetime('now','localtime'),
+    {param_user_muser}     = (select context from jsharmony_meta limit 1),
+    {param_user_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%AUDIT_I("{schema}_ppp","new.ppp_id","ppp_id","null","null","(select coalesce(pe_lname,'')||', '||coalesce(pe_fname,'') from {schema}_pe where pe_id=new.pe_id)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{schema}_{param_user}","new.{param_user_id}","{param_user_id}","null","null","(select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') from {schema}_{sys_user} where {sys_user_id}=new.{sys_user_id})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_ppp_before_update before update on {schema}_ppp
+create trigger {schema}_{param_user}_before_update before update on {schema}_{param_user}
 begin
-  select case when ifnull(old.ppp_id,'')<>ifnull(NEW.ppp_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when ifnull(old.pe_id,'')<>ifnull(NEW.pe_id,'') then raise(FAIL,'Application Error - Personnel cannot be updated.') end\;
-  select case when ifnull(old.ppp_process,'')<>ifnull(NEW.ppp_process,'') then raise(FAIL,'Application Error - Process cannot be updated.') end\;
-  select case when ifnull(old.ppp_attrib,'')<>ifnull(NEW.ppp_attrib,'') then raise(FAIL,'Application Error - Attribute cannot be updated.') end\;
+  select case when ifnull(old.{param_user_id},'')<>ifnull(NEW.{param_user_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(old.{sys_user_id},'')<>ifnull(NEW.{sys_user_id},'') then raise(FAIL,'Application Error - Personnel cannot be updated.') end\;
+  select case when ifnull(old.{param_user_process},'')<>ifnull(NEW.{param_user_process},'') then raise(FAIL,'Application Error - Process cannot be updated.') end\;
+  select case when ifnull(old.{param_user_attrib},'')<>ifnull(NEW.{param_user_attrib},'') then raise(FAIL,'Application Error - Attribute cannot be updated.') end\;
 
-  select case when not exists(select * from {schema}_ppd where ppd_process=new.ppp_process and ppd_attrib = new.ppp_attrib and ppd_ppp=1) then raise(FAIL,'Application Error - Process parameter is not assigned for PPP in PPD') end\;
-  select case when new.ppp_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select ppd_type from {schema}_ppd where ppd_process=new.ppp_process and ppd_attrib = new.ppp_attrib))='N') and (cast(new.ppp_val as float)<>new.ppp_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib} and {is_param_user}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_user} in {param}') end\;
+  select case when new.{param_user_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
+  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib}))='{note}') and (cast(new.{param_user_val} as float)<>new.{param_user_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
-create trigger {schema}_ppp_after_update after update on {schema}_ppp
+create trigger {schema}_{param_user}_after_update after update on {schema}_{param_user}
 begin
-  %%%AUDIT_U_MULT("{schema}_ppp","old.ppp_id",["ppp_id","pe_id","ppp_process","ppp_attrib","ppp_val"],"null","null","(select coalesce(pe_lname,'')||', '||coalesce(pe_fname,'') from {schema}_pe where pe_id=new.pe_id)")%%%
+  %%%{log_audit_update_mult}("{schema}_{param_user}","old.{param_user_id}",["{param_user_id}","{sys_user_id}","{param_user_process}","{param_user_attrib}","{param_user_val}"],"null","null","(select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') from {schema}_{sys_user} where {sys_user_id}=new.{sys_user_id})")%%%
 
-  update {schema}_ppp set 
-    ppp_mu     = (select context from jsharmony_meta limit 1),
-    ppp_mtstmp = datetime('now','localtime')
-    where ppp_id = new.ppp_id and exists(select * from jsharmony_meta where aud_seq is not null)\; 
+  update {schema}_{param_user} set 
+    {param_user_muser}     = (select context from jsharmony_meta limit 1),
+    {param_user_mtstmp} = datetime('now','localtime')
+    where {param_user_id} = new.{param_user_id} and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
 
-  update jsharmony_meta set aud_seq = null\;
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_ppp_delete before delete on {schema}_ppp
+create trigger {schema}_{param_user}_delete before delete on {schema}_{param_user}
 begin
-  %%%AUDIT_D_MULT("{schema}_ppp","old.ppp_id",["ppp_id","pe_id","ppp_process","ppp_attrib","ppp_val"])%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{schema}_{param_user}","old.{param_user_id}",["{param_user_id}","{sys_user_id}","{param_user_process}","{param_user_attrib}","{param_user_val}"])%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************PPD***************/
+/***************{param}***************/
 
-create trigger {schema}_ppd_after_insert after insert on {schema}_ppd
+create trigger {schema}_{param}_after_insert after insert on {schema}_{param}
 begin
-  update {schema}_ppd set 
-    ppd_eu     = (select context from jsharmony_meta limit 1),
-    ppd_etstmp = datetime('now','localtime'),
-    ppd_mu     = (select context from jsharmony_meta limit 1),
-    ppd_mtstmp = datetime('now','localtime')
+  update {schema}_{param} set 
+    {param_euser}     = (select context from jsharmony_meta limit 1),
+    {param_etstmp} = datetime('now','localtime'),
+    {param_muser}     = (select context from jsharmony_meta limit 1),
+    {param_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%AUDIT_I("{schema}_ppd","new.ppd_id","ppd_id")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{schema}_{param}","new.{param_id}","{param_id}")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_ppd_before_update before update on {schema}_ppd
+create trigger {schema}_{param}_before_update before update on {schema}_{param}
 begin
-  select case when ifnull(old.ppd_id,'')<>ifnull(NEW.ppd_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(old.{param_id},'')<>ifnull(NEW.{param_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
 end;
 
-create trigger {schema}_ppd_after_update after update on {schema}_ppd
+create trigger {schema}_{param}_after_update after update on {schema}_{param}
 begin
-  %%%AUDIT_U_MULT("{schema}_ppd","old.ppd_id",["ppd_id","ppd_process","ppd_attrib","ppd_desc","ppd_type","codename","ppd_gpp","ppd_ppp","ppd_xpp"])%%%
+  %%%{log_audit_update_mult}("{schema}_{param}","old.{param_id}",["{param_id}","{param_process}","{param_attrib}","{param_desc}","{param_type}","{code_name}","{is_param_app}","{is_param_user}","{is_param_sys}"])%%%
   
-  update {schema}_ppd set 
-    ppd_mu     = (select context from jsharmony_meta limit 1),
-    ppd_mtstmp = datetime('now','localtime')
-    where ppd_id = new.ppd_id and exists(select * from jsharmony_meta where aud_seq is not null)\; 
+  update {schema}_{param} set 
+    {param_muser}     = (select context from jsharmony_meta limit 1),
+    {param_mtstmp} = datetime('now','localtime')
+    where {param_id} = new.{param_id} and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
 
-  update jsharmony_meta set aud_seq = null\;
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_ppd_delete before delete on {schema}_ppd
+create trigger {schema}_{param}_delete before delete on {schema}_{param}
 begin
-  %%%AUDIT_D_MULT("{schema}_ppd","old.ppd_id",["ppd_id","ppd_process","ppd_attrib","ppd_desc","ppd_type","codename","ppd_gpp","ppd_ppp","ppd_xpp"])%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{schema}_{param}","old.{param_id}",["{param_id}","{param_process}","{param_attrib}","{param_desc}","{param_type}","{code_name}","{is_param_app}","{is_param_user}","{is_param_sys}"])%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************H***************/
+/***************{help}***************/
 
-create trigger {schema}_h_after_insert after insert on {schema}_h
+create trigger {schema}_{help}_after_insert after insert on {schema}_{help}
 begin
-  update {schema}_h set 
-    h_eu     = (select context from jsharmony_meta limit 1),
-    h_etstmp = datetime('now','localtime'),
-    h_mu     = (select context from jsharmony_meta limit 1),
-    h_mtstmp = datetime('now','localtime')
+  update {schema}_{help} set 
+    {help_euser}     = (select context from jsharmony_meta limit 1),
+    {help_etstmp} = datetime('now','localtime'),
+    {help_muser}     = (select context from jsharmony_meta limit 1),
+    {help_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%AUDIT_I("{schema}_h","new.h_id","h_id","null","null","(select hp_desc from {schema}_hp where hp_code=new.hp_code)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{schema}_{help}","new.{help_id}","{help_id}","null","null","(select {help_target_desc} from {schema}_{help_target} where {help_target_code}=new.{help_target_code})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_h_before_update before update on {schema}_h
+create trigger {schema}_{help}_before_update before update on {schema}_{help}
 begin
-  select case when ifnull(old.h_id,'')<>ifnull(NEW.h_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when ifnull(old.hp_code,'')<>ifnull(NEW.hp_code,'') then raise(FAIL,'Application Error - HP Code cannot be updated.') end\;
+  select case when ifnull(old.{help_id},'')<>ifnull(NEW.{help_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(old.{help_target_code},'')<>ifnull(NEW.{help_target_code},'') then raise(FAIL,'Application Error - {help_target} Code cannot be updated.') end\;
 end;
 
-create trigger {schema}_h_after_update after update on {schema}_h
+create trigger {schema}_{help}_after_update after update on {schema}_{help}
 begin
-  %%%AUDIT_U_MULT("{schema}_h","old.h_id",["h_id","hp_code","h_title","h_text","h_seq","h_index_a","h_index_p"],"null","null","(select hp_desc from {schema}_hp where hp_code=new.hp_code)")%%%
+  %%%{log_audit_update_mult}("{schema}_{help}","old.{help_id}",["{help_id}","{help_target_code}","{help_title}","{help_text}","{help_seq}","{help_listing_main}","{help_listing_client}"],"null","null","(select {help_target_desc} from {schema}_{help_target} where {help_target_code}=new.{help_target_code})")%%%
 
-  update {schema}_h set 
-    h_mu     = (select context from jsharmony_meta limit 1),
-    h_mtstmp = datetime('now','localtime')
-    where h_id = new.h_id and exists(select * from jsharmony_meta where aud_seq is not null)\; 
+  update {schema}_{help} set 
+    {help_muser}     = (select context from jsharmony_meta limit 1),
+    {help_mtstmp} = datetime('now','localtime')
+    where {help_id} = new.{help_id} and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
 
-  update jsharmony_meta set aud_seq = null\;
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_h_delete before delete on {schema}_h
+create trigger {schema}_{help}_delete before delete on {schema}_{help}
 begin
-  %%%AUDIT_D_MULT("{schema}_h","old.h_id",["h_id","hp_code","h_title","h_text","h_seq","h_index_a","h_index_p"],"null","null","(select hp_desc from {schema}_hp where hp_code=old.hp_code)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{schema}_{help}","old.{help_id}",["{help_id}","{help_target_code}","{help_title}","{help_text}","{help_seq}","{help_listing_main}","{help_listing_client}"],"null","null","(select {help_target_desc} from {schema}_{help_target} where {help_target_code}=old.{help_target_code})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************SPEF***************/
+/***************{sys_user_func}***************/
 
-create trigger {schema}_spef_after_insert after insert on {schema}_spef
+create trigger {schema}_{sys_user_func}_after_insert after insert on {schema}_{sys_user_func}
 begin
-  %%%AUDIT_I("{schema}_spef","new.spef_id","spef_id","null","null","(select coalesce(pe_lname,'')||', '||coalesce(pe_fname,'') from {schema}_pe where pe_id=new.pe_id)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{schema}_{sys_user_func}","new.{sys_user_func_id}","{sys_user_func_id}","null","null","(select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') from {schema}_{sys_user} where {sys_user_id}=new.{sys_user_id})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_spef_before_update before update on {schema}_spef
+create trigger {schema}_{sys_user_func}_before_update before update on {schema}_{sys_user_func}
 begin
-  select case when ifnull(old.spef_id,'')<>ifnull(NEW.spef_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when ifnull(old.pe_id,'')<>ifnull(NEW.pe_id,'') then raise(FAIL,'Application Error - User ID cannot be updated.') end\;
+  select case when ifnull(old.{sys_user_func_id},'')<>ifnull(NEW.{sys_user_func_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(old.{sys_user_id},'')<>ifnull(NEW.{sys_user_id},'') then raise(FAIL,'Application Error - User ID cannot be updated.') end\;
 end;
 
-create trigger {schema}_spef_after_update after update on {schema}_spef
+create trigger {schema}_{sys_user_func}_after_update after update on {schema}_{sys_user_func}
 begin
-  %%%AUDIT_U_MULT("{schema}_spef","old.spef_id",["spef_id","pe_id","sf_name"],"null","null","(select coalesce(pe_lname,'')||', '||coalesce(pe_fname,'') from {schema}_pe where pe_id=new.pe_id)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_update_mult}("{schema}_{sys_user_func}","old.{sys_user_func_id}",["{sys_user_func_id}","{sys_user_id}","{sys_func_name}"],"null","null","(select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') from {schema}_{sys_user} where {sys_user_id}=new.{sys_user_id})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_spef_delete before delete on {schema}_spef
+create trigger {schema}_{sys_user_func}_delete before delete on {schema}_{sys_user_func}
 begin
-  %%%AUDIT_D_MULT("{schema}_spef","old.spef_id",["spef_id","pe_id","sf_name"])%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{schema}_{sys_user_func}","old.{sys_user_func_id}",["{sys_user_func_id}","{sys_user_id}","{sys_func_name}"])%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************SPER***************/
+/***************{sys_user_role}***************/
 
-create trigger {schema}_sper_before_insert before insert on {schema}_sper
+create trigger {schema}_{sys_user_role}_before_insert before insert on {schema}_{sys_user_role}
 begin
-  select case when (upper(new.sr_name)='DEV') and ({schema}.mype() is not null) and (not exists (select sr_name from {schema}.V_MY_ROLES where SR_NAME='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
+  select case when (upper(new.{sys_role_name})='DEV') and ({schema}.{my_sys_user_id}() is not null) and (not exists (select {sys_role_name} from {schema}.{v_my_roles} where {sys_role_name}='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
 end;
 
-create trigger {schema}_sper_after_insert after insert on {schema}_sper
+create trigger {schema}_{sys_user_role}_after_insert after insert on {schema}_{sys_user_role}
 begin
-  %%%AUDIT_I("{schema}_sper","new.sper_id","sper_id","null","null","(select coalesce(pe_lname,'')||', '||coalesce(pe_fname,'') from {schema}_pe where pe_id=new.pe_id)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{schema}_{sys_user_role}","new.{sys_user_role_id}","{sys_user_role_id}","null","null","(select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') from {schema}_{sys_user} where {sys_user_id}=new.{sys_user_id})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_sper_before_update before update on {schema}_sper
+create trigger {schema}_{sys_user_role}_before_update before update on {schema}_{sys_user_role}
 begin
-  select case when ifnull(old.sper_id,'')<>ifnull(NEW.sper_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when ifnull(old.pe_id,'')<>ifnull(NEW.pe_id,'') then raise(FAIL,'Application Error - User ID cannot be updated.') end\;
-  select case when (upper(new.sr_name)='DEV') and ({schema}.mype() is not null) and (not exists (select sr_name from {schema}.V_MY_ROLES where SR_NAME='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
+  select case when ifnull(old.{sys_user_role_id},'')<>ifnull(NEW.{sys_user_role_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(old.{sys_user_id},'')<>ifnull(NEW.{sys_user_id},'') then raise(FAIL,'Application Error - User ID cannot be updated.') end\;
+  select case when (upper(new.{sys_role_name})='DEV') and ({schema}.{my_sys_user_id}() is not null) and (not exists (select {sys_role_name} from {schema}.{v_my_roles} where {sys_role_name}='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
 end;
 
-create trigger {schema}_sper_after_update after update on {schema}_sper
+create trigger {schema}_{sys_user_role}_after_update after update on {schema}_{sys_user_role}
 begin
-  %%%AUDIT_U_MULT("{schema}_sper","old.sper_id",["sper_id","pe_id","sr_name"],"null","null","(select coalesce(pe_lname,'')||', '||coalesce(pe_fname,'') from {schema}_pe where pe_id=new.pe_id)")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_update_mult}("{schema}_{sys_user_role}","old.{sys_user_role_id}",["{sys_user_role_id}","{sys_user_id}","{sys_role_name}"],"null","null","(select coalesce({sys_user_lname},'')||', '||coalesce({sys_user_fname},'') from {schema}_{sys_user} where {sys_user_id}=new.{sys_user_id})")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_sper_delete before delete on {schema}_sper
+create trigger {schema}_{sys_user_role}_delete before delete on {schema}_{sys_user_role}
 begin
-  select case when (upper(old.sr_name)='DEV') and ({schema}.mype() is not null) and (not exists (select sr_name from {schema}.V_MY_ROLES where SR_NAME='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
-  %%%AUDIT_D_MULT("{schema}_sper","old.sper_id",["sper_id","pe_id","sr_name"])%%%
-  update jsharmony_meta set aud_seq = null\;
+  select case when (upper(old.{sys_role_name})='DEV') and ({schema}.{my_sys_user_id}() is not null) and (not exists (select {sys_role_name} from {schema}.{v_my_roles} where {sys_role_name}='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
+  %%%{log_audit_delete_mult}("{schema}_{sys_user_role}","old.{sys_user_role_id}",["{sys_user_role_id}","{sys_user_id}","{sys_role_name}"])%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************TXT***************/
+/***************{txt}***************/
 
-create trigger {schema}_txt_after_insert after insert on {schema}_txt
+create trigger {schema}_{txt}_after_insert after insert on {schema}_{txt}
 begin
-  update {schema}_txt set 
-    txt_eu     = (select context from jsharmony_meta limit 1),
-    txt_etstmp = datetime('now','localtime'),
-    txt_mu     = (select context from jsharmony_meta limit 1),
-    txt_mtstmp = datetime('now','localtime')
+  update {schema}_{txt} set 
+    {txt_euser}     = (select context from jsharmony_meta limit 1),
+    {txt_etstmp} = datetime('now','localtime'),
+    {txt_muser}     = (select context from jsharmony_meta limit 1),
+    {txt_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%AUDIT_I("{schema}_txt","new.txt_id","txt_id")%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_insert}("{schema}_{txt}","new.{txt_id}","{txt_id}")%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_txt_before_update before update on {schema}_txt
+create trigger {schema}_{txt}_before_update before update on {schema}_{txt}
 begin
-  select case when ifnull(old.txt_id,'')<>ifnull(NEW.txt_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when ifnull(old.{txt_id},'')<>ifnull(NEW.{txt_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
 end;
 
-create trigger {schema}_txt_after_update after update on {schema}_txt
+create trigger {schema}_{txt}_after_update after update on {schema}_{txt}
 begin
-  %%%AUDIT_U_MULT("{schema}_txt","old.txt_id",["txt_id","txt_process","txt_attrib","txt_type","txt_tval","txt_val","txt_bcc","txt_desc"])%%%
+  %%%{log_audit_update_mult}("{schema}_{txt}","old.{txt_id}",["{txt_id}","{txt_process}","{txt_attrib}","{txt_type}","{txt_title}","{txt_body}","{txt_bcc}","{txt_desc}"])%%%
 
-  update {schema}_txt set 
-    txt_mu     = (select context from jsharmony_meta limit 1),
-    txt_mtstmp = datetime('now','localtime')
-    where txt_id = new.txt_id and exists(select * from jsharmony_meta where aud_seq is not null)\; 
+  update {schema}_{txt} set 
+    {txt_muser}     = (select context from jsharmony_meta limit 1),
+    {txt_mtstmp} = datetime('now','localtime')
+    where {txt_id} = new.{txt_id} and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
 
-  update jsharmony_meta set aud_seq = null\;
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_txt_delete before delete on {schema}_txt
+create trigger {schema}_{txt}_delete before delete on {schema}_{txt}
 begin
-  %%%AUDIT_D_MULT("{schema}_txt","old.txt_id",["txt_id","txt_process","txt_attrib","txt_type","txt_tval","txt_val","txt_bcc","txt_desc"])%%%
-  update jsharmony_meta set aud_seq = null\;
+  %%%{log_audit_delete_mult}("{schema}_{txt}","old.{txt_id}",["{txt_id}","{txt_process}","{txt_attrib}","{txt_type}","{txt_title}","{txt_body}","{txt_bcc}","{txt_desc}"])%%%
+  update jsharmony_meta set {audit_seq} = null\;
 end;
 
 
@@ -613,122 +613,122 @@ end;
 
 
 
-/***************RQ***************/
+/***************{queue}***************/
 
-create trigger {schema}_rq_after_insert after insert on {schema}_rq
+create trigger {schema}_{queue}_after_insert after insert on {schema}_{queue}
 begin
-  update {schema}_rq set 
-    rq_eu     = (select context from jsharmony_meta limit 1),
-    rq_etstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
-end;
-
-/***************RQST***************/
-
-create trigger {schema}_rqst_after_insert after insert on {schema}_rqst
-begin
-  update {schema}_rqst set 
-    rqst_eu     = (select context from jsharmony_meta limit 1),
-    rqst_etstmp = datetime('now','localtime')
+  update {schema}_{queue} set 
+    {queue_euser}     = (select context from jsharmony_meta limit 1),
+    {queue_etstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
 
-/***************GCOD_H***************/
+/***************{job}***************/
 
-create trigger {schema}_gcod_h_after_insert after insert on {schema}_gcod_h
+create trigger {schema}_{job}_after_insert after insert on {schema}_{job}
 begin
-  update {schema}_gcod_h set 
-    cod_h_eu     = (select context from jsharmony_meta limit 1),
-    cod_h_etstmp = datetime('now','localtime'),
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
+  update {schema}_{job} set 
+    {job_user}     = (select context from jsharmony_meta limit 1),
+    {job_etstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
 
-create trigger {schema}_gcod_h_after_update after update on {schema}_gcod_h
+/***************{code_app}***************/
+
+create trigger {schema}_{code_app}_after_insert after insert on {schema}_{code_app}
 begin
-  update {schema}_gcod_h set 
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
+  update {schema}_{code_app} set 
+    {code_h_euser}     = (select context from jsharmony_meta limit 1),
+    {code_h_etstmp} = datetime('now','localtime'),
+    {code_h_muser}     = (select context from jsharmony_meta limit 1),
+    {code_h_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
 
-/***************GCOD2_H***************/
-
-create trigger {schema}_gcod2_h_after_insert after insert on {schema}_gcod2_h
+create trigger {schema}_{code_app}_after_update after update on {schema}_{code_app}
 begin
-  update {schema}_gcod2_h set 
-    cod_h_eu     = (select context from jsharmony_meta limit 1),
-    cod_h_etstmp = datetime('now','localtime'),
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
+  update {schema}_{code_app} set 
+    {code_h_muser}     = (select context from jsharmony_meta limit 1),
+    {code_h_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
 
-create trigger {schema}_gcod2_h_after_update after update on {schema}_gcod2_h
+/***************{code2_app}***************/
+
+create trigger {schema}_{code2_app}_after_insert after insert on {schema}_{code2_app}
 begin
-  update {schema}_gcod2_h set 
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
+  update {schema}_{code2_app} set 
+    {code_h_euser}     = (select context from jsharmony_meta limit 1),
+    {code_h_etstmp} = datetime('now','localtime'),
+    {code_h_muser}     = (select context from jsharmony_meta limit 1),
+    {code_h_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
 
-/***************UCOD_H***************/
-
-create trigger {schema}_ucod_h_after_insert after insert on {schema}_ucod_h
+create trigger {schema}_{code2_app}_after_update after update on {schema}_{code2_app}
 begin
-  update {schema}_ucod_h set 
-    cod_h_eu     = (select context from jsharmony_meta limit 1),
-    cod_h_etstmp = datetime('now','localtime'),
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
+  update {schema}_{code2_app} set 
+    {code_h_muser}     = (select context from jsharmony_meta limit 1),
+    {code_h_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
 
-create trigger {schema}_ucod_h_after_update after update on {schema}_ucod_h
+/***************{code_sys}***************/
+
+create trigger {schema}_{code_sys}_after_insert after insert on {schema}_{code_sys}
 begin
-  update {schema}_ucod_h set 
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
+  update {schema}_{code_sys} set 
+    {code_h_euser}     = (select context from jsharmony_meta limit 1),
+    {code_h_etstmp} = datetime('now','localtime'),
+    {code_h_muser}     = (select context from jsharmony_meta limit 1),
+    {code_h_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
 
-/***************UCOD2_H***************/
-
-create trigger {schema}_ucod2_h_after_insert after insert on {schema}_ucod2_h
+create trigger {schema}_{code_sys}_after_update after update on {schema}_{code_sys}
 begin
-  update {schema}_ucod2_h set 
-    cod_h_eu     = (select context from jsharmony_meta limit 1),
-    cod_h_etstmp = datetime('now','localtime'),
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
+  update {schema}_{code_sys} set 
+    {code_h_muser}     = (select context from jsharmony_meta limit 1),
+    {code_h_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
 
-create trigger {schema}_ucod2_h_after_update after update on {schema}_ucod2_h
+/***************{code2_sys}***************/
+
+create trigger {schema}_{code2_sys}_after_insert after insert on {schema}_{code2_sys}
 begin
-  update {schema}_ucod2_h set 
-    cod_h_mu     = (select context from jsharmony_meta limit 1),
-    cod_h_mtstmp = datetime('now','localtime')
+  update {schema}_{code2_sys} set 
+    {code_h_euser}     = (select context from jsharmony_meta limit 1),
+    {code_h_etstmp} = datetime('now','localtime'),
+    {code_h_muser}     = (select context from jsharmony_meta limit 1),
+    {code_h_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
 
-/***************V***************/
-
-create trigger {schema}_v_after_insert after insert on {schema}_v
+create trigger {schema}_{code2_sys}_after_update after update on {schema}_{code2_sys}
 begin
-  update {schema}_v set 
-    v_eu     = (select context from jsharmony_meta limit 1),
-    v_etstmp = datetime('now','localtime'),
-    v_mu     = (select context from jsharmony_meta limit 1),
-    v_mtstmp = datetime('now','localtime')
+  update {schema}_{code2_sys} set 
+    {code_h_muser}     = (select context from jsharmony_meta limit 1),
+    {code_h_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
 
-create trigger {schema}_v_after_update after update on {schema}_v
+/***************{version}***************/
+
+create trigger {schema}_{version}_after_insert after insert on {schema}_{version}
 begin
-  update {schema}_v set 
-    v_mu     = (select context from jsharmony_meta limit 1),
-    v_mtstmp = datetime('now','localtime')
+  update {schema}_{version} set 
+    {version_euser}     = (select context from jsharmony_meta limit 1),
+    {version_etstmp} = datetime('now','localtime'),
+    {version_muser}     = (select context from jsharmony_meta limit 1),
+    {version_mtstmp} = datetime('now','localtime')
+    where rowid = new.rowid\;
+end;
+
+create trigger {schema}_{version}_after_update after update on {schema}_{version}
+begin
+  update {schema}_{version} set 
+    {version_muser}     = (select context from jsharmony_meta limit 1),
+    {version_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;

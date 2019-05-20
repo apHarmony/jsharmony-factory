@@ -207,9 +207,9 @@ function ModuleFunctions(module){
       var dbid = Q.db;
 
       if(dbid){
-        if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Databse ID'); return; }
+        if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Database ID'); return; }
         var schema = jsh.DB[dbid].schema_definition;
-        res.end(JSON.stringify({ _success: 1, schema: schema }));
+        res.end(JSON.stringify({ _success: 1, schema: schema, funcs: jsh.DB[dbid].SQLExt.Funcs }));
       }
       else {
         var dbs = [];

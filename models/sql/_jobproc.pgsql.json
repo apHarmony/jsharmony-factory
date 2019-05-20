@@ -1,44 +1,44 @@
 {
-  "jobproc_jobcheck": [
-    "select RQST.rqst_id,rqst_atype,rqst_aname,rqst_parms,",
-    "RQST_D.d_scope, RQST_D.d_scope_id, RQST_D.d_ctgr, RQST_D.d_desc,",
-    "rq_name,rq_message,",
-    "email_txt_attrib, email_to, email_cc, email_bcc, email_attach,email_subject,email_text,email_html,email_d_id,RQST_EMAIL_D.D_FileName as email_d_filename,",
-    "n_scope, n_scope_id, n_type, n_note,",
-    "sms_txt_attrib,sms_to,sms_body",
-    "from {schema}.RQST",
-    "left outer join {schema}.RQST_D on RQST_D.rqst_id = RQST.rqst_id",
-    "left outer join {schema}.RQST_RQ on RQST_RQ.rqst_id = RQST.rqst_id",
-    "left outer join {schema}.RQST_EMAIL on RQST_EMAIL.rqst_id = RQST.rqst_id",
-    "left outer join {schema}.V_D_X RQST_EMAIL_D on RQST_EMAIL.email_d_id = RQST_EMAIL_D.d_id",
-    "left outer join {schema}.RQST_N on RQST_N.rqst_id = RQST.rqst_id",
-    "left outer join {schema}.RQST_SMS on RQST_SMS.rqst_id = RQST.rqst_id",
-    "where rqst_rslt is null limit 1"
+  "{jobproc_jobcheck}": [
+    "select {job}.{job_id},{job_action},{job_action_target},{job_params},",
+    "{job_doc}.{doc_scope}, {job_doc}.{doc_scope_id}, {job_doc}.{doc_ctgr}, {job_doc}.{doc_desc},",
+    "{queue_name},{queue_message},",
+    "{email_txt_attrib}, {email_to}, {email_cc}, {email_bcc}, {email_attach},{email_subject},{email_text},{email_html},{email_doc_id},{job_email}_{doc}.{doc_filename} as email_{doc_filename},",
+    "{note_scope}, {note_scope_id}, {note_type}, {note_body},",
+    "{sms_txt_attrib},{sms_to},{sms_body}",
+    "from {schema}.{job}",
+    "left outer join {schema}.{job_doc} on {job_doc}.{job_id} = {job}.{job_id}",
+    "left outer join {schema}.{job_queue} on {job_queue}.{job_id} = {job}.{job_id}",
+    "left outer join {schema}.{job_email} on {job_email}.{job_id} = {job}.{job_id}",
+    "left outer join {schema}.{v_doc_filename} {job_email}_{doc} on {job_email}.{email_doc_id} = {job_email}_{doc}.{doc_id}",
+    "left outer join {schema}.{job_note} on {job_note}.{job_id} = {job}.{job_id}",
+    "left outer join {schema}.{job_sms} on {job_sms}.{job_id} = {job}.{job_id}",
+    "where {job_rslt} is null limit 1"
   ],
-  "jobproc_saveD": [
-    "with xrslt as (insert into D(d_scope,d_scope_id,c_id,D_STS,d_ctgr,d_desc,D_EXT,d_size,D_UU) values(@d_scope,@d_scope_id, ",
-    "case @d_scope when 'C' then @d_scope_id else null end, ",
-    "'A',@d_ctgr,@d_desc, '.pdf',@d_size, 'jobproc') returning d_id) select d_id from xrslt;"
+  "{jobproc_save_doc}": [
+    "with xrslt as (insert into {doc}({doc_scope},{doc_scope_id},{cust_id},{doc_sts},{doc_ctgr},{doc_desc},{doc_ext},{doc_size},{doc_uuser}) values({@doc_scope},{@doc_scope_id}, ",
+    "case {@doc_scope} when 'C' then {@doc_scope_id} else null end, ",
+    "'A',{@doc_ctgr},{@doc_desc}, '.pdf',{@doc_size}, 'jobproc') returning {doc_id}) select {doc_id} from xrslt;"
   ],
-  "jobproc_saveRQ": "with xrslt as (insert into {schema}.RQ(rq_name,rq_message) values(@rq_name,'{}') returning rq_id) select rq_id from xrslt;",
-  "jobproc_saverq_message": "update {schema}.RQ set rq_message = @rq_message where rq_id=@rq_id;",
-  "jobproc_saveN": "insert into {schema}.N(n_scope,n_scope_id,n_sts,n_type,n_note) values(@n_scope,@n_scope_id,'A',@n_type,@n_note);",
-  "jobproc_jobresult": "update {schema}.RQST set rqst_rslt=@rqst_rslt,rqst_rslt_tstmp=public.myNOW(),rqst_snotes=@rqst_snotes where rqst_id=@rqst_id",
-  "jobproc_add_BEGIN": "do $$declare rqst_id bigint; begin insert into {schema}.RQST(rqst_source,rqst_atype,rqst_aname,rqst_parms) values (@rqst_source,@rqst_atype,@rqst_aname,@rqst_parms) returning {schema}.RQST.rqst_id into rqst_id;",
-  "jobproc_add_RQST_D": "insert into {schema}.RQST_D(rqst_id,d_scope,d_scope_id,d_ctgr,d_desc) values (rqst_id,@d_scope,@d_scope_id,@d_ctgr,@d_desc);",
-  "jobproc_add_RQST_RQ": "insert into {schema}.RQST_RQ(rqst_id,rq_name,rq_message) values (rqst_id,@rq_name,@rq_message);",
-  "jobproc_add_RQST_EMAIL": "insert into {schema}.RQST_EMAIL(rqst_id,email_txt_attrib,email_to,email_cc,email_bcc,email_attach,email_subject,email_text,email_html,email_d_id) values (rqst_id,@email_txt_attrib,@email_to,@email_cc,@email_bcc,@email_attach,@email_subject,@email_text,@email_html,@email_d_id);",
-  "jobproc_add_RQST_SMS": "insert into {schema}.RQST_SMS(rqst_id,sms_txt_attrib,sms_to,sms_body) values (rqst_id,@sms_txt_attrib,@sms_to,@sms_body);",
-  "jobproc_add_RQST_N": "insert into {schema}.RQST_N(rqst_id,n_scope,n_scope_id,n_type,n_note) values (rqst_id,@n_scope,@n_scope_id,@n_type,@n_note);",
-  "jobproc_add_END": " end$$;",
-  "jobproc_queueresult": "update {schema}.RQ set rq_rslt=@rq_rslt,rq_rslt_tstmp=public.myNOW(),rq_snotes=@rq_snotes where rq_id=@rq_id",
-  "jobproc_queuecheck": "select rq_id, rq_name, rq_message from {schema}.RQ where rq_name=@rq_name and rq_rslt is null order by rq_id limit 1",
-  "jobproc_queuesubscribers": [
-    "WITH CTE AS (SELECT rq_id, rq_name, rq_message,ROW_NUMBER() OVER (PARTITION BY rq_name ORDER BY rq_id) as RN FROM {schema}.RQ where rq_rslt is null)",
-    "select rq_id, rq_name, rq_message",
+  "{jobproc_save_queue}": "with xrslt as (insert into {schema}.{queue}({queue_name},{queue_message}) values({@queue_name},'{}') returning {queue_id}) select {queue_id} from xrslt;",
+  "{jobproc_save_queue_message}": "update {schema}.{queue} set {queue_message} = {@queue_message} where {queue_id}={@queue_id};",
+  "{jobproc_save_note}": "insert into {schema}.{note}({note_scope},{note_scope_id},{note_sts},{note_type},{note_body}) values({@note_scope},{@note_scope_id},'A',{@note_type},{@note_body});",
+  "{jobproc_jobresult}": "update {schema}.{job} set {job_rslt}={@job_rslt},{job_rslt_tstmp}=public.{my_now}(),{job_snotes}={@job_snotes} where {job_id}={@job_id}",
+  "{jobproc_add_BEGIN}": "do $$declare {job_id} bigint; begin insert into {schema}.{job}({job_source},{job_action},{job_action_target},{job_params}) values ({@job_source},{@job_action},{@job_action_target},{@job_params}) returning {schema}.{job}.{job_id} into {job_id};",
+  "{jobproc_add_doc}": "insert into {schema}.{job_doc}({job_id},{doc_scope},{doc_scope_id},{doc_ctgr},{doc_desc}) values ({job_id},{@doc_scope},{@doc_scope_id},{@doc_ctgr},{@doc_desc});",
+  "{jobproc_add_queue}": "insert into {schema}.{job_queue}({job_id},{queue_name},{queue_message}) values ({job_id},{@queue_name},{@queue_message});",
+  "{jobproc_add_email}": "insert into {schema}.{job_email}({job_id},{email_txt_attrib},{email_to},{email_cc},{email_bcc},{email_attach},{email_subject},{email_text},{email_html},{email_doc_id}) values ({job_id},{@email_txt_attrib},{@email_to},{@email_cc},{@email_bcc},{@email_attach},{@email_subject},{@email_text},{@email_html},{@email_doc_id});",
+  "{jobproc_add_sms}": "insert into {schema}.{job_sms}({job_id},{sms_txt_attrib},{sms_to},{sms_body}) values ({job_id},{@sms_txt_attrib},{@sms_to},{@sms_body});",
+  "{jobproc_add_note}": "insert into {schema}.{job_note}({job_id},{note_scope},{note_scope_id},{note_type},{note_body}) values ({job_id},{@note_scope},{@note_scope_id},{@note_type},{@note_body});",
+  "{jobproc_add_END}": " end$$;",
+  "{jobproc_queueresult}": "update {schema}.{queue} set {queue_rslt}={@queue_rslt},{queue_rslt_tstmp}=public.{my_now}(),{queue_snotes}={@queue_snotes} where {queue_id}={@queue_id}",
+  "{jobproc_queuecheck}": "select {queue_id}, {queue_name}, {queue_message} from {schema}.{queue} where {queue_name}={@queue_name} and {queue_rslt} is null order by {queue_id} limit 1",
+  "{jobproc_queuesubscribers}": [
+    "WITH CTE AS (SELECT {queue_id}, {queue_name}, {queue_message},ROW_NUMBER() OVER (PARTITION BY {queue_name} ORDER BY {queue_id}) as RN FROM {schema}.{queue} where {queue_rslt} is null)",
+    "select {queue_id}, {queue_name}, {queue_message}",
     "from CTE",
     "where RN=1",
-    "order by rq_id"
+    "order by {queue_id}"
   ],
-  "jobproc_queuepop": "select rq_id from {schema}.RQ where rq_id=@rq_id and rq_name=@rq_name and rq_rslt is null"
+  "{jobproc_queuepop}": "select {queue_id} from {schema}.{queue} where {queue_id}={@queue_id} and {queue_name}={@queue_name} and {queue_rslt} is null"
 }

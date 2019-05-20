@@ -36,7 +36,7 @@ jsh.App[modelid] = new (function(){
   this.GetSchema = function(dbid){
     XForm.prototype.XExecute('../_funcs/DEV_DB_SCHEMA', { db: dbid }, function (rslt) { //On success
       if ('_success' in rslt) { 
-        _this.RenderSchema(dbid, rslt.schema);
+        _this.RenderSchema(dbid, rslt.schema, rslt.funcs);
       }
     });
   }
@@ -49,7 +49,7 @@ jsh.App[modelid] = new (function(){
     }
   }
 
-  this.RenderSchema = function(dbid, schema){
+  this.RenderSchema = function(dbid, schema, funcs){
     var jobj = jsh.$root('.DEV_DB_SCHEMA_rslt');
     jobj.html('');
     $('<div>\
@@ -60,11 +60,12 @@ jsh.App[modelid] = new (function(){
     jobj.find('.hide_all').click(function(){ jobj.find('table').hide(); });
     //var tables = _.map(schema.tables, function(table){ console.log(table); });
     _.each(schema.tables, function(table, tableName){
-      var dispTableName = tableName;
-      if(dispTableName && (dispTableName[0]=='.')) dispTableName = dispTableName.substr(1);
-      $('<a href="#" class="table_name expand_table" onclick="return false;">'+XExt.escapeHTML(dispTableName)+'</a> &nbsp; \
-         <a href="#" class="expand_table" onclick="return false;">Schema</a> &nbsp; \
-         <a href="DEV_DB?db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispTableName)+'" target="_blank">Data</a> &nbsp; \
+      var dispName = tableName;
+      if(dispName && (dispName[0]=='.')) dispName = dispName.substr(1);
+      dispName = 'table_' + dispName;
+      $('<a href="#" class="table_name expandable" onclick="return false;">'+XExt.escapeHTML(dispName.substr(6))+'</a> &nbsp; \
+         <a href="#" class="expandable" onclick="return false;">Schema</a> &nbsp; \
+         <a href="DEV_DB?db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">Data</a> &nbsp; \
          <br/>').appendTo(jobj);
       var html = '<table cellpadding="0" cellspacing="0" border="0" style="display:none;">';
       html += '<tr>';
@@ -111,7 +112,24 @@ jsh.App[modelid] = new (function(){
       $(html).appendTo(jobj);
       //console.log(table);
     });
-    $('.expand_table').click(function(){ _this.getTable(this).toggle(); });
+    _.each(funcs, function(func, funcName){
+      var dispName = funcName;
+      if(dispName && (dispName[0]=='.')) dispName = dispName.substr(1);
+      dispName = 'func_' + dispName;
+      var funcVal = func;
+      if(_.isString(funcVal)) funcVal = XExt.escapeHTMLBR(funcVal);
+      else funcVal = '<pre>' + XExt.escapeHTML(JSON.stringify(funcVal,null,4)) + '</pre>';
+      $('<a href="#" class="func_name expandable" onclick="return false;">Func: '+XExt.escapeHTML(dispName.substr(5))+'</a> &nbsp; \
+         <a href="#" class="expandable" onclick="return false;">Definition</a> \
+         <br/>').appendTo(jobj);
+      var html = '<table cellpadding="0" cellspacing="0" border="0" style="display:none;">';
+      html += '<tr>';
+      html += '<td>' + funcVal + '</td>';
+      html += '</tr>';
+      html += '</table>';
+      $(html).appendTo(jobj);
+    });
+    $('.expandable').click(function(){ _this.getTable(this).toggle(); });
     //jsh.$root('.DEV_DB_SCHEMA_rslt').text(JSON.stringify(schema));
   }
 
