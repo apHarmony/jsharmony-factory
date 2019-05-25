@@ -262,7 +262,7 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
       '/_d/_transaction/': ignore_overdue_transaction,
       '*': function (req, res, next) {
         if (req.gdata[jsh.map.client_overdue_ignore] > 0) return next();
-        if (req.gdata[jsh.map.client_overdue] > 0) { console.log('Redirect-Payment'); return Helper.Redirect302(res, req.baseurl + 'C_PA_CC/'); }
+        if (req.gdata[jsh.map.client_overdue] > 0) { console.log('Redirect-Payment '+req.url); return Helper.Redirect302(res, req.baseurl + 'C_PA_CC/'); }
         next();
       }
     }
