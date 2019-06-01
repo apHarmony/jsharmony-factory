@@ -201,7 +201,9 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
         if (job.email_attach && tmppath){
           fs.exists(tmppath, function(exists){
             if(!exists) return cb(new Error('Report output does not exist'));
-            attachments.push({ filename: 'D' + (d_id||'0') + '.pdf', content: fs.createReadStream(tmppath) });
+            var filename = 'D' + (d_id||'0') + '.pdf';
+            if(job.email_attach.toString().substr(0,9)=='filename:') filename = job.email_attach.substr(9);
+            attachments.push({ filename: filename, content: fs.createReadStream(tmppath) });
             return cb();
           });
         }
@@ -312,9 +314,8 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
     job_sql_ptypes.push(dbtypes.VarChar(255));
     job_sql_params['email_bcc'] = jrow.email_bcc || null;
     jobvalidate.AddValidator('_obj.email_bcc', 'email_bcc', 'B', [XValidate._v_MaxLength(255)]);
-    job_sql_ptypes.push(dbtypes.SmallInt);
-    job_sql_params['email_attach'] = jrow.email_attach;
-    jobvalidate.AddValidator('_obj.email_attach', 'email_attach', 'B', [XValidate._v_IsNumeric()]);
+    job_sql_ptypes.push(dbtypes.VarChar(dbtypes.MAX));
+    job_sql_params['email_attach'] = jrow.email_attach || null;
     job_sql_ptypes.push(dbtypes.VarChar(500));
     job_sql_params['email_subject'] = jrow.email_subject || null;
     jobvalidate.AddValidator('_obj.email_subject', 'email_subject', 'B', [XValidate._v_MaxLength(500)]);

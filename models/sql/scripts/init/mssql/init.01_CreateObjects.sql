@@ -2350,7 +2350,7 @@ CREATE TABLE [jsharmony].[{job_email}](
 	[{email_to}] [nvarchar](255) NOT NULL,
 	[{email_cc}] [nvarchar](255) NULL,
 	[{email_bcc}] [nvarchar](255) NULL,
-	[{email_attach}] [smallint] NULL,
+	[{email_attach}] [nvarchar](max) NULL,
 	[{email_subject}] [nvarchar](500) NULL,
 	[{email_text}] [ntext] NULL,
 	[{email_html}] [ntext] NULL,

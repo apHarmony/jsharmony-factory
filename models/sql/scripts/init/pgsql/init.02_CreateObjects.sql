@@ -5015,7 +5015,7 @@ CREATE TABLE {job_email} (
     {email_to} character varying(255) NOT NULL,
     {email_cc} character varying(255),
     {email_bcc} character varying(255),
-    {email_attach} smallint,
+    {email_attach} text,
     {email_subject} character varying(500),
     {email_text} text,
     {email_html} text,

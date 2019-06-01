@@ -303,7 +303,7 @@ CREATE TABLE {schema}_{job_email} (
   {email_to} text NOT NULL,
   {email_cc} text,
   {email_bcc} text,
-  {email_attach} integer,
+  {email_attach} text,
   {email_subject} text,
   {email_text} text,
   {email_html} text,
