@@ -447,13 +447,4 @@ AppSrvJobProc.prototype.PopQueue = function (req, res, queueid, queueresult, onC
   });
 }
 
-AppSrvJobProc.ExecuteSQL = function (sql){
-  return function (jobproc){
-    jobproc.AppSrv.ExecRecordset('jobproc', sql, [], { }, function (err, rslt) {
-      if (err) _this.jsh.Log.error('Error Running Task: '+err.toString());
-      if (rslt && rslt[0]) _this.jsh.Log.info('Task Result: '+JSON.stringify(rslt));
-    });
-  }
-}
-
 module.exports = AppSrvJobProc;

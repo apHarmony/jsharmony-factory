@@ -57,8 +57,6 @@ function jsHarmonyFactoryConfig(){
     disable_job_processor: false,             //Disable Job Processor
   };
 
-  //Excel integration token timeout
-  this.excel_timeout = 4 * 60 * 60; //4 hours
   //Job Processor sleep time after no jobs found - Default 60000
   this.JobCheckDelay = 60000;
   //Job Processor sleep time after last job item executed - Default 5000
@@ -103,5 +101,7 @@ jsHarmonyFactoryConfig.prototype.Merge = function(config, jsh, sourceModuleName)
   }
   jsHarmonyConfig.Base.prototype.Merge.apply(_this, arguments);
 }
+
+jsHarmonyFactoryConfig.prototype.Helper = require('./jsHarmonyFactoryConfigHelper.js');
 
 exports = module.exports = jsHarmonyFactoryConfig;
