@@ -11,7 +11,7 @@
   "fields": [
     {"name":"c_id","type":"bigint","datalock":{"c_id":"c_c_id"},"nl":1,
 	      "control":"dropdown_L","actions": "B",
-        "lov": { "sql": "agreement_cod_c_id", "datalock":{"c_id":"c_id"}, "blank": 1 },
+        "lov": { "sql": "agreement_COD_C_ID", "datalock":{"c_id":"c_id"}, "blank": 1 },
         "validate": [ "Required" ],
         "default": "js:XExt.UndefinedBlank(_GET['c_id'])",
         "caption":"Company Name"},

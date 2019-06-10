@@ -1196,13 +1196,13 @@ INSERT INTO {code_txt_type} ({code_seq}, {code_val}, {code_txt}, {code_code}, {c
 
 
 
-INSERT INTO {txt} ({txt_process}, {txt_attrib}, {txt_type}, {txt_title}, {txt_body}, {txt_bcc}, {txt_desc}) VALUES ('EMAIL', 'RESETPASS', 'HTML', 'Password Reset', '<p>Dear <%-data.{sys_user_name}%>,<br />
+INSERT INTO {txt} ({txt_process}, {txt_attrib}, {txt_type}, {txt_title}, {txt_body}, {txt_bcc}, {txt_desc}) VALUES ('EMAIL', 'RESETPASS', 'HTML', 'Password Reset', '<p>Dear <%-data.{SYS_USER_NAME}%>,<br />
 <br />
 A password reset has been requested on your account. If you did not initiate the request, please contact us at <%-data.SUPPORT_EMAIL%> immediately.<br />
 <br />
 Please follow the link below to reset your password:<br />
 <a href="<%-data.RESET_LINK%>"><%-data.RESET_LINK%></a></p>
-', NULL, '<%-data.{sys_user_name}%> User Name
+', NULL, '<%-data.{SYS_USER_NAME}%> User Name
 <%-data.SUPPORT_EMAIL%> Support Email
 <%-data.RESET_LINK%> Reset Link');
 INSERT INTO {txt} ({txt_process}, {txt_attrib}, {txt_type}, {txt_title}, {txt_body}, {txt_bcc}, {txt_desc}) VALUES ('CMS', 'AGREEMENT', 'HTML', 'Client Agreement', NULL, NULL, 'Client Agreement');

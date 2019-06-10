@@ -228,13 +228,13 @@ INSERT INTO {schema}_{sys_role} ({sys_role_seq}, {sys_role_sts}, {sys_role_name}
 
 INSERT INTO {schema}_{sys_func} ({sys_func_seq}, {sys_func_sts}, {sys_func_name}, {sys_func_desc}, {sys_func_code}, {sys_func_attrib}) VALUES (1, 'ACTIVE', 'TBD', 'TBD', NULL, NULL);
 
-INSERT INTO {schema}_{txt} ({txt_process}, {txt_attrib}, {txt_type}, {txt_title}, {txt_body}, {txt_bcc}, {txt_desc}) VALUES ('EMAIL', 'RESETPASS', 'HTML', 'Password Reset', '<p>Dear <%-data.{sys_user_name}%>,<br />
+INSERT INTO {schema}_{txt} ({txt_process}, {txt_attrib}, {txt_type}, {txt_title}, {txt_body}, {txt_bcc}, {txt_desc}) VALUES ('EMAIL', 'RESETPASS', 'HTML', 'Password Reset', '<p>Dear <%-data.{SYS_USER_NAME}%>,<br />
 <br />
 A password reset has been requested on your account. If you did not initiate the request, please contact us at <%-data.SUPPORT_EMAIL%> immediately.<br />
 <br />
 Please follow the link below to reset your password:<br />
 <a href="<%-data.RESET_LINK%>"><%-data.RESET_LINK%></a></p>
-', NULL, '<%-data.{sys_user_name}%> User Name
+', NULL, '<%-data.{SYS_USER_NAME}%> User Name
 <%-data.SUPPORT_EMAIL%> Support Email
 <%-data.RESET_LINK%> Reset Link');
 INSERT INTO {schema}_{txt} ({txt_process}, {txt_attrib}, {txt_type}, {txt_title}, {txt_body}, {txt_bcc}, {txt_desc}) VALUES ('CMS', 'AGREEMENT', 'HTML', 'Client Agreement', NULL, NULL, 'Client Agreement');

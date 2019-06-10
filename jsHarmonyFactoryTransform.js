@@ -274,6 +274,7 @@ function jsHarmonyFactoryTransform(module){
     "sys_user_mtstmp": "sys_user_mtstmp",
     "sys_user_muser": "sys_user_muser",
     "sys_user_name": "sys_user_name",
+    "SYS_USER_NAME": "SYS_USER_NAME",
     "sys_user_pw1": "sys_user_pw1",
     "sys_user_pw2": "sys_user_pw2",
     "sys_user_snotes": "sys_user_snotes",
