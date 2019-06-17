@@ -23,6 +23,7 @@
   },	
   "HSHOW_SINGLE": {
     "inherits":"HSHOW",
+    "querystring": { "&action": "browse" },
     "fields":[
       {"name":"h_id","__REMOVE__":1},
       {"name":"hp_code","type":"varchar","length":50,"key":1,"datalock":{"c_id":"always"},"control":"hidden"}
