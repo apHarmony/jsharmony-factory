@@ -3,8 +3,8 @@ pragma foreign_keys = ON;
 begin;
 
 
-/***************{audit}***************/
-CREATE TABLE {schema}_{audit} (
+/***************{audit__tbl}***************/
+CREATE TABLE {schema}_{audit__tbl} (
   {audit_seq} integer primary key autoincrement NOT NULL,
   {audit_table_name} text,
   {audit_table_id} integer NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE {schema}_{audit_detail}
   {audit_column_name} text NOT NULL,
   {audit_column_val} text,
   PRIMARY KEY ({audit_seq}, {audit_column_name}),
-  FOREIGN KEY ({audit_seq}) REFERENCES {schema}_{audit}({audit_seq})
+  FOREIGN KEY ({audit_seq}) REFERENCES {schema}_{audit__tbl}({audit_seq})
 );
 
 /*********{single}*********/
@@ -124,8 +124,8 @@ CREATE TABLE {schema}_{cust_role} (
   FOREIGN KEY ({cust_role_sts}) REFERENCES {schema}_{code_ahc}({code_val})
 );
 
-/***************{doc}***************/
-CREATE TABLE {schema}_{doc} (
+/***************{doc__tbl}***************/
+CREATE TABLE {schema}_{doc__tbl} (
   {doc_id} integer primary key autoincrement NOT NULL,
   {doc_scope} text NOT NULL DEFAULT 'S',
   {doc_scope_id} integer NOT NULL DEFAULT 0,
@@ -158,8 +158,8 @@ CREATE TABLE {schema}_{help_target} (
   UNIQUE ({help_target_desc})
 );
 
-/***************{help}***************/
-CREATE TABLE {schema}_{help} (
+/***************{help__tbl}***************/
+CREATE TABLE {schema}_{help__tbl} (
   {help_id} integer primary key autoincrement NOT NULL,
   {help_target_code} text,
   {help_title} text NOT NULL,
@@ -175,8 +175,8 @@ CREATE TABLE {schema}_{help} (
   FOREIGN KEY ({help_target_code}) REFERENCES {schema}_{help_target} ({help_target_code})
 );
 
-/***************{note}***************/
-CREATE TABLE {schema}_{note} (
+/***************{note__tbl}***************/
+CREATE TABLE {schema}_{note__tbl} (
   {note_id} integer primary key autoincrement NOT NULL,
   {note_scope} text NOT NULL DEFAULT 'S',
   {note_scope_id} integer NOT NULL DEFAULT 0,
@@ -233,8 +233,8 @@ create table {schema}_{sys_user} (
     CHECK (COALESCE({sys_user_email},'')<>'')
 );
 
-  /***************{param}***************/
-CREATE TABLE {schema}_{param} (
+  /***************{param__tbl}***************/
+CREATE TABLE {schema}_{param__tbl} (
   {param_id} integer primary key autoincrement NOT NULL,
   {param_process} text NOT NULL,
   {param_attrib} text NOT NULL,
@@ -253,8 +253,8 @@ CREATE TABLE {schema}_{param} (
   UNIQUE ({param_process}, {param_attrib})
 );
 
-/***************{queue}***************/
-CREATE TABLE {schema}_{queue} (
+/***************{queue__tbl}***************/
+CREATE TABLE {schema}_{queue__tbl} (
   {queue_id} integer primary key autoincrement NOT NULL,
   {queue_etstmp} text,
   {queue_euser} text,
@@ -266,8 +266,8 @@ CREATE TABLE {schema}_{queue} (
   {queue_snotes} text
 );
 
-/***************{job}***************/
-CREATE TABLE {schema}_{job} (
+/***************{job__tbl}***************/
+CREATE TABLE {schema}_{job__tbl} (
   {job_id} integer primary key autoincrement NOT NULL,
   {job_etstmp} text,
   {job_user} text,
@@ -292,7 +292,7 @@ CREATE TABLE {schema}_{job_doc} (
   {doc_scope_id} integer,
   {doc_ctgr} text,
   {doc_desc} text,
-  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job} ({job_id})
+  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job__tbl} ({job_id})
 );
 
 /***************{job_email}***************/
@@ -308,7 +308,7 @@ CREATE TABLE {schema}_{job_email} (
   {email_text} text,
   {email_html} text,
   {email_doc_id} integer,
-  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job} ({job_id})
+  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job__tbl} ({job_id})
 );
 
 /***************{job_note}***************/
@@ -319,7 +319,7 @@ CREATE TABLE {schema}_{job_note} (
   {note_scope_id} integer,
   {note_type} text,
   {note_body} text,
-  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job} ({job_id})
+  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job__tbl} ({job_id})
 );
 
 /***************{job_queue}***************/
@@ -328,7 +328,7 @@ CREATE TABLE {schema}_{job_queue} (
   {job_id} integer NOT NULL,
   {queue_name} text NOT NULL,
   {queue_message} text,
-  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job} ({job_id})
+  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job__tbl} ({job_id})
 );
 
 /***************{job_sms}***************/
@@ -338,11 +338,11 @@ CREATE TABLE {schema}_{job_sms} (
   {sms_txt_attrib} text,
   {sms_to} text NOT NULL,
   {sms_body} text,
-  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job} ({job_id})
+  FOREIGN KEY ({job_id}) REFERENCES {schema}_{job__tbl} ({job_id})
 );
 
-/***************{menu}***************/
-CREATE TABLE {schema}_{menu} (
+/***************{menu__tbl}***************/
+CREATE TABLE {schema}_{menu__tbl} (
   {menu_id_auto} integer primary key autoincrement NOT NULL,
   {menu_group} text NOT NULL DEFAULT 'S',
   {menu_id} integert NOT NULL,
@@ -362,7 +362,7 @@ CREATE TABLE {schema}_{menu} (
   UNIQUE ({menu_id}, {menu_desc}),
   UNIQUE ({menu_name}),
   CHECK ({menu_group} in ('S', 'C')),
-  FOREIGN KEY ({menu_id_parent}) REFERENCES {schema}_{menu}({menu_id}),
+  FOREIGN KEY ({menu_id_parent}) REFERENCES {schema}_{menu__tbl}({menu_id}),
   FOREIGN KEY ({menu_sts}) REFERENCES {schema}_{code_ahc}({code_val})
 );
 
@@ -396,8 +396,8 @@ CREATE TABLE {schema}_{sys_func} (
   FOREIGN KEY ({sys_func_sts}) REFERENCES {schema}_{code_ahc}({code_val})
 );
 
-/***************{txt}***************/
-CREATE TABLE {schema}_{txt} (
+/***************{txt__tbl}***************/
+CREATE TABLE {schema}_{txt__tbl} (
   {txt_id} integer primary key autoincrement NOT NULL,
   {txt_process} text NOT NULL,
   {txt_attrib} text NOT NULL,
@@ -432,7 +432,7 @@ CREATE TABLE {schema}_{cust_menu_role} (
   {cust_role_name} text NOT NULL,
   {cust_menu_role_snotes} text,
   UNIQUE ({cust_role_name}, {menu_id}),
-  FOREIGN KEY ({menu_id}) REFERENCES {schema}_{menu}({menu_id}) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY ({menu_id}) REFERENCES {schema}_{menu__tbl}({menu_id}) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY ({cust_role_name}) REFERENCES {schema}_{cust_role}({cust_role_name}) ON DELETE CASCADE
 );
 
@@ -474,12 +474,12 @@ CREATE TABLE {schema}_{param_app} (
   {param_app_process} text NULL,
   {param_app_attrib} text NOT NULL,
   {param_app_val} text,
-  {param_app_etstmp} {txt},
+  {param_app_etstmp} {txt__tbl},
   {param_app_euser} text,
   {param_app_mtstmp} text,
   {param_app_muser} text,
   UNIQUE ({param_app_process}, {param_app_attrib}),
-  FOREIGN KEY ({param_app_process}, {param_app_attrib}) REFERENCES {schema}_{param}({param_process}, {param_attrib})
+  FOREIGN KEY ({param_app_process}, {param_app_attrib}) REFERENCES {schema}_{param__tbl}({param_process}, {param_attrib})
 );
 
 /***************{param_user}***************/
@@ -489,12 +489,12 @@ CREATE TABLE {schema}_{param_user} (
   {param_user_process} text NULL,
   {param_user_attrib} text NOT NULL,
   {param_user_val} text,
-  {param_user_etstmp} {txt},
+  {param_user_etstmp} {txt__tbl},
   {param_user_euser} text,
   {param_user_mtstmp} text,
   {param_user_muser} text,
   UNIQUE ({param_user_process}, {param_user_attrib}),
-  FOREIGN KEY ({param_user_process}, {param_user_attrib}) REFERENCES {schema}_{param}({param_process}, {param_attrib})
+  FOREIGN KEY ({param_user_process}, {param_user_attrib}) REFERENCES {schema}_{param__tbl}({param_process}, {param_attrib})
               ON UPDATE NO ACTION ON DELETE CASCADE,
   FOREIGN KEY ({sys_user_id}) REFERENCES {schema}_{sys_user}({sys_user_id})
               ON UPDATE NO ACTION ON DELETE CASCADE
@@ -529,7 +529,7 @@ CREATE TABLE {schema}_{sys_menu_role} (
   {sys_role_name} text NOT NULL,
   {sys_menu_role_snotes} text,
   UNIQUE ({sys_role_name}, {menu_id}),
-  FOREIGN KEY ({menu_id}) REFERENCES {schema}_{menu}({menu_id}) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY ({menu_id}) REFERENCES {schema}_{menu__tbl}({menu_id}) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY ({sys_role_name}) REFERENCES {schema}_{sys_role}({sys_role_name}) ON DELETE CASCADE
 );
 
@@ -565,8 +565,8 @@ CREATE TABLE {schema}_{code2_sys} (
     UNIQUE ({code_schema}, {code_name})
 );
 
-/***************{version}***************/
-CREATE TABLE {schema}_{version} (
+/***************{version__tbl}***************/
+CREATE TABLE {schema}_{version__tbl} (
     {version_id} integer primary key autoincrement NOT NULL,
     {version_component} text NOT NULL,
     {version_no_major} integer DEFAULT 0 NOT NULL,
@@ -590,16 +590,16 @@ CREATE TABLE {schema}_{param_sys} (
   {param_sys_process} text NULL,
   {param_sys_attrib} text NOT NULL,
   {param_sys_val} text,
-  {param_sys_etstmp} {txt},
+  {param_sys_etstmp} {txt__tbl},
   {param_sys_euser} text,
   {param_sys_mtstmp} text,
   {param_sys_muser} text,
   UNIQUE ({param_sys_process}, {param_sys_attrib}),
-  FOREIGN KEY ({param_sys_process}, {param_sys_attrib}) REFERENCES {schema}_{param}({param_process}, {param_attrib})
+  FOREIGN KEY ({param_sys_process}, {param_sys_attrib}) REFERENCES {schema}_{param__tbl}({param_process}, {param_attrib})
 );
 
-/***************{number}***************/
-CREATE TABLE {schema}_{number} (
+/***************{number__tbl}***************/
+CREATE TABLE {schema}_{number__tbl} (
   {number_val} integer NOT NULL,
   PRIMARY KEY ({number_val})
 );

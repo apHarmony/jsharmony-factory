@@ -4,17 +4,17 @@ drop trigger if exists {schema}_{cust_user_role}_insert;
 drop trigger if exists {schema}_{cust_user_role}_update;
 drop trigger if exists {schema}_{cust_user_role}_delete;
 
-drop trigger if exists {schema}_{doc}_before_insert;
-drop trigger if exists {schema}_{doc}_after_insert;
-drop trigger if exists {schema}_{doc}_before_update;
-drop trigger if exists {schema}_{doc}_after_update;
-drop trigger if exists {schema}_{doc}_delete;
+drop trigger if exists {schema}_{doc__tbl}_before_insert;
+drop trigger if exists {schema}_{doc__tbl}_after_insert;
+drop trigger if exists {schema}_{doc__tbl}_before_update;
+drop trigger if exists {schema}_{doc__tbl}_after_update;
+drop trigger if exists {schema}_{doc__tbl}_delete;
 
-drop trigger if exists {schema}_{note}_before_insert;
-drop trigger if exists {schema}_{note}_after_insert;
-drop trigger if exists {schema}_{note}_before_update;
-drop trigger if exists {schema}_{note}_after_update;
-drop trigger if exists {schema}_{note}_delete;
+drop trigger if exists {schema}_{note__tbl}_before_insert;
+drop trigger if exists {schema}_{note__tbl}_after_insert;
+drop trigger if exists {schema}_{note__tbl}_before_update;
+drop trigger if exists {schema}_{note__tbl}_after_update;
+drop trigger if exists {schema}_{note__tbl}_delete;
 
 drop trigger if exists {schema}_{sys_user}_before_insert;
 drop trigger if exists {schema}_{sys_user}_after_insert;
@@ -46,15 +46,15 @@ drop trigger if exists {schema}_{param_user}_before_update;
 drop trigger if exists {schema}_{param_user}_after_update;
 drop trigger if exists {schema}_{param_user}_delete;
 
-drop trigger if exists {schema}_{param}_after_insert;
-drop trigger if exists {schema}_{param}_before_update;
-drop trigger if exists {schema}_{param}_after_update;
-drop trigger if exists {schema}_{param}_delete;
+drop trigger if exists {schema}_{param__tbl}_after_insert;
+drop trigger if exists {schema}_{param__tbl}_before_update;
+drop trigger if exists {schema}_{param__tbl}_after_update;
+drop trigger if exists {schema}_{param__tbl}_delete;
 
-drop trigger if exists {schema}_{help}_after_insert;
-drop trigger if exists {schema}_{help}_before_update;
-drop trigger if exists {schema}_{help}_after_update;
-drop trigger if exists {schema}_{help}_delete;
+drop trigger if exists {schema}_{help__tbl}_after_insert;
+drop trigger if exists {schema}_{help__tbl}_before_update;
+drop trigger if exists {schema}_{help__tbl}_after_update;
+drop trigger if exists {schema}_{help__tbl}_delete;
 
 drop trigger if exists {schema}_{sys_user_func}_after_insert;
 drop trigger if exists {schema}_{sys_user_func}_before_update;
@@ -67,14 +67,14 @@ drop trigger if exists {schema}_{sys_user_role}_before_update;
 drop trigger if exists {schema}_{sys_user_role}_after_update;
 drop trigger if exists {schema}_{sys_user_role}_delete;
 
-drop trigger if exists {schema}_{txt}_after_insert;
-drop trigger if exists {schema}_{txt}_before_update;
-drop trigger if exists {schema}_{txt}_after_update;
-drop trigger if exists {schema}_{txt}_delete;
+drop trigger if exists {schema}_{txt__tbl}_after_insert;
+drop trigger if exists {schema}_{txt__tbl}_before_update;
+drop trigger if exists {schema}_{txt__tbl}_after_update;
+drop trigger if exists {schema}_{txt__tbl}_delete;
 
-drop trigger if exists {schema}_{queue}_after_insert;
+drop trigger if exists {schema}_{queue__tbl}_after_insert;
 
-drop trigger if exists {schema}_{job}_after_insert;
+drop trigger if exists {schema}_{job__tbl}_after_insert;
 
 drop trigger if exists {schema}_{code_app}_after_insert;
 drop trigger if exists {schema}_{code_app}_after_update;
@@ -88,8 +88,8 @@ drop trigger if exists {schema}_{code_sys}_after_update;
 drop trigger if exists {schema}_{code2_sys}_after_insert;
 drop trigger if exists {schema}_{code2_sys}_after_update;
 
-drop trigger if exists {schema}_{version}_after_insert;
-drop trigger if exists {schema}_{version}_after_update;
+drop trigger if exists {schema}_{version__tbl}_after_insert;
+drop trigger if exists {schema}_{version__tbl}_after_update;
 
 /***************VIEWS***************/
 drop view if exists {schema}_{v_param_cur};

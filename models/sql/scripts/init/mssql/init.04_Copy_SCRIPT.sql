@@ -1,9 +1,9 @@
 SET NUMERIC_ROUNDABORT OFF
 GO
-SET XACT_ABORT, ANSI_PADDING, ANSI_WARNINGS, {concat}_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+SET XACT_ABORT, ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
 BEGIN TRANSACTION
-EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([{script_name}], [{script_txt}]) VALUES (N''{create_code_app}'', N''CREATE TABLE [%%%schema%%%].[gcod_%%%name%%%](
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([{script_name}], [{script_txt}]) VALUES (N''{create_code_app}'', N''CREATE TABLE [%%%schema%%%].[gcod_%%%name%%%](
 	[gcod_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[{code_seq}] [smallint] NULL,
 	[{code_val}] [nvarchar](8) NOT NULL,
@@ -73,7 +73,7 @@ EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code 
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry User'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema'')')
-UPDATE [jsharmony].[SCRIPT] SET [{script_txt}].WRITE(N'%%%'', @level1type=N''TABLE'',@level1name=N''GCOD_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''{code_euser}''
+UPDATE [jsharmony].[script__tbl] SET [{script_txt}].WRITE(N'%%%'', @level1type=N''TABLE'',@level1name=N''GCOD_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''{code_euser}''
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''{code_mtstmp}''
@@ -90,7 +90,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 
 
 
 ',NULL,NULL) WHERE [{script_name}]=N'{create_code_app}'
-EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([{script_name}], [{script_txt}]) VALUES (N''{create_code_app}_TRIGGER'', N''CREATE trigger [%%%schema%%%].[GCOD_%%%name%%%_IUD] on [%%%schema%%%].[GCOD_%%%name%%%]
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([{script_name}], [{script_txt}]) VALUES (N''{create_code_app}_TRIGGER'', N''CREATE trigger [%%%schema%%%].[GCOD_%%%name%%%_IUD] on [%%%schema%%%].[GCOD_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -229,7 +229,7 @@ BEGIN
 
       IF (@TP = ''''D'''' AND @D_{code_seq} IS NOT NULL OR
           @TP = ''''U'''' AND {schema}.{nequal_num}(@D_{code_seq}, @I_'')')
-UPDATE [jsharmony].[SCRIPT] SET [{script_txt}].WRITE(N'{code_seq}) > 0)
+UPDATE [jsharmony].[script__tbl] SET [{script_txt}].WRITE(N'{code_seq}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
 		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
@@ -329,7 +329,7 @@ END
 
 
 ',NULL,NULL) WHERE [{script_name}]=N'{create_code_app}_TRIGGER'
-EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([{script_name}], [{script_txt}]) VALUES (N''{create_code2_app}'', N''CREATE TABLE [%%%schema%%%].[gcod2_%%%name%%%](
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([{script_name}], [{script_txt}]) VALUES (N''{create_code2_app}'', N''CREATE TABLE [%%%schema%%%].[gcod2_%%%name%%%](
 	[{code2_app_id}] [bigint] IDENTITY(1,1) NOT NULL,
 	[{code_seq}] [smallint] NULL,
 	[{code_val1}] [nvarchar](8) NOT NULL,
@@ -405,7 +405,7 @@ EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code 
 ;
 
 EXEC sys.sp_addextendedproper'')')
-UPDATE [jsharmony].[SCRIPT] SET [{script_txt}].WRITE(N'ty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''{code_mtstmp}''
+UPDATE [jsharmony].[script__tbl] SET [{script_txt}].WRITE(N'ty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''{code_mtstmp}''
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''{code_muser}''
@@ -419,7 +419,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 
 
 
 ',NULL,NULL) WHERE [{script_name}]=N'{create_code2_app}'
-EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([{script_name}], [{script_txt}]) VALUES (N''{create_code2_app}_TRIGGER'', N''CREATE trigger [%%%schema%%%].[GCOD2_%%%name%%%_IUD] on [%%%schema%%%].[GCOD2_%%%name%%%]
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([{script_name}], [{script_txt}]) VALUES (N''{create_code2_app}_TRIGGER'', N''CREATE trigger [%%%schema%%%].[GCOD2_%%%name%%%_IUD] on [%%%schema%%%].[GCOD2_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -555,7 +555,7 @@ BEGIN
 	/****** SPECIAL FRONT ACTION - END   ******/
 	/******************'')')
 EXEC(N'DECLARE @pv binary(16)
-'+N'UPDATE [jsharmony].[SCRIPT] SET [{script_txt}].WRITE(N''************************/
+'+N'UPDATE [jsharmony].[script__tbl] SET [{script_txt}].WRITE(N''************************/
 
 
     SET @MY_{audit_seq} = 0
@@ -661,7 +661,7 @@ EXEC(N'DECLARE @pv binary(16)
              @D_{code_end_dt}, @I_{code_end_dt},
              @D_{code_val1}, @I_{code_val1},
              @D_{code_va12}, @I_CO'',NULL,NULL) WHERE [{script_name}]=N''{create_code2_app}_TRIGGER''
-UPDATE [jsharmony].[SCRIPT] SET [{script_txt}].WRITE(N''DEVAL2,
+UPDATE [jsharmony].[script__tbl] SET [{script_txt}].WRITE(N''DEVAL2,
              @D_{code_txt}, @I_{code_txt},
              @D_{code_code}, @I_{code_code},
              @D_{code_attrib}, @I_{code_attrib},
@@ -680,7 +680,7 @@ END
 
 '',NULL,NULL) WHERE [{script_name}]=N''{create_code2_app}_TRIGGER''
 ')
-EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([{script_name}], [{script_txt}]) VALUES (N''{create_code_sys}'', N''CREATE TABLE [%%%schema%%%].[ucod_%%%name%%%](
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([{script_name}], [{script_txt}]) VALUES (N''{create_code_sys}'', N''CREATE TABLE [%%%schema%%%].[ucod_%%%name%%%](
 	[{code_sys_id}] [bigint] IDENTITY(1,1) NOT NULL,
 	[{code_seq}] [smallint] NULL,
 	[{code_val}] [nvarchar](8) NOT NULL,
@@ -751,7 +751,7 @@ EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code 
 ;
 
 '')')
-UPDATE [jsharmony].[SCRIPT] SET [{script_txt}].WRITE(N'
+UPDATE [jsharmony].[script__tbl] SET [{script_txt}].WRITE(N'
 EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''{code_mtstmp}''
 ;
 
@@ -766,7 +766,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''System Code
 
 
 ',NULL,NULL) WHERE [{script_name}]=N'{create_code_sys}'
-EXEC(N'INSERT INTO [jsharmony].[SCRIPT] ([{script_name}], [{script_txt}]) VALUES (N''{create_code2_sys}'', N''CREATE TABLE [%%%schema%%%].[ucod2_%%%name%%%](
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([{script_name}], [{script_txt}]) VALUES (N''{create_code2_sys}'', N''CREATE TABLE [%%%schema%%%].[ucod2_%%%name%%%](
 	[{code2_sys_id}] [bigint] IDENTITY(1,1) NOT NULL,
 	[{code_seq}] [smallint] NULL,
 	[{code_val1}] [nvarchar](8) NOT NULL,
@@ -840,7 +840,7 @@ EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code 
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Last Modification Timestamp'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%'')')
-UPDATE [jsharmony].[SCRIPT] SET [{script_txt}].WRITE(N'%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''{code_mtstmp}''
+UPDATE [jsharmony].[script__tbl] SET [{script_txt}].WRITE(N'%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''{code_mtstmp}''
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''{code_muser}''

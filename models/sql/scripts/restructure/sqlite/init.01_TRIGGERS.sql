@@ -24,9 +24,9 @@ begin
 end;
 
 
-/***************{doc}***************/
+/***************{doc__tbl}***************/
 
-create trigger {schema}_{doc}_before_insert before insert on {schema}_{doc}
+create trigger {schema}_{doc__tbl}_before_insert before insert on {schema}_{doc__tbl}
 begin
   select case when new.{doc_scope}='S' and new.{doc_scope_id}<>0 then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
   select case when new.{doc_scope}<>'S' and new.{doc_scope_id} is null then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
@@ -37,9 +37,9 @@ begin
   select case when not exists (select * from {schema}_{code2_doc_ctgr} where {code_val1}=new.{doc_scope} and {code_va12}=new.{doc_ctgr}) then raise(FAIL,'Document type not allowed for selected scope') end\;
 end;
 
-create trigger {schema}_{doc}_after_insert after insert on {schema}_{doc}
+create trigger {schema}_{doc__tbl}_after_insert after insert on {schema}_{doc__tbl}
 begin
-  update {schema}_{doc} set 
+  update {schema}_{doc__tbl} set 
     {cust_id}     = {schema}.{get_cust_id}(new.{doc_scope},new.{doc_scope_id}),
     {item_id}     = {schema}.{get_item_id}(new.{doc_scope},new.{doc_scope_id}),
     {doc_euser}     = (select context from jsharmony_meta limit 1),
@@ -48,11 +48,11 @@ begin
     {doc_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%{log_audit_insert}("{schema}_{doc}","new.{doc_id}","{doc_id}","null","null","null","{schema}.{get_cust_id}(new.{doc_scope},new.{doc_scope_id})","{schema}.{get_item_id}(new.{doc_scope},new.{doc_scope_id})")%%%
+  %%%{log_audit_insert}("{schema}_{doc__tbl}","new.{doc_id}","{doc_id}","null","null","null","{schema}.{get_cust_id}(new.{doc_scope},new.{doc_scope_id})","{schema}.{get_item_id}(new.{doc_scope},new.{doc_scope_id})")%%%
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_{doc}_before_update before update on {schema}_{doc}
+create trigger {schema}_{doc__tbl}_before_update before update on {schema}_{doc__tbl}
 begin
   select case when ifnull(old.{doc_id},'')<>ifnull(NEW.{doc_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
   select case when ifnull(old.{doc_scope},'')<>ifnull(NEW.{doc_scope},'') then raise(FAIL,'Application Error - Scope cannot be updated.') end\;
@@ -61,11 +61,11 @@ begin
   select case when not exists (select * from {schema}_{code2_doc_ctgr} where {code_val1}=new.{doc_scope} and {code_va12}=new.{doc_ctgr}) then raise(FAIL,'Document type not allowed for selected scope') end\;
 end;
 
-create trigger {schema}_{doc}_after_update after update on {schema}_{doc}
+create trigger {schema}_{doc__tbl}_after_update after update on {schema}_{doc__tbl}
 begin
-  %%%{log_audit_update_mult}("{schema}_{doc}","old.{doc_id}",["{doc_id}","{cust_id}","{doc_scope}","{doc_scope_id}","{item_id}","{doc_sts}","{doc_ctgr}","{doc_desc}","{doc_utstmp}","{doc_uuser}","{doc_sync_tstmp}"],"null","null","null","{schema}.{get_cust_id}(new.{doc_scope},new.{doc_scope_id})","{schema}.{get_item_id}(new.{doc_scope},new.{doc_scope_id})")%%%
+  %%%{log_audit_update_mult}("{schema}_{doc__tbl}","old.{doc_id}",["{doc_id}","{cust_id}","{doc_scope}","{doc_scope_id}","{item_id}","{doc_sts}","{doc_ctgr}","{doc_desc}","{doc_utstmp}","{doc_uuser}","{doc_sync_tstmp}"],"null","null","null","{schema}.{get_cust_id}(new.{doc_scope},new.{doc_scope_id})","{schema}.{get_item_id}(new.{doc_scope},new.{doc_scope_id})")%%%
 
-  update {schema}_{doc} set 
+  update {schema}_{doc__tbl} set 
     {cust_id}     = {schema}.{get_cust_id}(new.{doc_scope},new.{doc_scope_id}),
     {item_id}     = {schema}.{get_item_id}(new.{doc_scope},new.{doc_scope_id}),
     {doc_muser}     = (select context from jsharmony_meta limit 1),
@@ -75,15 +75,15 @@ begin
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_{doc}_delete before delete on {schema}_{doc}
+create trigger {schema}_{doc__tbl}_delete before delete on {schema}_{doc__tbl}
 begin
-  %%%{log_audit_delete_mult}("{schema}_{doc}","old.{doc_id}",["{doc_id}","{cust_id}","{doc_scope}","{doc_scope_id}","{item_id}","{doc_sts}","{doc_ctgr}","{doc_desc}","{doc_utstmp}","{doc_uuser}","{doc_sync_tstmp}"],"null","null","null")%%%
+  %%%{log_audit_delete_mult}("{schema}_{doc__tbl}","old.{doc_id}",["{doc_id}","{cust_id}","{doc_scope}","{doc_scope_id}","{item_id}","{doc_sts}","{doc_ctgr}","{doc_desc}","{doc_utstmp}","{doc_uuser}","{doc_sync_tstmp}"],"null","null","null")%%%
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************{note}***************/
+/***************{note__tbl}***************/
 
-create trigger {schema}_{note}_before_insert before insert on {schema}_{note}
+create trigger {schema}_{note__tbl}_before_insert before insert on {schema}_{note__tbl}
 begin
   select case when new.{note_scope}='S' and new.{note_scope_id}<>0 then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
   select case when new.{note_scope}<>'S' and new.{note_scope_id} is null then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
@@ -93,9 +93,9 @@ begin
     then raise(FAIL,'Application Error - Client User has no rights to perform this operation') end\;
 end;
 
-create trigger {schema}_{note}_after_insert after insert on {schema}_{note}
+create trigger {schema}_{note__tbl}_after_insert after insert on {schema}_{note__tbl}
 begin
-  update {schema}_{note} set 
+  update {schema}_{note__tbl} set 
     {cust_id}     = {schema}.{get_cust_id}(new.{note_scope},new.{note_scope_id}),
     {item_id}     = {schema}.{get_item_id}(new.{note_scope},new.{note_scope_id}),
     {note_euser}     = (select context from jsharmony_meta limit 1),
@@ -104,11 +104,11 @@ begin
     {note_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%{log_audit_insert}("{schema}_{note}","new.{note_id}","{note_id}","null","null","null","{schema}.{get_cust_id}(new.{note_scope},new.{note_scope_id})","{schema}.{get_item_id}(new.{note_scope},new.{note_scope_id})")%%%
+  %%%{log_audit_insert}("{schema}_{note__tbl}","new.{note_id}","{note_id}","null","null","null","{schema}.{get_cust_id}(new.{note_scope},new.{note_scope_id})","{schema}.{get_item_id}(new.{note_scope},new.{note_scope_id})")%%%
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_{note}_before_update before update on {schema}_{note}
+create trigger {schema}_{note__tbl}_before_update before update on {schema}_{note__tbl}
 begin
   select case when ifnull(old.{note_id},'')<>ifnull(NEW.{note_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
   select case when ifnull(old.{note_scope},'')<>ifnull(NEW.{note_scope},'') then raise(FAIL,'Application Error - Scope cannot be updated.') end\;
@@ -116,11 +116,11 @@ begin
   select case when ifnull(old.{note_type},'')<>ifnull(NEW.{note_type},'') then raise(FAIL,'Application Error - Note Type cannot be updated.') end\;
 end;
 
-create trigger {schema}_{note}_after_update after update on {schema}_{note}
+create trigger {schema}_{note__tbl}_after_update after update on {schema}_{note__tbl}
 begin
-  %%%{log_audit_update_mult}("{schema}_{note}","old.{note_id}",["{note_id}","{cust_id}","{note_scope}","{note_scope_id}","{item_id}","{note_sts}","{note_type}","{note_body}"],"null","null","null","{schema}.{get_cust_id}(new.{note_scope},new.{note_scope_id})","{schema}.{get_item_id}(new.{note_scope},new.{note_scope_id})")%%%
+  %%%{log_audit_update_mult}("{schema}_{note__tbl}","old.{note_id}",["{note_id}","{cust_id}","{note_scope}","{note_scope_id}","{item_id}","{note_sts}","{note_type}","{note_body}"],"null","null","null","{schema}.{get_cust_id}(new.{note_scope},new.{note_scope_id})","{schema}.{get_item_id}(new.{note_scope},new.{note_scope_id})")%%%
 
-  update {schema}_{note} set 
+  update {schema}_{note__tbl} set 
     {cust_id}     = {schema}.{get_cust_id}(new.{note_scope},new.{note_scope_id}),
     {item_id}     = {schema}.{get_item_id}(new.{note_scope},new.{note_scope_id}),
     {note_muser}     = (select context from jsharmony_meta limit 1),
@@ -130,9 +130,9 @@ begin
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_{note}_delete before delete on {schema}_{note}
+create trigger {schema}_{note__tbl}_delete before delete on {schema}_{note__tbl}
 begin
-  %%%{log_audit_delete_mult}("{schema}_{note}","old.{note_id}",["{note_id}","{cust_id}","{note_scope}","{note_scope_id}","{item_id}","{note_sts}","{note_type}","{note_body}"],"null","null","null")%%%
+  %%%{log_audit_delete_mult}("{schema}_{note__tbl}","old.{note_id}",["{note_id}","{cust_id}","{note_scope}","{note_scope_id}","{item_id}","{note_sts}","{note_type}","{note_body}"],"null","null","null")%%%
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
@@ -265,9 +265,9 @@ end;
 
 create trigger {schema}_{param_app}_before_insert before insert on {schema}_{param_app}
 begin
-  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib} and {is_param_app}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_app} in {param}') end\;
+  select case when not exists(select * from {schema}_{param__tbl} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib} and {is_param_app}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_app} in {param__tbl}') end\;
   select case when new.{param_app_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib}))='{note}') and (cast(new.{param_app_val} as float)<>new.{param_app_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (upper((select {param_type} from {schema}_{param__tbl} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib}))='{note__tbl}') and (cast(new.{param_app_val} as float)<>new.{param_app_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_{param_app}_after_insert after insert on {schema}_{param_app}
@@ -289,9 +289,9 @@ begin
   select case when ifnull(old.{param_app_process},'')<>ifnull(NEW.{param_app_process},'') then raise(FAIL,'Application Error - Process cannot be updated.') end\;
   select case when ifnull(old.{param_app_attrib},'')<>ifnull(NEW.{param_app_attrib},'') then raise(FAIL,'Application Error - Attribute cannot be updated.') end\;
 
-  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib} and {is_param_app}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_app} in {param}') end\;
+  select case when not exists(select * from {schema}_{param__tbl} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib} and {is_param_app}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_app} in {param__tbl}') end\;
   select case when new.{param_app_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib}))='{note}') and (cast(new.{param_app_val} as float)<>new.{param_app_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (upper((select {param_type} from {schema}_{param__tbl} where {param_process}=new.{param_app_process} and {param_attrib} = new.{param_app_attrib}))='{note__tbl}') and (cast(new.{param_app_val} as float)<>new.{param_app_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_{param_app}_after_update after update on {schema}_{param_app}
@@ -316,9 +316,9 @@ end;
 
 create trigger {schema}_{param_sys}_before_insert before insert on {schema}_{param_sys}
 begin
-  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib} and {is_param_sys}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_sys} in {param}') end\;
+  select case when not exists(select * from {schema}_{param__tbl} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib} and {is_param_sys}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_sys} in {param__tbl}') end\;
   select case when new.{param_sys_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib}))='{note}') and (cast(new.{param_sys_val} as float)<>new.{param_sys_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (upper((select {param_type} from {schema}_{param__tbl} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib}))='{note__tbl}') and (cast(new.{param_sys_val} as float)<>new.{param_sys_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_{param_sys}_after_insert after insert on {schema}_{param_sys}
@@ -340,9 +340,9 @@ begin
   select case when ifnull(old.{param_sys_process},'')<>ifnull(NEW.{param_sys_process},'') then raise(FAIL,'Application Error - Process cannot be updated.') end\;
   select case when ifnull(old.{param_sys_attrib},'')<>ifnull(NEW.{param_sys_attrib},'') then raise(FAIL,'Application Error - Attribute cannot be updated.') end\;
 
-  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib} and {is_param_sys}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_sys} in {param}') end\;
+  select case when not exists(select * from {schema}_{param__tbl} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib} and {is_param_sys}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_sys} in {param__tbl}') end\;
   select case when new.{param_sys_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib}))='{note}') and (cast(new.{param_sys_val} as float)<>new.{param_sys_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (upper((select {param_type} from {schema}_{param__tbl} where {param_process}=new.{param_sys_process} and {param_attrib} = new.{param_sys_attrib}))='{note__tbl}') and (cast(new.{param_sys_val} as float)<>new.{param_sys_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_{param_sys}_after_update after update on {schema}_{param_sys}
@@ -367,9 +367,9 @@ end;
 
 create trigger {schema}_{param_user}_before_insert before insert on {schema}_{param_user}
 begin
-  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib} and {is_param_user}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_user} in {param}') end\;
+  select case when not exists(select * from {schema}_{param__tbl} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib} and {is_param_user}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_user} in {param__tbl}') end\;
   select case when new.{param_user_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib}))='{note}') and (cast(new.{param_user_val} as float)<>new.{param_user_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (upper((select {param_type} from {schema}_{param__tbl} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib}))='{note__tbl}') and (cast(new.{param_user_val} as float)<>new.{param_user_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_{param_user}_after_insert after insert on {schema}_{param_user}
@@ -392,9 +392,9 @@ begin
   select case when ifnull(old.{param_user_process},'')<>ifnull(NEW.{param_user_process},'') then raise(FAIL,'Application Error - Process cannot be updated.') end\;
   select case when ifnull(old.{param_user_attrib},'')<>ifnull(NEW.{param_user_attrib},'') then raise(FAIL,'Application Error - Attribute cannot be updated.') end\;
 
-  select case when not exists(select * from {schema}_{param} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib} and {is_param_user}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_user} in {param}') end\;
+  select case when not exists(select * from {schema}_{param__tbl} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib} and {is_param_user}=1) then raise(FAIL,'Application Error - Process parameter is not assigned for {param_user} in {param__tbl}') end\;
   select case when new.{param_user_val} = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select {param_type} from {schema}_{param} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib}))='{note}') and (cast(new.{param_user_val} as float)<>new.{param_user_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (upper((select {param_type} from {schema}_{param__tbl} where {param_process}=new.{param_user_process} and {param_attrib} = new.{param_user_attrib}))='{note__tbl}') and (cast(new.{param_user_val} as float)<>new.{param_user_val}) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_{param_user}_after_update after update on {schema}_{param_user}
@@ -415,31 +415,31 @@ begin
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************{param}***************/
+/***************{param__tbl}***************/
 
-create trigger {schema}_{param}_after_insert after insert on {schema}_{param}
+create trigger {schema}_{param__tbl}_after_insert after insert on {schema}_{param__tbl}
 begin
-  update {schema}_{param} set 
+  update {schema}_{param__tbl} set 
     {param_euser}     = (select context from jsharmony_meta limit 1),
     {param_etstmp} = datetime('now','localtime'),
     {param_muser}     = (select context from jsharmony_meta limit 1),
     {param_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%{log_audit_insert}("{schema}_{param}","new.{param_id}","{param_id}")%%%
+  %%%{log_audit_insert}("{schema}_{param__tbl}","new.{param_id}","{param_id}")%%%
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_{param}_before_update before update on {schema}_{param}
+create trigger {schema}_{param__tbl}_before_update before update on {schema}_{param__tbl}
 begin
   select case when ifnull(old.{param_id},'')<>ifnull(NEW.{param_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
 end;
 
-create trigger {schema}_{param}_after_update after update on {schema}_{param}
+create trigger {schema}_{param__tbl}_after_update after update on {schema}_{param__tbl}
 begin
-  %%%{log_audit_update_mult}("{schema}_{param}","old.{param_id}",["{param_id}","{param_process}","{param_attrib}","{param_desc}","{param_type}","{code_name}","{is_param_app}","{is_param_user}","{is_param_sys}"])%%%
+  %%%{log_audit_update_mult}("{schema}_{param__tbl}","old.{param_id}",["{param_id}","{param_process}","{param_attrib}","{param_desc}","{param_type}","{code_name}","{is_param_app}","{is_param_user}","{is_param_sys}"])%%%
   
-  update {schema}_{param} set 
+  update {schema}_{param__tbl} set 
     {param_muser}     = (select context from jsharmony_meta limit 1),
     {param_mtstmp} = datetime('now','localtime')
     where {param_id} = new.{param_id} and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
@@ -447,38 +447,38 @@ begin
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_{param}_delete before delete on {schema}_{param}
+create trigger {schema}_{param__tbl}_delete before delete on {schema}_{param__tbl}
 begin
-  %%%{log_audit_delete_mult}("{schema}_{param}","old.{param_id}",["{param_id}","{param_process}","{param_attrib}","{param_desc}","{param_type}","{code_name}","{is_param_app}","{is_param_user}","{is_param_sys}"])%%%
+  %%%{log_audit_delete_mult}("{schema}_{param__tbl}","old.{param_id}",["{param_id}","{param_process}","{param_attrib}","{param_desc}","{param_type}","{code_name}","{is_param_app}","{is_param_user}","{is_param_sys}"])%%%
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************{help}***************/
+/***************{help__tbl}***************/
 
-create trigger {schema}_{help}_after_insert after insert on {schema}_{help}
+create trigger {schema}_{help__tbl}_after_insert after insert on {schema}_{help__tbl}
 begin
-  update {schema}_{help} set 
+  update {schema}_{help__tbl} set 
     {help_euser}     = (select context from jsharmony_meta limit 1),
     {help_etstmp} = datetime('now','localtime'),
     {help_muser}     = (select context from jsharmony_meta limit 1),
     {help_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%{log_audit_insert}("{schema}_{help}","new.{help_id}","{help_id}","null","null","(select {help_target_desc} from {schema}_{help_target} where {help_target_code}=new.{help_target_code})")%%%
+  %%%{log_audit_insert}("{schema}_{help__tbl}","new.{help_id}","{help_id}","null","null","(select {help_target_desc} from {schema}_{help_target} where {help_target_code}=new.{help_target_code})")%%%
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_{help}_before_update before update on {schema}_{help}
+create trigger {schema}_{help__tbl}_before_update before update on {schema}_{help__tbl}
 begin
   select case when ifnull(old.{help_id},'')<>ifnull(NEW.{help_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
   select case when ifnull(old.{help_target_code},'')<>ifnull(NEW.{help_target_code},'') then raise(FAIL,'Application Error - {help_target} Code cannot be updated.') end\;
 end;
 
-create trigger {schema}_{help}_after_update after update on {schema}_{help}
+create trigger {schema}_{help__tbl}_after_update after update on {schema}_{help__tbl}
 begin
-  %%%{log_audit_update_mult}("{schema}_{help}","old.{help_id}",["{help_id}","{help_target_code}","{help_title}","{help_text}","{help_seq}","{help_listing_main}","{help_listing_client}"],"null","null","(select {help_target_desc} from {schema}_{help_target} where {help_target_code}=new.{help_target_code})")%%%
+  %%%{log_audit_update_mult}("{schema}_{help__tbl}","old.{help_id}",["{help_id}","{help_target_code}","{help_title}","{help_text}","{help_seq}","{help_listing_main}","{help_listing_client}"],"null","null","(select {help_target_desc} from {schema}_{help_target} where {help_target_code}=new.{help_target_code})")%%%
 
-  update {schema}_{help} set 
+  update {schema}_{help__tbl} set 
     {help_muser}     = (select context from jsharmony_meta limit 1),
     {help_mtstmp} = datetime('now','localtime')
     where {help_id} = new.{help_id} and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
@@ -486,9 +486,9 @@ begin
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_{help}_delete before delete on {schema}_{help}
+create trigger {schema}_{help__tbl}_delete before delete on {schema}_{help__tbl}
 begin
-  %%%{log_audit_delete_mult}("{schema}_{help}","old.{help_id}",["{help_id}","{help_target_code}","{help_title}","{help_text}","{help_seq}","{help_listing_main}","{help_listing_client}"],"null","null","(select {help_target_desc} from {schema}_{help_target} where {help_target_code}=old.{help_target_code})")%%%
+  %%%{log_audit_delete_mult}("{schema}_{help__tbl}","old.{help_id}",["{help_id}","{help_target_code}","{help_title}","{help_text}","{help_seq}","{help_listing_main}","{help_listing_client}"],"null","null","(select {help_target_desc} from {schema}_{help_target} where {help_target_code}=old.{help_target_code})")%%%
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
@@ -551,31 +551,31 @@ begin
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-/***************{txt}***************/
+/***************{txt__tbl}***************/
 
-create trigger {schema}_{txt}_after_insert after insert on {schema}_{txt}
+create trigger {schema}_{txt__tbl}_after_insert after insert on {schema}_{txt__tbl}
 begin
-  update {schema}_{txt} set 
+  update {schema}_{txt__tbl} set 
     {txt_euser}     = (select context from jsharmony_meta limit 1),
     {txt_etstmp} = datetime('now','localtime'),
     {txt_muser}     = (select context from jsharmony_meta limit 1),
     {txt_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 
-  %%%{log_audit_insert}("{schema}_{txt}","new.{txt_id}","{txt_id}")%%%
+  %%%{log_audit_insert}("{schema}_{txt__tbl}","new.{txt_id}","{txt_id}")%%%
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_{txt}_before_update before update on {schema}_{txt}
+create trigger {schema}_{txt__tbl}_before_update before update on {schema}_{txt__tbl}
 begin
   select case when ifnull(old.{txt_id},'')<>ifnull(NEW.{txt_id},'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
 end;
 
-create trigger {schema}_{txt}_after_update after update on {schema}_{txt}
+create trigger {schema}_{txt__tbl}_after_update after update on {schema}_{txt__tbl}
 begin
-  %%%{log_audit_update_mult}("{schema}_{txt}","old.{txt_id}",["{txt_id}","{txt_process}","{txt_attrib}","{txt_type}","{txt_title}","{txt_body}","{txt_bcc}","{txt_desc}"])%%%
+  %%%{log_audit_update_mult}("{schema}_{txt__tbl}","old.{txt_id}",["{txt_id}","{txt_process}","{txt_attrib}","{txt_type}","{txt_title}","{txt_body}","{txt_bcc}","{txt_desc}"])%%%
 
-  update {schema}_{txt} set 
+  update {schema}_{txt__tbl} set 
     {txt_muser}     = (select context from jsharmony_meta limit 1),
     {txt_mtstmp} = datetime('now','localtime')
     where {txt_id} = new.{txt_id} and exists(select * from jsharmony_meta where {audit_seq} is not null)\; 
@@ -583,9 +583,9 @@ begin
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
-create trigger {schema}_{txt}_delete before delete on {schema}_{txt}
+create trigger {schema}_{txt__tbl}_delete before delete on {schema}_{txt__tbl}
 begin
-  %%%{log_audit_delete_mult}("{schema}_{txt}","old.{txt_id}",["{txt_id}","{txt_process}","{txt_attrib}","{txt_type}","{txt_title}","{txt_body}","{txt_bcc}","{txt_desc}"])%%%
+  %%%{log_audit_delete_mult}("{schema}_{txt__tbl}","old.{txt_id}",["{txt_id}","{txt_process}","{txt_attrib}","{txt_type}","{txt_title}","{txt_body}","{txt_bcc}","{txt_desc}"])%%%
   update jsharmony_meta set {audit_seq} = null\;
 end;
 
@@ -613,21 +613,21 @@ end;
 
 
 
-/***************{queue}***************/
+/***************{queue__tbl}***************/
 
-create trigger {schema}_{queue}_after_insert after insert on {schema}_{queue}
+create trigger {schema}_{queue__tbl}_after_insert after insert on {schema}_{queue__tbl}
 begin
-  update {schema}_{queue} set 
+  update {schema}_{queue__tbl} set 
     {queue_euser}     = (select context from jsharmony_meta limit 1),
     {queue_etstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
 end;
 
-/***************{job}***************/
+/***************{job__tbl}***************/
 
-create trigger {schema}_{job}_after_insert after insert on {schema}_{job}
+create trigger {schema}_{job__tbl}_after_insert after insert on {schema}_{job__tbl}
 begin
-  update {schema}_{job} set 
+  update {schema}_{job__tbl} set 
     {job_user}     = (select context from jsharmony_meta limit 1),
     {job_etstmp} = datetime('now','localtime')
     where rowid = new.rowid\;
@@ -713,11 +713,11 @@ begin
     where rowid = new.rowid\;
 end;
 
-/***************{version}***************/
+/***************{version__tbl}***************/
 
-create trigger {schema}_{version}_after_insert after insert on {schema}_{version}
+create trigger {schema}_{version__tbl}_after_insert after insert on {schema}_{version__tbl}
 begin
-  update {schema}_{version} set 
+  update {schema}_{version__tbl} set 
     {version_euser}     = (select context from jsharmony_meta limit 1),
     {version_etstmp} = datetime('now','localtime'),
     {version_muser}     = (select context from jsharmony_meta limit 1),
@@ -725,9 +725,9 @@ begin
     where rowid = new.rowid\;
 end;
 
-create trigger {schema}_{version}_after_update after update on {schema}_{version}
+create trigger {schema}_{version__tbl}_after_update after update on {schema}_{version__tbl}
 begin
-  update {schema}_{version} set 
+  update {schema}_{version__tbl} set 
     {version_muser}     = (select context from jsharmony_meta limit 1),
     {version_mtstmp} = datetime('now','localtime')
     where rowid = new.rowid\;

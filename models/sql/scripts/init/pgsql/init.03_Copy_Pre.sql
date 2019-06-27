@@ -1,1 +1,1 @@
-ALTER TABLE {schema}.{menu} DROP CONSTRAINT {menu}_{menu_id_parent}_fkey;
+ALTER TABLE {schema}.{menu__tbl} DROP CONSTRAINT {menu__tbl}_{menu_id_parent}_fkey;

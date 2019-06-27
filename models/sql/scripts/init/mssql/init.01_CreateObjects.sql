@@ -83,17 +83,17 @@ DECLARE @{is_param_sys} BIT
   SELECT @rslt = NULL
   SELECT @{param_type} = NULL
   
-  SELECT @{param_type} = {param}.{param_type},
-         @{code_name} = {param}.{code_name},
-         @{is_param_app} = {param}.{is_param_app},
-         @{is_param_user} = {param}.{is_param_user},
-         @{is_param_sys} = {param}.{is_param_sys}
-    FROM {schema}.{param}
-   WHERE {param}.{param_process} = {@in_process}
-     AND {param}.{param_attrib} = {@in_attrib}      
+  SELECT @{param_type} = {param__tbl}.{param_type},
+         @{code_name} = {param__tbl}.{code_name},
+         @{is_param_app} = {param__tbl}.{is_param_app},
+         @{is_param_user} = {param__tbl}.{is_param_user},
+         @{is_param_sys} = {param__tbl}.{is_param_sys}
+    FROM {schema}.{param__tbl}
+   WHERE {param__tbl}.{param_process} = {@in_process}
+     AND {param__tbl}.{param_attrib} = {@in_attrib}      
 
   IF @{param_type} IS NULL
-    RETURN 'Process parameter '+{@in_process}+'.'+{@in_attrib}+' is not defined in {param}'
+    RETURN 'Process parameter '+{@in_process}+'.'+{@in_attrib}+' is not defined in {param__tbl}'
   
   IF {@in_table} NOT IN ('{param_app}','{param_user}','{param_sys}')
     RETURN 'Table '+{@in_table} + ' is not defined'
@@ -108,7 +108,7 @@ DECLARE @{is_param_sys} BIT
   IF ISNULL({@in_val},'') = ''
     RETURN 'Value has to be present'
 
-  IF @{param_type}='{note}' AND ISNUMERIC({@in_val})=0
+  IF @{param_type}='{note__tbl}' AND ISNUMERIC({@in_val})=0
     RETURN 'Value '+{@in_val}+' is not numeric'
 
   IF ISNULL(@{code_name},'') != ''
@@ -181,7 +181,7 @@ BEGIN
 DECLARE @rslt BIT = 0
 
   select top(1) @rslt=1
-    from {schema}.{doc}
+    from {schema}.{doc__tbl}
    where {doc_scope} = {@tbl}
      and {doc_scope_id} = {@id};	 
 
@@ -223,7 +223,7 @@ BEGIN
 DECLARE @rslt BIT = 0
 
   select top(1) @rslt=1
-    from {schema}.{note}
+    from {schema}.{note__tbl}
    where {note_scope} = {@tbl}
      and {note_scope_id} = {@id};	 
 
@@ -317,7 +317,7 @@ BEGIN
 DECLARE @rslt NVARCHAR(MAX) = NULL
 
   SELECT @rslt = {param_desc}
-    FROM {schema}.{param}
+    FROM {schema}.{param__tbl}
    WHERE {param_process} = {@in_param_process}
      AND {param_attrib} = {@in_param_attrib}
 
@@ -939,7 +939,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[{param}](
+CREATE TABLE [jsharmony].[{param__tbl}](
 	[{param_process}] [nvarchar](32) NOT NULL,
 	[{param_attrib}] [nvarchar](16) NOT NULL,
 	[{param_desc}] [nvarchar](255) NOT NULL,
@@ -954,7 +954,7 @@ CREATE TABLE [jsharmony].[{param}](
 	[{param_mtstmp}] [datetime2](7) NOT NULL,
 	[{param_muser}] [nvarchar](20) NOT NULL,
 	[{param_snotes}] [nvarchar](max) NULL,
- CONSTRAINT [PK_{param}] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_{param__tbl}] PRIMARY KEY CLUSTERED 
 (
 	[{param_process}] ASC,
 	[{param_attrib}] ASC
@@ -977,7 +977,7 @@ SELECT distinct
       ,NULL {code_code}
       ,NULL {code_end_dt}
       ,NULL {code_end_reason}
-  FROM {schema}.{param}
+  FROM {schema}.{param__tbl}
  where {is_param_user} = 1
 
 GO
@@ -985,7 +985,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[{audit}](
+CREATE TABLE [jsharmony].[{audit__tbl}](
 	[{audit_seq}] [bigint] IDENTITY(1,1) NOT NULL,
 	[{audit_table_name}] [varchar](32) NOT NULL,
 	[{audit_table_id}] [bigint] NOT NULL,
@@ -998,7 +998,7 @@ CREATE TABLE [jsharmony].[{audit}](
 	[{audit_ref_name}] [varchar](32) NULL,
 	[{audit_ref_id}] [bigint] NULL,
 	[{audit_subject}] [nvarchar](255) NULL,
- CONSTRAINT [PK_{audit}] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_{audit__tbl}] PRIMARY KEY CLUSTERED 
 (
 	[{audit_seq}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1037,23 +1037,23 @@ GO
 
 CREATE VIEW [jsharmony].[{v_audit_detail}]
 AS
-SELECT  {audit}.{audit_seq},
-        {audit}.{cust_id},
-        {audit}.{item_id},
-        {audit}.{audit_table_name},
-        {audit}.{audit_table_id},
-        {audit}.{audit_op},
-        {audit}.{audit_user},
-			  {schema}.{my_db_user_fmt}({audit}.{audit_user}) {sys_user_name},
-			  {audit}.{db_id},
-			  {audit}.{audit_tstmp},
-			  {audit}.{audit_ref_name},
-			  {audit}.{audit_ref_id},
-			  {audit}.{audit_subject},
+SELECT  {audit__tbl}.{audit_seq},
+        {audit__tbl}.{cust_id},
+        {audit__tbl}.{item_id},
+        {audit__tbl}.{audit_table_name},
+        {audit__tbl}.{audit_table_id},
+        {audit__tbl}.{audit_op},
+        {audit__tbl}.{audit_user},
+			  {schema}.{my_db_user_fmt}({audit__tbl}.{audit_user}) {sys_user_name},
+			  {audit__tbl}.{db_id},
+			  {audit__tbl}.{audit_tstmp},
+			  {audit__tbl}.{audit_ref_name},
+			  {audit__tbl}.{audit_ref_id},
+			  {audit__tbl}.{audit_subject},
         {audit_detail}.{audit_column_name}, 
 			  {audit_detail}.{audit_column_val}
-FROM          {schema}.{audit} 
-LEFT OUTER JOIN {schema}.{audit_detail} ON {audit}.{audit_seq} = {audit_detail}.{audit_seq}
+FROM          {schema}.{audit__tbl} 
+LEFT OUTER JOIN {schema}.{audit_detail} ON {audit__tbl}.{audit_seq} = {audit_detail}.{audit_seq}
 
 
 
@@ -1078,7 +1078,7 @@ SELECT distinct
       ,NULL {code_code}
       ,NULL {code_end_dt}
       ,NULL {code_end_reason}
-  FROM {schema}.{param}
+  FROM {schema}.{param__tbl}
  where {is_param_sys} = 1
 
 GO
@@ -1103,7 +1103,7 @@ SELECT NULL {code_seq}
       ,NULL {code_muser}
       ,NULL {code_snotes}
       ,NULL {code_notes}
-  FROM {schema}.{param}
+  FROM {schema}.{param__tbl}
  WHERE {is_param_app} = 1
 GO
 SET ANSI_NULLS ON
@@ -1128,7 +1128,7 @@ SELECT NULL {code_seq}
       ,NULL {code_muser}
       ,NULL {code_snotes}
       ,NULL {code_notes}
-  FROM {schema}.{param}
+  FROM {schema}.{param__tbl}
  WHERE {is_param_user} = 1
 
 GO
@@ -1154,7 +1154,7 @@ SELECT NULL {code_seq}
       ,NULL {code_muser}
       ,NULL {code_snotes}
       ,NULL {code_notes}
-  FROM {schema}.{param}
+  FROM {schema}.{param__tbl}
  WHERE {is_param_sys} = 1
 
 GO
@@ -1197,9 +1197,9 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[{number}](
+CREATE TABLE [jsharmony].[{number__tbl}](
 	[{number_val}] [smallint] NOT NULL,
- CONSTRAINT [PK_{number}] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_{number__tbl}] PRIMARY KEY CLUSTERED 
 (
 	[{number_val}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1221,7 +1221,7 @@ CREATE view [jsharmony].[{v_month}] as
 select {number_val} {month_val},
        right('0'+convert(nvarchar(50),{number_val}),2) {month_txt2},
        right('0'+convert(nvarchar(50),{number_val}),2) {month_txt}
-  from {schema}.{number}
+  from {schema}.{number__tbl}
  where {number_val} <=12;
 
 
@@ -1242,7 +1242,7 @@ GO
 CREATE view [jsharmony].[{v_year}] as
 select datepart({year_txt},sysdatetime())+{number_val}-1 {year_val},
        datepart({year_txt},sysdatetime())+{number_val}-1 {year_txt}
-  from {schema}.{number}
+  from {schema}.{number__tbl}
  where {number_val} <=10;
 
 
@@ -1320,8 +1320,8 @@ GO
 
 
 CREATE VIEW [jsharmony].[{v_param_cur}] AS
- SELECT {param}.{param_process} AS {param_cur_process}, 
-        {param}.{param_attrib} AS {param_cur_attrib}, 
+ SELECT {param__tbl}.{param_process} AS {param_cur_process}, 
+        {param__tbl}.{param_attrib} AS {param_cur_attrib}, 
 		    CASE WHEN {param_user_val} IS NULL OR {param_user_val} = '' 
 		         THEN CASE WHEN {param_app_val} IS NULL OR {param_app_val} = '' 
 			                 THEN {param_sys_val} 
@@ -1332,10 +1332,10 @@ CREATE VIEW [jsharmony].[{v_param_cur}] AS
 			                 THEN '{param_sys}' 
 					             ELSE '{param_app}' END 
 			  ELSE convert(varchar,{param_user}.{sys_user_id}) END AS {param_cur_source} 
-   FROM {schema}.{param} 
-   LEFT OUTER JOIN {schema}.{param_sys} ON {param}.{param_process} = {param_sys}.{param_sys_process} AND {param}.{param_attrib} = {param_sys}.{param_sys_attrib} 
-   LEFT OUTER JOIN {schema}.{param_app} ON {param}.{param_process} = {param_app}.{param_app_process} AND {param}.{param_attrib} = {param_app}.{param_app_attrib} 
-   LEFT OUTER JOIN {schema}.{param_user} ON {param}.{param_process} = {param_user}.{param_user_process} AND {param}.{param_attrib} = {param_user}.{param_user_attrib} AND {param_user}.{sys_user_id} = {schema}.{my_sys_user_id}();
+   FROM {schema}.{param__tbl} 
+   LEFT OUTER JOIN {schema}.{param_sys} ON {param__tbl}.{param_process} = {param_sys}.{param_sys_process} AND {param__tbl}.{param_attrib} = {param_sys}.{param_sys_attrib} 
+   LEFT OUTER JOIN {schema}.{param_app} ON {param__tbl}.{param_process} = {param_app}.{param_app_process} AND {param__tbl}.{param_attrib} = {param_app}.{param_app_attrib} 
+   LEFT OUTER JOIN {schema}.{param_user} ON {param__tbl}.{param_process} = {param_user}.{param_user_process} AND {param__tbl}.{param_attrib} = {param_user}.{param_user_attrib} AND {param_user}.{sys_user_id} = {schema}.{my_sys_user_id}();
 
 
 
@@ -1345,7 +1345,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[{doc}](
+CREATE TABLE [jsharmony].[{doc__tbl}](
 	[{doc_id}] [bigint] IDENTITY(1,1) NOT NULL,
 	[{doc_scope}] [nvarchar](8) NOT NULL,
 	[{doc_scope_id}] [bigint] NOT NULL,
@@ -1366,7 +1366,7 @@ CREATE TABLE [jsharmony].[{doc}](
 	[{doc_sync_tstmp}] [datetime2](7) NULL,
 	[{doc_snotes}] [nvarchar](255) NULL,
 	[{doc_sync_id}] [bigint] NULL,
- CONSTRAINT [PK_{doc}] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_{doc__tbl}] PRIMARY KEY CLUSTERED 
 (
 	[{doc_id}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1399,7 +1399,7 @@ SELECT {doc_id}
       ,{doc_sync_tstmp}
       ,{doc_snotes}
       ,{doc_sync_id}
-  FROM {schema}.{doc}
+  FROM {schema}.{doc__tbl}
 GO
 SET ANSI_NULLS ON
 GO
@@ -1428,7 +1428,7 @@ GO
 
 
 CREATE view [jsharmony].[{v_app_info}] as
-select NAME.{param_cur_val} {app_name},
+select NAME.{param_cur_val} {app_title},
        ADDR.{param_cur_val} {app_addr},
 	     CITY.{param_cur_val} {app_city},
 	     [STATE].{param_cur_val} {app_state},
@@ -1504,7 +1504,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[{menu}](
+CREATE TABLE [jsharmony].[{menu__tbl}](
 	[{menu_id_auto}] [bigint] IDENTITY(1,1) NOT NULL,
 	[{menu_group}] [char](1) NOT NULL,
 	[{menu_id}] [bigint] NOT NULL,
@@ -1519,20 +1519,20 @@ CREATE TABLE [jsharmony].[{menu}](
 	[{menu_image}] [nvarchar](255) NULL,
 	[{menu_snotes}] [nvarchar](255) NULL,
 	[{menu_subcmd}] [varchar](255) NULL,
- CONSTRAINT [PK_{menu}] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_{menu__tbl}] PRIMARY KEY CLUSTERED 
 (
 	[{menu_id_auto}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_{menu}_{menu_desc}] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_{menu__tbl}_{menu_desc}] UNIQUE NONCLUSTERED 
 (
 	[{menu_id_parent}] ASC,
 	[{menu_desc}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_{menu}_{menu_id}] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_{menu__tbl}_{menu_id}] UNIQUE NONCLUSTERED 
 (
 	[{menu_id}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_{menu}_{menu_name}] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_{menu__tbl}_{menu_name}] UNIQUE NONCLUSTERED 
 (
 	[{menu_name}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1580,22 +1580,22 @@ SELECT {schema}.{cust_menu_role}.{cust_menu_role_id},
                {schema}.{cust_role}.{cust_role_sts}, 
                {schema}.{cust_role}.{cust_role_name}, 
                {schema}.{cust_role}.{cust_role_desc}, 
-               {schema}.{menu}.{menu_id_auto}, 
-			   {schema}.{menu}.{menu_group}, 
-			   {schema}.{menu}.{menu_id}, 
-			   {schema}.{menu}.{menu_sts}, 
-			   {schema}.{menu}.{menu_id_parent}, 
-			   {schema}.{menu}.{menu_name}, 
-               {schema}.{menu}.{menu_seq}, 
-			   {schema}.{menu}.{menu_desc}, 
-			   {schema}.{menu}.{menu_desc_ext}, 
-			   {schema}.{menu}.{menu_desc_ext2}, 
-			   {schema}.{menu}.{menu_cmd}, 
-			   {schema}.{menu}.{menu_image}, 
-			   {schema}.{menu}.{menu_snotes}, 
-               {schema}.{menu}.{menu_subcmd}
+               {schema}.{menu__tbl}.{menu_id_auto}, 
+			   {schema}.{menu__tbl}.{menu_group}, 
+			   {schema}.{menu__tbl}.{menu_id}, 
+			   {schema}.{menu__tbl}.{menu_sts}, 
+			   {schema}.{menu__tbl}.{menu_id_parent}, 
+			   {schema}.{menu__tbl}.{menu_name}, 
+               {schema}.{menu__tbl}.{menu_seq}, 
+			   {schema}.{menu__tbl}.{menu_desc}, 
+			   {schema}.{menu__tbl}.{menu_desc_ext}, 
+			   {schema}.{menu__tbl}.{menu_desc_ext2}, 
+			   {schema}.{menu__tbl}.{menu_cmd}, 
+			   {schema}.{menu__tbl}.{menu_image}, 
+			   {schema}.{menu__tbl}.{menu_snotes}, 
+               {schema}.{menu__tbl}.{menu_subcmd}
           FROM {schema}.{cust_role} 
-		  LEFT OUTER JOIN {schema}.{menu} ON {schema}.{menu}.{menu_group} = 'C') AS M 
+		  LEFT OUTER JOIN {schema}.{menu__tbl} ON {schema}.{menu__tbl}.{menu_group} = 'C') AS M 
  INNER JOIN {schema}.{single} ON 1 = 1 
   LEFT OUTER JOIN {schema}.{cust_menu_role} ON {schema}.{cust_menu_role}.{cust_role_name} = M.{cust_role_name} AND {schema}.{cust_menu_role}.{menu_id} = M.{menu_id};
 
@@ -1723,22 +1723,22 @@ SELECT {schema}.{sys_menu_role}.{sys_menu_role_id},
                {schema}.{sys_role}.{sys_role_sts}, 
                {schema}.{sys_role}.{sys_role_name}, 
                {schema}.{sys_role}.{sys_role_desc}, 
-               {schema}.{menu}.{menu_id_auto}, 
-			   {schema}.{menu}.{menu_group}, 
-			   {schema}.{menu}.{menu_id}, 
-			   {schema}.{menu}.{menu_sts}, 
-			   {schema}.{menu}.{menu_id_parent}, 
-			   {schema}.{menu}.{menu_name}, 
-               {schema}.{menu}.{menu_seq}, 
-			   {schema}.{menu}.{menu_desc}, 
-			   {schema}.{menu}.{menu_desc_ext}, 
-			   {schema}.{menu}.{menu_desc_ext2}, 
-			   {schema}.{menu}.{menu_cmd}, 
-			   {schema}.{menu}.{menu_image}, 
-			   {schema}.{menu}.{menu_snotes}, 
-               {schema}.{menu}.{menu_subcmd}
+               {schema}.{menu__tbl}.{menu_id_auto}, 
+			   {schema}.{menu__tbl}.{menu_group}, 
+			   {schema}.{menu__tbl}.{menu_id}, 
+			   {schema}.{menu__tbl}.{menu_sts}, 
+			   {schema}.{menu__tbl}.{menu_id_parent}, 
+			   {schema}.{menu__tbl}.{menu_name}, 
+               {schema}.{menu__tbl}.{menu_seq}, 
+			   {schema}.{menu__tbl}.{menu_desc}, 
+			   {schema}.{menu__tbl}.{menu_desc_ext}, 
+			   {schema}.{menu__tbl}.{menu_desc_ext2}, 
+			   {schema}.{menu__tbl}.{menu_cmd}, 
+			   {schema}.{menu__tbl}.{menu_image}, 
+			   {schema}.{menu__tbl}.{menu_snotes}, 
+               {schema}.{menu__tbl}.{menu_subcmd}
           FROM {schema}.{sys_role} 
-		  LEFT OUTER JOIN {schema}.{menu} ON {schema}.{menu}.{menu_group} = 'S') AS M 
+		  LEFT OUTER JOIN {schema}.{menu__tbl} ON {schema}.{menu__tbl}.{menu_group} = 'S') AS M 
  INNER JOIN {schema}.{single} ON 1 = 1 
   LEFT OUTER JOIN {schema}.{sys_menu_role} ON {schema}.{sys_menu_role}.{sys_role_name} = M.{sys_role_name} AND {schema}.{sys_menu_role}.{menu_id} = M.{menu_id};
 
@@ -1979,9 +1979,9 @@ GO
 
 
 CREATE VIEW [jsharmony].[{v_param}] AS
-SELECT {param}.*,
+SELECT {param__tbl}.*,
 	   {schema}.{log_audit_info}({param_etstmp}, {param_euser}, {param_mtstmp}, {param_muser}) {param_info}
-  FROM {schema}.{param};
+  FROM {schema}.{param__tbl};
 
 
 
@@ -2016,7 +2016,7 @@ SELECT distinct
       ,NULL {code_code}
       ,NULL {code_end_dt}
       ,NULL {code_end_reason}
-  FROM {schema}.{param}
+  FROM {schema}.{param__tbl}
  where {is_param_app} = 1
 GO
 SET ANSI_NULLS ON
@@ -2156,7 +2156,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ARITHABORT ON
 GO
-CREATE TABLE [jsharmony].[{help}](
+CREATE TABLE [jsharmony].[{help__tbl}](
 	[{help_id}] [bigint] IDENTITY(1,1) NOT NULL,
 	[{help_target_code}] [varchar](50) NULL,
 	[{help_title}] [nvarchar](70) NOT NULL,
@@ -2169,15 +2169,15 @@ CREATE TABLE [jsharmony].[{help}](
 	[{help_seq}] [int] NULL,
 	[{help_listing_main}] [bit] NOT NULL,
 	[{help_listing_client}] [bit] NOT NULL,
- CONSTRAINT [PK_{help}] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_{help__tbl}] PRIMARY KEY CLUSTERED 
 (
 	[{help_id}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_{help}_{help_title}] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_{help__tbl}_{help_title}] UNIQUE NONCLUSTERED 
 (
 	[{help_title}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_{help}_{help_unq_code}] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_{help__tbl}_{help_unq_code}] UNIQUE NONCLUSTERED 
 (
 	[{help_unq_code}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2209,7 +2209,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[{note}](
+CREATE TABLE [jsharmony].[{note__tbl}](
 	[{note_id}] [bigint] IDENTITY(1,1) NOT NULL,
 	[{note_scope}] [nvarchar](8) NOT NULL,
 	[{note_scope_id}] [bigint] NOT NULL,
@@ -2225,7 +2225,7 @@ CREATE TABLE [jsharmony].[{note}](
 	[{note_sync_tstmp}] [datetime2](7) NULL,
 	[{note_snotes}] [nvarchar](255) NULL,
 	[{note_sync_id}] [bigint] NULL,
- CONSTRAINT [PK_{note}] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_{note__tbl}] PRIMARY KEY CLUSTERED 
 (
 	[{note_id}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2283,7 +2283,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[{queue}](
+CREATE TABLE [jsharmony].[{queue__tbl}](
 	[{queue_id}] [bigint] IDENTITY(1,1) NOT NULL,
 	[{queue_etstmp}] [datetime2](7) NOT NULL,
 	[{queue_euser}] [nvarchar](20) NOT NULL,
@@ -2293,7 +2293,7 @@ CREATE TABLE [jsharmony].[{queue}](
 	[{queue_rslt_tstmp}] [datetime2](7) NULL,
 	[{queue_rslt_user}] [nvarchar](20) NULL,
 	[{queue_snotes}] [nvarchar](max) NULL,
- CONSTRAINT [PK_{queue}] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_{queue__tbl}] PRIMARY KEY CLUSTERED 
 (
 	[{queue_id}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2303,7 +2303,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[{job}](
+CREATE TABLE [jsharmony].[{job__tbl}](
 	[{job_id}] [bigint] IDENTITY(1,1) NOT NULL,
 	[{job_etstmp}] [datetime2](7) NOT NULL,
 	[{job_user}] [nvarchar](20) NOT NULL,
@@ -2316,7 +2316,7 @@ CREATE TABLE [jsharmony].[{job}](
 	[{job_rslt_tstmp}] [datetime2](7) NULL,
 	[{job_rslt_user}] [nvarchar](20) NULL,
 	[{job_snotes}] [nvarchar](max) NULL,
- CONSTRAINT [PK_{job}] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_{job__tbl}] PRIMARY KEY CLUSTERED 
 (
 	[{job_id}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2413,7 +2413,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[script](
+CREATE TABLE [jsharmony].[script__tbl](
 	[{script_name}] [nvarchar](32) NOT NULL,
 	[{script_txt}] [nvarchar](max) NULL,
  CONSTRAINT [PK_SCRIPT] PRIMARY KEY CLUSTERED 
@@ -2478,7 +2478,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[{txt}](
+CREATE TABLE [jsharmony].[{txt__tbl}](
 	[{txt_process}] [nvarchar](32) NOT NULL,
 	[{txt_attrib}] [nvarchar](32) NOT NULL,
 	[{txt_type}] [nvarchar](8) NOT NULL,
@@ -2992,7 +2992,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[{version}](
+CREATE TABLE [jsharmony].[{version__tbl}](
 	[{version_id}] [bigint] IDENTITY(1,1) NOT NULL,
 	[{version_component}] [nvarchar](50) NOT NULL,
 	[{version_no_major}] [int] NOT NULL,
@@ -3006,7 +3006,7 @@ CREATE TABLE [jsharmony].[{version}](
 	[{version_mtstmp}] [datetime2](7) NOT NULL,
 	[{version_muser}] [nvarchar](20) NOT NULL,
 	[{version_snotes}] [nvarchar](255) NULL,
- CONSTRAINT [UNQ_{version}] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [UNQ_{version__tbl}] PRIMARY KEY CLUSTERED 
 (
 	[{version_no_major}] ASC,
 	[{version_no_minor}] ASC,
@@ -3020,14 +3020,14 @@ CREATE NONCLUSTERED INDEX [IX_{cust_user}_{cust_id}] ON [jsharmony].[{cust_user}
 	[{cust_id}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [IX_{doc}_{cust_id}] ON [jsharmony].[{doc}]
+CREATE NONCLUSTERED INDEX [IX_{doc__tbl}_{cust_id}] ON [jsharmony].[{doc__tbl}]
 (
 	[{cust_id}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-CREATE NONCLUSTERED INDEX [IX_{doc_scope}] ON [jsharmony].[{doc}]
+CREATE NONCLUSTERED INDEX [IX_{doc_scope}] ON [jsharmony].[{doc__tbl}]
 (
 	[{doc_scope}] ASC,
 	[{doc_scope_id}] ASC
@@ -3035,19 +3035,19 @@ CREATE NONCLUSTERED INDEX [IX_{doc_scope}] ON [jsharmony].[{doc}]
 GO
 SET ANSI_PADDING ON
 GO
-CREATE NONCLUSTERED INDEX [IX_{help}] ON [jsharmony].[{help}]
+CREATE NONCLUSTERED INDEX [IX_{help__tbl}] ON [jsharmony].[{help__tbl}]
 (
 	[{help_target_code}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-CREATE NONCLUSTERED INDEX [IX_{queue}_{queue_name}] ON [jsharmony].[{queue}]
+CREATE NONCLUSTERED INDEX [IX_{queue__tbl}_{queue_name}] ON [jsharmony].[{queue__tbl}]
 (
 	[{queue_name}] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-ALTER TABLE [jsharmony].[{audit}] ADD  CONSTRAINT [DF_{audit}_{db_id}]  DEFAULT ('0') FOR [{db_id}]
+ALTER TABLE [jsharmony].[{audit__tbl}] ADD  CONSTRAINT [DF_{audit__tbl}_{db_id}]  DEFAULT ('0') FOR [{db_id}]
 GO
 ALTER TABLE [jsharmony].[{cust_user}] ADD  CONSTRAINT [DF_{cust_user}_{sys_user_sts}]  DEFAULT (N'ACTIVE') FOR [{sys_user_sts}]
 GO
@@ -3065,27 +3065,27 @@ ALTER TABLE [jsharmony].[{cust_user}] ADD  CONSTRAINT [DF_{cust_user}_{sys_user_
 GO
 ALTER TABLE [jsharmony].[{cust_role}] ADD  CONSTRAINT [DF_{cust_role}_{cust_role_sts}]  DEFAULT ('ACTIVE') FOR [{cust_role_sts}]
 GO
-ALTER TABLE [jsharmony].[{doc}] ADD  CONSTRAINT [DF_{doc}_{doc_scope}]  DEFAULT (N'S') FOR [{doc_scope}]
+ALTER TABLE [jsharmony].[{doc__tbl}] ADD  CONSTRAINT [DF_{doc__tbl}_{doc_scope}]  DEFAULT (N'S') FOR [{doc_scope}]
 GO
-ALTER TABLE [jsharmony].[{doc}] ADD  CONSTRAINT [DF_{doc}_{doc_scope_id}]  DEFAULT ((0)) FOR [{doc_scope_id}]
+ALTER TABLE [jsharmony].[{doc__tbl}] ADD  CONSTRAINT [DF_{doc__tbl}_{doc_scope_id}]  DEFAULT ((0)) FOR [{doc_scope_id}]
 GO
-ALTER TABLE [jsharmony].[{doc}] ADD  CONSTRAINT [DF_{doc}_{cust_id}]  DEFAULT (NULL) FOR [{cust_id}]
+ALTER TABLE [jsharmony].[{doc__tbl}] ADD  CONSTRAINT [DF_{doc__tbl}_{cust_id}]  DEFAULT (NULL) FOR [{cust_id}]
 GO
-ALTER TABLE [jsharmony].[{doc}] ADD  CONSTRAINT [DF_{doc}_{item_id}]  DEFAULT (NULL) FOR [{item_id}]
+ALTER TABLE [jsharmony].[{doc__tbl}] ADD  CONSTRAINT [DF_{doc__tbl}_{item_id}]  DEFAULT (NULL) FOR [{item_id}]
 GO
-ALTER TABLE [jsharmony].[{doc}] ADD  CONSTRAINT [DF_{doc}_{doc_sts}]  DEFAULT (N'A') FOR [{doc_sts}]
+ALTER TABLE [jsharmony].[{doc__tbl}] ADD  CONSTRAINT [DF_{doc__tbl}_{doc_sts}]  DEFAULT (N'A') FOR [{doc_sts}]
 GO
-ALTER TABLE [jsharmony].[{doc}] ADD  CONSTRAINT [DF_{doc}_{doc_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{doc_etstmp}]
+ALTER TABLE [jsharmony].[{doc__tbl}] ADD  CONSTRAINT [DF_{doc__tbl}_{doc_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{doc_etstmp}]
 GO
-ALTER TABLE [jsharmony].[{doc}] ADD  CONSTRAINT [DF_{doc}_{doc_euser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{doc_euser}]
+ALTER TABLE [jsharmony].[{doc__tbl}] ADD  CONSTRAINT [DF_{doc__tbl}_{doc_euser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{doc_euser}]
 GO
-ALTER TABLE [jsharmony].[{doc}] ADD  CONSTRAINT [DF_{doc}_{doc_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{doc_mtstmp}]
+ALTER TABLE [jsharmony].[{doc__tbl}] ADD  CONSTRAINT [DF_{doc__tbl}_{doc_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{doc_mtstmp}]
 GO
-ALTER TABLE [jsharmony].[{doc}] ADD  CONSTRAINT [DF_{doc}_{doc_muser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{doc_muser}]
+ALTER TABLE [jsharmony].[{doc__tbl}] ADD  CONSTRAINT [DF_{doc__tbl}_{doc_muser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{doc_muser}]
 GO
-ALTER TABLE [jsharmony].[{doc}] ADD  CONSTRAINT [DF_{doc}_{doc_utstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{doc_utstmp}]
+ALTER TABLE [jsharmony].[{doc__tbl}] ADD  CONSTRAINT [DF_{doc__tbl}_{doc_utstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{doc_utstmp}]
 GO
-ALTER TABLE [jsharmony].[{doc}] ADD  CONSTRAINT [DF_{doc}_{doc_uuser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{doc_uuser}]
+ALTER TABLE [jsharmony].[{doc__tbl}] ADD  CONSTRAINT [DF_{doc__tbl}_{doc_uuser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{doc_uuser}]
 GO
 ALTER TABLE [jsharmony].[{code_app}] ADD  CONSTRAINT [DF_{code_app}_{code_app}_Edt]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{code_h_etstmp}]
 GO
@@ -3119,35 +3119,35 @@ ALTER TABLE [jsharmony].[{param_app}] ADD  CONSTRAINT [DF_{param_app}_{param_app
 GO
 ALTER TABLE [jsharmony].[{param_app}] ADD  CONSTRAINT [DF_{param_app}_{param_app}_MUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{param_app_muser}]
 GO
-ALTER TABLE [jsharmony].[{help}] ADD  CONSTRAINT [DF_{help}_{help_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{help_etstmp}]
+ALTER TABLE [jsharmony].[{help__tbl}] ADD  CONSTRAINT [DF_{help__tbl}_{help_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{help_etstmp}]
 GO
-ALTER TABLE [jsharmony].[{help}] ADD  CONSTRAINT [DF_{help}_{help_euser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{help_euser}]
+ALTER TABLE [jsharmony].[{help__tbl}] ADD  CONSTRAINT [DF_{help__tbl}_{help_euser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{help_euser}]
 GO
-ALTER TABLE [jsharmony].[{help}] ADD  CONSTRAINT [DF_{help}_{help_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{help_mtstmp}]
+ALTER TABLE [jsharmony].[{help__tbl}] ADD  CONSTRAINT [DF_{help__tbl}_{help_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{help_mtstmp}]
 GO
-ALTER TABLE [jsharmony].[{help}] ADD  CONSTRAINT [DF_{help}_{help_muser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{help_muser}]
+ALTER TABLE [jsharmony].[{help__tbl}] ADD  CONSTRAINT [DF_{help__tbl}_{help_muser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{help_muser}]
 GO
-ALTER TABLE [jsharmony].[{help}] ADD  CONSTRAINT [DF_{help}_{help_listing_main}]  DEFAULT ((1)) FOR [{help_listing_main}]
+ALTER TABLE [jsharmony].[{help__tbl}] ADD  CONSTRAINT [DF_{help__tbl}_{help_listing_main}]  DEFAULT ((1)) FOR [{help_listing_main}]
 GO
-ALTER TABLE [jsharmony].[{help}] ADD  CONSTRAINT [DF_{help}_{help_listing_client}]  DEFAULT ((1)) FOR [{help_listing_client}]
+ALTER TABLE [jsharmony].[{help__tbl}] ADD  CONSTRAINT [DF_{help__tbl}_{help_listing_client}]  DEFAULT ((1)) FOR [{help_listing_client}]
 GO
-ALTER TABLE [jsharmony].[{note}] ADD  CONSTRAINT [DF_{note}_{note_scope}]  DEFAULT (N'S') FOR [{note_scope}]
+ALTER TABLE [jsharmony].[{note__tbl}] ADD  CONSTRAINT [DF_{note__tbl}_{note_scope}]  DEFAULT (N'S') FOR [{note_scope}]
 GO
-ALTER TABLE [jsharmony].[{note}] ADD  CONSTRAINT [DF_{note}_{note_scope_id}]  DEFAULT ((0)) FOR [{note_scope_id}]
+ALTER TABLE [jsharmony].[{note__tbl}] ADD  CONSTRAINT [DF_{note__tbl}_{note_scope_id}]  DEFAULT ((0)) FOR [{note_scope_id}]
 GO
-ALTER TABLE [jsharmony].[{note}] ADD  CONSTRAINT [DF_{note}_{note_sts}]  DEFAULT ('A') FOR [{note_sts}]
+ALTER TABLE [jsharmony].[{note__tbl}] ADD  CONSTRAINT [DF_{note__tbl}_{note_sts}]  DEFAULT ('A') FOR [{note_sts}]
 GO
-ALTER TABLE [jsharmony].[{note}] ADD  CONSTRAINT [DF_{note}_{cust_id}]  DEFAULT (NULL) FOR [{cust_id}]
+ALTER TABLE [jsharmony].[{note__tbl}] ADD  CONSTRAINT [DF_{note__tbl}_{cust_id}]  DEFAULT (NULL) FOR [{cust_id}]
 GO
-ALTER TABLE [jsharmony].[{note}] ADD  CONSTRAINT [DF_{note}_{item_id}]  DEFAULT (NULL) FOR [{item_id}]
+ALTER TABLE [jsharmony].[{note__tbl}] ADD  CONSTRAINT [DF_{note__tbl}_{item_id}]  DEFAULT (NULL) FOR [{item_id}]
 GO
-ALTER TABLE [jsharmony].[{note}] ADD  CONSTRAINT [DF_{note}_{note_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{note_etstmp}]
+ALTER TABLE [jsharmony].[{note__tbl}] ADD  CONSTRAINT [DF_{note__tbl}_{note_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{note_etstmp}]
 GO
-ALTER TABLE [jsharmony].[{note}] ADD  CONSTRAINT [DF_{note}_{note_euser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{note_euser}]
+ALTER TABLE [jsharmony].[{note__tbl}] ADD  CONSTRAINT [DF_{note__tbl}_{note_euser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{note_euser}]
 GO
-ALTER TABLE [jsharmony].[{note}] ADD  CONSTRAINT [DF_{note}_{note_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{note_mtstmp}]
+ALTER TABLE [jsharmony].[{note__tbl}] ADD  CONSTRAINT [DF_{note__tbl}_{note_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{note_mtstmp}]
 GO
-ALTER TABLE [jsharmony].[{note}] ADD  CONSTRAINT [DF_{note}_{note_muser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{note_muser}]
+ALTER TABLE [jsharmony].[{note__tbl}] ADD  CONSTRAINT [DF_{note__tbl}_{note_muser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{note_muser}]
 GO
 ALTER TABLE [jsharmony].[{sys_user}] ADD  CONSTRAINT [DF_{sys_user}_{sys_user_sts}]  DEFAULT (N'ACTIVE') FOR [{sys_user_sts}]
 GO
@@ -3167,19 +3167,19 @@ ALTER TABLE [jsharmony].[{sys_user}] ADD  CONSTRAINT [DF__{sys_user}__{sys_user_
 GO
 ALTER TABLE [jsharmony].[{sys_user}] ADD  CONSTRAINT [DF__{sys_user}__{sys_user_hash}__597119F2]  DEFAULT ((0)) FOR [{sys_user_hash}]
 GO
-ALTER TABLE [jsharmony].[{param}] ADD  CONSTRAINT [DF_{param}_{is_param_app}]  DEFAULT ((0)) FOR [{is_param_app}]
+ALTER TABLE [jsharmony].[{param__tbl}] ADD  CONSTRAINT [DF_{param__tbl}_{is_param_app}]  DEFAULT ((0)) FOR [{is_param_app}]
 GO
-ALTER TABLE [jsharmony].[{param}] ADD  CONSTRAINT [DF_{param}_{is_param_user}]  DEFAULT ((0)) FOR [{is_param_user}]
+ALTER TABLE [jsharmony].[{param__tbl}] ADD  CONSTRAINT [DF_{param__tbl}_{is_param_user}]  DEFAULT ((0)) FOR [{is_param_user}]
 GO
-ALTER TABLE [jsharmony].[{param}] ADD  CONSTRAINT [DF_{param}_{is_param_sys}]  DEFAULT ((0)) FOR [{is_param_sys}]
+ALTER TABLE [jsharmony].[{param__tbl}] ADD  CONSTRAINT [DF_{param__tbl}_{is_param_sys}]  DEFAULT ((0)) FOR [{is_param_sys}]
 GO
-ALTER TABLE [jsharmony].[{param}] ADD  CONSTRAINT [DF_{param}_{param_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{param_etstmp}]
+ALTER TABLE [jsharmony].[{param__tbl}] ADD  CONSTRAINT [DF_{param__tbl}_{param_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{param_etstmp}]
 GO
-ALTER TABLE [jsharmony].[{param}] ADD  CONSTRAINT [DF_{param}_{param}_EUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{param_euser}]
+ALTER TABLE [jsharmony].[{param__tbl}] ADD  CONSTRAINT [DF_{param__tbl}_{param__tbl}_EUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{param_euser}]
 GO
-ALTER TABLE [jsharmony].[{param}] ADD  CONSTRAINT [DF_{param}_{param_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{param_mtstmp}]
+ALTER TABLE [jsharmony].[{param__tbl}] ADD  CONSTRAINT [DF_{param__tbl}_{param_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{param_mtstmp}]
 GO
-ALTER TABLE [jsharmony].[{param}] ADD  CONSTRAINT [DF_{param}_{param}_MUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{param_muser}]
+ALTER TABLE [jsharmony].[{param__tbl}] ADD  CONSTRAINT [DF_{param__tbl}_{param__tbl}_MUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{param_muser}]
 GO
 ALTER TABLE [jsharmony].[{param_user}] ADD  CONSTRAINT [DF_{param_user}_{param_user_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{param_user_etstmp}]
 GO
@@ -3189,31 +3189,31 @@ ALTER TABLE [jsharmony].[{param_user}] ADD  CONSTRAINT [DF_{param_user}_{param_u
 GO
 ALTER TABLE [jsharmony].[{param_user}] ADD  CONSTRAINT [DF_{param_user}_{param_user}_MUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{param_user_muser}]
 GO
-ALTER TABLE [jsharmony].[{queue}] ADD  CONSTRAINT [DF_{queue}_{queue_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{queue_etstmp}]
+ALTER TABLE [jsharmony].[{queue__tbl}] ADD  CONSTRAINT [DF_{queue__tbl}_{queue_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{queue_etstmp}]
 GO
-ALTER TABLE [jsharmony].[{queue}] ADD  CONSTRAINT [DF_{queue}_{queue_euser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{queue_euser}]
+ALTER TABLE [jsharmony].[{queue__tbl}] ADD  CONSTRAINT [DF_{queue__tbl}_{queue_euser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{queue_euser}]
 GO
-ALTER TABLE [jsharmony].[{job}] ADD  CONSTRAINT [DF_{job}_{job_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{job_etstmp}]
+ALTER TABLE [jsharmony].[{job__tbl}] ADD  CONSTRAINT [DF_{job__tbl}_{job_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{job_etstmp}]
 GO
-ALTER TABLE [jsharmony].[{job}] ADD  CONSTRAINT [DF_{job}_{job_user}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{job_user}]
+ALTER TABLE [jsharmony].[{job__tbl}] ADD  CONSTRAINT [DF_{job__tbl}_{job_user}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{job_user}]
 GO
 ALTER TABLE [jsharmony].[{sys_func}] ADD  CONSTRAINT [DF_{sys_func}_{sys_func_sts}]  DEFAULT ('ACTIVE') FOR [{sys_func_sts}]
 GO
-ALTER TABLE [jsharmony].[{menu}] ADD  CONSTRAINT [DF_{menu}_{menu_group}]  DEFAULT ('S') FOR [{menu_group}]
+ALTER TABLE [jsharmony].[{menu__tbl}] ADD  CONSTRAINT [DF_{menu__tbl}_{menu_group}]  DEFAULT ('S') FOR [{menu_group}]
 GO
-ALTER TABLE [jsharmony].[{menu}] ADD  CONSTRAINT [DF_{menu}_{menu_sts}]  DEFAULT ('ACTIVE') FOR [{menu_sts}]
+ALTER TABLE [jsharmony].[{menu__tbl}] ADD  CONSTRAINT [DF_{menu__tbl}_{menu_sts}]  DEFAULT ('ACTIVE') FOR [{menu_sts}]
 GO
 ALTER TABLE [jsharmony].[{sys_role}] ADD  CONSTRAINT [DF_{sys_role}_{sys_role_sts}]  DEFAULT ('ACTIVE') FOR [{sys_role_sts}]
 GO
-ALTER TABLE [jsharmony].[{txt}] ADD  CONSTRAINT [DF_TXT_{txt_type}]  DEFAULT ('TEXT') FOR [{txt_type}]
+ALTER TABLE [jsharmony].[{txt__tbl}] ADD  CONSTRAINT [DF_TXT_{txt_type}]  DEFAULT ('TEXT') FOR [{txt_type}]
 GO
-ALTER TABLE [jsharmony].[{txt}] ADD  CONSTRAINT [DF_TXT_{txt_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{txt_etstmp}]
+ALTER TABLE [jsharmony].[{txt__tbl}] ADD  CONSTRAINT [DF_TXT_{txt_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{txt_etstmp}]
 GO
-ALTER TABLE [jsharmony].[{txt}] ADD  CONSTRAINT [DF_TXT_TXT_EUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{txt_euser}]
+ALTER TABLE [jsharmony].[{txt__tbl}] ADD  CONSTRAINT [DF_TXT_TXT_EUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{txt_euser}]
 GO
-ALTER TABLE [jsharmony].[{txt}] ADD  CONSTRAINT [DF_TXT_{txt_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{txt_mtstmp}]
+ALTER TABLE [jsharmony].[{txt__tbl}] ADD  CONSTRAINT [DF_TXT_{txt_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{txt_mtstmp}]
 GO
-ALTER TABLE [jsharmony].[{txt}] ADD  CONSTRAINT [DF_TXT_TXT_MUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{txt_muser}]
+ALTER TABLE [jsharmony].[{txt__tbl}] ADD  CONSTRAINT [DF_TXT_TXT_MUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{txt_muser}]
 GO
 ALTER TABLE [jsharmony].[{code_ac}] ADD  CONSTRAINT [DF_{code_ac}_COD_EDt]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{code_etstmp}]
 GO
@@ -3255,13 +3255,13 @@ ALTER TABLE [jsharmony].[{code_doc_scope}] ADD  CONSTRAINT [DF_UCOD_SCOPE_COD_MD
 GO
 ALTER TABLE [jsharmony].[{code_doc_scope}] ADD  CONSTRAINT [DF_UCOD_SCOPE_cod_muser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{code_muser}]
 GO
-ALTER TABLE [jsharmony].[{code_sys}] ADD  CONSTRAINT [DF_COD_{help}_COD_{help}_Edt]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{code_h_etstmp}]
+ALTER TABLE [jsharmony].[{code_sys}] ADD  CONSTRAINT [DF_COD_{help__tbl}_COD_{help__tbl}_Edt]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{code_h_etstmp}]
 GO
-ALTER TABLE [jsharmony].[{code_sys}] ADD  CONSTRAINT [DF_COD_{help}_COD_{help}_EUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{code_h_euser}]
+ALTER TABLE [jsharmony].[{code_sys}] ADD  CONSTRAINT [DF_COD_{help__tbl}_COD_{help__tbl}_EUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{code_h_euser}]
 GO
-ALTER TABLE [jsharmony].[{code_sys}] ADD  CONSTRAINT [DF_COD_{help}_COD_{help}_MDt]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{code_h_mtstmp}]
+ALTER TABLE [jsharmony].[{code_sys}] ADD  CONSTRAINT [DF_COD_{help__tbl}_COD_{help__tbl}_MDt]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{code_h_mtstmp}]
 GO
-ALTER TABLE [jsharmony].[{code_sys}] ADD  CONSTRAINT [DF_COD_{help}_COD_{help}_MUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{code_h_muser}]
+ALTER TABLE [jsharmony].[{code_sys}] ADD  CONSTRAINT [DF_COD_{help__tbl}_COD_{help__tbl}_MUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{code_h_muser}]
 GO
 ALTER TABLE [jsharmony].[{code_note_scope}] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_EDt]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{code_etstmp}]
 GO
@@ -3335,23 +3335,23 @@ ALTER TABLE [jsharmony].[{code2_sys}] ADD  CONSTRAINT [DF_{code2_sys}_{code2_sys
 GO
 ALTER TABLE [jsharmony].[{code2_sys}] ADD  CONSTRAINT [DF_{code2_sys}_{code2_sys}_MUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{code_h_muser}]
 GO
-ALTER TABLE [jsharmony].[{version}] ADD  CONSTRAINT [DF_{version}_{version_no_major}]  DEFAULT ((0)) FOR [{version_no_major}]
+ALTER TABLE [jsharmony].[{version__tbl}] ADD  CONSTRAINT [DF_{version__tbl}_{version_no_major}]  DEFAULT ((0)) FOR [{version_no_major}]
 GO
-ALTER TABLE [jsharmony].[{version}] ADD  CONSTRAINT [DF_{version}_{version_no_minor}]  DEFAULT ((0)) FOR [{version_no_minor}]
+ALTER TABLE [jsharmony].[{version__tbl}] ADD  CONSTRAINT [DF_{version__tbl}_{version_no_minor}]  DEFAULT ((0)) FOR [{version_no_minor}]
 GO
-ALTER TABLE [jsharmony].[{version}] ADD  CONSTRAINT [DF_{version}_{version_no_build}]  DEFAULT ((0)) FOR [{version_no_build}]
+ALTER TABLE [jsharmony].[{version__tbl}] ADD  CONSTRAINT [DF_{version__tbl}_{version_no_build}]  DEFAULT ((0)) FOR [{version_no_build}]
 GO
-ALTER TABLE [jsharmony].[{version}] ADD  CONSTRAINT [DF_{version}_{version_no_rev}]  DEFAULT ((0)) FOR [{version_no_rev}]
+ALTER TABLE [jsharmony].[{version__tbl}] ADD  CONSTRAINT [DF_{version__tbl}_{version_no_rev}]  DEFAULT ((0)) FOR [{version_no_rev}]
 GO
-ALTER TABLE [jsharmony].[{version}] ADD  CONSTRAINT [DF_{version}_{version_sts}]  DEFAULT ('OK') FOR [{version_sts}]
+ALTER TABLE [jsharmony].[{version__tbl}] ADD  CONSTRAINT [DF_{version__tbl}_{version_sts}]  DEFAULT ('OK') FOR [{version_sts}]
 GO
-ALTER TABLE [jsharmony].[{version}] ADD  CONSTRAINT [DF_{version}_{version_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{version_etstmp}]
+ALTER TABLE [jsharmony].[{version__tbl}] ADD  CONSTRAINT [DF_{version__tbl}_{version_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{version_etstmp}]
 GO
-ALTER TABLE [jsharmony].[{version}] ADD  CONSTRAINT [DF_{version}_{version_euser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{version_euser}]
+ALTER TABLE [jsharmony].[{version__tbl}] ADD  CONSTRAINT [DF_{version__tbl}_{version_euser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{version_euser}]
 GO
-ALTER TABLE [jsharmony].[{version}] ADD  CONSTRAINT [DF_{version}_{version_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{version_mtstmp}]
+ALTER TABLE [jsharmony].[{version__tbl}] ADD  CONSTRAINT [DF_{version__tbl}_{version_mtstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{version_mtstmp}]
 GO
-ALTER TABLE [jsharmony].[{version}] ADD  CONSTRAINT [DF_{version}_{version_muser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{version_muser}]
+ALTER TABLE [jsharmony].[{version__tbl}] ADD  CONSTRAINT [DF_{version__tbl}_{version_muser}]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{version_muser}]
 GO
 ALTER TABLE [jsharmony].[{param_sys}] ADD  CONSTRAINT [DF_{param_sys}_{param_sys_etstmp}]  DEFAULT ([jsharmony].[{my_now}]()) FOR [{param_sys_etstmp}]
 GO
@@ -3361,10 +3361,10 @@ ALTER TABLE [jsharmony].[{param_sys}] ADD  CONSTRAINT [DF_{param_sys}_{param_sys
 GO
 ALTER TABLE [jsharmony].[{param_sys}] ADD  CONSTRAINT [DF_{param_sys}_{param_sys}_MUser]  DEFAULT ([jsharmony].[{my_db_user}]()) FOR [{param_sys_muser}]
 GO
-ALTER TABLE [jsharmony].[{audit_detail}]  WITH CHECK ADD  CONSTRAINT [FK_{audit_detail}_{audit}] FOREIGN KEY([{audit_seq}])
-REFERENCES [jsharmony].[{audit}] ([{audit_seq}])
+ALTER TABLE [jsharmony].[{audit_detail}]  WITH CHECK ADD  CONSTRAINT [FK_{audit_detail}_{audit__tbl}] FOREIGN KEY([{audit_seq}])
+REFERENCES [jsharmony].[{audit__tbl}] ([{audit_seq}])
 GO
-ALTER TABLE [jsharmony].[{audit_detail}] CHECK CONSTRAINT [FK_{audit_detail}_{audit}]
+ALTER TABLE [jsharmony].[{audit_detail}] CHECK CONSTRAINT [FK_{audit_detail}_{audit__tbl}]
 GO
 ALTER TABLE [jsharmony].[{cust_user}]  WITH CHECK ADD  CONSTRAINT [FK_{cust_user}_{code_ahc}] FOREIGN KEY([{sys_user_sts}])
 REFERENCES [jsharmony].[{code_ahc}] ([{code_val}])
@@ -3393,47 +3393,47 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [jsharmony].[{cust_menu_role}] CHECK CONSTRAINT [FK_{cust_menu_role}_{cust_role}_{cust_role_name}]
 GO
-ALTER TABLE [jsharmony].[{cust_menu_role}]  WITH CHECK ADD  CONSTRAINT [FK_{cust_menu_role}_{menu}] FOREIGN KEY([{menu_id}])
-REFERENCES [jsharmony].[{menu}] ([{menu_id}])
+ALTER TABLE [jsharmony].[{cust_menu_role}]  WITH CHECK ADD  CONSTRAINT [FK_{cust_menu_role}_{menu__tbl}] FOREIGN KEY([{menu_id}])
+REFERENCES [jsharmony].[{menu__tbl}] ([{menu_id}])
 ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[{cust_menu_role}] CHECK CONSTRAINT [FK_{cust_menu_role}_{menu}]
+ALTER TABLE [jsharmony].[{cust_menu_role}] CHECK CONSTRAINT [FK_{cust_menu_role}_{menu__tbl}]
 GO
-ALTER TABLE [jsharmony].[{doc}]  WITH CHECK ADD  CONSTRAINT [FK_{doc}_{code2_doc_ctgr}] FOREIGN KEY([{doc_scope}], [{doc_ctgr}])
+ALTER TABLE [jsharmony].[{doc__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{doc__tbl}_{code2_doc_ctgr}] FOREIGN KEY([{doc_scope}], [{doc_ctgr}])
 REFERENCES [jsharmony].[{code2_doc_ctgr}] ([{code_val1}], [{code_va12}])
 GO
-ALTER TABLE [jsharmony].[{doc}] CHECK CONSTRAINT [FK_{doc}_{code2_doc_ctgr}]
+ALTER TABLE [jsharmony].[{doc__tbl}] CHECK CONSTRAINT [FK_{doc__tbl}_{code2_doc_ctgr}]
 GO
-ALTER TABLE [jsharmony].[{doc}]  WITH CHECK ADD  CONSTRAINT [FK_{doc}_{code_doc_scope}] FOREIGN KEY([{doc_scope}])
+ALTER TABLE [jsharmony].[{doc__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{doc__tbl}_{code_doc_scope}] FOREIGN KEY([{doc_scope}])
 REFERENCES [jsharmony].[{code_doc_scope}] ([{code_val}])
 GO
-ALTER TABLE [jsharmony].[{doc}] CHECK CONSTRAINT [FK_{doc}_{code_doc_scope}]
+ALTER TABLE [jsharmony].[{doc__tbl}] CHECK CONSTRAINT [FK_{doc__tbl}_{code_doc_scope}]
 GO
-ALTER TABLE [jsharmony].[{param_app}]  WITH CHECK ADD  CONSTRAINT [FK_{param_app}_{param}] FOREIGN KEY([{param_app_process}], [{param_app_attrib}])
-REFERENCES [jsharmony].[{param}] ([{param_process}], [{param_attrib}])
+ALTER TABLE [jsharmony].[{param_app}]  WITH CHECK ADD  CONSTRAINT [FK_{param_app}_{param__tbl}] FOREIGN KEY([{param_app_process}], [{param_app_attrib}])
+REFERENCES [jsharmony].[{param__tbl}] ([{param_process}], [{param_attrib}])
 GO
-ALTER TABLE [jsharmony].[{param_app}] CHECK CONSTRAINT [FK_{param_app}_{param}]
+ALTER TABLE [jsharmony].[{param_app}] CHECK CONSTRAINT [FK_{param_app}_{param__tbl}]
 GO
-ALTER TABLE [jsharmony].[{help}]  WITH CHECK ADD  CONSTRAINT [FK_{help}_{help_target}] FOREIGN KEY([{help_target_code}])
+ALTER TABLE [jsharmony].[{help__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{help__tbl}_{help_target}] FOREIGN KEY([{help_target_code}])
 REFERENCES [jsharmony].[{help_target}] ([{help_target_code}])
 GO
-ALTER TABLE [jsharmony].[{help}] CHECK CONSTRAINT [FK_{help}_{help_target}]
+ALTER TABLE [jsharmony].[{help__tbl}] CHECK CONSTRAINT [FK_{help__tbl}_{help_target}]
 GO
-ALTER TABLE [jsharmony].[{note}]  WITH CHECK ADD  CONSTRAINT [FK_{note}_{code_ac1}] FOREIGN KEY([{note_sts}])
+ALTER TABLE [jsharmony].[{note__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{note__tbl}_{code_ac1}] FOREIGN KEY([{note_sts}])
 REFERENCES [jsharmony].[{code_ac1}] ([{code_val}])
 GO
-ALTER TABLE [jsharmony].[{note}] CHECK CONSTRAINT [FK_{note}_{code_ac1}]
+ALTER TABLE [jsharmony].[{note__tbl}] CHECK CONSTRAINT [FK_{note__tbl}_{code_ac1}]
 GO
-ALTER TABLE [jsharmony].[{note}]  WITH CHECK ADD  CONSTRAINT [FK_{note}_{code_note_scope}] FOREIGN KEY([{note_scope}])
+ALTER TABLE [jsharmony].[{note__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{note__tbl}_{code_note_scope}] FOREIGN KEY([{note_scope}])
 REFERENCES [jsharmony].[{code_note_scope}] ([{code_val}])
 GO
-ALTER TABLE [jsharmony].[{note}] CHECK CONSTRAINT [FK_{note}_{code_note_scope}]
+ALTER TABLE [jsharmony].[{note__tbl}] CHECK CONSTRAINT [FK_{note__tbl}_{code_note_scope}]
 GO
-ALTER TABLE [jsharmony].[{note}]  WITH CHECK ADD  CONSTRAINT [FK_{note}_{code_note_type}] FOREIGN KEY([{note_type}])
+ALTER TABLE [jsharmony].[{note__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{note__tbl}_{code_note_type}] FOREIGN KEY([{note_type}])
 REFERENCES [jsharmony].[{code_note_type}] ([{code_val}])
 GO
-ALTER TABLE [jsharmony].[{note}] CHECK CONSTRAINT [FK_{note}_{code_note_type}]
+ALTER TABLE [jsharmony].[{note__tbl}] CHECK CONSTRAINT [FK_{note__tbl}_{code_note_type}]
 GO
 ALTER TABLE [jsharmony].[{sys_user}]  WITH CHECK ADD  CONSTRAINT [FK_{sys_user}_{code_ahc}] FOREIGN KEY([{sys_user_sts}])
 REFERENCES [jsharmony].[{code_ahc}] ([{code_val}])
@@ -3450,10 +3450,10 @@ REFERENCES [jsharmony].[{code2_state}] ([{code_val1}], [{code_va12}])
 GO
 ALTER TABLE [jsharmony].[{sys_user}] CHECK CONSTRAINT [FK_{sys_user}_{code2_state}]
 GO
-ALTER TABLE [jsharmony].[{param}]  WITH CHECK ADD  CONSTRAINT [FK_{param}_{code_param_type}] FOREIGN KEY([{param_type}])
+ALTER TABLE [jsharmony].[{param__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{param__tbl}_{code_param_type}] FOREIGN KEY([{param_type}])
 REFERENCES [jsharmony].[{code_param_type}] ([{code_val}])
 GO
-ALTER TABLE [jsharmony].[{param}] CHECK CONSTRAINT [FK_{param}_{code_param_type}]
+ALTER TABLE [jsharmony].[{param__tbl}] CHECK CONSTRAINT [FK_{param__tbl}_{code_param_type}]
 GO
 ALTER TABLE [jsharmony].[{param_user}]  WITH CHECK ADD  CONSTRAINT [FK_{param_user}_{sys_user}] FOREIGN KEY([{sys_user_id}])
 REFERENCES [jsharmony].[{sys_user}] ([{sys_user_id}])
@@ -3461,61 +3461,61 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [jsharmony].[{param_user}] CHECK CONSTRAINT [FK_{param_user}_{sys_user}]
 GO
-ALTER TABLE [jsharmony].[{param_user}]  WITH CHECK ADD  CONSTRAINT [FK_{param_user}_{param}] FOREIGN KEY([{param_user_process}], [{param_user_attrib}])
-REFERENCES [jsharmony].[{param}] ([{param_process}], [{param_attrib}])
+ALTER TABLE [jsharmony].[{param_user}]  WITH CHECK ADD  CONSTRAINT [FK_{param_user}_{param__tbl}] FOREIGN KEY([{param_user_process}], [{param_user_attrib}])
+REFERENCES [jsharmony].[{param__tbl}] ([{param_process}], [{param_attrib}])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[{param_user}] CHECK CONSTRAINT [FK_{param_user}_{param}]
+ALTER TABLE [jsharmony].[{param_user}] CHECK CONSTRAINT [FK_{param_user}_{param__tbl}]
 GO
-ALTER TABLE [jsharmony].[{job}]  WITH CHECK ADD  CONSTRAINT [FK_{job}_{code_task_action}] FOREIGN KEY([{job_action}])
+ALTER TABLE [jsharmony].[{job__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{job__tbl}_{code_task_action}] FOREIGN KEY([{job_action}])
 REFERENCES [jsharmony].[{code_task_action}] ([{code_val}])
 GO
-ALTER TABLE [jsharmony].[{job}] CHECK CONSTRAINT [FK_{job}_{code_task_action}]
+ALTER TABLE [jsharmony].[{job__tbl}] CHECK CONSTRAINT [FK_{job__tbl}_{code_task_action}]
 GO
-ALTER TABLE [jsharmony].[{job}]  WITH CHECK ADD  CONSTRAINT [FK_{job}_{code_task_source}] FOREIGN KEY([{job_source}])
+ALTER TABLE [jsharmony].[{job__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{job__tbl}_{code_task_source}] FOREIGN KEY([{job_source}])
 REFERENCES [jsharmony].[{code_task_source}] ([{code_val}])
 GO
-ALTER TABLE [jsharmony].[{job}] CHECK CONSTRAINT [FK_{job}_{code_task_source}]
+ALTER TABLE [jsharmony].[{job__tbl}] CHECK CONSTRAINT [FK_{job__tbl}_{code_task_source}]
 GO
-ALTER TABLE [jsharmony].[{job_doc}]  WITH CHECK ADD  CONSTRAINT [FK_{job_doc}_{job}] FOREIGN KEY([{job_id}])
-REFERENCES [jsharmony].[{job}] ([{job_id}])
+ALTER TABLE [jsharmony].[{job_doc}]  WITH CHECK ADD  CONSTRAINT [FK_{job_doc}_{job__tbl}] FOREIGN KEY([{job_id}])
+REFERENCES [jsharmony].[{job__tbl}] ([{job_id}])
 GO
-ALTER TABLE [jsharmony].[{job_doc}] CHECK CONSTRAINT [FK_{job_doc}_{job}]
+ALTER TABLE [jsharmony].[{job_doc}] CHECK CONSTRAINT [FK_{job_doc}_{job__tbl}]
 GO
-ALTER TABLE [jsharmony].[{job_email}]  WITH CHECK ADD  CONSTRAINT [FK_{job_email}_{job}] FOREIGN KEY([{job_id}])
-REFERENCES [jsharmony].[{job}] ([{job_id}])
+ALTER TABLE [jsharmony].[{job_email}]  WITH CHECK ADD  CONSTRAINT [FK_{job_email}_{job__tbl}] FOREIGN KEY([{job_id}])
+REFERENCES [jsharmony].[{job__tbl}] ([{job_id}])
 GO
-ALTER TABLE [jsharmony].[{job_email}] CHECK CONSTRAINT [FK_{job_email}_{job}]
+ALTER TABLE [jsharmony].[{job_email}] CHECK CONSTRAINT [FK_{job_email}_{job__tbl}]
 GO
-ALTER TABLE [jsharmony].[{job_note}]  WITH CHECK ADD  CONSTRAINT [FK_{job_note}_{job}] FOREIGN KEY([{job_id}])
-REFERENCES [jsharmony].[{job}] ([{job_id}])
+ALTER TABLE [jsharmony].[{job_note}]  WITH CHECK ADD  CONSTRAINT [FK_{job_note}_{job__tbl}] FOREIGN KEY([{job_id}])
+REFERENCES [jsharmony].[{job__tbl}] ([{job_id}])
 GO
-ALTER TABLE [jsharmony].[{job_note}] CHECK CONSTRAINT [FK_{job_note}_{job}]
+ALTER TABLE [jsharmony].[{job_note}] CHECK CONSTRAINT [FK_{job_note}_{job__tbl}]
 GO
-ALTER TABLE [jsharmony].[{job_queue}]  WITH CHECK ADD  CONSTRAINT [FK_{job_queue}_{job}] FOREIGN KEY([{job_id}])
-REFERENCES [jsharmony].[{job}] ([{job_id}])
+ALTER TABLE [jsharmony].[{job_queue}]  WITH CHECK ADD  CONSTRAINT [FK_{job_queue}_{job__tbl}] FOREIGN KEY([{job_id}])
+REFERENCES [jsharmony].[{job__tbl}] ([{job_id}])
 GO
-ALTER TABLE [jsharmony].[{job_queue}] CHECK CONSTRAINT [FK_{job_queue}_{job}]
+ALTER TABLE [jsharmony].[{job_queue}] CHECK CONSTRAINT [FK_{job_queue}_{job__tbl}]
 GO
-ALTER TABLE [jsharmony].[{job_sms}]  WITH CHECK ADD  CONSTRAINT [FK_{job_sms}_{job}] FOREIGN KEY([{job_id}])
-REFERENCES [jsharmony].[{job}] ([{job_id}])
+ALTER TABLE [jsharmony].[{job_sms}]  WITH CHECK ADD  CONSTRAINT [FK_{job_sms}_{job__tbl}] FOREIGN KEY([{job_id}])
+REFERENCES [jsharmony].[{job__tbl}] ([{job_id}])
 GO
-ALTER TABLE [jsharmony].[{job_sms}] CHECK CONSTRAINT [FK_{job_sms}_{job}]
+ALTER TABLE [jsharmony].[{job_sms}] CHECK CONSTRAINT [FK_{job_sms}_{job__tbl}]
 GO
 ALTER TABLE [jsharmony].[{sys_func}]  WITH CHECK ADD  CONSTRAINT [FK_{sys_func}_{code_ahc}] FOREIGN KEY([{sys_func_sts}])
 REFERENCES [jsharmony].[{code_ahc}] ([{code_val}])
 GO
 ALTER TABLE [jsharmony].[{sys_func}] CHECK CONSTRAINT [FK_{sys_func}_{code_ahc}]
 GO
-ALTER TABLE [jsharmony].[{menu}]  WITH CHECK ADD  CONSTRAINT [FK_{menu}_{menu}] FOREIGN KEY([{menu_id_parent}])
-REFERENCES [jsharmony].[{menu}] ([{menu_id}])
+ALTER TABLE [jsharmony].[{menu__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{menu__tbl}_{menu__tbl}] FOREIGN KEY([{menu_id_parent}])
+REFERENCES [jsharmony].[{menu__tbl}] ([{menu_id}])
 GO
-ALTER TABLE [jsharmony].[{menu}] CHECK CONSTRAINT [FK_{menu}_{menu}]
+ALTER TABLE [jsharmony].[{menu__tbl}] CHECK CONSTRAINT [FK_{menu__tbl}_{menu__tbl}]
 GO
-ALTER TABLE [jsharmony].[{menu}]  WITH CHECK ADD  CONSTRAINT [FK_{menu}_{code_ahc}] FOREIGN KEY([{menu_sts}])
+ALTER TABLE [jsharmony].[{menu__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{menu__tbl}_{code_ahc}] FOREIGN KEY([{menu_sts}])
 REFERENCES [jsharmony].[{code_ahc}] ([{code_val}])
 GO
-ALTER TABLE [jsharmony].[{menu}] CHECK CONSTRAINT [FK_{menu}_{code_ahc}]
+ALTER TABLE [jsharmony].[{menu__tbl}] CHECK CONSTRAINT [FK_{menu__tbl}_{code_ahc}]
 GO
 ALTER TABLE [jsharmony].[{sys_user_func}]  WITH CHECK ADD  CONSTRAINT [FK_{sys_user_func}_{sys_user}] FOREIGN KEY([{sys_user_id}])
 REFERENCES [jsharmony].[{sys_user}] ([{sys_user_id}])
@@ -3542,12 +3542,12 @@ REFERENCES [jsharmony].[{code_ahc}] ([{code_val}])
 GO
 ALTER TABLE [jsharmony].[{sys_role}] CHECK CONSTRAINT [FK_{sys_role}_{code_ahc}]
 GO
-ALTER TABLE [jsharmony].[{sys_menu_role}]  WITH CHECK ADD  CONSTRAINT [FK_{sys_menu_role}_{menu}] FOREIGN KEY([{menu_id}])
-REFERENCES [jsharmony].[{menu}] ([{menu_id}])
+ALTER TABLE [jsharmony].[{sys_menu_role}]  WITH CHECK ADD  CONSTRAINT [FK_{sys_menu_role}_{menu__tbl}] FOREIGN KEY([{menu_id}])
+REFERENCES [jsharmony].[{menu__tbl}] ([{menu_id}])
 ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[{sys_menu_role}] CHECK CONSTRAINT [FK_{sys_menu_role}_{menu}]
+ALTER TABLE [jsharmony].[{sys_menu_role}] CHECK CONSTRAINT [FK_{sys_menu_role}_{menu__tbl}]
 GO
 ALTER TABLE [jsharmony].[{sys_menu_role}]  WITH CHECK ADD  CONSTRAINT [FK_{sys_menu_role}_{sys_role}_{sys_role_name}] FOREIGN KEY([{sys_role_name}])
 REFERENCES [jsharmony].[{sys_role}] ([{sys_role_name}])
@@ -3555,20 +3555,20 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [jsharmony].[{sys_menu_role}] CHECK CONSTRAINT [FK_{sys_menu_role}_{sys_role}_{sys_role_name}]
 GO
-ALTER TABLE [jsharmony].[{txt}]  WITH CHECK ADD  CONSTRAINT [FK_TXT_{code_txt_type}] FOREIGN KEY([{txt_type}])
+ALTER TABLE [jsharmony].[{txt__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_TXT_{code_txt_type}] FOREIGN KEY([{txt_type}])
 REFERENCES [jsharmony].[{code_txt_type}] ([{code_val}])
 GO
-ALTER TABLE [jsharmony].[{txt}] CHECK CONSTRAINT [FK_TXT_{code_txt_type}]
+ALTER TABLE [jsharmony].[{txt__tbl}] CHECK CONSTRAINT [FK_TXT_{code_txt_type}]
 GO
-ALTER TABLE [jsharmony].[{version}]  WITH CHECK ADD  CONSTRAINT [FK_{version}_{code_version_sts}] FOREIGN KEY([{version_sts}])
+ALTER TABLE [jsharmony].[{version__tbl}]  WITH CHECK ADD  CONSTRAINT [FK_{version__tbl}_{code_version_sts}] FOREIGN KEY([{version_sts}])
 REFERENCES [jsharmony].[{code_version_sts}] ([{code_val}])
 GO
-ALTER TABLE [jsharmony].[{version}] CHECK CONSTRAINT [FK_{version}_{code_version_sts}]
+ALTER TABLE [jsharmony].[{version__tbl}] CHECK CONSTRAINT [FK_{version__tbl}_{code_version_sts}]
 GO
-ALTER TABLE [jsharmony].[{param_sys}]  WITH CHECK ADD  CONSTRAINT [FK_{param_sys}_{param}] FOREIGN KEY([{param_sys_process}], [{param_sys_attrib}])
-REFERENCES [jsharmony].[{param}] ([{param_process}], [{param_attrib}])
+ALTER TABLE [jsharmony].[{param_sys}]  WITH CHECK ADD  CONSTRAINT [FK_{param_sys}_{param__tbl}] FOREIGN KEY([{param_sys_process}], [{param_sys_attrib}])
+REFERENCES [jsharmony].[{param__tbl}] ([{param_process}], [{param_attrib}])
 GO
-ALTER TABLE [jsharmony].[{param_sys}] CHECK CONSTRAINT [FK_{param_sys}_{param}]
+ALTER TABLE [jsharmony].[{param_sys}] CHECK CONSTRAINT [FK_{param_sys}_{param__tbl}]
 GO
 ALTER TABLE [jsharmony].[{cust_user}]  WITH CHECK ADD  CONSTRAINT [CK_{cust_user}_{sys_user_email}] CHECK  ((isnull([{sys_user_email}],'')<>''))
 GO
@@ -3578,9 +3578,9 @@ ALTER TABLE [jsharmony].[{sys_user}]  WITH CHECK ADD  CONSTRAINT [CK_{sys_user}_
 GO
 ALTER TABLE [jsharmony].[{sys_user}] CHECK CONSTRAINT [CK_{sys_user}_{sys_user_email}]
 GO
-ALTER TABLE [jsharmony].[{menu}]  WITH CHECK ADD  CONSTRAINT [CK_{menu}_{menu_group}] CHECK  (([{menu_group}]='C' OR [{menu_group}]='S'))
+ALTER TABLE [jsharmony].[{menu__tbl}]  WITH CHECK ADD  CONSTRAINT [CK_{menu__tbl}_{menu_group}] CHECK  (([{menu_group}]='C' OR [{menu_group}]='S'))
 GO
-ALTER TABLE [jsharmony].[{menu}] CHECK CONSTRAINT [CK_{menu}_{menu_group}]
+ALTER TABLE [jsharmony].[{menu__tbl}] CHECK CONSTRAINT [CK_{menu__tbl}_{menu_group}]
 GO
 SET ANSI_NULLS ON
 GO
@@ -3642,7 +3642,7 @@ BEGIN
 		       @WK_{audit_ref_name} = {audit_ref_name},
 		       @WK_{audit_ref_id} = {audit_ref_id},
 		       @WK_{audit_subject} = {audit_subject}
-		  from {schema}.{audit}
+		  from {schema}.{audit__tbl}
          where {audit_table_name} = lower({@tname})
 		   and {audit_table_id} = {@tid}
 		   and {audit_op} = 'I'
@@ -3657,7 +3657,7 @@ BEGIN
 	         SET {@cust_id} = @MY_{cust_id}
            end
 
-           if ({@itemid} is null and lower({@tname}) <> '{item}')
+           if ({@itemid} is null and lower({@tname}) <> '{item__tbl}')
 		   begin	
 	         SET @SQLCMD = 'select @my_{item_id}  = ' + @{get_item_id} + '(''' + lower({@tname}) + ''',' + convert(varchar,{@tid}) + ')'
 	         EXECUTE sp_executesql @SQLCMD, N'@my_{item_id} bigint OUTPUT', @MY_{item_id}=@my_{item_id} OUTPUT
@@ -3668,7 +3668,7 @@ BEGIN
 		                          when lower({@tname}) = '{cust}' then {@tid} 
 							      else {@cust_id} end,  
 		          @WK_{item_id} = case when {@itemid} is not null then {@itemid}
-		                          when lower({@tname})  = '{item}' then {@tid} 
+		                          when lower({@tname})  = '{item__tbl}' then {@tid} 
 								  else @{item_id} end, 
 		          @WK_{audit_ref_name} = {@audit_ref_name},
 		          @WK_{audit_ref_id} = {@audit_ref_id},
@@ -3685,7 +3685,7 @@ BEGIN
 	      SET {@cust_id} = @MY_{cust_id}
         end
 
-        if ({@itemid} is null and lower({@tname}) <> '{item}')
+        if ({@itemid} is null and lower({@tname}) <> '{item__tbl}')
 		begin	
 	      SET @SQLCMD = 'select @my_{item_id}  = ' + @{get_item_id} + '(''' + lower({@tname}) + ''',' + convert(varchar,{@tid}) + ')'
 	      EXECUTE sp_executesql @SQLCMD, N'@my_{item_id} bigint OUTPUT', @MY_{item_id}=@my_{item_id} OUTPUT
@@ -3696,14 +3696,14 @@ BEGIN
 		                    when lower({@tname}) = '{cust}' then {@tid} 
 							else {@cust_id} end;  
 		SET @WK_{item_id} = case when {@itemid} is not null then {@itemid}
-		                    when lower({@tname}) = '{item}' then {@tid} 
+		                    when lower({@tname}) = '{item__tbl}' then {@tid} 
 							else @{item_id} end; 
 		SET @WK_{audit_ref_name} = {@audit_ref_name};
 		SET @WK_{audit_ref_id} = {@audit_ref_id};
 		SET @WK_{audit_subject} = {@audit_subject};
 	end
 
-    INSERT INTO {schema}.{audit} 
+    INSERT INTO {schema}.{audit__tbl} 
 	                  ({audit_table_name}, {audit_table_id}, {audit_op}, {audit_user}, {audit_tstmp}, {cust_id}, {item_id}, {audit_ref_name}, {audit_ref_id}, {audit_subject}) 
                VALUES (lower({@tname}), 
 			           {@tid}, 
@@ -3778,7 +3778,7 @@ BEGIN
 		       @WK_{audit_ref_name} = {audit_ref_name},
 		       @WK_{audit_ref_id} = {audit_ref_id},
 		       @WK_{audit_subject} = {audit_subject}
-		  from {schema}.{audit}
+		  from {schema}.{audit__tbl}
          where {audit_table_name} = lower({@tname})
 		   and {audit_table_id} = {@tid}
 		   and {audit_op} = 'I'
@@ -3797,7 +3797,7 @@ BEGIN
 		SET @WK_{audit_subject} = {@audit_subject};
 	end
 
-    INSERT INTO {schema}.{audit} 
+    INSERT INTO {schema}.{audit__tbl} 
 	                  ({audit_table_name}, {audit_table_id}, {audit_op}, {audit_user}, {audit_tstmp}, {audit_ref_name}, {audit_ref_id}, {audit_subject}) 
                VALUES (lower({@tname}), 
 			           {@tid}, 
@@ -4085,7 +4085,7 @@ BEGIN
   DECLARE @rrrt NVARCHAR(max)
 
   select @rrr = {script_txt}
-    from {schema}.SCRIPT
+    from {schema}.script__tbl
    where {script_name} = '{create_code_app}';
 
   set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull({@in_code_schema},'dbo')))
@@ -4095,7 +4095,7 @@ BEGIN
   EXEC (@rrr)      
 
   select @rrrt = {script_txt}
-    from {schema}.SCRIPT
+    from {schema}.script__tbl
    where {script_name} = '{create_code_app}_TRIGGER';
 
   set @rrrt = replace(@rrrt, '%%%schema%%%', lower(isnull({@in_code_schema},'dbo')))
@@ -4135,7 +4135,7 @@ BEGIN
   DECLARE @rrrt NVARCHAR(max)
 
   select @rrr = {script_txt}
-    from {schema}.SCRIPT
+    from {schema}.script__tbl
    where {script_name} = '{create_code2_app}';
 
   set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull({@in_code_schema},'dbo')))
@@ -4145,7 +4145,7 @@ BEGIN
   EXEC (@rrr)      
 
   select @rrrt = {script_txt}
-    from {schema}.SCRIPT
+    from {schema}.script__tbl
    where {script_name} = '{create_code2_app}_TRIGGER';
 
   set @rrrt = replace(@rrrt, '%%%schema%%%', lower(isnull({@in_code_schema},'dbo')))
@@ -4184,7 +4184,7 @@ BEGIN
   DECLARE @rrr NVARCHAR(max)
 
   select @rrr = {script_txt}
-    from {schema}.SCRIPT
+    from {schema}.script__tbl
    where {script_name} = '{create_code_sys}';
 
   set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull({@in_code_schema},'dbo')))
@@ -4223,7 +4223,7 @@ BEGIN
   DECLARE @rrr NVARCHAR(max)
 
   select @rrr = {script_txt}
-    from {schema}.SCRIPT
+    from {schema}.script__tbl
    where {script_name} = '{create_code2_sys}';
 
   set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull({@in_code_schema},'dbo')))
@@ -4295,9 +4295,9 @@ BEGIN
           INSERT INTO ZZ_LOG (LOG_PLACE, LOG_VALUE)
            VALUES('Q_UPDATE',
 		             ' TP=' + @TP + 
-		             ' {doc}_QT_TNAME=' + @D_QT_TNAME + 
-			         ' {doc}_Q_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_Q_ID),'null'))) +
-			         ' {doc}_CT_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_CT_ID),'null'))) );
+		             ' {doc__tbl}_QT_TNAME=' + @D_QT_TNAME + 
+			         ' {doc__tbl}_Q_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_Q_ID),'null'))) +
+			         ' {doc__tbl}_CT_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_CT_ID),'null'))) );
 */
 END
 
@@ -4455,7 +4455,7 @@ BEGIN
     SET @hash = NULL
 
 	SET @NEWPW = NUll;
-    SET @UPDATE_PW = '{note}'
+    SET @UPDATE_PW = '{note__tbl}'
 
 	SET @WK_{cust_id} = ISNULL(@I_{cust_id},@D_{cust_id})
 
@@ -4802,7 +4802,7 @@ BEGIN
       
     SET @xloc = 'TP=' + ISNULL(@TP,'null')
 	SET @xtxt = 'I_{cust_user_role_id}=' + LTRIM(ISNULL(STR(@I_{cust_user_role_id}),'null')) +
-	            ' {doc}_{cust_user_role_id}=' + LTRIM(ISNULL(STR(@D_{cust_user_role_id}),'null')) 
+	            ' {doc__tbl}_{cust_user_role_id}=' + LTRIM(ISNULL(STR(@D_{cust_user_role_id}),'null')) 
     /*
     EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{cust_user_role}_IUD',@xloc, @xtxt
 	*/
@@ -4916,7 +4916,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[{doc}_IUD] on [jsharmony].[{doc}]
+CREATE trigger [jsharmony].[{doc__tbl}_IUD] on [jsharmony].[{doc__tbl}]
 for insert, update, delete
 AS
 BEGIN
@@ -4927,7 +4927,7 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_{audit_seq} NUMERIC(20,0)
-  DECLARE CUR_{doc}_IUD CURSOR LOCAL FOR
+  DECLARE CUR_{doc__tbl}_IUD CURSOR LOCAL FOR
      SELECT  del.{doc_id}, i.{doc_id},
 	         del.{doc_scope}, i.{doc_scope},
 	         del.{doc_scope_id}, i.{doc_scope_id},
@@ -5007,7 +5007,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE({doc_id})
   BEGIN
-    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{doc}_IUD','ERR', 'Cannot update ID'
+    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{doc__tbl}_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5015,7 +5015,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE({doc_scope})
   BEGIN
-    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{doc}_IUD','ERR', 'Cannot update {doc_scope}'
+    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{doc__tbl}_IUD','ERR', 'Cannot update {doc_scope}'
     raiserror('Cannot update foreign key {doc_scope}',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5023,7 +5023,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE({doc_scope_id})
   BEGIN
-    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{doc}_IUD','ERR', 'Cannot update {doc_scope_id}'
+    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{doc__tbl}_IUD','ERR', 'Cannot update {doc_scope_id}'
     raiserror('Cannot update foreign key {doc_scope_id}',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5041,8 +5041,8 @@ BEGIN
   END
 
   
-  OPEN CUR_{doc}_IUD
-  FETCH NEXT FROM CUR_{doc}_IUD
+  OPEN CUR_{doc__tbl}_IUD
+  FETCH NEXT FROM CUR_{doc__tbl}_IUD
         INTO @D_{doc_id}, @I_{doc_id},
              @D_{doc_scope}, @I_{doc_scope},
              @D_{doc_scope_id}, @I_{doc_scope_id},
@@ -5074,8 +5074,8 @@ BEGIN
 		   OR
 		   @I_{doc_scope} <> 'S' AND @I_{doc_scope_id} is NULL
 		BEGIN
-			CLOSE CUR_{doc}_IUD
-			DEALLOCATE CUR_{doc}_IUD
+			CLOSE CUR_{doc__tbl}_IUD
+			DEALLOCATE CUR_{doc__tbl}_IUD
 			SET @M = 'SCOPE ID INCONSISTENT WITH SCOPE'
 			raiserror(@M ,16,1)
 			ROLLBACK TRANSACTION
@@ -5090,8 +5090,8 @@ BEGIN
 		    {@in_tblid} = @I_{doc_scope_id}
 		IF @C <= 0
 		BEGIN
-			CLOSE CUR_{doc}_IUD
-			DEALLOCATE CUR_{doc}_IUD
+			CLOSE CUR_{doc__tbl}_IUD
+			DEALLOCATE CUR_{doc__tbl}_IUD
 			SET @M = 'Table ' + @I_{doc_scope} + ' does not contain record ' + CONVERT(NVARCHAR(MAX),@I_{doc_scope_id})
 			raiserror(@M ,16,1)
 			ROLLBACK TRANSACTION
@@ -5110,8 +5110,8 @@ BEGIN
 		    {@in_code_val2} = @I_{doc_ctgr}
 		IF @C <= 0
 		BEGIN
-			CLOSE CUR_{doc}_IUD
-			DEALLOCATE CUR_{doc}_IUD
+			CLOSE CUR_{doc__tbl}_IUD
+			DEALLOCATE CUR_{doc__tbl}_IUD
 			SET @M = 'Document Type not allowed for selected Scope'
 			raiserror(@M ,16,1)
 			ROLLBACK TRANSACTION
@@ -5125,14 +5125,14 @@ BEGIN
 
 
 	  IF (@I_{doc_sync_tstmp} is null)
-        UPDATE {schema}.{doc}
+        UPDATE {schema}.{doc__tbl}
 	     SET {cust_id} = NULL,
 		     {item_id} = NULL,
 		     {doc_etstmp} = @CURDTTM,
 			 {doc_euser} = @MYUSER,
 		     {doc_mtstmp} = @CURDTTM,
 			 {doc_muser} = @MYUSER
-         WHERE {doc}.{doc_id} = @I_{doc_id};
+         WHERE {doc__tbl}.{doc_id} = @I_{doc_id};
     END  
 
 	/******************************************/
@@ -5236,11 +5236,11 @@ BEGIN
     IF (@TP='U' AND @MY_{audit_seq} <> 0)
 	BEGIN
  	  if ({schema}.{nequal_date}(@D_{doc_sync_tstmp}, @I_{doc_sync_tstmp}) <= 0)
-        UPDATE {schema}.{doc}
+        UPDATE {schema}.{doc__tbl}
 	     SET {doc_mtstmp} = @CURDTTM,
 			 {doc_muser} = @MYUSER,
 			 {doc_sync_tstmp} = NULL
-         WHERE {doc}.{doc_id} = @I_{doc_id};
+         WHERE {doc__tbl}.{doc_id} = @I_{doc_id};
     END  
 
 	/*****************************************/
@@ -5250,7 +5250,7 @@ BEGIN
 
 
             
-    FETCH NEXT FROM CUR_{doc}_IUD
+    FETCH NEXT FROM CUR_{doc__tbl}_IUD
         INTO @D_{doc_id}, @I_{doc_id},
              @D_{doc_scope},  @I_{doc_scope},
              @D_{doc_scope_id}, @I_{doc_scope_id},
@@ -5264,15 +5264,15 @@ BEGIN
 			 @D_{item_id}, @I_{item_id}
 
   END
-  CLOSE CUR_{doc}_IUD
-  DEALLOCATE CUR_{doc}_IUD
+  CLOSE CUR_{doc__tbl}_IUD
+  DEALLOCATE CUR_{doc__tbl}_IUD
 
   RETURN
 
 END
 
 GO
-ALTER TABLE [jsharmony].[{doc}] ENABLE TRIGGER [{doc}_IUD]
+ALTER TABLE [jsharmony].[{doc__tbl}] ENABLE TRIGGER [{doc__tbl}_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -5702,7 +5702,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[{help}_IUD] on [jsharmony].[{help}]
+CREATE trigger [jsharmony].[{help__tbl}_IUD] on [jsharmony].[{help__tbl}]
 for insert, update, delete
 AS
 BEGIN
@@ -5714,7 +5714,7 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_{audit_seq} NUMERIC(20,0)
-  DECLARE CUR_{help}_IUD CURSOR LOCAL FOR
+  DECLARE CUR_{help__tbl}_IUD CURSOR LOCAL FOR
      SELECT  del.{help_id}, i.{help_id},
 	         del.{help_target_code}, i.{help_target_code},
 	         del.{help_title}, i.{help_title},
@@ -5777,7 +5777,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE({help_id})
   BEGIN
-    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{help}_IUD','ERR', 'Cannot update ID'
+    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{help__tbl}_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5785,15 +5785,15 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE({help_target_code})
   BEGIN
-    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{help}_IUD','ERR', 'Cannot update {help_target_code}'
+    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{help__tbl}_IUD','ERR', 'Cannot update {help_target_code}'
     raiserror('Cannot update foreign key {help_target_code}',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_{help}_IUD
-  FETCH NEXT FROM CUR_{help}_IUD
+  OPEN CUR_{help__tbl}_IUD
+  FETCH NEXT FROM CUR_{help__tbl}_IUD
         INTO @D_{help_id}, @I_{help_id},
              @D_{help_target_code}, @I_{help_target_code},
              @D_{help_title}, @I_{help_title},
@@ -5811,12 +5811,12 @@ BEGIN
 
     IF (@TP='I')
 	BEGIN
-      UPDATE {schema}.{help}
+      UPDATE {schema}.{help__tbl}
 	     SET {help_etstmp} = @CURDTTM,
 			 {help_euser} = @MYUSER,
 		     {help_mtstmp} = @CURDTTM,
 			 {help_muser} = @MYUSER
-       WHERE {help}.{help_id} = @I_{help_id};
+       WHERE {help__tbl}.{help_id} = @I_{help_id};
     END  
 
 	/******************************************/
@@ -5828,7 +5828,7 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN  
 	  SET @WK_{help_id} = ISNULL(@D_{help_id},@I_{help_id})
-	  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} @TP, '{help}', @WK_{help_id}, @MYUSER, @CURDTTM
+	  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} @TP, '{help__tbl}', @WK_{help_id}, @MYUSER, @CURDTTM
 	END
 
  
@@ -5839,7 +5839,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{help_target_code}, @I_{help_target_code}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help}', @I_{help_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help__tbl}', @I_{help_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{help_target_code}'), @D_{help_target_code})
       END
 
@@ -5847,7 +5847,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{help_title}, @I_{help_title}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help}', @I_{help_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help__tbl}', @I_{help_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{help_title}'), @D_{help_title})
       END
 
@@ -5855,7 +5855,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{help_text}, @I_{help_text}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help}', @I_{help_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help__tbl}', @I_{help_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{help_text}'), @D_{help_text})
       END
 
@@ -5863,7 +5863,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_num}(@D_{help_seq}, @I_{help_seq}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help}', @I_{help_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help__tbl}', @I_{help_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{help_seq}'), @D_{help_seq})
       END
 
@@ -5871,7 +5871,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_num}(@D_{help_listing_main}, @I_{help_listing_main}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help}', @I_{help_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help__tbl}', @I_{help_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{help_listing_main}'), @D_{help_listing_main})
       END
 
@@ -5879,7 +5879,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_num}(@D_{help_listing_client}, @I_{help_listing_client}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help}', @I_{help_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{help__tbl}', @I_{help_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{help_listing_client}'), @D_{help_listing_client})
       END
 
@@ -5892,10 +5892,10 @@ BEGIN
 
     IF (@TP='U' AND @MY_{audit_seq} <> 0)
 	BEGIN
-      UPDATE {schema}.{help}
+      UPDATE {schema}.{help__tbl}
 	     SET {help_mtstmp} = @CURDTTM,
 			 {help_muser} = @MYUSER
-       WHERE {help}.{help_id} = @I_{help_id};
+       WHERE {help__tbl}.{help_id} = @I_{help_id};
     END  
 
 	/*****************************************/
@@ -5905,7 +5905,7 @@ BEGIN
 
 
             
-    FETCH NEXT FROM CUR_{help}_IUD
+    FETCH NEXT FROM CUR_{help__tbl}_IUD
         INTO @D_{help_id}, @I_{help_id},
              @D_{help_target_code},  @I_{help_target_code},
              @D_{help_title}, @I_{help_title},
@@ -5916,14 +5916,14 @@ BEGIN
 
 
   END
-  CLOSE CUR_{help}_IUD
-  DEALLOCATE CUR_{help}_IUD
+  CLOSE CUR_{help__tbl}_IUD
+  DEALLOCATE CUR_{help__tbl}_IUD
 
   RETURN
 
 END
 GO
-ALTER TABLE [jsharmony].[{help}] ENABLE TRIGGER [{help}_IUD]
+ALTER TABLE [jsharmony].[{help__tbl}] ENABLE TRIGGER [{help__tbl}_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -5931,7 +5931,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[{note}_IUD] on [jsharmony].[{note}]
+CREATE trigger [jsharmony].[{note__tbl}_IUD] on [jsharmony].[{note__tbl}]
 for insert, update, delete
 AS
 BEGIN
@@ -5942,7 +5942,7 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_{audit_seq} NUMERIC(20,0)
-  DECLARE CUR_{note}_IUD CURSOR LOCAL FOR
+  DECLARE CUR_{note__tbl}_IUD CURSOR LOCAL FOR
      SELECT  del.{note_id}, i.{note_id},
 	         del.{note_scope}, i.{note_scope},
 	         del.{note_scope_id}, i.{note_scope_id},
@@ -6015,7 +6015,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE({note_id})
   BEGIN
-    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{note}_IUD','ERR', 'Cannot update ID'
+    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{note__tbl}_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6023,7 +6023,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE({note_scope})
   BEGIN
-    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{note}_IUD','ERR', 'Cannot update {note_scope}'
+    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{note__tbl}_IUD','ERR', 'Cannot update {note_scope}'
     raiserror('Cannot update foreign key {note_scope}',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6031,7 +6031,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE({note_scope_id})
   BEGIN
-    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{note}_IUD','ERR', 'Cannot update {note_scope_id}'
+    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{note__tbl}_IUD','ERR', 'Cannot update {note_scope_id}'
     raiserror('Cannot update foreign key {note_scope_id}',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6039,14 +6039,14 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE({note_type})
   BEGIN
-    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{note}_IUD','ERR', 'Cannot update {note_type}'
+    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{note__tbl}_IUD','ERR', 'Cannot update {note_type}'
     raiserror('Cannot update foreign key {note_type}',16,1)
     ROLLBACK TRANSACTION
     return
   END
   
-  OPEN CUR_{note}_IUD
-  FETCH NEXT FROM CUR_{note}_IUD
+  OPEN CUR_{note__tbl}_IUD
+  FETCH NEXT FROM CUR_{note__tbl}_IUD
         INTO @D_{note_id}, @I_{note_id},
              @D_{note_scope}, @I_{note_scope},
              @D_{note_scope_id}, @I_{note_scope_id},
@@ -6073,8 +6073,8 @@ BEGIN
 		   OR
 		   @I_{note_scope} <> 'S' AND @I_{note_scope_id} is NULL
 		BEGIN
-			CLOSE CUR_{note}_IUD
-			DEALLOCATE CUR_{note}_IUD
+			CLOSE CUR_{note__tbl}_IUD
+			DEALLOCATE CUR_{note__tbl}_IUD
 			SET @M = 'SCOPE ID INCONSISTENT WITH SCOPE'
 			raiserror(@M ,16,1)
 			ROLLBACK TRANSACTION
@@ -6089,8 +6089,8 @@ BEGIN
 		     {@in_tblid} = @I_{note_scope_id}
 		IF @C <= 0
 		BEGIN
-			CLOSE CUR_{note}_IUD
-			DEALLOCATE CUR_{note}_IUD
+			CLOSE CUR_{note__tbl}_IUD
+			DEALLOCATE CUR_{note__tbl}_IUD
 			SET @M = 'Table ' + @I_{note_scope} + ' does not contain record ' + CONVERT(NVARCHAR(MAX),@I_{note_scope_id})
 			raiserror(@M ,16,1)
 			ROLLBACK TRANSACTION
@@ -6101,14 +6101,14 @@ BEGIN
     IF (@TP='I')
 	BEGIN
 
-      UPDATE {schema}.{note}
+      UPDATE {schema}.{note__tbl}
 	     SET {cust_id} = NULL,
 		     {item_id} = NULL,
 		     {note_etstmp} = @CURDTTM,
 			 {note_euser} = @MYUSER,
 		     {note_mtstmp} = @CURDTTM,
 			 {note_muser} = @MYUSER
-         WHERE {note}.{note_id} = @I_{note_id};
+         WHERE {note__tbl}.{note_id} = @I_{note_id};
 
     END  
 
@@ -6123,7 +6123,7 @@ BEGIN
 	  SET @WK_{note_id} = ISNULL(@D_{note_id},@I_{note_id})
 	  SET @WK_{audit_ref_name} = ISNULL(@D_{note_scope},@I_{note_scope})
 	  SET @WK_{audit_ref_id} = ISNULL(@D_{note_scope_id},@I_{note_scope_id})
-	  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} @TP, '{note}', @WK_{note_id}, @MYUSER, @CURDTTM, @WK_{audit_ref_name}, @WK_{audit_ref_id}, default
+	  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} @TP, '{note__tbl}', @WK_{note_id}, @MYUSER, @CURDTTM, @WK_{audit_ref_name}, @WK_{audit_ref_id}, default
 	END
 
  
@@ -6134,7 +6134,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{note_scope}, @I_{note_scope}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note__tbl}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{note_scope}'), @D_{note_scope})
       END
 
@@ -6142,7 +6142,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_num}(@D_{note_scope_id}, @I_{note_scope_id}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note__tbl}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{note_scope_id}'), @D_{note_scope_id})
       END
 
@@ -6150,7 +6150,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{note_sts}, @I_{note_sts}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note__tbl}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{note_sts}'), @D_{note_sts})
       END
 
@@ -6158,7 +6158,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{note_type}, @I_{note_type}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note__tbl}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{note_type}'), @D_{note_type})
       END
 
@@ -6166,7 +6166,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{note_body}, @I_{note_body}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note__tbl}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{note_body}'), @D_{note_body})
       END
 
@@ -6174,7 +6174,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_num}(@D_{cust_id}, @I_{cust_id}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note__tbl}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{cust_id}'), @D_{cust_id})
       END
 
@@ -6182,7 +6182,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_num}(@D_{item_id}, @I_{item_id}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base}  'U', '{note__tbl}', @I_{note_id}, @MYUSER, @CURDTTM, @I_{note_scope}, @I_{note_scope_id}, default
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{item_id}'), @D_{item_id})
       END
 
@@ -6195,10 +6195,10 @@ BEGIN
 
     IF (@TP='U' AND @MY_{audit_seq} <> 0)
 	BEGIN
-        UPDATE {schema}.{note}
+        UPDATE {schema}.{note__tbl}
 	     SET {note_mtstmp} = @CURDTTM,
 			 {note_muser} = @MYUSER
-         WHERE {note}.{note_id} = @I_{note_id};
+         WHERE {note__tbl}.{note_id} = @I_{note_id};
     END  
 
 	/*****************************************/
@@ -6208,7 +6208,7 @@ BEGIN
 
 
             
-    FETCH NEXT FROM CUR_{note}_IUD
+    FETCH NEXT FROM CUR_{note__tbl}_IUD
         INTO @D_{note_id}, @I_{note_id},
              @D_{note_scope},  @I_{note_scope},
              @D_{note_scope_id}, @I_{note_scope_id},
@@ -6219,15 +6219,15 @@ BEGIN
 			 @D_{item_id}, @I_{item_id}
 
   END
-  CLOSE CUR_{note}_IUD
-  DEALLOCATE CUR_{note}_IUD
+  CLOSE CUR_{note__tbl}_IUD
+  DEALLOCATE CUR_{note__tbl}_IUD
 
   RETURN
 
 END
 
 GO
-ALTER TABLE [jsharmony].[{note}] ENABLE TRIGGER [{note}_IUD]
+ALTER TABLE [jsharmony].[{note__tbl}] ENABLE TRIGGER [{note__tbl}_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6375,7 +6375,7 @@ BEGIN
     SET @hash = NULL
 
 	SET @NEWPW = NUll;
-    SET @UPDATE_PW = '{note}'
+    SET @UPDATE_PW = '{note__tbl}'
 
     IF (@TP='I' or @TP='U')
 	BEGIN
@@ -6607,7 +6607,7 @@ GO
 
 
 
-CREATE trigger [jsharmony].[{param}_IUD] on [jsharmony].[{param}]
+CREATE trigger [jsharmony].[{param__tbl}_IUD] on [jsharmony].[{param__tbl}]
 for insert, update, delete
 AS
 BEGIN
@@ -6634,13 +6634,13 @@ BEGIN
   if(@TP = 'I')
   BEGIN
   
-    update {schema}.{param} set
+    update {schema}.{param__tbl} set
       {param_etstmp} = @MYGETDATE,
       {param_euser} =@MYUSER, 
       {param_mtstmp} = @MYGETDATE,
       {param_muser} =@MYUSER 
       from INSERTED
-      WHERE {param}.{param_id}=INSERTED.{param_id} 
+      WHERE {param__tbl}.{param_id}=INSERTED.{param_id} 
   
   END
   ELSE 
@@ -6648,11 +6648,11 @@ BEGIN
   
     if(@TP = 'U')
     BEGIN
-      update {schema}.{param} set
+      update {schema}.{param__tbl} set
         {param_mtstmp} = @MYGETDATE,
         {param_muser} =@MYUSER 
       from inserted 
-      WHERE {param}.{param_id}=INSERTED.{param_id} 
+      WHERE {param__tbl}.{param_id}=INSERTED.{param_id} 
     END
 
   END
@@ -6664,7 +6664,7 @@ END
 
 
 GO
-ALTER TABLE [jsharmony].[{param}] ENABLE TRIGGER [{param}_IUD]
+ALTER TABLE [jsharmony].[{param__tbl}] ENABLE TRIGGER [{param__tbl}_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6920,7 +6920,7 @@ BEGIN
       
     SET @xloc = 'TP=' + ISNULL(@TP,'null')
 	SET @xtxt = 'I_{sys_user_func_id}=' + LTRIM(ISNULL(STR(@I_{sys_user_func_id}),'null')) +
-	            ' {doc}_{sys_user_func_id}=' + LTRIM(ISNULL(STR(@D_{sys_user_func_id}),'null')) 
+	            ' {doc__tbl}_{sys_user_func_id}=' + LTRIM(ISNULL(STR(@D_{sys_user_func_id}),'null')) 
     /* 
 	EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{sys_user_func}_IUD',@xloc, @xtxt 
 	*/
@@ -7081,7 +7081,7 @@ BEGIN
       
     SET @xloc = 'TP=' + ISNULL(@TP,'null')
 	SET @xtxt = 'I_{sys_user_role_id}=' + LTRIM(ISNULL(STR(@I_{sys_user_role_id}),'null')) +
-	            ' {doc}_{sys_user_role_id}=' + LTRIM(ISNULL(STR(@D_{sys_user_role_id}),'null')) 
+	            ' {doc__tbl}_{sys_user_role_id}=' + LTRIM(ISNULL(STR(@D_{sys_user_role_id}),'null')) 
     /*
     EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{sys_user_role}_IUD',@xloc, @xtxt
 	*/
@@ -7189,7 +7189,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[{txt}_IUD] on [jsharmony].[{txt}]
+CREATE trigger [jsharmony].[{txt__tbl}_IUD] on [jsharmony].[{txt__tbl}]
 for insert, update, delete
 AS
 BEGIN
@@ -7265,7 +7265,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE({txt_id})
   BEGIN
-    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{txt}_IUD','ERR', 'Cannot update ID'
+    EXEC [jsharmony].[{zz-filedebug}] 'TRIGGER','{txt__tbl}_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -7292,12 +7292,12 @@ BEGIN
 
     IF (@TP='I')
 	BEGIN
-      UPDATE {schema}.{txt}
+      UPDATE {schema}.{txt__tbl}
 	     SET {txt_etstmp} = @CURDTTM,
 			 {txt_euser} = @MYUSER,
 		     {txt_mtstmp} = @CURDTTM,
 			 {txt_muser} = @MYUSER
-       WHERE {txt}.{txt_id} = @I_{txt_id};
+       WHERE {txt__tbl}.{txt_id} = @I_{txt_id};
     END  
 
 	/******************************************/
@@ -7309,7 +7309,7 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN  
 	  SET @WK_{txt_id} = ISNULL(@D_{txt_id},@I_{txt_id})
-	  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} @TP, '{txt}', @WK_{txt_id}, @MYUSER, @CURDTTM
+	  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} @TP, '{txt__tbl}', @WK_{txt_id}, @MYUSER, @CURDTTM
 	END
 
  
@@ -7320,7 +7320,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{txt_process}, @I_{txt_process}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt}', @I_{txt_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt__tbl}', @I_{txt_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{txt_process}'), @D_{txt_process})
       END
 
@@ -7328,7 +7328,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{txt_attrib}, @I_{txt_attrib}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt}', @I_{txt_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt__tbl}', @I_{txt_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{txt_attrib}'), @D_{txt_attrib})
       END
 	  
@@ -7336,7 +7336,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{txt_type}, @I_{txt_type}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt}', @I_{txt_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt__tbl}', @I_{txt_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{txt_type}'), @D_{txt_type})
       END
 
@@ -7344,7 +7344,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{txt_title}, @I_{txt_title}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt}', @I_{txt_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt__tbl}', @I_{txt_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{txt_title}'), @D_{txt_title})
       END
 
@@ -7352,7 +7352,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{txt_body}, @I_{txt_body}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt}', @I_{txt_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt__tbl}', @I_{txt_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{txt_body}'), @D_{txt_body})
       END
 
@@ -7360,7 +7360,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{txt_bcc}, @I_{txt_bcc}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt}', @I_{txt_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt__tbl}', @I_{txt_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{txt_bcc}'), @D_{txt_bcc})
       END
 
@@ -7368,7 +7368,7 @@ BEGIN
           @TP = 'U' AND {schema}.{nequal_chr}(@D_{txt_desc}, @I_{txt_desc}) > 0)
       BEGIN
         IF (@MY_{audit_seq}=0)
-		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt}', @I_{txt_id}, @MYUSER, @CURDTTM
+		  EXEC	@MY_{audit_seq} = {schema}.{log_audit_base} 'U', '{txt__tbl}', @I_{txt_id}, @MYUSER, @CURDTTM
         INSERT INTO {schema}.{audit_detail} VALUES (@MY_{audit_seq}, lower('{txt_desc}'), @D_{txt_desc})
       END
 
@@ -7382,10 +7382,10 @@ BEGIN
 
     IF (@TP='U' AND @MY_{audit_seq} <> 0)
 	BEGIN
-      UPDATE {schema}.{txt}
+      UPDATE {schema}.{txt__tbl}
 	     SET {txt_mtstmp} = @CURDTTM,
 			 {txt_muser} = @MYUSER
-       WHERE {txt}.{txt_id} = @I_{txt_id};
+       WHERE {txt__tbl}.{txt_id} = @I_{txt_id};
     END  
 
 	/*****************************************/
@@ -7422,7 +7422,7 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[{txt}] ENABLE TRIGGER [{txt}_IUD]
+ALTER TABLE [jsharmony].[{txt__tbl}] ENABLE TRIGGER [{txt__tbl}_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -7693,7 +7693,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit_detail}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Sequence - {audit}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit_detail}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Sequence - {audit__tbl}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit_detail}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit_detail}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
 GO
@@ -7727,101 +7727,101 @@ EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=0x00 , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Detail (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit_detail}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=960 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=960 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Table Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Table Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header ID Value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header ID Value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_table_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Operation - DUI' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Operation - DUI' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_op}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header User Number' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header User Number' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=3690 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=3690 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_tstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{cust_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{cust_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Equipment ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{item_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Equipment ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{item_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Reference Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_ref_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Reference Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_ref_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Reference ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_ref_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Reference ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_ref_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Subject' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}', @level2type=N'COLUMN',@level2name=N'{audit_subject}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Subject' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}', @level2type=N'COLUMN',@level2name=N'{audit_subject}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Audit Trail Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{audit__tbl}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'IMD' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_user}', @level2type=N'COLUMN',@level2name=N'{sys_user_id}'
 GO
@@ -7839,7 +7839,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personn
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_user}', @level2type=N'COLUMN',@level2name=N'{sys_user_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'{note}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_user}', @level2type=N'COLUMN',@level2name=N'{sys_user_id}'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'{note__tbl}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_user}', @level2type=N'COLUMN',@level2name=N'{sys_user_id}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'TRIGGER', @value=N'Referential Integrity back to AC' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_user}', @level2type=N'COLUMN',@level2name=N'{sys_user_id}'
 GO
@@ -7861,7 +7861,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Personn
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_user}', @level2type=N'COLUMN',@level2name=N'{sys_user_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'{note}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_user}', @level2type=N'COLUMN',@level2name=N'{sys_user_sts}'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'{note__tbl}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_user}', @level2type=N'COLUMN',@level2name=N'{sys_user_sts}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_user}', @level2type=N'COLUMN',@level2name=N'{sys_user_stsdt}'
 GO
@@ -8023,7 +8023,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role St
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_role}', @level2type=N'COLUMN',@level2name=N'{cust_role_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'{note}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_role}', @level2type=N'COLUMN',@level2name=N'{cust_role_sts}'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'{note__tbl}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_role}', @level2type=N'COLUMN',@level2name=N'{cust_role_sts}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_role}', @level2type=N'COLUMN',@level2name=N'{cust_role_name}'
 GO
@@ -8083,47 +8083,47 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Customer - Role Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{cust_menu_role}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope - {code_doc_scope}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_scope}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope - {code_doc_scope}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_scope}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_scope_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Scope ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_scope_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID - C' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{cust_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID - C' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{cust_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Employee ID - E' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{item_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Employee ID - E' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{item_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Status - {code_ac1}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_sts}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Status - {code_ac1}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Category - {code2_doc_ctgr}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_ctgr}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Category - {code2_doc_ctgr}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_ctgr}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Extension (file suffix)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_ext}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Extension (file suffix)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_ext}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Size in bytes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_size}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Size in bytes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_size}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document File Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_filename}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document File Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_filename}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_mtstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_mtstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_muser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_muser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_utstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_utstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_uuser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_uuser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Synchronization Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_sync_tstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Synchronization Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_sync_tstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Main ID (Synchronization)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}', @level2type=N'COLUMN',@level2name=N'{doc_sync_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Main ID (Synchronization)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}', @level2type=N'COLUMN',@level2name=N'{doc_sync_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Documents (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Documents (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{doc__tbl}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Table (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{single}'
 GO
@@ -8369,31 +8369,31 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'{param_app} At
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters - Global (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param_app}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Header Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_target_code}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Header Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_target_code}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Title' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_title}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Title' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_title}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Text' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_text}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Text' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_text}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Last Modification Entry' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_mtstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Last Modification Entry' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_mtstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_muser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_muser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help UNIQUE - not null {help_target_code} unique' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_unq_code}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help UNIQUE - not null {help_target_code} unique' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_unq_code}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help - Show on Admin Index' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_listing_main}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help - Show on Admin Index' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_listing_main}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help - Show on Portal Index' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}', @level2type=N'COLUMN',@level2name=N'{help_listing_client}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help - Show on Portal Index' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}', @level2type=N'COLUMN',@level2name=N'{help_listing_client}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help__tbl}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help_target}', @level2type=N'COLUMN',@level2name=N'{help_target_code}'
 GO
@@ -8403,35 +8403,35 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel ID'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{help_target}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{note_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{note_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Scope - {code_note_scope}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{note_scope}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Scope - {code_note_scope}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{note_scope}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Scope ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{note_scope_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Scope ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{note_scope_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Status - {code_ac1}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{note_sts}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Status - {code_ac1}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{note_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID - C' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{cust_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client ID - C' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{cust_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Employee ID - E' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{item_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Employee ID - E' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{item_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Type - {code_note_type} - C,S,U' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{note_type}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Type - {code_note_type} - C,S,U' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{note_type}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note NOTE' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{note_body}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note NOTE' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{note_body}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{note_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{note_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{note_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{note_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{note_mtstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{note_mtstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{note_muser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{note_muser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}', @level2type=N'COLUMN',@level2name=N'{note_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Note System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}', @level2type=N'COLUMN',@level2name=N'{note_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Notes (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Notes (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{note__tbl}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Table (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{number}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Table (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{number__tbl}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{sys_user}', @level2type=N'COLUMN',@level2name=N'{sys_user_id}'
 GO
@@ -8567,15 +8567,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{sys_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'{param} Process Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param}', @level2type=N'COLUMN',@level2name=N'{param_process}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'{param__tbl} Process Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param__tbl}', @level2type=N'COLUMN',@level2name=N'{param_process}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'{param} Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param}', @level2type=N'COLUMN',@level2name=N'{param_attrib}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'{param__tbl} Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param__tbl}', @level2type=N'COLUMN',@level2name=N'{param_attrib}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'{param} Attribute (Parameter) Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param}', @level2type=N'COLUMN',@level2name=N'{param_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'{param__tbl} Attribute (Parameter) Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param__tbl}', @level2type=N'COLUMN',@level2name=N'{param_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'{param} Attribute (Parameter) Type - {code_param_type}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param}', @level2type=N'COLUMN',@level2name=N'{param_type}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'{param__tbl} Attribute (Parameter) Type - {code_param_type}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param__tbl}', @level2type=N'COLUMN',@level2name=N'{param_type}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters Dictionary (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters Dictionary (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param__tbl}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param_user}', @level2type=N'COLUMN',@level2name=N'{sys_user_id}'
 GO
@@ -8587,49 +8587,49 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'{param_sys} At
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Process Parameters - Personal (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue}', @level2type=N'COLUMN',@level2name=N'{queue_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue__tbl}', @level2type=N'COLUMN',@level2name=N'{queue_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue}', @level2type=N'COLUMN',@level2name=N'{queue_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue__tbl}', @level2type=N'COLUMN',@level2name=N'{queue_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue}', @level2type=N'COLUMN',@level2name=N'{queue_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue__tbl}', @level2type=N'COLUMN',@level2name=N'{queue_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Queue Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue}', @level2type=N'COLUMN',@level2name=N'{queue_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Queue Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue__tbl}', @level2type=N'COLUMN',@level2name=N'{queue_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Message' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue}', @level2type=N'COLUMN',@level2name=N'{queue_message}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Message' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue__tbl}', @level2type=N'COLUMN',@level2name=N'{queue_message}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result - OK, ERROR' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue}', @level2type=N'COLUMN',@level2name=N'{queue_rslt}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result - OK, ERROR' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue__tbl}', @level2type=N'COLUMN',@level2name=N'{queue_rslt}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue}', @level2type=N'COLUMN',@level2name=N'{queue_rslt_tstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue__tbl}', @level2type=N'COLUMN',@level2name=N'{queue_rslt_tstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue}', @level2type=N'COLUMN',@level2name=N'{queue_rslt_user}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request Result User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue__tbl}', @level2type=N'COLUMN',@level2name=N'{queue_rslt_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue}', @level2type=N'COLUMN',@level2name=N'{queue_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue__tbl}', @level2type=N'COLUMN',@level2name=N'{queue_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{queue__tbl}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}', @level2type=N'COLUMN',@level2name=N'{job_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}', @level2type=N'COLUMN',@level2name=N'{job_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}', @level2type=N'COLUMN',@level2name=N'{job_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}', @level2type=N'COLUMN',@level2name=N'{job_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}', @level2type=N'COLUMN',@level2name=N'{job_user}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}', @level2type=N'COLUMN',@level2name=N'{job_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Source - {code_task_source}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}', @level2type=N'COLUMN',@level2name=N'{job_source}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Source - {code_task_source}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}', @level2type=N'COLUMN',@level2name=N'{job_source}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Type - {code_task_action}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}', @level2type=N'COLUMN',@level2name=N'{job_action}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Type - {code_task_action}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}', @level2type=N'COLUMN',@level2name=N'{job_action}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}', @level2type=N'COLUMN',@level2name=N'{job_action_target}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}', @level2type=N'COLUMN',@level2name=N'{job_action_target}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Parameters' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}', @level2type=N'COLUMN',@level2name=N'{job_params}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Parameters' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}', @level2type=N'COLUMN',@level2name=N'{job_params}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result - OK, ERROR' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}', @level2type=N'COLUMN',@level2name=N'{job_rslt}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result - OK, ERROR' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}', @level2type=N'COLUMN',@level2name=N'{job_rslt}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}', @level2type=N'COLUMN',@level2name=N'{job_rslt_tstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}', @level2type=N'COLUMN',@level2name=N'{job_rslt_tstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}', @level2type=N'COLUMN',@level2name=N'{job_rslt_user}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}', @level2type=N'COLUMN',@level2name=N'{job_rslt_user}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}', @level2type=N'COLUMN',@level2name=N'{job_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}', @level2type=N'COLUMN',@level2name=N'{job_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job__tbl}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job_doc}', @level2type=N'COLUMN',@level2name=N'{job_doc_id}'
 GO
@@ -8677,7 +8677,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job_queue}', @level2type=N'COLUMN',@level2name=N'{job_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - {queue} (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job_queue}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - {queue__tbl} (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job_queue}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job_sms}', @level2type=N'COLUMN',@level2name=N'{job_sms_id}'
 GO
@@ -8689,7 +8689,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - SMS (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{job_sms}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Scripts (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'SCRIPT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Scripts (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'script__tbl'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{sys_func}', @level2type=N'COLUMN',@level2name=N'{sys_func_id}'
 GO
@@ -8709,161 +8709,161 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Syste
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Functions (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{sys_func}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item User Type - S-System, C-Customer' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_group}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item User Type - S-System, C-Customer' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_group}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'SIMD' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'SIMD' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=2 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'{note}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'{note__tbl}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=4 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=2550 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=2550 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_name}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=5 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_seq}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
+EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=6 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=3090 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=3090 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=7 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=4470 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=4470 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description Long' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description Long' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=8 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=8 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=8370 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=8370 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description Very Long' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Description Very Long' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_desc_ext2}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=9 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=9 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Command' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Command' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_cmd}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=10 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=10 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'For buttons as SMs: unique identifier for image' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'For buttons as SMs: unique identifier for image' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_image}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=11 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=11 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}', @level2type=N'COLUMN',@level2name=N'{menu_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{menu__tbl}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{sys_user_func}', @level2type=N'COLUMN',@level2name=N'{sys_user_id}'
 GO
@@ -8921,7 +8921,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Status CO
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{sys_role}', @level2type=N'COLUMN',@level2name=N'{sys_role_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'{note}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{sys_role}', @level2type=N'COLUMN',@level2name=N'{sys_role_sts}'
+EXEC sys.sp_addextendedproperty @name=N'NT', @value=N'{note__tbl}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{sys_role}', @level2type=N'COLUMN',@level2name=N'{sys_role_sts}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'AUDIT', @value=N'M' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{sys_role}', @level2type=N'COLUMN',@level2name=N'{sys_role_name}'
 GO
@@ -8985,151 +8985,151 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Name' , @
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Security - Role Menu Items (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{sys_menu_role}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Process Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Process Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_process}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_attrib}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Type HTML / TAXT - {code_txt_type}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_type}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Type HTML / TAXT - {code_txt_type}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_type}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=1350 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=1350 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Title' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) Title' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_title}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=10110 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=10110 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Attribute (Parameter) value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_body}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP BCC' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_bcc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP BCC' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_bcc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=525 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=525 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_desc}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_mtstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnOrder', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SPP Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}', @level2type=N'COLUMN',@level2name=N'{txt_muser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'String Process Parameters (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'String Process Parameters (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{txt__tbl}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{code_ac}', @level2type=N'COLUMN',@level2name=N'{code_sys_id}'
 GO
@@ -9673,33 +9673,33 @@ EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{code2_sys}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version ID (internal)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_id}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version ID (internal)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_id}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Component Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_component}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Component Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_component}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Major' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_no_major}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Major' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_no_major}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Minor' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_no_minor}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Minor' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_no_minor}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Build' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_no_build}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Build' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_no_build}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Revision' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_no_rev}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Number - Revision' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_no_rev}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version status - {code_version_sts}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_sts}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version status - {code_version_sts}' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_sts}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Note' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_note}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Note' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_note}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version entry date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_etstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version entry date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_etstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version entry user' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_euser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version entry user' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_euser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version last modification date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_mtstmp}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version last modification date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_mtstmp}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version last modification user' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_muser}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version last modification user' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_muser}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}', @level2type=N'COLUMN',@level2name=N'{version_snotes}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}', @level2type=N'COLUMN',@level2name=N'{version_snotes}'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Versions (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version}'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Versions (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{version__tbl}'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'{param_sys}', @level2type=N'COLUMN',@level2name=N'{param_sys_process}'
 GO
@@ -9818,34 +9818,34 @@ GO
 
 /****** Script for SelectTopNRows command from SSMS  ******/
 CREATE VIEW [jsharmony].[{v_doc}] AS
-SELECT {doc}.{doc_id}
-      ,{doc}.{doc_scope}
-      ,{doc}.{doc_scope_id}
-      ,{doc}.{cust_id}
-      ,{doc}.{item_id}
-      ,{doc}.{doc_sts}
-      ,{doc}.{doc_ctgr}
+SELECT {doc__tbl}.{doc_id}
+      ,{doc__tbl}.{doc_scope}
+      ,{doc__tbl}.{doc_scope_id}
+      ,{doc__tbl}.{cust_id}
+      ,{doc__tbl}.{item_id}
+      ,{doc__tbl}.{doc_sts}
+      ,{doc__tbl}.{doc_ctgr}
 	    ,GDD.{code_txt} {doc_ctgr_txt}
-      ,{doc}.{doc_desc}
-      ,{doc}.{doc_ext}
-      ,{doc}.{doc_size}
-      ,{doc}.{doc_filename}
-      ,{doc}.{doc_etstmp}
-      ,{doc}.{doc_euser}
+      ,{doc__tbl}.{doc_desc}
+      ,{doc__tbl}.{doc_ext}
+      ,{doc__tbl}.{doc_size}
+      ,{doc__tbl}.{doc_filename}
+      ,{doc__tbl}.{doc_etstmp}
+      ,{doc__tbl}.{doc_euser}
       ,{schema}.{my_db_user_fmt}({doc_euser}) {doc_euser_fmt}
-      ,{doc}.{doc_mtstmp}
-      ,{doc}.{doc_muser}
+      ,{doc__tbl}.{doc_mtstmp}
+      ,{doc__tbl}.{doc_muser}
       ,{schema}.{my_db_user_fmt}({doc_muser}) {doc_muser_fmt}
-      ,{doc}.{doc_utstmp}
-      ,{doc}.{doc_uuser}
+      ,{doc__tbl}.{doc_utstmp}
+      ,{doc__tbl}.{doc_uuser}
       ,{schema}.{my_db_user_fmt}({doc_uuser}) {doc_uuser}_fmt
-      ,{doc}.{doc_snotes}
+      ,{doc__tbl}.{doc_snotes}
 	    ,{single}.{dual_nvarchar50} {title_head}
 	    ,{single}.{dual_nvarchar50} {title_detail}
-  FROM {schema}.{doc}
+  FROM {schema}.{doc__tbl}
   INNER JOIN {schema}.{single} on 1=1
-  LEFT OUTER JOIN  {schema}.{code2_doc_ctgr} GDD ON GDD.{code_val1} = {doc}.{doc_scope}
-                                             AND GDD.{code_va12} = {doc}.{doc_ctgr}   
+  LEFT OUTER JOIN  {schema}.{code2_doc_ctgr} GDD ON GDD.{code_val1} = {doc__tbl}.{doc_scope}
+                                             AND GDD.{code_va12} = {doc__tbl}.{doc_ctgr}   
 
 GO
 
@@ -9860,30 +9860,30 @@ GO
 
 /****** Script for SelectTopNRows command from SSMS  ******/
 CREATE VIEW [jsharmony].[{v_note}] as
-SELECT {note}.{note_id}
-      ,{note}.{note_scope}
-      ,{note}.{note_scope_id}
+SELECT {note__tbl}.{note_id}
+      ,{note__tbl}.{note_scope}
+      ,{note__tbl}.{note_scope_id}
 	    ,{note_sts}
-      ,{note}.{cust_id}
+      ,{note__tbl}.{cust_id}
 	    ,{single}.{dual_nvarchar50} {cust_name}
 	    ,{single}.{dual_nvarchar50} {cust_name_ext}
-      ,{note}.{item_id}
+      ,{note__tbl}.{item_id}
 	    ,{single}.{dual_nvarchar50} {item_name}
-      ,{note}.{note_type}
-      ,{note}.{note_body}
-      ,{schema}.{my_to_date}({note}.{note_etstmp}) {note_dt}
-      ,{note}.{note_etstmp}
-      ,{schema}.{my_mmddyyhhmi}({note}.{note_etstmp}) {note_etstmp_fmt}
-      ,{note}.{note_euser}
-      ,{schema}.{my_db_user_fmt}({note}.{note_euser}) {note_euser_fmt}
-      ,{note}.{note_mtstmp}
-      ,{schema}.{my_mmddyyhhmi}({note}.{note_mtstmp}) {note_mtstmp_fmt}
-      ,{note}.{note_muser}
-      ,{schema}.{my_db_user_fmt}({note}.{note_muser}) {note_muser_fmt}
-      ,{note}.{note_snotes}
+      ,{note__tbl}.{note_type}
+      ,{note__tbl}.{note_body}
+      ,{schema}.{my_to_date}({note__tbl}.{note_etstmp}) {note_dt}
+      ,{note__tbl}.{note_etstmp}
+      ,{schema}.{my_mmddyyhhmi}({note__tbl}.{note_etstmp}) {note_etstmp_fmt}
+      ,{note__tbl}.{note_euser}
+      ,{schema}.{my_db_user_fmt}({note__tbl}.{note_euser}) {note_euser_fmt}
+      ,{note__tbl}.{note_mtstmp}
+      ,{schema}.{my_mmddyyhhmi}({note__tbl}.{note_mtstmp}) {note_mtstmp_fmt}
+      ,{note__tbl}.{note_muser}
+      ,{schema}.{my_db_user_fmt}({note__tbl}.{note_muser}) {note_muser_fmt}
+      ,{note__tbl}.{note_snotes}
 	    ,{single}.{dual_nvarchar50} {title_head}
 	    ,{single}.{dual_nvarchar50} {title_detail}
-  FROM {schema}.{note}
+  FROM {schema}.{note__tbl}
   INNER JOIN {schema}.{single} ON 1=1
 
 GO

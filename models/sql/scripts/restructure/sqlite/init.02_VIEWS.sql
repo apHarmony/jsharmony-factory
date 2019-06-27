@@ -1,9 +1,9 @@
 /***************VIEWS***************/
 
-/***************{version}_{param_user}***************/
+/***************{version__tbl}_{param_user}***************/
 CREATE VIEW {schema}_{v_param_cur} AS 
- SELECT {param}.{param_process} AS {param_cur_process},
-        {param}.{param_attrib} AS {param_cur_attrib},
+ SELECT {param__tbl}.{param_process} AS {param_cur_process},
+        {param__tbl}.{param_attrib} AS {param_cur_attrib},
         CASE
             WHEN {param_user}.{param_user_val} IS NULL OR {param_user}.{param_user_val} = '' THEN
             CASE
@@ -13,9 +13,9 @@ CREATE VIEW {schema}_{v_param_cur} AS
             ELSE {param_user}.{param_user_val}
         END AS {param_cur_val},
     {param_user}.{sys_user_id}
-   FROM {schema}_{param} {param}
-     LEFT JOIN {schema}_{param_sys} {param_sys} ON {param}.{param_process} = {param_sys}.{param_sys_process} AND {param}.{param_attrib} = {param_sys}.{param_sys_attrib}
-     LEFT JOIN {schema}_{param_app} {param_app} ON {param}.{param_process} = {param_app}.{param_app_process} AND {param}.{param_attrib} = {param_app}.{param_app_attrib}
+   FROM {schema}_{param__tbl} {param__tbl}
+     LEFT JOIN {schema}_{param_sys} {param_sys} ON {param__tbl}.{param_process} = {param_sys}.{param_sys_process} AND {param__tbl}.{param_attrib} = {param_sys}.{param_sys_attrib}
+     LEFT JOIN {schema}_{param_app} {param_app} ON {param__tbl}.{param_process} = {param_app}.{param_app_process} AND {param__tbl}.{param_attrib} = {param_app}.{param_app_attrib}
      LEFT JOIN ( SELECT {param_user}_1.{sys_user_id},
                         {param_user}_1.{param_user_process},
                         {param_user}_1.{param_user_attrib},
@@ -26,11 +26,11 @@ CREATE VIEW {schema}_{v_param_cur} AS
                         {param_user}_null.{param_user_process},
                         {param_user}_null.{param_user_attrib},
                         NULL AS {param_user_val}
-                   FROM {schema}_{param_user} {param_user}_null) {param_user} ON {param}.{param_process} = {param_user}.{param_user_process} AND {param}.{param_attrib} = {param_user}.{param_user_attrib};
+                   FROM {schema}_{param_user} {param_user}_null) {param_user} ON {param__tbl}.{param_process} = {param_user}.{param_user_process} AND {param__tbl}.{param_attrib} = {param_user}.{param_user_attrib};
 
 /***************{v_app_info}***************/
 CREATE VIEW {schema}_{v_app_info} AS
- SELECT name.{param_cur_val} AS {app_name},
+ SELECT name.{param_cur_val} AS {app_title},
     addr.{param_cur_val} AS {app_addr},
     city.{param_cur_val} AS {app_city},
     state.{param_cur_val} AS {app_state},
@@ -55,9 +55,9 @@ CREATE VIEW {schema}_{v_app_info} AS
 /***************{code2_param_app_attrib}***************/
 CREATE VIEW {schema}_{code2_param_app_attrib} AS
  SELECT null AS {code_seq},
-    {param}.{param_process} AS {code_val1},
-    {param}.{param_attrib} AS {code_va12},
-    {param}.{param_desc} AS {code_txt},
+    {param__tbl}.{param_process} AS {code_val1},
+    {param__tbl}.{param_attrib} AS {code_va12},
+    {param__tbl}.{param_desc} AS {code_txt},
     null AS {code_code},
     null {code_end_dt},
     null AS {code_end_reason},
@@ -67,15 +67,15 @@ CREATE VIEW {schema}_{code2_param_app_attrib} AS
     null AS {code_muser},
     null AS {code_snotes},
     null AS {code_notes}
-   FROM {schema}_{param} {param}
-  WHERE {param}.{is_param_app};
+   FROM {schema}_{param__tbl} {param__tbl}
+  WHERE {param__tbl}.{is_param_app};
 
 /***************{code2_param_user_attrib}***************/
 CREATE VIEW {schema}_{code2_param_user_attrib} AS
  SELECT null AS {code_seq},
-    {param}.{param_process} AS {code_val1},
-    {param}.{param_attrib} AS {code_va12},
-    {param}.{param_desc} AS {code_txt},
+    {param__tbl}.{param_process} AS {code_val1},
+    {param__tbl}.{param_attrib} AS {code_va12},
+    {param__tbl}.{param_desc} AS {code_txt},
     null AS {code_code},
     null AS {code_end_dt},
     null AS {code_end_reason},
@@ -85,15 +85,15 @@ CREATE VIEW {schema}_{code2_param_user_attrib} AS
     null AS {code_muser},
     null AS {code_snotes},
     null AS {code_notes}
-   FROM {schema}_{param} {param}
-  WHERE {param}.{is_param_user};
+   FROM {schema}_{param__tbl} {param__tbl}
+  WHERE {param__tbl}.{is_param_user};
 
 /***************{code2_param_sys_attrib}***************/
 CREATE VIEW {schema}_{code2_param_sys_attrib} AS
  SELECT null AS {code_seq},
-    {param}.{param_process} AS {code_val1},
-    {param}.{param_attrib} AS {code_va12},
-    {param}.{param_desc} AS {code_txt},
+    {param__tbl}.{param_process} AS {code_val1},
+    {param__tbl}.{param_attrib} AS {code_va12},
+    {param__tbl}.{param_desc} AS {code_txt},
     null AS {code_code},
     null {code_end_dt},
     null AS {code_end_reason},
@@ -103,61 +103,61 @@ CREATE VIEW {schema}_{code2_param_sys_attrib} AS
     null AS {code_muser},
     null AS {code_snotes},
     null AS {code_notes}
-   FROM {schema}_{param} {param}
-  WHERE {param}.{is_param_sys};
+   FROM {schema}_{param__tbl} {param__tbl}
+  WHERE {param__tbl}.{is_param_sys};
 
 /***************{code_param_app_process}***************/
 CREATE VIEW {schema}_{code_param_app_process} AS
  SELECT DISTINCT null AS {code_seq},
-    {param}.{param_process} AS {code_val},
-    {param}.{param_process} AS {code_txt},
+    {param__tbl}.{param_process} AS {code_val},
+    {param__tbl}.{param_process} AS {code_txt},
     null AS {code_code},
     null AS {code_end_dt},
     null AS {code_end_reason}
-   FROM {schema}_{param} {param}
-  WHERE {param}.{is_param_app};
+   FROM {schema}_{param__tbl} {param__tbl}
+  WHERE {param__tbl}.{is_param_app};
 
 /***************{code_param_user_process}***************/
 CREATE VIEW {schema}_{code_param_user_process} AS
  SELECT DISTINCT null AS {code_seq},
-    {param}.{param_process} AS {code_val},
-    {param}.{param_process} AS {code_txt},
+    {param__tbl}.{param_process} AS {code_val},
+    {param__tbl}.{param_process} AS {code_txt},
     null AS {code_code},
     null AS {code_end_dt},
     null AS {code_end_reason}
-   FROM {schema}_{param} {param}
-  WHERE {param}.{is_param_user};
+   FROM {schema}_{param__tbl} {param__tbl}
+  WHERE {param__tbl}.{is_param_user};
 
 /***************{code_param_sys_process}***************/
 CREATE VIEW {schema}_{code_param_sys_process} AS
  SELECT DISTINCT null AS {code_seq},
-    {param}.{param_process} AS {code_val},
-    {param}.{param_process} AS {code_txt},
+    {param__tbl}.{param_process} AS {code_val},
+    {param__tbl}.{param_process} AS {code_txt},
     null AS {code_code},
     null AS {code_end_dt},
     null AS {code_end_reason}
-   FROM {schema}_{param} {param}
-  WHERE {param}.{is_param_sys};
+   FROM {schema}_{param__tbl} {param__tbl}
+  WHERE {param__tbl}.{is_param_sys};
 
 /***************{v_audit_detail}***************/
 CREATE VIEW {schema}_{v_audit_detail} AS
- SELECT {audit}.{audit_seq},
-    {audit}.{cust_id},
-    {audit}.{item_id},
-    {audit}.{audit_table_name},
-    {audit}.{audit_table_id},
-    {audit}.{audit_op},
-    {audit}.{audit_user},
-    {schema}.{my_db_user_fmt}({audit}.{audit_user}) AS {sys_user_name},
-    {audit}.{db_id},
-    {audit}.{audit_tstmp},
-    {audit}.{audit_ref_name},
-    {audit}.{audit_ref_id},
-    {audit}.{audit_subject},
+ SELECT {audit__tbl}.{audit_seq},
+    {audit__tbl}.{cust_id},
+    {audit__tbl}.{item_id},
+    {audit__tbl}.{audit_table_name},
+    {audit__tbl}.{audit_table_id},
+    {audit__tbl}.{audit_op},
+    {audit__tbl}.{audit_user},
+    {schema}.{my_db_user_fmt}({audit__tbl}.{audit_user}) AS {sys_user_name},
+    {audit__tbl}.{db_id},
+    {audit__tbl}.{audit_tstmp},
+    {audit__tbl}.{audit_ref_name},
+    {audit__tbl}.{audit_ref_id},
+    {audit__tbl}.{audit_subject},
     {audit_detail}.{audit_column_name},
     {audit_detail}.{audit_column_val}
-   FROM ({schema}_{audit} {audit}
-     LEFT JOIN {schema}_{audit_detail} {audit_detail} ON (({audit}.{audit_seq} = {audit_detail}.{audit_seq})));
+   FROM ({schema}_{audit__tbl} {audit__tbl}
+     LEFT JOIN {schema}_{audit_detail} {audit_detail} ON (({audit__tbl}.{audit_seq} = {audit_detail}.{audit_seq})));
 
 /***************{v_cust_user_nostar}***************/
 CREATE VIEW {schema}_{v_cust_user_nostar} AS
@@ -220,22 +220,22 @@ CREATE VIEW {schema}_{v_cust_menu_role_selection} AS
             {cust_role}.{cust_role_sts},
             {cust_role}.{cust_role_desc},
             {cust_role}.{cust_role_id},
-            {menu}.{menu_id_auto},
-            {menu}.{menu_group},
-            {menu}.{menu_id},
-            {menu}.{menu_sts},
-            {menu}.{menu_id_parent},
-            {menu}.{menu_name},
-            {menu}.{menu_seq},
-            {menu}.{menu_desc},
-            {menu}.{menu_desc_ext},
-            {menu}.{menu_desc_ext2},
-            {menu}.{menu_cmd},
-            {menu}.{menu_image},
-            {menu}.{menu_snotes},
-            {menu}.{menu_subcmd}
+            {menu__tbl}.{menu_id_auto},
+            {menu__tbl}.{menu_group},
+            {menu__tbl}.{menu_id},
+            {menu__tbl}.{menu_sts},
+            {menu__tbl}.{menu_id_parent},
+            {menu__tbl}.{menu_name},
+            {menu__tbl}.{menu_seq},
+            {menu__tbl}.{menu_desc},
+            {menu__tbl}.{menu_desc_ext},
+            {menu__tbl}.{menu_desc_ext2},
+            {menu__tbl}.{menu_cmd},
+            {menu__tbl}.{menu_image},
+            {menu__tbl}.{menu_snotes},
+            {menu__tbl}.{menu_subcmd}
            FROM ({schema}_{cust_role} {cust_role}
-             LEFT JOIN {schema}_{menu} {menu} ON (({menu}.{menu_group} = 'C')))) m
+             LEFT JOIN {schema}_{menu__tbl} {menu__tbl} ON (({menu__tbl}.{menu_group} = 'C')))) m
      JOIN {schema}_{single} {single} ON ((1 = 1)))
      LEFT JOIN {schema}_{cust_menu_role} {cust_menu_role} ON ((({cust_menu_role}.{cust_role_name} = m.{cust_role_name}) AND ({cust_menu_role}.{menu_id} = m.{menu_id}))));
 
@@ -252,75 +252,75 @@ end;
 
 /***************{v_doc}***************/
 CREATE VIEW {schema}_{v_doc} AS
- SELECT {doc}.{doc_id},
-    {doc}.{doc_scope},
-    {doc}.{doc_scope_id},
-    {doc}.{cust_id},
-    {doc}.{item_id},
-    {doc}.{doc_sts},
-    {doc}.{doc_ctgr},
+ SELECT {doc__tbl}.{doc_id},
+    {doc__tbl}.{doc_scope},
+    {doc__tbl}.{doc_scope_id},
+    {doc__tbl}.{cust_id},
+    {doc__tbl}.{item_id},
+    {doc__tbl}.{doc_sts},
+    {doc__tbl}.{doc_ctgr},
     gdd.{code_txt} AS {doc_ctgr_txt},
-    {doc}.{doc_desc},
-    {doc}.{doc_ext},
-    {doc}.{doc_size},
-    ('D' || ({doc}.{doc_id}) || COALESCE({doc}.{doc_ext}, '')) AS {doc_filename},
-    {doc}.{doc_etstmp},
-    {doc}.{doc_euser},
-    {schema}.{my_db_user_fmt}({doc}.{doc_euser}) AS {doc_euser_fmt},
-    {doc}.{doc_mtstmp},
-    {doc}.{doc_muser},
-    {schema}.{my_db_user_fmt}({doc}.{doc_muser}) AS {doc_muser_fmt},
-    {doc}.{doc_utstmp},
-    {doc}.{doc_uuser},
-    {schema}.{my_db_user_fmt}({doc}.{doc_uuser}) AS {doc_uuser}_fmt,
-    {doc}.{doc_snotes},
+    {doc__tbl}.{doc_desc},
+    {doc__tbl}.{doc_ext},
+    {doc__tbl}.{doc_size},
+    ('D' || ({doc__tbl}.{doc_id}) || COALESCE({doc__tbl}.{doc_ext}, '')) AS {doc_filename},
+    {doc__tbl}.{doc_etstmp},
+    {doc__tbl}.{doc_euser},
+    {schema}.{my_db_user_fmt}({doc__tbl}.{doc_euser}) AS {doc_euser_fmt},
+    {doc__tbl}.{doc_mtstmp},
+    {doc__tbl}.{doc_muser},
+    {schema}.{my_db_user_fmt}({doc__tbl}.{doc_muser}) AS {doc_muser_fmt},
+    {doc__tbl}.{doc_utstmp},
+    {doc__tbl}.{doc_uuser},
+    {schema}.{my_db_user_fmt}({doc__tbl}.{doc_uuser}) AS {doc_uuser}_fmt,
+    {doc__tbl}.{doc_snotes},
     NULL AS {title_head},
     NULL AS {title_detail}
-   FROM ({schema}_{doc} {doc}
-     LEFT JOIN {schema}_{code2_doc_ctgr} gdd ON (((gdd.{code_val1} = {doc}.{doc_scope}) AND (gdd.{code_va12} = {doc}.{doc_ctgr}))));
+   FROM ({schema}_{doc__tbl} {doc__tbl}
+     LEFT JOIN {schema}_{code2_doc_ctgr} gdd ON (((gdd.{code_val1} = {doc__tbl}.{doc_scope}) AND (gdd.{code_va12} = {doc__tbl}.{doc_ctgr}))));
 
 /***************{v_doc_ext}***************/
 CREATE VIEW {schema}_{v_doc_ext} AS
- SELECT {doc}.{doc_id},
-    {doc}.{doc_scope},
-    {doc}.{doc_scope_id},
-    {doc}.{cust_id},
-    {doc}.{item_id},
-    {doc}.{doc_sts},
-    {doc}.{doc_ctgr},
-    {doc}.{doc_desc},
-    {doc}.{doc_ext},
-    {doc}.{doc_size},
-    ('D' || {doc}.{doc_id} || COALESCE({doc}.{doc_ext}, '')) AS {doc_filename},
-    {doc}.{doc_etstmp},
-    {doc}.{doc_euser},
-    {schema}.{my_db_user_fmt}({doc}.{doc_euser}) AS {doc_euser_fmt},
-    {doc}.{doc_mtstmp},
-    {doc}.{doc_muser},
-    {schema}.{my_db_user_fmt}({doc}.{doc_muser}) AS {doc_muser_fmt},
-    {doc}.{doc_utstmp},
-    {doc}.{doc_uuser},
-    {schema}.{my_db_user_fmt}({doc}.{doc_uuser}) AS {doc_uuser}_fmt,
-    {doc}.{doc_snotes},
+ SELECT {doc__tbl}.{doc_id},
+    {doc__tbl}.{doc_scope},
+    {doc__tbl}.{doc_scope_id},
+    {doc__tbl}.{cust_id},
+    {doc__tbl}.{item_id},
+    {doc__tbl}.{doc_sts},
+    {doc__tbl}.{doc_ctgr},
+    {doc__tbl}.{doc_desc},
+    {doc__tbl}.{doc_ext},
+    {doc__tbl}.{doc_size},
+    ('D' || {doc__tbl}.{doc_id} || COALESCE({doc__tbl}.{doc_ext}, '')) AS {doc_filename},
+    {doc__tbl}.{doc_etstmp},
+    {doc__tbl}.{doc_euser},
+    {schema}.{my_db_user_fmt}({doc__tbl}.{doc_euser}) AS {doc_euser_fmt},
+    {doc__tbl}.{doc_mtstmp},
+    {doc__tbl}.{doc_muser},
+    {schema}.{my_db_user_fmt}({doc__tbl}.{doc_muser}) AS {doc_muser_fmt},
+    {doc__tbl}.{doc_utstmp},
+    {doc__tbl}.{doc_uuser},
+    {schema}.{my_db_user_fmt}({doc__tbl}.{doc_uuser}) AS {doc_uuser}_fmt,
+    {doc__tbl}.{doc_snotes},
     null AS {title_head},
     null AS {title_detail},
-    {doc}.{doc_scope} AS {doc_datalock},
+    {doc__tbl}.{doc_scope} AS {doc_datalock},
     null AS {cust_name},
     null AS {cust_name_ext},
     null AS {item_name},
-    {doc}.rowid rowid
-   FROM {schema}_{doc} {doc};
+    {doc__tbl}.rowid rowid
+   FROM {schema}_{doc__tbl} {doc__tbl};
 
 create trigger {schema}_{v_doc_ext}_insert instead of insert on {schema}_{v_doc_ext}
 begin
-  insert into {schema}_{doc}({doc_scope}, {doc_scope_id}, {doc_sts}, {cust_id}, {item_id}, {doc_ctgr}, {doc_desc}, {doc_ext}, {doc_size}, {doc_etstmp}, {doc_euser}, {doc_mtstmp}, {doc_muser}, {doc_utstmp}, {doc_uuser}, {doc_snotes})
+  insert into {schema}_{doc__tbl}({doc_scope}, {doc_scope_id}, {doc_sts}, {cust_id}, {item_id}, {doc_ctgr}, {doc_desc}, {doc_ext}, {doc_size}, {doc_etstmp}, {doc_euser}, {doc_mtstmp}, {doc_muser}, {doc_utstmp}, {doc_uuser}, {doc_snotes})
                     values (coalesce(new.{doc_scope},'S'), coalesce(new.{doc_scope_id},0), coalesce(new.{doc_sts},'A'), new.{cust_id}, new.{item_id}, new.{doc_ctgr}, new.{doc_desc}, new.{doc_ext}, new.{doc_size}, new.{doc_etstmp}, new.{doc_euser}, new.{doc_mtstmp}, new.{doc_muser}, new.{doc_utstmp}, new.{doc_uuser}, new.{doc_snotes})\;
   update jsharmony_meta set extra_changes=extra_changes+1, last_insert_rowid_override=last_insert_rowid()\;
 end;
 
 create trigger {schema}_{v_doc_ext}_update instead of update on {schema}_{v_doc_ext}
 begin
-  update {schema}_{doc} set {doc_scope} = new.{doc_scope}, {doc_scope_id} = new.{doc_scope_id}, {doc_sts} = new.{doc_sts},
+  update {schema}_{doc__tbl} set {doc_scope} = new.{doc_scope}, {doc_scope_id} = new.{doc_scope_id}, {doc_sts} = new.{doc_sts},
                            {cust_id} = new.{cust_id}, {item_id} = new.{item_id}, {doc_ctgr} = new.{doc_ctgr}, {doc_desc} = new.{doc_desc},
                            {doc_ext} = new.{doc_ext}, {doc_size} = new.{doc_size},
                            {doc_etstmp} = new.{doc_etstmp},{doc_euser} = new.{doc_euser}, {doc_mtstmp} = new.{doc_mtstmp}, {doc_muser} = new.{doc_muser},
@@ -331,33 +331,33 @@ end;
 
 create trigger {schema}_{v_doc_ext}_delete instead of delete on {schema}_{v_doc_ext}
 begin
-  delete from {schema}_{doc} where {doc_id} = old.{doc_id}\;
+  delete from {schema}_{doc__tbl} where {doc_id} = old.{doc_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
 /***************{v_doc_filename}***************/
 CREATE VIEW {schema}_{v_doc_filename} AS
- SELECT {doc}.{doc_id},
-    {doc}.{doc_scope},
-    {doc}.{doc_scope_id},
-    {doc}.{cust_id},
-    {doc}.{item_id},
-    {doc}.{doc_sts},
-    {doc}.{doc_ctgr},
-    {doc}.{doc_desc},
-    {doc}.{doc_ext},
-    {doc}.{doc_size},
-    {doc}.{doc_etstmp},
-    {doc}.{doc_euser},
-    {doc}.{doc_mtstmp},
-    {doc}.{doc_muser},
-    {doc}.{doc_utstmp},
-    {doc}.{doc_uuser},
-    {doc}.{doc_sync_tstmp},
-    {doc}.{doc_snotes},
-    {doc}.{doc_sync_id},
-    ('D' || {doc}.{doc_id} || COALESCE({doc}.{doc_ext}, '')) AS {doc_filename}
-   FROM {schema}_{doc} {doc};
+ SELECT {doc__tbl}.{doc_id},
+    {doc__tbl}.{doc_scope},
+    {doc__tbl}.{doc_scope_id},
+    {doc__tbl}.{cust_id},
+    {doc__tbl}.{item_id},
+    {doc__tbl}.{doc_sts},
+    {doc__tbl}.{doc_ctgr},
+    {doc__tbl}.{doc_desc},
+    {doc__tbl}.{doc_ext},
+    {doc__tbl}.{doc_size},
+    {doc__tbl}.{doc_etstmp},
+    {doc__tbl}.{doc_euser},
+    {doc__tbl}.{doc_mtstmp},
+    {doc__tbl}.{doc_muser},
+    {doc__tbl}.{doc_utstmp},
+    {doc__tbl}.{doc_uuser},
+    {doc__tbl}.{doc_sync_tstmp},
+    {doc__tbl}.{doc_snotes},
+    {doc__tbl}.{doc_sync_id},
+    ('D' || {doc__tbl}.{doc_id} || COALESCE({doc__tbl}.{doc_ext}, '')) AS {doc_filename}
+   FROM {schema}_{doc__tbl} {doc__tbl};
 
 /***************{v_param_app}***************/
 CREATE VIEW {schema}_{v_param_app} AS
@@ -397,10 +397,10 @@ end;
 
 /***************{v_month}***************/
 CREATE VIEW {schema}_{v_month} AS
- SELECT {number}.{number_val} {month_val},
-    substr(('0' || {number}.{number_val}), -2, 2) AS {month_txt}
-   FROM {schema}_{number} {number}
-  WHERE ({number}.{number_val} <= 12);
+ SELECT {number__tbl}.{number_val} {month_val},
+    substr(('0' || {number__tbl}.{number_val}), -2, 2) AS {month_txt}
+   FROM {schema}_{number__tbl} {number__tbl}
+  WHERE ({number__tbl}.{number_val} <= 12);
 
 /***************{v_my_user}***************/
 CREATE VIEW {schema}_{v_my_user} AS
@@ -414,64 +414,64 @@ CREATE VIEW {schema}_{v_my_roles} AS
 
 /***************{v_note}***************/
 CREATE VIEW {schema}_{v_note} AS
- SELECT {note}.{note_id},
-    {note}.{note_scope},
-    {note}.{note_scope_id},
-    {note}.{note_sts},
-    {note}.{cust_id},
+ SELECT {note__tbl}.{note_id},
+    {note__tbl}.{note_scope},
+    {note__tbl}.{note_scope_id},
+    {note__tbl}.{note_sts},
+    {note__tbl}.{cust_id},
     null AS {cust_name},
     null AS {cust_name_ext},
-    {note}.{item_id},
+    {note__tbl}.{item_id},
     null AS {item_name},
-    {note}.{note_type},
-    {note}.{note_body},
-    {schema}.{my_to_date}({note}.{note_etstmp}) AS {note_dt},
-    {note}.{note_etstmp},
-    {note}.{note_euser},
-    {schema}.{my_db_user_fmt}({note}.{note_euser}) AS {note_euser_fmt},
-    {note}.{note_mtstmp},
-    {note}.{note_muser},
-    {schema}.{my_db_user_fmt}({note}.{note_muser}) AS {note_muser_fmt},
-    {note}.{note_snotes},
+    {note__tbl}.{note_type},
+    {note__tbl}.{note_body},
+    {schema}.{my_to_date}({note__tbl}.{note_etstmp}) AS {note_dt},
+    {note__tbl}.{note_etstmp},
+    {note__tbl}.{note_euser},
+    {schema}.{my_db_user_fmt}({note__tbl}.{note_euser}) AS {note_euser_fmt},
+    {note__tbl}.{note_mtstmp},
+    {note__tbl}.{note_muser},
+    {schema}.{my_db_user_fmt}({note__tbl}.{note_muser}) AS {note_muser_fmt},
+    {note__tbl}.{note_snotes},
     null AS {title_head},
     null AS {title_detail}
-   FROM {schema}_{note} {note};
+   FROM {schema}_{note__tbl} {note__tbl};
 
 /***************{v_note_ext}***************/
 CREATE VIEW {schema}_{v_note_ext} AS
- SELECT {note}.{note_id},
-    {note}.{note_scope},
-    {note}.{note_scope_id},
-    {note}.{note_sts},
-    {note}.{cust_id},
-    {note}.{item_id},
-    {note}.{note_type},
-    {note}.{note_body},
-    {note}.{note_etstmp},
-    {note}.{note_euser},
-    {schema}.{my_db_user_fmt}({note}.{note_euser}) AS {note_euser_fmt},
-    {note}.{note_mtstmp},
-    {note}.{note_muser},
-    {schema}.{my_db_user_fmt}({note}.{note_muser}) AS {note_muser_fmt},
-    {note}.{note_snotes},
+ SELECT {note__tbl}.{note_id},
+    {note__tbl}.{note_scope},
+    {note__tbl}.{note_scope_id},
+    {note__tbl}.{note_sts},
+    {note__tbl}.{cust_id},
+    {note__tbl}.{item_id},
+    {note__tbl}.{note_type},
+    {note__tbl}.{note_body},
+    {note__tbl}.{note_etstmp},
+    {note__tbl}.{note_euser},
+    {schema}.{my_db_user_fmt}({note__tbl}.{note_euser}) AS {note_euser_fmt},
+    {note__tbl}.{note_mtstmp},
+    {note__tbl}.{note_muser},
+    {schema}.{my_db_user_fmt}({note__tbl}.{note_muser}) AS {note_muser_fmt},
+    {note__tbl}.{note_snotes},
     null AS {title_head},
     null AS {title_detail},
     null AS {cust_name},
     null AS {cust_name_ext},
     null AS {item_name},
-    {note}.rowid rowid
-   FROM {schema}_{note} {note};
+    {note__tbl}.rowid rowid
+   FROM {schema}_{note__tbl} {note__tbl};
 
 create trigger {schema}_{v_note_ext}_insert instead of insert on {schema}_{v_note_ext}
 begin
-  insert into {schema}_{note}({note_scope}, {note_scope_id}, {note_sts}, {cust_id}, {item_id}, {note_type}, {note_body}, {note_etstmp}, {note_euser}, {note_mtstmp}, {note_muser}, {note_snotes})
+  insert into {schema}_{note__tbl}({note_scope}, {note_scope_id}, {note_sts}, {cust_id}, {item_id}, {note_type}, {note_body}, {note_etstmp}, {note_euser}, {note_mtstmp}, {note_muser}, {note_snotes})
                     values (coalesce(new.{note_scope},'S'), coalesce(new.{note_scope_id},0), coalesce(new.{note_sts},'A'), new.{cust_id}, new.{item_id}, new.{note_type}, new.{note_body}, new.{note_etstmp}, new.{note_euser}, new.{note_mtstmp}, new.{note_muser}, new.{note_snotes})\;
   update jsharmony_meta set extra_changes=extra_changes+1, last_insert_rowid_override=last_insert_rowid()\;
 end;
 
 create trigger {schema}_{v_note_ext}_update instead of update on {schema}_{v_note_ext}
 begin
-  update {schema}_{note} set {note_scope} = new.{note_scope}, {note_scope_id} = new.{note_scope_id}, {note_sts} = new.{note_sts},
+  update {schema}_{note__tbl} set {note_scope} = new.{note_scope}, {note_scope_id} = new.{note_scope_id}, {note_sts} = new.{note_sts},
                            {cust_id} = new.{cust_id}, {item_id} = new.{item_id}, {note_type} = new.{note_type}, {note_body} = new.{note_body},
                            {note_etstmp} = new.{note_etstmp},{note_euser} = new.{note_euser}, {note_mtstmp} = new.{note_mtstmp}, {note_muser} = new.{note_muser},
                            {note_snotes} =  new.{note_snotes}
@@ -481,40 +481,40 @@ end;
 
 create trigger {schema}_{v_note_ext}_delete instead of delete on {schema}_{v_note_ext}
 begin
-  delete from {schema}_{note} where {note_id} = old.{note_id}\;
+  delete from {schema}_{note__tbl} where {note_id} = old.{note_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
 /***************{v_param}***************/
 CREATE VIEW {schema}_{v_param} AS
- SELECT {param}.{param_id},
-    {param}.{param_process},
-    {param}.{param_attrib},
-    {param}.{param_desc},
-    {param}.{param_type},
-    {param}.{code_name},
-    {param}.{is_param_app},
-    {param}.{is_param_user},
-    {param}.{is_param_sys},
-    {param}.{param_etstmp},
-    {param}.{param_euser},
-    {param}.{param_mtstmp},
-    {param}.{param_muser},
-    {param}.{param_snotes},
-    {schema}.{log_audit_info}({param}.{param_etstmp}, {param}.{param_euser}, {param}.{param_mtstmp}, {param}.{param_muser}) AS {param_info},
-    {param}.rowid rowid
-   FROM {schema}_{param} {param};
+ SELECT {param__tbl}.{param_id},
+    {param__tbl}.{param_process},
+    {param__tbl}.{param_attrib},
+    {param__tbl}.{param_desc},
+    {param__tbl}.{param_type},
+    {param__tbl}.{code_name},
+    {param__tbl}.{is_param_app},
+    {param__tbl}.{is_param_user},
+    {param__tbl}.{is_param_sys},
+    {param__tbl}.{param_etstmp},
+    {param__tbl}.{param_euser},
+    {param__tbl}.{param_mtstmp},
+    {param__tbl}.{param_muser},
+    {param__tbl}.{param_snotes},
+    {schema}.{log_audit_info}({param__tbl}.{param_etstmp}, {param__tbl}.{param_euser}, {param__tbl}.{param_mtstmp}, {param__tbl}.{param_muser}) AS {param_info},
+    {param__tbl}.rowid rowid
+   FROM {schema}_{param__tbl} {param__tbl};
 
 create trigger {schema}_{v_param}_insert instead of insert on {schema}_{v_param}
 begin
-  insert into {schema}_{param}({param_process}, {param_attrib}, {param_desc}, {param_type}, {code_name}, {is_param_app}, {is_param_user}, {is_param_sys}, {param_etstmp}, {param_euser}, {param_mtstmp}, {param_muser}, {param_snotes})
+  insert into {schema}_{param__tbl}({param_process}, {param_attrib}, {param_desc}, {param_type}, {code_name}, {is_param_app}, {is_param_user}, {is_param_sys}, {param_etstmp}, {param_euser}, {param_mtstmp}, {param_muser}, {param_snotes})
                     values (new.{param_process}, new.{param_attrib}, new.{param_desc}, new.{param_type}, new.{code_name}, coalesce(new.{is_param_app},0), coalesce(new.{is_param_user},0), coalesce(new.{is_param_sys},0), new.{param_etstmp}, new.{param_euser}, new.{param_mtstmp}, new.{param_muser}, new.{param_snotes})\;
   update jsharmony_meta set extra_changes=extra_changes+1, last_insert_rowid_override=last_insert_rowid()\;
 end;
 
 create trigger {schema}_{v_param}_update instead of update on {schema}_{v_param}
 begin
-  update {schema}_{param} set {param_process} = new.{param_process}, {param_attrib} = new.{param_attrib}, {param_desc} = new.{param_desc},
+  update {schema}_{param__tbl} set {param_process} = new.{param_process}, {param_attrib} = new.{param_attrib}, {param_desc} = new.{param_desc},
                            {param_type} = new.{param_type}, {code_name} = new.{code_name}, 
                            {is_param_app} = new.{is_param_app}, {is_param_user} = new.{is_param_user}, {is_param_sys} = new.{is_param_sys}, 
                            {param_etstmp} = new.{param_etstmp},{param_euser} = new.{param_euser}, {param_mtstmp} = new.{param_mtstmp}, {param_muser} = new.{param_muser},
@@ -524,7 +524,7 @@ end;
 
 create trigger {schema}_{v_param}_delete instead of delete on {schema}_{v_param}
 begin
-  delete from {schema}_{param} where {param_id} = old.{param_id}\;
+  delete from {schema}_{param__tbl} where {param_id} = old.{param_id}\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
 
@@ -598,22 +598,22 @@ CREATE VIEW {schema}_{v_sys_menu_role_selection} AS
             {sys_role}.{sys_role_sts},
             {sys_role}.{sys_role_desc},
             {sys_role}.{sys_role_id},
-            {menu}.{menu_id_auto},
-            {menu}.{menu_group},
-            {menu}.{menu_id},
-            {menu}.{menu_sts},
-            {menu}.{menu_id_parent},
-            {menu}.{menu_name},
-            {menu}.{menu_seq},
-            {menu}.{menu_desc},
-            {menu}.{menu_desc_ext},
-            {menu}.{menu_desc_ext2},
-            {menu}.{menu_cmd},
-            {menu}.{menu_image},
-            {menu}.{menu_snotes},
-            {menu}.{menu_subcmd}
+            {menu__tbl}.{menu_id_auto},
+            {menu__tbl}.{menu_group},
+            {menu__tbl}.{menu_id},
+            {menu__tbl}.{menu_sts},
+            {menu__tbl}.{menu_id_parent},
+            {menu__tbl}.{menu_name},
+            {menu__tbl}.{menu_seq},
+            {menu__tbl}.{menu_desc},
+            {menu__tbl}.{menu_desc_ext},
+            {menu__tbl}.{menu_desc_ext2},
+            {menu__tbl}.{menu_cmd},
+            {menu__tbl}.{menu_image},
+            {menu__tbl}.{menu_snotes},
+            {menu__tbl}.{menu_subcmd}
            FROM ({schema}_{sys_role} {sys_role}
-             LEFT JOIN {schema}_{menu} {menu} ON ({menu}.{menu_group} = 'S'))) m
+             LEFT JOIN {schema}_{menu__tbl} {menu__tbl} ON ({menu__tbl}.{menu_group} = 'S'))) m
      JOIN {schema}_{single} {single} ON (1 = 1))
      LEFT JOIN {schema}_{sys_menu_role} {sys_menu_role} ON ((({sys_menu_role}.{sys_role_name} = m.{sys_role_name}) AND ({sys_menu_role}.{menu_id} = m.{menu_id}))));
 
@@ -666,6 +666,6 @@ end;
 
 /***************{v_year}***************/
 CREATE VIEW {schema}_{v_year} AS
- SELECT ((cast(strftime('%Y',{schema}.{my_now}()) as int) + {number}.{number_val}) - 1) AS {year_val}
-   FROM {schema}_{number} {number}
-  WHERE ({number}.{number_val} <= 10);
+ SELECT ((cast(strftime('%Y',{schema}.{my_now}()) as int) + {number__tbl}.{number_val}) - 1) AS {year_val}
+   FROM {schema}_{number__tbl} {number__tbl}
+  WHERE ({number__tbl}.{number_val} <= 10);

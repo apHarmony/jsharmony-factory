@@ -68,7 +68,9 @@ var scriptConfig = {
 };
 
 jsHarmonyFactory_Create.Run = function(run_cb){
+
   process.on('exit',function(){ process.exit(cliReturnCode); });
+  process.on('uncaughtException', function (err) { console.log(err); });
 
   jsh = new jsHarmonyFactory.Application();
   jsh.Config.appbasepath = process.cwd();
@@ -398,5 +400,5 @@ jsHarmonyFactory_Create.Run = function(run_cb){
 
   });
 }
-  
+
 jsHarmonyFactory_Create.Run();

@@ -66,6 +66,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   jsh.Init(function(){
 
     process.on('exit',function(){ process.exit(cliReturnCode); });
+    process.on('uncaughtException', function (err) { console.log(err); });
 
     if(!jsh.DBConfig['default']){
       console.log('\r\nPlease configure dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js before running init database operation');
