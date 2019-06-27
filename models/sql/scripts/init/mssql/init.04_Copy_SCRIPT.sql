@@ -4,7 +4,7 @@ SET XACT_ABORT, ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT
 GO
 BEGIN TRANSACTION
 EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app'', N''CREATE TABLE [%%%schema%%%].[gcod_%%%name%%%](
-	[gcod_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[code_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](8) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
@@ -22,7 +22,7 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [PK_GCOD_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
-	[GCOD_ID] ASC
+	[code_app_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [UNQ_GCOD_%%%name%%%_code_txt] UNIQUE NONCLUSTERED 
 (
@@ -48,7 +48,7 @@ ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%
 ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''GCOD_ID''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_app_id''''
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Sequence'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_seq''''
@@ -103,7 +103,7 @@ BEGIN
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
   DECLARE CUR_GCOD_%%%name%%%_IUD CURSOR LOCAL FOR
-     SELECT  del.GCOD_ID, i.GCOD_ID,
+     SELECT  del.code_app_id, i.code_app_id,
 	         del.code_seq, i.code_seq,
 	         del.code_end_dt, i.code_end_dt,
 	         del.code_val, i.code_val,
@@ -112,9 +112,9 @@ BEGIN
 	         del.code_attrib, i.code_attrib,
 	         del.code_end_reason, i.code_end_reason
        FROM deleted del FULL OUTER JOIN inserted i
-                       ON i.GCOD_ID = del.GCOD_ID;
-  DECLARE @D_GCOD_ID bigint
-  DECLARE @I_GCOD_ID bigint
+                       ON i.code_app_id = del.code_app_id;
+  DECLARE @D_code_app_id bigint
+  DECLARE @I_code_app_id bigint
   DECLARE @D_code_seq bigint
   DECLARE @I_code_seq bigint
   DECLARE @D_code_end_dt DATETIME2(7)
@@ -139,7 +139,7 @@ BEGIN
   DECLARE @DYNSQL NVARCHAR(MAX)
   DECLARE @C BIGINT
   DECLARE @code_val NVARCHAR(MAX)
-  DECLARE @WK_GCOD_ID bigint
+  DECLARE @WK_code_app_id bigint
   DECLARE @M NVARCHAR(MAX)
   DECLARE @cust_user_USER BIT
 
@@ -166,7 +166,7 @@ BEGIN
   SET @CURDTTM_CHAR = CONVERT(NVARCHAR, @CURDTTM, 120)+''''.0000000''''
   SET @MYUSER = {schema}.my_db_user() 
 
-  IF @TP = ''''U'''' AND UPDATE(GCOD_ID)
+  IF @TP = ''''U'''' AND UPDATE(code_app_id)
   BEGIN
     EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''GCOD_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
     raiserror(''''Cannot update identity'''',16,1)
@@ -185,7 +185,7 @@ BEGIN
   
   OPEN CUR_GCOD_%%%name%%%_IUD
   FETCH NEXT FROM CUR_GCOD_%%%name%%%_IUD
-        INTO @D_GCOD_ID, @I_GCOD_ID,
+        INTO @D_code_app_id, @I_code_app_id,
              @D_code_seq, @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
              @D_code_val, @I_code_val,
@@ -208,7 +208,7 @@ BEGIN
 			 code_euser = @MYUSER,
 		     code_mtstmp = @CURDTTM,
 			 code_muser = @MYUSER
-       WHERE GCOD_%%%name%%%.GCOD_ID = @I_GCOD_ID;
+       WHERE GCOD_%%%name%%%.code_app_id = @I_code_app_id;
     END  
 
 	/******************************************/
@@ -219,8 +219,8 @@ BEGIN
     SET @MY_audit_seq = 0
 	IF (@TP=''''I'''' OR @TP=''''D'''')
 	BEGIN  
-	  SET @WK_GCOD_ID = ISNULL(@D_GCOD_ID,@I_GCOD_ID)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, ''''GCOD_%%%name%%%'''', @WK_GCOD_ID, @MYUSER, @CURDTTM
+	  SET @WK_code_app_id = ISNULL(@D_code_app_id,@I_code_app_id)
+	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, ''''GCOD_%%%name%%%'''', @WK_code_app_id, @MYUSER, @CURDTTM
 	END
 
  
@@ -232,7 +232,7 @@ BEGIN
 UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_seq''), @D_code_seq)
       END
 
@@ -240,7 +240,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_date(@D_code_end_dt, @I_code_end_dt) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_end_dt''), @D_code_end_dt)
       END
 
@@ -248,7 +248,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_chr(@D_code_val, @I_code_val) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_val''), @D_code_val)
       END
 
@@ -256,7 +256,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_chr(@D_code_txt, @I_code_txt) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_txt''), @D_code_txt)
       END
 
@@ -264,7 +264,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_chr(@D_code_code, @I_code_code) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_code''), @D_code_code)
       END
 
@@ -272,7 +272,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_chr(@D_code_attrib, @I_code_attrib) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_attrib''), @D_code_attrib)
       END
 
@@ -280,7 +280,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_chr(@D_code_end_reason, @I_code_end_reason) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_GCOD_ID, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_end_reason''), @D_code_end_reason)
       END
 
@@ -296,7 +296,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
       UPDATE %%%schema%%%.GCOD_%%%name%%%
 	     SET code_mtstmp = @CURDTTM,
 			 code_muser = @MYUSER
-       WHERE GCOD_%%%name%%%.GCOD_ID = @I_GCOD_ID;
+       WHERE GCOD_%%%name%%%.code_app_id = @I_code_app_id;
     END  
 
 	/*****************************************/
@@ -307,7 +307,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
 
             
     FETCH NEXT FROM CUR_GCOD_%%%name%%%_IUD
-        INTO @D_GCOD_ID, @I_GCOD_ID,
+        INTO @D_code_app_id, @I_code_app_id,
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
              @D_code_val, @I_code_val,

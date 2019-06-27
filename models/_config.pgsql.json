@@ -11,7 +11,7 @@
     "user_last_tstmp": "pe_ll_tstmp",
     "user_role": "sr_name",
     "rowcount": "xrowcount",
-    "menu_name": "sm_name",
+    "{{menu_name}}": "sm_name",
     "menu_title": "sm_desc",
     "menu_command": "sm_cmd",
     "menu_subcommand": "sm_subcmd",

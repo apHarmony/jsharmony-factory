@@ -60,7 +60,7 @@ function jsHarmonyFactory(name, options){
   _this.clientRouter = null;
   _this.funcs = new funcs(_this);
   _this.transform = new jsHarmonyFactoryTransform(_this);
-  _this.transform.Add(require('./jsHarmonyFactoryTransform.Classic.js'));
+  //_this.transform.Add(require('./jsHarmonyFactoryTransform.Classic.js'));
 }
 
 jsHarmonyFactory.prototype = new jsHarmonyModule();

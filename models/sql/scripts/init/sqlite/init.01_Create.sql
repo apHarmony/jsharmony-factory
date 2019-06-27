@@ -62,10 +62,10 @@ CREATE TABLE {schema}_single (
 /*********code_param_type*********/
 {schema}.create_code_sys('{schema}','param_type','');
 
-/*********code_task_action*********/
+/*********code_job_action*********/
 {schema}.create_code_sys('{schema}','job_action','');
 
-/*********code_task_source*********/
+/*********code_job_source*********/
 {schema}.create_code_sys('{schema}','job_source','');
 
 /*********code_txt_type*********/
@@ -74,7 +74,7 @@ CREATE TABLE {schema}_single (
 /*********code_version_sts*********/
 {schema}.create_code_sys('{schema}','version_sts','');
 
-/*********code2_state*********/
+/*********code2_country_state*********/
 {schema}.create_code2_sys('{schema}','country_state','');
 
 /*********code2_doc_ctgr*********/
@@ -229,7 +229,7 @@ create table {schema}_sys_user (
     sys_user_snotes text,
     FOREIGN KEY (sys_user_sts) REFERENCES {schema}_code_ahc(code_val),
     FOREIGN KEY (sys_user_country) REFERENCES {schema}_code_country(code_val),
-    FOREIGN KEY (sys_user_country, sys_user_state) REFERENCES {schema}_code2_state(code_val1,code_va12),
+    FOREIGN KEY (sys_user_country, sys_user_state) REFERENCES {schema}_code2_country_state(code_val1,code_va12),
     CHECK (COALESCE(sys_user_email,'')<>'')
 );
 
@@ -280,8 +280,8 @@ CREATE TABLE {schema}_job__tbl (
   job_rslt_tstmp text,
   job_rslt_user text,
   job_snotes text,
-  FOREIGN KEY (job_action) REFERENCES {schema}_code_task_action (code_val),
-  FOREIGN KEY (job_source) REFERENCES {schema}_code_task_source (code_val)
+  FOREIGN KEY (job_action) REFERENCES {schema}_code_job_action (code_val),
+  FOREIGN KEY (job_source) REFERENCES {schema}_code_job_source (code_val)
 );
 
 /***************job_doc***************/

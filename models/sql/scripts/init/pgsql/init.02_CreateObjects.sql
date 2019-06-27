@@ -809,7 +809,7 @@ BEGIN
 
   runmesql := 'CREATE TABLE '||wk_code_schema||'.gcod_'||in_code_name||' '
             ||'( '
-            ||'  CONSTRAINT gcod_'||in_code_name||'_pkey PRIMARY KEY (gcod_id), '
+            ||'  CONSTRAINT gcod_'||in_code_name||'_pkey PRIMARY KEY (code_app_id), '
             ||'  CONSTRAINT gcod_'||in_code_name||'_code_val_key UNIQUE (code_val), '
             ||'  CONSTRAINT gcod_'||in_code_name||'_code_txt_key UNIQUE (code_txt) '
             ||') '
@@ -1438,7 +1438,7 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
       curdttm    timestamp default {schema}.my_now();
       myuser     text default {schema}.my_db_user();
       audit_seq    bigint default NULL;
-      my_id      bigint default case TG_OP when 'DELETE' then OLD.gcod_id else NEW.gcod_id end;
+      my_id      bigint default case TG_OP when 'DELETE' then OLD.code_app_id else NEW.code_app_id end;
       my_toa     {schema}.toaudit;
     BEGIN
 
@@ -1460,7 +1460,7 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
         /**********************************/
             
         IF TG_OP = 'UPDATE' THEN
-          IF {schema}.nequal(NEW.gcod_id, OLD.gcod_id) THEN
+          IF {schema}.nequal(NEW.code_app_id, OLD.code_app_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
           IF {schema}.nequal(NEW.code_val, OLD.code_val) THEN
@@ -1477,9 +1477,9 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
           SELECT par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, my_id);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.gcod_id is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nequal(NEW.gcod_id, OLD.gcod_id) end) THEN
-          SELECT par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, my_id, 'gcod_id',OLD.gcod_id::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.code_app_id is not null 
+                 else TG_OP = 'UPDATE' and {schema}.nequal(NEW.code_app_id, OLD.code_app_id) end) THEN
+          SELECT par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, my_id, 'code_app_id',OLD.code_app_id::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.code_seq is not null 
@@ -4223,10 +4223,10 @@ ALTER SEQUENCE single_single_ident_seq OWNED BY single.single_ident;
 
 
 --
--- Name: gcod_gcod_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: gcod_code_app_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE gcod_gcod_id_seq
+CREATE SEQUENCE gcod_code_app_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4234,14 +4234,14 @@ CREATE SEQUENCE gcod_gcod_id_seq
     CACHE 1;
 
 
-ALTER TABLE gcod_gcod_id_seq OWNER TO postgres;
+ALTER TABLE gcod_code_app_id_seq OWNER TO postgres;
 
 --
 -- Name: gcod; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
 CREATE TABLE gcod (
-    gcod_id bigint DEFAULT nextval('gcod_gcod_id_seq'::regclass) NOT NULL,
+    code_app_id bigint DEFAULT nextval('gcod_code_app_id_seq'::regclass) NOT NULL,
     code_seq smallint,
     code_val character varying(8) NOT NULL,
     code_txt character varying(50) NOT NULL,
@@ -5819,21 +5819,21 @@ COMMENT ON COLUMN ucod2.code_attrib IS 'Code Value Additional Attribute';
 
 
 --
--- Name: code2_state; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: code2_country_state; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE code2_state (
+CREATE TABLE code2_country_state (
 )
 INHERITS (ucod2);
 
 
-ALTER TABLE code2_state OWNER TO postgres;
+ALTER TABLE code2_country_state OWNER TO postgres;
 
 --
--- Name: TABLE code2_state; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE code2_country_state; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE code2_state IS 'System Codes 2 - Country / State';
+COMMENT ON TABLE code2_country_state IS 'System Codes 2 - Country / State';
 
 
 --
@@ -6185,39 +6185,39 @@ CREATE VIEW code_param_user_process AS
 ALTER TABLE code_param_user_process OWNER TO postgres;
 
 --
--- Name: code_task_action; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: code_job_action; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE code_task_action (
+CREATE TABLE code_job_action (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE code_task_action OWNER TO postgres;
+ALTER TABLE code_job_action OWNER TO postgres;
 
 --
--- Name: TABLE code_task_action; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE code_job_action; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE code_task_action IS 'System Codes - Request Type (CONTROL)';
+COMMENT ON TABLE code_job_action IS 'System Codes - Request Type (CONTROL)';
 
 
 --
--- Name: code_task_source; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: code_job_source; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE code_task_source (
+CREATE TABLE code_job_source (
 )
 INHERITS (ucod);
 
 
-ALTER TABLE code_task_source OWNER TO postgres;
+ALTER TABLE code_job_source OWNER TO postgres;
 
 --
--- Name: TABLE code_task_source; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE code_job_source; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE code_task_source IS 'System Codes - Request Source (CONTROL)';
+COMMENT ON TABLE code_job_source IS 'System Codes - Request Source (CONTROL)';
 
 
 --
@@ -7182,35 +7182,35 @@ ALTER TABLE ONLY ucod ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sy
 -- Name: code2_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_state ALTER COLUMN code2_sys_id SET DEFAULT nextval('ucod2_code2_sys_id_seq'::regclass);
+ALTER TABLE ONLY code2_country_state ALTER COLUMN code2_sys_id SET DEFAULT nextval('ucod2_code2_sys_id_seq'::regclass);
 
 
 --
 -- Name: code_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_state ALTER COLUMN code_etstmp SET DEFAULT my_now();
+ALTER TABLE ONLY code2_country_state ALTER COLUMN code_etstmp SET DEFAULT my_now();
 
 
 --
 -- Name: code_euser; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_state ALTER COLUMN code_euser SET DEFAULT my_db_user();
+ALTER TABLE ONLY code2_country_state ALTER COLUMN code_euser SET DEFAULT my_db_user();
 
 
 --
 -- Name: code_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_state ALTER COLUMN code_mtstmp SET DEFAULT my_now();
+ALTER TABLE ONLY code2_country_state ALTER COLUMN code_mtstmp SET DEFAULT my_now();
 
 
 --
 -- Name: code_muser; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_state ALTER COLUMN code_muser SET DEFAULT my_db_user();
+ALTER TABLE ONLY code2_country_state ALTER COLUMN code_muser SET DEFAULT my_db_user();
 
 
 --
@@ -7511,70 +7511,70 @@ ALTER TABLE ONLY code_param_type ALTER COLUMN code_muser SET DEFAULT my_db_user(
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_task_action ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_job_action ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
 
 
 --
 -- Name: code_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_task_action ALTER COLUMN code_etstmp SET DEFAULT my_now();
+ALTER TABLE ONLY code_job_action ALTER COLUMN code_etstmp SET DEFAULT my_now();
 
 
 --
 -- Name: code_euser; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_task_action ALTER COLUMN code_euser SET DEFAULT my_db_user();
+ALTER TABLE ONLY code_job_action ALTER COLUMN code_euser SET DEFAULT my_db_user();
 
 
 --
 -- Name: code_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_task_action ALTER COLUMN code_mtstmp SET DEFAULT my_now();
+ALTER TABLE ONLY code_job_action ALTER COLUMN code_mtstmp SET DEFAULT my_now();
 
 
 --
 -- Name: code_muser; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_task_action ALTER COLUMN code_muser SET DEFAULT my_db_user();
+ALTER TABLE ONLY code_job_action ALTER COLUMN code_muser SET DEFAULT my_db_user();
 
 
 --
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_task_source ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_job_source ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
 
 
 --
 -- Name: code_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_task_source ALTER COLUMN code_etstmp SET DEFAULT my_now();
+ALTER TABLE ONLY code_job_source ALTER COLUMN code_etstmp SET DEFAULT my_now();
 
 
 --
 -- Name: code_euser; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_task_source ALTER COLUMN code_euser SET DEFAULT my_db_user();
+ALTER TABLE ONLY code_job_source ALTER COLUMN code_euser SET DEFAULT my_db_user();
 
 
 --
 -- Name: code_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_task_source ALTER COLUMN code_mtstmp SET DEFAULT my_now();
+ALTER TABLE ONLY code_job_source ALTER COLUMN code_mtstmp SET DEFAULT my_now();
 
 
 --
 -- Name: code_muser; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_task_source ALTER COLUMN code_muser SET DEFAULT my_db_user();
+ALTER TABLE ONLY code_job_source ALTER COLUMN code_muser SET DEFAULT my_db_user();
 
 
 --
@@ -7842,7 +7842,7 @@ ALTER TABLE ONLY code_app
 --
 
 ALTER TABLE ONLY gcod
-    ADD CONSTRAINT gcod_pkey PRIMARY KEY (gcod_id);
+    ADD CONSTRAINT gcod_pkey PRIMARY KEY (code_app_id);
 
 
 --
@@ -8184,29 +8184,29 @@ ALTER TABLE ONLY ucod2
 
 
 --
--- Name: code2_state_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_country_state_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_state
-    ADD CONSTRAINT code2_state_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
+ALTER TABLE ONLY code2_country_state
+    ADD CONSTRAINT code2_country_state_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
 
 
-
-
---
--- Name: code2_state_code_val1_code_txt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY code2_state
-    ADD CONSTRAINT code2_state_code_val1_code_txt_key UNIQUE (code_val1, code_txt);
 
 
 --
--- Name: code2_state_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_country_state_code_val1_code_txt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_state
-    ADD CONSTRAINT code2_state_pkey PRIMARY KEY (code2_sys_id);
+ALTER TABLE ONLY code2_country_state
+    ADD CONSTRAINT code2_country_state_code_val1_code_txt_key UNIQUE (code_val1, code_txt);
+
+
+--
+-- Name: code2_country_state_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY code2_country_state
+    ADD CONSTRAINT code2_country_state_pkey PRIMARY KEY (code2_sys_id);
 
 
 --
@@ -8313,19 +8313,19 @@ ALTER TABLE ONLY code_param_type
 ALTER TABLE ONLY code_param_type
     ADD CONSTRAINT code_param_type_code_val_key UNIQUE (code_val);
 
-ALTER TABLE ONLY code_task_action
-    ADD CONSTRAINT code_task_action_pkey PRIMARY KEY (code_sys_id);
-ALTER TABLE ONLY code_task_action
-    ADD CONSTRAINT code_task_action_code_txt_key UNIQUE (code_txt);
-ALTER TABLE ONLY code_task_action
-    ADD CONSTRAINT code_task_action_code_val_key UNIQUE (code_val);
+ALTER TABLE ONLY code_job_action
+    ADD CONSTRAINT code_job_action_pkey PRIMARY KEY (code_sys_id);
+ALTER TABLE ONLY code_job_action
+    ADD CONSTRAINT code_job_action_code_txt_key UNIQUE (code_txt);
+ALTER TABLE ONLY code_job_action
+    ADD CONSTRAINT code_job_action_code_val_key UNIQUE (code_val);
 
-ALTER TABLE ONLY code_task_source
-    ADD CONSTRAINT code_task_source_pkey PRIMARY KEY (code_sys_id);
-ALTER TABLE ONLY code_task_source
-    ADD CONSTRAINT code_task_source_code_txt_key UNIQUE (code_txt);
-ALTER TABLE ONLY code_task_source
-    ADD CONSTRAINT code_task_source_code_val_key UNIQUE (code_val);
+ALTER TABLE ONLY code_job_source
+    ADD CONSTRAINT code_job_source_pkey PRIMARY KEY (code_sys_id);
+ALTER TABLE ONLY code_job_source
+    ADD CONSTRAINT code_job_source_code_txt_key UNIQUE (code_txt);
+ALTER TABLE ONLY code_job_source
+    ADD CONSTRAINT code_job_source_code_val_key UNIQUE (code_val);
 
 ALTER TABLE ONLY code_txt_type
     ADD CONSTRAINT code_txt_type_pkey PRIMARY KEY (code_sys_id);
@@ -8694,11 +8694,11 @@ ALTER TABLE ONLY sys_user
 
 
 --
--- Name: sys_user_code2_state_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: sys_user_code2_country_state_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY sys_user
-    ADD CONSTRAINT sys_user_code2_state_fkey FOREIGN KEY (sys_user_country, sys_user_state) REFERENCES code2_state(code_val1, code_va12);
+    ADD CONSTRAINT sys_user_code2_country_state_fkey FOREIGN KEY (sys_user_country, sys_user_state) REFERENCES code2_country_state(code_val1, code_va12);
 
 
 --
@@ -8774,19 +8774,19 @@ ALTER TABLE ONLY job_sms
 
 
 --
--- Name: job__tbl_code_task_action_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: job__tbl_code_job_action_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY job__tbl
-    ADD CONSTRAINT job__tbl_code_task_action_fkey FOREIGN KEY (job_action) REFERENCES code_task_action(code_val);
+    ADD CONSTRAINT job__tbl_code_job_action_fkey FOREIGN KEY (job_action) REFERENCES code_job_action(code_val);
 
 
 --
--- Name: job__tbl_code_task_source_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: job__tbl_code_job_source_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY job__tbl
-    ADD CONSTRAINT job__tbl_code_task_source_fkey FOREIGN KEY (job_source) REFERENCES code_task_source(code_val);
+    ADD CONSTRAINT job__tbl_code_job_source_fkey FOREIGN KEY (job_source) REFERENCES code_job_source(code_val);
 
 
 --
@@ -9800,13 +9800,13 @@ GRANT SELECT,UPDATE ON SEQUENCE single_single_ident_seq TO {schema}_%%%INIT_DB_L
 
 
 --
--- Name: gcod_gcod_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: gcod_code_app_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE gcod_gcod_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE gcod_gcod_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE gcod_gcod_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE gcod_gcod_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE gcod_code_app_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE gcod_code_app_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE gcod_code_app_id_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE gcod_code_app_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10330,13 +10330,13 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2 TO {schema}_%%%INIT_DB_LCASE%%%
 
 
 --
--- Name: code2_state; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: code2_country_state; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE code2_state FROM PUBLIC;
-REVOKE ALL ON TABLE code2_state FROM postgres;
-GRANT ALL ON TABLE code2_state TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code2_state TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE code2_country_state FROM PUBLIC;
+REVOKE ALL ON TABLE code2_country_state FROM postgres;
+GRANT ALL ON TABLE code2_country_state TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code2_country_state TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10510,23 +10510,23 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code_param_user_process TO {schema}_%
 
 
 --
--- Name: code_task_action; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: code_job_action; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE code_task_action FROM PUBLIC;
-REVOKE ALL ON TABLE code_task_action FROM postgres;
-GRANT ALL ON TABLE code_task_action TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code_task_action TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE code_job_action FROM PUBLIC;
+REVOKE ALL ON TABLE code_job_action FROM postgres;
+GRANT ALL ON TABLE code_job_action TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code_job_action TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: code_task_source; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: code_job_source; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE code_task_source FROM PUBLIC;
-REVOKE ALL ON TABLE code_task_source FROM postgres;
-GRANT ALL ON TABLE code_task_source TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code_task_source TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE code_job_source FROM PUBLIC;
+REVOKE ALL ON TABLE code_job_source FROM postgres;
+GRANT ALL ON TABLE code_job_source TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code_job_source TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --

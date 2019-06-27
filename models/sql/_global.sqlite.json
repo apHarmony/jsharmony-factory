@@ -27,14 +27,14 @@
   },
   "{schema}.create_code_app" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_code_app(ifnull(%%%SCHEMA%%%||'_','')||'gcod_'||%%%ID%%%)"]
+    "sql": ["create_code_app(ifnull(%%%SCHEMA%%%||'_','')||'code_app_prefix'||%%%ID%%%)"]
   },
   "create_code_app" : {
     "params": ["audit_table_name"],
     "sql": [
       "update jsharmony_meta set jsexec = '{ \"function\": \"exec\", \"sql\": \"",
       "  create table '||%%%audit_table_name%%%||' (",
-      "    gcod_id integer primary key autoincrement not null,",
+      "    code_app_id integer primary key autoincrement not null,",
       "    code_seq integer,",
       "    code_val text unique not null,",
       "    code_txt text,",
@@ -55,17 +55,17 @@
       "      code_euser = (select context from jsharmony_meta limit 1),code_etstmp=datetime(''now'',''localtime''),",
       "      code_muser = (select context from jsharmony_meta limit 1),code_mtstmp=datetime(''now'',''localtime'')",
       "      where rowid = new.rowid\\\\\\;",
-      "    %%%JSEXEC_ESCAPE(%%%log_audit_insert(\"'||%%%audit_table_name%%%||'\",\"new.gcod_id\",\"gcod_id\",\"null\",\"null\",\"null\")%%%)%%%",
+      "    %%%JSEXEC_ESCAPE(%%%log_audit_insert(\"'||%%%audit_table_name%%%||'\",\"new.code_app_id\",\"code_app_id\",\"null\",\"null\",\"null\")%%%)%%%",
       "    update jsharmony_meta set audit_seq = null\\\\\\;",
       "  end\\;",
       " create trigger '||%%%audit_table_name%%%||'_before_update before update on '||%%%audit_table_name%%%||'",
       "  begin",
-      "    select case when %%%nequal(\"NEW.gcod_id\",\"OLD.gcod_id\")%%% then raise(FAIL,''Application Error - ID cannot be updated.'') end\\\\\\;",
+      "    select case when %%%nequal(\"NEW.code_app_id\",\"OLD.code_app_id\")%%% then raise(FAIL,''Application Error - ID cannot be updated.'') end\\\\\\;",
       "    select case when %%%nequal(\"NEW.code_val\",\"OLD.code_val\")%%% then raise(FAIL,''Application Error - Code Value 1 cannot be updated..'') end\\\\\\;",
       "  end\\;",
       " create trigger '||%%%audit_table_name%%%||'_after_update after update on '||%%%audit_table_name%%%||'",
       "  begin",
-      "    %%%JSEXEC_ESCAPE(%%%log_audit_update_mult(\"'||%%%audit_table_name%%%||'\",\"new.gcod_id\",[\"gcod_id\",\"code_seq\",\"code_val\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
+      "    %%%JSEXEC_ESCAPE(%%%log_audit_update_mult(\"'||%%%audit_table_name%%%||'\",\"new.code_app_id\",[\"code_app_id\",\"code_seq\",\"code_val\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
       "    update '||%%%audit_table_name%%%||' set ",
       "      code_muser = (select context from jsharmony_meta limit 1),code_mtstmp=datetime(''now'',''localtime'') ",
       "      where rowid = new.rowid and exists(select * from jsharmony_meta where audit_seq is not null)\\\\\\;",
@@ -73,7 +73,7 @@
       "  end\\;",
       " create trigger '||%%%audit_table_name%%%||'_delete before delete on '||%%%audit_table_name%%%||'",
       "  begin",
-      "    %%%JSEXEC_ESCAPE(%%%log_audit_delete_mult(\"'||%%%audit_table_name%%%||'\",\"old.gcod_id\",[\"gcod_id\",\"code_seq\",\"code_val\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
+      "    %%%JSEXEC_ESCAPE(%%%log_audit_delete_mult(\"'||%%%audit_table_name%%%||'\",\"old.code_app_id\",[\"code_app_id\",\"code_seq\",\"code_val\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
       "    update jsharmony_meta set audit_seq = null\\\\\\;",
       "  end\\;",
       "\" }';"
@@ -81,7 +81,7 @@
   },
   "{schema}.create_code2_app" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_code2_app(ifnull(%%%SCHEMA%%%||'_','')||'gcod2_'||%%%ID%%%)"]
+    "sql": ["create_code2_app(ifnull(%%%SCHEMA%%%||'_','')||'code2_app_prefix'||%%%ID%%%)"]
   },
   "create_code2_app" : {
     "params": ["audit_table_name"],
@@ -138,7 +138,7 @@
   },
   "{schema}.create_code_sys" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_code_sys(ifnull(%%%SCHEMA%%%||'_','')||'ucod_'||%%%ID%%%)"]
+    "sql": ["create_code_sys(ifnull(%%%SCHEMA%%%||'_','')||'code_sys_prefix'||%%%ID%%%)"]
   },
   "create_code_sys" : {
     "params": ["audit_table_name"],
@@ -192,7 +192,7 @@
   },
   "{schema}.create_code2_sys" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_code2_sys(ifnull(%%%SCHEMA%%%||'_','')||'ucod2_'||%%%ID%%%)"]
+    "sql": ["create_code2_sys(ifnull(%%%SCHEMA%%%||'_','')||'code2_sys_prefix'||%%%ID%%%)"]
   },
   "create_code2_sys" : {
     "params": ["audit_table_name"],

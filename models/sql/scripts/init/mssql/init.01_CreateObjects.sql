@@ -2797,7 +2797,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_task_action](
+CREATE TABLE [jsharmony].[code_job_action](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](8) NOT NULL,
@@ -2812,15 +2812,15 @@ CREATE TABLE [jsharmony].[code_task_action](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_task_action] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_code_job_action] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_task_action_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code_job_action_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_task_action_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code_job_action_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2830,7 +2830,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_task_source](
+CREATE TABLE [jsharmony].[code_job_source](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](8) NOT NULL,
@@ -2845,15 +2845,15 @@ CREATE TABLE [jsharmony].[code_task_source](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_task_source] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_code_job_source] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_task_source_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code_job_source_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_task_source_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code_job_source_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2929,7 +2929,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code2_state](
+CREATE TABLE [jsharmony].[code2_country_state](
 	[code2_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](8) NOT NULL,
@@ -2945,16 +2945,16 @@ CREATE TABLE [jsharmony].[code2_state](
 	[code_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
- CONSTRAINT [PK_code2_state] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_code2_country_state] PRIMARY KEY CLUSTERED 
 (
 	[code2_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_state_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code2_country_state_code_val1_code_va12] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_va12] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_state_code_val1_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code2_country_state_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_txt] ASC
@@ -3287,21 +3287,21 @@ ALTER TABLE [jsharmony].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_CO
 GO
 ALTER TABLE [jsharmony].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_task_action] ADD  CONSTRAINT [DF_code_task_action_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [jsharmony].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_task_action] ADD  CONSTRAINT [DF_code_task_action_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [jsharmony].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_task_action] ADD  CONSTRAINT [DF_code_task_action_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [jsharmony].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_task_action] ADD  CONSTRAINT [DF_code_task_action_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [jsharmony].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_task_source] ADD  CONSTRAINT [DF_code_task_source_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [jsharmony].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_task_source] ADD  CONSTRAINT [DF_code_task_source_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [jsharmony].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_task_source] ADD  CONSTRAINT [DF_code_task_source_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [jsharmony].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_task_source] ADD  CONSTRAINT [DF_code_task_source_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [jsharmony].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 GO
 ALTER TABLE [jsharmony].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
 GO
@@ -3319,13 +3319,13 @@ ALTER TABLE [jsharmony].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_
 GO
 ALTER TABLE [jsharmony].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code2_state] ADD  CONSTRAINT [DF_code2_state_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [jsharmony].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code2_state] ADD  CONSTRAINT [DF_code2_state_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [jsharmony].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code2_state] ADD  CONSTRAINT [DF_code2_state_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [jsharmony].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code2_state] ADD  CONSTRAINT [DF_code2_state_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [jsharmony].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 GO
 ALTER TABLE [jsharmony].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_Edt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_etstmp]
 GO
@@ -3445,10 +3445,10 @@ REFERENCES [jsharmony].[code_country] ([code_val])
 GO
 ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [FK_sys_user_code_country]
 GO
-ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [FK_sys_user_code2_state] FOREIGN KEY([sys_user_country], [sys_user_state])
-REFERENCES [jsharmony].[code2_state] ([code_val1], [code_va12])
+ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [FK_sys_user_code2_country_state] FOREIGN KEY([sys_user_country], [sys_user_state])
+REFERENCES [jsharmony].[code2_country_state] ([code_val1], [code_va12])
 GO
-ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [FK_sys_user_code2_state]
+ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [FK_sys_user_code2_country_state]
 GO
 ALTER TABLE [jsharmony].[param__tbl]  WITH CHECK ADD  CONSTRAINT [FK_param__tbl_code_param_type] FOREIGN KEY([param_type])
 REFERENCES [jsharmony].[code_param_type] ([code_val])
@@ -3467,15 +3467,15 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [jsharmony].[param_user] CHECK CONSTRAINT [FK_param_user_param__tbl]
 GO
-ALTER TABLE [jsharmony].[job__tbl]  WITH CHECK ADD  CONSTRAINT [FK_job__tbl_code_task_action] FOREIGN KEY([job_action])
-REFERENCES [jsharmony].[code_task_action] ([code_val])
+ALTER TABLE [jsharmony].[job__tbl]  WITH CHECK ADD  CONSTRAINT [FK_job__tbl_code_job_action] FOREIGN KEY([job_action])
+REFERENCES [jsharmony].[code_job_action] ([code_val])
 GO
-ALTER TABLE [jsharmony].[job__tbl] CHECK CONSTRAINT [FK_job__tbl_code_task_action]
+ALTER TABLE [jsharmony].[job__tbl] CHECK CONSTRAINT [FK_job__tbl_code_job_action]
 GO
-ALTER TABLE [jsharmony].[job__tbl]  WITH CHECK ADD  CONSTRAINT [FK_job__tbl_code_task_source] FOREIGN KEY([job_source])
-REFERENCES [jsharmony].[code_task_source] ([code_val])
+ALTER TABLE [jsharmony].[job__tbl]  WITH CHECK ADD  CONSTRAINT [FK_job__tbl_code_job_source] FOREIGN KEY([job_source])
+REFERENCES [jsharmony].[code_job_source] ([code_val])
 GO
-ALTER TABLE [jsharmony].[job__tbl] CHECK CONSTRAINT [FK_job__tbl_code_task_source]
+ALTER TABLE [jsharmony].[job__tbl] CHECK CONSTRAINT [FK_job__tbl_code_job_source]
 GO
 ALTER TABLE [jsharmony].[job_doc]  WITH CHECK ADD  CONSTRAINT [FK_job_doc_job__tbl] FOREIGN KEY([job_id])
 REFERENCES [jsharmony].[job__tbl] ([job_id])
@@ -8499,7 +8499,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel addr
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel city' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_user', @level2type=N'COLUMN',@level2name=N'sys_user_city'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel state - code2_state' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_user', @level2type=N'COLUMN',@level2name=N'sys_user_state'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel state - code2_country_state' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_user', @level2type=N'COLUMN',@level2name=N'sys_user_state'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Personnel zip code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_user', @level2type=N'COLUMN',@level2name=N'sys_user_zip'
 GO
@@ -8613,9 +8613,9 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry 
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_user'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Source - code_task_source' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_source'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Source - code_job_source' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_source'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Type - code_task_action' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_action'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Type - code_job_action' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_action'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_action_target'
 GO
@@ -9439,57 +9439,57 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System No
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Process Parameter Type' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_param_type'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_sys_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_sys_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_seq'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_val'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_val'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_txt'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_txt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_code'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_code'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_end_dt'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_end_dt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_end_reason'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_end_reason'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_euser'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_euser'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_muser'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_muser'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action', @level2type=N'COLUMN',@level2name=N'code_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_action'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_sys_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_sys_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_seq'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_val'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_val'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_txt'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_txt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_code'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_code'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_end_dt'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_end_dt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_end_reason'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_end_reason'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_euser'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_euser'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_muser'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_muser'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source', @level2type=N'COLUMN',@level2name=N'code_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Source (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_task_source'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Source (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_txt_type', @level2type=N'COLUMN',@level2name=N'code_sys_id'
 GO
@@ -9543,31 +9543,31 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System No
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Version Status' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_version_sts'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code2_sys_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code2_sys_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code_seq'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code_seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code_val1'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code_val1'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code_txt'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code_txt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code_code'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code_code'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code_end_dt'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code_end_dt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code_end_reason'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code_end_reason'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code_euser'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code_euser'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code_muser'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code_muser'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state', @level2type=N'COLUMN',@level2name=N'code_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state', @level2type=N'COLUMN',@level2name=N'code_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 - Country / State' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_state'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 - Country / State' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_sys', @level2type=N'COLUMN',@level2name=N'code_name'
 GO

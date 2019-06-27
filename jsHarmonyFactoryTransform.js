@@ -20,8 +20,6 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 var jsHarmonyModuleTransform = require('jsharmony/jsHarmonyModuleTransform');
 
 function jsHarmonyFactoryTransform(module){
-  jsHarmonyModuleTransform.call(this, module);
-
   this.tables = {
     "audit__tbl": "audit",
     "audit_detail": "audit_detail",
@@ -46,6 +44,8 @@ function jsHarmonyFactoryTransform(module){
     "help_target": "help_target",
     "code_app": "code_app",
     "code_sys": "code_sys",
+    "code_app_prefix": "code_",
+    "code_sys_prefix": "code_",
     "code_ac": "code_ac",
     "code_ac1": "code_ac1",
     "code_ahc": "code_ahc",
@@ -56,16 +56,18 @@ function jsHarmonyFactoryTransform(module){
     "code_param_sys_process": "code_param_sys_process",
     "code2_app": "code2_app",
     "code2_sys": "code2_sys",
+    "code2_app_prefix": "code2_",
+    "code2_sys_prefix": "code2_",
     "code2_doc_ctgr": "code2_doc_ctgr",
-    "code2_state": "code2_state",
+    "code2_country_state": "code2_country_state",
     "code2_param_user_attrib": "code2_param_user_attrib",
     "code2_param_app_attrib": "code2_param_app_attrib",
     "code2_param_sys_attrib": "code2_param_sys_attrib",
     "code_note_scope": "code_note_scope",
     "code_note_type": "code_note_type",
     "code_param_type": "code_param_type",
-    "code_task_action": "code_task_action",
-    "code_task_source": "code_task_source",
+    "code_job_action": "code_job_action",
+    "code_job_source": "code_job_source",
     "code_txt_type": "code_txt_type",
     "code_version_sts": "code_version_sts",
     "queue__tbl": "queue",
@@ -192,6 +194,7 @@ function jsHarmonyFactoryTransform(module){
     "email_to": "email_to",
     "email_txt_attrib": "email_txt_attrib",
     "code_app_h_id": "code_app_h_id",
+    "code_app_id": "code_app_id",
     "code2_app_h_id": "code2_app_h_id",
     "code2_app_id": "code2_app_id",
     "param_app_attrib": "param_app_attrib",
@@ -766,6 +769,8 @@ function jsHarmonyFactoryTransform(module){
     "@sms_to": "@sms_to",
     "@sms_body": "@sms_body",
   };
+
+  jsHarmonyModuleTransform.call(this, module);
 }
 
 jsHarmonyFactoryTransform.prototype = new jsHarmonyModuleTransform();

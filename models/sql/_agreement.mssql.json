@@ -1,5 +1,5 @@
 {
-  "agreement_code_state": "select code_va12 code_val, code_va12 code_txt from {schema}.code2_state where code_val1='USA' and (code_end_dt is null or (code_end_dt is not null and code_end_dt > getdate())) order by code_seq,code_va12",
+  "agreement_code_state": "select code_va12 code_val, code_va12 code_txt from {schema}.code2_country_state where code_val1='USA' and (code_end_dt is null or (code_end_dt is not null and code_end_dt > getdate())) order by code_seq,code_va12",
   "agreement_code_month": "select month_txt as code_val,month_txt as code_txt from {schema}.v_month order by month_val",
   "agreement_code_year": "select year_val as code_val,year_val as code_txt from {schema}.v_year order by year_val",
   "agreement_sign": [
