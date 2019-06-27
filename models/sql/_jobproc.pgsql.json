@@ -1,44 +1,44 @@
 {
-  "{jobproc_jobcheck}": [
-    "select {job__tbl}.{job_id},{job_action},{job_action_target},{job_params},",
-    "{job_doc}.{doc_scope}, {job_doc}.{doc_scope_id}, {job_doc}.{doc_ctgr}, {job_doc}.{doc_desc},",
-    "{queue_name},{queue_message},",
-    "{email_txt_attrib}, {email_to}, {email_cc}, {email_bcc}, {email_attach},{email_subject},{email_text},{email_html},{email_doc_id},{job_email}_{doc__tbl}.{doc_filename} as email_{doc_filename},",
-    "{note_scope}, {note_scope_id}, {note_type}, {note_body},",
-    "{sms_txt_attrib},{sms_to},{sms_body}",
-    "from {schema}.{job__tbl}",
-    "left outer join {schema}.{job_doc} on {job_doc}.{job_id} = {job__tbl}.{job_id}",
-    "left outer join {schema}.{job_queue} on {job_queue}.{job_id} = {job__tbl}.{job_id}",
-    "left outer join {schema}.{job_email} on {job_email}.{job_id} = {job__tbl}.{job_id}",
-    "left outer join {schema}.{v_doc_filename} {job_email}_{doc__tbl} on {job_email}.{email_doc_id} = {job_email}_{doc__tbl}.{doc_id}",
-    "left outer join {schema}.{job_note} on {job_note}.{job_id} = {job__tbl}.{job_id}",
-    "left outer join {schema}.{job_sms} on {job_sms}.{job_id} = {job__tbl}.{job_id}",
-    "where {job_rslt} is null limit 1"
+  "jobproc_jobcheck": [
+    "select job__tbl.job_id,job_action,job_action_target,job_params,",
+    "job_doc.doc_scope, job_doc.doc_scope_id, job_doc.doc_ctgr, job_doc.doc_desc,",
+    "queue_name,queue_message,",
+    "email_txt_attrib, email_to, email_cc, email_bcc, email_attach,email_subject,email_text,email_html,email_doc_id,job_email_doc__tbl.doc_filename as email_doc_filename,",
+    "note_scope, note_scope_id, note_type, note_body,",
+    "sms_txt_attrib,sms_to,sms_body",
+    "from {schema}.job__tbl",
+    "left outer join {schema}.job_doc on job_doc.job_id = job__tbl.job_id",
+    "left outer join {schema}.job_queue on job_queue.job_id = job__tbl.job_id",
+    "left outer join {schema}.job_email on job_email.job_id = job__tbl.job_id",
+    "left outer join {schema}.v_doc_filename job_email_doc__tbl on job_email.email_doc_id = job_email_doc__tbl.doc_id",
+    "left outer join {schema}.job_note on job_note.job_id = job__tbl.job_id",
+    "left outer join {schema}.job_sms on job_sms.job_id = job__tbl.job_id",
+    "where job_rslt is null limit 1"
   ],
-  "{jobproc_save_doc}": [
-    "with xrslt as (insert into {doc__tbl}({doc_scope},{doc_scope_id},{cust_id},{doc_sts},{doc_ctgr},{doc_desc},{doc_ext},{doc_size},{doc_uuser}) values({@doc_scope},{@doc_scope_id}, ",
-    "case {@doc_scope} when 'C' then {@doc_scope_id} else null end, ",
-    "'A',{@doc_ctgr},{@doc_desc}, '.pdf',{@doc_size}, 'jobproc') returning {doc_id}) select {doc_id} from xrslt;"
+  "jobproc_save_doc": [
+    "with xrslt as (insert into doc__tbl(doc_scope,doc_scope_id,cust_id,doc_sts,doc_ctgr,doc_desc,doc_ext,doc_size,doc_uuser) values(@doc_scope,@doc_scope_id, ",
+    "case @doc_scope when 'C' then @doc_scope_id else null end, ",
+    "'A',@doc_ctgr,@doc_desc, '.pdf',@doc_size, 'jobproc') returning doc_id) select doc_id from xrslt;"
   ],
-  "{jobproc_save_queue}": "with xrslt as (insert into {schema}.{queue__tbl}({queue_name},{queue_message}) values({@queue_name},'{}') returning {queue_id}) select {queue_id} from xrslt;",
-  "{jobproc_save_queue_message}": "update {schema}.{queue__tbl} set {queue_message} = {@queue_message} where {queue_id}={@queue_id};",
-  "{jobproc_save_note}": "insert into {schema}.{note__tbl}({note_scope},{note_scope_id},{note_sts},{note_type},{note_body}) values({@note_scope},{@note_scope_id},'A',{@note_type},{@note_body});",
-  "{jobproc_jobresult}": "update {schema}.{job__tbl} set {job_rslt}={@job_rslt},{job_rslt_tstmp}=public.{my_now}(),{job_snotes}={@job_snotes} where {job_id}={@job_id}",
-  "{jobproc_add_BEGIN}": "do $$declare {job_id} bigint; begin insert into {schema}.{job__tbl}({job_source},{job_action},{job_action_target},{job_params}) values ({@job_source},{@job_action},{@job_action_target},{@job_params}) returning {schema}.{job__tbl}.{job_id} into {job_id};",
-  "{jobproc_add_doc}": "insert into {schema}.{job_doc}({job_id},{doc_scope},{doc_scope_id},{doc_ctgr},{doc_desc}) values ({job_id},{@doc_scope},{@doc_scope_id},{@doc_ctgr},{@doc_desc});",
-  "{jobproc_add_queue}": "insert into {schema}.{job_queue}({job_id},{queue_name},{queue_message}) values ({job_id},{@queue_name},{@queue_message});",
-  "{jobproc_add_email}": "insert into {schema}.{job_email}({job_id},{email_txt_attrib},{email_to},{email_cc},{email_bcc},{email_attach},{email_subject},{email_text},{email_html},{email_doc_id}) values ({job_id},{@email_txt_attrib},{@email_to},{@email_cc},{@email_bcc},{@email_attach},{@email_subject},{@email_text},{@email_html},{@email_doc_id});",
-  "{jobproc_add_sms}": "insert into {schema}.{job_sms}({job_id},{sms_txt_attrib},{sms_to},{sms_body}) values ({job_id},{@sms_txt_attrib},{@sms_to},{@sms_body});",
-  "{jobproc_add_note}": "insert into {schema}.{job_note}({job_id},{note_scope},{note_scope_id},{note_type},{note_body}) values ({job_id},{@note_scope},{@note_scope_id},{@note_type},{@note_body});",
-  "{jobproc_add_END}": " end$$;",
-  "{jobproc_queueresult}": "update {schema}.{queue__tbl} set {queue_rslt}={@queue_rslt},{queue_rslt_tstmp}=public.{my_now}(),{queue_snotes}={@queue_snotes} where {queue_id}={@queue_id}",
-  "{jobproc_queuecheck}": "select {queue_id}, {queue_name}, {queue_message} from {schema}.{queue__tbl} where {queue_name}={@queue_name} and {queue_rslt} is null order by {queue_id} limit 1",
-  "{jobproc_queuesubscribers}": [
-    "WITH CTE AS (SELECT {queue_id}, {queue_name}, {queue_message},ROW_NUMBER() OVER (PARTITION BY {queue_name} ORDER BY {queue_id}) as RN FROM {schema}.{queue__tbl} where {queue_rslt} is null)",
-    "select {queue_id}, {queue_name}, {queue_message}",
+  "jobproc_save_queue": "with xrslt as (insert into {schema}.queue__tbl(queue_name,queue_message) values(@queue_name,'{}') returning queue_id) select queue_id from xrslt;",
+  "jobproc_save_queue_message": "update {schema}.queue__tbl set queue_message = @queue_message where queue_id=@queue_id;",
+  "jobproc_save_note": "insert into {schema}.note__tbl(note_scope,note_scope_id,note_sts,note_type,note_body) values(@note_scope,@note_scope_id,'A',@note_type,@note_body);",
+  "jobproc_jobresult": "update {schema}.job__tbl set job_rslt=@job_rslt,job_rslt_tstmp=public.my_now(),job_snotes=@job_snotes where job_id=@job_id",
+  "jobproc_add_BEGIN": "do $$declare job_id bigint; begin insert into {schema}.job__tbl(job_source,job_action,job_action_target,job_params) values (@job_source,@job_action,@job_action_target,@job_params) returning {schema}.job__tbl.job_id into job_id;",
+  "jobproc_add_doc": "insert into {schema}.job_doc(job_id,doc_scope,doc_scope_id,doc_ctgr,doc_desc) values (job_id,@doc_scope,@doc_scope_id,@doc_ctgr,@doc_desc);",
+  "jobproc_add_queue": "insert into {schema}.job_queue(job_id,queue_name,queue_message) values (job_id,@queue_name,@queue_message);",
+  "jobproc_add_email": "insert into {schema}.job_email(job_id,email_txt_attrib,email_to,email_cc,email_bcc,email_attach,email_subject,email_text,email_html,email_doc_id) values (job_id,@email_txt_attrib,@email_to,@email_cc,@email_bcc,@email_attach,@email_subject,@email_text,@email_html,@email_doc_id);",
+  "jobproc_add_sms": "insert into {schema}.job_sms(job_id,sms_txt_attrib,sms_to,sms_body) values (job_id,@sms_txt_attrib,@sms_to,@sms_body);",
+  "jobproc_add_note": "insert into {schema}.job_note(job_id,note_scope,note_scope_id,note_type,note_body) values (job_id,@note_scope,@note_scope_id,@note_type,@note_body);",
+  "jobproc_add_END": " end$$;",
+  "jobproc_queueresult": "update {schema}.queue__tbl set queue_rslt=@queue_rslt,queue_rslt_tstmp=public.my_now(),queue_snotes=@queue_snotes where queue_id=@queue_id",
+  "jobproc_queuecheck": "select queue_id, queue_name, queue_message from {schema}.queue__tbl where queue_name=@queue_name and queue_rslt is null order by queue_id limit 1",
+  "jobproc_queuesubscribers": [
+    "WITH CTE AS (SELECT queue_id, queue_name, queue_message,ROW_NUMBER() OVER (PARTITION BY queue_name ORDER BY queue_id) as RN FROM {schema}.queue__tbl where queue_rslt is null)",
+    "select queue_id, queue_name, queue_message",
     "from CTE",
     "where RN=1",
-    "order by {queue_id}"
+    "order by queue_id"
   ],
-  "{jobproc_queuepop}": "select {queue_id} from {schema}.{queue__tbl} where {queue_id}={@queue_id} and {queue_name}={@queue_name} and {queue_rslt} is null"
+  "jobproc_queuepop": "select queue_id from {schema}.queue__tbl where queue_id=@queue_id and queue_name=@queue_name and queue_rslt is null"
 }
