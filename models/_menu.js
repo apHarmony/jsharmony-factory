@@ -74,7 +74,6 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
 
         //Check if the menu item is selected
         var selected = false;
-        console.log(jsh.map);
         if (menuitem[jsh.map.menu_name].toString().toUpperCase() == selectedmenu) {
           selected = true;
         }
