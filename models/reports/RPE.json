@@ -41,7 +41,7 @@
               " where pe_sts = coalesce(@pe_sts,pe_sts) ",
               " order by pe_lname, pe_fname "], "nodatalock": ["c_id"] 
       },
-      "HOUSE": { "sql": ["select HOUSE_NAME \"HOUSE_NAME\",coalesce('Phone:  '%%%str_concat%%%HOUSE_BPHONE,'') \"HOUSE_BPHONE\",coalesce('Fax:  '%%%str_concat%%%HOUSE_FAX,'') \"HOUSE_FAX\",coalesce('Email:  '%%%str_concat%%%HOUSE_EMAIL,'') \"HOUSE_EMAIL\", ",
+      "HOUSE": { "sql": ["select HOUSE_NAME \"HOUSE_NAME\",coalesce('Phone:  '%%%concat%%%HOUSE_BPHONE,'') \"HOUSE_BPHONE\",coalesce('Fax:  '%%%concat%%%HOUSE_FAX,'') \"HOUSE_FAX\",coalesce('Email:  '%%%concat%%%HOUSE_EMAIL,'') \"HOUSE_EMAIL\", ",
                         " HOUSE_FULL_ADDR \"HOUSE_FULL_ADDR\" from jsharmony.v_house"], "nodatalock": ["c_id"] }
     }
   }
