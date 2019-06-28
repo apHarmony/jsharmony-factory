@@ -1,21 +1,22 @@
 {
-"comment":"RQ",
-  "title":"Remote Queue",
-  "table":"jsharmony.RQ",
-  "actions":"BIUD", 
-  "layout":"form", 
-  "caption": [ "", "Request", "Requests" ],
-	"fields":[
-	  {"name":"rq_id","type":"bigint","key": 1,"control":"hidden"},
-    {"name":"RQ_FILE","type":"file","actions":"BIU","nl":1,
-       "control":"file_upload","caption":"Document",
-       "controlparams": { 
-         "sqlparams": {
-                       "FILE_NAME": "rq_id"
-         },
-         "data_folder": "RQ"
-       },
-      "validate": [ "Required" ]}
-	]
-	
+  "RQ": {
+    "comment":"RQ",
+    "title":"Remote Queue",
+    "table":"jsharmony.RQ",
+    "actions":"BIUD", 
+    "layout":"form", 
+    "caption": [ "", "Request", "Requests" ],
+    "fields":[
+      {"name":"rq_id","type":"bigint","key": 1,"control":"hidden"},
+      {"name":"RQ_FILE","type":"file","actions":"BIU","nl":1,
+        "control":"file_upload","caption":"Document",
+        "controlparams": { 
+          "sqlparams": {
+                        "FILE_NAME": "rq_id"
+          },
+          "data_folder": "RQ"
+        },
+        "validate": [ "Required" ]}
+    ]	
+  }
 }

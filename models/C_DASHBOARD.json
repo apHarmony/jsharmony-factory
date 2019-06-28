@@ -1,19 +1,21 @@
 {
-  "comment":"C_DASHBOARD",
-  "layout":"form",
-  "title":"Dashboard",
-  "caption":["","Dashboard","Dashboard"],
-  "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
-  "actions":"B",
-  "menu":"c_dashboard",
-  "sqlselect": "select (select txt_val from jsharmony.txt where txt_process='CMS' and txt_attrib='C_DASHBOARD') as motd from jsharmony.dual where 1=1 %%%DATALOCKS%%%",
-  "nokey": 1,
-  "onload":"jsh.$root('.DASHBOARD_MOTD').html(xmodel.controller.form.Data.motd);",
-  "fields":[
-    {"name":"motd","type":"varchar","actions":"B","control":"hidden","caption":"","datalock":{"c_id":"always"}},
-    {"control":"html","value":"<div class=\"clear DASHBOARD_MOTD\"></div>"},
-    {"name":"qnssl","control":"subform","target":"C_QNCSL","bindings":{"n_scope":"'C'","n_type":"'S'"},"actions": "BIUD",
-     "caption":"Notifications","controlstyle":"width:820px;float:left;margin-right:10px;"},
-    {"control":"html","value":"<div class=\"clear\"></div>"}
-  ]
+  "C_DASHBOARD": {
+    "comment":"C_DASHBOARD",
+    "layout":"form",
+    "title":"Dashboard",
+    "caption":["","Dashboard","Dashboard"],
+    "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
+    "actions":"B",
+    "menu":"c_dashboard",
+    "sqlselect": "select (select txt_val from jsharmony.txt where txt_process='CMS' and txt_attrib='C_DASHBOARD') as motd from jsharmony.dual where 1=1 %%%DATALOCKS%%%",
+    "nokey": 1,
+    "onload":"jsh.$root('.DASHBOARD_MOTD').html(xmodel.controller.form.Data.motd);",
+    "fields":[
+      {"name":"motd","type":"varchar","actions":"B","control":"hidden","caption":"","datalock":{"c_id":"always"}},
+      {"control":"html","value":"<div class=\"clear DASHBOARD_MOTD\"></div>"},
+      {"name":"qnssl","control":"subform","target":"C_QNCSL","bindings":{"n_scope":"'C'","n_type":"'S'"},"actions": "BIUD",
+      "caption":"Notifications","controlstyle":"width:820px;float:left;margin-right:10px;"},
+      {"control":"html","value":"<div class=\"clear\"></div>"}
+    ]
+  }
 }

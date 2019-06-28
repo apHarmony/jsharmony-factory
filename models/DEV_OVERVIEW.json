@@ -1,16 +1,18 @@
 {
-  "comment":"DEV",
-  "layout":"form", 
-  "table":"",
-  "caption":[0,"Developer Tools","Developer Tools"],
-  "title":"Developer Tools",
-  "actions":"B",
-  "unbound": 1,
-  "dev":1,
-  "menu":"dev",
-  "fields":[
-    {"control":"html","value":"<div class=\"clear\">Please select a developer configuration tool below</div>"},
-    {"control":"html","value":"<ul class='xsubmenu_listing'></ul>"}
-  ],
-  "oninit": "jsh.$root('.xsubmenu:visible').children('a').not('.xsubmenu_more').each(function(){ var link = $('<a href=\\'#\\'></a>').prop('href',this.href).text($(this).text()); $('<li/>').append(link).appendTo(jsh.$root('.xsubmenu_listing')); });"
+  "DEV_OVERVIEW": {
+    "comment":"DEV_OVERVIEW",
+    "layout":"form", 
+    "table":"",
+    "caption":[0,"Developer Tools","Developer Tools"],
+    "title":"Developer Tools",
+    "actions":"B",
+    "unbound": 1,
+    "dev":1,
+    "menu":"dev",
+    "fields":[
+      {"control":"html","value":"<div class=\"clear\">Please select a developer configuration tool below</div>"},
+      {"control":"html","value":"<ul class='xsubmenu_listing'></ul>"}
+    ],
+    "oninit": "jsh.$root('.xsubmenu:visible').children('a').not('.xsubmenu_more').each(function(){ var link = $('<a href=\\'#\\'></a>').prop('href',this.href).text($(this).text()); $('<li/>').append(link).appendTo(jsh.$root('.xsubmenu_listing')); });"
+  }
 }

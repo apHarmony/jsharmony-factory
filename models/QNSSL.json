@@ -1,20 +1,22 @@
 {
-  "comment":"QNSSL - List of System Notes with System Scope",
-  "layout":"grid",
-  "title":"System Notifications",
-  "table":"jsharmony.n",
-  "actions":"B", 
-  "roles": {"X_B":"B","X_X":"*","DASH":"*"},
-  "sort":["vn_etstmp","vn_id"],
-  "caption":[0,"Note","System Notes"],
-  "menu":"dashboard",
-  "rowlimit":10,
-  "disableautoload": 1,
-  "fields":[
-    {"name":"n_id","type":"bigint","key": 1,"control":"hidden"},
-    {"name":"n_scope","type":"varchar","length":8,"foreignkey":1,"control":"hidden"},
-    {"name":"n_type","type":"varchar","length":8,"foreignkey":1,"control":"hidden"},
-    {"name":"n_etstmp","type":"date","format":["date","MM/DD/YY"],"caption":"Posted","actions":"B"},
-    {"name":"n_note","type":"varchar","length":"9999999","caption":"Note","actions":"B","controlstyle":"width:700px;"}
-  ]
+  "QNSSL": {
+    "comment":"QNSSL - List of System Notes with System Scope",
+    "layout":"grid",
+    "title":"System Notifications",
+    "table":"jsharmony.n",
+    "actions":"B", 
+    "roles": {"X_B":"B","X_X":"*","DASH":"*"},
+    "sort":["vn_etstmp","vn_id"],
+    "caption":[0,"Note","System Notes"],
+    "menu":"dashboard",
+    "rowlimit":10,
+    "disableautoload": 1,
+    "fields":[
+      {"name":"n_id","type":"bigint","key": 1,"control":"hidden"},
+      {"name":"n_scope","type":"varchar","length":8,"foreignkey":1,"control":"hidden"},
+      {"name":"n_type","type":"varchar","length":8,"foreignkey":1,"control":"hidden"},
+      {"name":"n_etstmp","type":"date","format":["date","MM/DD/YY"],"caption":"Posted","actions":"B"},
+      {"name":"n_note","type":"varchar","length":"9999999","caption":"Note","actions":"B","controlstyle":"width:700px;"}
+    ]
+  }
 }

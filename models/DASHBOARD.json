@@ -1,19 +1,21 @@
 {
-  "comment":"DASHBOARD",
-  "layout":"form",
-  "title":"Dashboard",
-  "caption":["","Dashboard","Dashboard"],
-  "roles": {"*":"B"},
-  "actions":"B",
-  "menu":"dashboard",
-  "sqlselect": "select (select txt_val from jsharmony.txt where txt_process='CMS' and txt_attrib='DASHBOARD') as motd from jsharmony.dual",
-  "nokey": 1,
-  "onload":"jsh.$root('.DASHBOARD_MOTD').html(xmodel.controller.form.Data.motd);",
-  "fields":[
-    {"name":"motd","type":"varchar","actions":"B","control":"hidden","caption":""},
-    {"control":"html","value":"<div class=\"clear DASHBOARD_MOTD\"></div>"},
-    {"name":"qnssl","control":"subform","target":"QNSSL","bindings":{"n_scope":"'S'","n_type":"'S'"},"actions": "BIUD",
-     "caption":"System Notifications","controlstyle":"width:820px;float:left;margin-right:10px;"},
-    {"control":"html","value":"<div class=\"clear\"></div>"}
-  ]
+  "DASHBOARD": {
+    "comment":"DASHBOARD",
+    "layout":"form",
+    "title":"Dashboard",
+    "caption":["","Dashboard","Dashboard"],
+    "roles": {"*":"B"},
+    "actions":"B",
+    "menu":"dashboard",
+    "sqlselect": "select (select txt_val from jsharmony.txt where txt_process='CMS' and txt_attrib='DASHBOARD') as motd from jsharmony.dual",
+    "nokey": 1,
+    "onload":"jsh.$root('.DASHBOARD_MOTD').html(xmodel.controller.form.Data.motd);",
+    "fields":[
+      {"name":"motd","type":"varchar","actions":"B","control":"hidden","caption":""},
+      {"control":"html","value":"<div class=\"clear DASHBOARD_MOTD\"></div>"},
+      {"name":"qnssl","control":"subform","target":"QNSSL","bindings":{"n_scope":"'S'","n_type":"'S'"},"actions": "BIUD",
+      "caption":"System Notifications","controlstyle":"width:820px;float:left;margin-right:10px;"},
+      {"control":"html","value":"<div class=\"clear\"></div>"}
+    ]
+  }
 }
