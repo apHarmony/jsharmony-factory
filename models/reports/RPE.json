@@ -34,7 +34,7 @@
               "  from jsharmony.dual ",
               "  left outer join jsharmony.ucod_ahc on codeval = @pe_sts"], "nodatalock": ["c_id"] 
       },
-      "pe":{
+      "users":{
         "sql":["select pe_id, pe_sts, pe_fname, pe_mname, pe_lname, pe_jtitle, pe_email, ",
               "       pe_bphone, pe_cphone ",
               "  from jsharmony.pe ",

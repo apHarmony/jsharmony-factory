@@ -42,14 +42,14 @@ body {
   <tr>
     <td colspan=5><hr width="100%" /></td>
   </tr>
-<!-- For Each pe Record -->
-<% _.each(data.pe,function(pe,i){ %>
+<!-- For Each user Record -->
+<% _.each(data.users,function(user,i){ %>
   <tr>
-    <td>{{pe.pe_lname||''}}</td>
-    <td>{{pe.pe_fname||''}}</td>
-    <td>{{pe.pe_sts||''}}</td>
-    <td>{{ejsext.phone_format(pe.pe_bphone)||''}}</td>
-    <td>{{pe.pe_email||''}}</td>
+    <td>{{user.pe_lname||''}}</td>
+    <td>{{user.pe_fname||''}}</td>
+    <td>{{user.pe_sts||''}}</td>
+    <td>{{ejsext.phone_format(user.pe_bphone)||''}}</td>
+    <td>{{user.pe_email||''}}</td>
   </tr>
   <tr>
     <td colspan=5><hr width="100%" /></td>
