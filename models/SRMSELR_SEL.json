@@ -21,11 +21,11 @@
     "validationlevel": "cell",        "comment4":"cell, or row",
     "hide_system_buttons" : ["export"],    
 	  "buttons": [
-	    {"link":"js:jsh.App.SRMSELR_SEL.SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
-	    {"link":"js:jsh.App.SRMSELR_SEL.DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
+	    {"link":"js:jsh.App[modelid].SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
+	    {"link":"js:jsh.App[modelid].DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
 	  ],
-    "oninit": "jsh.App.SRMSELR_SEL.oninit(xmodel);",
-    "oncommit": "jsh.App.SRMSELR_SEL.oncommit();",
+    "oninit": "jsh.App[modelid].oninit(xmodel);",
+    "oncommit": "jsh.App[modelid].oncommit();",
 	  "fields":[
       {"name":"srmsel_sel","type":"smallint","actions":"BU","caption":"Select","control":"checkbox",
        "controlparams":{"value_true":"1","value_false":"0","value_hidden":""},"captionstyle": "text-align:center;"},

@@ -1,8 +1,8 @@
-jsh.App.X_SMLW = { }
+jsh.App[modelid] = { }
 
-jsh.App.X_SMLW.sm_id_auto = 0;
+jsh.App[modelid].sm_id_auto = 0;
 
-jsh.App.X_SMLW.oninit = function(){
+jsh.App[modelid].oninit = function(){
   var _this = this;
   XModels[modelid].sm_id_auto = function () { 
     if(!_this.sm_id_auto) _this.sm_id_auto = xmodel.controller.form.Data.sm_id_auto;
@@ -11,7 +11,7 @@ jsh.App.X_SMLW.oninit = function(){
   jsh.$root('.sm_id_auto.tree').data('oncontextmenu','return '+jsh.getInstance()+'.App.X_SMLW.oncontextmenu(this, n);');
 }
 
-jsh.App.X_SMLW.oncontextmenu = function(ctrl, n){
+jsh.App[modelid].oncontextmenu = function(ctrl, n){
   var menuid = '._item_context_menu_sm_id_auto';
   var menu_add = jsh.$root(menuid).children('.insert');
   var menu_delete = jsh.$root(menuid).children('.delete');
@@ -37,22 +37,22 @@ jsh.App.X_SMLW.oncontextmenu = function(ctrl, n){
   return false;
 }
 
-jsh.App.X_SMLW.sm_id_onchange = function(obj, newval, undoChange) {
+jsh.App[modelid].sm_id_onchange = function(obj, newval, undoChange) {
   if(jsh.XPage.GetChanges().length){
     undoChange();
     return XExt.Alert('Please save changes before navigating to a different record.');
   }
-  jsh.App.X_SMLW.select_sm_id_auto(newval);
+  jsh.App[modelid].select_sm_id_auto(newval);
 }
 
-jsh.App.X_SMLW.select_sm_id_auto = function(newval, cb){
+jsh.App[modelid].select_sm_id_auto = function(newval, cb){
   xmodel.controller.form.Data.cur_sm_id_auto = newval;
   xmodel.controller.form.Data.sm_id_auto = newval;
   this.sm_id_auto = newval;
   jsh.XPage.Select({ modelid: XBase[xmodel.namespace+'X_SML_EDIT'][0], force: true }, cb);
 }
 
-jsh.App.X_SMLW.item_insert = function(context_item){
+jsh.App[modelid].item_insert = function(context_item){
   if(jsh.XPage.GetChanges().length) return XExt.Alert('Please save changes before adding menu items.');
 
   var fields = {
@@ -79,7 +79,7 @@ jsh.App.X_SMLW.item_insert = function(context_item){
     if (!validate.ValidateControls('I', data, '')) return;
     XForm.prototype.XExecutePost('X_SMLW_INSERT', data, function (rslt) { //On success
       if ('_success' in rslt) { 
-        jsh.App.X_SMLW.select_sm_id_auto(parseInt(rslt.X_SMLW_INSERT[0].sm_id_auto), function(){
+        jsh.App[modelid].select_sm_id_auto(parseInt(rslt.X_SMLW_INSERT[0].sm_id_auto), function(){
           success(); 
           jsh.XPage.Refresh(); 
         });
@@ -90,7 +90,7 @@ jsh.App.X_SMLW.item_insert = function(context_item){
   });
 }
 
-jsh.App.X_SMLW.getSMbyValue = function(sm_id_auto){
+jsh.App[modelid].getSMbyValue = function(sm_id_auto){
   var _this = this;
   if(!sm_id_auto) return null;
   var lov = xmodel.controller.form.LOVs.sm_id_auto;
@@ -100,7 +100,7 @@ jsh.App.X_SMLW.getSMbyValue = function(sm_id_auto){
   return null;
 }
 
-jsh.App.X_SMLW.getSMbyID = function(sm_id){
+jsh.App[modelid].getSMbyID = function(sm_id){
   var _this = this;
   if(!sm_id) return null;
   var lov = xmodel.controller.form.LOVs.sm_id_auto;
@@ -110,17 +110,17 @@ jsh.App.X_SMLW.getSMbyID = function(sm_id){
   return null;
 }
 
-jsh.App.X_SMLW.item_delete = function(context_item){
+jsh.App[modelid].item_delete = function(context_item){
   var _this = this;
   if(jsh.XPage.GetChanges().length) return XExt.Alert('Please save changes before deleting menu items.');
   var item_desc = XExt.getLOVTxt(xmodel.controller.form.LOVs.sm_id_auto,context_item);
 
-  var sm = jsh.App.X_SMLW.getSMbyValue(context_item);
+  var sm = jsh.App[modelid].getSMbyValue(context_item);
   var sm_parent = null;
   var has_children = false;
   if(sm){
     if(!sm[jsh.uimap.code_parent_id]) return XExt.Alert('Cannot delete root node');
-    sm_parent = jsh.App.X_SMLW.getSMbyID(sm[jsh.uimap.code_parent_id]);
+    sm_parent = jsh.App[modelid].getSMbyID(sm[jsh.uimap.code_parent_id]);
     var lov = xmodel.controller.form.LOVs.sm_id_auto;
     for(var i=0;i<lov.length;i++){
       if(lov[i][jsh.uimap.code_parent_id] && (lov[i][jsh.uimap.code_parent_id].toString()==sm[jsh.uimap.codeid].toString())) has_children = true;

@@ -1,6 +1,6 @@
-jsh.App.X_MODELS = { }
+jsh.App[modelid] = { }
 
-jsh.App.X_MODELS.ShowUserModels = function(popupmodelid, parentmodelid, fieldid, onComplete){
+jsh.App[modelid].ShowUserModels = function(popupmodelid, parentmodelid, fieldid, onComplete){
   var searchitems = [];
   searchitems.push(new jsh.XSearch.SearchItem('model_module', 'jsharmonyFactory', 'and', '<>'));
   var popupmodel = jsh.XModels[popupmodelid];

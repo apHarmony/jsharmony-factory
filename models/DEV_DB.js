@@ -1,9 +1,9 @@
-jsh.App.DEV_DB = { }
+jsh.App[modelid] = { }
 
-jsh.App.DEV_DB.DBs = {};  //Populated onroute
+jsh.App[modelid].DBs = {};  //Populated onroute
 
-jsh.App.DEV_DB.samples = {};
-jsh.App.DEV_DB.samples.mssql = {
+jsh.App[modelid].samples = {};
+jsh.App[modelid].samples.mssql = {
   "Select": "select top 1000 * from TABLE;",
   "List Tables": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='U' order by schema_name,table_name",
   "List Views": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='V' order by schema_name,table_name",
@@ -14,7 +14,7 @@ jsh.App.DEV_DB.samples.mssql = {
   "Create Stored Procedure": "",
   "Create UCOD": "",
 };
-jsh.App.DEV_DB.samples.pgsql = {
+jsh.App[modelid].samples.pgsql = {
   "Select": "select * from TABLE limit 1000;",
   "List Tables": "select table_schema||'.'||table_name as table from information_schema.tables where table_type='BASE TABLE' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
   "List Views": "select table_schema||'.'||table_name as view from information_schema.tables where table_type='VIEW' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
@@ -43,7 +43,7 @@ insert into c(c_id,c_sts,c_name) values (1,'ACTIVE','ACME Industries');",
   "Create Stored Procedure": "",
   "Create UCOD": "",
 };
-jsh.App.DEV_DB.samples.sqlite = {
+jsh.App[modelid].samples.sqlite = {
   "Select": "select * from TABLE limit 1000;",
   "List Tables": "SELECT name FROM sqlite_master WHERE type='table' order by name;",
   "List Views": "SELECT name FROM sqlite_master WHERE type='view' order by name;",
@@ -74,12 +74,12 @@ insert into ucod_c_sts(codseq,codeval,codetxt,codecode) values (1,'ACTIVE','Acti
 };
 
 
-jsh.App.DEV_DB.oninit = function(xmodel) {
+jsh.App[modelid].oninit = function(xmodel) {
   var _this = this;
   jsh.$root('.DEV_DB_db').change(function(){
     var db = jsh.$root('.DEV_DB_db').val();
     if(!db) jsh.$root('.DEV_DB_run').hide();
-    else jsh.App.DEV_DB.LoadScripts(db);
+    else jsh.App[modelid].LoadScripts(db);
   });
   var jSamples = jsh.$root('.DEV_DB_samples');
   jSamples.change(function(){
@@ -92,13 +92,13 @@ jsh.App.DEV_DB.oninit = function(xmodel) {
     jsh.$root('.DEV_DB_sql').val(sampleSQL)
     jSamples.val('');
   });
-  jsh.$root('.DEV_DB_runsql').click(function(){ jsh.App.DEV_DB.RunSQL(); });
+  jsh.$root('.DEV_DB_runsql').click(function(){ jsh.App[modelid].RunSQL(); });
   jsh.$root('.DEV_DB_runas_toggle').click(function(){ jsh.$root('.DEV_DB_runas').toggle(); return false; });
 
-  jsh.App.DEV_DB.RenderDBListing(_.keys(_this.DBs));
+  jsh.App[modelid].RenderDBListing(_.keys(_this.DBs));
 }
 
-jsh.App.DEV_DB.RenderDBListing = function(dbs){
+jsh.App[modelid].RenderDBListing = function(dbs){
   var jobj = jsh.$root('.DEV_DB_db');
   if(dbs.length > 1){
     jsh.$root('.DEV_DB_dbselect').show();
@@ -112,13 +112,13 @@ jsh.App.DEV_DB.RenderDBListing = function(dbs){
     var db = dbs[i];
     jobj.append($('<option>',{value:db}).text(db));
   }
-  if(dbs.length==1) jsh.App.DEV_DB.LoadScripts(dbs[0]);
+  if(dbs.length==1) jsh.App[modelid].LoadScripts(dbs[0]);
   else if(_GET['db']){
     jobj.val(_GET['db']).change();
   }
 }
 
-jsh.App.DEV_DB.LoadScripts = function(db){
+jsh.App[modelid].LoadScripts = function(db){
   var _this = this;
   jsh.$root('.DEV_DB_run').show();
   jsh.$root('.DEV_DB_rslt').html('');
@@ -147,7 +147,7 @@ jsh.App.DEV_DB.LoadScripts = function(db){
   }
 }
 
-jsh.App.DEV_DB.RunSQL = function(){
+jsh.App[modelid].RunSQL = function(){
   var _this = this;
   var sql = jsh.$root('.DEV_DB_sql').val();
   var db = jsh.$root('.DEV_DB_db').val();

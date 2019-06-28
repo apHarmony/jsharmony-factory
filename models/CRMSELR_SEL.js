@@ -1,9 +1,9 @@
-jsh.App.CRMSELR_SEL = { }
+jsh.App[modelid] = { }
 
-jsh.App.CRMSELR_SEL.loadobj = '';
-jsh.App.CRMSELR_SEL.ops = [];
+jsh.App[modelid].loadobj = '';
+jsh.App[modelid].ops = [];
 
-jsh.App.CRMSELR_SEL.oninit = function(xmodel) {
+jsh.App[modelid].oninit = function(xmodel) {
   var _this = this;
   xmodel.controller.form.GetReselectParams = function(){ 
 	  var rslt = this.GetKeys(); 
@@ -17,7 +17,7 @@ jsh.App.CRMSELR_SEL.oninit = function(xmodel) {
   }
 }
 
-jsh.App.CRMSELR_SEL.oncommit = function(){
+jsh.App[modelid].oncommit = function(){
   var _this = this;
   if(!_this.loadobj){ $(document.activeElement).blur(); return; }
   if (_this.ops.length == 0) {
@@ -32,7 +32,7 @@ jsh.App.CRMSELR_SEL.oncommit = function(){
   op();
 }
 
-jsh.App.CRMSELR_SEL.SelectAll = function(){
+jsh.App[modelid].SelectAll = function(){
   var _this = this;
 	_this.ForAllChildren(function (obj) {
     if ($(obj).is(':checked')) return;
@@ -41,7 +41,7 @@ jsh.App.CRMSELR_SEL.SelectAll = function(){
   });
 }
 
-jsh.App.CRMSELR_SEL.DeselectAll = function(){
+jsh.App[modelid].DeselectAll = function(){
   var _this = this;
 	_this.ForAllChildren(function (obj) {
     if (!$(obj).is(':checked')) return;
@@ -50,7 +50,7 @@ jsh.App.CRMSELR_SEL.DeselectAll = function(){
   });
 }
 
-jsh.App.CRMSELR_SEL.ForAllChildren = function(add_op) {
+jsh.App[modelid].ForAllChildren = function(add_op) {
   var _this = this;
   if (_this.loadobj) return;
   _this.ops = [];

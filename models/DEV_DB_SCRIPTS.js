@@ -1,6 +1,6 @@
-jsh.App.DEV_DB_SCRIPTS = { }
+jsh.App[modelid] = { }
 
-jsh.App.DEV_DB_SCRIPTS.oninit = function(xmodel) {
+jsh.App[modelid].oninit = function(xmodel) {
   var _this = this;
   XForm.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { }, function (rslt) { //On success
     if ('_success' in rslt) { 
@@ -14,7 +14,7 @@ jsh.App.DEV_DB_SCRIPTS.oninit = function(xmodel) {
   });
 }
 
-jsh.App.DEV_DB_SCRIPTS.RenderDBListing = function(dbs){
+jsh.App[modelid].RenderDBListing = function(dbs){
   var _this = this;
   var jobj = jsh.$root('.DEV_DB_SCRIPTS_db');
   if(dbs.length > 1){
@@ -32,7 +32,7 @@ jsh.App.DEV_DB_SCRIPTS.RenderDBListing = function(dbs){
   if(dbs.length==1) _this.GetScripts(dbs[0]);
 }
 
-jsh.App.DEV_DB_SCRIPTS.GetScripts = function(dbid){
+jsh.App[modelid].GetScripts = function(dbid){
   var _this = this;
   XForm.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { db: dbid }, function (rslt) { //On success
     if ('_success' in rslt) { 
@@ -41,7 +41,7 @@ jsh.App.DEV_DB_SCRIPTS.GetScripts = function(dbid){
   });
 }
 
-jsh.App.DEV_DB_SCRIPTS.RenderScripts = function(scripts){
+jsh.App[modelid].RenderScripts = function(scripts){
   var _this = this;
   jsh.$root('.DEV_DB_SCRIPTS_run').show();
   jsh.$root('.DEV_DB_SCRIPTS_rslt').text('');
@@ -75,7 +75,7 @@ jsh.App.DEV_DB_SCRIPTS.RenderScripts = function(scripts){
   jobj.find('a.info').click(function(e){ e.preventDefault(); _this.ExecScript(this, 'read'); });
 }
 
-jsh.App.DEV_DB_SCRIPTS.RenderScriptsNode = function(node){
+jsh.App[modelid].RenderScriptsNode = function(node){
   var _this = this;
   var jlist = $('<ul></ul>');
   for(var childname in node){
@@ -101,7 +101,7 @@ jsh.App.DEV_DB_SCRIPTS.RenderScriptsNode = function(node){
   return jlist;
 }
 
-jsh.App.DEV_DB_SCRIPTS.ExecScript = function(obj, mode){
+jsh.App[modelid].ExecScript = function(obj, mode){
   var _this = this;
   var jobj = $(obj);
   jsh.$root('.DEV_DB_SCRIPTS_rslt').text('');
