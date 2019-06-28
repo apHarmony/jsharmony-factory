@@ -1,7 +1,7 @@
 {
  "D_BASE": {
   "title":"Document",
-  "table":"REPLACE_WITH_LOCAL_EDITABLE_D_VIEW",
+  "table":"REPLACE_WITH_LOCAL_EDITABLE_VIEW",
   "actions":"BIUD", 
   "layout":"form", 
   "caption": [ "", "Document", "Documents" ],
