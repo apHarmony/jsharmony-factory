@@ -25,7 +25,7 @@ body {
 <tr>
 <td colspan=5>
 <div class="report_header">
-  <br/>User Status:&nbsp; <%=data.PARAMS[0].pe_sts_txt%> <br />
+  <br/>User Status:&nbsp; <%=data.params[0].pe_sts_txt%> <br />
 </div>
 </td>
 </tr>
@@ -42,14 +42,14 @@ body {
   <tr>
     <td colspan=5><hr width="100%" /></td>
   </tr>
-<!-- For Each PE Record -->
-<% _.each(data.PE,function(PE,i){ %>
+<!-- For Each pe Record -->
+<% _.each(data.pe,function(pe,i){ %>
   <tr>
-    <td>{{PE.pe_lname||''}}</td>
-    <td>{{PE.pe_fname||''}}</td>
-    <td>{{PE.pe_sts||''}}</td>
-    <td>{{ejsext.phone_format(PE.pe_bphone)||''}}</td>
-    <td>{{PE.pe_email||''}}</td>
+    <td>{{pe.pe_lname||''}}</td>
+    <td>{{pe.pe_fname||''}}</td>
+    <td>{{pe.pe_sts||''}}</td>
+    <td>{{ejsext.phone_format(pe.pe_bphone)||''}}</td>
+    <td>{{pe.pe_email||''}}</td>
   </tr>
   <tr>
     <td colspan=5><hr width="100%" /></td>
@@ -57,6 +57,6 @@ body {
 
 <% }); %><!-- End C Loop -->
 </table>  
-Number of records:  {{data.PE.length}}
+Number of records:  {{data.pe.length}}
 </body>
 </html>

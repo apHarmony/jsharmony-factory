@@ -29,12 +29,12 @@
     "headerheight": "1.7cm",
     "pagefooter" : ["<hr/><h3 align='center' style=\"font-size:12px;\"><div style='float:left;'>001 USERS</div>              <div style='float:right;'> Page <%-pageNum%> / <%-numPages%></div></h3>"],
     "reportdata" : {
-      "PARAMS":{
+      "params":{
         "sql":["select coalesce(codetxt,'(All)') pe_sts_txt ",
               "  from jsharmony.dual ",
               "  left outer join jsharmony.ucod_ahc on codeval = @pe_sts"], "nodatalock": ["c_id"] 
       },
-      "PE":{
+      "pe":{
         "sql":["select pe_id, pe_sts, pe_fname, pe_mname, pe_lname, pe_jtitle, pe_email, ",
               "       pe_bphone, pe_cphone ",
               "  from jsharmony.pe ",
