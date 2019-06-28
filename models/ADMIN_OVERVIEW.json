@@ -7,7 +7,7 @@
     "title":"Administration",
     "actions":"B",
     "unbound": 1,
-    "menu":"administration",
+    "menu":"admin",
     "fields":[
       {"control":"html","value":"<div class=\"clear\">Please select an administration option below</div>"},
       {"control":"html","value":"<ul class='xsubmenu_listing'></ul>"}

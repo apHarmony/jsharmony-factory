@@ -8,7 +8,7 @@
 	"caption":[0,"System Code Table","System Code Tables"],
     "roles": {"X_B":"B","DADMIN":"*"},
     "sort":["^codename","^codeschema"], 
-	"menu":"DEV_X_UCOD_HL",
+	"menu":"X_UCOD_HL",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",

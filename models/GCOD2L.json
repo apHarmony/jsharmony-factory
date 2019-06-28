@@ -5,7 +5,7 @@
 	"caption":[0,"Code","Codes"],
 	"actions":"BIUD", 
 	"sort":["^codeval1","^codseq","^codeval2"], 
-	"menu":"ADMINISTRATION_CODE2TABLES",
+	"menu":"GCOD2_HL",
     "roles": {"X_B":"B","DADMIN":"*"},
     "breadcrumbs": { "parents": ["GCOD2_HL"] },
     "reselectafteredit": "row",    "comment1":"row, or blank",
@@ -56,7 +56,7 @@
   "X_GCOD2L": {
     "inherits":"GCOD2L",
     "dev":1,
-    "menu":"DEV_X_GCOD2_HL",
+    "menu":"X_GCOD2_HL",
     "breadcrumbs": { "parents": ["X_GCOD2_HL"] }
   }
 }

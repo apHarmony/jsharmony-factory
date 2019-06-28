@@ -5,7 +5,7 @@
 	  "actions":"BIUD", 
     "layout":"form", 
     "caption": [ "", "Help Module", "Help Modules" ],
-    "menu":"ADMINISTRATION_HELPMAINTENANCE",
+    "menu":"HL",
     "breadcrumbs": { "parents": ["HL"] },
 	  "fields":[
 	    {"name":"h_id","type":"bigint","key":1,"control":"hidden"},

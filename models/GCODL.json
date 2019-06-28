@@ -6,7 +6,7 @@
   "roles": {"X_B":"B","DADMIN":"*"},
 	"actions":"BIUD", 
 	"sort":["^codseq","^codeval"], 
-	"menu":"ADMINISTRATION_CODETABLES",
+	"menu":"GCOD_HL",
     "roles": {"X_B":"B","DADMIN":"*"},
     "breadcrumbs": { "parents": ["GCOD_HL"] },
     "reselectafteredit": "row",    "comment1":"row, or blank",
@@ -52,7 +52,7 @@
   "X_GCODL": {
     "inherits":"GCODL",
     "dev":1,
-    "menu":"DEV_X_GCOD_HL",
+    "menu":"X_GCOD_HL",
     "breadcrumbs": { "parents": ["X_GCOD_HL"] }
   }
 }

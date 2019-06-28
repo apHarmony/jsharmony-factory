@@ -5,7 +5,7 @@
 	  "actions":"BU", 
     "layout":"form", 
     "caption":[0,"Text Module","Text Modules"],
-	  "menu":"ADMINISTRATION_TEXTMAINTENANCE",
+	  "menu":"TXTL",
     "breadcrumbs": { "parents": ["TXTL"] },
     "onload": "if(xmodel.controller.form.Data.txt_type.toUpperCase()=='HTML'){ $('.txt_val.xelem'+xmodel.class).attr('id',xmodel.class+'_txt_val'); XExt.CKEditor(xmodel.class+'_txt_val'); }",
     "fields":[
@@ -54,7 +54,7 @@
     "inherits":"TXT",
     "dev":1,
     "actions":"BIUD", 
-    "menu":"DEV_X_TXTL",
+    "menu":"X_TXTL",
     "breadcrumbs": { "parents": ["X_TXTL"] },
     "fields":[
       {"name":"txt_process","actions":"BIU"},

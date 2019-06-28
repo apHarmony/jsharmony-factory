@@ -7,7 +7,7 @@
     "caption":[0,"Code Table","Code Tables"],
     "roles": {"X_B":"B","DADMIN":"*"},
 	  "sort":["^codename"], 
-    "menu":"ADMINISTRATION_CODETABLES",
+    "menu":"GCOD_HL",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
@@ -34,7 +34,7 @@
     "inherits":"GCOD_HL",
     "dev":1,
     "actions":"BIUD",
-    "menu":"DEV_X_GCOD_HL",
+    "menu":"X_GCOD_HL",
     "fields":[
       {"name":"codeschema","actions": "BI","control": "textbox"},
       {"name":"codename","actions": "BI","control": "textbox","value":"__REMOVEPROPERTY__"},

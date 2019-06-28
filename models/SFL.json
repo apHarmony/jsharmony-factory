@@ -7,7 +7,7 @@
     "caption":[0,"Function","Functions"],
     "layout":"grid", 
     "sort":[{"sf_seq":"asc"},{"sf_name":"asc"}], 
-    "menu":"administration",
+    "menu":"admin",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",

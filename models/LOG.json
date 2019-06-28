@@ -5,7 +5,7 @@
     "table":"",
     "actions":"B", 
     "layout":"exec", 
-    "menu":"ADMINISTRATION_LOG",
+    "menu":"LOG",
     "caption": [ "", "Request", "Requests" ],
 	  "fields":[
       {"control":"button","value":"Download Logs","controlstyle": "padding:3px 8px;",

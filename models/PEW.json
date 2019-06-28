@@ -5,7 +5,7 @@
     "table": "jsharmony.pe",
     "actions": "B", 
     "caption": [ 0, "User", "Users" ],
-    "menu": "ADMINISTRATION_USERS",
+    "menu": "PEL",
 	"tabpos":"top",
     "tabs":[
       {"name":"General","target":"PE","bindings":{"pe_id":"pe_id"}},

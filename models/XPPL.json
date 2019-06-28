@@ -7,7 +7,7 @@
     "caption":[0,"Parameter","Parameters"],
     "layout":"grid", 
     "sort":["^xpp_process","^xpp_attrib"], 
-    "menu":"DEV_X_XPPL",
+    "menu":"X_XPPL",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",

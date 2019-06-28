@@ -7,7 +7,7 @@
     "caption":[0,"Help Panel","Help Panels"],
     "layout":"grid", 
     "sort":[{"hp_desc":"asc"}], 
-    "menu":"DEV_X_HPL",
+    "menu":"X_HPL",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",

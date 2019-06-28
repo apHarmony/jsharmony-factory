@@ -6,7 +6,7 @@
     "title":"System Users",
     "actions":"B", 
     "sort":["^pe_name1"],
-    "menu":"ADMINISTRATION_USERS",
+    "menu":"PEL",
     "buttons":[{"link":"insert:PE"}],
     "fields":[
       {"name":"pe_id","type":"bigint","key":"1","actions":"B","caption":"ID","link":"update:PE"},
