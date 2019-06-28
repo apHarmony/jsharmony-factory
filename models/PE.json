@@ -51,7 +51,7 @@
       {"name": "pe_city","type": "varchar","length": 50,"actions": "BIU","control": "textbox_M",
        "validate": [ "MaxLength:50"],"caption": "City","captionstyle":"width:200px;text-align:right;"},
       {"name": "pe_state","type": "varchar","length": 8,"actions": "BIU","control": "dropdown_S",
-       "lov": {"sql2":"select codeval1 as %%%jsh.map.codeparent%%%, codeval2 as %%%jsh.map.codeval%%%, %%%jsh.map.codetxt%%% from jsharmony.ucod2_country_state order by codseq,codetxt", 
+       "lov": {"sql2":"select codeval1 as %%%jsh.map.code_parent%%%, codeval2 as %%%jsh.map.codeval%%%, %%%jsh.map.codetxt%%% from jsharmony.ucod2_country_state order by codseq,codetxt", 
        "blank": " ", "parent": "pe_country", "showcode":1 },
        "caption": "State","captionstyle":"width:496px;text-align:right;","nl":1},
       {"name": "pe_zip","type": "varchar","length": 50,"actions": "BIU","control": "textbox_S","controlstyle": "width:72px;",

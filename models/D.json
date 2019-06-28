@@ -20,7 +20,7 @@
      "validate":["Required"],
 	   "caption":"Scope","captionstyle":"width:120px;text-align:right;"},
     {"name":"d_ctgr","type":"varchar","length":50,"actions":"BI",
-     "lov":{"sql2":"select codeval1 as %%%jsh.map.codeparent%%%, codeval2 as %%%jsh.map.codeval%%%, codetxt as %%%jsh.map.codetxt%%% from jsharmony.gcod2_d_scope_d_ctgr order by codetxt", 
+     "lov":{"sql2":"select codeval1 as %%%jsh.map.code_parent%%%, codeval2 as %%%jsh.map.codeval%%%, codetxt as %%%jsh.map.codetxt%%% from jsharmony.gcod2_d_scope_d_ctgr order by codetxt", 
      "blank":1, "parent":"d_scope","nodatalock":["c_id"]},
      "control":"dropdown_L","validate":["Required"],
      "caption":"Type","captionstyle":"width:105px;text-align:right;"},

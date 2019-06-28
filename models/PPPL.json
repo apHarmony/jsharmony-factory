@@ -21,7 +21,7 @@
        "blank":1},"validate":["Required"],"comment":"hidden",
        "caption":"Process","captionstyle":"width:120px;text-align:right;"},
       {"name":"ppp_attrib","type":"varchar","length":16,"actions": "BIU","control": "dropdown_M",
-       "lov":{"sql2":"select codeval1 as %%%jsh.map.codeparent%%%, codeval2 as %%%jsh.map.codeval%%%, %%%jsh.map.codetxt%%% from jsharmony.ucod2_ppp_process_attrib_v order by codseq,codetxt",
+       "lov":{"sql2":"select codeval1 as %%%jsh.map.code_parent%%%, codeval2 as %%%jsh.map.codeval%%%, %%%jsh.map.codetxt%%% from jsharmony.ucod2_ppp_process_attrib_v order by codseq,codetxt",
        "blank": 1,"parent":"ppp_process"},"validate":["Required"],
        "caption":"Attribute","comment":"hidden"},
       {"name":"ppd_desc","type":"varchar","length":"255","caption":"Description","actions":"B",

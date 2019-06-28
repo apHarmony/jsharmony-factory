@@ -119,11 +119,11 @@ jsh.App.X_SMLW.item_delete = function(context_item){
   var sm_parent = null;
   var has_children = false;
   if(sm){
-    if(!sm[jsh.uimap.codeparentid]) return XExt.Alert('Cannot delete root node');
-    sm_parent = jsh.App.X_SMLW.getSMbyID(sm[jsh.uimap.codeparentid]);
+    if(!sm[jsh.uimap.code_parent_id]) return XExt.Alert('Cannot delete root node');
+    sm_parent = jsh.App.X_SMLW.getSMbyID(sm[jsh.uimap.code_parent_id]);
     var lov = xmodel.controller.form.LOVs.sm_id_auto;
     for(var i=0;i<lov.length;i++){
-      if(lov[i][jsh.uimap.codeparentid] && (lov[i][jsh.uimap.codeparentid].toString()==sm[jsh.uimap.codeid].toString())) has_children = true;
+      if(lov[i][jsh.uimap.code_parent_id] && (lov[i][jsh.uimap.code_parent_id].toString()==sm[jsh.uimap.codeid].toString())) has_children = true;
     }
   }
 

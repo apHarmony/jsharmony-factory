@@ -16,12 +16,12 @@
     "menu_command": "sm_cmd",
     "menu_subcommand": "sm_subcmd",
     "menu_parentname": "sm_parent_name",
-    "codeval": "codeval",
-    "codetxt": "codetxt",
-    "codeseq": "codseq",
-    "codeparent": "codeparent",
-    "txt_val": "txt_val",
-    "txt_tval": "txt_tval",
+    "code_val": "codeval",
+    "code_txt": "codetxt",
+    "code_seq": "codseq",
+    "code_parent": "code_parent",
+    "txt_body": "txt_val",
+    "txt_title": "txt_tval",
     "txt_bcc": "txt_bcc",
     "txt_type": "txt_type",
 
@@ -32,14 +32,14 @@
     "client_overdue_ignore": "inv_overdue_ignore"
   },
   "ui_field_mapping": {
-    "codeval": "codeval",
-    "codetxt": "codetxt",
-    "codeparentid": "codeparentid",
-    "codeicon": "codeicon",
-    "codeid": "codeid",
-    "codeparent": "codeparent",
-    "codeseq": "codeseq",
-    "codetype": "codetype"
+    "code_val": "code_val",
+    "code_txt": "code_txt",
+    "code_parent_id": "code_parent_id",
+    "code_icon": "code_icon",
+    "code_id": "code_id",
+    "code_parent": "code_parent",
+    "code_seq": "code_seq",
+    "code_type": "code_type"
   },
   "modules":{
     "jsHarmonyFactory": {
