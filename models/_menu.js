@@ -50,7 +50,7 @@ exports = module.exports = function GenMenu(type, req, res, jsh, params, onCompl
   var sqlparams = {};
   sqlparams[jsh.map.user_id] = req.user_id;
   sqlparams['root_menu'] = rootmenu;
-  jsh.AppSrv.ExecMultiRecordset(req._DBContext, menusql, [dbtypes.BigInt, dbtypes.VarChar(30)], sqlparams, function (err, rslt) {
+  jsh.AppSrv.ExecMultiRecordset(req._DBContext, menusql, [dbtypes.BigInt, dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
     if(err){ return Helper.GenError(req, res, -99999, "An unexpected database error has occurred: "+err.toString()); }
     var xmenu = {};
     xmenu.MainMenu = [];

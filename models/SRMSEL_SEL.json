@@ -39,7 +39,7 @@
         "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"cellstyle": "text-align:right;",
         "sqlsort":"(coalesce(coalesce(sm_seq,sm_id),0))",
         "caption":"Seq","captionstyle": "text-align:right;"},
-        {"name":"sm_name","type":"varchar","length":30,"actions": "B","control": "label",
+        {"name":"sm_name","type":"varchar","length":255,"actions": "B","control": "label",
         "validate":["Required"],"caption":"Name"},
         {"name":"sm_desc","type":"varchar","length":"255","actions":"B","control": "label",
         "validate":["Required"],"caption":"Description"}

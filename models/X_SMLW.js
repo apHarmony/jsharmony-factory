@@ -67,7 +67,7 @@ jsh.App[modelid].item_insert = function(context_item){
     <div class="X_SMLW_InsertPopup xdialogbox xpromptbox" style="width:360px;"> \
       <h3>Add Child Item</h3> \
       <div align="left" style="padding-top:15px;"> \
-        <div style="width:100px;display:inline-block;margin-bottom:8px;text-align:right;">Menu ID:</div> <input type="text" class="sm_name" style="width:150px;" maxlength="30" /> (ex. ORDERS)<br/> \
+        <div style="width:100px;display:inline-block;margin-bottom:8px;text-align:right;">Menu ID:</div> <input type="text" class="sm_name" style="width:150px;" maxlength="255" /> (ex. ORDERS)<br/> \
         <div style="width:100px;display:inline-block;text-align:right;">Display Name:</div> <input type="text" class="sm_desc" style="width:150px;"maxlength="255" /><br/> \
         <div style="text-align:center;"><input type="button" value="Add" class="button_ok" style="margin-right:15px;" /> <input type="button" value="Cancel" class="button_cancel" /></div> \
       </div> \

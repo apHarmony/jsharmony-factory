@@ -1510,7 +1510,7 @@ CREATE TABLE [jsharmony].[menu__tbl](
 	[menu_id] [bigint] NOT NULL,
 	[menu_sts] [nvarchar](8) NOT NULL,
 	[menu_id_parent] [bigint] NULL,
-	[menu_name] [nvarchar](30) NOT NULL,
+	[menu_name] [nvarchar](255) NOT NULL,
 	[menu_seq] [int] NULL,
 	[menu_desc] [nvarchar](255) NOT NULL,
 	[menu_desc_ext] [nvarchar](max) NULL,

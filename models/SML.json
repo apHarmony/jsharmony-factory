@@ -30,7 +30,7 @@
        "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
        "sqlsort":"(coalesce(coalesce(sm_seq,sm_id),0))",
        "caption":"Seq","captionstyle": "text-align:right;"},
-      {"name":"sm_name","type":"varchar","length":30,"actions": "BIU","control": "textbox_M",
+      {"name":"sm_name","type":"varchar","length":255,"actions": "BIU","control": "textbox_M",
        "validate":["Required"],"caption":"Menu ID"},
       {"name":"sm_desc","type":"varchar","length":"255","actions":"BIU","control": "textbox_M",
        "validate":["Required"],"caption":"Display Name"},

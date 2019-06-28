@@ -5273,7 +5273,7 @@ CREATE TABLE menu__tbl (
     menu_id bigint NOT NULL,
     menu_sts character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
     menu_id_parent bigint,
-    menu_name character varying(30) NOT NULL,
+    menu_name character varying(255) NOT NULL,
     menu_seq integer,
     menu_desc character varying(255) NOT NULL,
     menu_desc_ext text,
