@@ -14,7 +14,7 @@
         "lov": { "sql": ["select sr_name as %%%jsh.map.codeval%%%, ",
                           "       sr_desc as %%%jsh.map.codetxt%%%, ",
                           "       sr_seq as %%%jsh.map.codeseq%%% ",
-                          "  from jsharmony.SR"] }
+                          "  from jsharmony.sr"] }
       }
     ],
     "dberrors":[

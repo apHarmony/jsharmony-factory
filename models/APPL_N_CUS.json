@@ -29,7 +29,7 @@
     "table":"jsharmony.N",
     "title":"Note - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
     "breadcrumbs":{
-      "sql": ["select pe_fname, pe_lname from jsharmony.PE ",
+      "sql": ["select pe_fname, pe_lname from jsharmony.pe ",
               " where pe_id=coalesce(@n_scope_id,(select n_scope_id from jsharmony.n where n_id = @n_id))"],
       "sql_params": ["n_scope_id","n_scope"]
     },
@@ -40,7 +40,7 @@
     "table":"jsharmony.N",
     "title":"Note - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
     "breadcrumbs":{
-      "sql": ["select pe_fname, pe_lname from jsharmony.PE ",
+      "sql": ["select pe_fname, pe_lname from jsharmony.pe ",
               " where pe_id=coalesce(@n_scope_id,(select n_scope_id from jsharmony.n where n_id = @n_id))"],
       "sql_params": ["n_scope_id","n_scope"]
     },

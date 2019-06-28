@@ -57,7 +57,7 @@
       "title": "Delete Menu Item",
       "actions": "U",
       "dev": 1,
-      "sqlexec": ["delete from jsharmony.SM where sm_id_auto=@sm_id_auto"],
+      "sqlexec": ["delete from jsharmony.sm where sm_id_auto=@sm_id_auto"],
       "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
       "popup":[450,250],
       "fields": [

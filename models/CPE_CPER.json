@@ -18,7 +18,7 @@
           "sql": ["select cr_name as %%%jsh.map.codeval%%%, ",
                   "       cr_desc as %%%jsh.map.codetxt%%%, ",
                   "       cr_seq as %%%jsh.map.codeseq%%% ",
-                  "  from jsharmony.CR ",
+                  "  from jsharmony.cr ",
                   " where cr_name<>'C*' %%%DATALOCKS%%%"],
           "datalock":{"c_id":"always"} 
         }

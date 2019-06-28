@@ -21,7 +21,7 @@
     "table":"jsharmony.D",
     "title":"Document - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
     "breadcrumbs":{
-      "sql": ["select pe_fname, pe_lname from jsharmony.PE ",
+      "sql": ["select pe_fname, pe_lname from jsharmony.pe ",
               " where pe_id=coalesce(@d_scope_id,(select d_scope_id from jsharmony.d where d_id = @d_id))"],
       "sql_params": ["d_scope_id","d_scope"]
     },

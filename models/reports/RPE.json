@@ -37,12 +37,12 @@
       "PE":{
         "sql":["select pe_id, pe_sts, pe_fname, pe_mname, pe_lname, pe_jtitle, pe_email, ",
               "       pe_bphone, pe_cphone ",
-              "  from jsharmony.PE ",
+              "  from jsharmony.pe ",
               " where pe_sts = coalesce(@pe_sts,pe_sts) ",
               " order by pe_lname, pe_fname "], "nodatalock": ["c_id"] 
       },
-      "HOUSE": { "sql": ["select HOUSE_NAME \"HOUSE_NAME\",coalesce('Phone:  '%%%concat%%%HOUSE_BPHONE,'') \"HOUSE_BPHONE\",coalesce('Fax:  '%%%concat%%%HOUSE_FAX,'') \"HOUSE_FAX\",coalesce('Email:  '%%%concat%%%HOUSE_EMAIL,'') \"HOUSE_EMAIL\", ",
-                        " HOUSE_FULL_ADDR \"HOUSE_FULL_ADDR\" from jsharmony.v_house"], "nodatalock": ["c_id"] }
+      "HOUSE": { "sql": ["select house_name \"HOUSE_NAME\",coalesce('Phone:  '%%%concat%%%house_bphone,'') \"HOUSE_BPHONE\",coalesce('Fax:  '%%%concat%%%house_fax,'') \"HOUSE_FAX\",coalesce('Email:  '%%%concat%%%house_email,'') \"HOUSE_EMAIL\", ",
+                        " house_full_addr \"HOUSE_FULL_ADDR\" from jsharmony.v_house"], "nodatalock": ["c_id"] }
     }
   }
 }
