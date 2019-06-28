@@ -1,7 +1,7 @@
 {
   "GPE_DL": {
     "inherits": "DL",
-    "table":"jsharmony.V_DL",
+    "table":"jsharmony.v_dl",
     "title":"Documents - <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
     "roles": {"O_B":"B","O_X":"*"},
     "buttons":[{"link":"insert:GPE_D","bindings":{"d_scope_id":"d_scope_id","d_scope":"d_scope"}}],
@@ -18,7 +18,7 @@
   },
   "GPE_D": {
     "inherits": "D",
-    "table":"jsharmony.D",
+    "table":"jsharmony.d",
     "title":"Document - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
     "breadcrumbs":{
       "sql": ["select pe_fname, pe_lname from jsharmony.pe ",

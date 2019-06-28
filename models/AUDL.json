@@ -1,7 +1,7 @@
 {
   "AUDL_BASE": {
     "title":"Audit Trail",
-    "table":"jsharmony.V_AUDL_RAW",
+    "table":"jsharmony.v_audl_raw",
     "actions":"B", 
     "layout":"grid", 
     "caption":[0,"Record","Test ResultsRecords"],

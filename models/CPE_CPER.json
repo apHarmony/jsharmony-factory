@@ -1,7 +1,7 @@
 {
   "CPE_CPER_BASE": {
     "layout":"multisel", 
-    "table":"jsharmony.V_CPER_NOSTAR",
+    "table":"jsharmony.v_cper_nostar",
     "title":"",
     "caption":["","Role","Roles"],
     "actions":"BU",

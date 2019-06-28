@@ -2,7 +2,7 @@
   "UCOD_HL": {
 	"title":"System 1-Dimensional Code Tables",
     "dev":1,
-	"table":"jsharmony.UCOD_H",
+	"table":"jsharmony.ucod_h",
 	"actions":"B", 
     "layout":"grid", 
 	"caption":[0,"System Code Table","System Code Tables"],

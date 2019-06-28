@@ -2,7 +2,7 @@
   "DL_BASE": {
     "layout":"grid", 
     "title":"Documents",
-	  "table":"jsharmony.D",
+	  "table":"jsharmony.d",
 	  "actions":"B",
 	  "sort":["vd_utstmp"], 
 	  "samplerepeat":5,

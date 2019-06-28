@@ -1,7 +1,7 @@
 {
   "NL_BASE": {
     "layout":"grid", 
-    "table":"jsharmony.N",
+    "table":"jsharmony.n",
     "actions":"B", 
     "sort":["vn_etstmp"], 
     "caption":[0,"Note","Notes"],

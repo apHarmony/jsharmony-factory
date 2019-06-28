@@ -2,7 +2,7 @@
   "SRMSEL_SEL": {
     "layout":"grid", 
     "title": "Menu Items for Role <#=data.sr_name#>",
-    "table":"jsharmony.V_SRMSEL",
+    "table":"jsharmony.v_srmsel",
     "actions":"BU", 
     "caption":[0,"Item","Items"],
     "sort":[{"sm_id_parent":"asc"},{"sm_seq":"asc"},{"sm_name":"asc"}], 

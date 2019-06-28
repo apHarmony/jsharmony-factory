@@ -2,7 +2,7 @@
   "CPE_BASE": {
     "layout":"form", 
     "title":"Customer User",
-    "table":"jsharmony.CPE",
+    "table":"jsharmony.cpe",
     "actions":"BIUD", 
     "caption": [ "", "Customer User", "Customer Users" ],
     "roles": {

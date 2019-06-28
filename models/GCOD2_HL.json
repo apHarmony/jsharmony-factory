@@ -1,7 +1,7 @@
 {
   "GCOD2_HL": {
     "title":"Admin 2-Dimensional Code Tables",
-    "table":"jsharmony.GCOD2_H",
+    "table":"jsharmony.gcod2_h",
     "actions":"B",
     "layout":"grid", 
 	"caption":[0,"Code2 Table","Code2 Tables"],

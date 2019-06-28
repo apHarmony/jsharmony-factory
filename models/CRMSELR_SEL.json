@@ -2,7 +2,7 @@
   "CRMSELR_SEL": {
     "layout":"grid", 
     "title": "Menu Privileges: <#=bcrumbs.sm_desc#> (C<#=data.sm_id#>)",
-	  "table":"jsharmony.V_CRMSEL",
+	  "table":"jsharmony.v_crmsel",
 	  "actions":"BU", 
     "breadcrumbs":{
       "sql": ["select sm_desc from jsharmony.sm ",

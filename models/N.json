@@ -1,7 +1,7 @@
 {
  "N_BASE": {
     "title":"Note",
-    "table":"jsharmony.N",
+    "table":"jsharmony.n",
     "actions":"BIUD", 
     "layout":"form", 
     "caption": [ "", "Note", "Notes" ],
