@@ -250,7 +250,7 @@ GO
 
 CREATE FUNCTION [jsharmony].[get_cust_user_name]
 (
-	@in_user_id BIGINT
+	@in_sys_user_id BIGINT
 )	
 RETURNS NVARCHAR(MAX)  
 AS 
@@ -259,7 +259,7 @@ DECLARE @rslt NVARCHAR(MAX) = NULL
 
   SELECT @rslt = sys_user_lname+', '+sys_user_fname
     FROM {schema}.cust_user
-   WHERE sys_user_id = @in_user_id;
+   WHERE sys_user_id = @in_sys_user_id;
 
   RETURN (@rslt)
 
@@ -278,7 +278,7 @@ GO
 
 CREATE FUNCTION [jsharmony].[get_sys_user_name]
 (
-	@in_user_id BIGINT
+	@in_sys_user_id BIGINT
 )	
 RETURNS NVARCHAR(MAX)  
 AS 
@@ -287,7 +287,7 @@ DECLARE @rslt NVARCHAR(MAX) = NULL
 
   SELECT @rslt = sys_user_lname+', '+sys_user_fname
     FROM {schema}.sys_user
-   WHERE sys_user_id = @in_user_id;
+   WHERE sys_user_id = @in_sys_user_id;
 
   RETURN (@rslt)
 
@@ -381,17 +381,17 @@ AS
 BEGIN
 DECLARE @rslt nvarchar(20)
 DECLARE @an varchar(255)
-DECLARE @user_id BIGINT=-1;
+DECLARE @sys_user_id BIGINT=-1;
 
   SET @rslt = '0'
   SET @an = LTRIM(RTRIM(REPLACE(ISNULL(CONVERT(VARCHAR(128), CONTEXT_INFO()), APP_NAME()),CHAR(0),'')))
   IF ((@an IS NOT NULL) AND (@an <> 'DBAPP')) 
   BEGIN 
-    SELECT @user_id=sys_user_id
+    SELECT @sys_user_id=sys_user_id
 	  FROM {schema}.sys_user
      WHERE sys_user_email = @an;
 	
-	SET @rslt = CASE WHEN @user_id=(-1) THEN @an ELSE 'P'+CONVERT(VARCHAR(30),@user_id) END
+	SET @rslt = CASE WHEN @sys_user_id=(-1) THEN @an ELSE 'P'+CONVERT(VARCHAR(30),@sys_user_id) END
   END 
   return (@rslt)
 END
@@ -492,7 +492,7 @@ GO
 
 CREATE FUNCTION [jsharmony].[my_hash]
 (@TYPE CHAR(1),
- @user_id bigint,
+ @sys_user_id bigint,
  @pw nvarchar(255))	
 RETURNS varbinary(200)   
 AS 
@@ -517,10 +517,10 @@ DECLARE @val varchar(255)
   END
 
   if (@seed is not null
-      and isnull(@user_id,0) > 0
+      and isnull(@sys_user_id,0) > 0
 	  and isnull(@pw,'') <> '')
   begin
-    select @val = (convert(varchar(50),@user_id)+@pw+@seed)
+    select @val = (convert(varchar(50),@sys_user_id)+@pw+@seed)
     select @rslt = hashbytes('sha1',@val)
   end
 
@@ -647,7 +647,7 @@ AS
 BEGIN
 DECLARE @rslt bigint
 DECLARE @an varchar(255)
-DECLARE @user_id BIGINT=-1;
+DECLARE @sys_user_id BIGINT=-1;
 
   SET @rslt = NULL
   SET @an = LTRIM(RTRIM(REPLACE(ISNULL(CONVERT(VARCHAR(128), CONTEXT_INFO()), APP_NAME()),CHAR(0),'')))
@@ -702,7 +702,7 @@ AS
 BEGIN
 DECLARE @rslt bigint
 DECLARE @an varchar(255)
-DECLARE @user_id BIGINT=-1;
+DECLARE @sys_user_id BIGINT=-1;
 
   SET @rslt = NULL
   SET @an = LTRIM(RTRIM(REPLACE(ISNULL(CONVERT(VARCHAR(128), CONTEXT_INFO()), APP_NAME()),CHAR(0),'')))

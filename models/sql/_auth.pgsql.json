@@ -5,15 +5,15 @@
   ],
   "client_sql_login": "select sys_user_id,sys_user_hash,sys_user_sts from {schema}.cust_user where lower(sys_user_email)=lower(@sys_user_email)",
   "client_sql_superlogin": "select sys_user.sys_user_id,sys_user_hash from {schema}.sys_user inner join {schema}.sys_user_role on sys_user_role.sys_user_id = sys_user.sys_user_id and sys_user_role.sys_role_name='SYSADMIN' where sys_user_sts='ACTIVE' and lower(sys_user_email)=lower(@sys_user_email)",
-  "client_sql_loginsuccess": "with xrslt as (update {schema}.cust_user set sys_user_lastlogin_ip=@sys_user_lastlogin_ip,sys_user_lastlogin_tstmp=@sys_user_lastlogin_tstmp where sys_user_id=@user_id returning 1) select count(*) xrowcount from xrslt;",
-  "client_sql_passwordreset": "with xrslt as (update {schema}.cust_user set sys_user_hash=@sys_user_hash,sys_user_lastlogin_tstmp=@sys_user_lastlogin_tstmp where sys_user_id=@user_id returning 1) select count(*) xrowcount from xrslt;",
+  "client_sql_loginsuccess": "with xrslt as (update {schema}.cust_user set sys_user_lastlogin_ip=@sys_user_lastlogin_ip,sys_user_lastlogin_tstmp=@sys_user_lastlogin_tstmp where sys_user_id=@sys_user_id returning 1) select count(*) xrowcount from xrslt;",
+  "client_sql_passwordreset": "with xrslt as (update {schema}.cust_user set sys_user_hash=@sys_user_hash,sys_user_lastlogin_tstmp=@sys_user_lastlogin_tstmp where sys_user_id=@sys_user_id returning 1) select count(*) xrowcount from xrslt;",
   "main_sql_auth": [
     "select sys_user_id,sys_user_hash,sys_user_sts,sys_user_fname,sys_user_lname,sys_user_lastlogin_tstmp,sys_user_email from {schema}.sys_user where lower(sys_user_email)=lower(@sys_user_email);",
     "select sys_user_role.sys_role_name from {schema}.sys_role inner join {schema}.sys_user_role on sys_user_role.sys_role_name=sys_role.sys_role_name inner join {schema}.sys_user on sys_user.sys_user_id=sys_user_role.sys_user_id where sys_role_sts='ACTIVE' and lower(sys_user_email)=lower(@sys_user_email) and sys_user_sts='ACTIVE';"
   ],
   "main_sql_login": "select sys_user_id,sys_user_hash,sys_user_sts from {schema}.sys_user where lower(sys_user_email)=lower(@sys_user_email)",
   "main_sql_superlogin": "select sys_user.sys_user_id,sys_user_hash from {schema}.sys_user inner join {schema}.sys_user_role on sys_user_role.sys_user_id = sys_user.sys_user_id and sys_user_role.sys_role_name='SYSADMIN' where sys_user_sts='ACTIVE' and lower(sys_user_email)=lower(@sys_user_email)",
-  "main_sql_loginsuccess": "with xrslt as (update {schema}.sys_user set sys_user_lastlogin_ip=@sys_user_lastlogin_ip,sys_user_lastlogin_tstmp=@sys_user_lastlogin_tstmp where sys_user_id=@user_id returning 1) select count(*) xrowcount from xrslt;",
-  "main_sql_passwordreset": "with xrslt as (update {schema}.sys_user set sys_user_hash=@sys_user_hash,sys_user_lastlogin_ip=@sys_user_lastlogin_ip,sys_user_lastlogin_tstmp=@sys_user_lastlogin_tstmp where sys_user_id=@user_id returning 1) select count(*) xrowcount from xrslt;",
-  "main_sql_check_email": "select sys_user_email from {schema}.sys_user where sys_user_id=@user_id"
+  "main_sql_loginsuccess": "with xrslt as (update {schema}.sys_user set sys_user_lastlogin_ip=@sys_user_lastlogin_ip,sys_user_lastlogin_tstmp=@sys_user_lastlogin_tstmp where sys_user_id=@sys_user_id returning 1) select count(*) xrowcount from xrslt;",
+  "main_sql_passwordreset": "with xrslt as (update {schema}.sys_user set sys_user_hash=@sys_user_hash,sys_user_lastlogin_ip=@sys_user_lastlogin_ip,sys_user_lastlogin_tstmp=@sys_user_lastlogin_tstmp where sys_user_id=@sys_user_id returning 1) select count(*) xrowcount from xrslt;",
+  "main_sql_check_email": "select sys_user_email from {schema}.sys_user where sys_user_id=@sys_user_id"
 }
