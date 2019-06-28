@@ -1398,7 +1398,7 @@ INSERT INTO code_version_sts (code_seq, code_val, code_txt, code_code, code_end_
 
 INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('USERS', 'HASH_SEED_C', 'AAA');
 INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('USERS', 'HASH_SEED_S', 'BBB');
-INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'doc_ctgr_table', 'code2_doc_ctgr');
+INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'doc_ctgr_table', 'code2_doc_scope_doc_ctgr');
 INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'get_cust_id', 'public.get_cust_id');
 INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'get_item_id', 'public.get_item_id');
 INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'https://localhost');

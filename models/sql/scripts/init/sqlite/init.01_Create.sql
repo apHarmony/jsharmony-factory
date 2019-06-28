@@ -77,7 +77,7 @@ CREATE TABLE {schema}_single (
 /*********code2_country_state*********/
 {schema}.create_code2_sys('{schema}','country_state','');
 
-/*********code2_doc_ctgr*********/
+/*********code2_doc_scope_doc_ctgr*********/
 {schema}.create_code2_app('{schema}','doc_scope_doc_ctgr','');
 
 /***************cust_user***************/
@@ -145,7 +145,7 @@ CREATE TABLE {schema}_doc__tbl (
   doc_sync_tstmp text,
   doc_snotes text,
   doc_sync_id integer,
-  FOREIGN KEY (doc_scope, doc_ctgr) REFERENCES {schema}_code2_doc_ctgr (code_val1, code_va12),
+  FOREIGN KEY (doc_scope, doc_ctgr) REFERENCES {schema}_code2_doc_scope_doc_ctgr (code_val1, code_va12),
   FOREIGN KEY (doc_scope) REFERENCES {schema}_code_doc_scope (code_val)
 );
 

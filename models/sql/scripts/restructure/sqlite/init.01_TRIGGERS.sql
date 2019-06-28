@@ -5,7 +5,7 @@
 create trigger {schema}_cust_user_role_insert after insert on {schema}_cust_user_role
 begin
   %%%log_audit_insert("{schema}_cust_user_role","new.cust_user_role_id","cust_user_role_id","null","null","(select coalesce(sys_user_lname,'')||', '||coalesce(sys_user_fname,'') from {schema}_cust_user where {schema}_cust_user.sys_user_id = new.sys_user_id)","{schema}.get_cust_id('cust_user',new.sys_user_id)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_cust_user_role_update before update on {schema}_cust_user_role
@@ -14,13 +14,13 @@ begin
   select case when ifnull(old.sys_user_id,'')<>ifnull(NEW.sys_user_id,'') then raise(FAIL,'Application Error - Customer User ID cannot be updated.') end\;
 
   %%%log_audit_update_mult("{schema}_cust_user_role","old.cust_user_role_id",["sys_user_id","cust_role_name"],"null","null","(select coalesce(sys_user_lname,'')||', '||coalesce(sys_user_fname,'') from {schema}_cust_user where {schema}_cust_user.sys_user_id = new.sys_user_id)","{schema}.get_cust_id('cust_user',new.sys_user_id)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_cust_user_role_delete before delete on {schema}_cust_user_role
 begin
   %%%log_audit_delete_mult("{schema}_cust_user_role","old.cust_user_role_id",["sys_user_id","cust_role_name"],"null","null","null","{schema}.get_cust_id('cust_user',old.sys_user_id)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 
@@ -34,7 +34,7 @@ begin
     (({schema}.get_cust_id(new.doc_scope,new.doc_scope_id)<>{schema}.my_cust_id()) or
      (new.doc_scope not in %%%client_scope%%%))
     then raise(FAIL,'Application Error - Client User has no rights to perform this operation') end\;
-  select case when not exists (select * from {schema}_code2_doc_ctgr where code_val1=new.doc_scope and code_va12=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
+  select case when not exists (select * from {schema}_code2_doc_scope_doc_ctgr where code_val1=new.doc_scope and code_va12=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
 end;
 
 create trigger {schema}_doc__tbl_after_insert after insert on {schema}_doc__tbl
@@ -49,7 +49,7 @@ begin
     where rowid = new.rowid\;
 
   %%%log_audit_insert("{schema}_doc__tbl","new.doc_id","doc_id","null","null","null","{schema}.get_cust_id(new.doc_scope,new.doc_scope_id)","{schema}.get_item_id(new.doc_scope,new.doc_scope_id)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_doc__tbl_before_update before update on {schema}_doc__tbl
@@ -58,7 +58,7 @@ begin
   select case when ifnull(old.doc_scope,'')<>ifnull(NEW.doc_scope,'') then raise(FAIL,'Application Error - Scope cannot be updated.') end\;
   select case when ifnull(old.doc_scope_id,'')<>ifnull(NEW.doc_scope_id,'') then raise(FAIL,'Application Error - Scope ID cannot be updated.') end\;
   select case when ifnull(old.doc_ctgr,'')<>ifnull(NEW.doc_ctgr,'') then raise(FAIL,'Application Error - Document Category cannot be updated.') end\;
-  select case when not exists (select * from {schema}_code2_doc_ctgr where code_val1=new.doc_scope and code_va12=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
+  select case when not exists (select * from {schema}_code2_doc_scope_doc_ctgr where code_val1=new.doc_scope and code_va12=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
 end;
 
 create trigger {schema}_doc__tbl_after_update after update on {schema}_doc__tbl
@@ -70,15 +70,15 @@ begin
     item_id     = {schema}.get_item_id(new.doc_scope,new.doc_scope_id),
     doc_muser     = (select context from jsharmony_meta limit 1),
     doc_mtstmp = datetime('now','localtime')
-    where doc_id = new.doc_id and exists(select * from jsharmony_meta where audit_seq is not null)\; 
+    where doc_id = new.doc_id and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
 
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_doc__tbl_delete before delete on {schema}_doc__tbl
 begin
   %%%log_audit_delete_mult("{schema}_doc__tbl","old.doc_id",["doc_id","cust_id","doc_scope","doc_scope_id","item_id","doc_sts","doc_ctgr","doc_desc","doc_utstmp","doc_uuser","doc_sync_tstmp"],"null","null","null")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 /***************note__tbl***************/
@@ -105,7 +105,7 @@ begin
     where rowid = new.rowid\;
 
   %%%log_audit_insert("{schema}_note__tbl","new.note_id","note_id","null","null","null","{schema}.get_cust_id(new.note_scope,new.note_scope_id)","{schema}.get_item_id(new.note_scope,new.note_scope_id)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_note__tbl_before_update before update on {schema}_note__tbl
@@ -125,15 +125,15 @@ begin
     item_id     = {schema}.get_item_id(new.note_scope,new.note_scope_id),
     note_muser     = (select context from jsharmony_meta limit 1),
     note_mtstmp = datetime('now','localtime')
-    where note_id = new.note_id and exists(select * from jsharmony_meta where audit_seq is not null)\; 
+    where note_id = new.note_id and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
 
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_note__tbl_delete before delete on {schema}_note__tbl
 begin
   %%%log_audit_delete_mult("{schema}_note__tbl","old.note_id",["note_id","cust_id","note_scope","note_scope_id","item_id","note_sts","note_type","note_body"],"null","null","null")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 
@@ -159,7 +159,7 @@ begin
   update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "{schema}_sys_user", "rowid": '||NEW.rowid||', "source":"sys_user_id||sys_user_pw1||(select param_cur_val from {schema}_v_param_cur where param_cur_process=''USERS'' and param_cur_attrib=''HASH_SEED_S'')", "dest":"sys_user_hash" }, { "function": "exec", "sql": "update {schema}_sys_user set sys_user_pw1=null,sys_user_pw2=null where rowid='||NEW.rowid||'" }'\;
 
   %%%log_audit_insert("sys_user","new.sys_user_id","sys_user_id","null","null","null")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_sys_user_before_update before update on {schema}_sys_user
@@ -179,22 +179,22 @@ begin
 
   %%%log_audit_update_custom("sys_user","old.sys_user_id","coalesce(NEW.sys_user_pw1,'') <> '' and coalesce(NEW.sys_user_pw1,'') <> coalesce(OLD.sys_user_pw1,'')","null","null","null")%%%
   insert into {schema}_audit_detail(audit_seq,audit_column_name,audit_column_val)
-    select (select audit_seq from jsharmony_meta),'sys_user_pw1','*'
+    select (select {{audit_seq}} from jsharmony_meta),'sys_user_pw1','*'
     where (coalesce(NEW.sys_user_pw1,'') <> '' and coalesce(NEW.sys_user_pw1,'') <> coalesce(OLD.sys_user_pw1,''))\;
 
   update {schema}_sys_user set
     sys_user_stsdt  = case when (%%%nequal("NEW.sys_user_sts","OLD.sys_user_sts")%%%) then datetime('now','localtime') else NEW.sys_user_stsdt end,
     sys_user_muser     = (select context from jsharmony_meta limit 1),
     sys_user_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid and exists(select * from jsharmony_meta where audit_seq is not null)\; 
+    where rowid = new.rowid and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
 
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_sys_user_delete before delete on {schema}_sys_user
 begin
   %%%log_audit_delete_mult("sys_user","old.sys_user_id",["sys_user_id","sys_user_sts","sys_user_fname","sys_user_mname","sys_user_lname","sys_user_jobtitle","sys_user_bphone","sys_user_cphone","sys_user_country","sys_user_addr","sys_user_city","sys_user_state","sys_user_zip","sys_user_email","sys_user_startdt","sys_user_enddt","sys_user_unotes","sys_user_lastlogin_tstmp"],"null","null","null")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 /***************cust_user***************/
@@ -218,7 +218,7 @@ begin
   update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "{schema}_cust_user", "rowid": '||NEW.rowid||', "source":"sys_user_id||sys_user_pw1||(select param_cur_val from {schema}_v_param_cur where param_cur_process=''USERS'' and param_cur_attrib=''HASH_SEED_C'')", "dest":"sys_user_hash" }, { "function": "exec", "sql": "update {schema}_cust_user set sys_user_pw1=null,sys_user_pw2=null where rowid='||NEW.rowid||'" }'\;
 
   %%%log_audit_insert("cust_user","new.sys_user_id","sys_user_id","null","null","(select coalesce(new.sys_user_lname,'')||', '||coalesce(new.sys_user_fname,''))","new.cust_id")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 
   insert into {schema}_cust_user_role(sys_user_id, cust_role_name) values(new.sys_user_id, 'C*')\;
 
@@ -239,7 +239,7 @@ begin
 
   %%%log_audit_update_custom("cust_user","new.sys_user_id","coalesce(NEW.sys_user_pw1,'') <> '' and coalesce(NEW.sys_user_pw1,'') <> coalesce(OLD.sys_user_pw1,'')","null","null","(select coalesce(new.sys_user_lname,'')||', '||coalesce(new.sys_user_fname,''))","new.cust_id")%%%
   insert into {schema}_audit_detail(audit_seq,audit_column_name,audit_column_val)
-    select (select audit_seq from jsharmony_meta),'sys_user_pw1','*'
+    select (select {{audit_seq}} from jsharmony_meta),'sys_user_pw1','*'
     where (coalesce(NEW.sys_user_pw1,'') <> '' and coalesce(NEW.sys_user_pw1,'') <> coalesce(OLD.sys_user_pw1,''))\;
 
 
@@ -250,15 +250,15 @@ begin
     sys_user_stsdt  = case when (%%%nequal("NEW.sys_user_sts","OLD.sys_user_sts")%%%) then datetime('now','localtime') else NEW.sys_user_stsdt end,
     sys_user_muser     = (select context from jsharmony_meta limit 1),
     sys_user_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid and exists(select * from jsharmony_meta where audit_seq is not null)\; 
+    where rowid = new.rowid and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
 
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_cust_user_delete before delete on {schema}_cust_user
 begin
   %%%log_audit_delete_mult("cust_user","old.sys_user_id",["sys_user_id","cust_id","sys_user_sts","sys_user_fname","sys_user_mname","sys_user_lname","sys_user_jobtitle","sys_user_bphone","sys_user_cphone","sys_user_email","sys_user_lastlogin_tstmp"],"null","null","null","null")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 /***************param_app***************/
@@ -280,7 +280,7 @@ begin
     where rowid = new.rowid\;
 
   %%%log_audit_insert("{schema}_param_app","new.param_app_id","param_app_id")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_param_app_before_update before update on {schema}_param_app
@@ -301,15 +301,15 @@ begin
   update {schema}_param_app set 
     param_app_muser     = (select context from jsharmony_meta limit 1),
     param_app_mtstmp = datetime('now','localtime')
-    where param_app_id = new.param_app_id and exists(select * from jsharmony_meta where audit_seq is not null)\; 
+    where param_app_id = new.param_app_id and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
 
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_param_app_delete before delete on {schema}_param_app
 begin
   %%%log_audit_delete_mult("{schema}_param_app","old.param_app_id",["param_app_id","param_app_process","param_app_attrib","param_app_val"])%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 /***************param_sys***************/
@@ -331,7 +331,7 @@ begin
     where rowid = new.rowid\;
 
   %%%log_audit_insert("{schema}_param_sys","new.param_sys_id","param_sys_id")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_param_sys_before_update before update on {schema}_param_sys
@@ -352,15 +352,15 @@ begin
   update {schema}_param_sys set 
     param_sys_muser     = (select context from jsharmony_meta limit 1),
     param_sys_mtstmp = datetime('now','localtime')
-    where param_sys_id = new.param_sys_id and exists(select * from jsharmony_meta where audit_seq is not null)\; 
+    where param_sys_id = new.param_sys_id and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
 
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_param_sys_delete before delete on {schema}_param_sys
 begin
   %%%log_audit_delete_mult("{schema}_param_sys","old.param_sys_id",["param_sys_id","param_sys_process","param_sys_attrib","param_sys_val"])%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 /***************param_user***************/
@@ -382,7 +382,7 @@ begin
     where rowid = new.rowid\;
 
   %%%log_audit_insert("{schema}_param_user","new.param_user_id","param_user_id","null","null","(select coalesce(sys_user_lname,'')||', '||coalesce(sys_user_fname,'') from {schema}_sys_user where sys_user_id=new.sys_user_id)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_param_user_before_update before update on {schema}_param_user
@@ -404,15 +404,15 @@ begin
   update {schema}_param_user set 
     param_user_muser     = (select context from jsharmony_meta limit 1),
     param_user_mtstmp = datetime('now','localtime')
-    where param_user_id = new.param_user_id and exists(select * from jsharmony_meta where audit_seq is not null)\; 
+    where param_user_id = new.param_user_id and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
 
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_param_user_delete before delete on {schema}_param_user
 begin
   %%%log_audit_delete_mult("{schema}_param_user","old.param_user_id",["param_user_id","sys_user_id","param_user_process","param_user_attrib","param_user_val"])%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 /***************param__tbl***************/
@@ -427,7 +427,7 @@ begin
     where rowid = new.rowid\;
 
   %%%log_audit_insert("{schema}_param__tbl","new.param_id","param_id")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_param__tbl_before_update before update on {schema}_param__tbl
@@ -442,15 +442,15 @@ begin
   update {schema}_param__tbl set 
     param_muser     = (select context from jsharmony_meta limit 1),
     param_mtstmp = datetime('now','localtime')
-    where param_id = new.param_id and exists(select * from jsharmony_meta where audit_seq is not null)\; 
+    where param_id = new.param_id and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
 
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_param__tbl_delete before delete on {schema}_param__tbl
 begin
   %%%log_audit_delete_mult("{schema}_param__tbl","old.param_id",["param_id","param_process","param_attrib","param_desc","param_type","code_name","is_param_app","is_param_user","is_param_sys"])%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 /***************help__tbl***************/
@@ -465,7 +465,7 @@ begin
     where rowid = new.rowid\;
 
   %%%log_audit_insert("{schema}_help__tbl","new.help_id","help_id","null","null","(select help_target_desc from {schema}_help_target where help_target_code=new.help_target_code)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_help__tbl_before_update before update on {schema}_help__tbl
@@ -481,15 +481,15 @@ begin
   update {schema}_help__tbl set 
     help_muser     = (select context from jsharmony_meta limit 1),
     help_mtstmp = datetime('now','localtime')
-    where help_id = new.help_id and exists(select * from jsharmony_meta where audit_seq is not null)\; 
+    where help_id = new.help_id and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
 
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_help__tbl_delete before delete on {schema}_help__tbl
 begin
   %%%log_audit_delete_mult("{schema}_help__tbl","old.help_id",["help_id","help_target_code","help_title","help_text","help_seq","help_listing_main","help_listing_client"],"null","null","(select help_target_desc from {schema}_help_target where help_target_code=old.help_target_code)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 /***************sys_user_func***************/
@@ -497,7 +497,7 @@ end;
 create trigger {schema}_sys_user_func_after_insert after insert on {schema}_sys_user_func
 begin
   %%%log_audit_insert("{schema}_sys_user_func","new.sys_user_func_id","sys_user_func_id","null","null","(select coalesce(sys_user_lname,'')||', '||coalesce(sys_user_fname,'') from {schema}_sys_user where sys_user_id=new.sys_user_id)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_sys_user_func_before_update before update on {schema}_sys_user_func
@@ -509,13 +509,13 @@ end;
 create trigger {schema}_sys_user_func_after_update after update on {schema}_sys_user_func
 begin
   %%%log_audit_update_mult("{schema}_sys_user_func","old.sys_user_func_id",["sys_user_func_id","sys_user_id","sys_func_name"],"null","null","(select coalesce(sys_user_lname,'')||', '||coalesce(sys_user_fname,'') from {schema}_sys_user where sys_user_id=new.sys_user_id)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_sys_user_func_delete before delete on {schema}_sys_user_func
 begin
   %%%log_audit_delete_mult("{schema}_sys_user_func","old.sys_user_func_id",["sys_user_func_id","sys_user_id","sys_func_name"])%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 /***************sys_user_role***************/
@@ -528,7 +528,7 @@ end;
 create trigger {schema}_sys_user_role_after_insert after insert on {schema}_sys_user_role
 begin
   %%%log_audit_insert("{schema}_sys_user_role","new.sys_user_role_id","sys_user_role_id","null","null","(select coalesce(sys_user_lname,'')||', '||coalesce(sys_user_fname,'') from {schema}_sys_user where sys_user_id=new.sys_user_id)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_sys_user_role_before_update before update on {schema}_sys_user_role
@@ -541,14 +541,14 @@ end;
 create trigger {schema}_sys_user_role_after_update after update on {schema}_sys_user_role
 begin
   %%%log_audit_update_mult("{schema}_sys_user_role","old.sys_user_role_id",["sys_user_role_id","sys_user_id","sys_role_name"],"null","null","(select coalesce(sys_user_lname,'')||', '||coalesce(sys_user_fname,'') from {schema}_sys_user where sys_user_id=new.sys_user_id)")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_sys_user_role_delete before delete on {schema}_sys_user_role
 begin
   select case when (upper(old.sys_role_name)='DEV') and ({schema}.my_sys_user_id() is not null) and (not exists (select sys_role_name from {schema}.v_my_roles where sys_role_name='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
   %%%log_audit_delete_mult("{schema}_sys_user_role","old.sys_user_role_id",["sys_user_role_id","sys_user_id","sys_role_name"])%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 /***************txt__tbl***************/
@@ -563,7 +563,7 @@ begin
     where rowid = new.rowid\;
 
   %%%log_audit_insert("{schema}_txt__tbl","new.txt_id","txt_id")%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_txt__tbl_before_update before update on {schema}_txt__tbl
@@ -578,15 +578,15 @@ begin
   update {schema}_txt__tbl set 
     txt_muser     = (select context from jsharmony_meta limit 1),
     txt_mtstmp = datetime('now','localtime')
-    where txt_id = new.txt_id and exists(select * from jsharmony_meta where audit_seq is not null)\; 
+    where txt_id = new.txt_id and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
 
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_txt__tbl_delete before delete on {schema}_txt__tbl
 begin
   %%%log_audit_delete_mult("{schema}_txt__tbl","old.txt_id",["txt_id","txt_process","txt_attrib","txt_type","txt_title","txt_body","txt_bcc","txt_desc"])%%%
-  update jsharmony_meta set audit_seq = null\;
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 

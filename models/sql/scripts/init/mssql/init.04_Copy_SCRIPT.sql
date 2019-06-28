@@ -3,7 +3,7 @@ GO
 SET XACT_ABORT, ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
 BEGIN TRANSACTION
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app'', N''CREATE TABLE [%%%schema%%%].[gcod_%%%name%%%](
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app'', N''CREATE TABLE [%%%schema%%%].[code_app_%%%name%%%](
 	[code_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](8) NOT NULL,
@@ -20,15 +20,15 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_euser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_euser])),
 	[code_muser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_muser])),
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_GCOD_%%%name%%%] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_code_app_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[code_app_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_GCOD_%%%name%%%_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code_app_%%%name%%%_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_GCOD_%%%name%%%_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code_app_%%%name%%%_code_val] UNIQUE NONCLUSTERED 
 (
 	[code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -36,61 +36,61 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD_%%%name%%%] ADD  CONSTRAINT [DF_GCOD_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_app_id''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_app_id''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Sequence'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_seq''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Sequence'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_seq''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_val''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_val''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Description'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_txt''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Description'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_txt''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Additional Code'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_code''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Additional Code'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_code''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Date'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_dt''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Date'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_dt''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Comment'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_reason''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Comment'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_reason''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry Timestamp'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_etstmp''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry Timestamp'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_etstmp''''
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry User'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema'')')
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'%%%'', @level1type=N''TABLE'',@level1name=N''GCOD_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_euser''
+UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'%%%'', @level1type=N''TABLE'',@level1name=N''code_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_euser''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_muser''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_muser''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code System Notes'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_snotes''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code System Notes'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_snotes''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes - %%%mean%%%'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD_%%%name%%%''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes - %%%mean%%%'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code_app_%%%name%%%''
 ;
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code_app'
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[GCOD_%%%name%%%_IUD] on [%%%schema%%%].[GCOD_%%%name%%%]
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code_app_%%%name%%%_IUD] on [%%%schema%%%].[code_app_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -102,7 +102,7 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_GCOD_%%%name%%%_IUD CURSOR LOCAL FOR
+  DECLARE CUR_code_app_%%%name%%%_IUD CURSOR LOCAL FOR
      SELECT  del.code_app_id, i.code_app_id,
 	         del.code_seq, i.code_seq,
 	         del.code_end_dt, i.code_end_dt,
@@ -168,7 +168,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_app_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''GCOD_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
+    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
     raiserror(''''Cannot update identity'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -176,15 +176,15 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''GCOD_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val''''
+    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val''''
     raiserror(''''Cannot update foreign key code_val'''',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_GCOD_%%%name%%%_IUD
-  FETCH NEXT FROM CUR_GCOD_%%%name%%%_IUD
+  OPEN CUR_code_app_%%%name%%%_IUD
+  FETCH NEXT FROM CUR_code_app_%%%name%%%_IUD
         INTO @D_code_app_id, @I_code_app_id,
              @D_code_seq, @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -203,12 +203,12 @@ BEGIN
 
     IF (@TP=''''I'''')
 	BEGIN
-      UPDATE %%%schema%%%.GCOD_%%%name%%%
+      UPDATE %%%schema%%%.code_app_%%%name%%%
 	     SET code_etstmp = @CURDTTM,
 			 code_euser = @MYUSER,
 		     code_mtstmp = @CURDTTM,
 			 code_muser = @MYUSER
-       WHERE GCOD_%%%name%%%.code_app_id = @I_code_app_id;
+       WHERE code_app_%%%name%%%.code_app_id = @I_code_app_id;
     END  
 
 	/******************************************/
@@ -220,7 +220,7 @@ BEGIN
 	IF (@TP=''''I'''' OR @TP=''''D'''')
 	BEGIN  
 	  SET @WK_code_app_id = ISNULL(@D_code_app_id,@I_code_app_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, ''''GCOD_%%%name%%%'''', @WK_code_app_id, @MYUSER, @CURDTTM
+	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, ''''code_app_%%%name%%%'''', @WK_code_app_id, @MYUSER, @CURDTTM
 	END
 
  
@@ -232,7 +232,7 @@ BEGIN
 UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''code_app_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_seq''), @D_code_seq)
       END
 
@@ -240,7 +240,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_date(@D_code_end_dt, @I_code_end_dt) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''code_app_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_end_dt''), @D_code_end_dt)
       END
 
@@ -248,7 +248,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_chr(@D_code_val, @I_code_val) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''code_app_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_val''), @D_code_val)
       END
 
@@ -256,7 +256,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_chr(@D_code_txt, @I_code_txt) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''code_app_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_txt''), @D_code_txt)
       END
 
@@ -264,7 +264,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_chr(@D_code_code, @I_code_code) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''code_app_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_code''), @D_code_code)
       END
 
@@ -272,7 +272,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_chr(@D_code_attrib, @I_code_attrib) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''code_app_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_attrib''), @D_code_attrib)
       END
 
@@ -280,7 +280,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
           @TP = ''U'' AND {schema}.nequal_chr(@D_code_end_reason, @I_code_end_reason) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''GCOD_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''code_app_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''code_end_reason''), @D_code_end_reason)
       END
 
@@ -293,10 +293,10 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
 
     IF (@TP=''U'' AND @MY_audit_seq <> 0)
 	BEGIN
-      UPDATE %%%schema%%%.GCOD_%%%name%%%
+      UPDATE %%%schema%%%.code_app_%%%name%%%
 	     SET code_mtstmp = @CURDTTM,
 			 code_muser = @MYUSER
-       WHERE GCOD_%%%name%%%.code_app_id = @I_code_app_id;
+       WHERE code_app_%%%name%%%.code_app_id = @I_code_app_id;
     END  
 
 	/*****************************************/
@@ -306,7 +306,7 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
 
 
             
-    FETCH NEXT FROM CUR_GCOD_%%%name%%%_IUD
+    FETCH NEXT FROM CUR_code_app_%%%name%%%_IUD
         INTO @D_code_app_id, @I_code_app_id,
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -318,8 +318,8 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
 
 
   END
-  CLOSE CUR_GCOD_%%%name%%%_IUD
-  DEALLOCATE CUR_GCOD_%%%name%%%_IUD
+  CLOSE CUR_code_app_%%%name%%%_IUD
+  DEALLOCATE CUR_code_app_%%%name%%%_IUD
 
 
   RETURN
@@ -329,7 +329,7 @@ END
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code_app_TRIGGER'
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_app'', N''CREATE TABLE [%%%schema%%%].[gcod2_%%%name%%%](
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_app'', N''CREATE TABLE [%%%schema%%%].[code2_app_%%%name%%%](
 	[code2_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](8) NOT NULL,
@@ -347,16 +347,16 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_notes] [nvarchar](255) NULL,
 	[code_euser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_euser])),
 	[code_muser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_muser])),
- CONSTRAINT [PK_GCOD2_%%%name%%%] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_code2_app_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[code2_app_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_GCOD2_%%%name%%%_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code2_app_%%%name%%%_code_val1_code_va12] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_va12] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_GCOD2_%%%name%%%_code_val1_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code2_app_%%%name%%%_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_txt] ASC
@@ -365,61 +365,61 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[GCOD2_%%%name%%%] ADD  CONSTRAINT [DF_GCOD2_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code2_app_id''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code2_app_id''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Sequence'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_seq''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Sequence'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_seq''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_val1''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_val1''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Description'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_txt''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Description'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_txt''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Additional Code'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_code''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Additional Code'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_code''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Date'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_dt''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Date'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_dt''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Comment'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_reason''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Comment'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_reason''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry Timestamp'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_etstmp''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry Timestamp'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_etstmp''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry User'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''GCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_euser''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry User'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_euser''''
 ;
 
 EXEC sys.sp_addextendedproper'')')
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'ty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
+UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'ty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_muser''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_muser''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code System Notes'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_snotes''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code System Notes'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_snotes''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 2 - %%%mean%%%'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''GCOD2_%%%name%%%''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 2 - %%%mean%%%'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_app_%%%name%%%''
 ;
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code2_app'
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[GCOD2_%%%name%%%_IUD] on [%%%schema%%%].[GCOD2_%%%name%%%]
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code2_app_%%%name%%%_IUD] on [%%%schema%%%].[code2_app_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -431,7 +431,7 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_GCOD2_%%%name%%%_IUD CURSOR LOCAL FOR
+  DECLARE CUR_code2_app_%%%name%%%_IUD CURSOR LOCAL FOR
      SELECT  del.code2_app_id, i.code2_app_id,
 	         del.code_seq, i.code_seq,
 	         del.code_end_dt, i.code_end_dt,
@@ -499,7 +499,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code2_app_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''GCOD2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
+    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
     raiserror(''''Cannot update identity'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -507,7 +507,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val1)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''GCOD2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val1''''
+    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val1''''
     raiserror(''''Cannot update foreign key code_val1'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -515,15 +515,15 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_va12)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''GCOD2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_va12''''
+    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_va12''''
     raiserror(''''Cannot update foreign key code_va12'''',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_GCOD2_%%%name%%%_IUD
-  FETCH NEXT FROM CUR_GCOD2_%%%name%%%_IUD
+  OPEN CUR_code2_app_%%%name%%%_IUD
+  FETCH NEXT FROM CUR_code2_app_%%%name%%%_IUD
         INTO @D_code2_app_id, @I_code2_app_id,
              @D_code_seq, @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -543,12 +543,12 @@ BEGIN
 
     IF (@TP=''''I'''')
 	BEGIN
-      UPDATE %%%schema%%%.GCOD2_%%%name%%%
+      UPDATE %%%schema%%%.code2_app_%%%name%%%
 	     SET code_etstmp = @CURDTTM,
 			 code_euser = @MYUSER,
 		     code_mtstmp = @CURDTTM,
 			 code_muser = @MYUSER
-       WHERE GCOD2_%%%name%%%.code2_app_id = @I_code2_app_id;
+       WHERE code2_app_%%%name%%%.code2_app_id = @I_code2_app_id;
     END  
 
 	/******************************************/
@@ -562,7 +562,7 @@ EXEC(N'DECLARE @pv binary(16)
 	IF (@TP=''''I'''' OR @TP=''''D'''')
 	BEGIN  
 	  SET @WK_code2_app_id = ISNULL(@D_code2_app_id,@I_code2_app_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, ''''GCOD2_%%%name%%%'''', @WK_code2_app_id, @MYUSER, @CURDTTM
+	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, ''''code2_app_%%%name%%%'''', @WK_code2_app_id, @MYUSER, @CURDTTM
 	END
 
  
@@ -573,7 +573,7 @@ EXEC(N'DECLARE @pv binary(16)
           @TP = ''''U'''' AND {schema}.nequal_num(@D_code_seq, @I_code_seq) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''GCOD2_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''code2_app_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''''code_seq''''), @D_code_seq)
       END
 
@@ -581,7 +581,7 @@ EXEC(N'DECLARE @pv binary(16)
           @TP = ''''U'''' AND {schema}.nequal_date(@D_code_end_dt, @I_code_end_dt) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''GCOD2_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''code2_app_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''''code_end_dt''''), @D_code_end_dt)
       END
 
@@ -589,7 +589,7 @@ EXEC(N'DECLARE @pv binary(16)
           @TP = ''''U'''' AND {schema}.nequal_chr(@D_code_val1, @I_code_val1) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''GCOD2_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''code2_app_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''''code_val1''''), @D_code_val1)
       END
 
@@ -597,7 +597,7 @@ EXEC(N'DECLARE @pv binary(16)
           @TP = ''''U'''' AND {schema}.nequal_chr(@D_code_va12, @I_code_va12) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''GCOD2_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''code2_app_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''''code_va12''''), @D_code_va12)
       END
 
@@ -605,7 +605,7 @@ EXEC(N'DECLARE @pv binary(16)
           @TP = ''''U'''' AND {schema}.nequal_chr(@D_code_txt, @I_code_txt) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''GCOD2_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''code2_app_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''''code_txt''''), @D_code_txt)
       END
 
@@ -613,7 +613,7 @@ EXEC(N'DECLARE @pv binary(16)
           @TP = ''''U'''' AND {schema}.nequal_chr(@D_code_code, @I_code_code) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''GCOD2_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''code2_app_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''''code_code''''), @D_code_code)
       END
 
@@ -621,7 +621,7 @@ EXEC(N'DECLARE @pv binary(16)
           @TP = ''''U'''' AND {schema}.nequal_chr(@D_code_attrib, @I_code_attrib) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''GCOD2_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''code2_app_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''''code_attrib''''), @D_code_attrib)
       END
 
@@ -629,7 +629,7 @@ EXEC(N'DECLARE @pv binary(16)
           @TP = ''''U'''' AND {schema}.nequal_chr(@D_code_end_reason, @I_code_end_reason) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''GCOD2_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''code2_app_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''''code_end_reason''''), @D_code_end_reason)
       END
 
@@ -642,10 +642,10 @@ EXEC(N'DECLARE @pv binary(16)
 
     IF (@TP=''''U'''' AND @MY_audit_seq <> 0)
 	BEGIN
-      UPDATE %%%schema%%%.GCOD2_%%%name%%%
+      UPDATE %%%schema%%%.code2_app_%%%name%%%
 	     SET code_mtstmp = @CURDTTM,
 			 code_muser = @MYUSER
-       WHERE GCOD2_%%%name%%%.code2_app_id = @I_code2_app_id;
+       WHERE code2_app_%%%name%%%.code2_app_id = @I_code2_app_id;
     END  
 
 	/*****************************************/
@@ -655,7 +655,7 @@ EXEC(N'DECLARE @pv binary(16)
 
 
             
-    FETCH NEXT FROM CUR_GCOD2_%%%name%%%_IUD
+    FETCH NEXT FROM CUR_code2_app_%%%name%%%_IUD
         INTO @D_code2_app_id, @I_code2_app_id,
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -669,8 +669,8 @@ UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N''DEVAL2,
 
 
   END
-  CLOSE CUR_GCOD2_%%%name%%%_IUD
-  DEALLOCATE CUR_GCOD2_%%%name%%%_IUD
+  CLOSE CUR_code2_app_%%%name%%%_IUD
+  DEALLOCATE CUR_code2_app_%%%name%%%_IUD
 
 
   RETURN
@@ -680,7 +680,7 @@ END
 
 '',NULL,NULL) WHERE [script_name]=N''create_code2_app_TRIGGER''
 ')
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_sys'', N''CREATE TABLE [%%%schema%%%].[ucod_%%%name%%%](
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_sys'', N''CREATE TABLE [%%%schema%%%].[code_sys_%%%name%%%](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](8) NOT NULL,
@@ -695,15 +695,15 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_UCOD_%%%name%%%] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_code_sys_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_%%%name%%%_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code_sys_%%%name%%%_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD_%%%name%%%_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code_sys_%%%name%%%_code_val] UNIQUE NONCLUSTERED 
 (
 	[code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -711,62 +711,62 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD_%%%name%%%] ADD  CONSTRAINT [DF_UCOD_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_sys_id''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_sys_id''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Sequence'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_seq''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Sequence'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_seq''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_val''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_val''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Description'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_txt''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Description'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_txt''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Additional Code'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_code''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Additional Code'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_code''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Date'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_dt''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Date'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_dt''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Comment'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_reason''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Comment'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_reason''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry Timestamp'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_etstmp''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry Timestamp'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_etstmp''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry User'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_euser''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry User'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_euser''''
 ;
 
 '')')
 UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code_sys_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_muser''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code_sys_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_muser''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code System Notes'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_snotes''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code System Notes'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code_sys_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_snotes''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''System Codes - %%%mean%%%'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD_%%%name%%%''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''System Codes - %%%mean%%%'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code_sys_%%%name%%%''
 ;
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code_sys'
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_sys'', N''CREATE TABLE [%%%schema%%%].[ucod2_%%%name%%%](
+EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_sys'', N''CREATE TABLE [%%%schema%%%].[code2_sys_%%%name%%%](
 	[code2_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](8) NOT NULL,
@@ -782,16 +782,16 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
- CONSTRAINT [PK_UCOD2_%%%name%%%] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_code2_sys_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[code2_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD2_%%%name%%%_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code2_sys_%%%name%%%_code_val1_code_va12] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_va12] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_UCOD2_%%%name%%%_code_val1_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code2_sys_%%%name%%%_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_txt] ASC
@@ -800,56 +800,56 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[UCOD2_%%%name%%%] ADD  CONSTRAINT [DF_UCOD2_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code2_sys_id''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code2_sys_id''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Sequence'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_seq''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Sequence'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_seq''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_val1''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_val1''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Description'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_txt''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Description'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_txt''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Additional Code'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_code''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Additional Code'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_code''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Date'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_dt''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Date'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_dt''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Comment'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_reason''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Termination Comment'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_end_reason''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry Timestamp'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_etstmp''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry Timestamp'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_etstmp''''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry User'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''UCOD2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_euser''''
+EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry User'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_euser''''
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Last Modification Timestamp'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%'')')
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
+UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_sys_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_muser''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_sys_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_muser''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code System Notes'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_snotes''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code System Notes'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_sys_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_snotes''
 ;
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''System Codes 2 - %%%mean%%%'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''UCOD2_%%%name%%%''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''System Codes 2 - %%%mean%%%'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_sys_%%%name%%%''
 ;
 
 

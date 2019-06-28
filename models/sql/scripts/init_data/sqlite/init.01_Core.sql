@@ -320,7 +320,7 @@ INSERT INTO {schema}_code2_sys (code_name, code_desc, code_code_desc, code_attri
 
 INSERT INTO {schema}_param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('USERS', 'HASH_SEED_C', 'NOT CONFIGURED');
 INSERT INTO {schema}_param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('USERS', 'HASH_SEED_S', 'NOT CONFIGURED');
-INSERT INTO {schema}_param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'doc_ctgr_table', 'code2_doc_ctgr');
+INSERT INTO {schema}_param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'doc_ctgr_table', 'code2_doc_scope_doc_ctgr');
 INSERT INTO {schema}_param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'get_cust_id', 'get_cust_id');
 INSERT INTO {schema}_param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'get_item_id', 'get_item_id');
 INSERT INTO {schema}_param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'https://localhost');

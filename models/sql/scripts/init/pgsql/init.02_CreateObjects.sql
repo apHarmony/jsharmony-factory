@@ -418,7 +418,7 @@ BEGIN
 
     select count(*)
       into cust
-      from {schema}.ucod
+      from {schema}.code_sys_base
      where code_name = code_name
        and code_val = in_val; 
        
@@ -807,32 +807,32 @@ BEGIN
 
   SET client_min_messages to ERROR;
 
-  runmesql := 'CREATE TABLE '||wk_code_schema||'.gcod_'||in_code_name||' '
+  runmesql := 'CREATE TABLE '||wk_code_schema||'.code_app_'||in_code_name||' '
             ||'( '
-            ||'  CONSTRAINT gcod_'||in_code_name||'_pkey PRIMARY KEY (code_app_id), '
-            ||'  CONSTRAINT gcod_'||in_code_name||'_code_val_key UNIQUE (code_val), '
-            ||'  CONSTRAINT gcod_'||in_code_name||'_code_txt_key UNIQUE (code_txt) '
+            ||'  CONSTRAINT code_app_'||in_code_name||'_pkey PRIMARY KEY (code_app_id), '
+            ||'  CONSTRAINT code_app_'||in_code_name||'_code_val_key UNIQUE (code_val), '
+            ||'  CONSTRAINT code_app_'||in_code_name||'_code_txt_key UNIQUE (code_txt) '
             ||') '
-            ||'INHERITS ('||'{schema}'||'.gcod) '
+            ||'INHERITS ('||'{schema}'||'.code_app_base) '
             ||'WITH ( '
             ||'  OIDS=FALSE '
             ||');';
   EXECUTE runmesql ; 
 
-  runmesql := 'CREATE TRIGGER gcod_'||in_code_name||' '
+  runmesql := 'CREATE TRIGGER code_app_'||in_code_name||' '
             ||'BEFORE INSERT OR UPDATE OR DELETE '
-            ||'ON '||wk_code_schema||'.gcod_'||in_code_name||' ' 
+            ||'ON '||wk_code_schema||'.code_app_'||in_code_name||' ' 
             ||'FOR EACH ROW '
-            ||'EXECUTE PROCEDURE '||'{schema}'||'.gcod_iud();';
+            ||'EXECUTE PROCEDURE '||'{schema}'||'.code_app_base_iud();';
   EXECUTE runmesql ; 
 
-  runmesql := 'COMMENT ON TABLE '||wk_code_schema||'.gcod_'||in_code_name||' IS ''User Codes - '||coalesce(in_code_desc,'')||''';';
+  runmesql := 'COMMENT ON TABLE '||wk_code_schema||'.code_app_'||in_code_name||' IS ''User Codes - '||coalesce(in_code_desc,'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.gcod_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code_app_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.gcod_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code_app_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -866,33 +866,33 @@ BEGIN
 
   SET client_min_messages to ERROR;
 
-  runmesql := 'CREATE TABLE '||wk_code_schema||'.gcod2_'||in_code_name||' '
+  runmesql := 'CREATE TABLE '||wk_code_schema||'.code2_app_'||in_code_name||' '
             ||'( '
-            ||'  CONSTRAINT gcod2_'||in_code_name||'_pkey PRIMARY KEY (code2_app_id), '
-            ||'  CONSTRAINT gcod2_'||in_code_name||'_code_val1_code_va12_key UNIQUE (code_val1,code_va12), '
-            ||'  CONSTRAINT gcod2_'||in_code_name||'_code_val1_code_txt_key UNIQUE (code_val1,code_txt) '
+            ||'  CONSTRAINT code2_app_'||in_code_name||'_pkey PRIMARY KEY (code2_app_id), '
+            ||'  CONSTRAINT code2_app_'||in_code_name||'_code_val1_code_va12_key UNIQUE (code_val1,code_va12), '
+            ||'  CONSTRAINT code2_app_'||in_code_name||'_code_val1_code_txt_key UNIQUE (code_val1,code_txt) '
             ||') '
-            ||'INHERITS ('||'{schema}'||'.gcod2) '
+            ||'INHERITS ('||'{schema}'||'.code2_app_base) '
             ||'WITH ( '
             ||'  OIDS=FALSE '
             ||');';
 
   EXECUTE runmesql ; 
 
-  runmesql := 'CREATE TRIGGER gcod2_'||in_code_name||' '
+  runmesql := 'CREATE TRIGGER code2_app_'||in_code_name||' '
             ||'BEFORE INSERT OR UPDATE OR DELETE '
-            ||'ON '||wk_code_schema||'.gcod2_'||in_code_name||' ' 
+            ||'ON '||wk_code_schema||'.code2_app_'||in_code_name||' ' 
             ||'FOR EACH ROW '
-            ||'EXECUTE PROCEDURE '||'{schema}'||'.gcod2_iud();';
+            ||'EXECUTE PROCEDURE '||'{schema}'||'.code2_app_base_iud();';
   EXECUTE runmesql ; 
 
-  runmesql := 'COMMENT ON TABLE '||wk_code_schema||'.gcod2_'||in_code_name||' IS ''User Codes 2 - '||coalesce(in_code_desc,'')||''';';
+  runmesql := 'COMMENT ON TABLE '||wk_code_schema||'.code2_app_'||in_code_name||' IS ''User Codes 2 - '||coalesce(in_code_desc,'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.gcod2_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code2_app_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.gcod2_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code2_app_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -926,26 +926,26 @@ BEGIN
 
   SET client_min_messages to ERROR;
 
-  runmesql := 'CREATE TABLE '||wk_code_schema||'.ucod_'||in_code_name||' '
+  runmesql := 'CREATE TABLE '||wk_code_schema||'.code_sys_'||in_code_name||' '
             ||'( '
-            ||'  CONSTRAINT ucod_'||in_code_name||'_pkey PRIMARY KEY (code_sys_id), '
-            ||'  CONSTRAINT ucod_'||in_code_name||'_code_val_key UNIQUE (code_val), '
-            ||'  CONSTRAINT ucod_'||in_code_name||'_code_txt_key UNIQUE (code_txt) '
+            ||'  CONSTRAINT code_sys_'||in_code_name||'_pkey PRIMARY KEY (code_sys_id), '
+            ||'  CONSTRAINT code_sys_'||in_code_name||'_code_val_key UNIQUE (code_val), '
+            ||'  CONSTRAINT code_sys_'||in_code_name||'_code_txt_key UNIQUE (code_txt) '
             ||') '
-            ||'INHERITS ('||'{schema}'||'.ucod) '
+            ||'INHERITS ('||'{schema}'||'.code_sys_base) '
             ||'WITH ( '
             ||'  OIDS=FALSE '
             ||');';
 
   EXECUTE runmesql ; 
 
-  runmesql := 'COMMENT ON TABLE '||wk_code_schema||'.ucod_'||in_code_name||' IS ''System Codes - '||coalesce(in_code_desc,'')||''';';
+  runmesql := 'COMMENT ON TABLE '||wk_code_schema||'.code_sys_'||in_code_name||' IS ''System Codes - '||coalesce(in_code_desc,'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.ucod_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code_sys_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.ucod_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code_sys_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -979,26 +979,26 @@ BEGIN
 
   SET client_min_messages to ERROR;
 
-  runmesql := 'CREATE TABLE '||wk_code_schema||'.ucod2_'||in_code_name||' '
+  runmesql := 'CREATE TABLE '||wk_code_schema||'.code2_sys_'||in_code_name||' '
             ||'( '
-            ||'  CONSTRAINT ucod2_'||in_code_name||'_pkey PRIMARY KEY (code2_sys_id), '
-            ||'  CONSTRAINT ucod2_'||in_code_name||'_code_val1_code_va12_key UNIQUE (code_val1, code_va12), '
-            ||'  CONSTRAINT ucod2_'||in_code_name||'_code_val1_code_txt_key UNIQUE (code_val1, code_txt) '
+            ||'  CONSTRAINT code2_sys_'||in_code_name||'_pkey PRIMARY KEY (code2_sys_id), '
+            ||'  CONSTRAINT code2_sys_'||in_code_name||'_code_val1_code_va12_key UNIQUE (code_val1, code_va12), '
+            ||'  CONSTRAINT code2_sys_'||in_code_name||'_code_val1_code_txt_key UNIQUE (code_val1, code_txt) '
             ||') '
-            ||'INHERITS ('||'{schema}'||'.ucod2) '
+            ||'INHERITS ('||'{schema}'||'.code2_sys_base) '
             ||'WITH ( '
             ||'  OIDS=FALSE '
             ||');';
 
   EXECUTE runmesql ; 
 
-  runmesql := 'COMMENT ON TABLE '||wk_code_schema||'.ucod2_'||in_code_name||' IS ''System Codes 2 - '||coalesce(in_code_desc,'')||''';';
+  runmesql := 'COMMENT ON TABLE '||wk_code_schema||'.code2_sys_'||in_code_name||' IS ''System Codes 2 - '||coalesce(in_code_desc,'')||''';';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.ucod2_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_exec;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code2_sys_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_exec;';
   EXECUTE runmesql ; 
 
-  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.ucod2_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_dev;';
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code2_sys_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_dev;';
   EXECUTE runmesql ; 
 
   RETURN rslt;
@@ -1294,10 +1294,10 @@ CREATE FUNCTION digest(text, text) RETURNS bytea
 ALTER FUNCTION {schema}.digest(text, text) OWNER TO postgres;
 
 --
--- Name: gcod2_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: code2_app_base_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION gcod2_iud() RETURNS trigger
+CREATE FUNCTION code2_app_base_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
@@ -1425,13 +1425,13 @@ CREATE FUNCTION gcod2_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.gcod2_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.code2_app_base_iud() OWNER TO postgres;
 
 --
--- Name: gcod_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+-- Name: code_app_base_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION gcod_iud() RETURNS trigger
+CREATE FUNCTION code_app_base_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
@@ -1551,7 +1551,7 @@ CREATE FUNCTION gcod_iud() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION {schema}.gcod_iud() OWNER TO postgres;
+ALTER FUNCTION {schema}.code_app_base_iud() OWNER TO postgres;
 
 --
 -- Name: get_cust_user_name(bigint); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -4072,7 +4072,7 @@ COMMENT ON COLUMN doc__tbl.doc_sts IS 'Document Status - code_ac1';
 -- Name: COLUMN doc__tbl.doc_ctgr; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN doc__tbl.doc_ctgr IS 'Document Category - code2_doc_ctgr';
+COMMENT ON COLUMN doc__tbl.doc_ctgr IS 'Document Category - code2_doc_scope_doc_ctgr';
 
 
 --
@@ -4223,10 +4223,10 @@ ALTER SEQUENCE single_single_ident_seq OWNED BY single.single_ident;
 
 
 --
--- Name: gcod_code_app_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: code_app_base_code_app_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE gcod_code_app_id_seq
+CREATE SEQUENCE code_app_base_code_app_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4234,14 +4234,14 @@ CREATE SEQUENCE gcod_code_app_id_seq
     CACHE 1;
 
 
-ALTER TABLE gcod_code_app_id_seq OWNER TO postgres;
+ALTER TABLE code_app_base_code_app_id_seq OWNER TO postgres;
 
 --
--- Name: gcod; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: code_app_base; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE gcod (
-    code_app_id bigint DEFAULT nextval('gcod_code_app_id_seq'::regclass) NOT NULL,
+CREATE TABLE code_app_base (
+    code_app_id bigint DEFAULT nextval('code_app_base_code_app_id_seq'::regclass) NOT NULL,
     code_seq smallint,
     code_val character varying(8) NOT NULL,
     code_txt character varying(50) NOT NULL,
@@ -4258,20 +4258,20 @@ CREATE TABLE gcod (
 );
 
 
-ALTER TABLE gcod OWNER TO postgres;
+ALTER TABLE code_app_base OWNER TO postgres;
 
 --
--- Name: TABLE gcod; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE code_app_base; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE gcod IS 'User Codes - TEMPLATE';
+COMMENT ON TABLE code_app_base IS 'User Codes - TEMPLATE';
 
 
 --
--- Name: gcod2_code2_app_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: code2_app_base_code2_app_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE gcod2_code2_app_id_seq
+CREATE SEQUENCE code2_app_base_code2_app_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4279,14 +4279,14 @@ CREATE SEQUENCE gcod2_code2_app_id_seq
     CACHE 1;
 
 
-ALTER TABLE gcod2_code2_app_id_seq OWNER TO postgres;
+ALTER TABLE code2_app_base_code2_app_id_seq OWNER TO postgres;
 
 --
--- Name: gcod2; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: code2_app; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE gcod2 (
-    code2_app_id bigint DEFAULT nextval('gcod2_code2_app_id_seq'::regclass) NOT NULL,
+CREATE TABLE code2_app_base (
+    code2_app_id bigint DEFAULT nextval('code2_app_base_code2_app_id_seq'::regclass) NOT NULL,
     code_seq smallint,
     code_val1 character varying(8) NOT NULL,
     code_va12 character varying(8) NOT NULL,
@@ -4304,31 +4304,31 @@ CREATE TABLE gcod2 (
 );
 
 
-ALTER TABLE gcod2 OWNER TO postgres;
+ALTER TABLE code2_app_base OWNER TO postgres;
 
 --
--- Name: TABLE gcod2; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE code2_app_base; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE gcod2 IS 'User Codes 2 - TEMPLATE';
+COMMENT ON TABLE code2_app_base IS 'User Codes 2 - TEMPLATE';
 
 
 --
--- Name: code2_doc_ctgr; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: code2_doc_scope_doc_ctgr; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE code2_doc_ctgr (
+CREATE TABLE code2_doc_scope_doc_ctgr (
 )
-INHERITS (gcod2);
+INHERITS (code2_app_base);
 
 
-ALTER TABLE code2_doc_ctgr OWNER TO postgres;
+ALTER TABLE code2_doc_scope_doc_ctgr OWNER TO postgres;
 
 --
--- Name: TABLE code2_doc_ctgr; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE code2_doc_scope_doc_ctgr; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE code2_doc_ctgr IS 'User Codes 2 - Document Scope / Category';
+COMMENT ON TABLE code2_doc_scope_doc_ctgr IS 'User Codes 2 - Document Scope / Category';
 
 
 --
@@ -5539,10 +5539,10 @@ ALTER SEQUENCE txt__tbl_txt_id_seq OWNED BY txt__tbl.txt_id;
 
 
 --
--- Name: ucod; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: code_sys_base; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod (
+CREATE TABLE code_sys_base (
     code_sys_id bigint NOT NULL,
     code_seq smallint,
     code_val character varying(8) NOT NULL,
@@ -5560,118 +5560,118 @@ CREATE TABLE ucod (
 );
 
 
-ALTER TABLE ucod OWNER TO postgres;
+ALTER TABLE code_sys_base OWNER TO postgres;
 
 --
--- Name: TABLE ucod; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE code_sys_base; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod IS 'System Codes - TEMPLATE';
-
-
---
--- Name: COLUMN ucod.code_sys_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.code_sys_id IS 'Code Value ID';
+COMMENT ON TABLE code_sys_base IS 'System Codes - TEMPLATE';
 
 
 --
--- Name: COLUMN ucod.code_seq; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code_sys_base.code_sys_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.code_seq IS 'Code Value Sequence';
-
-
---
--- Name: COLUMN ucod.code_val; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.code_val IS 'Code Value';
+COMMENT ON COLUMN code_sys_base.code_sys_id IS 'Code Value ID';
 
 
 --
--- Name: COLUMN ucod.code_txt; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code_sys_base.code_seq; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.code_txt IS 'Code Value Description';
-
-
---
--- Name: COLUMN ucod.code_code; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.code_code IS 'Code Value Additional Code';
+COMMENT ON COLUMN code_sys_base.code_seq IS 'Code Value Sequence';
 
 
 --
--- Name: COLUMN ucod.code_end_dt; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code_sys_base.code_val; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.code_end_dt IS 'Code Value Termination Date';
-
-
---
--- Name: COLUMN ucod.code_end_reason; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.code_end_reason IS 'Code Value Termination Comment';
+COMMENT ON COLUMN code_sys_base.code_val IS 'Code Value';
 
 
 --
--- Name: COLUMN ucod.code_etstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code_sys_base.code_txt; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.code_etstmp IS 'Code Value Entry Timestamp';
-
-
---
--- Name: COLUMN ucod.code_euser; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.code_euser IS 'Code Value Entry User';
+COMMENT ON COLUMN code_sys_base.code_txt IS 'Code Value Description';
 
 
 --
--- Name: COLUMN ucod.code_mtstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code_sys_base.code_code; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.code_mtstmp IS 'Code Value Last Modification Timestamp';
-
-
---
--- Name: COLUMN ucod.code_muser; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.code_muser IS 'Code Value Last Modification User';
+COMMENT ON COLUMN code_sys_base.code_code IS 'Code Value Additional Code';
 
 
 --
--- Name: COLUMN ucod.code_snotes; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code_sys_base.code_end_dt; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.code_snotes IS 'Code Value System Notes';
-
-
---
--- Name: COLUMN ucod.code_notes; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod.code_notes IS 'Code Value Notes';
+COMMENT ON COLUMN code_sys_base.code_end_dt IS 'Code Value Termination Date';
 
 
 --
--- Name: COLUMN ucod.code_attrib; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code_sys_base.code_end_reason; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod.code_attrib IS 'Code Value Additional Attribute';
+COMMENT ON COLUMN code_sys_base.code_end_reason IS 'Code Value Termination Comment';
 
 
 --
--- Name: ucod2_code2_sys_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code_sys_base.code_etstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE ucod2_code2_sys_id_seq
+COMMENT ON COLUMN code_sys_base.code_etstmp IS 'Code Value Entry Timestamp';
+
+
+--
+-- Name: COLUMN code_sys_base.code_euser; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code_sys_base.code_euser IS 'Code Value Entry User';
+
+
+--
+-- Name: COLUMN code_sys_base.code_mtstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code_sys_base.code_mtstmp IS 'Code Value Last Modification Timestamp';
+
+
+--
+-- Name: COLUMN code_sys_base.code_muser; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code_sys_base.code_muser IS 'Code Value Last Modification User';
+
+
+--
+-- Name: COLUMN code_sys_base.code_snotes; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code_sys_base.code_snotes IS 'Code Value System Notes';
+
+
+--
+-- Name: COLUMN code_sys_base.code_notes; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code_sys_base.code_notes IS 'Code Value Notes';
+
+
+--
+-- Name: COLUMN code_sys_base.code_attrib; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code_sys_base.code_attrib IS 'Code Value Additional Attribute';
+
+
+--
+-- Name: code2_sys_base_code2_sys_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+--
+
+CREATE SEQUENCE code2_sys_base_code2_sys_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5679,14 +5679,14 @@ CREATE SEQUENCE ucod2_code2_sys_id_seq
     CACHE 1;
 
 
-ALTER TABLE ucod2_code2_sys_id_seq OWNER TO postgres;
+ALTER TABLE code2_sys_base_code2_sys_id_seq OWNER TO postgres;
 
 --
--- Name: ucod2; Type: TABLE; Schema: jsharmony; Owner: postgres
+-- Name: code2_sys_base; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE ucod2 (
-    code2_sys_id bigint DEFAULT nextval('ucod2_code2_sys_id_seq'::regclass) NOT NULL,
+CREATE TABLE code2_sys_base (
+    code2_sys_id bigint DEFAULT nextval('code2_sys_base_code2_sys_id_seq'::regclass) NOT NULL,
     code_seq smallint,
     code_val1 character varying(8) NOT NULL,
     code_va12 character varying(8) NOT NULL,
@@ -5704,118 +5704,118 @@ CREATE TABLE ucod2 (
 );
 
 
-ALTER TABLE ucod2 OWNER TO postgres;
+ALTER TABLE code2_sys_base OWNER TO postgres;
 
 --
--- Name: TABLE ucod2; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: TABLE code2_sys_base; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON TABLE ucod2 IS 'System Codes 2 - TEMPLATE';
-
-
---
--- Name: COLUMN ucod2.code2_sys_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.code2_sys_id IS 'Code Value ID';
+COMMENT ON TABLE code2_sys_base IS 'System Codes 2 - TEMPLATE';
 
 
 --
--- Name: COLUMN ucod2.code_seq; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code2_sys_base.code2_sys_id; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.code_seq IS 'Code Value Sequence';
-
-
---
--- Name: COLUMN ucod2.code_val1; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.code_val1 IS 'Code Value 1';
+COMMENT ON COLUMN code2_sys_base.code2_sys_id IS 'Code Value ID';
 
 
 --
--- Name: COLUMN ucod2.code_va12; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code2_sys_base.code_seq; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.code_va12 IS 'Code Value 2';
-
-
---
--- Name: COLUMN ucod2.code_txt; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.code_txt IS 'Code Value Description';
+COMMENT ON COLUMN code2_sys_base.code_seq IS 'Code Value Sequence';
 
 
 --
--- Name: COLUMN ucod2.code_code; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code2_sys_base.code_val1; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.code_code IS 'Code Value Additional Code';
-
-
---
--- Name: COLUMN ucod2.code_end_dt; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.code_end_dt IS 'Code Value Termination Date';
+COMMENT ON COLUMN code2_sys_base.code_val1 IS 'Code Value 1';
 
 
 --
--- Name: COLUMN ucod2.code_end_reason; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code2_sys_base.code_va12; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.code_end_reason IS 'Code Value Termination Comment';
-
-
---
--- Name: COLUMN ucod2.code_etstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.code_etstmp IS 'Code Value Entry Timestamp';
+COMMENT ON COLUMN code2_sys_base.code_va12 IS 'Code Value 2';
 
 
 --
--- Name: COLUMN ucod2.code_euser; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code2_sys_base.code_txt; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.code_euser IS 'Code Value Entry User';
-
-
---
--- Name: COLUMN ucod2.code_mtstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.code_mtstmp IS 'Code Value Last Modification Timestamp';
+COMMENT ON COLUMN code2_sys_base.code_txt IS 'Code Value Description';
 
 
 --
--- Name: COLUMN ucod2.code_muser; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code2_sys_base.code_code; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.code_muser IS 'Code Value Last Modification User';
-
-
---
--- Name: COLUMN ucod2.code_snotes; Type: COMMENT; Schema: jsharmony; Owner: postgres
---
-
-COMMENT ON COLUMN ucod2.code_snotes IS 'Code Value System Notes';
+COMMENT ON COLUMN code2_sys_base.code_code IS 'Code Value Additional Code';
 
 
 --
--- Name: COLUMN ucod2.code_notes; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code2_sys_base.code_end_dt; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.code_notes IS 'Code Value Notes';
+COMMENT ON COLUMN code2_sys_base.code_end_dt IS 'Code Value Termination Date';
 
 
 --
--- Name: COLUMN ucod2.code_attrib; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code2_sys_base.code_end_reason; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN ucod2.code_attrib IS 'Code Value Additional Attribute';
+COMMENT ON COLUMN code2_sys_base.code_end_reason IS 'Code Value Termination Comment';
+
+
+--
+-- Name: COLUMN code2_sys_base.code_etstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code2_sys_base.code_etstmp IS 'Code Value Entry Timestamp';
+
+
+--
+-- Name: COLUMN code2_sys_base.code_euser; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code2_sys_base.code_euser IS 'Code Value Entry User';
+
+
+--
+-- Name: COLUMN code2_sys_base.code_mtstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code2_sys_base.code_mtstmp IS 'Code Value Last Modification Timestamp';
+
+
+--
+-- Name: COLUMN code2_sys_base.code_muser; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code2_sys_base.code_muser IS 'Code Value Last Modification User';
+
+
+--
+-- Name: COLUMN code2_sys_base.code_snotes; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code2_sys_base.code_snotes IS 'Code Value System Notes';
+
+
+--
+-- Name: COLUMN code2_sys_base.code_notes; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code2_sys_base.code_notes IS 'Code Value Notes';
+
+
+--
+-- Name: COLUMN code2_sys_base.code_attrib; Type: COMMENT; Schema: jsharmony; Owner: postgres
+--
+
+COMMENT ON COLUMN code2_sys_base.code_attrib IS 'Code Value Additional Attribute';
 
 
 --
@@ -5824,7 +5824,7 @@ COMMENT ON COLUMN ucod2.code_attrib IS 'Code Value Additional Attribute';
 
 CREATE TABLE code2_country_state (
 )
-INHERITS (ucod2);
+INHERITS (code2_sys_base);
 
 
 ALTER TABLE code2_country_state OWNER TO postgres;
@@ -5963,7 +5963,7 @@ ALTER TABLE code2_param_sys_attrib OWNER TO postgres;
 
 CREATE TABLE code_ac (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_ac OWNER TO postgres;
@@ -5981,7 +5981,7 @@ COMMENT ON TABLE code_ac IS 'System Codes - Active / Closed';
 
 CREATE TABLE code_ac1 (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_ac1 OWNER TO postgres;
@@ -5999,7 +5999,7 @@ COMMENT ON TABLE code_ac1 IS 'System Codes - A / C';
 
 CREATE TABLE code_ahc (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_ahc OWNER TO postgres;
@@ -6017,7 +6017,7 @@ COMMENT ON TABLE code_ahc IS 'System Codes - Active / Hold / Closed';
 
 CREATE TABLE code_country (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_country OWNER TO postgres;
@@ -6035,7 +6035,7 @@ COMMENT ON TABLE code_country IS 'System Codes - Countries';
 
 CREATE TABLE code_doc_scope (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_doc_scope OWNER TO postgres;
@@ -6119,7 +6119,7 @@ ALTER SEQUENCE code_sys_code_sys_h_id_seq OWNED BY code_sys.code_sys_h_id;
 
 CREATE TABLE code_note_scope (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_note_scope OWNER TO postgres;
@@ -6137,7 +6137,7 @@ COMMENT ON TABLE code_note_scope IS 'System Codes - Note Scope';
 
 CREATE TABLE code_note_type (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_note_type OWNER TO postgres;
@@ -6155,7 +6155,7 @@ COMMENT ON TABLE code_note_type IS 'System Codes - Note Type';
 
 CREATE TABLE code_param_type (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_param_type OWNER TO postgres;
@@ -6190,7 +6190,7 @@ ALTER TABLE code_param_user_process OWNER TO postgres;
 
 CREATE TABLE code_job_action (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_job_action OWNER TO postgres;
@@ -6208,7 +6208,7 @@ COMMENT ON TABLE code_job_action IS 'System Codes - Request Type (CONTROL)';
 
 CREATE TABLE code_job_source (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_job_source OWNER TO postgres;
@@ -6226,7 +6226,7 @@ COMMENT ON TABLE code_job_source IS 'System Codes - Request Source (CONTROL)';
 
 CREATE TABLE code_txt_type (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_txt_type OWNER TO postgres;
@@ -6239,10 +6239,10 @@ COMMENT ON TABLE code_txt_type IS 'System Codes - Text Type (Control)';
 
 
 --
--- Name: ucod_code_sys_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
+-- Name: code_sys_base_code_sys_id_seq; Type: SEQUENCE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE SEQUENCE ucod_code_sys_id_seq
+CREATE SEQUENCE code_sys_base_code_sys_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -6250,13 +6250,13 @@ CREATE SEQUENCE ucod_code_sys_id_seq
     CACHE 1;
 
 
-ALTER TABLE ucod_code_sys_id_seq OWNER TO postgres;
+ALTER TABLE code_sys_base_code_sys_id_seq OWNER TO postgres;
 
 --
--- Name: ucod_code_sys_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
+-- Name: code_sys_base_code_sys_id_seq; Type: SEQUENCE OWNED BY; Schema: jsharmony; Owner: postgres
 --
 
-ALTER SEQUENCE ucod_code_sys_id_seq OWNED BY ucod.code_sys_id;
+ALTER SEQUENCE code_sys_base_code_sys_id_seq OWNED BY code_sys_base.code_sys_id;
 
 
 --
@@ -6265,7 +6265,7 @@ ALTER SEQUENCE ucod_code_sys_id_seq OWNED BY ucod.code_sys_id;
 
 CREATE TABLE code_version_sts (
 )
-INHERITS (ucod);
+INHERITS (code_sys_base);
 
 
 ALTER TABLE code_version_sts OWNER TO postgres;
@@ -6551,7 +6551,7 @@ CREATE VIEW v_doc AS
     NULL::text AS title_head,
     NULL::text AS title_detail
    FROM (doc__tbl
-     LEFT JOIN code2_doc_ctgr gdd ON ((((gdd.code_val1)::text = (doc__tbl.doc_scope)::text) AND ((gdd.code_va12)::text = (doc__tbl.doc_ctgr)::text))));
+     LEFT JOIN code2_doc_scope_doc_ctgr gdd ON ((((gdd.code_val1)::text = (doc__tbl.doc_scope)::text) AND ((gdd.code_va12)::text = (doc__tbl.doc_ctgr)::text))));
 
 
 ALTER TABLE v_doc OWNER TO postgres;
@@ -6993,35 +6993,35 @@ ALTER TABLE ONLY single ALTER COLUMN single_ident SET DEFAULT nextval('single_si
 -- Name: code2_app_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_doc_ctgr ALTER COLUMN code2_app_id SET DEFAULT nextval('gcod2_code2_app_id_seq'::regclass);
+ALTER TABLE ONLY code2_doc_scope_doc_ctgr ALTER COLUMN code2_app_id SET DEFAULT nextval('code2_app_base_code2_app_id_seq'::regclass);
 
 
 --
 -- Name: code_etstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_doc_ctgr ALTER COLUMN code_etstmp SET DEFAULT my_now();
+ALTER TABLE ONLY code2_doc_scope_doc_ctgr ALTER COLUMN code_etstmp SET DEFAULT my_now();
 
 
 --
 -- Name: code_euser; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_doc_ctgr ALTER COLUMN code_euser SET DEFAULT my_db_user();
+ALTER TABLE ONLY code2_doc_scope_doc_ctgr ALTER COLUMN code_euser SET DEFAULT my_db_user();
 
 
 --
 -- Name: code_mtstmp; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_doc_ctgr ALTER COLUMN code_mtstmp SET DEFAULT my_now();
+ALTER TABLE ONLY code2_doc_scope_doc_ctgr ALTER COLUMN code_mtstmp SET DEFAULT my_now();
 
 
 --
 -- Name: code_muser; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_doc_ctgr ALTER COLUMN code_muser SET DEFAULT my_db_user();
+ALTER TABLE ONLY code2_doc_scope_doc_ctgr ALTER COLUMN code_muser SET DEFAULT my_db_user();
 
 
 --
@@ -7175,14 +7175,14 @@ ALTER TABLE ONLY txt__tbl ALTER COLUMN txt_id SET DEFAULT nextval('txt__tbl_txt_
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_sys_base ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
 -- Name: code2_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_country_state ALTER COLUMN code2_sys_id SET DEFAULT nextval('ucod2_code2_sys_id_seq'::regclass);
+ALTER TABLE ONLY code2_country_state ALTER COLUMN code2_sys_id SET DEFAULT nextval('code2_sys_base_code2_sys_id_seq'::regclass);
 
 
 --
@@ -7224,7 +7224,7 @@ ALTER TABLE ONLY code2_sys ALTER COLUMN code2_sys_h_id SET DEFAULT nextval('code
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_ac ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_ac ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7259,7 +7259,7 @@ ALTER TABLE ONLY code_ac ALTER COLUMN code_muser SET DEFAULT my_db_user();
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_ac1 ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_ac1 ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7294,7 +7294,7 @@ ALTER TABLE ONLY code_ac1 ALTER COLUMN code_muser SET DEFAULT my_db_user();
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_ahc ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_ahc ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7329,7 +7329,7 @@ ALTER TABLE ONLY code_ahc ALTER COLUMN code_muser SET DEFAULT my_db_user();
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_country ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_country ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7364,7 +7364,7 @@ ALTER TABLE ONLY code_country ALTER COLUMN code_muser SET DEFAULT my_db_user();
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_doc_scope ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_doc_scope ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7406,7 +7406,7 @@ ALTER TABLE ONLY code_sys ALTER COLUMN code_sys_h_id SET DEFAULT nextval('code_s
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_note_scope ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_note_scope ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7441,7 +7441,7 @@ ALTER TABLE ONLY code_note_scope ALTER COLUMN code_muser SET DEFAULT my_db_user(
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_note_type ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_note_type ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7476,7 +7476,7 @@ ALTER TABLE ONLY code_note_type ALTER COLUMN code_muser SET DEFAULT my_db_user()
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_param_type ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_param_type ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7511,7 +7511,7 @@ ALTER TABLE ONLY code_param_type ALTER COLUMN code_muser SET DEFAULT my_db_user(
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_job_action ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_job_action ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7546,7 +7546,7 @@ ALTER TABLE ONLY code_job_action ALTER COLUMN code_muser SET DEFAULT my_db_user(
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_job_source ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_job_source ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7581,7 +7581,7 @@ ALTER TABLE ONLY code_job_source ALTER COLUMN code_muser SET DEFAULT my_db_user(
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_txt_type ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_txt_type ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7616,7 +7616,7 @@ ALTER TABLE ONLY code_txt_type ALTER COLUMN code_muser SET DEFAULT my_db_user();
 -- Name: code_sys_id; Type: DEFAULT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code_version_sts ALTER COLUMN code_sys_id SET DEFAULT nextval('ucod_code_sys_id_seq'::regclass);
+ALTER TABLE ONLY code_version_sts ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
 
 
 --
@@ -7758,43 +7758,43 @@ ALTER TABLE ONLY single
 
 
 --
--- Name: gcod2_code_val1_code_txt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_app_base_code_val1_code_txt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod2
-    ADD CONSTRAINT gcod2_code_val1_code_txt_key UNIQUE (code_val1, code_txt);
-
-
---
--- Name: gcod2_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY gcod2
-    ADD CONSTRAINT gcod2_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
+ALTER TABLE ONLY code2_app_base
+    ADD CONSTRAINT code2_app_base_code_val1_code_txt_key UNIQUE (code_val1, code_txt);
 
 
 --
--- Name: code2_doc_ctgr_code_val1_code_txt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_app_base_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_doc_ctgr
-    ADD CONSTRAINT code2_doc_ctgr_code_val1_code_txt_key UNIQUE (code_val1, code_txt);
-
-
---
--- Name: code2_doc_ctgr_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY code2_doc_ctgr
-    ADD CONSTRAINT code2_doc_ctgr_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
+ALTER TABLE ONLY code2_app_base
+    ADD CONSTRAINT code2_app_base_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
 
 
 --
--- Name: code2_doc_ctgr_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_doc_scope_doc_ctgr_code_val1_code_txt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY code2_doc_ctgr
-    ADD CONSTRAINT code2_doc_ctgr_pkey PRIMARY KEY (code2_app_id);
+ALTER TABLE ONLY code2_doc_scope_doc_ctgr
+    ADD CONSTRAINT code2_doc_scope_doc_ctgr_code_val1_code_txt_key UNIQUE (code_val1, code_txt);
+
+
+--
+-- Name: code2_doc_scope_doc_ctgr_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY code2_doc_scope_doc_ctgr
+    ADD CONSTRAINT code2_doc_scope_doc_ctgr_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
+
+
+--
+-- Name: code2_doc_scope_doc_ctgr_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY code2_doc_scope_doc_ctgr
+    ADD CONSTRAINT code2_doc_scope_doc_ctgr_pkey PRIMARY KEY (code2_app_id);
 
 
 --
@@ -7806,27 +7806,35 @@ ALTER TABLE ONLY code2_app
 
 
 --
--- Name: gcod2_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_app_base_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod2
-    ADD CONSTRAINT gcod2_pkey PRIMARY KEY (code2_app_id);
-
-
---
--- Name: gcod_code_txt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY gcod
-    ADD CONSTRAINT gcod_code_txt_key UNIQUE (code_txt);
+ALTER TABLE ONLY code2_app_base
+    ADD CONSTRAINT code2_app_base_pkey PRIMARY KEY (code2_app_id);
 
 
 --
--- Name: gcod_code_val_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code_app_base_code_txt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY gcod
-    ADD CONSTRAINT gcod_code_val_key UNIQUE (code_val);
+ALTER TABLE ONLY code_app_base
+    ADD CONSTRAINT code_app_base_code_txt_key UNIQUE (code_txt);
+
+
+--
+-- Name: code_app_base_code_val_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY code_app_base
+    ADD CONSTRAINT code_app_base_code_val_key UNIQUE (code_val);
+
+
+--
+-- Name: code_app_base_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+--
+
+ALTER TABLE ONLY code_app_base
+    ADD CONSTRAINT code_app_base_pkey PRIMARY KEY (code_name);
 
 
 --
@@ -7834,15 +7842,7 @@ ALTER TABLE ONLY gcod
 --
 
 ALTER TABLE ONLY code_app
-    ADD CONSTRAINT code_app_pkey PRIMARY KEY (code_name);
-
-
---
--- Name: gcod_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY gcod
-    ADD CONSTRAINT gcod_pkey PRIMARY KEY (code_app_id);
+    ADD CONSTRAINT code_app_pkey PRIMARY KEY (code_app_id);
 
 
 --
@@ -8166,21 +8166,21 @@ ALTER TABLE ONLY txt__tbl
 
 
 --
--- Name: ucod2_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_sys_base_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2
-    ADD CONSTRAINT ucod2_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
+ALTER TABLE ONLY code2_sys_base
+    ADD CONSTRAINT code2_sys_base_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
 
 
 
 
 --
--- Name: ucod2_code_val1_code_txt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_sys_base_code_val1_code_txt_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2
-    ADD CONSTRAINT ucod2_code_val1_code_txt_key UNIQUE (code_val1, code_txt);
+ALTER TABLE ONLY code2_sys_base
+    ADD CONSTRAINT code2_sys_base_code_val1_code_txt_key UNIQUE (code_val1, code_txt);
 
 
 --
@@ -8226,11 +8226,11 @@ ALTER TABLE ONLY code2_sys
 
 
 --
--- Name: ucod2_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_sys_base_pkey; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
-ALTER TABLE ONLY ucod2
-    ADD CONSTRAINT ucod2_pkey PRIMARY KEY (code2_sys_id);
+ALTER TABLE ONLY code2_sys_base
+    ADD CONSTRAINT code2_sys_base_pkey PRIMARY KEY (code2_sys_id);
 
 
 ALTER TABLE ONLY code_ac1
@@ -8254,12 +8254,12 @@ ALTER TABLE ONLY code_ahc
 ALTER TABLE ONLY code_ahc
     ADD CONSTRAINT code_ahc_code_val_key UNIQUE (code_val);
 
-ALTER TABLE ONLY ucod
-    ADD CONSTRAINT ucod_pkey PRIMARY KEY (code_sys_id);
-ALTER TABLE ONLY ucod
-    ADD CONSTRAINT ucod_code_txt_key UNIQUE (code_txt);
-ALTER TABLE ONLY ucod
-    ADD CONSTRAINT ucod_code_val_key UNIQUE (code_val);
+ALTER TABLE ONLY code_sys_base
+    ADD CONSTRAINT code_sys_base_pkey PRIMARY KEY (code_sys_id);
+ALTER TABLE ONLY code_sys_base
+    ADD CONSTRAINT code_sys_base_code_txt_key UNIQUE (code_txt);
+ALTER TABLE ONLY code_sys_base
+    ADD CONSTRAINT code_sys_base_code_val_key UNIQUE (code_val);
 
 ALTER TABLE ONLY code_country
     ADD CONSTRAINT code_country_pkey PRIMARY KEY (code_sys_id);
@@ -8469,24 +8469,24 @@ CREATE TRIGGER doc__tbl_iud BEFORE INSERT OR DELETE OR UPDATE ON doc__tbl FOR EA
 
 
 --
--- Name: code2_doc_ctgr_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: code2_doc_scope_doc_ctgr_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER code2_doc_ctgr_iud BEFORE INSERT OR DELETE OR UPDATE ON code2_doc_ctgr FOR EACH ROW EXECUTE PROCEDURE gcod2_iud();
-
-
---
--- Name: gcod2_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
---
-
-CREATE TRIGGER gcod2_iud BEFORE INSERT OR DELETE OR UPDATE ON gcod2 FOR EACH ROW EXECUTE PROCEDURE gcod2_iud();
+CREATE TRIGGER code2_doc_scope_doc_ctgr_iud BEFORE INSERT OR DELETE OR UPDATE ON code2_doc_scope_doc_ctgr FOR EACH ROW EXECUTE PROCEDURE code2_app_base_iud();
 
 
 --
--- Name: gcod_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+-- Name: code2_app_base_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TRIGGER gcod_iud BEFORE INSERT OR DELETE OR UPDATE ON gcod FOR EACH ROW EXECUTE PROCEDURE gcod_iud();
+CREATE TRIGGER code2_app_base_iud BEFORE INSERT OR DELETE OR UPDATE ON code2_app_base FOR EACH ROW EXECUTE PROCEDURE code2_app_base_iud();
+
+
+--
+-- Name: code_app_base_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+--
+
+CREATE TRIGGER code_app_base_iud BEFORE INSERT OR DELETE OR UPDATE ON code_app_base FOR EACH ROW EXECUTE PROCEDURE code_app_base_iud();
 
 
 --
@@ -8634,7 +8634,7 @@ ALTER TABLE ONLY cust_menu_role
 --
 
 ALTER TABLE ONLY doc__tbl
-    ADD CONSTRAINT doc__tbl_doc_scope_doc_ctgr FOREIGN KEY (doc_scope, doc_ctgr) REFERENCES code2_doc_ctgr(code_val1, code_va12);
+    ADD CONSTRAINT doc__tbl_doc_scope_doc_ctgr FOREIGN KEY (doc_scope, doc_ctgr) REFERENCES code2_doc_scope_doc_ctgr(code_val1, code_va12);
 
 
 --
@@ -9146,27 +9146,27 @@ GRANT ALL ON FUNCTION digest(text, text) TO {schema}_%%%INIT_DB_LCASE%%%_role_de
 
 
 --
--- Name: gcod2_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: code2_app_base_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION gcod2_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION gcod2_iud() FROM postgres;
-GRANT ALL ON FUNCTION gcod2_iud() TO postgres;
-GRANT ALL ON FUNCTION gcod2_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION gcod2_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION gcod2_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION code2_app_base_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION code2_app_base_iud() FROM postgres;
+GRANT ALL ON FUNCTION code2_app_base_iud() TO postgres;
+GRANT ALL ON FUNCTION code2_app_base_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION code2_app_base_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION code2_app_base_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
--- Name: gcod_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: code_app_base_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION gcod_iud() FROM PUBLIC;
-REVOKE ALL ON FUNCTION gcod_iud() FROM postgres;
-GRANT ALL ON FUNCTION gcod_iud() TO postgres;
-GRANT ALL ON FUNCTION gcod_iud() TO PUBLIC;
-GRANT ALL ON FUNCTION gcod_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION gcod_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION code_app_base_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION code_app_base_iud() FROM postgres;
+GRANT ALL ON FUNCTION code_app_base_iud() TO postgres;
+GRANT ALL ON FUNCTION code_app_base_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION code_app_base_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION code_app_base_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
@@ -9800,53 +9800,53 @@ GRANT SELECT,UPDATE ON SEQUENCE single_single_ident_seq TO {schema}_%%%INIT_DB_L
 
 
 --
--- Name: gcod_code_app_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: code_app_base_code_app_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE gcod_code_app_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE gcod_code_app_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE gcod_code_app_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE gcod_code_app_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- Name: gcod; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON TABLE gcod FROM PUBLIC;
-REVOKE ALL ON TABLE gcod FROM postgres;
-GRANT ALL ON TABLE gcod TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE code_app_base_code_app_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE code_app_base_code_app_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE code_app_base_code_app_id_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE code_app_base_code_app_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: gcod2_code2_app_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: code_app_base; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE gcod2_code2_app_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE gcod2_code2_app_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE gcod2_code2_app_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE gcod2_code2_app_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- Name: gcod2; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON TABLE gcod2 FROM PUBLIC;
-REVOKE ALL ON TABLE gcod2 FROM postgres;
-GRANT ALL ON TABLE gcod2 TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE gcod2 TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE code_app_base FROM PUBLIC;
+REVOKE ALL ON TABLE code_app_base FROM postgres;
+GRANT ALL ON TABLE code_app_base TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code_app_base TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: code2_doc_ctgr; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: code2_app_base_code2_app_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE code2_doc_ctgr FROM PUBLIC;
-REVOKE ALL ON TABLE code2_doc_ctgr FROM postgres;
-GRANT ALL ON TABLE code2_doc_ctgr TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code2_doc_ctgr TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE code2_app_base_code2_app_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE code2_app_base_code2_app_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE code2_app_base_code2_app_id_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE code2_app_base_code2_app_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: code2_app_base; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE code2_app_base FROM PUBLIC;
+REVOKE ALL ON TABLE code2_app_base FROM postgres;
+GRANT ALL ON TABLE code2_app_base TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code2_app_base TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: code2_doc_scope_doc_ctgr; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE code2_doc_scope_doc_ctgr FROM PUBLIC;
+REVOKE ALL ON TABLE code2_doc_scope_doc_ctgr FROM postgres;
+GRANT ALL ON TABLE code2_doc_scope_doc_ctgr TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code2_doc_scope_doc_ctgr TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10300,33 +10300,33 @@ GRANT SELECT,UPDATE ON SEQUENCE txt__tbl_txt_id_seq TO {schema}_%%%INIT_DB_LCASE
 
 
 --
--- Name: ucod; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: code_sys_base; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod FROM PUBLIC;
-REVOKE ALL ON TABLE ucod FROM postgres;
-GRANT ALL ON TABLE ucod TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-
-
---
--- Name: ucod2_code2_sys_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
---
-
-REVOKE ALL ON SEQUENCE ucod2_code2_sys_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE ucod2_code2_sys_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE ucod2_code2_sys_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ucod2_code2_sys_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON TABLE code_sys_base FROM PUBLIC;
+REVOKE ALL ON TABLE code_sys_base FROM postgres;
+GRANT ALL ON TABLE code_sys_base TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code_sys_base TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
--- Name: ucod2; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: code2_sys_base_code2_sys_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON TABLE ucod2 FROM PUBLIC;
-REVOKE ALL ON TABLE ucod2 FROM postgres;
-GRANT ALL ON TABLE ucod2 TO postgres;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE ucod2 TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE code2_sys_base_code2_sys_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE code2_sys_base_code2_sys_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE code2_sys_base_code2_sys_id_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE code2_sys_base_code2_sys_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+
+
+--
+-- Name: code2_sys_base; Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON TABLE code2_sys_base FROM PUBLIC;
+REVOKE ALL ON TABLE code2_sys_base FROM postgres;
+GRANT ALL ON TABLE code2_sys_base TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code2_sys_base TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --
@@ -10540,13 +10540,13 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE code_txt_type TO {schema}_%%%INIT_DB_
 
 
 --
--- Name: ucod_code_sys_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
+-- Name: code_sys_base_code_sys_id_seq; Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON SEQUENCE ucod_code_sys_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE ucod_code_sys_id_seq FROM postgres;
-GRANT ALL ON SEQUENCE ucod_code_sys_id_seq TO postgres;
-GRANT SELECT,UPDATE ON SEQUENCE ucod_code_sys_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+REVOKE ALL ON SEQUENCE code_sys_base_code_sys_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE code_sys_base_code_sys_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE code_sys_base_code_sys_id_seq TO postgres;
+GRANT SELECT,UPDATE ON SEQUENCE code_sys_base_code_sys_id_seq TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 
 
 --

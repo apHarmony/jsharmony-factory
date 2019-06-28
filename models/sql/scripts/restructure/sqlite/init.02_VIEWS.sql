@@ -277,7 +277,7 @@ CREATE VIEW {schema}_v_doc AS
     NULL AS title_head,
     NULL AS title_detail
    FROM ({schema}_doc__tbl doc__tbl
-     LEFT JOIN {schema}_code2_doc_ctgr gdd ON (((gdd.code_val1 = doc__tbl.doc_scope) AND (gdd.code_va12 = doc__tbl.doc_ctgr))));
+     LEFT JOIN {schema}_code2_doc_scope_doc_ctgr gdd ON (((gdd.code_val1 = doc__tbl.doc_scope) AND (gdd.code_va12 = doc__tbl.doc_ctgr))));
 
 /***************v_doc_ext***************/
 CREATE VIEW {schema}_v_doc_ext AS

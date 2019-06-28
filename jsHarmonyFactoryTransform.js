@@ -42,34 +42,38 @@ function jsHarmonyFactoryTransform(module){
     "version__tbl": "version",
     "help__tbl": "help",
     "help_target": "help_target",
-    "code_app": "code_app",
-    "code_sys": "code_sys",
-    "code_app_prefix": "code_",
-    "code_sys_prefix": "code_",
-    "code_ac": "code_ac",
-    "code_ac1": "code_ac1",
-    "code_ahc": "code_ahc",
-    "code_country": "code_country",
-    "code_doc_scope": "code_doc_scope",
+    "code_app": "code_app", //"code"
+    "code_sys": "code_sys", //"code"
+    "code_app_": "code_app_", //"code_"
+    "code_sys_": "code_sys_", //"code_"
+    "code_app_base": "code_app_base", //"code_base"
+    "code_sys_base": "code_sys_base", //"code_base"
+    "code_ac": "code_sys_ac", //"code_ac"
+    "code_ac1": "code_sys_ac1", //"code_ac1"
+    "code_ahc": "code_sys_ahc", //"code_ahc"
+    "code_country": "code_sys_country", //"code_country"
+    "code_doc_scope": "code_sys_doc_scope", //"code_doc_scope"
     "code_param_user_process": "code_param_user_process",
     "code_param_app_process": "code_param_app_process",
     "code_param_sys_process": "code_param_sys_process",
-    "code2_app": "code2_app",
-    "code2_sys": "code2_sys",
-    "code2_app_prefix": "code2_",
-    "code2_sys_prefix": "code2_",
-    "code2_doc_ctgr": "code2_doc_ctgr",
-    "code2_country_state": "code2_country_state",
+    "code2_app": "code2_app", //"code2"
+    "code2_sys": "code2_sys", //"code2"
+    "code2_app_": "code2_app_", //"code2_"
+    "code2_sys_": "code2_sys_", //"code2_"
+    "code2_app_base": "code2_app_base", //"code2_base"
+    "code2_sys_base": "code2_sys_base", //"code2_base"
+    "code2_doc_scope_doc_ctgr": "code2_app_doc_scope_doc_ctgr", //"code2_doc_scope_doc_ctgr"
+    "code2_country_state": "code2_sys_country_state", //"code2_country_state"
     "code2_param_user_attrib": "code2_param_user_attrib",
     "code2_param_app_attrib": "code2_param_app_attrib",
     "code2_param_sys_attrib": "code2_param_sys_attrib",
-    "code_note_scope": "code_note_scope",
-    "code_note_type": "code_note_type",
-    "code_param_type": "code_param_type",
-    "code_job_action": "code_job_action",
-    "code_job_source": "code_job_source",
-    "code_txt_type": "code_txt_type",
-    "code_version_sts": "code_version_sts",
+    "code_note_scope": "code_sys_note_scope", //"code_note_scope"
+    "code_note_type": "code_sys_note_type", //"code_note_type"
+    "code_param_type": "code_sys_param_type", //"code_param_type"
+    "code_job_action": "code_sys_job_action", //"code_job_action"
+    "code_job_source": "code_sys_job_source", //"code_job_source"
+    "code_txt_type": "code_sys_txt_type", //"code_txt_type"
+    "code_version_sts": "code_sys_version_sts", //"code_version_sts"
     "queue__tbl": "queue",
     "script__tbl": "script",
     "job__tbl": "job",

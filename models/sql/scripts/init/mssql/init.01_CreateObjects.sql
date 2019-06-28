@@ -2095,7 +2095,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code2_doc_ctgr](
+CREATE TABLE [jsharmony].[code2_doc_scope_doc_ctgr](
 	[code2_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](8) NOT NULL,
@@ -2113,16 +2113,16 @@ CREATE TABLE [jsharmony].[code2_doc_ctgr](
 	[code_notes] [nvarchar](255) NULL,
 	[code_euser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_euser])),
 	[code_muser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_muser])),
- CONSTRAINT [PK_code2_doc_ctgr] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_code2_doc_scope_doc_ctgr] PRIMARY KEY CLUSTERED 
 (
 	[code2_app_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_doc_ctgr_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code2_doc_scope_doc_ctgr_code_val1_code_va12] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_va12] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_doc_ctgr_code_val1_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UNQ_code2_doc_scope_doc_ctgr_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_txt] ASC
@@ -3095,13 +3095,13 @@ ALTER TABLE [jsharmony].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_MDt]  D
 GO
 ALTER TABLE [jsharmony].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_h_muser]
 GO
-ALTER TABLE [jsharmony].[code2_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_ctgr_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [jsharmony].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code2_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_ctgr_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [jsharmony].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code2_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_ctgr_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [jsharmony].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code2_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_ctgr_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [jsharmony].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 GO
 ALTER TABLE [jsharmony].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_Edt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_etstmp]
 GO
@@ -3235,11 +3235,11 @@ ALTER TABLE [jsharmony].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_COD_EDt]  DEFAUL
 GO
 ALTER TABLE [jsharmony].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [jsharmony].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_code_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
 GO
 ALTER TABLE [jsharmony].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_country] ADD  CONSTRAINT [DF_code_country_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [jsharmony].[code_country] ADD  CONSTRAINT [DF_code_country_code_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
 GO
 ALTER TABLE [jsharmony].[code_country] ADD  CONSTRAINT [DF_code_country_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
 GO
@@ -3247,13 +3247,13 @@ ALTER TABLE [jsharmony].[code_country] ADD  CONSTRAINT [DF_code_country_COD_MDt]
 GO
 ALTER TABLE [jsharmony].[code_country] ADD  CONSTRAINT [DF_code_country_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_UCOD_SCOPE_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_code_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_UCOD_SCOPE_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_UCOD_SCOPE_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_code_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_UCOD_SCOPE_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
 GO
 ALTER TABLE [jsharmony].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_Edt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_etstmp]
 GO
@@ -3400,10 +3400,10 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [jsharmony].[cust_menu_role] CHECK CONSTRAINT [FK_cust_menu_role_menu__tbl]
 GO
-ALTER TABLE [jsharmony].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [FK_doc__tbl_code2_doc_ctgr] FOREIGN KEY([doc_scope], [doc_ctgr])
-REFERENCES [jsharmony].[code2_doc_ctgr] ([code_val1], [code_va12])
+ALTER TABLE [jsharmony].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [FK_doc__tbl_code2_doc_scope_doc_ctgr] FOREIGN KEY([doc_scope], [doc_ctgr])
+REFERENCES [jsharmony].[code2_doc_scope_doc_ctgr] ([code_val1], [code_va12])
 GO
-ALTER TABLE [jsharmony].[doc__tbl] CHECK CONSTRAINT [FK_doc__tbl_code2_doc_ctgr]
+ALTER TABLE [jsharmony].[doc__tbl] CHECK CONSTRAINT [FK_doc__tbl_code2_doc_scope_doc_ctgr]
 GO
 ALTER TABLE [jsharmony].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [FK_doc__tbl_code_doc_scope] FOREIGN KEY([doc_scope])
 REFERENCES [jsharmony].[code_doc_scope] ([code_val])
@@ -5279,7 +5279,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[code2_doc_ctgr_IUD] on [jsharmony].[code2_doc_ctgr]
+CREATE trigger [jsharmony].[code2_doc_scope_doc_ctgr_IUD] on [jsharmony].[code2_doc_scope_doc_ctgr]
 for insert, update, delete
 AS
 BEGIN
@@ -5291,7 +5291,7 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_code2_doc_ctgr_IUD CURSOR LOCAL FOR
+  DECLARE CUR_code2_doc_scope_doc_ctgr_IUD CURSOR LOCAL FOR
      SELECT  del.code2_app_id, i.code2_app_id,
 	         del.code_seq, i.code_seq,
 	         del.code_end_dt, i.code_end_dt,
@@ -5359,7 +5359,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(code2_app_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','code2_doc_ctgr_IUD','ERR', 'Cannot update ID'
+    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5367,7 +5367,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(code_val1)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','code2_doc_ctgr_IUD','ERR', 'Cannot update code_val1'
+    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update code_val1'
     raiserror('Cannot update foreign key code_val1',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5375,15 +5375,15 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(code_va12)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','code2_doc_ctgr_IUD','ERR', 'Cannot update code_va12'
+    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update code_va12'
     raiserror('Cannot update foreign key code_va12',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_code2_doc_ctgr_IUD
-  FETCH NEXT FROM CUR_code2_doc_ctgr_IUD
+  OPEN CUR_code2_doc_scope_doc_ctgr_IUD
+  FETCH NEXT FROM CUR_code2_doc_scope_doc_ctgr_IUD
         INTO @D_code2_app_id, @I_code2_app_id,
              @D_code_seq, @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -5403,12 +5403,12 @@ BEGIN
 
     IF (@TP='I')
 	BEGIN
-      UPDATE {schema}.code2_doc_ctgr
+      UPDATE {schema}.code2_doc_scope_doc_ctgr
 	     SET code_etstmp = @CURDTTM,
 			 code_euser = @MYUSER,
 		     code_mtstmp = @CURDTTM,
 			 code_muser = @MYUSER
-       WHERE code2_doc_ctgr.code2_app_id = @I_code2_app_id;
+       WHERE code2_doc_scope_doc_ctgr.code2_app_id = @I_code2_app_id;
     END  
 
 	/******************************************/
@@ -5420,7 +5420,7 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN  
 	  SET @WK_code2_app_id = ISNULL(@D_code2_app_id,@I_code2_app_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'code2_doc_ctgr', @WK_code2_app_id, @MYUSER, @CURDTTM
+	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'code2_doc_scope_doc_ctgr', @WK_code2_app_id, @MYUSER, @CURDTTM
 	END
 
  
@@ -5431,7 +5431,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_num(@D_code_seq, @I_code_seq) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_seq'), @D_code_seq)
       END
 
@@ -5439,7 +5439,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_date(@D_code_end_dt, @I_code_end_dt) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_end_dt'), @D_code_end_dt)
       END
 
@@ -5447,7 +5447,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_val1, @I_code_val1) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_val1'), @D_code_val1)
       END
 
@@ -5455,7 +5455,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_va12, @I_code_va12) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_va12'), @D_code_va12)
       END
 
@@ -5463,7 +5463,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_txt, @I_code_txt) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_txt'), @D_code_txt)
       END
 
@@ -5471,7 +5471,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_code, @I_code_code) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_code'), @D_code_code)
       END
 
@@ -5479,7 +5479,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_attrib, @I_code_attrib) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_attrib'), @D_code_attrib)
       END
 
@@ -5487,7 +5487,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_end_reason, @I_code_end_reason) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_end_reason'), @D_code_end_reason)
       END
 
@@ -5500,10 +5500,10 @@ BEGIN
 
     IF (@TP='U' AND @MY_audit_seq <> 0)
 	BEGIN
-      UPDATE {schema}.code2_doc_ctgr
+      UPDATE {schema}.code2_doc_scope_doc_ctgr
 	     SET code_mtstmp = @CURDTTM,
 			 code_muser = @MYUSER
-       WHERE code2_doc_ctgr.code2_app_id = @I_code2_app_id;
+       WHERE code2_doc_scope_doc_ctgr.code2_app_id = @I_code2_app_id;
     END  
 
 	/*****************************************/
@@ -5513,7 +5513,7 @@ BEGIN
 
 
             
-    FETCH NEXT FROM CUR_code2_doc_ctgr_IUD
+    FETCH NEXT FROM CUR_code2_doc_scope_doc_ctgr_IUD
         INTO @D_code2_app_id, @I_code2_app_id,
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -5526,15 +5526,15 @@ BEGIN
 
 
   END
-  CLOSE CUR_code2_doc_ctgr_IUD
-  DEALLOCATE CUR_code2_doc_ctgr_IUD
+  CLOSE CUR_code2_doc_scope_doc_ctgr_IUD
+  DEALLOCATE CUR_code2_doc_scope_doc_ctgr_IUD
 
 
   RETURN
 
 END
 GO
-ALTER TABLE [jsharmony].[code2_doc_ctgr] ENABLE TRIGGER [code2_doc_ctgr_IUD]
+ALTER TABLE [jsharmony].[code2_doc_scope_doc_ctgr] ENABLE TRIGGER [code2_doc_scope_doc_ctgr_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -8095,7 +8095,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Employee ID - 
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Status - code_ac1' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'doc__tbl', @level2type=N'COLUMN',@level2name=N'doc_sts'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Category - code2_doc_ctgr' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'doc__tbl', @level2type=N'COLUMN',@level2name=N'doc_ctgr'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Category - code2_doc_scope_doc_ctgr' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'doc__tbl', @level2type=N'COLUMN',@level2name=N'doc_ctgr'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'doc__tbl', @level2type=N'COLUMN',@level2name=N'doc_desc'
 GO
@@ -8231,31 +8231,31 @@ EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_app'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code2_app_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code2_app_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_seq'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_val1'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_val1'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_txt'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_txt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_code'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Additional Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_code'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_end_dt'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Date' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_end_dt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_end_reason'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Termination Comment' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_end_reason'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_euser'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_euser'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_mtstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_mtstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_muser'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_muser'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr', @level2type=N'COLUMN',@level2name=N'code_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes 2 - Document Scope / Category' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_ctgr'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User Codes 2 - Document Scope / Category' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_doc_scope_doc_ctgr'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_app', @level2type=N'COLUMN',@level2name=N'code_name'
 GO
@@ -9844,7 +9844,7 @@ SELECT doc__tbl.doc_id
 	    ,single.dual_nvarchar50 title_detail
   FROM {schema}.doc__tbl
   INNER JOIN {schema}.single on 1=1
-  LEFT OUTER JOIN  {schema}.code2_doc_ctgr GDD ON GDD.code_val1 = doc__tbl.doc_scope
+  LEFT OUTER JOIN  {schema}.code2_doc_scope_doc_ctgr GDD ON GDD.code_val1 = doc__tbl.doc_scope
                                              AND GDD.code_va12 = doc__tbl.doc_ctgr   
 
 GO

@@ -27,7 +27,7 @@
   },
   "{schema}.create_code_app" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_code_app(ifnull(%%%SCHEMA%%%||'_','')||'code_app_prefix'||%%%ID%%%)"]
+    "sql": ["create_code_app(ifnull(%%%SCHEMA%%%||'_','')||'code_app_'||%%%ID%%%)"]
   },
   "create_code_app" : {
     "params": ["audit_table_name"],
@@ -56,7 +56,7 @@
       "      code_muser = (select context from jsharmony_meta limit 1),code_mtstmp=datetime(''now'',''localtime'')",
       "      where rowid = new.rowid\\\\\\;",
       "    %%%JSEXEC_ESCAPE(%%%log_audit_insert(\"'||%%%audit_table_name%%%||'\",\"new.code_app_id\",\"code_app_id\",\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       " create trigger '||%%%audit_table_name%%%||'_before_update before update on '||%%%audit_table_name%%%||'",
       "  begin",
@@ -68,20 +68,20 @@
       "    %%%JSEXEC_ESCAPE(%%%log_audit_update_mult(\"'||%%%audit_table_name%%%||'\",\"new.code_app_id\",[\"code_app_id\",\"code_seq\",\"code_val\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
       "    update '||%%%audit_table_name%%%||' set ",
       "      code_muser = (select context from jsharmony_meta limit 1),code_mtstmp=datetime(''now'',''localtime'') ",
-      "      where rowid = new.rowid and exists(select * from jsharmony_meta where audit_seq is not null)\\\\\\;",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "      where rowid = new.rowid and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       " create trigger '||%%%audit_table_name%%%||'_delete before delete on '||%%%audit_table_name%%%||'",
       "  begin",
       "    %%%JSEXEC_ESCAPE(%%%log_audit_delete_mult(\"'||%%%audit_table_name%%%||'\",\"old.code_app_id\",[\"code_app_id\",\"code_seq\",\"code_val\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       "\" }';"
     ]
   },
   "{schema}.create_code2_app" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_code2_app(ifnull(%%%SCHEMA%%%||'_','')||'code2_app_prefix'||%%%ID%%%)"]
+    "sql": ["create_code2_app(ifnull(%%%SCHEMA%%%||'_','')||'code2_app_'||%%%ID%%%)"]
   },
   "create_code2_app" : {
     "params": ["audit_table_name"],
@@ -112,7 +112,7 @@
       "      code_muser = (select context from jsharmony_meta limit 1),code_mtstmp=datetime(''now'',''localtime'')",
       "      where rowid = new.rowid\\\\\\;",
       "    %%%JSEXEC_ESCAPE(%%%log_audit_insert(\"'||%%%audit_table_name%%%||'\",\"new.code2_app_id\",\"code2_app_id\",\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       " create trigger '||%%%audit_table_name%%%||'_before_update before update on '||%%%audit_table_name%%%||'",
       "  begin",
@@ -125,20 +125,20 @@
       "    %%%JSEXEC_ESCAPE(%%%log_audit_update_mult(\"'||%%%audit_table_name%%%||'\",\"new.code2_app_id\",[\"code2_app_id\",\"code_seq\",\"code_val1\",\"code_va12\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
       "    update '||%%%audit_table_name%%%||' set ",
       "      code_muser = (select context from jsharmony_meta limit 1),code_mtstmp=datetime(''now'',''localtime'') ",
-      "      where rowid = new.rowid and exists(select * from jsharmony_meta where audit_seq is not null)\\\\\\;",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "      where rowid = new.rowid and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       " create trigger '||%%%audit_table_name%%%||'_delete before delete on '||%%%audit_table_name%%%||'",
       "  begin",
       "    %%%JSEXEC_ESCAPE(%%%log_audit_delete_mult(\"'||%%%audit_table_name%%%||'\",\"old.code2_app_id\",[\"code2_app_id\",\"code_seq\",\"code_val1\",\"code_va12\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       "\" }';"
     ]
   },
   "{schema}.create_code_sys" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_code_sys(ifnull(%%%SCHEMA%%%||'_','')||'code_sys_prefix'||%%%ID%%%)"]
+    "sql": ["create_code_sys(ifnull(%%%SCHEMA%%%||'_','')||'code_sys_'||%%%ID%%%)"]
   },
   "create_code_sys" : {
     "params": ["audit_table_name"],
@@ -167,7 +167,7 @@
       "      code_muser = (select context from jsharmony_meta limit 1),code_mtstmp=datetime(''now'',''localtime'')",
       "      where rowid = new.rowid\\\\\\;",
       "    %%%JSEXEC_ESCAPE(%%%log_audit_insert(\"'||%%%audit_table_name%%%||'\",\"new.code_sys_id\",\"code_sys_id\",\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       " create trigger '||%%%audit_table_name%%%||'_before_update before update on '||%%%audit_table_name%%%||'",
       "  begin",
@@ -179,20 +179,20 @@
       "    %%%JSEXEC_ESCAPE(%%%log_audit_update_mult(\"'||%%%audit_table_name%%%||'\",\"new.code_sys_id\",[\"code_sys_id\",\"code_seq\",\"code_val\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
       "    update '||%%%audit_table_name%%%||' set ",
       "      code_muser = (select context from jsharmony_meta limit 1),code_mtstmp=datetime(''now'',''localtime'') ",
-      "      where rowid = new.rowid and exists(select * from jsharmony_meta where audit_seq is not null)\\\\\\;",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "      where rowid = new.rowid and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       " create trigger '||%%%audit_table_name%%%||'_delete before delete on '||%%%audit_table_name%%%||'",
       "  begin",
       "    %%%JSEXEC_ESCAPE(%%%log_audit_delete_mult(\"'||%%%audit_table_name%%%||'\",\"old.code_sys_id\",[\"code_sys_id\",\"code_seq\",\"code_val\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       "\" }';"
     ]
   },
   "{schema}.create_code2_sys" : {
     "params": ["SCHEMA","ID","COMMENT"],
-    "sql": ["create_code2_sys(ifnull(%%%SCHEMA%%%||'_','')||'code2_sys_prefix'||%%%ID%%%)"]
+    "sql": ["create_code2_sys(ifnull(%%%SCHEMA%%%||'_','')||'code2_sys_'||%%%ID%%%)"]
   },
   "create_code2_sys" : {
     "params": ["audit_table_name"],
@@ -223,7 +223,7 @@
       "      code_muser = (select context from jsharmony_meta limit 1),code_mtstmp=datetime(''now'',''localtime'')",
       "      where rowid = new.rowid\\\\\\;",
       "    %%%JSEXEC_ESCAPE(%%%log_audit_insert(\"'||%%%audit_table_name%%%||'\",\"new.code2_sys_id\",\"code2_sys_id\",\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       " create trigger '||%%%audit_table_name%%%||'_before_update before update on '||%%%audit_table_name%%%||'",
       "  begin",
@@ -236,13 +236,13 @@
       "    %%%JSEXEC_ESCAPE(%%%log_audit_update_mult(\"'||%%%audit_table_name%%%||'\",\"new.code2_sys_id\",[\"code2_sys_id\",\"code_seq\",\"code_val1\",\"code_va12\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
       "    update '||%%%audit_table_name%%%||' set ",
       "      code_muser = (select context from jsharmony_meta limit 1),code_mtstmp=datetime(''now'',''localtime'') ",
-      "      where rowid = new.rowid and exists(select * from jsharmony_meta where audit_seq is not null)\\\\\\;",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "      where rowid = new.rowid and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       " create trigger '||%%%audit_table_name%%%||'_delete before delete on '||%%%audit_table_name%%%||'",
       "  begin",
       "    %%%JSEXEC_ESCAPE(%%%log_audit_delete_mult(\"'||%%%audit_table_name%%%||'\",\"old.code2_sys_id\",[\"code2_sys_id\",\"code_seq\",\"code_val1\",\"code_va12\",\"code_txt\",\"code_code\",\"code_end_dt\",\"code_end_reason\",\"code_notes\"],\"null\",\"null\",\"null\")%%%)%%%",
-      "    update jsharmony_meta set audit_seq = null\\\\\\;",
+      "    update jsharmony_meta set {{audit_seq}} = null\\\\\\;",
       "  end\\;",
       "\" }';"
     ]
@@ -256,9 +256,9 @@
     "sql": [
       "insert into {schema}_audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
       "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,(select context from jsharmony_meta limit 1)",
-      "  where exists(select * from jsharmony_meta where audit_seq is null)\\\\\\;",
-      "update jsharmony_meta set audit_seq = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
-      "  where exists(select * from jsharmony_meta where audit_seq is null)\\\\\\;"
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null)\\\\\\;",
+      "update jsharmony_meta set {{audit_seq}} = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null)\\\\\\;"
     ]
   },
   "log_audit_insert" : {
@@ -266,9 +266,9 @@
     "sql": [
       "insert into {schema}_audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
       "  select '%%%TABLE%%%',%%%ID%%%,'I',datetime('now','localtime'),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,(select context from jsharmony_meta limit 1)",
-      "  where exists(select * from jsharmony_meta where audit_seq is null)\\;",
-      "update jsharmony_meta set audit_seq = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
-      "  where exists(select * from jsharmony_meta where audit_seq is null)\\;"
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null)\\;",
+      "update jsharmony_meta set {{audit_seq}} = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null)\\;"
     ]
   },
   "log_audit_update_mult" : {
@@ -286,11 +286,11 @@
     "sql": [
       "insert into {schema}_audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
       "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,(select context from jsharmony_meta limit 1)",
-      "  where exists(select * from jsharmony_meta where audit_seq is null) and (%%%nequal(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
-      "update jsharmony_meta set audit_seq = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
-      "  where exists(select * from jsharmony_meta where audit_seq is null) and (%%%nequal(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null) and (%%%nequal(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
+      "update jsharmony_meta set {{audit_seq}} = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null) and (%%%nequal(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
       "insert into {schema}_audit_detail(audit_seq,audit_column_name,audit_column_val)",
-      "  select (select audit_seq from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%",
+      "  select (select {{audit_seq}} from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%",
       "  where (%%%nequal(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
       ""
     ]
@@ -300,9 +300,9 @@
     "sql": [
       "insert into {schema}_audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
       "  select '%%%TABLE%%%',%%%ID%%%,'U',datetime('now','localtime'),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,(select context from jsharmony_meta limit 1)",
-      "  where exists(select * from jsharmony_meta where audit_seq is null) and (%%%CONDITION%%%)\\;",
-      "update jsharmony_meta set audit_seq = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
-      "  where exists(select * from jsharmony_meta where audit_seq is null) and (%%%CONDITION%%%)\\;",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null) and (%%%CONDITION%%%)\\;",
+      "update jsharmony_meta set {{audit_seq}} = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null) and (%%%CONDITION%%%)\\;",
       ""
     ]
   },
@@ -328,12 +328,12 @@
       "    (select cust_id from {schema}_audit__tbl where audit_table_name='%%%TABLE%%%' and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
       "    (select item_id from {schema}_audit__tbl where audit_table_name='%%%TABLE%%%' and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
       "    (select context from jsharmony_meta limit 1)",
-      "  where exists(select * from jsharmony_meta where audit_seq is null)\\;",
-      "update jsharmony_meta set audit_seq = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
-      "  where exists(select * from jsharmony_meta where audit_seq is null)\\;",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null)\\;",
+      "update jsharmony_meta set {{audit_seq}} = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null)\\;",
 
       "insert into {schema}_audit_detail(audit_seq,audit_column_name,audit_column_val)",
-      "  select (select audit_seq from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%\\;",
+      "  select (select {{audit_seq}} from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%\\;",
       ""
     ]
   },
@@ -356,7 +356,7 @@
       "(select {schema}_cust_user.cust_id from {schema}_cust_user where {schema}_cust_user.sys_user_id={schema}.my_cust_user())"
     ]
   },
-  "{schema}.doc_ctgr_table":"{schema}_code2_doc_ctgr",
+  "{schema}.doc_ctgr_table":"{schema}_code2_doc_scope_doc_ctgr",
   "{schema}.my_db_user":{
     "params": [],
     "sql": [

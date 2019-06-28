@@ -22,6 +22,6 @@ insert into {schema}.sys_user_role (sys_user_id, sys_role_name) values(1,'X_X');
 delete from {schema}.audit_detail;
 delete from {schema}.audit__tbl;
 
-insert into {schema}.code2_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user','DOCUMENT','DOCUMENT');
-insert into {schema}.code2_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user','IMAGE','IMAGE');
-insert into {schema}.code2_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user','OTHER','OTHER');
+insert into {schema}.code2_doc_scope_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user','DOCUMENT','DOCUMENT');
+insert into {schema}.code2_doc_scope_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user','IMAGE','IMAGE');
+insert into {schema}.code2_doc_scope_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user','OTHER','OTHER');
