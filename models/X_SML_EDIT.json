@@ -31,7 +31,7 @@
        "lov": {"sql":"select codeval, codetxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
        "controlstyle":"width:70px;","caption":"Status"},
       {"name":"privs","actions":"B","control": "label","nl":1,"caption":"Privileges",
-        "value": ["<a href=\"<#=((data['sm_utype']=='S')?'X_SRMSELR_HW':'X_CRMSELR_HW')#>?action=update&amp;sm_id=<#=data['sm_id']#>\"",
+        "value": ["<a href=\"<#=((data['sm_utype']=='S')?'<%=jsh._BASEURL%><%=xmodel.namespace%>X_SRMSELR_HW':'<%=jsh._BASEURL%><%=xmodel.namespace%>X_CRMSELR_HW')#>?action=update&amp;sm_id=<#=data['sm_id']#>\"",
                   " class=\"privs_link xform_ctrl xelemX_SML xform_label uneditable\"",
                   " onclick=\"window.open(<#=instance#>.$(this).attr('href'),'_blank','width=1200,height=700,resizable=1,scrollbars=1');return false;\"",
                   "><#-((data['sm_id_auto'])?'<img src=\"/images/icon_update.png\" class=\"xicon\">':'')#></a>"]
