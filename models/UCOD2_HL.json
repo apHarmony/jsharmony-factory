@@ -16,7 +16,7 @@
 	"fields":[
       {"name":"ucod2_h_id","type":"bigint","key":1,"control":"hidden"},
       {"name":"click","type":"varchar","length":"128","validate":["Required"],
-       "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod2_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
+       "sqlselect":"(case jsharmony.table_type(codeschema,{{concat}}('ucod2_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"","actions":"B","control": "html",
        "value": "<a href='UCOD2L?codename=<%=data['codename']%>&codeschema=<%=data['codeschema']%>'><%=data['click']%></a>"},
       {"name":"codeschema","type":"varchar","length":"16","actions":"B","caption":"Schema"},
@@ -31,11 +31,11 @@
       {"name":"codeattribmean","type":"varchar","length":"128",
        "caption":"Attribute","actions":"B","controlstyle":"width:160px;"},
       {"name":"my_create","type":"varchar","length":"128","cellstyle":"text-align:center;",
-       "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod2_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
+       "sqlselect":"(case jsharmony.table_type(codeschema,{{concat}}('ucod2_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
        "link":"update:POPUP_EXEC_CREATE_UCOD2&codeschema=codeschema&codename=codename&codemean=codemean",
        "caption":"Create Table","actions":""},
       {"name":"click2","type":"varchar","length":"128","validate":["Required"],
-       "sqlselect":"(case jsharmony.table_type(codeschema,concat('ucod2_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
+       "sqlselect":"(case jsharmony.table_type(codeschema,{{concat}}('ucod2_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"Edit Codes","actions":"B","control": "html","cellstyle": "text-align:center;",
        "value": "<a href='UCOD2L?codename=<%=data['codename']%>&codeschema=<%=data['codeschema']%>'><% if(data['click2']){ %><img src='/images/icon_update.png' height='14' style='position:relative;top:2px;' /><% } %></a>"}
 	]

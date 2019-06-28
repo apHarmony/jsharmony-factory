@@ -25,7 +25,7 @@
       {"name":"codeattribmean","type":"varchar","length":"128",
        "caption":"Attribute","actions":"B","controlstyle":"width:160px;"},
       {"name":"my_create","type":"varchar","length":"128","cellstyle":"text-align:center;",
-       "sqlselect":"(case jsharmony.table_type(codeschema,concat('gcod_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
+       "sqlselect":"(case jsharmony.table_type(codeschema,{{concat}}('gcod_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
        "link":"update:POPUP_EXEC_CREATE_GCOD&codeschema=codeschema&codename=codename&codemean=codemean",
        "caption":"Create Table","actions":""}
 	]
@@ -43,7 +43,7 @@
       {"name":"codeattribmean","actions": "BIU","control": "textbox"},
       {"name":"my_create","actions": "B"},
       {"name":"click2","type":"varchar","length":"128","validate":["Required"],
-       "sqlselect":"(case jsharmony.table_type(codeschema,concat('gcod_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
+       "sqlselect":"(case jsharmony.table_type(codeschema,{{concat}}('gcod_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"Edit Codes","actions":"B","control": "html","cellstyle": "text-align:center;",
        "value": "<a href='X_GCODL?codename=<%=data['codename']%>&codeschema=<%=(data['codeschema']||'')%>'><% if(data['click2']){ %><img src='/images/icon_update.png' height='14' style='position:relative;top:2px;' /><% } %></a>",
        "__AFTER__": "my_create"}
