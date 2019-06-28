@@ -448,7 +448,7 @@
       "(cast(%%%doc_id%%% as text)||%%%doc_ext%%%)"
     ]
   },
-  "str_concat":{
+  "{{concat}}":{
     "params": ["a","b"],
     "sql": [
       "(%%%a%%%||%%%b%%%)"
