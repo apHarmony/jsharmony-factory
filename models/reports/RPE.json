@@ -11,7 +11,7 @@
     "pagesettings":  {"orientation": "portrait"},
     "fields": [
       {"name":"pe_sts","type":"varchar","nl":1,"control":"dropdown_S","actions": "B",
-      "lov": { "sql": "select codeval,codetxt from jsharmony.UCOD_AHC where 1=1 %%%DATALOCKS%%% order by codseq", 
+      "lov": { "sql": "select codeval,codetxt from jsharmony.ucod_ahc where 1=1 %%%DATALOCKS%%% order by codseq", 
                 "datalock":{"c_id":"c_id"}, "blank": "(All)" },
       "caption":"User Status","captionstyle": "width:90px;"},
 
@@ -32,7 +32,7 @@
       "PARAMS":{
         "sql":["select coalesce(codetxt,'(All)') pe_sts_txt ",
               "  from jsharmony.dual ",
-              "  left outer join jsharmony.UCOD_AHC on codeval = @pe_sts"], "nodatalock": ["c_id"] 
+              "  left outer join jsharmony.ucod_ahc on codeval = @pe_sts"], "nodatalock": ["c_id"] 
       },
       "PE":{
         "sql":["select pe_id, pe_sts, pe_fname, pe_mname, pe_lname, pe_jtitle, pe_email, ",
