@@ -179,6 +179,7 @@ function jsHarmonyFactoryTransform(module){
     "doc_sync_tstmp": "doc_sync_tstmp",
     "doc_utstmp": "doc_utstmp",
     "doc_uuser": "doc_uuser",
+    "doc_img": "doc_img",
     "db_id": "db_id",
     "dual_bigint": "dual_bigint",
     "single_ident": "single_ident",

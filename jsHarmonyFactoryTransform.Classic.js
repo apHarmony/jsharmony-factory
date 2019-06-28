@@ -176,6 +176,7 @@ transform.fields = {
   "doc_sync_tstmp": "d_synctstmp",
   "doc_utstmp": "d_utstmp",
   "doc_uuser": "d_uu",
+  "doc_img": "D_IMG",
   "db_id": "db_k",
   "dual_bigint": "dual_bigint",
   "single_ident": "dual_ident",
