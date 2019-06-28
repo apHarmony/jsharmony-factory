@@ -6,7 +6,7 @@
     "begin transaction;",
     "update cust set cust_agreement_tstmp=getdate() where cust_id=@cust_id;",
     "declare @job_id bigint;",
-    "insert into {schema}.job__tbl(job_source, job_action, job_action_target, job_params) values('CLIENT', 'REPORT', '{namespace}reports/AGREEMENT',@job_params);",
+    "insert into {schema}.job__tbl(job_source, job_action, job_action_target, job_params) values('CLIENT', 'REPORT', '{namespace}Reports/Agreement',@job_params);",
     "select @job_id = scope_identity();",
     "insert into {schema}.job_doc(job_id, doc_scope, doc_scope_id, doc_ctgr, doc_desc) values(@job_id, 'C',@cust_id, 'AGREEMNT', 'Customer Portal Agreement');",
     "commit transaction;"
