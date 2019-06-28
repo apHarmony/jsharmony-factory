@@ -67,8 +67,8 @@ exports.form = function (req, res, next) {
   var COD_YEAR = [];
   var appsrv = _this;
   var blank_code = {};
-  blank_code[_this.jsh.map.codeval] = '';
-  blank_code[_this.jsh.map.codetxt] = '';
+  blank_code[_this.jsh.map.code_val] = '';
+  blank_code[_this.jsh.map.code_txt] = '';
   async.series([
     function (cb) { HelperRender.getTXT(req, res, appsrv, 'agreeement', 'CMS', 'AGREEMENT', function (rslt) { cms_agreement = rslt; cb(); }) },
     function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', "agreement_COD_STATE", [], {}, function (rslt) { COD_STATE = rslt; COD_STATE.unshift(blank_code); cb(); }) },

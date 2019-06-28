@@ -25,7 +25,7 @@
 		  
 		  
 	    {"name":"hp_code","type":"varchar","length":50,"actions":"BI","nl":1,
-	     "control":"dropdown_VL","sample":"Test - General","lov":{"sql":"select hp_code as %%%jsh.map.codeval%%%,hp_desc as %%%jsh.map.codetxt%%% from jsharmony.hp order by hp_desc","blank":""},
+	     "control":"dropdown_VL","sample":"Test - General","lov":{"sql":"select hp_code as %%%jsh.map.{{code_val}}%%%,hp_desc as %%%jsh.map.{{code_txt}}%%% from jsharmony.hp order by hp_desc","blank":""},
 		   "caption":"Panel"},
 	    {"name":"h_text","type":"varchar","length":99999,"actions":"BIU","nl":1,
 	     "control":"htmlarea","controlstyle":"width:590px;height:400px;","sample":"Here goes the text ...........",

@@ -11,9 +11,9 @@
       {"name":"sper_id","type":"bigint","key":1,"control":"hidden"},
       {"name":"sr_name","type":"varchar","length":"8","cellstyle":"width:300px;",
         "caption":"Role","actions":"B",
-        "lov": { "sql": ["select sr_name as %%%jsh.map.codeval%%%, ",
-                          "       sr_desc as %%%jsh.map.codetxt%%%, ",
-                          "       sr_seq as %%%jsh.map.codeseq%%% ",
+        "lov": { "sql": ["select sr_name as %%%jsh.map.{{code_val}}%%%, ",
+                          "       sr_desc as %%%jsh.map.{{code_txt}}%%%, ",
+                          "       sr_seq as %%%jsh.map.{{code_seq}}%%% ",
                           "  from jsharmony.sr"] }
       }
     ],

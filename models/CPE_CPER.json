@@ -15,9 +15,9 @@
       {"name":"cr_name","type":"varchar","length":"16","cellstyle":"width:300px;",
         "caption":"Role","actions":"B",
         "lov": { 
-          "sql": ["select cr_name as %%%jsh.map.codeval%%%, ",
-                  "       cr_desc as %%%jsh.map.codetxt%%%, ",
-                  "       cr_seq as %%%jsh.map.codeseq%%% ",
+          "sql": ["select cr_name as %%%jsh.map.{{code_val}}%%%, ",
+                  "       cr_desc as %%%jsh.map.{{code_txt}}%%%, ",
+                  "       cr_seq as %%%jsh.map.{{code_seq}}%%% ",
                   "  from jsharmony.cr ",
                   " where cr_name<>'C*' %%%DATALOCKS%%%"],
           "datalock":{"c_id":"always"} 
