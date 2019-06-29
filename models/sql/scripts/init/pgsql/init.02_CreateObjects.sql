@@ -370,7 +370,7 @@ CREATE FUNCTION check_param(in_table character varying, in_process character var
 DECLARE 
   cust bigint = 0;
   param_type VARCHAR(8) = NULL;
-  code_name VARCHAR(16);
+  code_name VARCHAR(128);
   is_param_app boolean;
   is_param_user boolean;
   is_param_sys boolean;
@@ -4336,7 +4336,7 @@ COMMENT ON TABLE code2_doc_scope_doc_ctgr IS 'User Codes 2 - Document Scope / Ca
 --
 
 CREATE TABLE code2_app (
-    code_name character varying(16) NOT NULL,
+    code_name character varying(128) NOT NULL,
     code_desc character varying(128),
     code_code_desc character varying(128),
     code_h_etstmp timestamp without time zone DEFAULT my_now() NOT NULL,
@@ -4345,7 +4345,7 @@ CREATE TABLE code2_app (
     code_h_muser character varying(20) DEFAULT my_db_user() NOT NULL,
     code_snotes character varying(255),
     code_attrib_desc character varying(128),
-    code_schema character varying(16)
+    code_schema character varying(128)
 );
 
 
@@ -4363,7 +4363,7 @@ COMMENT ON TABLE code2_app IS 'User Codes 2 Header (CONTROL)';
 --
 
 CREATE TABLE code_app (
-    code_name character varying(16) NOT NULL,
+    code_name character varying(128) NOT NULL,
     code_desc character varying(128),
     code_code_desc character varying(128),
     code_h_etstmp timestamp without time zone DEFAULT my_now() NOT NULL,
@@ -4372,7 +4372,7 @@ CREATE TABLE code_app (
     code_h_muser character varying(20) DEFAULT my_db_user() NOT NULL,
     code_snotes character varying(255),
     code_attrib_desc character varying(128),
-    code_schema character varying(16)
+    code_schema character varying(128)
 );
 
 
@@ -4795,7 +4795,7 @@ CREATE TABLE param__tbl (
     param_attrib character varying(16) NOT NULL,
     param_desc character varying(255) NOT NULL,
     param_type character varying(8) NOT NULL,
-    code_name character varying(16),
+    code_name character varying(128),
     param_etstmp timestamp without time zone DEFAULT my_now() NOT NULL,
     param_euser character varying(20) DEFAULT my_db_user() NOT NULL,
     param_mtstmp timestamp without time zone DEFAULT my_now() NOT NULL,
@@ -5865,7 +5865,7 @@ ALTER TABLE code2_param_app_attrib OWNER TO postgres;
 --
 
 CREATE TABLE code2_sys (
-    code_name character varying(16) NOT NULL,
+    code_name character varying(128) NOT NULL,
     code_desc character varying(128),
     code_code_desc character varying(128),
     code_h_etstmp timestamp without time zone DEFAULT my_now() NOT NULL,
@@ -5874,7 +5874,7 @@ CREATE TABLE code2_sys (
     code_h_muser character varying(20) DEFAULT my_db_user() NOT NULL,
     code_snotes character varying(255),
     code_attrib_desc character varying(128),
-    code_schema character varying(16),
+    code_schema character varying(128),
     code2_sys_h_id bigint NOT NULL
 );
 
@@ -6069,7 +6069,7 @@ ALTER TABLE code_param_app_process OWNER TO postgres;
 --
 
 CREATE TABLE code_sys (
-    code_name character varying(16) NOT NULL,
+    code_name character varying(128) NOT NULL,
     code_desc character varying(128),
     code_code_desc character varying(128),
     code_h_etstmp timestamp without time zone DEFAULT my_now() NOT NULL,
@@ -6078,7 +6078,7 @@ CREATE TABLE code_sys (
     code_h_muser character varying(20) DEFAULT my_db_user() NOT NULL,
     code_snotes character varying(255),
     code_attrib_desc character varying(128),
-    code_schema character varying(16),
+    code_schema character varying(128),
     code_sys_h_id bigint NOT NULL
 );
 

@@ -25,7 +25,7 @@
       {"name":"ppd_type","type":"varchar","length":8,"actions": "BIU","control": "dropdown_S",
        "lov": {"sql":"select codeval, codetxt from jsharmony.ucod_ppd_type order by codseq,codetxt","blank":1},"validate":["Required"],
        "controlstyle":"width:82px;","caption":"Type"},
-      {"name":"codename","type":"varchar","length":"16","actions":"BIU","control":"textbox_VS",
+      {"name":"codename","type":"varchar","length":"128","actions":"BIU","control":"textbox_VS",
        "caption":"Code"},
       {"name":"ppd_xpp","type":"boolean","actions":"BIU","control":"checkbox",
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Developer","default":"0"},

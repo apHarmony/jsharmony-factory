@@ -13,8 +13,8 @@
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
 	  "fields":[
-      {"name":"codeschema","type":"varchar","length":"16","actions":"B","caption":"Schema","control":"hidden"},
-      {"name":"codename","type":"varchar","length":"16","key":1,"validate":["Required"],
+      {"name":"codeschema","type":"varchar","length":"128","actions":"B","caption":"Schema","control":"hidden"},
+      {"name":"codename","type":"varchar","length":"128","key":1,"validate":["Required"],
        "caption":"Code Table Name","actions":"B","controlstyle":"width:120px;","control": "html",
        "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>GCODL?codename=<%=data['codename']%>&codeschema=<%=data['codeschema']%>'><%=data['codename']%></a>"},
       {"name":"codemean","type":"varchar","length":"128","validate":["Required"],

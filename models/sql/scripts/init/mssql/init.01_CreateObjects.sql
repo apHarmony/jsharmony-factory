@@ -74,7 +74,7 @@ DECLARE @adv_error INT
 DECLARE @c TINYINT
 DECLARE @rslt NVARCHAR(MAX)
 DECLARE @param_type NVARCHAR(8)
-DECLARE @code_name NVARCHAR(16)
+DECLARE @code_name NVARCHAR(128)
 DECLARE @is_param_app BIT
 DECLARE @is_param_user BIT
 DECLARE @is_param_sys BIT
@@ -944,7 +944,7 @@ CREATE TABLE [jsharmony].[param__tbl](
 	[param_attrib] [nvarchar](16) NOT NULL,
 	[param_desc] [nvarchar](255) NOT NULL,
 	[param_type] [nvarchar](8) NOT NULL,
-	[code_name] [nvarchar](16) NULL,
+	[code_name] [nvarchar](128) NULL,
 	[is_param_app] [bit] NOT NULL,
 	[is_param_user] [bit] NOT NULL,
 	[is_param_sys] [bit] NOT NULL,
@@ -2075,7 +2075,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[code_app](
-	[code_name] [nvarchar](16) NOT NULL,
+	[code_name] [nvarchar](128) NOT NULL,
 	[code_desc] [nvarchar](128) NULL,
 	[code_code_desc] [nvarchar](128) NULL,
 	[code_attrib_desc] [nvarchar](128) NULL,
@@ -2084,7 +2084,7 @@ CREATE TABLE [jsharmony].[code_app](
 	[code_h_mtstmp] [datetime2](7) NULL,
 	[code_h_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
-	[code_schema] [nvarchar](16) NULL,
+	[code_schema] [nvarchar](128) NULL,
  CONSTRAINT [PK_code_app] PRIMARY KEY CLUSTERED 
 (
 	[code_name] ASC
@@ -2134,7 +2134,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[code2_app](
-	[code_name] [nvarchar](16) NOT NULL,
+	[code_name] [nvarchar](128) NOT NULL,
 	[code_desc] [nvarchar](128) NULL,
 	[code_code_desc] [nvarchar](128) NULL,
 	[code_attrib_desc] [nvarchar](128) NULL,
@@ -2143,7 +2143,7 @@ CREATE TABLE [jsharmony].[code2_app](
 	[code_h_mtstmp] [datetime2](7) NULL,
 	[code_h_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
-	[code_schema] [nvarchar](16) NULL,
+	[code_schema] [nvarchar](128) NULL,
  CONSTRAINT [PK_code2_app] PRIMARY KEY CLUSTERED 
 (
 	[code_name] ASC
@@ -2672,7 +2672,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[code_sys](
-	[code_name] [nvarchar](16) NOT NULL,
+	[code_name] [nvarchar](128) NOT NULL,
 	[code_desc] [nvarchar](128) NULL,
 	[code_code_desc] [nvarchar](128) NULL,
 	[code_attrib_desc] [nvarchar](128) NULL,
@@ -2681,7 +2681,7 @@ CREATE TABLE [jsharmony].[code_sys](
 	[code_h_mtstmp] [datetime2](7) NULL,
 	[code_h_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
-	[code_schema] [nvarchar](16) NULL,
+	[code_schema] [nvarchar](128) NULL,
 	[code_sys_h_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_code_sys] PRIMARY KEY CLUSTERED 
 (
@@ -2966,7 +2966,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[code2_sys](
-	[code_name] [nvarchar](16) NOT NULL,
+	[code_name] [nvarchar](128) NOT NULL,
 	[code_desc] [nvarchar](128) NULL,
 	[code_code_desc] [nvarchar](128) NULL,
 	[code_attrib_desc] [nvarchar](128) NULL,
@@ -2975,7 +2975,7 @@ CREATE TABLE [jsharmony].[code2_sys](
 	[code_h_mtstmp] [datetime2](7) NULL,
 	[code_h_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
-	[code_schema] [nvarchar](16) NULL,
+	[code_schema] [nvarchar](128) NULL,
 	[code2_sys_h_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_code2_sys] PRIMARY KEY CLUSTERED 
 (
@@ -4004,7 +4004,7 @@ GO
 
 CREATE PROCEDURE  [jsharmony].[check_foreign_key]
 (
-	@in_tblname nvarchar(16),
+	@in_tblname nvarchar(128),
 	@in_tblid bigint
 )	
 as
@@ -4038,7 +4038,7 @@ GO
 
 CREATE PROCEDURE  [jsharmony].[check_foreign_key_exec]
 (
-	@in_tblname nvarchar(16),
+	@in_tblname nvarchar(128),
 	@in_tblid bigint
 )	
 as

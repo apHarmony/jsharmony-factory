@@ -6,9 +6,9 @@
   "fields": [
     {"name":"question",
      "value":"Are you sure you want to create table <span class='get_codeschema'></span>.ucod_<span class='get_codename'></span> ? <br /> <span class='get_codemean'></span>"},
-    {"name":"codeschema","type":"varchar","length":"16","actions":"BU",
+    {"name":"codeschema","type":"varchar","length":"128","actions":"BU",
      "default": "js:XExt.UndefinedBlank(_GET['codeschema'])","control":"hidden"},
-    {"name":"codename","type":"varchar","length":"16","actions":"BU",
+    {"name":"codename","type":"varchar","length":"128","actions":"BU",
      "default": "js:XExt.UndefinedBlank(_GET['codename'])","control":"hidden"},
     {"name":"codemean","type":"varchar","length":"128","actions":"BU",
      "default": "js:XExt.UndefinedBlank(_GET['codemean'])","control":"hidden"}

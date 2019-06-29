@@ -19,8 +19,8 @@
        "sqlselect":"(case jsharmony.table_type(codeschema,{{concat}}('ucod_',codename)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"","actions":"B","control": "html","cellstyle": "text-align:center;",
        "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>UCODL?codename=<%=data['codename']%>&codeschema=<%=data['codeschema']%>'><%=data['click']%></a>"},
-      {"name":"codeschema","type":"varchar","length":"16","actions":"B","caption":"Schema"},
-      {"name":"codename","type":"varchar","length":"16","validate":["Required"],
+      {"name":"codeschema","type":"varchar","length":"128","actions":"B","caption":"Schema"},
+      {"name":"codename","type":"varchar","length":"128","validate":["Required"],
        "caption":"Code Table Name","actions":"B","controlstyle":"width:120px;","control": "html",
        "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>UCODL?codename=<%=data['codename']%>&codeschema=<%=data['codeschema']%>'><%=data['codename']%></a>"},
       {"name":"codemean","type":"varchar","length":"128","validate":["Required"],
@@ -72,8 +72,8 @@
       "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
       "popup":[450,250],
       "fields": [
-        {"name":"codeschema","type":"varchar","length":"16","actions":"U","control":"hidden"},
-        {"name":"codename","type":"varchar","length":"16","actions":"U","control":"hidden"},
+        {"name":"codeschema","type":"varchar","length":"128","actions":"U","control":"hidden"},
+        {"name":"codename","type":"varchar","length":"128","actions":"U","control":"hidden"},
         {"name":"codemean","type":"varchar","length":"128","actions":"U","control":"hidden"}
       ]
   }
