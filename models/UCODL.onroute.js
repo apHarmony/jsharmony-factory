@@ -20,7 +20,7 @@ jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean 
     //Set title
     model.title = 'SYSTEM TABLE - '+rslt[0]['codemean']+' - '+codeschema;
     //Set table
-    model.table = 'UCOD_'+codename;
+    model.table = 'ucod_'+codename;
     if(codeschema){ 
       if(jsh.DBConfig['default']._driver.name=='sqlite') model.table = codeschema+'_'+model.table;
       else model.table = codeschema+'.'+model.table;
