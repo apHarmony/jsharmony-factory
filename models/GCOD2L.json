@@ -41,7 +41,7 @@
         "controlstyle":"width:130px;","caption":"Termination Comment"},
       {"name":"info","type":"varchar","length":"500","actions":"B","control":"textzoom",
         "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
-        "sqlselect":"(jsharmony.audit_info(COD_ETstmp,COD_EU,COD_MTstmp,COD_MU))",
+        "sqlselect":"(jsharmony.audit_info(cod_etstmp,cod_eu,cod_mtstmp,cod_mu))",
         "controlstyle":"width:48px;display:none;"}
     ],
     "dberrors": [
