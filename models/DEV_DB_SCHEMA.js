@@ -65,7 +65,7 @@ jsh.App[modelid] = new (function(){
       dispName = 'table_' + dispName;
       $('<a href="#" class="table_name expandable" onclick="return false;">'+XExt.escapeHTML(dispName.substr(6))+'</a> &nbsp; \
          <a href="#" class="expandable" onclick="return false;">Schema</a> &nbsp; \
-         <a href="<%=jsh._BASEURL%><%=xmodel.moduleNamespace%>DEV_DB?db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">Data</a> &nbsp; \
+         <a href="<%=jsh._BASEURL%><%=xmodel.module_namespace%>DEV_DB?db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">Data</a> &nbsp; \
          <br/>').appendTo(jobj);
       var html = '<table cellpadding="0" cellspacing="0" border="0" style="display:none;">';
       html += '<tr>';
