@@ -12,7 +12,7 @@
     "fields":[
       {"name":"d_scope","foreignkey":1},
       {"name":"d_utstmp","link":"update:GPE_D"},
-      {"name":"btndownload","value": "<a href='<%=jsh._BASEURL%>_dl/<%=jsh._BASEURL%>GPE_D/<%=data['d_id']%>/d_file'>Download</a>"},
+      {"name":"btndownload","value": "<a href='<%=jsh._BASEURL%>_dl/<%=xmodel.moduleNamespace%>GPE_D/<%=data['d_id']%>/d_file'>Download</a>"},
       {"name":"btndetails","link":"update:GPE_D"}
     ]   
   },
