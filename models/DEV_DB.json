@@ -1,6 +1,7 @@
 {
   "DEV_DB": {
     "comment":"DEV_DB",
+    "source_files_prefix":"DEV_DB",
     "title":"Database Management",
     "table":"",
     "actions":"B", 

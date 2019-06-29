@@ -1,5 +1,6 @@
 {
   "X_MODELS": {
+    "source_files_prefix":"X_MODELS",
     "layout":"grid",
     "title":"Models",
     "table":"jsharmony:models",

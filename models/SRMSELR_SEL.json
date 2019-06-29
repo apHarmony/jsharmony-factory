@@ -1,5 +1,6 @@
 {
   "SRMSELR_SEL": {
+    "source_files_prefix":"SRMSELR_SEL",
     "layout":"grid", 
 	  "title": "Menu Privileges: <#=bcrumbs.sm_desc#> (S<#=data.sm_id#>)",
 	  "table":"jsharmony.v_srmsel",

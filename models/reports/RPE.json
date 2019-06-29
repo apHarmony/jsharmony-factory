@@ -1,6 +1,7 @@
 {
   "RPE": {
     "comment":"RPE",
+    "source_files_prefix":"RPE",
     "layout": "report",
     "title": "User Listing",
     "inherits": "TMPL_DEFAULT",

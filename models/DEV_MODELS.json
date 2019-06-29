@@ -1,6 +1,7 @@
 {
   "DEV_MODELS": {
     "comment":"DEV_MODELS",
+    "source_files_prefix":"DEV_MODELS",
     "title":"Model Viewer",
     "table":"",
     "actions":"B", 

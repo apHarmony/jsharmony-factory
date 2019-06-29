@@ -1,6 +1,7 @@
 {
   "DEV_DB_SCRIPTS": {
     "comment":"DEV_DB_SCRIPTS",
+    "source_files_prefix":"DEV_DB_SCRIPTS",
     "title":"Database Scripts",
     "table":"",
     "actions":"B", 

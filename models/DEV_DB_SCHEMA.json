@@ -1,6 +1,7 @@
 {
   "DEV_DB_SCHEMA": {
     "comment":"DEV_DB_SCHEMA",
+    "source_files_prefix":"DEV_DB_SCHEMA",
     "title":"Database Schema",
     "table":"",
     "actions":"B", 

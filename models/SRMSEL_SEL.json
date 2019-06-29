@@ -1,5 +1,6 @@
 {
   "SRMSEL_SEL": {
+    "source_files_prefix":"SRMSEL_SEL",
     "layout":"grid", 
     "title": "Menu Items for Role <#=data.sr_name#>",
     "table":"jsharmony.v_srmsel",

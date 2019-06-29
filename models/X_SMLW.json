@@ -1,5 +1,6 @@
 {
   "X_SMLW": {
+    "source_files_prefix":"X_SMLW",
     "dev":1,
     "layout":"form", 
     "title":"Menu Items",

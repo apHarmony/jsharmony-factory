@@ -1,6 +1,7 @@
 {
   "AGREEMENT": {
     "comment":"AGREEMENT",
+    "source_files_prefix":"AGREEMENT",
     "layout": "report",
     "title": "Customer Agreement",
     "actions": "B",

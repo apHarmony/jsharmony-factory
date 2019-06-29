@@ -1,5 +1,6 @@
 {
   "HSHOWL": {
+    "source_files_prefix":"HSHOWL",
     "title":"Help Index",
     "caption":["","Help","Help"],
     "table":"jsharmony.h",

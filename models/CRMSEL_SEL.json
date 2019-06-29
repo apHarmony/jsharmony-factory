@@ -1,12 +1,13 @@
 {
   "CRMSEL_SEL": {
+    "source_files_prefix":"CRMSEL_SEL",
     "layout":"grid", 
-	"title": "Menu Items for Role <#=data.cr_name#>",
-	"table":"jsharmony.v_crmsel",
-	"actions":"BU", 
-	"caption":[0,"Item","Items"],
+    "title": "Menu Items for Role <#=data.cr_name#>",
+    "table":"jsharmony.v_crmsel",
+    "actions":"BU", 
+    "caption":[0,"Item","Items"],
     "sort":[{"sm_id_parent":"asc"},{"sm_seq":"asc"},{"sm_name":"asc"}], 
-	"menu":"items",
+    "menu":"items",
     "grid_expand_search": 1,
     "rowlimit":500,
     "grid_rowcount":1,
@@ -15,15 +16,15 @@
     "commitlevel": "cell",            "comment3":"cell, row, page, or none",
     "validationlevel": "cell",        "comment4":"cell, or row",
     "hide_system_buttons" : ["export"],    
-	"buttons": [
-	    {"link":"js:jsh.App[modelid].SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
-	    {"link":"js:jsh.App[modelid].DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
-	],
+    "buttons": [
+      {"link":"js:jsh.App[modelid].SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
+      {"link":"js:jsh.App[modelid].DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
+    ],
     "oninit": "jsh.App[modelid].oninit(xmodel);",
     "oncommit": "jsh.App[modelid].oncommit();",
-	"fields":[
-	  {"name":"cr_name","type":"varchar","length":16,"actions":"B","datalock":{"c_id":"c_id"},"control":"hidden","key":1,
-	   "caption":""},
+    "fields":[
+      {"name":"cr_name","type":"varchar","length":16,"actions":"B","datalock":{"c_id":"c_id"},"control":"hidden","key":1,
+       "caption":""},
       {"name":"crmsel_sel","type":"smallint","actions":"BU","caption":"Select","control":"checkbox",
        "controlparams":{"value_true":"1","value_false":"0","value_hidden":""},"captionstyle": "text-align:center;"},
       {"name":"new_cr_name","type":"varchar","length":16,"actions":"BU","control":"hidden","captionstyle":"display:none;","cellstyle":"display:none;",
@@ -43,6 +44,6 @@
        "validate":["Required"],"caption":"Name"},
       {"name":"sm_desc","type":"varchar","length":"255","actions":"B","control": "label",
        "validate":["Required"],"caption":"Description"}
-	]
-  }	
+    ]
+  }
 }

@@ -1,17 +1,18 @@
 {
   "CRMSELR_SEL": {
+    "source_files_prefix":"CRMSELR_SEL",
     "layout":"grid", 
     "title": "Menu Privileges: <#=bcrumbs.sm_desc#> (C<#=data.sm_id#>)",
-	  "table":"jsharmony.v_crmsel",
-	  "actions":"BU", 
+    "table":"jsharmony.v_crmsel",
+    "actions":"BU", 
     "breadcrumbs":{
       "sql": ["select sm_desc from jsharmony.sm ",
               " where sm_id=@sm_id"],
       "sql_params": ["sm_id","sm_id"]
     },
-	  "caption":[0,"Item","Items"],
+    "caption":[0,"Item","Items"],
     "sort":[{"cr_seq":"asc"},{"cr_name":"asc"}], 
-	  "menu":"dev",
+    "menu":"dev",
     "grid_expand_search": 1,
     "rowlimit":500,
     "grid_rowcount":1,
@@ -20,13 +21,13 @@
     "commitlevel": "cell",            "comment3":"cell, row, page, or none",
     "validationlevel": "cell",        "comment4":"cell, or row",
     "hide_system_buttons" : ["export"],    
-	  "buttons": [
-	    {"link":"js:jsh.App[modelid].SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
-	    {"link":"js:jsh.App[modelid].DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
-	  ],
+    "buttons": [
+      {"link":"js:jsh.App[modelid].SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
+      {"link":"js:jsh.App[modelid].DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
+    ],
     "oninit": "jsh.App[modelid].oninit(xmodel);",
     "oncommit": "jsh.App[modelid].oncommit();",
-	  "fields":[
+    "fields":[
       {"name":"crmsel_sel","type":"smallint","actions":"BU","caption":"Select","control":"checkbox",
        "controlparams":{"value_true":"1","value_false":"0","value_hidden":""},"captionstyle": "text-align:center;"},
       {"name":"cr_name","type":"varchar","length":16,"actions":"B","datalock":{"c_id":"c_id"},"control":"label","key":1,
@@ -40,6 +41,6 @@
        "caption":"Seq","captionstyle": "text-align:right;"},
       {"name":"cr_desc","type":"varchar","length":"255","actions":"B","control": "label",
        "validate":["Required"],"caption":"Description"}
-	  ]
-  }	
+    ]
+  }  
 }
