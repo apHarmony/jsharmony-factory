@@ -1064,12 +1064,12 @@ CREATE FUNCTION doc__tbl_iud() RETURNS trigger
         my_doc_scope = case TG_OP when 'DELETE' then OLD.doc_scope else NEW.doc_scope end;
         my_doc_scope_id = case TG_OP when 'DELETE' then OLD.doc_scope_id else NEW.doc_scope_id end;
 
-        if get_cust_id is not null and my_doc_scope not in ('sys_user') then
+        if get_cust_id is not null and my_doc_scope not in ('sys_user_code') then
           sqlcmd := 'select '||get_cust_id||'($1,$2);';
           EXECUTE sqlcmd INTO my_cust_id USING my_doc_scope, my_doc_scope_id;
         end if;
 
-        if get_item_id is not null and my_doc_scope not in ('sys_user') then
+        if get_item_id is not null and my_doc_scope not in ('sys_user_code') then
           sqlcmd := 'select '||get_item_id||'($1,$2);';
           EXECUTE sqlcmd INTO my_item_id USING my_doc_scope, my_doc_scope_id;
         end if;
@@ -2183,7 +2183,7 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
         if TG_OP = 'DELETE' then
           my_toa.cust_id := NULL;
         else
-          if NEW.note_scope in ('sys_user')
+          if NEW.note_scope in ('sys_user_code')
           then 
             my_toa.cust_id := NULL;
           else  
@@ -2197,7 +2197,7 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
         my_toa.audit_subject := NULL;
 
         if TG_OP = 'DELETE' then
-          if OLD.note_scope in ('sys_user')
+          if OLD.note_scope in ('sys_user_code')
           then 
             my_cust_id := NULL;
           else  
@@ -2205,7 +2205,7 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
           end if;  
           my_note_scope := OLD.note_scope;
         else
-          if NEW.note_scope in ('sys_user')
+          if NEW.note_scope in ('sys_user_code')
           then 
             my_cust_id := NULL;
           else  

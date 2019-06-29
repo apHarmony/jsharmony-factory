@@ -1214,7 +1214,7 @@ INSERT INTO {schema}.code2_country_state (code_seq, code_val1, code_va12, code_t
 INSERT INTO {schema}.code2_country_state (code_seq, code_val1, code_va12, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'CANADA', 'NT', 'Northwest Territories', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code2_country_state (code_seq, code_val1, code_va12, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'CANADA', 'NU', 'Nunavut', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code2_country_state (code_seq, code_val1, code_va12, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'CANADA', 'ON', 'Ontario', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code2_country_state (code_seq, code_val1, code_va12, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'CANADA', 'sys_user', 'Prince Edward Island', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO {schema}.code2_country_state (code_seq, code_val1, code_va12, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'CANADA', 'PE', 'Prince Edward Island', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code2_country_state (code_seq, code_val1, code_va12, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'CANADA', 'QC', 'Quebec', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code2_country_state (code_seq, code_val1, code_va12, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'CANADA', 'SK', 'Saskatchewan', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code2_country_state (code_seq, code_val1, code_va12, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'CANADA', 'YT', 'Yukon', NULL, NULL, NULL, NULL, NULL, NULL);
@@ -1337,7 +1337,7 @@ INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, co
 INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'S', 'System', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'O', 'Order', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (5, 'sys_user', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (5, 'sys_user_code', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
@@ -1360,7 +1360,7 @@ INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, c
 INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'S', 'System', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'CT', 'Cust Contact', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (5, 'sys_user', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (5, 'sys_user_code', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 

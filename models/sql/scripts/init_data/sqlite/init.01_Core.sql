@@ -18,13 +18,13 @@ insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, co
 insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'S', 'System', NULL, NULL);
 insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (3, 'O', 'Order', NULL, NULL);
 insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL);
-insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (5, 'sys_user', 'User', NULL, NULL);
+insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (5, 'sys_user_code', 'User', NULL, NULL);
 
 insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL);
 insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'S', 'System', NULL, NULL);
 insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (3, 'CT', 'Cust Contact', NULL, NULL);
 insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL);
-insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (5, 'sys_user', 'User', NULL, NULL);
+insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (5, 'sys_user_code', 'User', NULL, NULL);
 
 insert into {schema}_code_note_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'C', 'Client', NULL, NULL);
 insert into {schema}_code_note_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (3, 'S', 'System', NULL, NULL);
@@ -54,7 +54,7 @@ insert into {schema}_code2_country_state(code_val1,code_va12,code_txt) values ('
 insert into {schema}_code2_country_state(code_val1,code_va12,code_txt) values ('CANADA','NT','Northwest Territories');
 insert into {schema}_code2_country_state(code_val1,code_va12,code_txt) values ('CANADA','NU','Nunavut');
 insert into {schema}_code2_country_state(code_val1,code_va12,code_txt) values ('CANADA','ON','Ontario');
-insert into {schema}_code2_country_state(code_val1,code_va12,code_txt) values ('CANADA','sys_user','Prince Edward Island');
+insert into {schema}_code2_country_state(code_val1,code_va12,code_txt) values ('CANADA','PE','Prince Edward Island');
 insert into {schema}_code2_country_state(code_val1,code_va12,code_txt) values ('CANADA','QC','Quebec');
 insert into {schema}_code2_country_state(code_val1,code_va12,code_txt) values ('CANADA','SK','Saskatchewan');
 insert into {schema}_code2_country_state(code_val1,code_va12,code_txt) values ('CANADA','YT','Yukon');

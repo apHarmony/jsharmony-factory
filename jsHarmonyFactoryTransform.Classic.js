@@ -728,6 +728,7 @@ transform.sql = {
   "code_cust_sts": "ucod_c_sts",
   "cust_sts": "c_sts",
   "item__tbl": "e",
+  "sys_user_code": "PE",
   "@cust_id": "@c_id",
   "@job_id": "@rqst_id",
   "@txt_attrib": "@txt_attrib",

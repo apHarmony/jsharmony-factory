@@ -732,6 +732,7 @@ function jsHarmonyFactoryTransform(module){
     "code_cust_sts": "code_cust_sts",
     "cust_sts": "cust_sts",
     "item__tbl": "item",
+    "sys_user_code": "U",
     "@cust_id": "@cust_id",
     "@job_id": "@job_id",
     "@txt_attrib": "@txt_attrib",

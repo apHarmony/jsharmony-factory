@@ -6359,7 +6359,7 @@ BEGIN
 	IF (@TP = 'D')
 	BEGIN
 	  
-	  if ({schema}.exists_doc('sys_user', @D_sys_user_id) > 0)
+	  if ({schema}.exists_doc('sys_user_code', @D_sys_user_id) > 0)
       begin
 		CLOSE CUR_sys_user_IUD
 		DEALLOCATE CUR_sys_user_IUD
@@ -6438,7 +6438,7 @@ BEGIN
 	IF (@TP='I' OR @TP='D')
 	BEGIN
 	  SET @WK_sys_user_id =  ISNULL(@D_sys_user_id,@I_sys_user_id) 
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'sys_user', @WK_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'sys_user_code', @WK_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
 	END
  
     IF @TP='U' OR @TP='D'
@@ -6448,7 +6448,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_sts, @I_sys_user_sts) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_sts'), @D_sys_user_sts)
       END
 
@@ -6456,7 +6456,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_fname, @I_sys_user_fname) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_fname'), @D_sys_user_fname)
       END
 
@@ -6464,7 +6464,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_mname, @I_sys_user_mname) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_mname'), @D_sys_user_mname)
       END
 
@@ -6472,7 +6472,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_lname, @I_sys_user_lname) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_lname'), @D_sys_user_lname)
       END
 
@@ -6480,7 +6480,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_jobtitle, @I_sys_user_jobtitle) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_jobtitle'), @D_sys_user_jobtitle)
       END
 
@@ -6488,7 +6488,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_bphone, @I_sys_user_bphone) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_bphone'), @D_sys_user_bphone)
       END
 
@@ -6496,7 +6496,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_cphone, @I_sys_user_cphone) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_cphone'), @D_sys_user_cphone)
       END
 
@@ -6504,7 +6504,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_email, @I_sys_user_email) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_email'), @D_sys_user_email)
       END
 
@@ -6512,7 +6512,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_date(@D_sys_user_lastlogin_tstmp, @I_sys_user_lastlogin_tstmp) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_lastlogin_tstmp'), @D_sys_user_lastlogin_tstmp)
       END
 
@@ -6531,7 +6531,7 @@ BEGIN
 		END
 
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_PW'), '*')
 
 	    SET @UPDATE_PW = 'Y'
