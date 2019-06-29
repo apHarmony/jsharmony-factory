@@ -25,7 +25,7 @@
        "lov": { "sql":"select codeval, codetxt from jsharmony.ucod_n_type order by codseq,codetxt", "nodatalock":["c_id"], "blank": 1 },
        "default": "js:_GET['n_type']","readonly": 1,"caption":"Type","captionstyle":"width:43px;text-align:right;"},
       {"name":"n_sts","type":"varchar","length":8,"actions":"BI","control":"dropdown_S","controlstyle":"width:95px;","datalock":{"c_id":"always"},
-       "lov":{"UCOD":"AC1", "schema":"jsharmony", "nodatalock":["c_id"], "blank": 1 }, "default":"A",
+       "lov":{"UCOD":"ac1", "schema":"jsharmony", "nodatalock":["c_id"], "blank": 1 }, "default":"A",
        "caption":"Status","captionstyle":"width:43px;text-align:right;"},
       {"name":"c_name_ext","type":"varchar","length":255,"actions":"","control":"hidden","nl":1},
       {"name":"e_name","type":"varchar","length":255,"actions":"","control":"hidden","nl":1},
