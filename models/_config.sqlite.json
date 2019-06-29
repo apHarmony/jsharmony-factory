@@ -24,6 +24,8 @@
     "txt_title": "txt_tval",
     "txt_bcc": "txt_bcc",
     "txt_type": "txt_type",
+    "timestamp": "TSTMP",
+    "current_user": "CUSER",
 
     "client_id": "c_id",
     "client_name": "c_name",
