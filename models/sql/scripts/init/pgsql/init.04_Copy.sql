@@ -1205,10 +1205,10 @@ Please follow the link below to reset your password:<br />
 ', NULL, '<%-data.SYS_USER_NAME%> User Name
 <%-data.SUPPORT_EMAIL%> Support Email
 <%-data.RESET_LINK%> Reset Link');
-INSERT INTO txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('CMS', 'AGREEMENT', 'HTML', 'Client Agreement', NULL, NULL, 'Client Agreement');
-INSERT INTO txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('CMS', 'AGREEMENT_DONE', 'HTML', 'Client Agreement Complete', '<p>Thank you for completing sign-up.</p>
+INSERT INTO txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('CMS', 'Client/Agreement', 'HTML', 'Client Agreement', NULL, NULL, 'Client Agreement');
+INSERT INTO txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('CMS', 'Client/Agreement_Complete', 'HTML', 'Client Agreement Complete', '<p>Thank you for completing sign-up.</p>
 ', NULL, 'Client Agreement Complete');
-INSERT INTO txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('SMS', 'WELCOME', 'TEXT', 'Welcome', 'Your account has been initialized.', NULL, 'SMS Welcome Message');
+INSERT INTO txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('SMS', 'Client/Welcome_SMS', 'TEXT', 'Welcome', 'Your account has been initialized.', NULL, 'SMS Welcome Message');
 INSERT INTO txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('CMS', 'Client/Dashboard', 'HTML', 'Client Dashboard Message of the Day', '<p>Welcome to the jsHarmony Client Portal</p>
 ', NULL, 'Client Dashboard Message of the Day');
 INSERT INTO txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('CMS', 'Dashboard__model', 'HTML', 'Dashboard Message of the Day', '<p>Welcome to the jsHarmony System</p>
