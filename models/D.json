@@ -71,7 +71,7 @@
      "download_button": "Download Document",
      "upload_button": "Upload New File",
      "delete_button": "Delete File",
-     "data_folder": "D"
+     "data_folder": "d"
        },
       "validate": [ "Required" ]}
 	],
