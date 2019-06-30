@@ -39,7 +39,7 @@
 	  ],
     "oninit": "jsh.App[modelid].oninit();"
   },
-  "X_SMLW_INSERT": {
+  "Dev/Menu_Exec_Insert": {
       "layout": "exec",
       "title": "Add Menu Item",
       "actions": "U",

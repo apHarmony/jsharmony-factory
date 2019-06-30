@@ -77,9 +77,10 @@ jsh.App[modelid] = new (function(){
     }, function (success) { //onAccept
       _.each(fields, function (val, key) { data[key] = jsh.$root('.Menu_InsertPopup .' + key).val(); });
       if (!validate.ValidateControls('I', data, '')) return;
-      XForm.prototype.XExecutePost('X_SMLW_INSERT', data, function (rslt) { //On success
-        if ('_success' in rslt) { 
-          jsh.App[modelid].select_sm_id_auto(parseInt(rslt.X_SMLW_INSERT[0].sm_id_auto), function(){
+      var insertTarget = xmodel.module_namespace+'Dev/Menu_Exec_Insert';
+      XForm.prototype.XExecutePost(insertTarget, data, function (rslt) { //On success
+        if ('_success' in rslt) {
+          jsh.App[modelid].select_sm_id_auto(parseInt(rslt[insertTarget][0].sm_id_auto), function(){
             success(); 
             jsh.XPage.Refresh(); 
           });
@@ -133,7 +134,7 @@ jsh.App[modelid] = new (function(){
     }
 
     XExt.Confirm('Are you sure you want to delete \''+item_desc+'\'?',function(){ 
-      XForm.prototype.XExecutePost('X_SMLW_DELETE', { sm_id_auto: context_item }, function (rslt) { //On success
+      XForm.prototype.XExecutePost(xmodel.module_namespace+'X_SMLW_DELETE', { sm_id_auto: context_item }, function (rslt) { //On success
         if ('_success' in rslt) { 
           //Select parent
           if(new_sm_id_auto) XExt.TreeSelectNode(jsh.$root('.sm_id_auto.tree'),new_sm_id_auto);
