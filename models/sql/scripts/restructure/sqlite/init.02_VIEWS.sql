@@ -305,9 +305,9 @@ CREATE VIEW {schema}_v_doc_ext AS
     null AS title_head,
     null AS title_detail,
     doc__tbl.doc_scope AS doc_datalock,
-    null AS cust_name,
-    null AS cust_name_ext,
-    null AS item_name,
+    {schema}.get_cust_name(doc__tbl.cust_id) AS cust_name,
+    {schema}.get_cust_name_ext(doc__tbl.cust_id) AS cust_name_ext,
+    {schema}.get_item_name(doc__tbl.item_id) AS item_name,
     doc__tbl.rowid rowid
    FROM {schema}_doc__tbl doc__tbl;
 
@@ -419,10 +419,10 @@ CREATE VIEW {schema}_v_note AS
     note__tbl.note_scope_id,
     note__tbl.note_sts,
     note__tbl.cust_id,
-    null AS cust_name,
-    null AS cust_name_ext,
+    {schema}.get_cust_name(note__tbl.cust_id) AS cust_name,
+    {schema}.get_cust_name_ext(note__tbl.cust_id) AS cust_name_ext,
     note__tbl.item_id,
-    null AS item_name,
+    {schema}.get_item_name(note__tbl.item_id) AS item_name,
     note__tbl.note_type,
     note__tbl.note_body,
     {schema}.my_to_date(note__tbl.note_etstmp) AS note_dt,
@@ -456,9 +456,9 @@ CREATE VIEW {schema}_v_note_ext AS
     note__tbl.note_snotes,
     null AS title_head,
     null AS title_detail,
-    null AS cust_name,
-    null AS cust_name_ext,
-    null AS item_name,
+    {schema}.get_cust_name(note__tbl.cust_id) AS cust_name,
+    {schema}.get_cust_name_ext(note__tbl.cust_id) AS cust_name_ext,
+    {schema}.get_item_name(note__tbl.item_id) AS item_name,
     note__tbl.rowid rowid
    FROM {schema}_note__tbl note__tbl;
 

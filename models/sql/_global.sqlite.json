@@ -356,6 +356,24 @@
       "(select {schema}_cust_user.cust_id from {schema}_cust_user where {schema}_cust_user.sys_user_id={schema}.my_cust_user())"
     ]
   },
+  "{schema}.get_cust_name":{
+    "params": ["col"],
+    "sql": [
+      "(select null)"
+    ]
+  },
+  "{schema}.get_cust_name_ext":{
+    "params": ["col"],
+    "sql": [
+      "(select null)"
+    ]
+  },
+  "{schema}.get_item_name":{
+    "params": ["col"],
+    "sql": [
+      "(select null)"
+    ]
+  },
   "{schema}.doc_ctgr_table":"{schema}_code2_doc_scope_doc_ctgr",
   "{schema}.my_db_user":{
     "params": [],
