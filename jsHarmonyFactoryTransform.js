@@ -735,7 +735,7 @@ function jsHarmonyFactoryTransform(module){
     "new_client_result": "new_client_result",
     "cust_agreement_tstmp": "cust_agreement_tstmp",
     "cust": "cust",
-    "code_cust_sts": "code_cust_sts",
+    "code_sys_cust_sts": "code_sys_cust_sts", //"code_cust_sts"
     "cust_sts": "cust_sts",
     "item__tbl": "item",
     "sys_user_code": "U",

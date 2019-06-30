@@ -729,7 +729,7 @@ transform.sql = {
   "new_client_result": "new_client_result",
   "cust_agreement_tstmp": "c_atstmp",
   "cust": "c",
-  "code_cust_sts": "ucod_c_sts",
+  "code_sys_cust_sts": "ucod_c_sts",
   "cust_sts": "c_sts",
   "item__tbl": "e",
   "sys_user_code": "PE",
