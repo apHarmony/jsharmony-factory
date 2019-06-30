@@ -173,7 +173,8 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
       'barcode_server': _this.Config.barcode_settings.server,
       'scanner_server': _this.Config.scanner_settings.server,
       'user_id': function (req) { return req.user_id; },
-      'user_name': function (req) { return req.user_name; }
+      'user_name': function (req) { return req.user_name; },
+      'help_view': function (req) { return _this.getHelpView(req); },
     },
     onLoad: function (jsh) {
     }
@@ -229,7 +230,8 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
       'user_name': function (req) { return req.user_name; },
       'company_id': function (req) { return req.gdata[jsh.map.client_id]; },
       'company_name': function (req) { return req.gdata[jsh.map.client_name]; },
-      'barcode_server': _this.Config.barcode_settings.server
+      'barcode_server': _this.Config.barcode_settings.server,
+      'help_view': function (req) { return _this.getHelpView(req); },
     }
   };
   jshconfig_client.globalparams[jsh.map.client_id] = function (req) { return req.gdata[jsh.map.client_id]; }
@@ -268,6 +270,16 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
     }
   ];
   return jshconfig_client;
+}
+
+jsHarmonyFactory.prototype.getHelpView = function(req){
+  if(!this.Config.help_view) return null;
+  if(_.isString(this.Config.help_view)) return this.Config.help_view;
+  for(var siteid in this.Config.help_view){
+    if(req.jshsite.id==siteid) return this.Config.help_view[siteid];
+  }
+  return '';
+  //throw new Error("help_view not defined in _config.json for '"+siteid+"' site");
 }
 
 jsHarmonyFactory.prototype.VerifyConfig = function(){

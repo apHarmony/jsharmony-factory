@@ -21,7 +21,7 @@ var _ = require('lodash');
 var Helper = require('jsharmony/Helper');
 
 function getHelpURL(req, jsh, jshFactory, helpid){
-  var help_view = getHelpView(req, jsh, jshFactory);
+  var help_view = jshFactory.getHelpView(req);
   var help_view_model = jsh.getModel(req, help_view);
   if(!help_view_model) return '';
   var helpid = helpid||'';
@@ -29,18 +29,9 @@ function getHelpURL(req, jsh, jshFactory, helpid){
 }
 
 function getHelpOnClick(req, jsh, jshFactory) {
-  var help_view = getHelpView(req, jsh, jshFactory);
+  var help_view = jshFactory.getHelpView(req);
   if(!help_view) return req.jshsite.instance+'.XExt.Alert(\'Help not initialized.\'); return false;';
   return jsh.getURL_onclick(req, undefined, help_view);
-}
-function getHelpView(req, jsh, jshFactory){
-  if(!jshFactory.Config.help_view) return null;
-  if(_.isString(jshFactory.Config.help_view)) return jshFactory.Config.help_view;
-  for(var siteid in jshFactory.Config.help_view){
-    if(req.jshsite.id==siteid) return jshFactory.Config.help_view[siteid];
-  }
-  return '';
-  //throw new Error("help_view not defined in _config.json for '"+siteid+"' site");
 }
 
 exports = module.exports = function(req, res, jsh, helpid, onComplete){

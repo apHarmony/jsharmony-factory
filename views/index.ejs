@@ -19,7 +19,7 @@
   <% if(req.isAuthenticated){ %>
     <div class="xtoplinks"><img src="/images/toplinks_corner.png" class="xtoplinks_corner" alt="" title="" />
       <b><%=jsh.Config.app_name%>:</b>&nbsp; <%=req.user_name%> &nbsp;|&nbsp; 
-      <a class="toplink_help static" href="<%-req.baseurl%><%=req.jshsite.help_view%>/" onclick="<%=req.jshsite.instance%>.XExt.popupForm('<%=req.jshsite.help_view%>'); return false;">Help</a> &nbsp;|&nbsp; 
+      <a class="toplink_help static" href="<%-req.baseurl%><%=req.jshsite.globalparams.help_view%>/" onclick="<%=req.jshsite.instance%>.XExt.popupForm('<%=req.jshsite.globalparams.help_view%>'); return false;">Help</a> &nbsp;|&nbsp; 
       <a href="/logout">Logout</a>
     </div>
   <% } %>
