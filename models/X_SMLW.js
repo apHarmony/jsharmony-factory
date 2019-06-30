@@ -61,10 +61,10 @@ jsh.App[modelid] = new (function(){
     }
     var data = { 'sm_id_parent': jsh.xContentMenuItemData.id };
     var validate = new XValidate();
-    _.each(fields, function (val, key) { validate.AddControlValidator('.X_SMLW_InsertPopup .' + key, '_obj.' + key, val.caption, 'BI', val.validators); });
+    _.each(fields, function (val, key) { validate.AddControlValidator('.Menu_InsertPopup .' + key, '_obj.' + key, val.caption, 'BI', val.validators); });
 
-    XExt.CustomPrompt('.X_SMLW_InsertPopup','\
-      <div class="X_SMLW_InsertPopup xdialogbox xpromptbox" style="width:360px;"> \
+    XExt.CustomPrompt('.Menu_InsertPopup','\
+      <div class="Menu_InsertPopup xdialogbox xpromptbox" style="width:360px;"> \
         <h3>Add Child Item</h3> \
         <div align="left" style="padding-top:15px;"> \
           <div style="width:100px;display:inline-block;margin-bottom:8px;text-align:right;">Menu ID:</div> <input type="text" class="sm_name" style="width:150px;" maxlength="255" /> (ex. ORDERS)<br/> \
@@ -73,9 +73,9 @@ jsh.App[modelid] = new (function(){
         </div> \
       </div> \
     ',function(){ //onInit
-      window.setTimeout(function(){jsh.$root('.X_SMLW_InsertPopup .sm_name').focus();},1);
+      window.setTimeout(function(){jsh.$root('.Menu_InsertPopup .sm_name').focus();},1);
     }, function (success) { //onAccept
-      _.each(fields, function (val, key) { data[key] = jsh.$root('.X_SMLW_InsertPopup .' + key).val(); });
+      _.each(fields, function (val, key) { data[key] = jsh.$root('.Menu_InsertPopup .' + key).val(); });
       if (!validate.ValidateControls('I', data, '')) return;
       XForm.prototype.XExecutePost('X_SMLW_INSERT', data, function (rslt) { //On success
         if ('_success' in rslt) { 
