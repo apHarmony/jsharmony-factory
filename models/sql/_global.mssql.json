@@ -15,7 +15,7 @@
                    "insert into {schema}.menu__tbl (menu_id,menu_id_parent,menu_group,menu_seq,menu_name,menu_desc,menu_sts)",
                    "  select (select max(menu_id)+1 from {schema}.menu__tbl),menu_id,menu_group,coalesce(menu_seq,menu_id)+1,@menu_name,@menu_desc,'ACTIVE' from {schema}.menu__tbl where menu_id=@menu_id_parent;",
                    "select SCOPE_IDENTITY() menu_id_auto;"],
-  "menu_editor_lov":"select menu_id as code_id,menu_id_parent as code_parent_id,menu_id_auto as code_val,menu_desc as code_txt,'folder' as codeicon from {schema}.menu__tbl where 1=1 %%%DATALOCKS%%% order by menu_group desc,coalesce(menu__tbl.menu_seq,menu__tbl.menu_id),menu_name,menu__tbl.menu_id",
+  "menu_editor_lov":"select menu_id as code_id,menu_id_parent as code_parent_id,menu_id_auto as code_val,menu_desc as code_txt,'folder' as code_icon from {schema}.menu__tbl where 1=1 %%%DATALOCKS%%% order by menu_group desc,coalesce(menu__tbl.menu_seq,menu__tbl.menu_id),menu_name,menu__tbl.menu_id",
   "menu_group_lov":"select * from (values('S','Main'),('C','Client')) as COD(code_val,code_txt)",
   "JSHARMONY_FACTORY_INSTALLED":"select case when isnull((select count(*) from information_schema.columns where audit_table_name = 'single' and table_schema='{schema}'),0) > 0 then 1 else 0 end JSHARMONY_FACTORY_INSTALLED"
 }
