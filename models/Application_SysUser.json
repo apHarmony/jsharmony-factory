@@ -16,6 +16,6 @@
   "PE_NEW": {
     "inherits": "PE",
     "title":"New System User",
-    "oninsert": "XExt.navTo(jsh._BASEURL+xmodel.module_namespace+'PEW?action=update&pe_id='+urlkeys.pe_id); return false;"
+    "oninsert": "XExt.navTo(jsh._BASEURL+xmodel.module_namespace+'PEW?action=update&pe_id='+urlkeys.pe_id); jsh.XPage.RefreshParent(); return false;"
   }
 }
