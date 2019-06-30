@@ -30,6 +30,10 @@ var crypto = require('crypto');
 var moment = require('moment');
 
 function ModuleFunctions(module){
+  
+  function _transform(elem){
+    return module.transform.mapping[elem];
+  }
 
   this.LOG_DOWNLOAD = function (req, res, next) {
     var verb = req.method.toLowerCase();
@@ -44,7 +48,8 @@ function ModuleFunctions(module){
     var appsrv = this;
     var jsh = this.jsh;
     var dbtypes = appsrv.DB.types;
-    var model = jsh.getModel(req, module.namespace + 'LOG');
+
+    var model = jsh.getModel(req, module.namespace + _transform('Admin/Log'));
     
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
     
@@ -111,7 +116,7 @@ function ModuleFunctions(module){
     var appsrv = this;
     var jsh = this.jsh;
     var dbtypes = appsrv.DB.types;
-    var model = jsh.getModel(req, module.namespace + 'DEV_DB_SCRIPTS');
+    var model = jsh.getModel(req, module.namespace + _transform('Dev/DBScripts'));
     
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
@@ -198,7 +203,7 @@ function ModuleFunctions(module){
     var appsrv = this;
     var jsh = this.jsh;
     var dbtypes = appsrv.DB.types;
-    var model = jsh.getModel(req, module.namespace + 'DEV_DB_SCHEMA');
+    var model = jsh.getModel(req, module.namespace + _transform('Dev/DBSchema'));
     
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
@@ -237,7 +242,7 @@ function ModuleFunctions(module){
     var appsrv = this;
     var jsh = this.jsh;
     var dbtypes = appsrv.DB.types;
-    var model = jsh.getModel(req, module.namespace + 'DEV_MODELS');
+    var model = jsh.getModel(req, module.namespace + _transform('Dev/Models'));
     
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
@@ -249,11 +254,11 @@ function ModuleFunctions(module){
       if (!_.includes(actions, Q.action)) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
 
       if(Q.action=='namespace_conflicts'){
-        appsrv.ExecRecordset(req._DBContext, "select sm_cmd,sm_name from jsharmony.sm order by sm_cmd", [], {}, function(err, rslt){
+        appsrv.ExecRecordset(req._DBContext, "select "+_transform('menu_cmd')+","+_transform('menu_name')+" from "+module.schema+"."+_transform('menu__tbl')+" order by "+_transform('menu_cmd'), [], {}, function(err, rslt){
           var menumodels = {};
           if(rslt && rslt[0]){
             _.each(rslt[0], function(row){
-              menumodels[row.sm_cmd] = row.sm_name;
+              menumodels[row[_transform('menu_cmd')]] = row[_transform('menu_name')];
             });
           }
           var fullmodelids = _.keys(jsh.Models);
