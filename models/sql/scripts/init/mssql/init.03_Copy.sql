@@ -9,7 +9,7 @@ INSERT INTO {schema}.code_ahc (code_seq, code_val, code_txt, code_code, code_end
 INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'CSYSADMIN', 'Administrator', NULL, NULL, NULL);
 INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (2, 'ACTIVE', 'CX_B', 'Browse', NULL, NULL, NULL);
 INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (3, 'ACTIVE', 'CX_X', 'Entry / Update', NULL, NULL, NULL);
-INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'context_user', 'Client User', NULL, NULL, NULL);
+INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'CUSER', 'Client User', NULL, NULL, NULL);
 INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (0, 'ACTIVE', 'C*', 'All Users', NULL, NULL, NULL);
 
 
@@ -62,7 +62,7 @@ INSERT INTO {schema}.cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_n
 INSERT INTO {schema}.cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (2800, NULL, 'CSYSADMIN');
 INSERT INTO {schema}.cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (280000, NULL, 'CSYSADMIN');
 INSERT INTO {schema}.cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (200, NULL, 'CX_X');
-INSERT INTO {schema}.cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (200, NULL, 'context_user');
+INSERT INTO {schema}.cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (200, NULL, 'CUSER');
 
 
 

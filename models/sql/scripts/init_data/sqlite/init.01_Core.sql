@@ -153,7 +153,7 @@ insert into {schema}_code2_country_state(code_val1,code_va12,code_txt) values ('
 INSERT INTO {schema}_cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'CSYSADMIN', 'Administrator', NULL,NULL);
 INSERT INTO {schema}_cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_code, cust_role_attrib) VALUES (2, 'ACTIVE', 'CX_B', 'Browse', NULL, NULL);
 INSERT INTO {schema}_cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_code, cust_role_attrib) VALUES (3, 'ACTIVE', 'CX_X', 'Entry / Update', NULL, NULL);
-INSERT INTO {schema}_cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'context_user', 'Client User', NULL, NULL);
+INSERT INTO {schema}_cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'CUSER', 'Client User', NULL, NULL);
 INSERT INTO {schema}_cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_code, cust_role_attrib) VALUES (0, 'ACTIVE', 'C*', 'All Users', NULL, NULL);
 
 INSERT INTO {schema}_param__tbl (param_process, param_attrib, param_desc, param_type, code_name, is_param_app, is_param_user, is_param_sys) VALUES ('EMAIL', 'NOTIF_ADMIN', 'Notifications Email - Administrative', 'C', NULL,  1, 0, 0);
@@ -250,7 +250,7 @@ INSERT INTO {schema}_cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_n
 INSERT INTO {schema}_cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (270, NULL, 'CSYSADMIN');
 INSERT INTO {schema}_cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (2700, NULL, 'CSYSADMIN');
 INSERT INTO {schema}_cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (200, NULL, 'CX_X');
-INSERT INTO {schema}_cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (200, NULL, 'context_user');
+INSERT INTO {schema}_cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (200, NULL, 'CUSER');
 
 INSERT INTO {schema}_code2_app (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('doc_scope_doc_ctgr', 'Scope - Documents', NULL, NULL, '{schema}');
 

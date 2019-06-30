@@ -725,7 +725,7 @@ CREATE FUNCTION cust_user_role_iud() RETURNS trigger
                       inner join cust_user on cust_user.cust_id = CF.cust_id
                       where cust_user.sys_user_id = NEW.sys_user_id
 		        and CF.CF_TYPE = 'LVL2') THEN
-	    IF NEW.cust_role_name not in ('C*','context_user','CMGR','CADMIN') THEN
+	    IF NEW.cust_role_name not in ('C*','CUSER','CMGR','CADMIN') THEN
               RAISE EXCEPTION  'Role % not compatible with LVL2', coalesce(NEW.cust_role_name,'');
             END IF;
             

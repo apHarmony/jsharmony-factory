@@ -4831,7 +4831,7 @@ BEGIN
                   where cust_user.sys_user_id = @I_sys_user_id
 				    and CF.CF_TYPE = 'LVL2')
       BEGIN
-	    IF @I_cust_role_name not in ('C*','context_user','CMGR','CADMIN')
+	    IF @I_cust_role_name not in ('C*','CUSER','CMGR','CADMIN')
         BEGIN
           EXEC [jsharmony].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Invalid Role'
           raiserror('Role not compatible with LVL2',16,1)
