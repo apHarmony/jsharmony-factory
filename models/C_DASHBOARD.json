@@ -6,7 +6,7 @@
     "caption":["","Dashboard","Dashboard"],
     "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
     "actions":"B",
-    "menu":"c_dashboard",
+    "menu":"C_DASHBOARD",
     "sqlselect": "select (select txt_val from jsharmony.txt where txt_process='CMS' and txt_attrib='C_DASHBOARD') as motd from jsharmony.dual where 1=1 %%%DATALOCKS%%%",
     "nokey": 1,
     "onload":"jsh.$root('.DASHBOARD_MOTD').html(xmodel.controller.form.Data.motd);",
