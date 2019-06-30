@@ -105,7 +105,7 @@ jsh.App[modelid].getSMbyID = function(sm_id){
   if(!sm_id) return null;
   var lov = xmodel.controller.form.LOVs.sm_id_auto;
   for(var i=0;i<lov.length;i++){
-    if(lov[i][jsh.uimap.codeid]==sm_id.toString()) return lov[i];
+    if(lov[i][jsh.uimap.code_id]==sm_id.toString()) return lov[i];
   }
   return null;
 }
@@ -123,7 +123,7 @@ jsh.App[modelid].item_delete = function(context_item){
     sm_parent = jsh.App[modelid].getSMbyID(sm[jsh.uimap.code_parent_id]);
     var lov = xmodel.controller.form.LOVs.sm_id_auto;
     for(var i=0;i<lov.length;i++){
-      if(lov[i][jsh.uimap.code_parent_id] && (lov[i][jsh.uimap.code_parent_id].toString()==sm[jsh.uimap.codeid].toString())) has_children = true;
+      if(lov[i][jsh.uimap.code_parent_id] && (lov[i][jsh.uimap.code_parent_id].toString()==sm[jsh.uimap.code_id].toString())) has_children = true;
     }
   }
 
