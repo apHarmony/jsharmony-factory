@@ -172,8 +172,8 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
   if (_this.jsh.Config.debug_params.report_debug) console.log(dbdata);
   var thisapp = this.AppSrv;
   var dbtypes = thisapp.DB.types;
-  var d_id = null;
-  var rq_id = null;
+  var doc_id = null;
+  var queue_id = null;
   var saveD = function (callback) {
     let sqlparams = {};
     sqlparams[_transform('doc_scope')] = job.doc_scope;
@@ -185,18 +185,18 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
       [dbtypes.VarChar(8), dbtypes.BigInt, dbtypes.VarChar(8), dbtypes.VarChar(255), dbtypes.BigInt], 
       sqlparams, function (err, rslt) {
       if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting document', -99999); }
-      if (err == null) d_id = rslt;
+      if (err == null) doc_id = rslt;
       callback(err);
     });
   };
   var saveRQ = function (callback) {
-    var rq_message = job.rq_message || '{}';
-    var rq_message_obj = {};
+    var queue_message = job.queue_message || '{}';
+    var queue_message_obj = {};
     try {
-      rq_message_obj = JSON.parse(rq_message);
+      queue_message_obj = JSON.parse(queue_message);
     }
     catch (ex) {
-      _this.jsh.Log.error('Error parsing rq_message: ' + rq_message_obj);
+      _this.jsh.Log.error('Error parsing '+_transform('queue_message')+': ' + queue_message_obj);
     }
     let sqlparams = {};
     sqlparams[_transform('queue_name')] = job.queue_name;
@@ -204,12 +204,12 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
       [dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
       if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting remote queue request', -99999); }
       if (err == null) {
-        rq_id = rslt;
-        rq_message_obj.url = '/_dl/'+this.jshFactory.namespace+_transform('Queue__model')+'/' + rq_id + '/RQ_FILE';
-        rq_message_obj.filetype = 'pdf';
+        queue_id = rslt;
+        queue_message_obj.url = '/_dl/'+this.jshFactory.namespace+_transform('Queue__model')+'/' + queue_id + '/'+_transform('queue__tbl')+'_file';
+        queue_message_obj.filetype = 'pdf';
         let sqlparams = {};
-        sqlparams[_transform('queue_id')] = rq_id;
-        sqlparams[_transform('queue_message')] = JSON.stringify(rq_message_obj);
+        sqlparams[_transform('queue_id')] = queue_id;
+        sqlparams[_transform('queue_message')] = JSON.stringify(queue_message_obj);
         _this.db.Command('jobproc', "jobproc_saverq_message", 
           [dbtypes.BigInt, dbtypes.VarChar(dbtypes.MAX)], 
           sqlparams, function (err, rslt) {
@@ -240,7 +240,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
         if (job.email_attach && tmppath){
           fs.exists(tmppath, function(exists){
             if(!exists) return cb(new Error('Report output does not exist'));
-            var filename = 'D' + (d_id||'0') + '.pdf';
+            var filename = _transform('doc') + (doc_id||'0') + '.pdf';
             if(job.email_attach.toString().substr(0,9)=='filename:') filename = job.email_attach.substr(9);
             attachments.push({ filename: filename, content: fs.createReadStream(tmppath) });
             return cb();
@@ -249,11 +249,11 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
         else return cb();
       },
       function(cb){
-        if (job.email_d_id){
-          var email_d_id_path = _this.jsh.Config.datadir + '/D/D_FILE_' + job.email_d_id;
-          fs.exists(email_d_id_path, function(exists){
-            if(!exists) return cb(new Error('Email d_id does not exist'));
-            attachments.push({ filename: job.email_d_filename, content: fs.createReadStream(email_d_id_path) });
+        if (job.email_doc_id){
+          var email_doc_id_path = _this.jsh.Config.datadir + '/'+_transform('doc')+'/'+_transform('doc')+'_file_' + job.email_doc_id;
+          fs.exists(email_doc_id_path, function(exists){
+            if(!exists) return cb(new Error('Email '+_transform('email_doc_id')+' does not exist'));
+            attachments.push({ filename: job.email_doc_filename, content: fs.createReadStream(email_doc_id_path) });
             return cb();
           });
         }
@@ -273,15 +273,15 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
   }
   
   var execarr = [];
-  if (job.d_scope && tmppath) {
+  if (job.doc_scope && tmppath) {
     execarr.push(saveD);
-    execarr.push(function (cb) { HelperFS.copyFile(tmppath, (_this.jsh.Config.datadir + 'D/d_file_' + d_id), cb); });
+    execarr.push(function (cb) { HelperFS.copyFile(tmppath, (_this.jsh.Config.datadir +_transform('doc')+'/'+_transform('doc')+'_file_' + doc_id), cb); });
   }
-  if (job.rq_name && tmppath) {
+  if (job.queue_name && tmppath) {
     execarr.push(saveRQ);
-    execarr.push(function (cb) { HelperFS.copyFile(tmppath, (_this.jsh.Config.datadir + 'RQ/rq_file_' + rq_id), cb); });
+    execarr.push(function (cb) { HelperFS.copyFile(tmppath, (_this.jsh.Config.datadir +_transform('queue__tbl')+'/'+_transform('queue__tbl')+'_file_' + queue_id), cb); });
   }
-  if (job.n_scope) execarr.push(saveN);
+  if (job.note_scope) execarr.push(saveN);
   if (job.sms_to) execarr.push(sendSMS);
   if (job.email_to) execarr.push(sendEMAIL);
   
@@ -502,7 +502,7 @@ AppSrvJobProc.prototype.PopQueue = function (req, res, queue_name, queueresult, 
     if (onComplete) onComplete(null);
     _this.SetSubscriberQueueResult(queueresult.ID, queueresult.RSLT, queueresult.NOTES, function () {
       //Delete request file, if applicable
-      if (queueresult.RSLT == 'OK') HelperFS.tryUnlink((_this.jsh.Config.datadir + 'RQ/rq_file_' + queueresult.ID), onComplete);
+      if (queueresult.RSLT == 'OK') HelperFS.tryUnlink((_this.jsh.Config.datadir +_transform('queue__tbl')+'/'+_transform('queue__tbl')+'_file_' + queueresult.ID), onComplete);
       else if (onComplete) onComplete();
     });
   });
