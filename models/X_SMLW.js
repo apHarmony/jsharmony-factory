@@ -8,7 +8,7 @@ jsh.App[modelid] = new (function(){
       if(!_this.sm_id_auto) _this.sm_id_auto = xmodel.controller.form.Data.sm_id_auto;
       return _this.sm_id_auto;
     };
-    jsh.$root('.sm_id_auto.tree').data('oncontextmenu','return '+jsh.getInstance()+'.App['+modelid+'].oncontextmenu(this, n);');
+    jsh.$root('.sm_id_auto.tree').data('oncontextmenu','return '+XExt.getJSApp()+'.oncontextmenu(this, n);');
   }
 
   this.oncontextmenu = function(ctrl, n){
