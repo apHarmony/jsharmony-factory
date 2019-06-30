@@ -3,27 +3,33 @@ jsh.App[modelid] = new (function(){
 
   this.DBs = {};  //Populated onroute
 
+  this.getFormElement = function(){
+    return jsh.$root('.xformcontainer.xelem'+xmodel.class);
+  }
+
   this.oninit = function(xmodel) {
+    var jform = _this.getFormElement();
     XForm.prototype.XExecute('../_funcs/DEV_DB_SCHEMA', { }, function (rslt) { //On success
       if ('_success' in rslt) { 
         _this.RenderDBListing(rslt.dbs);
       }
     });
-    jsh.$root('.DEV_DB_SCHEMA_db').change(function(){
-      var db = jsh.$root('.DEV_DB_SCHEMA_db').val();
-      if(!db) jsh.$root('.DEV_DB_SCHEMA_run').hide();
+    jform.find('.db').change(function(){
+      var db = jform.find('.db').val();
+      if(!db) jform.find('.run').hide();
       else _this.GetSchema(db);
     });
   }
 
   this.RenderDBListing = function(dbs){
-    var jobj = jsh.$root('.DEV_DB_SCHEMA_db');
+    var jform = _this.getFormElement();
+    var jobj = jform.find('.db');
     if(dbs.length > 1){
-      jsh.$root('.DEV_DB_SCHEMA_dbselect').show();
+      jform.find('.dbselect').show();
       jobj.append($('<option>',{value:''}).text('Please select...'));
     }
     else {
-      jsh.$root('.DEV_DB_SCHEMA_dbselect').hide();
+      jform.find('.dbselect').hide();
       jobj.empty();
     }
     for(var i=0;i<dbs.length;i++){
@@ -50,7 +56,8 @@ jsh.App[modelid] = new (function(){
   }
 
   this.RenderSchema = function(dbid, schema, funcs){
-    var jobj = jsh.$root('.DEV_DB_SCHEMA_rslt');
+    var jform = _this.getFormElement();
+    var jobj = jform.find('.rslt');
     jobj.html('');
     $('<div>\
       <a href="#" class="show_all" onclick="return false;">[Show All]</a> | \
@@ -130,7 +137,7 @@ jsh.App[modelid] = new (function(){
       $(html).appendTo(jobj);
     });
     $('.expandable').click(function(){ _this.getTable(this).toggle(); });
-    //jsh.$root('.DEV_DB_SCHEMA_rslt').text(JSON.stringify(schema));
+    //jform.find('.rslt').text(JSON.stringify(schema));
   }
 
 })();

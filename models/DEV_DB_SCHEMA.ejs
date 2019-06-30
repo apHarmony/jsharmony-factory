@@ -1,13 +1,15 @@
 <style type="text/css">
-.DEV_DB_SCHEMA_rslt table { border-collapse: collapse; }
-.DEV_DB_SCHEMA_rslt table td,.DEV_DB_SCHEMA_rslt table th { padding:3px 10px; border:1px solid black; }
-.DEV_DB_SCHEMA_rslt table th { background-color:#f6f6f6; }
-.DEV_DB_SCHEMA_rslt h2 { margin-top:20px; }
-.DEV_DB_SCHEMA_rslt .table_name,.DEV_DB_SCHEMA_rslt .func_name { font-weight:bold; display:inline-block;margin-top:3px; }
+.xformcontainer.xelem<%=model.class%> .rslt table { border-collapse: collapse; }
+.xformcontainer.xelem<%=model.class%> .rslt table td,
+.xformcontainer.xelem<%=model.class%> .rslt table th { padding:3px 10px; border:1px solid black; }
+.xformcontainer.xelem<%=model.class%> .rslt table th { background-color:#f6f6f6; }
+.xformcontainer.xelem<%=model.class%> .rslt h2 { margin-top:20px; }
+.xformcontainer.xelem<%=model.class%> .rslt .table_name,
+.xformcontainer.xelem<%=model.class%> .rslt .func_name { font-weight:bold; display:inline-block;margin-top:3px; }
 </style>
-<div class="DEV_DB_SCHEMA_dbselect">
+<div class="dbselect">
   Database:
-  <select class="DEV_DB_SCHEMA_db"></select>
+  <select class="db"></select>
 </div>
-<div class="DEV_DB_SCHEMA_rslt">
+<div class="rslt">
 </div>

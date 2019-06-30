@@ -1,5 +1,5 @@
 <style type="text/css">
-.DEV_DB_SCRIPTS_listing {
+.xformcontainer.xelem<%=model.class%> .listing {
   border:1px solid #000;
   float:left;
   padding:10px 15px;
@@ -8,10 +8,10 @@
   height:500px;
   overflow:scroll;
 }
-.DEV_DB_SCRIPTS_listing li {
+.xformcontainer.xelem<%=model.class%> .listing li {
   padding-top:4px;
 }
-.DEV_DB_SCRIPTS_rslt {
+.xformcontainer.xelem<%=model.class%> .rslt {
   border:1px solid #000;
   float:left;
   padding:10px 15px;
@@ -20,26 +20,26 @@
   height:500px;
   overflow:scroll;
 }
-.DEV_DB_SCRIPTS_runas {
+.xformcontainer.xelem<%=model.class%> .runas {
   clear:both;
   padding-top:10px;
 }
-.DEV_DB_SCRIPTS_runas label {
+.xformcontainer.xelem<%=model.class%> .runas label {
   display:inline-block;
   width:70px;
 }
 </style>
-<div class="DEV_DB_SCRIPTS_dbselect">
+<div class="dbselect">
   Database:
-  <select class="DEV_DB_SCRIPTS_db"></select>
+  <select class="db"></select>
 </div>
-<div class="DEV_DB_SCRIPTS_run" style="display:none;">
+<div class="run" style="display:none;">
   <div style="padding-bottom:8px;">Please click on a script below to run the database operation:</div>
-  <div class="DEV_DB_SCRIPTS_listing"></div>
-  <pre class="DEV_DB_SCRIPTS_rslt"></pre>
-  <div class="DEV_DB_SCRIPTS_runas">
+  <div class="listing"></div>
+  <pre class="rslt"></pre>
+  <div class="runas">
     <b>Run as:</b><br/>
-    <label>User:</label><input type="text" class="DEV_DB_SCRIPTS_user" /><br/>
-    <label>Password:</label><input type="password" class="DEV_DB_SCRIPTS_password" />
+    <label>User:</label><input type="text" class="user" /><br/>
+    <label>Password:</label><input type="password" class="password" />
   </div>
 </div>

@@ -8,10 +8,15 @@ jsh.App[modelid] = new (function(){
   this.panelNSConflicts = null;
   this.panelUtilities = null;
 
+  this.getFormElement = function(){
+    return jsh.$root('.xformcontainer.xelem'+xmodel.class);
+  }
+
   this.oninit = function(xmodel) {
-    this.panelViewer = jsh.$root('.DEV_MODELS_viewer');
-    this.panelNSConflicts = jsh.$root('.DEV_MODELS_namespace_conflicts');
-    this.panelUtilities = jsh.$root('.DEV_MODELS_utilities');
+    var jform = _this.getFormElement();
+    this.panelViewer = jform('.viewer');
+    this.panelNSConflicts = jform('.namespace_conflicts');
+    this.panelUtilities = jform('.utilities');
 
     _this.Models = _this.Models.sort(function(a, b){
       if(a.toUpperCase() > b.toUpperCase()) return 1;
