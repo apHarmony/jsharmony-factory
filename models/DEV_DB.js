@@ -79,7 +79,7 @@ jsh.App[modelid] = new (function(){
   }
 
   this.oninit = function(xmodel) {
-    var jform = getFormElement();
+    var jform = _this.getFormElement();
     jform.find('.db').change(function(){
       var db = jform.find('.db').val();
       if(!db) jform.find('.run').hide();
@@ -103,7 +103,7 @@ jsh.App[modelid] = new (function(){
   }
 
   this.RenderDBListing = function(dbs){
-    var jform = getFormElement();
+    var jform = _this.getFormElement();
     var jobj = jform.find('.db');
     if(dbs.length > 1){
       jform.find('.dbselect').show();
@@ -124,7 +124,7 @@ jsh.App[modelid] = new (function(){
   }
 
   this.LoadScripts = function(db){
-    var jform = getFormElement();
+    var jform = _this.getFormElement();
     jform.find('.run').show();
     jform.find('.rslt').html('');
     var jSamples = jform.find('.samples');
@@ -153,7 +153,7 @@ jsh.App[modelid] = new (function(){
   }
 
   this.RunSQL = function(){
-    var jform = getFormElement();
+    var jform = _this.getFormElement();
     var sql = jform.find('.sql').val();
     var db = jform.find('.db').val();
     var dbtype = _this.DBs[db];
