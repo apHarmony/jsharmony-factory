@@ -62,7 +62,7 @@ INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name,
 
 
 
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('C', 2, 'ACTIVE', NULL, 'Client', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('C', 200, 'ACTIVE', 2, 'Client/Dashboard', NULL, 'Dashboard', NULL, NULL, '%%%NAMESPACE%%%Client/Dashboard', NULL, NULL, NULL);
 INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('C', 2800, 'ACTIVE', 2, 'Client/Admin', 280000, 'Administration', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('C', 280000, 'ACTIVE', 2800, 'Client/Admin/CustUser_Listing', NULL, 'Cust Users', NULL, NULL, '%%%NAMESPACE%%%Client/Admin/CustUser_Listing', NULL, NULL, NULL);
