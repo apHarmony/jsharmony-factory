@@ -42,14 +42,16 @@ function jsHarmonyFactoryTransform(module){
     "version__tbl": "version",
     "help__tbl": "help",
     "help_target": "help_target",
-    "code_base": "code",
-    "code2_base": "code2",
+    "code_prefix": "code",
+    "code2_prefix": "code2",
     "code_app": "code_app", //"code"
     "code_sys": "code_sys", //"code"
     "code_app_": "code_app_", //"code_"
     "code_sys_": "code_sys_", //"code_"
     "code_app_base": "code_app_base", //"code_base"
     "code_sys_base": "code_sys_base", //"code_base"
+    "code_app_prefix": "code_app", //"code"
+    "code_sys_prefix": "code_sys", //"code"
     "code_ac": "code_sys_ac", //"code_ac"
     "code_ac1": "code_sys_ac1", //"code_ac1"
     "code_ahc": "code_sys_ahc", //"code_ahc"
@@ -64,6 +66,8 @@ function jsHarmonyFactoryTransform(module){
     "code2_sys_": "code2_sys_", //"code2_"
     "code2_app_base": "code2_app_base", //"code2_base"
     "code2_sys_base": "code2_sys_base", //"code2_base"
+    "code2_app_prefix": "code2_app", //"code2"
+    "code2_sys_prefix": "code2_sys", //"code2"
     "code2_doc_scope_doc_ctgr": "code2_app_doc_scope_doc_ctgr", //"code2_doc_scope_doc_ctgr"
     "code2_country_state": "code2_sys_country_state", //"code2_country_state"
     "code2_param_user_attrib": "code2_param_user_attrib",
