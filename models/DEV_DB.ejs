@@ -3,11 +3,11 @@
   padding-left:0;
   width:100%;
 }
-.DEV_DB_container, .xform_title {
+.xformcontainer.xelem<%=model.class%> .container, .xform_title {
   padding-left:29px;
   padding-right:30px;
 }
-textarea.DEV_DB_sql {
+.xformcontainer.xelem<%=model.class%> textarea.sql {
   width:100%;
   min-width:800px;
   height:100px;
@@ -17,46 +17,47 @@ textarea.DEV_DB_sql {
   box-sizing:border-box;
   font-family:monospace;
 }
-.DEV_DB_rslt_container {
+.xformcontainer.xelem<%=model.class%> .rslt_container {
   border:1px solid black;
   min-width:800px;
   height:500px;
   overflow:scroll;
 }
-.DEV_DB_rslt {
+.xformcontainer.xelem<%=model.class%> .rslt {
   padding:10px 15px;
   margin-top:20px;
   font-family:monospace;
 }
-.DEV_DB_rslt table { border-collapse: collapse; }
-.DEV_DB_rslt table td,.DEV_DB_rslt table th { padding:3px 10px; border:1px solid black; }
-.DEV_DB_rslt table td .null { color:#999; font-style:italic; }
-.DEV_DB_rslt table th { background-color:#f6f6f6; }
-.DEV_DB_rslt h1 { font-family:monospace; font-size:18px; }
+.xformcontainer.xelem<%=model.class%> .rslt table { border-collapse: collapse; }
+.xformcontainer.xelem<%=model.class%> .rslt table td,
+.xformcontainer.xelem<%=model.class%> .rslt table th { padding:3px 10px; border:1px solid black; }
+.xformcontainer.xelem<%=model.class%> .rslt table td .null { color:#999; font-style:italic; }
+.xformcontainer.xelem<%=model.class%> .rslt table th { background-color:#f6f6f6; }
+.xformcontainer.xelem<%=model.class%> .rslt h1 { font-family:monospace; font-size:18px; }
 </style>
-<div class="DEV_DB_container">
-  <div class="DEV_DB_dbselect">
+<div class="container">
+  <div class="dbselect">
     Database:
-    <select class="DEV_DB_db"></select>
+    <select class="db"></select>
   </div>
-  <div class="DEV_DB_run" style="display:none;">
+  <div class="run" style="display:none;">
     <table width="100%">
       <tr>
         <td></td>
         <td align="right">
           Samples:
-          <select class="DEV_DB_samples" style="margin-right:0px;"></select>
+          <select class="samples" style="margin-right:0px;"></select>
         </td>
       </tr>
     </table>
-    <textarea class="DEV_DB_sql"></textarea><br/>
-    <a href="#" class="DEV_DB_runas_toggle">Run as &gt;</a><br/>
-    <div class="DEV_DB_runas" style="display:none;">
-      <label>User:</label> <input type="text" class="DEV_DB_user" />
-      <label>Password:</label> <input type="password" class="DEV_DB_password" />
-      <label><input type="checkbox" class="DEV_DB_nocontext" /> No Context</label>
+    <textarea class="sql"></textarea><br/>
+    <a href="#" class="runas_toggle">Run as &gt;</a><br/>
+    <div class="runas" style="display:none;">
+      <label>User:</label> <input type="text" class="user" />
+      <label>Password:</label> <input type="password" class="password" />
+      <label><input type="checkbox" class="nocontext" /> No Context</label>
     </div>
-    <input type="button" class="DEV_DB_runsql" value="Run SQL" /><br/>
-    <div class="DEV_DB_rslt_container"><div class="DEV_DB_rslt"></div></div>
+    <input type="button" class="runsql" value="Run SQL" /><br/>
+    <div class="rslt_container"><div class="rslt"></div></div>
   </div>
 </div>
