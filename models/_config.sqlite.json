@@ -20,7 +20,7 @@
     "{{code_txt}}": "code_txt",
     "{{code_seq}}": "code_seq",
     "{{code_parent}}": "code_parent",
-    "{{code_end_dt}}": "code_end_dt",
+    "{{code_end_date}}": "code_end_dt",
     "txt_body": "txt_val",
     "txt_title": "txt_tval",
     "txt_bcc": "txt_bcc",
