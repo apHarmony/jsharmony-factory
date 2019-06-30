@@ -49,7 +49,7 @@ jsh.App[modelid].select_sm_id_auto = function(newval, cb){
   xmodel.controller.form.Data.cur_sm_id_auto = newval;
   xmodel.controller.form.Data.sm_id_auto = newval;
   this.sm_id_auto = newval;
-  jsh.XPage.Select({ modelid: XBase[xmodel.namespace+'X_SML_EDIT'][0], force: true }, cb);
+  jsh.XPage.Select({ modelid: XBase[xmodel.module_namespace+'X_SML_EDIT'][0], force: true }, cb);
 }
 
 jsh.App[modelid].item_insert = function(context_item){
