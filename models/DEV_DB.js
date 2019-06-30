@@ -75,7 +75,7 @@ jsh.App[modelid] = new (function(){
   };
 
   this.getFormElement = function(){
-    return jsh.$root('.xformcontainer.xelem'+model.class);
+    return jsh.$root('.xformcontainer.xelem'+xmodel.class);
   }
 
   this.oninit = function(xmodel) {
