@@ -74,38 +74,43 @@ jsh.App[modelid] = new (function(){
   insert into ucod_c_sts(codseq,codeval,codetxt,codecode) values (1,'ACTIVE','Active','A');",
   };
 
+  this.getFormElement = function(){
+    return jsh.$root('.xformcontainer.xelem'+model.class);
+  }
 
   this.oninit = function(xmodel) {
-    jsh.$root('.DEV_DB_db').change(function(){
-      var db = jsh.$root('.DEV_DB_db').val();
-      if(!db) jsh.$root('.DEV_DB_run').hide();
+    var jform = getFormElement();
+    jform.find('.db').change(function(){
+      var db = jform.find('.db').val();
+      if(!db) jform.find('.run').hide();
       else _this.LoadScripts(db);
     });
-    var jSamples = jsh.$root('.DEV_DB_samples');
+    var jSamples = jform.find('.samples');
     jSamples.change(function(){
-      var db = jsh.$root('.DEV_DB_db').val();
+      var db = jform.find('.db').val();
       var dbtype = _this.DBs[db];
       var sampleName = jSamples.val();
       var samples = _this.samples[dbtype];
       if(!(sampleName in samples)){ return XExt.Alert('Sample not found: '+sampleName); }
       var sampleSQL = samples[sampleName];
-      jsh.$root('.DEV_DB_sql').val(sampleSQL)
+      jform.find('.sql').val(sampleSQL)
       jSamples.val('');
     });
-    jsh.$root('.DEV_DB_runsql').click(function(){ _this.RunSQL(); });
-    jsh.$root('.DEV_DB_runas_toggle').click(function(){ jsh.$root('.DEV_DB_runas').toggle(); return false; });
+    jform.find('.runsql').click(function(){ _this.RunSQL(); });
+    jform.find('.runas_toggle').click(function(){ jform.find('.runas').toggle(); return false; });
 
     _this.RenderDBListing(_.keys(_this.DBs));
   }
 
   this.RenderDBListing = function(dbs){
-    var jobj = jsh.$root('.DEV_DB_db');
+    var jform = getFormElement();
+    var jobj = jform.find('.db');
     if(dbs.length > 1){
-      jsh.$root('.DEV_DB_dbselect').show();
+      jform.find('.dbselect').show();
       jobj.append($('<option>',{value:''}).text('Please select...'));
     }
     else {
-      jsh.$root('.DEV_DB_dbselect').hide();
+      jform.find('.dbselect').hide();
       jobj.empty();
     }
     for(var i=0;i<dbs.length;i++){
@@ -119,10 +124,10 @@ jsh.App[modelid] = new (function(){
   }
 
   this.LoadScripts = function(db){
-    var _this = this;
-    jsh.$root('.DEV_DB_run').show();
-    jsh.$root('.DEV_DB_rslt').html('');
-    var jSamples = jsh.$root('.DEV_DB_samples');
+    var jform = getFormElement();
+    jform.find('.run').show();
+    jform.find('.rslt').html('');
+    var jSamples = jform.find('.samples');
     jSamples.empty();
     jSamples.append($('<option>',{value:''}).text('Please select...'));
     var dbtype = _this.DBs[db];
@@ -137,26 +142,26 @@ jsh.App[modelid] = new (function(){
       if(_GET['table']){
         var sql = samples['Select'];
         sql = sql.replace('TABLE',_GET['table']);
-        jsh.$root('.DEV_DB_sql').val(sql);
-        jsh.$root('.DEV_DB_runsql').click();
+        jform.find('.sql').val(sql);
+        jform.find('.runsql').click();
 
       }
       else if('Select' in samples){
-        jsh.$root('.DEV_DB_sql').val(samples['Select'])
+        jform.find('.sql').val(samples['Select'])
       }
     }
   }
 
   this.RunSQL = function(){
-    var _this = this;
-    var sql = jsh.$root('.DEV_DB_sql').val();
-    var db = jsh.$root('.DEV_DB_db').val();
+    var jform = getFormElement();
+    var sql = jform.find('.sql').val();
+    var db = jform.find('.db').val();
     var dbtype = _this.DBs[db];
     var starttm = Date.now();
     var params = { sql: sql, db: db };
-    var runas_user = jsh.$root('.DEV_DB_user').val().trim();
-    var runas_password = jsh.$root('.DEV_DB_password').val();
-    var nocontext = jsh.$root('.DEV_DB_nocontext').is(':checked');
+    var runas_user = jform.find('.user').val().trim();
+    var runas_password = jform.find('.password').val();
+    var nocontext = jform.find('.nocontext').is(':checked');
     if(runas_user){
       params.runas_user = runas_user;
       params.runas_password = runas_password;
@@ -212,7 +217,7 @@ jsh.App[modelid] = new (function(){
         str += "<div style='font-weight:bold'>Operation complete</div>";
         var endtm = Date.now();
         str += "<div style='font-weight:bold'>Time: " + (endtm-starttm) + "ms</div>";
-        jsh.$root('.DEV_DB_rslt').html(str);
+        jform.find('.rslt').html(str);
       }
     });
   }
