@@ -7,7 +7,7 @@
     "caption":[0,"Text Module","Text Modules"],
 	  "menu":"TXTL",
     "breadcrumbs": { "parents": ["TXTL"] },
-    "onload": "if(xmodel.controller.form.Data.txt_type.toUpperCase()=='HTML'){ $('.txt_val.xelem'+xmodel.class).attr('id',xmodel.class+'_txt_val'); XExt.CKEditor(xmodel.class+'_txt_val'); }",
+    "onload": "if(xmodel.controller.form.Data.txt_type.toUpperCase()=='HTML'){ jsh.$root('.txt_val.xelem'+xmodel.class).attr('id',xmodel.class+'_txt_val'); XExt.CKEditor(xmodel.class+'_txt_val'); }",
     "fields":[
       {"control":"html","value":"<script type='text/javascript' src='/js/ckeditor/ckeditor.js'></script>"},
       {"name":"txt_id","type":"bigint","key": 1,"control":"hidden"},
