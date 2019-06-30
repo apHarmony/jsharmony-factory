@@ -26,7 +26,7 @@
     "txt_bcc": "txt_bcc",
     "txt_type": "txt_type",
     "timestamp": "TSTMP",
-    "current_user": "CUSER",
+    "current_user": "context_user",
     "{{code_sys}}": "code_sys_prefix",
     "{{code_app}}": "code_app_prefix",
     "{{code2_sys}}": "code2_sys_prefix",
