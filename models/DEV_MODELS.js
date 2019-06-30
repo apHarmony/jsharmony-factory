@@ -14,9 +14,9 @@ jsh.App[modelid] = new (function(){
 
   this.oninit = function(xmodel) {
     var jform = _this.getFormElement();
-    this.panelViewer = jform('.viewer');
-    this.panelNSConflicts = jform('.namespace_conflicts');
-    this.panelUtilities = jform('.utilities');
+    this.panelViewer = jform.find('.viewer');
+    this.panelNSConflicts = jform.find('.namespace_conflicts');
+    this.panelUtilities = jform.find('.utilities');
 
     _this.Models = _this.Models.sort(function(a, b){
       if(a.toUpperCase() > b.toUpperCase()) return 1;
