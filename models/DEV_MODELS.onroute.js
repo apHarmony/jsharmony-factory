@@ -4,11 +4,14 @@ var Helper = require('../Helper.js');
 var ejsext = require('../lib/ejsext.js');
 var model = jsh.getModelClone(req, modelid);
 
-model.oninit = "_this.Models = "+JSON.stringify(['System Config'].concat(_.keys(jsh.Models)))+";"+model.oninit;
+model.oninit = "_this.Models = "+JSON.stringify(['System Config','SQLExt'].concat(_.keys(jsh.Models)))+";"+model.oninit;
 if(req.query.modelid){
   var modeldata = {};
   if(req.query.modelid=='System Config'){
     modeldata = jsh.Config;
+  }
+  else if(req.query.modelid=='SQLExt'){
+    modeldata = jsh.DB['default'].SQLExt;
   }
   else{
     modeldata = jsh.getModel(req, req.query.modelid)
