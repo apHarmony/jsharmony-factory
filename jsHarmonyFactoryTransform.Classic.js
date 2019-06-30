@@ -549,7 +549,7 @@ transform.models = {
   "Dev/Param_Listing": "X_PPDL",
   "Dev/SysFunc_Listing": "X_SFL",
   "Dev/Menu_Listing": "X_SML",
-  "Dev/Menu_Tree_Tabs": "X_SMLW",
+  "Dev/Menu_Tree_Editor": "X_SMLW",
   "Dev/Menu_Exec_Delete": "X_SMLW_DELETE",
   "Dev/Menu_Exec_Insert": "X_SMLW_INSERT",
   "Dev/Menu": "X_SML_EDIT",

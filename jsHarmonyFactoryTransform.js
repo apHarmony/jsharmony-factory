@@ -555,7 +555,7 @@ function jsHarmonyFactoryTransform(module){
     "Dev/Param_Listing": "Dev/Param_Listing",
     "Dev/SysFunc_Listing": "Dev/SysFunc_Listing",
     "Dev/Menu_Listing": "Dev/Menu_Listing",
-    "Dev/Menu_Tree_Tabs": "Dev/Menu_Tree_Tabs",
+    "Dev/Menu_Tree_Editor": "Dev/Menu_Tree_Editor",
     "Dev/Menu_Exec_Delete": "Dev/Menu_Exec_Delete",
     "Dev/Menu_Exec_Insert": "Dev/Menu_Exec_Insert",
     "Dev/Menu": "Dev/Menu",
