@@ -26,6 +26,12 @@
     "txt_type": "txt_type",
     "timestamp": "TSTMP",
     "current_user": "CUSER",
+    "{{code_sys}}": "code_sys_base",
+    "{{code_app}}": "code_app_base",
+    "{{code2_sys}}": "code2_sys_base",
+    "{{code2_app}}": "code2_app_base",
+    "{{code}}": "code_base",
+    "{{code2}}": "code2_base",
 
     "client_id": "c_id",
     "client_name": "c_name",

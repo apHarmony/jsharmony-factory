@@ -42,6 +42,8 @@ function jsHarmonyFactoryTransform(module){
     "version__tbl": "version",
     "help__tbl": "help",
     "help_target": "help_target",
+    "code_base": "code",
+    "code2_base": "code2",
     "code_app": "code_app", //"code"
     "code_sys": "code_sys", //"code"
     "code_app_": "code_app_", //"code_"
