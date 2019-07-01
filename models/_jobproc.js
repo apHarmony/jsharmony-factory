@@ -299,7 +299,7 @@ AppSrvJobProc.prototype.SetJobResult = function (job, job_rslt, job_snotes, onCo
   let sqlparams = {};
   sqlparams[_this._transform('job_rslt')] = job_rslt;
   sqlparams[_this._transform('job_snotes')] = job_snotes;
-  sqlparmas[_this._transform('job_id')] = job.job_id;
+  sqlparams[_this._transform('job_id')] = job.job_id;
   this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_jobresult"), [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
     onComplete();
   });
