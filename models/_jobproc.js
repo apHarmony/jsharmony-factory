@@ -94,7 +94,7 @@ AppSrvJobProc.prototype.CheckJobQueue = function (onComplete) {
       }
     }
   }
-  this.AppSrv.ExecRow('jobproc', "jobproc_jobcheck", [], {}, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_jobcheck"), [], {}, function (err, rslt) {
     if (err != null) { _this.jsh.Log.error(err); return onComplete(null); }
     if ((rslt != null) && (rslt.length == 1) && (rslt[0] != null)) {
       var job = _this.map_db_rslt(rslt[0]);
@@ -181,7 +181,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
     sqlparams[_transform('doc_ctgr')] = job.doc_ctgr;
     sqlparams[_transform('doc_desc')] = job.doc_desc;
     sqlparams[_transform('doc_size')] = fsize;
-    _this.db.Scalar('jobproc', "jobproc_saveD", 
+    _this.db.Scalar('jobproc', _this._transform("jobproc_save_doc"), 
       [dbtypes.VarChar(8), dbtypes.BigInt, dbtypes.VarChar(8), dbtypes.VarChar(255), dbtypes.BigInt], 
       sqlparams, function (err, rslt) {
       if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting document', -99999); }
@@ -200,7 +200,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
     }
     let sqlparams = {};
     sqlparams[_transform('queue_name')] = job.queue_name;
-    _this.db.Scalar('jobproc', "jobproc_saveRQ", 
+    _this.db.Scalar('jobproc', _this._transform("jobproc_save_queue"), 
       [dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
       if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting remote queue request', -99999); }
       if (err == null) {
@@ -210,7 +210,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
         let sqlparams = {};
         sqlparams[_transform('queue_id')] = queue_id;
         sqlparams[_transform('queue_message')] = JSON.stringify(queue_message_obj);
-        _this.db.Command('jobproc', "jobproc_saverq_message", 
+        _this.db.Command('jobproc', _this._transform("jobproc_save_queue_message"), 
           [dbtypes.BigInt, dbtypes.VarChar(dbtypes.MAX)], 
           sqlparams, function (err, rslt) {
           callback(err);
@@ -225,7 +225,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
     sqlparams[_transform('note_scope_id')] = job.note_scope_id;
     sqlparams[_transform('note_type')] = job.note_type;
     sqlparams[_transform('note_body')] = job.note_body;
-    _this.db.Command('jobproc', "jobproc_saveN", 
+    _this.db.Command('jobproc', _this._transform("jobproc_save_note"), 
       [dbtypes.VarChar(8), dbtypes.BigInt, dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX)], 
       sqlparams, function (err, rslt) {
       callback(err);
@@ -300,7 +300,7 @@ AppSrvJobProc.prototype.SetJobResult = function (job, job_rslt, job_snotes, onCo
   sqlparams[_this._transform('job_rslt')] = job_rslt;
   sqlparams[_this._transform('job_snotes')] = job_snotes;
   sqlparmas[_this._transform('job_id')] = job.job_id;
-  this.AppSrv.ExecRow('jobproc', "jobproc_jobresult", [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_jobresult"), [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
     onComplete();
   });
 }
@@ -313,7 +313,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   var dbtypes = thisapp.DB.types;
   var jobvalidate = new XValidate();
   var jrow = _this.map_db_rslt(_jrow);
-  var job_sql = this.AppSrv.getSQL('','jobproc_add_BEGIN');
+  var job_sql = this.AppSrv.getSQL('',_this._transform('jobproc_add_BEGIN'));
   var job_sql_ptypes = [dbtypes.VarChar(8), dbtypes.VarChar(8), dbtypes.VarChar(50), dbtypes.VarChar(dbtypes.MAX)];
   var job_sql_params = {};
   job_sql_params['job_source'] = jrow.job_source;
@@ -324,7 +324,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   if ('doc_scope' in jrow) {
     //Add Document to Job
     if (!('doc_scope_id' in jrow) || !('doc_ctgr' in jrow) || !('doc_desc' in jrow)) throw new Error('Job with d_scope requires d_scope_id, d_ctgr, and d_desc');
-    job_sql += this.AppSrv.getSQL('','jobproc_add_RQST_D');
+    job_sql += this.AppSrv.getSQL('',_this._transform('jobproc_add_doc'));
     job_sql_ptypes.push(dbtypes.VarChar(8));
     job_sql_params['doc_scope'] = jrow.doc_scope;
     jobvalidate.AddValidator('_obj.doc_scope', _transform('doc_scope'), 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
@@ -340,7 +340,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   }
   if ('queue_name' in jrow) {
     //Add Document to Job
-    job_sql += this.AppSrv.getSQL('','jobproc_add_RQST_RQ');
+    job_sql += this.AppSrv.getSQL('',_this._transform('jobproc_add_queue'));
     job_sql_ptypes.push(dbtypes.VarChar(255));
     job_sql_params['queue_name'] = jrow.queue_name;
     jobvalidate.AddValidator('_obj.queue_name', _transform('queue_name'), 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
@@ -351,7 +351,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   if ('email_to' in jrow) {
     //Add Email to Job
     if (!('email_txt_attrib' in jrow) && !('email_subject' in jrow)) throw new Error('Job with email_to requires email_txt_attrib or email_subject');
-    job_sql += this.AppSrv.getSQL('','jobproc_add_RQST_EMAIL');
+    job_sql += this.AppSrv.getSQL('',_this._transform('jobproc_add_email'));
     job_sql_ptypes.push(dbtypes.VarChar(32));
     job_sql_params['email_txt_attrib'] = jrow.email_txt_attrib;
     jobvalidate.AddValidator('_obj.email_txt_attrib', _transform('email_txt_attrib'), 'B', [XValidate._v_MaxLength(32)]);
@@ -380,7 +380,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   if ('sms_to' in jrow) {
     //Add SMS to Job
     if (!('sms_txt_attrib' in jrow) && !('sms_body' in jrow)) throw new Error('Job with sms_to requires sms_txt_attrib or sms_body');
-    job_sql += this.AppSrv.getSQL('','jobproc_add_RQST_SMS');
+    job_sql += this.AppSrv.getSQL('',_this._transform('jobproc_add_sms'));
     job_sql_ptypes.push(dbtypes.VarChar(32));
     job_sql_params['sms_txt_attrib'] = jrow.sms_txt_attrib;
     jobvalidate.AddValidator('_obj.sms_txt_attrib', _transform('sms_txt_attrib'), 'B', [XValidate._v_MaxLength(32)]);
@@ -393,7 +393,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   if ('note_scope' in jrow) {
     //Add Note to Job
     if (!('note_scope_id' in jrow) || !('note_type' in jrow) || !('note_note' in jrow)) throw new Error('Job with n_scope requires n_scope_id, n_type, and n_note');
-    job_sql += this.AppSrv.getSQL('','jobproc_add_RQST_N');
+    job_sql += this.AppSrv.getSQL('',_this._transform('jobproc_add_note'));
     job_sql_ptypes.push(dbtypes.VarChar(8));
     job_sql_params['note_scope'] = jrow.note_scope;
     jobvalidate.AddValidator('_obj.note_scope', _transform('note_scope'), 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
@@ -407,7 +407,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
     job_sql_params['note_body'] = jrow.note_body;
     jobvalidate.AddValidator('_obj.note_body', _transform('note_body'), 'B', [XValidate._v_Required()]);
   }
-  job_sql += this.AppSrv.getSQL('','jobproc_add_END');
+  job_sql += this.AppSrv.getSQL('',_this._transform('jobproc_add_END'));
   var verrors = _.merge(verrors, jobvalidate.Validate('B', job_sql_params));
   //Transform job_sql_params
   _this.transform_db_params(job_sql_params);
@@ -431,7 +431,7 @@ AppSrvJobProc.prototype.SetSubscriberQueueResult = function (queue_id, queue_rsl
   sqlparams[_this._transform('queue_rslt')] = queue_rslt;
   sqlparams[_this._transform('queue_snotes')] = queue_snotes;
   sqlparams[_this._transform('queue_id')] = queue_id;
-  this.AppSrv.ExecRow('jobproc', "jobproc_queueresult", [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_queueresult"), [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
     if (err) { _this.jsh.Log.error(err); }
     if (onComplete) onComplete();
   });
@@ -443,7 +443,7 @@ AppSrvJobProc.prototype.SubscribeToQueue = function (req, res, queue_name) {
   var dbtypes = this.AppSrv.DB.types;
   let sqlparams = {};
   sqlparams[_this._transform('queue_name')] = queue_name;
-  this.AppSrv.ExecRow('jobproc', "jobproc_queuecheck", [dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_queuecheck"), [dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
     if (err != null) { _this.jsh.Log.error(err); return onComplete(null); }
     if ((rslt != null) && (rslt.length == 1) && (rslt[0])) {
       var queuetask = _this.map_db_rslt(rslt[0]);
@@ -464,7 +464,7 @@ AppSrvJobProc.prototype.CheckSubscriberQueue = function (onComplete) {
     if(_this.QueueHistory[queueName]==1) _this.QueueHistory[queueName] = 2;
     else delete _this.QueueHistory[queueName];
   }
-  this.AppSrv.ExecRecordset('jobproc', "jobproc_queuesubscribers", [], {}, function (err, rslt) {
+  this.AppSrv.ExecRecordset('jobproc', _this._transform("jobproc_queuesubscribers"), [], {}, function (err, rslt) {
     if (err != null) { _this.jsh.Log.error(err); return onComplete(null); }
     //Handle invalid queue
     //Update results
@@ -496,7 +496,7 @@ AppSrvJobProc.prototype.PopQueue = function (req, res, queue_name, queueresult, 
   let sqlparams = {};
   sqlparams[_this._transform('queue_id')] = queueresult.ID;
   sqlparams[_this._transform('queue_name')] = queue_name;
-  this.AppSrv.ExecScalar('jobproc', "jobproc_queuepop", [dbtypes.BigInt, dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
+  this.AppSrv.ExecScalar('jobproc', _this._transform("jobproc_queuepop"), [dbtypes.BigInt, dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
     if (err) { return Helper.GenError(req, res, -99999, err); }
     else if ((rslt == null) || (rslt.length != 1) || (!rslt[0])) { return Helper.GenError(req, res, -99999, 'Queue item ID does not exist or has already been resulted.'); }
     if (onComplete) onComplete(null);
