@@ -531,6 +531,7 @@ function jsHarmonyFactoryTransform(module){
     "Admin/Param_User_Listing": "Admin/Param_User_Listing",
     "Dashboard_Note_Listing": "Dashboard_Note_Listing",
     "Reports/Overview": "Reports/Overview",
+    "Reports/SysUser_Listing": "Reports/SysUser_Listing",
     "Client/Reports/Overview": "Client/Reports/Overview",
     "Admin/RestartSystem": "Admin/RestartSystem",
     "Queue__model": "Queue",

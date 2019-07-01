@@ -525,6 +525,7 @@ transform.models = {
   "Admin/Param_User_Listing": "PPPL",
   "Dashboard_Note_Listing": "QNSSL",
   "Reports/Overview": "REPORTS",
+  "Reports/SysUser_Listing": "RPE",
   "Client/Reports/Overview": "REPORTS_CLIENT",
   "Admin/RestartSystem": "RESTART_SYSTEM",
   "Queue__model": "RQ",

@@ -21,7 +21,7 @@ INSERT INTO {schema}.menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, m
 INSERT INTO {schema}.menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 800, 'ACTIVE', 1, 'Admin', 80000, 'Administration', NULL, NULL, '%%%NAMESPACE%%%Admin/Overview', NULL, NULL, NULL);
 INSERT INTO {schema}.menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 900, 'ACTIVE', 1, 'Dev', 90000, 'Developer', NULL, NULL, '%%%NAMESPACE%%%Dev/Overview', NULL, NULL, NULL);
 
-INSERT INTO {schema}.menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 70801, 'ACTIVE', 700, 'Reports/RPE', NULL, 'User Listing', NULL, NULL, '%%%NAMESPACE%%%reports/RPE', NULL, NULL, NULL);
+INSERT INTO {schema}.menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 70801, 'ACTIVE', 700, 'Reports/SysUser_Listing', NULL, 'User Listing', NULL, NULL, '%%%NAMESPACE%%%reports/SysUser_Listing', NULL, NULL, NULL);
 
 INSERT INTO {schema}.menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90012, 'ACTIVE', 900, 'Dev/Menu_Tree_Editor', 90011, 'Menu Items', NULL, NULL, '%%%NAMESPACE%%%Dev/Menu_Tree_Editor', NULL, NULL, NULL);
 INSERT INTO {schema}.menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90011, 'ACTIVE', 900, 'Dev/SysRole_Listing', 90012, 'User Roles', NULL, NULL, '%%%NAMESPACE%%%Dev/SysRole_Listing', NULL, NULL, NULL);
@@ -1197,7 +1197,6 @@ Please follow the link below to reset your password:<br />
 INSERT INTO {schema}.txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('CMS', 'Client/Agreement', 'HTML', 'Client Agreement', NULL, NULL, 'Client Agreement');
 INSERT INTO {schema}.txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('CMS', 'Client/Agreement_Complete', 'HTML', 'Client Agreement Complete', '<p>Thank you for completing sign-up.</p>
 ', NULL, 'Client Agreement Complete');
-INSERT INTO {schema}.txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('SMS', 'Client/Welcome_SMS', 'TEXT', 'Welcome', 'Your account has been initialized.', NULL, 'SMS Welcome Message');
 INSERT INTO {schema}.txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('CMS', 'Client/Dashboard', 'HTML', 'Client Dashboard Message of the Day', '<p>Welcome to the jsHarmony Client Portal</p>
 ', NULL, 'Client Dashboard Message of the Day');
 INSERT INTO {schema}.txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('CMS', 'Dashboard__model', 'HTML', 'Dashboard Message of the Day', '<p>Welcome to the jsHarmony System</p>
