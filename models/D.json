@@ -1,7 +1,7 @@
 {
  "D_BASE": {
   "title":"Document",
-  "table":"REPLACE_WITH_LOCAL_EDITABLE_VIEW",
+  "table":"jsharmony.v_d_ext",
   "actions":"BIUD", 
   "layout":"form", 
   "caption": [ "", "Document", "Documents" ],

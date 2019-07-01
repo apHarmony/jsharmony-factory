@@ -9863,7 +9863,7 @@ CREATE VIEW [jsharmony].[v_note] as
 SELECT note__tbl.note_id
       ,note__tbl.note_scope
       ,note__tbl.note_scope_id
-	    ,note_sts
+	    ,note__tbl.note_sts
       ,note__tbl.cust_id
 	    ,single.dual_nvarchar50 cust_name
 	    ,single.dual_nvarchar50 cust_name_ext
@@ -9887,4 +9887,56 @@ SELECT note__tbl.note_id
   INNER JOIN {schema}.single ON 1=1
 
 GO
+
+CREATE VIEW [jsharmony].[v_doc_ext] AS
+SELECT doc__tbl.doc_id
+      ,doc__tbl.doc_scope
+      ,doc__tbl.doc_scope_id
+      ,doc__tbl.cust_id
+      ,doc__tbl.item_id
+      ,doc__tbl.doc_sts
+      ,doc__tbl.doc_ctgr
+      ,doc__tbl.doc_desc
+      ,doc__tbl.doc_ext
+      ,doc__tbl.doc_size
+      ,doc__tbl.doc_filename
+      ,doc__tbl.doc_etstmp
+      ,doc__tbl.doc_euser
+      ,{schema}.my_db_user_fmt(doc_euser) doc_euser_fmt
+      ,doc__tbl.doc_mtstmp
+      ,doc__tbl.doc_muser
+      ,{schema}.my_db_user_fmt(doc_muser) doc_muser_fmt
+      ,doc__tbl.doc_utstmp
+      ,doc__tbl.doc_uuser
+      ,{schema}.my_db_user_fmt(doc_uuser) doc_uuser_fmt
+      ,doc__tbl.doc_snotes
+	    ,null title_head
+	    ,null title_detail
+      ,null cust_name
+      ,null cust_name_ext
+      ,null item_name
+  FROM {schema}.doc__tbl
+
+CREATE VIEW [jsharmony].[v_note_ext] AS
+SELECT note__tbl.note_id
+      ,note__tbl.note_scope
+      ,note__tbl.note_scope_id
+	    ,note__tbl.note_sts
+      ,note__tbl.cust_id
+      ,note__tbl.item_id
+      ,note__tbl.note_type
+      ,note__tbl.note_body
+      ,note__tbl.note_etstmp
+      ,note__tbl.note_euser
+      ,{schema}.my_db_user_fmt(note__tbl.note_euser) note_euser_fmt
+      ,note__tbl.note_mtstmp
+      ,note__tbl.note_muser
+      ,{schema}.my_db_user_fmt(note__tbl.note_muser) note_muser_fmt
+      ,note__tbl.note_snotes
+	    ,null title_head
+	    ,null title_detail
+      ,null cust_name
+	    ,null cust_name_ext
+      ,null item_name
+  FROM {schema}.note__tbl
 
