@@ -44,9 +44,9 @@
        "controlstyle":"width:48px;display:none;"}
     ],
     "dberrors": [
-      ["/UNQ_GCOD_.*_CODEVAL/","CODE Value has to be unique"],
+      ["/unq_gcod_.*_codeval/","CODE Value has to be unique"],
       ["_codeval_key","CODE Value has to be unique"],
-      ["/UNQ_GCOD_.*_CODETXT/","CODE Description has to be unique"],
+      ["/unq_gcod_.*_codetxt/","CODE Description has to be unique"],
       ["_codetxt_key","CODE Description has to be unique"]
     ]
   },

@@ -954,7 +954,7 @@ CREATE TABLE [jsharmony].[param__tbl](
 	[param_mtstmp] [datetime2](7) NOT NULL,
 	[param_muser] [nvarchar](20) NOT NULL,
 	[param_snotes] [nvarchar](max) NULL,
- CONSTRAINT [PK_param__tbl] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_param__tbl] PRIMARY KEY CLUSTERED 
 (
 	[param_process] ASC,
 	[param_attrib] ASC
@@ -998,7 +998,7 @@ CREATE TABLE [jsharmony].[audit__tbl](
 	[audit_ref_name] [varchar](32) NULL,
 	[audit_ref_id] [bigint] NULL,
 	[audit_subject] [nvarchar](255) NULL,
- CONSTRAINT [PK_audit__tbl] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_audit__tbl] PRIMARY KEY CLUSTERED 
 (
 	[audit_seq] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1012,7 +1012,7 @@ CREATE TABLE [jsharmony].[audit_detail](
 	[audit_seq] [bigint] NOT NULL,
 	[audit_column_name] [varchar](30) NOT NULL,
 	[audit_column_val] [nvarchar](max) NULL,
- CONSTRAINT [PK_audit_detail] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_audit_detail] PRIMARY KEY CLUSTERED 
 (
 	[audit_seq] ASC,
 	[audit_column_name] ASC
@@ -1167,12 +1167,12 @@ CREATE TABLE [jsharmony].[sys_user_role](
 	[sys_user_role_snotes] [nvarchar](255) NULL,
 	[sys_user_role_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[sys_role_name] [nvarchar](16) NOT NULL,
- CONSTRAINT [PK_sys_user_role] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_sys_user_role] PRIMARY KEY CLUSTERED 
 (
 	[sys_user_id] ASC,
 	[sys_role_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_sys_user_role] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_sys_user_role] UNIQUE NONCLUSTERED 
 (
 	[sys_user_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1199,7 +1199,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[number__tbl](
 	[number_val] [smallint] NOT NULL,
- CONSTRAINT [PK_number__tbl] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_number__tbl] PRIMARY KEY CLUSTERED 
 (
 	[number_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1262,7 +1262,7 @@ CREATE TABLE [jsharmony].[param_user](
 	[param_user_mtstmp] [datetime2](7) NOT NULL,
 	[param_user_muser] [nvarchar](20) NOT NULL,
 	[param_user_id] [bigint] IDENTITY(1,1) NOT NULL,
- CONSTRAINT [PK_param_user] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_param_user] PRIMARY KEY CLUSTERED 
 (
 	[sys_user_id] ASC,
 	[param_user_process] ASC,
@@ -1283,7 +1283,7 @@ CREATE TABLE [jsharmony].[param_app](
 	[param_app_mtstmp] [datetime2](7) NOT NULL,
 	[param_app_muser] [nvarchar](20) NOT NULL,
 	[param_app_id] [bigint] IDENTITY(1,1) NOT NULL,
- CONSTRAINT [PK_param_app] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_param_app] PRIMARY KEY CLUSTERED 
 (
 	[param_app_process] ASC,
 	[param_app_attrib] ASC
@@ -1303,7 +1303,7 @@ CREATE TABLE [jsharmony].[param_sys](
 	[param_sys_mtstmp] [datetime2](7) NOT NULL,
 	[param_sys_muser] [nvarchar](20) NOT NULL,
 	[param_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
- CONSTRAINT [PK_param_sys] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_param_sys] PRIMARY KEY CLUSTERED 
 (
 	[param_sys_process] ASC,
 	[param_sys_attrib] ASC
@@ -1366,7 +1366,7 @@ CREATE TABLE [jsharmony].[doc__tbl](
 	[doc_sync_tstmp] [datetime2](7) NULL,
 	[doc_snotes] [nvarchar](255) NULL,
 	[doc_sync_id] [bigint] NULL,
- CONSTRAINT [PK_doc__tbl] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_doc__tbl] PRIMARY KEY CLUSTERED 
 (
 	[doc_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1410,7 +1410,7 @@ CREATE TABLE [jsharmony].[single](
 	[single_ident] [bigint] NOT NULL,
 	[dual_bigint] [bigint] NULL,
 	[dual_nvarchar50] [nvarchar](50) NULL,
- CONSTRAINT [PK_single] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_single] PRIMARY KEY CLUSTERED 
 (
 	[single_ident] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1462,12 +1462,12 @@ CREATE TABLE [jsharmony].[cust_menu_role](
 	[cust_menu_role_snotes] [nvarchar](255) NULL,
 	[cust_menu_role_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[cust_role_name] [nvarchar](16) NOT NULL,
- CONSTRAINT [PK_cust_menu_role] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_cust_menu_role] PRIMARY KEY CLUSTERED 
 (
 	[cust_role_name] ASC,
 	[menu_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_cust_menu_role] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_cust_menu_role] UNIQUE NONCLUSTERED 
 (
 	[cust_menu_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1486,15 +1486,15 @@ CREATE TABLE [jsharmony].[cust_role](
 	[cust_role_code] [nvarchar](50) NULL,
 	[cust_role_attrib] [nvarchar](50) NULL,
 	[cust_role_snotes] [nvarchar](255) NULL,
- CONSTRAINT [PK_cust_role] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_cust_role] PRIMARY KEY CLUSTERED 
 (
 	[cust_role_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_cust_role_cust_role_desc] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_cust_role_cust_role_desc] UNIQUE NONCLUSTERED 
 (
 	[cust_role_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_cust_role_cust_role_id] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_cust_role_cust_role_id] UNIQUE NONCLUSTERED 
 (
 	[cust_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1519,20 +1519,20 @@ CREATE TABLE [jsharmony].[menu__tbl](
 	[menu_image] [nvarchar](255) NULL,
 	[menu_snotes] [nvarchar](255) NULL,
 	[menu_subcmd] [varchar](255) NULL,
- CONSTRAINT [PK_menu__tbl] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_menu__tbl] PRIMARY KEY CLUSTERED 
 (
 	[menu_id_auto] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_menu__tbl_menu_desc] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_menu__tbl_menu_desc] UNIQUE NONCLUSTERED 
 (
 	[menu_id_parent] ASC,
 	[menu_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_menu__tbl_menu_id] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_menu__tbl_menu_id] UNIQUE NONCLUSTERED 
 (
 	[menu_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_menu__tbl_menu_name] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_menu__tbl_menu_name] UNIQUE NONCLUSTERED 
 (
 	[menu_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1612,12 +1612,12 @@ CREATE TABLE [jsharmony].[cust_user_role](
 	[cust_user_role_snotes] [nvarchar](255) NULL,
 	[cust_user_role_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[cust_role_name] [nvarchar](16) NOT NULL,
- CONSTRAINT [PK_cust_user_role] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_cust_user_role] PRIMARY KEY CLUSTERED 
 (
 	[sys_user_id] ASC,
 	[cust_role_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_cust_user_role] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_cust_user_role] UNIQUE NONCLUSTERED 
 (
 	[cust_user_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1649,15 +1649,15 @@ CREATE TABLE [jsharmony].[sys_role](
 	[sys_role_code] [nvarchar](50) NULL,
 	[sys_role_attrib] [nvarchar](50) NULL,
 	[sys_role_snotes] [nvarchar](255) NULL,
- CONSTRAINT [PK_sys_role] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_sys_role] PRIMARY KEY CLUSTERED 
 (
 	[sys_role_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_sys_role_sys_role_desc] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_sys_role_sys_role_desc] UNIQUE NONCLUSTERED 
 (
 	[sys_role_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_sys_role_sys_role_id] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_sys_role_sys_role_id] UNIQUE NONCLUSTERED 
 (
 	[sys_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -1672,12 +1672,12 @@ CREATE TABLE [jsharmony].[sys_menu_role](
 	[sys_menu_role_snotes] [nvarchar](255) NULL,
 	[sys_menu_role_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[sys_role_name] [nvarchar](16) NOT NULL,
- CONSTRAINT [PK_sys_menu_role] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_sys_menu_role] PRIMARY KEY CLUSTERED 
 (
 	[sys_role_name] ASC,
 	[menu_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_sys_menu_role] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_sys_menu_role] UNIQUE NONCLUSTERED 
 (
 	[sys_menu_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2060,11 +2060,11 @@ CREATE TABLE [jsharmony].[cust_user](
 	[sys_user_snotes] [nvarchar](255) NULL,
 	[sys_user_name]  AS (([sys_user_lname]+', ')+[sys_user_fname]) PERSISTED NOT NULL,
 	[sys_user_unq_email]  AS (case when [sys_user_sts]='ACTIVE' then case when isnull([sys_user_email],'')='' then 'E'+CONVERT([varchar](50),[sys_user_id],(0)) else 'S'+[sys_user_email] end else 'E'+CONVERT([varchar](50),[sys_user_id],(0)) end) PERSISTED,
- CONSTRAINT [PK_cust_user] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_cust_user] PRIMARY KEY CLUSTERED 
 (
 	[sys_user_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_cust_user_sys_user_email] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_cust_user_sys_user_email] UNIQUE NONCLUSTERED 
 (
 	[sys_user_unq_email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2085,7 +2085,7 @@ CREATE TABLE [jsharmony].[code_app](
 	[code_h_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_schema] [nvarchar](128) NULL,
- CONSTRAINT [PK_code_app] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_app] PRIMARY KEY CLUSTERED 
 (
 	[code_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2113,16 +2113,16 @@ CREATE TABLE [jsharmony].[code2_doc_scope_doc_ctgr](
 	[code_notes] [nvarchar](255) NULL,
 	[code_euser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_euser])),
 	[code_muser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_muser])),
- CONSTRAINT [PK_code2_doc_scope_doc_ctgr] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code2_doc_scope_doc_ctgr] PRIMARY KEY CLUSTERED 
 (
 	[code2_app_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_doc_scope_doc_ctgr_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_doc_scope_doc_ctgr_code_val1_code_va12] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_va12] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_doc_scope_doc_ctgr_code_val1_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_doc_scope_doc_ctgr_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_txt] ASC
@@ -2144,7 +2144,7 @@ CREATE TABLE [jsharmony].[code2_app](
 	[code_h_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_schema] [nvarchar](128) NULL,
- CONSTRAINT [PK_code2_app] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code2_app] PRIMARY KEY CLUSTERED 
 (
 	[code_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2169,15 +2169,15 @@ CREATE TABLE [jsharmony].[help__tbl](
 	[help_seq] [int] NULL,
 	[help_listing_main] [bit] NOT NULL,
 	[help_listing_client] [bit] NOT NULL,
- CONSTRAINT [PK_help__tbl] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_help__tbl] PRIMARY KEY CLUSTERED 
 (
 	[help_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_help__tbl_help_title] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_help__tbl_help_title] UNIQUE NONCLUSTERED 
 (
 	[help_title] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_help__tbl_help_unq_code] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_help__tbl_help_unq_code] UNIQUE NONCLUSTERED 
 (
 	[help_unq_code] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2191,15 +2191,15 @@ CREATE TABLE [jsharmony].[help_target](
 	[help_target_code] [varchar](50) NOT NULL,
 	[help_target_desc] [nvarchar](50) NOT NULL,
 	[help_target_id] [bigint] IDENTITY(1,1) NOT NULL,
- CONSTRAINT [PK_help_target] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_help_target] PRIMARY KEY CLUSTERED 
 (
 	[help_target_code] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_help_target_help_target_desc] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_help_target_help_target_desc] UNIQUE NONCLUSTERED 
 (
 	[help_target_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_help_target_help_target_id] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_help_target_help_target_id] UNIQUE NONCLUSTERED 
 (
 	[help_target_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2225,7 +2225,7 @@ CREATE TABLE [jsharmony].[note__tbl](
 	[note_sync_tstmp] [datetime2](7) NULL,
 	[note_snotes] [nvarchar](255) NULL,
 	[note_sync_id] [bigint] NULL,
- CONSTRAINT [PK_note__tbl] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_note__tbl] PRIMARY KEY CLUSTERED 
 (
 	[note_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2269,11 +2269,11 @@ CREATE TABLE [jsharmony].[sys_user](
 	[sys_user_name]  AS (([sys_user_lname]+', ')+[sys_user_fname]) PERSISTED NOT NULL,
 	[sys_user_initials]  AS ((isnull(substring([sys_user_fname],(1),(1)),'')+isnull(substring([sys_user_mname],(1),(1)),''))+isnull(substring([sys_user_lname],(1),(1)),'')) PERSISTED NOT NULL,
 	[sys_user_unq_email]  AS (case when [sys_user_sts]='ACTIVE' then case when isnull([sys_user_email],'')='' then 'E'+CONVERT([varchar](50),[sys_user_id],(0)) else 'S'+[sys_user_email] end else 'E'+CONVERT([varchar](50),[sys_user_id],(0)) end) PERSISTED,
- CONSTRAINT [PK_sys_user] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_sys_user] PRIMARY KEY CLUSTERED 
 (
 	[sys_user_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_sys_user_sys_user_email] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_sys_user_sys_user_email] UNIQUE NONCLUSTERED 
 (
 	[sys_user_unq_email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2293,7 +2293,7 @@ CREATE TABLE [jsharmony].[queue__tbl](
 	[queue_rslt_tstmp] [datetime2](7) NULL,
 	[queue_rslt_user] [nvarchar](20) NULL,
 	[queue_snotes] [nvarchar](max) NULL,
- CONSTRAINT [PK_queue__tbl] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_queue__tbl] PRIMARY KEY CLUSTERED 
 (
 	[queue_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2316,7 +2316,7 @@ CREATE TABLE [jsharmony].[job__tbl](
 	[job_rslt_tstmp] [datetime2](7) NULL,
 	[job_rslt_user] [nvarchar](20) NULL,
 	[job_snotes] [nvarchar](max) NULL,
- CONSTRAINT [PK_job__tbl] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_job__tbl] PRIMARY KEY CLUSTERED 
 (
 	[job_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2333,7 +2333,7 @@ CREATE TABLE [jsharmony].[job_doc](
 	[doc_scope_id] [bigint] NULL,
 	[doc_ctgr] [nvarchar](32) NULL,
 	[doc_desc] [nvarchar](255) NULL,
- CONSTRAINT [PK_job_doc] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_job_doc] PRIMARY KEY CLUSTERED 
 (
 	[job_doc_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2355,7 +2355,7 @@ CREATE TABLE [jsharmony].[job_email](
 	[email_text] [ntext] NULL,
 	[email_html] [ntext] NULL,
 	[email_doc_id] [bigint] NULL,
- CONSTRAINT [PK_job_email] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_job_email] PRIMARY KEY CLUSTERED 
 (
 	[job_email_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2372,7 +2372,7 @@ CREATE TABLE [jsharmony].[job_note](
 	[note_scope_id] [bigint] NULL,
 	[note_type] [nvarchar](32) NULL,
 	[note_body] [nvarchar](max) NULL,
- CONSTRAINT [PK_job_note] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_job_note] PRIMARY KEY CLUSTERED 
 (
 	[job_note_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2387,7 +2387,7 @@ CREATE TABLE [jsharmony].[job_queue](
 	[job_id] [bigint] NOT NULL,
 	[queue_name] [nvarchar](255) NOT NULL,
 	[queue_message] [nvarchar](max) NULL,
- CONSTRAINT [PK_job_queue] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_job_queue] PRIMARY KEY CLUSTERED 
 (
 	[job_queue_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2403,7 +2403,7 @@ CREATE TABLE [jsharmony].[job_sms](
 	[sms_txt_attrib] [nvarchar](32) NULL,
 	[sms_to] [nvarchar](255) NOT NULL,
 	[sms_body] [ntext] NULL,
- CONSTRAINT [PK_job_sms] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_job_sms] PRIMARY KEY CLUSTERED 
 (
 	[job_sms_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2416,7 +2416,7 @@ GO
 CREATE TABLE [jsharmony].[script__tbl](
 	[script_name] [nvarchar](32) NOT NULL,
 	[script_txt] [nvarchar](max) NULL,
- CONSTRAINT [PK_SCRIPT] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_SCRIPT] PRIMARY KEY CLUSTERED 
 (
 	[script_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2435,20 +2435,20 @@ CREATE TABLE [jsharmony].[sys_func](
 	[sys_func_code] [nvarchar](50) NULL,
 	[sys_func_attrib] [nvarchar](50) NULL,
 	[sys_func_snotes] [nvarchar](255) NULL,
- CONSTRAINT [PK_sys_func] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_sys_func] PRIMARY KEY CLUSTERED 
 (
 	[sys_func_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_sys_func_sys_func_code_sys_func_name] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_sys_func_sys_func_code_sys_func_name] UNIQUE NONCLUSTERED 
 (
 	[sys_func_code] ASC,
 	[sys_func_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_sys_func_sys_func_desc] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_sys_func_sys_func_desc] UNIQUE NONCLUSTERED 
 (
 	[sys_func_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_sys_func_sys_func_id] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_sys_func_sys_func_id] UNIQUE NONCLUSTERED 
 (
 	[sys_func_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2463,12 +2463,12 @@ CREATE TABLE [jsharmony].[sys_user_func](
 	[sys_user_func_snotes] [nvarchar](255) NULL,
 	[sys_user_func_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[sys_func_name] [nvarchar](16) NOT NULL,
- CONSTRAINT [PK_sys_user_func] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_sys_user_func] PRIMARY KEY CLUSTERED 
 (
 	[sys_user_id] ASC,
 	[sys_func_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_sys_user_func] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_sys_user_func] UNIQUE NONCLUSTERED 
 (
 	[sys_user_func_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2491,11 +2491,11 @@ CREATE TABLE [jsharmony].[txt__tbl](
 	[txt_euser] [varchar](64) NOT NULL,
 	[txt_mtstmp] [datetime2](7) NOT NULL,
 	[txt_muser] [varchar](64) NOT NULL,
- CONSTRAINT [PK_TXT] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_TXT] PRIMARY KEY CLUSTERED 
 (
 	[txt_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_TXT] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_TXT] UNIQUE NONCLUSTERED 
 (
 	[txt_process] ASC,
 	[txt_attrib] ASC
@@ -2521,15 +2521,15 @@ CREATE TABLE [jsharmony].[code_ac](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_ac] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_ac] PRIMARY KEY CLUSTERED 
 (
 	[code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_ac_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_ac_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_ac_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_ac_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2554,15 +2554,15 @@ CREATE TABLE [jsharmony].[code_ac1](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_ac1] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_ac1] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_ac1_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_ac1_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_ac1_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_ac1_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2587,15 +2587,15 @@ CREATE TABLE [jsharmony].[code_ahc](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_ahc] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_ahc] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_ahc_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_ahc_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_ahc_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_ahc_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2620,15 +2620,15 @@ CREATE TABLE [jsharmony].[code_country](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_country] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_country] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_country_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_country_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_country_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_country_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2653,15 +2653,15 @@ CREATE TABLE [jsharmony].[code_doc_scope](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_doc_scope] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_doc_scope] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_doc_scope_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_doc_scope_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_doc_scope_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_doc_scope_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2683,11 +2683,11 @@ CREATE TABLE [jsharmony].[code_sys](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_schema] [nvarchar](128) NULL,
 	[code_sys_h_id] [bigint] IDENTITY(1,1) NOT NULL,
- CONSTRAINT [PK_code_sys] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_sys] PRIMARY KEY CLUSTERED 
 (
 	[code_sys_h_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_sys] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_sys] UNIQUE NONCLUSTERED 
 (
 	[code_schema] ASC,
 	[code_name] ASC
@@ -2713,15 +2713,15 @@ CREATE TABLE [jsharmony].[code_note_scope](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_note_scope] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_note_scope] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_note_scope_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_note_scope_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_note_scope_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_note_scope_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2746,15 +2746,15 @@ CREATE TABLE [jsharmony].[code_note_type](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_note_type] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_note_type] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_note_type_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_note_type_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_note_type_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_note_type_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2779,15 +2779,15 @@ CREATE TABLE [jsharmony].[code_param_type](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_param_type] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_param_type] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_param_type_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_param_type_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_param_type_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_param_type_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2812,15 +2812,15 @@ CREATE TABLE [jsharmony].[code_job_action](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_job_action] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_job_action] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_job_action_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_job_action_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_job_action_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_job_action_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2845,15 +2845,15 @@ CREATE TABLE [jsharmony].[code_job_source](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_job_source] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_job_source] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_job_source_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_job_source_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_job_source_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_job_source_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2878,15 +2878,15 @@ CREATE TABLE [jsharmony].[code_txt_type](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_txt_type] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_txt_type] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_txt_type_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_txt_type_code_txt] UNIQUE NONCLUSTERED 
 (
   [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_txt_type_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_txt_type_code_val] UNIQUE NONCLUSTERED 
 (
   [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2911,15 +2911,15 @@ CREATE TABLE [jsharmony].[code_version_sts](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_version_sts] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_version_sts] PRIMARY KEY CLUSTERED 
 (
 	[code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_version_sts_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_version_sts_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_version_sts_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_version_sts_code_val] UNIQUE NONCLUSTERED 
 (
 	[code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -2945,16 +2945,16 @@ CREATE TABLE [jsharmony].[code2_country_state](
 	[code_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
- CONSTRAINT [PK_code2_country_state] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code2_country_state] PRIMARY KEY CLUSTERED 
 (
 	[code2_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_country_state_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_country_state_code_val1_code_va12] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_va12] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_country_state_code_val1_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_country_state_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_txt] ASC
@@ -2977,11 +2977,11 @@ CREATE TABLE [jsharmony].[code2_sys](
 	[code_snotes] [nvarchar](255) NULL,
 	[code_schema] [nvarchar](128) NULL,
 	[code2_sys_h_id] [bigint] IDENTITY(1,1) NOT NULL,
- CONSTRAINT [PK_code2_sys] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code2_sys] PRIMARY KEY CLUSTERED 
 (
 	[code2_sys_h_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_sys] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_sys] UNIQUE NONCLUSTERED 
 (
 	[code_schema] ASC,
 	[code_name] ASC
@@ -3006,7 +3006,7 @@ CREATE TABLE [jsharmony].[version__tbl](
 	[version_mtstmp] [datetime2](7) NOT NULL,
 	[version_muser] [nvarchar](20) NOT NULL,
 	[version_snotes] [nvarchar](255) NULL,
- CONSTRAINT [UNQ_version__tbl] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [unq_version__tbl] PRIMARY KEY CLUSTERED 
 (
 	[version_no_major] ASC,
 	[version_no_minor] ASC,
@@ -3361,226 +3361,226 @@ ALTER TABLE [jsharmony].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_mtst
 GO
 ALTER TABLE [jsharmony].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [param_sys_muser]
 GO
-ALTER TABLE [jsharmony].[audit_detail]  WITH CHECK ADD  CONSTRAINT [FK_audit_detail_audit__tbl] FOREIGN KEY([audit_seq])
+ALTER TABLE [jsharmony].[audit_detail]  WITH CHECK ADD  CONSTRAINT [fk_audit_detail_audit__tbl] FOREIGN KEY([audit_seq])
 REFERENCES [jsharmony].[audit__tbl] ([audit_seq])
 GO
-ALTER TABLE [jsharmony].[audit_detail] CHECK CONSTRAINT [FK_audit_detail_audit__tbl]
+ALTER TABLE [jsharmony].[audit_detail] CHECK CONSTRAINT [fk_audit_detail_audit__tbl]
 GO
-ALTER TABLE [jsharmony].[cust_user]  WITH CHECK ADD  CONSTRAINT [FK_cust_user_code_ahc] FOREIGN KEY([sys_user_sts])
+ALTER TABLE [jsharmony].[cust_user]  WITH CHECK ADD  CONSTRAINT [fk_cust_user_code_ahc] FOREIGN KEY([sys_user_sts])
 REFERENCES [jsharmony].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[cust_user] CHECK CONSTRAINT [FK_cust_user_code_ahc]
+ALTER TABLE [jsharmony].[cust_user] CHECK CONSTRAINT [fk_cust_user_code_ahc]
 GO
-ALTER TABLE [jsharmony].[cust_user_role]  WITH CHECK ADD  CONSTRAINT [FK_cust_user_role_cust_user] FOREIGN KEY([sys_user_id])
+ALTER TABLE [jsharmony].[cust_user_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_user_role_cust_user] FOREIGN KEY([sys_user_id])
 REFERENCES [jsharmony].[cust_user] ([sys_user_id])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[cust_user_role] CHECK CONSTRAINT [FK_cust_user_role_cust_user]
+ALTER TABLE [jsharmony].[cust_user_role] CHECK CONSTRAINT [fk_cust_user_role_cust_user]
 GO
-ALTER TABLE [jsharmony].[cust_user_role]  WITH CHECK ADD  CONSTRAINT [FK_cust_user_role_cust_role_cust_role_name] FOREIGN KEY([cust_role_name])
+ALTER TABLE [jsharmony].[cust_user_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_user_role_cust_role_cust_role_name] FOREIGN KEY([cust_role_name])
 REFERENCES [jsharmony].[cust_role] ([cust_role_name])
 GO
-ALTER TABLE [jsharmony].[cust_user_role] CHECK CONSTRAINT [FK_cust_user_role_cust_role_cust_role_name]
+ALTER TABLE [jsharmony].[cust_user_role] CHECK CONSTRAINT [fk_cust_user_role_cust_role_cust_role_name]
 GO
-ALTER TABLE [jsharmony].[cust_role]  WITH CHECK ADD  CONSTRAINT [FK_cust_role_code_ahc] FOREIGN KEY([cust_role_sts])
+ALTER TABLE [jsharmony].[cust_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_role_code_ahc] FOREIGN KEY([cust_role_sts])
 REFERENCES [jsharmony].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[cust_role] CHECK CONSTRAINT [FK_cust_role_code_ahc]
+ALTER TABLE [jsharmony].[cust_role] CHECK CONSTRAINT [fk_cust_role_code_ahc]
 GO
-ALTER TABLE [jsharmony].[cust_menu_role]  WITH CHECK ADD  CONSTRAINT [FK_cust_menu_role_cust_role_cust_role_name] FOREIGN KEY([cust_role_name])
+ALTER TABLE [jsharmony].[cust_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_menu_role_cust_role_cust_role_name] FOREIGN KEY([cust_role_name])
 REFERENCES [jsharmony].[cust_role] ([cust_role_name])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[cust_menu_role] CHECK CONSTRAINT [FK_cust_menu_role_cust_role_cust_role_name]
+ALTER TABLE [jsharmony].[cust_menu_role] CHECK CONSTRAINT [fk_cust_menu_role_cust_role_cust_role_name]
 GO
-ALTER TABLE [jsharmony].[cust_menu_role]  WITH CHECK ADD  CONSTRAINT [FK_cust_menu_role_menu__tbl] FOREIGN KEY([menu_id])
+ALTER TABLE [jsharmony].[cust_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_menu_role_menu__tbl] FOREIGN KEY([menu_id])
 REFERENCES [jsharmony].[menu__tbl] ([menu_id])
 ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[cust_menu_role] CHECK CONSTRAINT [FK_cust_menu_role_menu__tbl]
+ALTER TABLE [jsharmony].[cust_menu_role] CHECK CONSTRAINT [fk_cust_menu_role_menu__tbl]
 GO
-ALTER TABLE [jsharmony].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [FK_doc__tbl_code2_doc_scope_doc_ctgr] FOREIGN KEY([doc_scope], [doc_ctgr])
+ALTER TABLE [jsharmony].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [fk_doc__tbl_code2_doc_scope_doc_ctgr] FOREIGN KEY([doc_scope], [doc_ctgr])
 REFERENCES [jsharmony].[code2_doc_scope_doc_ctgr] ([code_val1], [code_va12])
 GO
-ALTER TABLE [jsharmony].[doc__tbl] CHECK CONSTRAINT [FK_doc__tbl_code2_doc_scope_doc_ctgr]
+ALTER TABLE [jsharmony].[doc__tbl] CHECK CONSTRAINT [fk_doc__tbl_code2_doc_scope_doc_ctgr]
 GO
-ALTER TABLE [jsharmony].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [FK_doc__tbl_code_doc_scope] FOREIGN KEY([doc_scope])
+ALTER TABLE [jsharmony].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [fk_doc__tbl_code_doc_scope] FOREIGN KEY([doc_scope])
 REFERENCES [jsharmony].[code_doc_scope] ([code_val])
 GO
-ALTER TABLE [jsharmony].[doc__tbl] CHECK CONSTRAINT [FK_doc__tbl_code_doc_scope]
+ALTER TABLE [jsharmony].[doc__tbl] CHECK CONSTRAINT [fk_doc__tbl_code_doc_scope]
 GO
-ALTER TABLE [jsharmony].[param_app]  WITH CHECK ADD  CONSTRAINT [FK_param_app_param__tbl] FOREIGN KEY([param_app_process], [param_app_attrib])
+ALTER TABLE [jsharmony].[param_app]  WITH CHECK ADD  CONSTRAINT [fk_param_app_param__tbl] FOREIGN KEY([param_app_process], [param_app_attrib])
 REFERENCES [jsharmony].[param__tbl] ([param_process], [param_attrib])
 GO
-ALTER TABLE [jsharmony].[param_app] CHECK CONSTRAINT [FK_param_app_param__tbl]
+ALTER TABLE [jsharmony].[param_app] CHECK CONSTRAINT [fk_param_app_param__tbl]
 GO
-ALTER TABLE [jsharmony].[help__tbl]  WITH CHECK ADD  CONSTRAINT [FK_help__tbl_help_target] FOREIGN KEY([help_target_code])
+ALTER TABLE [jsharmony].[help__tbl]  WITH CHECK ADD  CONSTRAINT [fk_help__tbl_help_target] FOREIGN KEY([help_target_code])
 REFERENCES [jsharmony].[help_target] ([help_target_code])
 GO
-ALTER TABLE [jsharmony].[help__tbl] CHECK CONSTRAINT [FK_help__tbl_help_target]
+ALTER TABLE [jsharmony].[help__tbl] CHECK CONSTRAINT [fk_help__tbl_help_target]
 GO
-ALTER TABLE [jsharmony].[note__tbl]  WITH CHECK ADD  CONSTRAINT [FK_note__tbl_code_ac1] FOREIGN KEY([note_sts])
+ALTER TABLE [jsharmony].[note__tbl]  WITH CHECK ADD  CONSTRAINT [fk_note__tbl_code_ac1] FOREIGN KEY([note_sts])
 REFERENCES [jsharmony].[code_ac1] ([code_val])
 GO
-ALTER TABLE [jsharmony].[note__tbl] CHECK CONSTRAINT [FK_note__tbl_code_ac1]
+ALTER TABLE [jsharmony].[note__tbl] CHECK CONSTRAINT [fk_note__tbl_code_ac1]
 GO
-ALTER TABLE [jsharmony].[note__tbl]  WITH CHECK ADD  CONSTRAINT [FK_note__tbl_code_note_scope] FOREIGN KEY([note_scope])
+ALTER TABLE [jsharmony].[note__tbl]  WITH CHECK ADD  CONSTRAINT [fk_note__tbl_code_note_scope] FOREIGN KEY([note_scope])
 REFERENCES [jsharmony].[code_note_scope] ([code_val])
 GO
-ALTER TABLE [jsharmony].[note__tbl] CHECK CONSTRAINT [FK_note__tbl_code_note_scope]
+ALTER TABLE [jsharmony].[note__tbl] CHECK CONSTRAINT [fk_note__tbl_code_note_scope]
 GO
-ALTER TABLE [jsharmony].[note__tbl]  WITH CHECK ADD  CONSTRAINT [FK_note__tbl_code_note_type] FOREIGN KEY([note_type])
+ALTER TABLE [jsharmony].[note__tbl]  WITH CHECK ADD  CONSTRAINT [fk_note__tbl_code_note_type] FOREIGN KEY([note_type])
 REFERENCES [jsharmony].[code_note_type] ([code_val])
 GO
-ALTER TABLE [jsharmony].[note__tbl] CHECK CONSTRAINT [FK_note__tbl_code_note_type]
+ALTER TABLE [jsharmony].[note__tbl] CHECK CONSTRAINT [fk_note__tbl_code_note_type]
 GO
-ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [FK_sys_user_code_ahc] FOREIGN KEY([sys_user_sts])
+ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_code_ahc] FOREIGN KEY([sys_user_sts])
 REFERENCES [jsharmony].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [FK_sys_user_code_ahc]
+ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [fk_sys_user_code_ahc]
 GO
-ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [FK_sys_user_code_country] FOREIGN KEY([sys_user_country])
+ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_code_country] FOREIGN KEY([sys_user_country])
 REFERENCES [jsharmony].[code_country] ([code_val])
 GO
-ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [FK_sys_user_code_country]
+ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [fk_sys_user_code_country]
 GO
-ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [FK_sys_user_code2_country_state] FOREIGN KEY([sys_user_country], [sys_user_state])
+ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_code2_country_state] FOREIGN KEY([sys_user_country], [sys_user_state])
 REFERENCES [jsharmony].[code2_country_state] ([code_val1], [code_va12])
 GO
-ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [FK_sys_user_code2_country_state]
+ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [fk_sys_user_code2_country_state]
 GO
-ALTER TABLE [jsharmony].[param__tbl]  WITH CHECK ADD  CONSTRAINT [FK_param__tbl_code_param_type] FOREIGN KEY([param_type])
+ALTER TABLE [jsharmony].[param__tbl]  WITH CHECK ADD  CONSTRAINT [fk_param__tbl_code_param_type] FOREIGN KEY([param_type])
 REFERENCES [jsharmony].[code_param_type] ([code_val])
 GO
-ALTER TABLE [jsharmony].[param__tbl] CHECK CONSTRAINT [FK_param__tbl_code_param_type]
+ALTER TABLE [jsharmony].[param__tbl] CHECK CONSTRAINT [fk_param__tbl_code_param_type]
 GO
-ALTER TABLE [jsharmony].[param_user]  WITH CHECK ADD  CONSTRAINT [FK_param_user_sys_user] FOREIGN KEY([sys_user_id])
+ALTER TABLE [jsharmony].[param_user]  WITH CHECK ADD  CONSTRAINT [fk_param_user_sys_user] FOREIGN KEY([sys_user_id])
 REFERENCES [jsharmony].[sys_user] ([sys_user_id])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[param_user] CHECK CONSTRAINT [FK_param_user_sys_user]
+ALTER TABLE [jsharmony].[param_user] CHECK CONSTRAINT [fk_param_user_sys_user]
 GO
-ALTER TABLE [jsharmony].[param_user]  WITH CHECK ADD  CONSTRAINT [FK_param_user_param__tbl] FOREIGN KEY([param_user_process], [param_user_attrib])
+ALTER TABLE [jsharmony].[param_user]  WITH CHECK ADD  CONSTRAINT [fk_param_user_param__tbl] FOREIGN KEY([param_user_process], [param_user_attrib])
 REFERENCES [jsharmony].[param__tbl] ([param_process], [param_attrib])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[param_user] CHECK CONSTRAINT [FK_param_user_param__tbl]
+ALTER TABLE [jsharmony].[param_user] CHECK CONSTRAINT [fk_param_user_param__tbl]
 GO
-ALTER TABLE [jsharmony].[job__tbl]  WITH CHECK ADD  CONSTRAINT [FK_job__tbl_code_job_action] FOREIGN KEY([job_action])
+ALTER TABLE [jsharmony].[job__tbl]  WITH CHECK ADD  CONSTRAINT [fk_job__tbl_code_job_action] FOREIGN KEY([job_action])
 REFERENCES [jsharmony].[code_job_action] ([code_val])
 GO
-ALTER TABLE [jsharmony].[job__tbl] CHECK CONSTRAINT [FK_job__tbl_code_job_action]
+ALTER TABLE [jsharmony].[job__tbl] CHECK CONSTRAINT [fk_job__tbl_code_job_action]
 GO
-ALTER TABLE [jsharmony].[job__tbl]  WITH CHECK ADD  CONSTRAINT [FK_job__tbl_code_job_source] FOREIGN KEY([job_source])
+ALTER TABLE [jsharmony].[job__tbl]  WITH CHECK ADD  CONSTRAINT [fk_job__tbl_code_job_source] FOREIGN KEY([job_source])
 REFERENCES [jsharmony].[code_job_source] ([code_val])
 GO
-ALTER TABLE [jsharmony].[job__tbl] CHECK CONSTRAINT [FK_job__tbl_code_job_source]
+ALTER TABLE [jsharmony].[job__tbl] CHECK CONSTRAINT [fk_job__tbl_code_job_source]
 GO
-ALTER TABLE [jsharmony].[job_doc]  WITH CHECK ADD  CONSTRAINT [FK_job_doc_job__tbl] FOREIGN KEY([job_id])
+ALTER TABLE [jsharmony].[job_doc]  WITH CHECK ADD  CONSTRAINT [fk_job_doc_job__tbl] FOREIGN KEY([job_id])
 REFERENCES [jsharmony].[job__tbl] ([job_id])
 GO
-ALTER TABLE [jsharmony].[job_doc] CHECK CONSTRAINT [FK_job_doc_job__tbl]
+ALTER TABLE [jsharmony].[job_doc] CHECK CONSTRAINT [fk_job_doc_job__tbl]
 GO
-ALTER TABLE [jsharmony].[job_email]  WITH CHECK ADD  CONSTRAINT [FK_job_email_job__tbl] FOREIGN KEY([job_id])
+ALTER TABLE [jsharmony].[job_email]  WITH CHECK ADD  CONSTRAINT [fk_job_email_job__tbl] FOREIGN KEY([job_id])
 REFERENCES [jsharmony].[job__tbl] ([job_id])
 GO
-ALTER TABLE [jsharmony].[job_email] CHECK CONSTRAINT [FK_job_email_job__tbl]
+ALTER TABLE [jsharmony].[job_email] CHECK CONSTRAINT [fk_job_email_job__tbl]
 GO
-ALTER TABLE [jsharmony].[job_note]  WITH CHECK ADD  CONSTRAINT [FK_job_note_job__tbl] FOREIGN KEY([job_id])
+ALTER TABLE [jsharmony].[job_note]  WITH CHECK ADD  CONSTRAINT [fk_job_note_job__tbl] FOREIGN KEY([job_id])
 REFERENCES [jsharmony].[job__tbl] ([job_id])
 GO
-ALTER TABLE [jsharmony].[job_note] CHECK CONSTRAINT [FK_job_note_job__tbl]
+ALTER TABLE [jsharmony].[job_note] CHECK CONSTRAINT [fk_job_note_job__tbl]
 GO
-ALTER TABLE [jsharmony].[job_queue]  WITH CHECK ADD  CONSTRAINT [FK_job_queue_job__tbl] FOREIGN KEY([job_id])
+ALTER TABLE [jsharmony].[job_queue]  WITH CHECK ADD  CONSTRAINT [fk_job_queue_job__tbl] FOREIGN KEY([job_id])
 REFERENCES [jsharmony].[job__tbl] ([job_id])
 GO
-ALTER TABLE [jsharmony].[job_queue] CHECK CONSTRAINT [FK_job_queue_job__tbl]
+ALTER TABLE [jsharmony].[job_queue] CHECK CONSTRAINT [fk_job_queue_job__tbl]
 GO
-ALTER TABLE [jsharmony].[job_sms]  WITH CHECK ADD  CONSTRAINT [FK_job_sms_job__tbl] FOREIGN KEY([job_id])
+ALTER TABLE [jsharmony].[job_sms]  WITH CHECK ADD  CONSTRAINT [fk_job_sms_job__tbl] FOREIGN KEY([job_id])
 REFERENCES [jsharmony].[job__tbl] ([job_id])
 GO
-ALTER TABLE [jsharmony].[job_sms] CHECK CONSTRAINT [FK_job_sms_job__tbl]
+ALTER TABLE [jsharmony].[job_sms] CHECK CONSTRAINT [fk_job_sms_job__tbl]
 GO
-ALTER TABLE [jsharmony].[sys_func]  WITH CHECK ADD  CONSTRAINT [FK_sys_func_code_ahc] FOREIGN KEY([sys_func_sts])
+ALTER TABLE [jsharmony].[sys_func]  WITH CHECK ADD  CONSTRAINT [fk_sys_func_code_ahc] FOREIGN KEY([sys_func_sts])
 REFERENCES [jsharmony].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[sys_func] CHECK CONSTRAINT [FK_sys_func_code_ahc]
+ALTER TABLE [jsharmony].[sys_func] CHECK CONSTRAINT [fk_sys_func_code_ahc]
 GO
-ALTER TABLE [jsharmony].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [FK_menu__tbl_menu__tbl] FOREIGN KEY([menu_id_parent])
+ALTER TABLE [jsharmony].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [fk_menu__tbl_menu__tbl] FOREIGN KEY([menu_id_parent])
 REFERENCES [jsharmony].[menu__tbl] ([menu_id])
 GO
-ALTER TABLE [jsharmony].[menu__tbl] CHECK CONSTRAINT [FK_menu__tbl_menu__tbl]
+ALTER TABLE [jsharmony].[menu__tbl] CHECK CONSTRAINT [fk_menu__tbl_menu__tbl]
 GO
-ALTER TABLE [jsharmony].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [FK_menu__tbl_code_ahc] FOREIGN KEY([menu_sts])
+ALTER TABLE [jsharmony].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [fk_menu__tbl_code_ahc] FOREIGN KEY([menu_sts])
 REFERENCES [jsharmony].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[menu__tbl] CHECK CONSTRAINT [FK_menu__tbl_code_ahc]
+ALTER TABLE [jsharmony].[menu__tbl] CHECK CONSTRAINT [fk_menu__tbl_code_ahc]
 GO
-ALTER TABLE [jsharmony].[sys_user_func]  WITH CHECK ADD  CONSTRAINT [FK_sys_user_func_sys_user] FOREIGN KEY([sys_user_id])
+ALTER TABLE [jsharmony].[sys_user_func]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_func_sys_user] FOREIGN KEY([sys_user_id])
 REFERENCES [jsharmony].[sys_user] ([sys_user_id])
 GO
-ALTER TABLE [jsharmony].[sys_user_func] CHECK CONSTRAINT [FK_sys_user_func_sys_user]
+ALTER TABLE [jsharmony].[sys_user_func] CHECK CONSTRAINT [fk_sys_user_func_sys_user]
 GO
-ALTER TABLE [jsharmony].[sys_user_func]  WITH CHECK ADD  CONSTRAINT [FK_sys_user_func_sys_func_sys_func_name] FOREIGN KEY([sys_func_name])
+ALTER TABLE [jsharmony].[sys_user_func]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_func_sys_func_sys_func_name] FOREIGN KEY([sys_func_name])
 REFERENCES [jsharmony].[sys_func] ([sys_func_name])
 GO
-ALTER TABLE [jsharmony].[sys_user_func] CHECK CONSTRAINT [FK_sys_user_func_sys_func_sys_func_name]
+ALTER TABLE [jsharmony].[sys_user_func] CHECK CONSTRAINT [fk_sys_user_func_sys_func_sys_func_name]
 GO
-ALTER TABLE [jsharmony].[sys_user_role]  WITH CHECK ADD  CONSTRAINT [FK_sys_user_role_sys_user] FOREIGN KEY([sys_user_id])
+ALTER TABLE [jsharmony].[sys_user_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_role_sys_user] FOREIGN KEY([sys_user_id])
 REFERENCES [jsharmony].[sys_user] ([sys_user_id])
 GO
-ALTER TABLE [jsharmony].[sys_user_role] CHECK CONSTRAINT [FK_sys_user_role_sys_user]
+ALTER TABLE [jsharmony].[sys_user_role] CHECK CONSTRAINT [fk_sys_user_role_sys_user]
 GO
-ALTER TABLE [jsharmony].[sys_user_role]  WITH CHECK ADD  CONSTRAINT [FK_sys_user_role_sys_role_sys_role_name] FOREIGN KEY([sys_role_name])
+ALTER TABLE [jsharmony].[sys_user_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_role_sys_role_sys_role_name] FOREIGN KEY([sys_role_name])
 REFERENCES [jsharmony].[sys_role] ([sys_role_name])
 GO
-ALTER TABLE [jsharmony].[sys_user_role] CHECK CONSTRAINT [FK_sys_user_role_sys_role_sys_role_name]
+ALTER TABLE [jsharmony].[sys_user_role] CHECK CONSTRAINT [fk_sys_user_role_sys_role_sys_role_name]
 GO
-ALTER TABLE [jsharmony].[sys_role]  WITH CHECK ADD  CONSTRAINT [FK_sys_role_code_ahc] FOREIGN KEY([sys_role_sts])
+ALTER TABLE [jsharmony].[sys_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_role_code_ahc] FOREIGN KEY([sys_role_sts])
 REFERENCES [jsharmony].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[sys_role] CHECK CONSTRAINT [FK_sys_role_code_ahc]
+ALTER TABLE [jsharmony].[sys_role] CHECK CONSTRAINT [fk_sys_role_code_ahc]
 GO
-ALTER TABLE [jsharmony].[sys_menu_role]  WITH CHECK ADD  CONSTRAINT [FK_sys_menu_role_menu__tbl] FOREIGN KEY([menu_id])
+ALTER TABLE [jsharmony].[sys_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_menu_role_menu__tbl] FOREIGN KEY([menu_id])
 REFERENCES [jsharmony].[menu__tbl] ([menu_id])
 ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[sys_menu_role] CHECK CONSTRAINT [FK_sys_menu_role_menu__tbl]
+ALTER TABLE [jsharmony].[sys_menu_role] CHECK CONSTRAINT [fk_sys_menu_role_menu__tbl]
 GO
-ALTER TABLE [jsharmony].[sys_menu_role]  WITH CHECK ADD  CONSTRAINT [FK_sys_menu_role_sys_role_sys_role_name] FOREIGN KEY([sys_role_name])
+ALTER TABLE [jsharmony].[sys_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_menu_role_sys_role_sys_role_name] FOREIGN KEY([sys_role_name])
 REFERENCES [jsharmony].[sys_role] ([sys_role_name])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[sys_menu_role] CHECK CONSTRAINT [FK_sys_menu_role_sys_role_sys_role_name]
+ALTER TABLE [jsharmony].[sys_menu_role] CHECK CONSTRAINT [fk_sys_menu_role_sys_role_sys_role_name]
 GO
-ALTER TABLE [jsharmony].[txt__tbl]  WITH CHECK ADD  CONSTRAINT [FK_TXT_code_txt_type] FOREIGN KEY([txt_type])
+ALTER TABLE [jsharmony].[txt__tbl]  WITH CHECK ADD  CONSTRAINT [fk_TXT_code_txt_type] FOREIGN KEY([txt_type])
 REFERENCES [jsharmony].[code_txt_type] ([code_val])
 GO
-ALTER TABLE [jsharmony].[txt__tbl] CHECK CONSTRAINT [FK_TXT_code_txt_type]
+ALTER TABLE [jsharmony].[txt__tbl] CHECK CONSTRAINT [fk_TXT_code_txt_type]
 GO
-ALTER TABLE [jsharmony].[version__tbl]  WITH CHECK ADD  CONSTRAINT [FK_version__tbl_code_version_sts] FOREIGN KEY([version_sts])
+ALTER TABLE [jsharmony].[version__tbl]  WITH CHECK ADD  CONSTRAINT [fk_version__tbl_code_version_sts] FOREIGN KEY([version_sts])
 REFERENCES [jsharmony].[code_version_sts] ([code_val])
 GO
-ALTER TABLE [jsharmony].[version__tbl] CHECK CONSTRAINT [FK_version__tbl_code_version_sts]
+ALTER TABLE [jsharmony].[version__tbl] CHECK CONSTRAINT [fk_version__tbl_code_version_sts]
 GO
-ALTER TABLE [jsharmony].[param_sys]  WITH CHECK ADD  CONSTRAINT [FK_param_sys_param__tbl] FOREIGN KEY([param_sys_process], [param_sys_attrib])
+ALTER TABLE [jsharmony].[param_sys]  WITH CHECK ADD  CONSTRAINT [fk_param_sys_param__tbl] FOREIGN KEY([param_sys_process], [param_sys_attrib])
 REFERENCES [jsharmony].[param__tbl] ([param_process], [param_attrib])
 GO
-ALTER TABLE [jsharmony].[param_sys] CHECK CONSTRAINT [FK_param_sys_param__tbl]
+ALTER TABLE [jsharmony].[param_sys] CHECK CONSTRAINT [fk_param_sys_param__tbl]
 GO
-ALTER TABLE [jsharmony].[cust_user]  WITH CHECK ADD  CONSTRAINT [CK_cust_user_sys_user_email] CHECK  ((isnull([sys_user_email],'')<>''))
+ALTER TABLE [jsharmony].[cust_user]  WITH CHECK ADD  CONSTRAINT [ck_cust_user_sys_user_email] CHECK  ((isnull([sys_user_email],'')<>''))
 GO
-ALTER TABLE [jsharmony].[cust_user] CHECK CONSTRAINT [CK_cust_user_sys_user_email]
+ALTER TABLE [jsharmony].[cust_user] CHECK CONSTRAINT [ck_cust_user_sys_user_email]
 GO
-ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [CK_sys_user_sys_user_email] CHECK  ((isnull([sys_user_email],'')<>''))
+ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [ck_sys_user_sys_user_email] CHECK  ((isnull([sys_user_email],'')<>''))
 GO
-ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [CK_sys_user_sys_user_email]
+ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [ck_sys_user_sys_user_email]
 GO
-ALTER TABLE [jsharmony].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [CK_menu__tbl_menu_group] CHECK  (([menu_group]='C' OR [menu_group]='S'))
+ALTER TABLE [jsharmony].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [ck_menu__tbl_menu_group] CHECK  (([menu_group]='C' OR [menu_group]='S'))
 GO
-ALTER TABLE [jsharmony].[menu__tbl] CHECK CONSTRAINT [CK_menu__tbl_menu_group]
+ALTER TABLE [jsharmony].[menu__tbl] CHECK CONSTRAINT [ck_menu__tbl_menu_group]
 GO
 SET ANSI_NULLS ON
 GO

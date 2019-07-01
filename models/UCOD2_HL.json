@@ -53,7 +53,7 @@
       {"name":"my_create","actions": "B"}
     ],
     "dberrors": [
-      [ "UNQ_UCOD2_H", "Duplicate Key (Schema + Code Table Name)" ],
+      [ "unq_ucod2_h", "Duplicate Key (Schema + Code Table Name)" ],
       [ "ucod2_h_codeschema_codename_key", "Duplicate Key (Schema + Code Table Name)" ]
     ]  
   }

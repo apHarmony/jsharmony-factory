@@ -75,7 +75,7 @@
        },
       "validate": [ "Required" ]}
 	],
-	    "dberrors": [
+	"dberrors": [
     [ "Record not found", "You have no access to the document." ]
   ]
  },	

@@ -30,9 +30,9 @@
       {"name":"privs","caption":"Menu Access","control":"html","value":"<img src='/images/icon_update.png' class='xicon' />","link":"update:X_CRMSEL_HW&cr_name"}
     ],
     "dberrors": [
-      [ "PK_CR", "Duplicate Role Name" ],
+      [ "pk_cr", "Duplicate Role Name" ],
       [ "cr_pkey", "Duplicate Role Name" ],
-      [ "UNQ_CR_CR_Desc", "Duplicate Role Description" ],
+      [ "unq_cr_cr_desc", "Duplicate Role Description" ],
       [ "cr_cr_desc_key", "Duplicate Role Description" ],
       [ "cper_cr_name_fkey", "Role Name consistency error" ]
     ]

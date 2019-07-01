@@ -32,7 +32,7 @@
        "controlstyle":"width:48px;display:none;"}
     ],
     "dberrors": [
-      [ "PK_XPP", "Duplicate Key (Process + Attribute)" ],
+      [ "pk_xpp", "Duplicate Key (Process + Attribute)" ],
       [ "xpp_xpp_process_xpp_attrib_key", "Duplicate Key (Process + Attribute)" ]
     ]
   }    

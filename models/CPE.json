@@ -71,8 +71,8 @@
           "control": "hidden","caption": ""}
   ],
   "dberrors":[
-    ["FK_CPER_CPE","Cannot delete a user with selected role(s)"],
-    ["UNQ_CPE_PE_Email","Email address is not unique "],
+    ["fk_cper_cpe","Cannot delete a user with selected role(s)"],
+    ["unq_cpe_pe_email","Email address is not unique "],
     ["cpe_pe_email_unique","Email address is not unique "]
   ]
   },    

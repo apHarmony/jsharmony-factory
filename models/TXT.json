@@ -44,9 +44,9 @@
           "control":"textbox","controlstyle":"width:158px;","caption":"","eol":1}
     ],
     "dberrors": [
-      [ "FK_TXT_UCOD_TXT_TYPE", "Incorrect Body Type" ],
+      [ "fk_txt_ucod_txt_type", "Incorrect Body Type" ],
       [ "txt_ucod_txt_type_fkey", "Incorrect Body Type" ],
-      [ "UNQ_TXT", "Duplicate Key (Process + Attribute)" ],
+      [ "unq_txt", "Duplicate Key (Process + Attribute)" ],
       [ "txt_txt_process_txt_attrib_key", "Duplicate Key (Process + Attribute)" ]
     ]
   },

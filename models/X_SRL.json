@@ -30,9 +30,9 @@
       {"name":"privs","caption":"Menu Access","control":"html","value":"<img src='/images/icon_update.png' class='xicon' />","link":"update:X_SRMSEL_HW&sr_name"}
     ],
     "dberrors": [
-      [ "PK_SR", "Duplicate Role Name" ],
+      [ "pk_sr", "Duplicate Role Name" ],
       [ "sr_pkey", "Duplicate Role Name" ],
-      [ "UNQ_SR_SR_Desc", "Duplicate Role Description" ],
+      [ "unq_sr_sr_desc", "Duplicate Role Description" ],
       [ "sr_sr_desc_key", "Duplicate Role Description" ],
       [ "sper_sr_name_fkey", "Role Name consistency error" ]
     ]

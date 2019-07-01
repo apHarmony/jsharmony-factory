@@ -20,15 +20,15 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_euser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_euser])),
 	[code_muser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_muser])),
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_app_%%%name%%%] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_app_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[code_app_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_app_%%%name%%%_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_app_%%%name%%%_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_app_%%%name%%%_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_app_%%%name%%%_code_val] UNIQUE NONCLUSTERED 
 (
 	[code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -347,16 +347,16 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_notes] [nvarchar](255) NULL,
 	[code_euser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_euser])),
 	[code_muser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_muser])),
- CONSTRAINT [PK_code2_app_%%%name%%%] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code2_app_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[code2_app_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_app_%%%name%%%_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_app_%%%name%%%_code_val1_code_va12] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_va12] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_app_%%%name%%%_code_val1_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_app_%%%name%%%_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_txt] ASC
@@ -695,15 +695,15 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
 	[code_attrib] [nvarchar](50) NULL,
- CONSTRAINT [PK_code_sys_%%%name%%%] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code_sys_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_sys_%%%name%%%_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_sys_%%%name%%%_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code_sys_%%%name%%%_code_val] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code_sys_%%%name%%%_code_val] UNIQUE NONCLUSTERED 
 (
 	[code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -782,16 +782,16 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
- CONSTRAINT [PK_code2_sys_%%%name%%%] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [pk_code2_sys_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[code2_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_sys_%%%name%%%_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_sys_%%%name%%%_code_val1_code_va12] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_va12] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UNQ_code2_sys_%%%name%%%_code_val1_code_txt] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_sys_%%%name%%%_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
 	[code_txt] ASC

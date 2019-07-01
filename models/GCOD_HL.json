@@ -49,7 +49,7 @@
        "__AFTER__": "my_create"}
     ],
     "dberrors": [
-      [ "PK_XPP", "Duplicate Key (Code Table name)" ],
+      [ "pk_xpp", "Duplicate Key (Code Table name)" ],
       [ "gcod_h_pk", "Duplicate Key (Code Table Name)" ]
     ]
   }

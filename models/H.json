@@ -45,8 +45,8 @@
           "control":"textbox","controlstyle":"width:158px;","caption":"","eol":1}
 	],
 	"dberrors":[
-    ["UNQ_H_H_UNIQUE","This Help Panel has already been defined."],
-    ["UNQ_H_H_Title","The Help Panel with the same title has already been defined."],
+    ["unq_h_h_unique","This Help Panel has already been defined."],
+    ["unq_h_h_title","The Help Panel with the same title has already been defined."],
     ["h_hp_code_unique","This Help Panel has already been defined."],
     ["h_h_title_key","The Help Panel with the same title has already been defined."]
 	]

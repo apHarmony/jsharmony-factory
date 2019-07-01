@@ -53,16 +53,16 @@
        "caption": "Privileges"}
     ],
     "dberrors": [
-      [ "UNQ_SM_SM_ID", "Duplicate ID" ],
+      [ "unq_sm_sm_id", "Duplicate ID" ],
       [ "sm_sm_id_key", "Duplicate ID" ],
-      [ "UNQ_SM_SM_NAME", "Duplicate Name" ],
+      [ "unq_sm_sm_name", "Duplicate Name" ],
       [ "sm_sm_name_key", "Duplicate Menu ID" ],
-      [ "UNQ_SM_SM_DESC", "Duplicate Description within Parent" ],
+      [ "unq_sm_sm_desc", "Duplicate Description within Parent" ],
       [ "sm_sm_id_parent_sm_desc_key", "Duplicate Description within Parent" ],
-      [ "FK_SM_SM", "Parent ID consistency error" ],
+      [ "fk_sm_sm", "Parent ID consistency error" ],
       [ "sm_sm_id_parent_fkey", "Parent ID consistency error" ],
-      [ "CK_SM_SM_UTYPE", "User Type values: S-System, C-Customer" ],
-      [ "FK_SRM_SM", "This ID is used in SRM - cannot be modified or deleted" ]
+      [ "ck_sm_sm_utype", "User Type values: S-System, C-Customer" ],
+      [ "fk_srm_sm", "This ID is used in SRM - cannot be modified or deleted" ]
     ]
   }
 }

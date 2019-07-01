@@ -40,7 +40,7 @@
        "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>UCODL?codename=<%=data['codename']%>&codeschema=<%=data['codeschema']%>'><% if(data['click2']){ %><img src='/images/icon_update.png' height='14' style='position:relative;top:2px;' /><% } %></a>"}
 	],
     "dberrors": [
-      [ "UNQ_UCOD_H", "Duplicate Key (Schema + Code Table name)" ],
+      [ "unq_ucod_h", "Duplicate Key (Schema + Code Table name)" ],
       [ "ucod_h_codeschema_codename_key", "Duplicate Key (Schema + Code Table name)" ],
       [ "ucod_h_coalesce_codename_idx", "Duplicate Key (Schema + Code Table name)" ]
     ]  
@@ -58,7 +58,7 @@
       {"name":"my_create","actions": "B"}
     ],
     "dberrors": [
-      [ "UNQ_UCOD_H", "Duplicate Key (Schema + Code Table name)" ],
+      [ "unq_ucod_h", "Duplicate Key (Schema + Code Table name)" ],
       [ "ucod_h_codeschema_codename_key", "Duplicate Key (Schema + Code Table Name)" ],
       [ "ucod_h_coalesce_codename_idx", "Duplicate Key (Schema + Code Table name)" ]
     ]

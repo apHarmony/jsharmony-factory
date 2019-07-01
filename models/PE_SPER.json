@@ -19,7 +19,7 @@
     ],
     "dberrors":[
       ["fk_sper_pe","Cannot delete a user with selected role(s)."],
-      ["FK_SPER_PE","Cannot delete a user with selected role(s)."]
+      ["fk_sper_pe","Cannot delete a user with selected role(s)."]
     ]
   }
 }

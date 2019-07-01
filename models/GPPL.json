@@ -30,7 +30,7 @@
        "controlstyle":"width:48px;display:none;"}
     ],
     "dberrors": [
-      [ "PK_GPP", "Duplicate Key (Process + Attribute)" ],
+      [ "pk_gpp", "Duplicate Key (Process + Attribute)" ],
       [ "gpp_gpp_process_gpp_attrib_key", "Duplicate Key (Process + Attribute)" ]
     ]
   },    

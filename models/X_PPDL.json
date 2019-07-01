@@ -39,7 +39,7 @@
        "controlstyle":"width:48px;display:none;"}
     ],
     "dberrors": [
-      [ "PK_PPD", "Duplicate Key (Process + Attribute)" ],
+      [ "pk_ppd", "Duplicate Key (Process + Attribute)" ],
       [ "ppd_ppd_process_ppd_attrib_key", "Duplicate Key (Process + Attribute)" ]
     ]
   }    

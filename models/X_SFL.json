@@ -29,9 +29,9 @@
        "controlstyle":"width:70px;","caption":"Status"}
     ],
     "dberrors": [
-      [ "PK_SF", "Duplicate Function Name" ],
+      [ "pk_sf", "Duplicate Function Name" ],
       [ "sf_pkey", "Duplicate Function Name" ],
-      [ "UNQ_SF_SF_Desc", "Duplicate Function Description" ],
+      [ "unq_sf_sf_desc", "Duplicate Function Description" ],
       [ "sf_sf_desc_key", "Duplicate Function Description" ]
     ]
   }    
