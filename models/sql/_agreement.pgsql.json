@@ -5,7 +5,7 @@
   "agreement_sign": [
     "start transaction;",
     "update cust set cust_agreement_tstmp=current_date where cust_id=@cust_id;",
-    "with xrslt as (insert into {schema}.job__tbl(job_source, job_action, job_action_target, job_params) values('CLIENT', 'REPORT', 'AGREEMENT',@job_params) returning job_id)",
+    "with xrslt as (insert into {schema}.job__tbl(job_source, job_action, job_action_target, job_params) values('CLIENT', 'REPORT', '{namespace}Reports/Agreement',@job_params) returning job_id)",
     "  insert into {schema}.job_doc(job_id, doc_scope, doc_scope_id, doc_ctgr, doc_desc) select job_id, 'C',@cust_id, 'AGREEMNT', 'Customer Portal Agreement' from xrslt;",
     "commit transaction;"
   ],
