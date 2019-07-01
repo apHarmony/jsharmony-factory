@@ -1361,8 +1361,8 @@ CREATE TABLE [jsharmony].[doc__tbl](
 	[doc_euser] [nvarchar](20) NOT NULL,
 	[doc_mtstmp] [datetime2](7) NOT NULL,
 	[doc_muser] [nvarchar](20) NOT NULL,
-	[doc_utstmp] [datetime2](7) NOT NULL,
-	[doc_uuser] [nvarchar](20) NOT NULL,
+	[doc_uptstmp] [datetime2](7) NOT NULL,
+	[doc_upuser] [nvarchar](20) NOT NULL,
 	[doc_sync_tstmp] [datetime2](7) NULL,
 	[doc_snotes] [nvarchar](255) NULL,
 	[doc_sync_id] [bigint] NULL,
@@ -1394,8 +1394,8 @@ SELECT doc_id
       ,doc_euser
       ,doc_mtstmp
       ,doc_muser
-      ,doc_utstmp
-      ,doc_uuser
+      ,doc_uptstmp
+      ,doc_upuser
       ,doc_sync_tstmp
       ,doc_snotes
       ,doc_sync_id
@@ -3083,9 +3083,9 @@ ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_mtstmp]  DEF
 GO
 ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [doc_muser]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_utstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [doc_utstmp]
+ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_uptstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [doc_uptstmp]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_uuser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [doc_uuser]
+ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_upuser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [doc_upuser]
 GO
 ALTER TABLE [jsharmony].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_Edt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_etstmp]
 GO
@@ -4934,8 +4934,8 @@ BEGIN
 	         del.doc_sts, i.doc_sts,
 			 del.doc_ctgr, i.doc_ctgr,
 			 del.doc_desc, i.doc_desc,
-			 del.doc_utstmp, i.doc_utstmp,
-			 del.doc_uuser, i.doc_uuser,
+			 del.doc_uptstmp, i.doc_uptstmp,
+			 del.doc_upuser, i.doc_upuser,
 			 del.doc_sync_tstmp, i.doc_sync_tstmp,
 			 del.cust_id, i.cust_id,
 			 del.item_id, i.item_id
@@ -4953,10 +4953,10 @@ BEGIN
   DECLARE @I_doc_ctgr NVARCHAR(MAX)
   DECLARE @D_doc_desc NVARCHAR(MAX) 
   DECLARE @I_doc_desc NVARCHAR(MAX)
-  DECLARE @D_doc_utstmp datetime2(7) 
-  DECLARE @I_doc_utstmp datetime2(7)
-  DECLARE @D_doc_uuser NVARCHAR(MAX) 
-  DECLARE @I_doc_uuser NVARCHAR(MAX)
+  DECLARE @D_doc_uptstmp datetime2(7) 
+  DECLARE @I_doc_uptstmp datetime2(7)
+  DECLARE @D_doc_upuser NVARCHAR(MAX) 
+  DECLARE @I_doc_upuser NVARCHAR(MAX)
   DECLARE @D_doc_sync_tstmp datetime2(7) 
   DECLARE @I_doc_sync_tstmp datetime2(7)
   DECLARE @D_cust_id bigint 
@@ -5049,8 +5049,8 @@ BEGIN
              @D_doc_sts, @I_doc_sts,
 			 @D_doc_ctgr, @I_doc_ctgr,
 			 @D_doc_desc, @I_doc_desc,
-			 @D_doc_utstmp, @I_doc_utstmp,
-			 @D_doc_uuser, @I_doc_uuser,
+			 @D_doc_uptstmp, @I_doc_uptstmp,
+			 @D_doc_upuser, @I_doc_upuser,
 			 @D_doc_sync_tstmp, @I_doc_sync_tstmp,
 			 @D_cust_id, @I_cust_id,
 			 @D_item_id, @I_item_id
@@ -5193,20 +5193,20 @@ BEGIN
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_desc'), @D_doc_desc)
       END
 
-      IF (@TP = 'D' AND @D_doc_utstmp IS NOT NULL OR
-          @TP = 'U' AND {schema}.nequal_date(@D_doc_utstmp, @I_doc_utstmp) > 0)
+      IF (@TP = 'D' AND @D_doc_uptstmp IS NOT NULL OR
+          @TP = 'U' AND {schema}.nequal_date(@D_doc_uptstmp, @I_doc_uptstmp) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
 		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
-        INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_utstmp'), @D_doc_utstmp)
+        INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_uptstmp'), @D_doc_uptstmp)
       END
 
-      IF (@TP = 'D' AND @D_doc_uuser IS NOT NULL OR
-          @TP = 'U' AND {schema}.nequal_chr(@D_doc_uuser, @I_doc_uuser) > 0)
+      IF (@TP = 'D' AND @D_doc_upuser IS NOT NULL OR
+          @TP = 'U' AND {schema}.nequal_chr(@D_doc_upuser, @I_doc_upuser) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
 		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
-        INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_uuser'), @D_doc_uuser)
+        INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_upuser'), @D_doc_upuser)
       END
 
       IF (@TP = 'D' AND @D_cust_id IS NOT NULL OR
@@ -5257,8 +5257,8 @@ BEGIN
              @D_doc_sts, @I_doc_sts,
 			 @D_doc_ctgr, @I_doc_ctgr,
 			 @D_doc_desc, @I_doc_desc,
-			 @D_doc_utstmp, @I_doc_utstmp,
-			 @D_doc_uuser, @I_doc_uuser,
+			 @D_doc_uptstmp, @I_doc_uptstmp,
+			 @D_doc_upuser, @I_doc_upuser,
 			 @D_doc_sync_tstmp, @I_doc_sync_tstmp,
 			 @D_cust_id, @I_cust_id,
 			 @D_item_id, @I_item_id
@@ -8113,9 +8113,9 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last 
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Modification User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'doc__tbl', @level2type=N'COLUMN',@level2name=N'doc_muser'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'doc__tbl', @level2type=N'COLUMN',@level2name=N'doc_utstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'doc__tbl', @level2type=N'COLUMN',@level2name=N'doc_uptstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'doc__tbl', @level2type=N'COLUMN',@level2name=N'doc_uuser'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Last Upload User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'doc__tbl', @level2type=N'COLUMN',@level2name=N'doc_upuser'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Document Synchronization Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'doc__tbl', @level2type=N'COLUMN',@level2name=N'doc_sync_tstmp'
 GO
@@ -9836,9 +9836,9 @@ SELECT doc__tbl.doc_id
       ,doc__tbl.doc_mtstmp
       ,doc__tbl.doc_muser
       ,{schema}.my_db_user_fmt(doc_muser) doc_muser_fmt
-      ,doc__tbl.doc_utstmp
-      ,doc__tbl.doc_uuser
-      ,{schema}.my_db_user_fmt(doc_uuser) doc_uuser_fmt
+      ,doc__tbl.doc_uptstmp
+      ,doc__tbl.doc_upuser
+      ,{schema}.my_db_user_fmt(doc_upuser) doc_upuser_fmt
       ,doc__tbl.doc_snotes
 	    ,single.dual_nvarchar50 title_head
 	    ,single.dual_nvarchar50 title_detail
@@ -9906,9 +9906,9 @@ SELECT doc__tbl.doc_id
       ,doc__tbl.doc_mtstmp
       ,doc__tbl.doc_muser
       ,{schema}.my_db_user_fmt(doc_muser) doc_muser_fmt
-      ,doc__tbl.doc_utstmp
-      ,doc__tbl.doc_uuser
-      ,{schema}.my_db_user_fmt(doc_uuser) doc_uuser_fmt
+      ,doc__tbl.doc_uptstmp
+      ,doc__tbl.doc_upuser
+      ,{schema}.my_db_user_fmt(doc_upuser) doc_upuser_fmt
       ,doc__tbl.doc_snotes
 	    ,null title_head
 	    ,null title_detail

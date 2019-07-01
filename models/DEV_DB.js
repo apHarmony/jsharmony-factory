@@ -31,7 +31,7 @@ jsh.App[modelid] = new (function(){
     c_einhash bytea DEFAULT '\\x00'::bytea NOT NULL,\r\n\
     c_doc_ext character varying(16),\r\n\
     c_doc_size bigint,\r\n\
-    c_doc_utstmp timestamp without time zone,\r\n\
+    c_doc_uptstmp timestamp without time zone,\r\n\
     c_doc_uu character varying(20),\r\n\
     foreign key (c_sts) references public.ucod_c_sts(codeval)\r\n\
   );\r\n\
@@ -59,7 +59,7 @@ jsh.App[modelid] = new (function(){
     c_einhash blob,\r\n\
     c_doc_ext text,\r\n\
     c_doc_size integer,\r\n\
-    c_doc_utstmp text,\r\n\
+    c_doc_uptstmp text,\r\n\
     c_doc_uu text,\r\n\
     foreign key (c_sts) references ucod_c_sts(codeval)\r\n\
   );\r\n\

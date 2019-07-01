@@ -270,9 +270,9 @@ CREATE VIEW {schema}_v_doc AS
     doc__tbl.doc_mtstmp,
     doc__tbl.doc_muser,
     {schema}.my_db_user_fmt(doc__tbl.doc_muser) AS doc_muser_fmt,
-    doc__tbl.doc_utstmp,
-    doc__tbl.doc_uuser,
-    {schema}.my_db_user_fmt(doc__tbl.doc_uuser) AS doc_uuser_fmt,
+    doc__tbl.doc_uptstmp,
+    doc__tbl.doc_upuser,
+    {schema}.my_db_user_fmt(doc__tbl.doc_upuser) AS doc_upuser_fmt,
     doc__tbl.doc_snotes,
     NULL AS title_head,
     NULL AS title_detail
@@ -298,9 +298,9 @@ CREATE VIEW {schema}_v_doc_ext AS
     doc__tbl.doc_mtstmp,
     doc__tbl.doc_muser,
     {schema}.my_db_user_fmt(doc__tbl.doc_muser) AS doc_muser_fmt,
-    doc__tbl.doc_utstmp,
-    doc__tbl.doc_uuser,
-    {schema}.my_db_user_fmt(doc__tbl.doc_uuser) AS doc_uuser_fmt,
+    doc__tbl.doc_uptstmp,
+    doc__tbl.doc_upuser,
+    {schema}.my_db_user_fmt(doc__tbl.doc_upuser) AS doc_upuser_fmt,
     doc__tbl.doc_snotes,
     null AS title_head,
     null AS title_detail,
@@ -313,8 +313,8 @@ CREATE VIEW {schema}_v_doc_ext AS
 
 create trigger {schema}_v_doc_ext_insert instead of insert on {schema}_v_doc_ext
 begin
-  insert into {schema}_doc__tbl(doc_scope, doc_scope_id, doc_sts, cust_id, item_id, doc_ctgr, doc_desc, doc_ext, doc_size, doc_etstmp, doc_euser, doc_mtstmp, doc_muser, doc_utstmp, doc_uuser, doc_snotes)
-                    values (coalesce(new.doc_scope,'S'), coalesce(new.doc_scope_id,0), coalesce(new.doc_sts,'A'), new.cust_id, new.item_id, new.doc_ctgr, new.doc_desc, new.doc_ext, new.doc_size, new.doc_etstmp, new.doc_euser, new.doc_mtstmp, new.doc_muser, new.doc_utstmp, new.doc_uuser, new.doc_snotes)\;
+  insert into {schema}_doc__tbl(doc_scope, doc_scope_id, doc_sts, cust_id, item_id, doc_ctgr, doc_desc, doc_ext, doc_size, doc_etstmp, doc_euser, doc_mtstmp, doc_muser, doc_uptstmp, doc_upuser, doc_snotes)
+                    values (coalesce(new.doc_scope,'S'), coalesce(new.doc_scope_id,0), coalesce(new.doc_sts,'A'), new.cust_id, new.item_id, new.doc_ctgr, new.doc_desc, new.doc_ext, new.doc_size, new.doc_etstmp, new.doc_euser, new.doc_mtstmp, new.doc_muser, new.doc_uptstmp, new.doc_upuser, new.doc_snotes)\;
   update jsharmony_meta set extra_changes=extra_changes+1, last_insert_rowid_override=last_insert_rowid()\;
 end;
 
@@ -324,7 +324,7 @@ begin
                            cust_id = new.cust_id, item_id = new.item_id, doc_ctgr = new.doc_ctgr, doc_desc = new.doc_desc,
                            doc_ext = new.doc_ext, doc_size = new.doc_size,
                            doc_etstmp = new.doc_etstmp,doc_euser = new.doc_euser, doc_mtstmp = new.doc_mtstmp, doc_muser = new.doc_muser,
-                           doc_utstmp = new.doc_utstmp, doc_uuser = new.doc_uuser, doc_snotes =  new.doc_snotes
+                           doc_uptstmp = new.doc_uptstmp, doc_upuser = new.doc_upuser, doc_snotes =  new.doc_snotes
                            where doc_id=new.doc_id\;
   update jsharmony_meta set extra_changes=extra_changes+1\;
 end;
@@ -351,8 +351,8 @@ CREATE VIEW {schema}_v_doc_filename AS
     doc__tbl.doc_euser,
     doc__tbl.doc_mtstmp,
     doc__tbl.doc_muser,
-    doc__tbl.doc_utstmp,
-    doc__tbl.doc_uuser,
+    doc__tbl.doc_uptstmp,
+    doc__tbl.doc_upuser,
     doc__tbl.doc_sync_tstmp,
     doc__tbl.doc_snotes,
     doc__tbl.doc_sync_id,

@@ -1195,14 +1195,14 @@ CREATE FUNCTION doc__tbl_iud() RETURNS trigger
           SELECT par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, my_id, 'doc_desc',OLD.doc_desc::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.doc_utstmp is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nequal(NEW.doc_utstmp, OLD.doc_utstmp) end) THEN
-          SELECT par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, my_id, 'doc_utstmp',OLD.doc_utstmp::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.doc_uptstmp is not null 
+                 else TG_OP = 'UPDATE' and {schema}.nequal(NEW.doc_uptstmp, OLD.doc_uptstmp) end) THEN
+          SELECT par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, my_id, 'doc_uptstmp',OLD.doc_uptstmp::text);  
         END IF;
      
-        IF (case when TG_OP = 'DELETE' then OLD.doc_uuser is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nequal(NEW.doc_uuser, OLD.doc_uuser) end) THEN
-          SELECT par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, my_id, 'doc_uuser',OLD.doc_uuser::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.doc_upuser is not null 
+                 else TG_OP = 'UPDATE' and {schema}.nequal(NEW.doc_upuser, OLD.doc_upuser) end) THEN
+          SELECT par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, my_id, 'doc_upuser',OLD.doc_upuser::text);  
         END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.doc_sync_tstmp is not null 
@@ -4009,8 +4009,8 @@ CREATE TABLE doc__tbl (
     doc_euser character varying(20) DEFAULT my_db_user() NOT NULL,
     doc_mtstmp timestamp without time zone DEFAULT my_now() NOT NULL,
     doc_muser character varying(20) DEFAULT my_db_user() NOT NULL,
-    doc_utstmp timestamp without time zone DEFAULT my_now() NOT NULL,
-    doc_uuser character varying(20) DEFAULT my_db_user() NOT NULL,
+    doc_uptstmp timestamp without time zone DEFAULT my_now() NOT NULL,
+    doc_upuser character varying(20) DEFAULT my_db_user() NOT NULL,
     doc_sync_tstmp timestamp without time zone,
     doc_snotes character varying(255),
     doc_sync_id bigint
@@ -4125,17 +4125,17 @@ COMMENT ON COLUMN doc__tbl.doc_muser IS 'Document Last Modification User';
 
 
 --
--- Name: COLUMN doc__tbl.doc_utstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN doc__tbl.doc_uptstmp; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN doc__tbl.doc_utstmp IS 'Document Last Upload Timestamp';
+COMMENT ON COLUMN doc__tbl.doc_uptstmp IS 'Document Last Upload Timestamp';
 
 
 --
--- Name: COLUMN doc__tbl.doc_uuser; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN doc__tbl.doc_upuser; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN doc__tbl.doc_uuser IS 'Document Last Upload User';
+COMMENT ON COLUMN doc__tbl.doc_upuser IS 'Document Last Upload User';
 
 
 --
@@ -6476,9 +6476,9 @@ CREATE VIEW v_doc_ext AS
     doc__tbl.doc_mtstmp,
     doc__tbl.doc_muser,
     my_db_user_fmt((doc__tbl.doc_muser)::text) AS doc_muser_fmt,
-    doc__tbl.doc_utstmp,
-    doc__tbl.doc_uuser,
-    my_db_user_fmt((doc__tbl.doc_uuser)::text) AS doc_uuser_fmt,
+    doc__tbl.doc_uptstmp,
+    doc__tbl.doc_upuser,
+    my_db_user_fmt((doc__tbl.doc_upuser)::text) AS doc_upuser_fmt,
     doc__tbl.doc_snotes,
     NULL::text AS title_head,
     NULL::text AS title_detail,
@@ -6510,8 +6510,8 @@ CREATE VIEW v_doc_filename AS
     doc__tbl.doc_euser,
     doc__tbl.doc_mtstmp,
     doc__tbl.doc_muser,
-    doc__tbl.doc_utstmp,
-    doc__tbl.doc_uuser,
+    doc__tbl.doc_uptstmp,
+    doc__tbl.doc_upuser,
     doc__tbl.doc_sync_tstmp,
     doc__tbl.doc_snotes,
     doc__tbl.doc_sync_id,
@@ -6544,9 +6544,9 @@ CREATE VIEW v_doc AS
     doc__tbl.doc_mtstmp,
     doc__tbl.doc_muser,
     my_db_user_fmt((doc__tbl.doc_muser)::text) AS doc_muser_fmt,
-    doc__tbl.doc_utstmp,
-    doc__tbl.doc_uuser,
-    my_db_user_fmt((doc__tbl.doc_uuser)::text) AS doc_uuser_fmt,
+    doc__tbl.doc_uptstmp,
+    doc__tbl.doc_upuser,
+    my_db_user_fmt((doc__tbl.doc_upuser)::text) AS doc_upuser_fmt,
     doc__tbl.doc_snotes,
     NULL::text AS title_head,
     NULL::text AS title_detail

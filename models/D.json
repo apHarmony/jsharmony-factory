@@ -64,7 +64,7 @@
      "controlparams": { 
          "sqlparams": {"FILE_SIZE": "d_size",
                        "FILE_EXT": "d_ext",
-                       "FILE_UTSTMP": "d_utstmp",
+                       "FILE_uptstmp": "d_utstmp",
                        "FILE_UU": "d_uu",
                        "FILE_NAME": "d_filename"
          },

@@ -63,7 +63,7 @@ end;
 
 create trigger {schema}_doc__tbl_after_update after update on {schema}_doc__tbl
 begin
-  %%%log_audit_update_mult("{schema}_doc__tbl","old.doc_id",["doc_id","cust_id","doc_scope","doc_scope_id","item_id","doc_sts","doc_ctgr","doc_desc","doc_utstmp","doc_uuser","doc_sync_tstmp"],"null","null","null","{schema}.get_cust_id(new.doc_scope,new.doc_scope_id)","{schema}.get_item_id(new.doc_scope,new.doc_scope_id)")%%%
+  %%%log_audit_update_mult("{schema}_doc__tbl","old.doc_id",["doc_id","cust_id","doc_scope","doc_scope_id","item_id","doc_sts","doc_ctgr","doc_desc","doc_uptstmp","doc_upuser","doc_sync_tstmp"],"null","null","null","{schema}.get_cust_id(new.doc_scope,new.doc_scope_id)","{schema}.get_item_id(new.doc_scope,new.doc_scope_id)")%%%
 
   update {schema}_doc__tbl set 
     cust_id     = {schema}.get_cust_id(new.doc_scope,new.doc_scope_id),
@@ -77,7 +77,7 @@ end;
 
 create trigger {schema}_doc__tbl_delete before delete on {schema}_doc__tbl
 begin
-  %%%log_audit_delete_mult("{schema}_doc__tbl","old.doc_id",["doc_id","cust_id","doc_scope","doc_scope_id","item_id","doc_sts","doc_ctgr","doc_desc","doc_utstmp","doc_uuser","doc_sync_tstmp"],"null","null","null")%%%
+  %%%log_audit_delete_mult("{schema}_doc__tbl","old.doc_id",["doc_id","cust_id","doc_scope","doc_scope_id","item_id","doc_sts","doc_ctgr","doc_desc","doc_uptstmp","doc_upuser","doc_sync_tstmp"],"null","null","null")%%%
   update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
