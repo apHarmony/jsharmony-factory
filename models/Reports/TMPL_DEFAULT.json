@@ -1,0 +1,8 @@
+{
+  "TMPL_DEFAULT": {
+    "comment":"TMPL_DEFAULT",
+    "layout": "report",
+    "actions": "B",
+    "menu":"reports"
+  }
+}
