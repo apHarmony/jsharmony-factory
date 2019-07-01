@@ -220,7 +220,7 @@ ALTER FUNCTION {schema}.check_code(in_tblname character varying, in_code_val cha
 -- Name: check_code2(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) RETURNS bigint
+CREATE FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $$
 DECLARE
@@ -228,7 +228,7 @@ DECLARE
     runmesql text;
 BEGIN
 
-  rslt := {schema}.check_code2_exec(in_tblname, in_code_val1, in_code_va12);
+  rslt := {schema}.check_code2_exec(in_tblname, in_code_val1, in_code_val2);
 
   RETURN rslt;
 
@@ -240,13 +240,13 @@ END;
 $$;
 
 
-ALTER FUNCTION {schema}.check_code2(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.check_code2(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) OWNER TO postgres;
 
 --
 -- Name: check_code2_exec(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
-CREATE FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) RETURNS bigint
+CREATE FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) RETURNS bigint
     LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
     AS $_$
 DECLARE
@@ -257,21 +257,21 @@ BEGIN
   rslt := 0;
 
   select 'select count(*) from ' || schemaname || '.' || tablename ||
-           ' where code_val1 = $1 and code_va12 = $2;'
+           ' where code_val1 = $1 and code_val2 = $2;'
     into runmesql
     from pg_tables
    where tablename = lower(in_tblname) 
    order by (case schemaname when '{schema}' then 1 else 2 end), schemaname
    limit 1;
 
-  EXECUTE runmesql INTO rslt USING in_code_val1, in_code_va12;
+  EXECUTE runmesql INTO rslt USING in_code_val1, in_code_val2;
   
   RETURN rslt;
 END;
 $_$;
 
 
-ALTER FUNCTION {schema}.check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) OWNER TO postgres;
+ALTER FUNCTION {schema}.check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) OWNER TO postgres;
 
 --
 -- Name: check_code_exec(character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
@@ -869,7 +869,7 @@ BEGIN
   runmesql := 'CREATE TABLE '||wk_code_schema||'.code2_app_'||in_code_name||' '
             ||'( '
             ||'  CONSTRAINT code2_app_'||in_code_name||'_pkey PRIMARY KEY (code2_app_id), '
-            ||'  CONSTRAINT code2_app_'||in_code_name||'_code_val1_code_va12_key UNIQUE (code_val1,code_va12), '
+            ||'  CONSTRAINT code2_app_'||in_code_name||'_code_val1_code_val2_key UNIQUE (code_val1,code_val2), '
             ||'  CONSTRAINT code2_app_'||in_code_name||'_code_val1_code_txt_key UNIQUE (code_val1,code_txt) '
             ||') '
             ||'INHERITS ('||'{schema}'||'.code2_app_base) '
@@ -982,7 +982,7 @@ BEGIN
   runmesql := 'CREATE TABLE '||wk_code_schema||'.code2_sys_'||in_code_name||' '
             ||'( '
             ||'  CONSTRAINT code2_sys_'||in_code_name||'_pkey PRIMARY KEY (code2_sys_id), '
-            ||'  CONSTRAINT code2_sys_'||in_code_name||'_code_val1_code_va12_key UNIQUE (code_val1, code_va12), '
+            ||'  CONSTRAINT code2_sys_'||in_code_name||'_code_val1_code_val2_key UNIQUE (code_val1, code_val2), '
             ||'  CONSTRAINT code2_sys_'||in_code_name||'_code_val1_code_txt_key UNIQUE (code_val1, code_txt) '
             ||') '
             ||'INHERITS ('||'{schema}'||'.code2_sys_base) '
@@ -1332,7 +1332,7 @@ CREATE FUNCTION code2_app_base_iud() RETURNS trigger
           IF {schema}.nequal(NEW.code_val1, OLD.code_val1) THEN
             RAISE EXCEPTION  'Application Error - Code Value 1 cannot be updated..';
           END IF;
-          IF {schema}.nequal(NEW.code_va12, OLD.code_va12) THEN
+          IF {schema}.nequal(NEW.code_val2, OLD.code_val2) THEN
             RAISE EXCEPTION  'Application Error - Code Value 2 cannot be updated..';
           END IF;
         END IF;
@@ -1361,9 +1361,9 @@ CREATE FUNCTION code2_app_base_iud() RETURNS trigger
           SELECT par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, my_id, 'code_val1',OLD.code_val1::text);  
         END IF;
       
-        IF (case when TG_OP = 'DELETE' then OLD.code_va12 is not null 
-                 else TG_OP = 'UPDATE' and {schema}.nequal(NEW.code_va12, OLD.code_va12) end) THEN
-          SELECT par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, my_id, 'code_va12',OLD.code_va12::text);  
+        IF (case when TG_OP = 'DELETE' then OLD.code_val2 is not null 
+                 else TG_OP = 'UPDATE' and {schema}.nequal(NEW.code_val2, OLD.code_val2) end) THEN
+          SELECT par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, my_id, 'code_val2',OLD.code_val2::text);  
         END IF;
       
         IF (case when TG_OP = 'DELETE' then OLD.code_txt is not null 
@@ -4289,7 +4289,7 @@ CREATE TABLE code2_app_base (
     code2_app_id bigint DEFAULT nextval('code2_app_base_code2_app_id_seq'::regclass) NOT NULL,
     code_seq smallint,
     code_val1 character varying(32) NOT NULL,
-    code_va12 character varying(32) NOT NULL,
+    code_val2 character varying(32) NOT NULL,
     code_txt character varying(50),
     code_code character varying(50),
     code_end_dt date,
@@ -5689,7 +5689,7 @@ CREATE TABLE code2_sys_base (
     code2_sys_id bigint DEFAULT nextval('code2_sys_base_code2_sys_id_seq'::regclass) NOT NULL,
     code_seq smallint,
     code_val1 character varying(32) NOT NULL,
-    code_va12 character varying(32) NOT NULL,
+    code_val2 character varying(32) NOT NULL,
     code_txt character varying(50),
     code_code character varying(50),
     code_end_dt date,
@@ -5735,10 +5735,10 @@ COMMENT ON COLUMN code2_sys_base.code_val1 IS 'Code Value 1';
 
 
 --
--- Name: COLUMN code2_sys_base.code_va12; Type: COMMENT; Schema: jsharmony; Owner: postgres
+-- Name: COLUMN code2_sys_base.code_val2; Type: COMMENT; Schema: jsharmony; Owner: postgres
 --
 
-COMMENT ON COLUMN code2_sys_base.code_va12 IS 'Code Value 2';
+COMMENT ON COLUMN code2_sys_base.code_val2 IS 'Code Value 2';
 
 
 --
@@ -5843,7 +5843,7 @@ COMMENT ON TABLE code2_country_state IS 'System Codes 2 - Country / State';
 CREATE VIEW code2_param_app_attrib AS
  SELECT NULL::smallint AS code_seq,
     param__tbl.param_process AS code_val1,
-    param__tbl.param_attrib AS code_va12,
+    param__tbl.param_attrib AS code_val2,
     param__tbl.param_desc AS code_txt,
     NULL::character varying(50) AS code_code,
     NULL::date AS code_end_dt,
@@ -5916,7 +5916,7 @@ ALTER SEQUENCE code2_sys_code2_sys_h_id_seq OWNED BY code2_sys.code2_sys_h_id;
 CREATE VIEW code2_param_user_attrib AS
  SELECT NULL::smallint AS code_seq,
     param__tbl.param_process AS code_val1,
-    param__tbl.param_attrib AS code_va12,
+    param__tbl.param_attrib AS code_val2,
     param__tbl.param_desc AS code_txt,
     NULL::character varying(50) AS code_code,
     NULL::date AS code_end_dt,
@@ -5940,7 +5940,7 @@ ALTER TABLE code2_param_user_attrib OWNER TO postgres;
 CREATE VIEW code2_param_sys_attrib AS
  SELECT NULL::smallint AS code_seq,
     param__tbl.param_process AS code_val1,
-    param__tbl.param_attrib AS code_va12,
+    param__tbl.param_attrib AS code_val2,
     param__tbl.param_desc AS code_txt,
     NULL::character varying(50) AS code_code,
     NULL::date AS code_end_dt,
@@ -6551,7 +6551,7 @@ CREATE VIEW v_doc AS
     NULL::text AS title_head,
     NULL::text AS title_detail
    FROM (doc__tbl
-     LEFT JOIN code2_doc_scope_doc_ctgr gdd ON ((((gdd.code_val1)::text = (doc__tbl.doc_scope)::text) AND ((gdd.code_va12)::text = (doc__tbl.doc_ctgr)::text))));
+     LEFT JOIN code2_doc_scope_doc_ctgr gdd ON ((((gdd.code_val1)::text = (doc__tbl.doc_scope)::text) AND ((gdd.code_val2)::text = (doc__tbl.doc_ctgr)::text))));
 
 
 ALTER TABLE v_doc OWNER TO postgres;
@@ -7766,11 +7766,11 @@ ALTER TABLE ONLY code2_app_base
 
 
 --
--- Name: code2_app_base_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_app_base_code_val1_code_val2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY code2_app_base
-    ADD CONSTRAINT code2_app_base_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
+    ADD CONSTRAINT code2_app_base_code_val1_code_val2_key UNIQUE (code_val1, code_val2);
 
 
 --
@@ -7782,11 +7782,11 @@ ALTER TABLE ONLY code2_doc_scope_doc_ctgr
 
 
 --
--- Name: code2_doc_scope_doc_ctgr_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_doc_scope_doc_ctgr_code_val1_code_val2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY code2_doc_scope_doc_ctgr
-    ADD CONSTRAINT code2_doc_scope_doc_ctgr_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
+    ADD CONSTRAINT code2_doc_scope_doc_ctgr_code_val1_code_val2_key UNIQUE (code_val1, code_val2);
 
 
 --
@@ -8166,11 +8166,11 @@ ALTER TABLE ONLY txt__tbl
 
 
 --
--- Name: code2_sys_base_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_sys_base_code_val1_code_val2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY code2_sys_base
-    ADD CONSTRAINT code2_sys_base_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
+    ADD CONSTRAINT code2_sys_base_code_val1_code_val2_key UNIQUE (code_val1, code_val2);
 
 
 
@@ -8184,11 +8184,11 @@ ALTER TABLE ONLY code2_sys_base
 
 
 --
--- Name: code2_country_state_code_val1_code_va12_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
+-- Name: code2_country_state_code_val1_code_val2_key; Type: CONSTRAINT; Schema: jsharmony; Owner: postgres
 --
 
 ALTER TABLE ONLY code2_country_state
-    ADD CONSTRAINT code2_country_state_code_val1_code_va12_key UNIQUE (code_val1, code_va12);
+    ADD CONSTRAINT code2_country_state_code_val1_code_val2_key UNIQUE (code_val1, code_val2);
 
 
 
@@ -8634,7 +8634,7 @@ ALTER TABLE ONLY cust_menu_role
 --
 
 ALTER TABLE ONLY doc__tbl
-    ADD CONSTRAINT doc__tbl_doc_scope_doc_ctgr FOREIGN KEY (doc_scope, doc_ctgr) REFERENCES code2_doc_scope_doc_ctgr(code_val1, code_va12);
+    ADD CONSTRAINT doc__tbl_doc_scope_doc_ctgr FOREIGN KEY (doc_scope, doc_ctgr) REFERENCES code2_doc_scope_doc_ctgr(code_val1, code_val2);
 
 
 --
@@ -8698,7 +8698,7 @@ ALTER TABLE ONLY sys_user
 --
 
 ALTER TABLE ONLY sys_user
-    ADD CONSTRAINT sys_user_code2_country_state_fkey FOREIGN KEY (sys_user_country, sys_user_state) REFERENCES code2_country_state(code_val1, code_va12);
+    ADD CONSTRAINT sys_user_code2_country_state_fkey FOREIGN KEY (sys_user_country, sys_user_state) REFERENCES code2_country_state(code_val1, code_val2);
 
 
 --
@@ -8956,24 +8956,24 @@ GRANT ALL ON FUNCTION check_code(in_tblname character varying, in_code_val chara
 -- Name: check_code2(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) FROM postgres;
-GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) TO postgres;
-GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) FROM postgres;
+GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) TO postgres;
+GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) TO PUBLIC;
+GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_code2(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
 -- Name: check_code2_exec(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) FROM PUBLIC;
-REVOKE ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) FROM postgres;
-GRANT ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) TO postgres;
-GRANT ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) TO PUBLIC;
-GRANT ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_va12 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+REVOKE ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) FROM postgres;
+GRANT ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) TO postgres;
+GRANT ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) TO PUBLIC;
+GRANT ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION check_code2_exec(in_tblname character varying, in_code_val1 character varying, in_code_val2 character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --

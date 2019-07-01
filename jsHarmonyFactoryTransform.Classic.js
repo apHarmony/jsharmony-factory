@@ -141,7 +141,7 @@ transform.fields = {
   "code_txt": "codetxt",
   "code_val": "codeval",
   "code_val1": "codeval1",
-  "code_va12": "codeval2",
+  "code_val2": "codeval2",
   "code_seq": "codseq",
   "audit_column_name": "column_name",
   "audit_column_val": "column_val",

@@ -145,7 +145,7 @@ CREATE TABLE {schema}_doc__tbl (
   doc_sync_tstmp text,
   doc_snotes text,
   doc_sync_id integer,
-  FOREIGN KEY (doc_scope, doc_ctgr) REFERENCES {schema}_code2_doc_scope_doc_ctgr (code_val1, code_va12),
+  FOREIGN KEY (doc_scope, doc_ctgr) REFERENCES {schema}_code2_doc_scope_doc_ctgr (code_val1, code_val2),
   FOREIGN KEY (doc_scope) REFERENCES {schema}_code_doc_scope (code_val)
 );
 
@@ -229,7 +229,7 @@ create table {schema}_sys_user (
     sys_user_snotes text,
     FOREIGN KEY (sys_user_sts) REFERENCES {schema}_code_ahc(code_val),
     FOREIGN KEY (sys_user_country) REFERENCES {schema}_code_country(code_val),
-    FOREIGN KEY (sys_user_country, sys_user_state) REFERENCES {schema}_code2_country_state(code_val1,code_va12),
+    FOREIGN KEY (sys_user_country, sys_user_state) REFERENCES {schema}_code2_country_state(code_val1,code_val2),
     CHECK (COALESCE(sys_user_email,'')<>'')
 );
 

@@ -1092,7 +1092,7 @@ GO
 create view [jsharmony].[code2_param_app_attrib] as
 SELECT NULL code_seq
       ,param_process code_val1
-      ,param_attrib code_va12
+      ,param_attrib code_val2
       ,param_desc code_txt
       ,NULL code_code
       ,NULL code_end_dt
@@ -1117,7 +1117,7 @@ GO
 create view [jsharmony].[code2_param_user_attrib] as
 SELECT NULL code_seq
       ,param_process code_val1
-      ,param_attrib code_va12
+      ,param_attrib code_val2
       ,param_desc code_txt
       ,NULL code_code
       ,NULL code_end_dt
@@ -1143,7 +1143,7 @@ GO
 create view [jsharmony].[code2_param_sys_attrib] as
 SELECT NULL code_seq
       ,param_process code_val1
-      ,param_attrib code_va12
+      ,param_attrib code_val2
       ,param_desc code_txt
       ,NULL code_code
       ,NULL code_end_dt
@@ -2099,7 +2099,7 @@ CREATE TABLE [jsharmony].[code2_doc_scope_doc_ctgr](
 	[code2_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](32) NOT NULL,
-	[code_va12] [nvarchar](32) NOT NULL,
+	[code_val2] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_attrib] [nvarchar](50) NULL,
@@ -2117,10 +2117,10 @@ CREATE TABLE [jsharmony].[code2_doc_scope_doc_ctgr](
 (
 	[code2_app_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [unq_code2_doc_scope_doc_ctgr_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_doc_scope_doc_ctgr_code_val1_code_val2] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
-	[code_va12] ASC
+	[code_val2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code2_doc_scope_doc_ctgr_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
@@ -2933,7 +2933,7 @@ CREATE TABLE [jsharmony].[code2_country_state](
 	[code2_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](32) NOT NULL,
-	[code_va12] [nvarchar](32) NOT NULL,
+	[code_val2] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_attrib] [nvarchar](50) NULL,
@@ -2949,10 +2949,10 @@ CREATE TABLE [jsharmony].[code2_country_state](
 (
 	[code2_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [unq_code2_country_state_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_country_state_code_val1_code_val2] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
-	[code_va12] ASC
+	[code_val2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code2_country_state_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
@@ -3401,7 +3401,7 @@ GO
 ALTER TABLE [jsharmony].[cust_menu_role] CHECK CONSTRAINT [fk_cust_menu_role_menu__tbl]
 GO
 ALTER TABLE [jsharmony].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [fk_doc__tbl_code2_doc_scope_doc_ctgr] FOREIGN KEY([doc_scope], [doc_ctgr])
-REFERENCES [jsharmony].[code2_doc_scope_doc_ctgr] ([code_val1], [code_va12])
+REFERENCES [jsharmony].[code2_doc_scope_doc_ctgr] ([code_val1], [code_val2])
 GO
 ALTER TABLE [jsharmony].[doc__tbl] CHECK CONSTRAINT [fk_doc__tbl_code2_doc_scope_doc_ctgr]
 GO
@@ -3446,7 +3446,7 @@ GO
 ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [fk_sys_user_code_country]
 GO
 ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_code2_country_state] FOREIGN KEY([sys_user_country], [sys_user_state])
-REFERENCES [jsharmony].[code2_country_state] ([code_val1], [code_va12])
+REFERENCES [jsharmony].[code2_country_state] ([code_val1], [code_val2])
 GO
 ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [fk_sys_user_code2_country_state]
 GO
@@ -3977,7 +3977,7 @@ BEGIN
   SELECT @rslt = 0
   SELECT top(1)
          @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + audit_table_name + '] where code_val1 = ''' + 
-		             isnull(@in_code_val1,'') + ''' and code_va12 = ''' + isnull(@in_code_val2,'') +  ''''
+		             isnull(@in_code_val1,'') + ''' and code_val2 = ''' + isnull(@in_code_val2,'') +  ''''
     from information_schema.tables
    where audit_table_name = @in_tblname
    order by (case table_schema when '{schema}' then 1 else 2 end),table_schema;
@@ -5296,7 +5296,7 @@ BEGIN
 	         del.code_seq, i.code_seq,
 	         del.code_end_dt, i.code_end_dt,
 	         del.code_val1, i.code_val1,
-	         del.code_va12, i.code_va12,
+	         del.code_val2, i.code_val2,
 	         del.code_txt, i.code_txt,
 	         del.code_code, i.code_code,
 	         del.code_attrib, i.code_attrib,
@@ -5311,8 +5311,8 @@ BEGIN
   DECLARE @I_code_end_dt DATETIME2(7)
   DECLARE @D_code_val1 NVARCHAR(MAX)
   DECLARE @I_code_val1 NVARCHAR(MAX)
-  DECLARE @D_code_va12 NVARCHAR(MAX)
-  DECLARE @I_code_va12 NVARCHAR(MAX)
+  DECLARE @D_code_val2 NVARCHAR(MAX)
+  DECLARE @I_code_val2 NVARCHAR(MAX)
   DECLARE @D_code_txt NVARCHAR(MAX)
   DECLARE @I_code_txt NVARCHAR(MAX)
   DECLARE @D_code_code NVARCHAR(MAX)
@@ -5373,10 +5373,10 @@ BEGIN
     return
   END
 
-  IF @TP = 'U' AND UPDATE(code_va12)
+  IF @TP = 'U' AND UPDATE(code_val2)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update code_va12'
-    raiserror('Cannot update foreign key code_va12',16,1)
+    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update code_val2'
+    raiserror('Cannot update foreign key code_val2',16,1)
     ROLLBACK TRANSACTION
     return
   END
@@ -5388,7 +5388,7 @@ BEGIN
              @D_code_seq, @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
              @D_code_val1, @I_code_val1,
-             @D_code_va12, @I_code_va12,
+             @D_code_val2, @I_code_val2,
              @D_code_txt, @I_code_txt,
              @D_code_code, @I_code_code,
              @D_code_attrib, @I_code_attrib,
@@ -5451,12 +5451,12 @@ BEGIN
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_val1'), @D_code_val1)
       END
 
-      IF (@TP = 'D' AND @D_code_va12 IS NOT NULL OR
-          @TP = 'U' AND {schema}.nequal_chr(@D_code_va12, @I_code_va12) > 0)
+      IF (@TP = 'D' AND @D_code_val2 IS NOT NULL OR
+          @TP = 'U' AND {schema}.nequal_chr(@D_code_val2, @I_code_val2) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
 		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
-        INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_va12'), @D_code_va12)
+        INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_val2'), @D_code_val2)
       END
 
       IF (@TP = 'D' AND @D_code_txt IS NOT NULL OR
@@ -5518,7 +5518,7 @@ BEGIN
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
              @D_code_val1, @I_code_val1,
-             @D_code_va12, @I_code_va12,
+             @D_code_val2, @I_code_val2,
              @D_code_txt, @I_code_txt,
              @D_code_code, @I_code_code,
              @D_code_attrib, @I_code_attrib,
@@ -9845,7 +9845,7 @@ SELECT doc__tbl.doc_id
   FROM {schema}.doc__tbl
   INNER JOIN {schema}.single on 1=1
   LEFT OUTER JOIN  {schema}.code2_doc_scope_doc_ctgr GDD ON GDD.code_val1 = doc__tbl.doc_scope
-                                             AND GDD.code_va12 = doc__tbl.doc_ctgr   
+                                             AND GDD.code_val2 = doc__tbl.doc_ctgr   
 
 GO
 

@@ -16,8 +16,8 @@ delete from {schema}.audit_detail;
 delete from {schema}.audit__tbl;
 GO
       
-insert into {schema}.code2_doc_scope_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user_code','DOCUMENT','DOCUMENT');
-insert into {schema}.code2_doc_scope_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user_code','IMAGE','IMAGE');
-insert into {schema}.code2_doc_scope_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user_code','OTHER','OTHER');
-insert into {schema}.code2_doc_scope_doc_ctgr(code_val1, code_va12, code_txt) values ('C','agreement_doc_scope','AGREEMENT');
+insert into {schema}.code2_doc_scope_doc_ctgr(code_val1, code_val2, code_txt) values ('sys_user_code','DOCUMENT','DOCUMENT');
+insert into {schema}.code2_doc_scope_doc_ctgr(code_val1, code_val2, code_txt) values ('sys_user_code','IMAGE','IMAGE');
+insert into {schema}.code2_doc_scope_doc_ctgr(code_val1, code_val2, code_txt) values ('sys_user_code','OTHER','OTHER');
+insert into {schema}.code2_doc_scope_doc_ctgr(code_val1, code_val2, code_txt) values ('C','agreement_doc_scope','AGREEMENT');
 GO

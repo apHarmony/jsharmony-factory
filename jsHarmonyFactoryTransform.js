@@ -146,7 +146,7 @@ function jsHarmonyFactoryTransform(module){
     "code_txt": "code_txt",
     "code_val": "code_val",
     "code_val1": "code_val1",
-    "code_va12": "code_va12",
+    "code_val2": "code_val2",
     "code_parent": "code_parent",
     "code_seq": "code_seq",
     "audit_column_name": "audit_column_name",

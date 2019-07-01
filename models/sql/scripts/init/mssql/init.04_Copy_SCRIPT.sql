@@ -333,7 +333,7 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code2_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](32) NOT NULL,
-	[code_va12] [nvarchar](32) NOT NULL,
+	[code_val2] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_attrib] [nvarchar](50) NULL,
@@ -351,10 +351,10 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 (
 	[code2_app_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [unq_code2_app_%%%name%%%_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_app_%%%name%%%_code_val1_code_val2] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
-	[code_va12] ASC
+	[code_val2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code2_app_%%%name%%%_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
@@ -436,7 +436,7 @@ BEGIN
 	         del.code_seq, i.code_seq,
 	         del.code_end_dt, i.code_end_dt,
 	         del.code_val1, i.code_val1,
-	         del.code_va12, i.code_va12,
+	         del.code_val2, i.code_val2,
 	         del.code_txt, i.code_txt,
 	         del.code_code, i.code_code,
 	         del.code_attrib, i.code_attrib,
@@ -451,8 +451,8 @@ BEGIN
   DECLARE @I_code_end_dt DATETIME2(7)
   DECLARE @D_code_val1 NVARCHAR(MAX)
   DECLARE @I_code_val1 NVARCHAR(MAX)
-  DECLARE @D_code_va12 NVARCHAR(MAX)
-  DECLARE @I_code_va12 NVARCHAR(MAX)
+  DECLARE @D_code_val2 NVARCHAR(MAX)
+  DECLARE @I_code_val2 NVARCHAR(MAX)
   DECLARE @D_code_txt NVARCHAR(MAX)
   DECLARE @I_code_txt NVARCHAR(MAX)
   DECLARE @D_code_code NVARCHAR(MAX)
@@ -513,10 +513,10 @@ BEGIN
     return
   END
 
-  IF @TP = ''''U'''' AND UPDATE(code_va12)
+  IF @TP = ''''U'''' AND UPDATE(code_val2)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_va12''''
-    raiserror(''''Cannot update foreign key code_va12'''',16,1)
+    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val2''''
+    raiserror(''''Cannot update foreign key code_val2'''',16,1)
     ROLLBACK TRANSACTION
     return
   END
@@ -528,7 +528,7 @@ BEGIN
              @D_code_seq, @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
              @D_code_val1, @I_code_val1,
-             @D_code_va12, @I_code_va12,
+             @D_code_val2, @I_code_val2,
              @D_code_txt, @I_code_txt,
              @D_code_code, @I_code_code,
              @D_code_attrib, @I_code_attrib,
@@ -593,12 +593,12 @@ EXEC(N'DECLARE @pv binary(16)
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''''code_val1''''), @D_code_val1)
       END
 
-      IF (@TP = ''''D'''' AND @D_code_va12 IS NOT NULL OR
-          @TP = ''''U'''' AND {schema}.nequal_chr(@D_code_va12, @I_code_va12) > 0)
+      IF (@TP = ''''D'''' AND @D_code_val2 IS NOT NULL OR
+          @TP = ''''U'''' AND {schema}.nequal_chr(@D_code_val2, @I_code_val2) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
 		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''''U'''', ''''code2_app_%%%name%%%'''', @I_code2_app_id, @MYUSER, @CURDTTM
-        INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''''code_va12''''), @D_code_va12)
+        INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower(''''code_val2''''), @D_code_val2)
       END
 
       IF (@TP = ''''D'''' AND @D_code_txt IS NOT NULL OR
@@ -660,7 +660,7 @@ EXEC(N'DECLARE @pv binary(16)
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
              @D_code_val1, @I_code_val1,
-             @D_code_va12, @I_CO'',NULL,NULL) WHERE [script_name]=N''create_code2_app_TRIGGER''
+             @D_code_val2, @I_CO'',NULL,NULL) WHERE [script_name]=N''create_code2_app_TRIGGER''
 UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N''DEVAL2,
              @D_code_txt, @I_code_txt,
              @D_code_code, @I_code_code,
@@ -770,7 +770,7 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code2_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](32) NOT NULL,
-	[code_va12] [nvarchar](32) NOT NULL,
+	[code_val2] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_attrib] [nvarchar](50) NULL,
@@ -786,10 +786,10 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 (
 	[code2_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [unq_code2_sys_%%%name%%%_code_val1_code_va12] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_code2_sys_%%%name%%%_code_val1_code_val2] UNIQUE NONCLUSTERED 
 (
 	[code_val1] ASC,
-	[code_va12] ASC
+	[code_val2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code2_sys_%%%name%%%_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (

@@ -20,8 +20,8 @@ insert into {schema}.sys_user_role (sys_user_id, sys_role_name) values(1,'X_X');
 delete from {schema}_audit_detail;
 delete from {schema}_audit__tbl;
 
-insert into {schema}_code2_doc_scope_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user_code','DOCUMENT','DOCUMENT');
-insert into {schema}_code2_doc_scope_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user_code','IMAGE','IMAGE');
-insert into {schema}_code2_doc_scope_doc_ctgr(code_val1, code_va12, code_txt) values ('sys_user_code','OTHER','OTHER');
-insert into {schema}_code2_doc_scope_doc_ctgr(code_val1, code_va12, code_txt) values ('C','agreement_doc_scope','AGREEMENT');
+insert into {schema}_code2_doc_scope_doc_ctgr(code_val1, code_val2, code_txt) values ('sys_user_code','DOCUMENT','DOCUMENT');
+insert into {schema}_code2_doc_scope_doc_ctgr(code_val1, code_val2, code_txt) values ('sys_user_code','IMAGE','IMAGE');
+insert into {schema}_code2_doc_scope_doc_ctgr(code_val1, code_val2, code_txt) values ('sys_user_code','OTHER','OTHER');
+insert into {schema}_code2_doc_scope_doc_ctgr(code_val1, code_val2, code_txt) values ('C','agreement_doc_scope','AGREEMENT');
 

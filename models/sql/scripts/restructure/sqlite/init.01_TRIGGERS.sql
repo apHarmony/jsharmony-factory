@@ -34,7 +34,7 @@ begin
     (({schema}.get_cust_id(new.doc_scope,new.doc_scope_id)<>{schema}.my_cust_id()) or
      (new.doc_scope not in %%%client_scope%%%))
     then raise(FAIL,'Application Error - Client User has no rights to perform this operation') end\;
-  select case when not exists (select * from {schema}_code2_doc_scope_doc_ctgr where code_val1=new.doc_scope and code_va12=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
+  select case when not exists (select * from {schema}_code2_doc_scope_doc_ctgr where code_val1=new.doc_scope and code_val2=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
 end;
 
 create trigger {schema}_doc__tbl_after_insert after insert on {schema}_doc__tbl
@@ -58,7 +58,7 @@ begin
   select case when ifnull(old.doc_scope,'')<>ifnull(NEW.doc_scope,'') then raise(FAIL,'Application Error - Scope cannot be updated.') end\;
   select case when ifnull(old.doc_scope_id,'')<>ifnull(NEW.doc_scope_id,'') then raise(FAIL,'Application Error - Scope ID cannot be updated.') end\;
   select case when ifnull(old.doc_ctgr,'')<>ifnull(NEW.doc_ctgr,'') then raise(FAIL,'Application Error - Document Category cannot be updated.') end\;
-  select case when not exists (select * from {schema}_code2_doc_scope_doc_ctgr where code_val1=new.doc_scope and code_va12=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
+  select case when not exists (select * from {schema}_code2_doc_scope_doc_ctgr where code_val1=new.doc_scope and code_val2=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
 end;
 
 create trigger {schema}_doc__tbl_after_update after update on {schema}_doc__tbl
