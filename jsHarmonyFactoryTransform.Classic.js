@@ -727,6 +727,7 @@ transform.sql = {
   "payment_cc_sts": "pacc_sts",
   "payment_cc_result": "pacc_pp_result",
   "new_client_result": "new_client_result",
+  "agreement_doc_scope": "AGREEMNT",
   "cust_agreement_tstmp": "c_atstmp",
   "cust": "c",
   "code_sys_cust_sts": "ucod_c_sts",

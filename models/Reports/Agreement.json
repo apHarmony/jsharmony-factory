@@ -52,7 +52,7 @@
       }
     },
     "jobqueue": {
-      "sql": "select 'CLIENT' as rqst_source,'C' as d_scope,c_id as d_scope_id,'AGREEMNT' as d_ctgr,'Cust Agreement' as d_desc,c_id from c where c_id=@c_id %%%DATALOCKS%%%"
+      "sql": "select 'CLIENT' as rqst_source,'C' as d_scope,c_id as d_scope_id,'agreement_doc_scope' as d_ctgr,'Cust Agreement' as d_desc,c_id from c where c_id=@c_id %%%DATALOCKS%%%"
         //'C' as n_scope, c_id as n_scope_id, 'S' as n_type, 'Test Note' n_note
         //'test@test.com' as email_to,null as email_cc,null as email_bcc,'RCVD' as email_txt_attrib,1 as email_attach
         //'+12223334444' as sms_to, 'Client/Welcome' as sms_txt_attrib

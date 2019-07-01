@@ -733,6 +733,7 @@ function jsHarmonyFactoryTransform(module){
     "payment_cc_sts": "payment_cc_sts",
     "payment_cc_result": "payment_cc_result",
     "new_client_result": "new_client_result",
+    "agreement_doc_scope":"AGREEMENT",
     "cust_agreement_tstmp": "cust_agreement_tstmp",
     "cust": "cust",
     "code_sys_cust_sts": "code_sys_cust_sts", //"code_cust_sts"

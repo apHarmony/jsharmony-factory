@@ -6,7 +6,7 @@
     "begin;",
     "update cust set cust_agreement_tstmp={schema}.my_to_date({schema}.my_now()) where cust_id=@cust_id;",
     "insert into {schema}.job__tbl(job_source, job_action, job_action_target, job_params) values('CLIENT', 'REPORT', '{namespace}Reports/Agreement',@job_params);",
-    "insert into {schema}.job_doc(job_id, doc_scope, doc_scope_id, doc_ctgr, doc_desc) select (select job_id from {schema}.job__tbl where rowid = last_insert_rowid()), 'C',@cust_id, 'AGREEMNT', 'Customer Portal Agreement';",
+    "insert into {schema}.job_doc(job_id, doc_scope, doc_scope_id, doc_ctgr, doc_desc) select (select job_id from {schema}.job__tbl where rowid = last_insert_rowid()), 'C',@cust_id, 'agreement_doc_scope', 'Customer Portal Agreement';",
     "end;"
   ],
   "agreement_paymentresult": "select payment_cc_sts \"payment_cc_sts\",payment_cc_result \"payment_cc_result\",cust_staging.cust_id \"cust_id\",cust_staging.sys_user_id \"sys_user_id\",new_client_result \"new_client_result\",sys_user_lastlogin_tstmp \"sys_user_lastlogin_tstmp\" from cust_staging left outer join {schema}.cust_user on cust_staging.sys_user_id=cust_user.sys_user_id where cust_staging_id=@payment_id and payment_cc_fp_hash=@fp_hash;",
