@@ -784,6 +784,15 @@ function jsHarmonyFactoryTransform(module){
     "@sms_body": "@sms_body",
   };
 
+  this.ignore_errors = {
+    value: {
+      'code_app': true,
+      'code_sys': true,
+      'code2_app': true,
+      'code2_sys': true,
+    }
+  };
+
   jsHarmonyModuleTransform.call(this, module);
 }
 
