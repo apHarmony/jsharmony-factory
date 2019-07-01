@@ -8,18 +8,18 @@
     "buttons":[{"link":"insert:N","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"n_type"}}],
     "fields":[
 	    {"name":"n_id","type":"bigint","key":1,"datalock":{"c_id":"n_id"},"control":"hidden"},
-	    {"name":"n_scope","type":"varchar","length":8,"foreignkey":1,"datalock":{"c_id":"n_scope"},"control":"hidden"},
+	    {"name":"n_scope","type":"varchar","length":32,"foreignkey":1,"datalock":{"c_id":"n_scope"},"control":"hidden"},
 	    {"name":"n_scope_id","type":"bigint","foreignkey":1,"datalock":{"c_id":"always"},"control":"hidden"},
 	    {"name":"n_etstmp","type":"datetime","length":"7","format":"tstmp","caption":"Posted","actions":"B",
        "link":"update:N"},
-	    {"name":"n_type","type":"varchar","length":8,"foreignkey":1,"datalock":{"c_id":"n_type"},"control":"hidden"},
-	    {"name":"n_sts","type":"varchar","length":8,"caption":"S","caption_ext":"Status","actions":"B"},
+	    {"name":"n_type","type":"varchar","length":32,"foreignkey":1,"datalock":{"c_id":"n_type"},"control":"hidden"},
+	    {"name":"n_sts","type":"varchar","length":32,"caption":"S","caption_ext":"Status","actions":"B"},
       {"name":"n_eu_fmt","type":"varchar","length":120,"caption":"Author","actions":"B",
        "sqlselect":"(jsharmony.mycuser_fmt(n_eu))"},
-      {"name":"title_h","type":"varchar","length":8,"actions":""},
+      {"name":"title_h","type":"varchar","length":32,"actions":""},
       {"name":"c_name_ext","type":"varchar","length":255,"actions":""},
       {"name":"e_name","type":"varchar","length":120,"actions":""},
-	  {"name":"title_b","type":"varchar","length":8,"caption":"Record","actions":""},
+	  {"name":"title_b","type":"varchar","length":32,"caption":"Record","actions":""},
 	  {"name":"n_note","type":"varchar","length":"9999999","caption":"Note","actions":"B","controlstyle":"width:540px;"}
 	]
   },

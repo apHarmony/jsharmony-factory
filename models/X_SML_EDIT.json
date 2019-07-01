@@ -27,7 +27,7 @@
        "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
        "sqlsort":"(coalesce(coalesce(sm_seq,sm_id),0))",
        "caption":"Sequence #"},
-      {"name":"sm_sts","type":"varchar","length":8,"actions": "BIU","control": "dropdown_S","nl":1,
+      {"name":"sm_sts","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S","nl":1,
        "lov": {"sql":"select codeval, codetxt from jsharmony.ucod_ahc order by codseq,codetxt"},"validate":["Required"],"default":"ACTIVE",
        "controlstyle":"width:70px;","caption":"Status"},
       {"name":"privs","actions":"B","control": "label","nl":1,"caption":"Privileges",

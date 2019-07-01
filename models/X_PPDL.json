@@ -22,7 +22,7 @@
        "caption":"Attribute"},
       {"name":"ppd_desc","type":"varchar","length":"255","actions":"BIU","control": "textbox_L",
        "caption":"Description"},
-      {"name":"ppd_type","type":"varchar","length":8,"actions": "BIU","control": "dropdown_S",
+      {"name":"ppd_type","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S",
        "lov": {"sql":"select codeval, codetxt from jsharmony.ucod_ppd_type order by codseq,codetxt","blank":1},"validate":["Required"],
        "controlstyle":"width:82px;","caption":"Type"},
       {"name":"codename","type":"varchar","length":"128","actions":"BIU","control":"textbox_VS",

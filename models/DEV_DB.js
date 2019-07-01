@@ -24,7 +24,7 @@ jsh.App[modelid] = new (function(){
     "Drop / Create Table": "drop table if exists c;\r\n\
   create table public.c (\
     c_id bigserial primary key not null,\r\n\
-    c_sts character varying(8) NOT NULL references public.ucod_c_sts(codeval),\r\n\
+    c_sts character varying(32) NOT NULL references public.ucod_c_sts(codeval),\r\n\
     c_atstmp timestamp without time zone DEFAULT mynow() NOT NULL,\r\n\
     c_name character varying(255) NOT NULL UNIQUE,\r\n\
     c_ein bytea DEFAULT '\\x00'::bytea NOT NULL,\r\n\

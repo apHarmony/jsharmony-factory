@@ -182,7 +182,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
     sqlparams[_transform('doc_desc')] = job.doc_desc;
     sqlparams[_transform('doc_size')] = fsize;
     _this.db.Scalar('jobproc', _this._transform("jobproc_save_doc"), 
-      [dbtypes.VarChar(8), dbtypes.BigInt, dbtypes.VarChar(8), dbtypes.VarChar(255), dbtypes.BigInt], 
+      [dbtypes.VarChar(32), dbtypes.BigInt, dbtypes.VarChar(32), dbtypes.VarChar(255), dbtypes.BigInt], 
       sqlparams, function (err, rslt) {
       if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting document', -99999); }
       if (err == null) doc_id = rslt;
@@ -226,7 +226,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
     sqlparams[_transform('note_type')] = job.note_type;
     sqlparams[_transform('note_body')] = job.note_body;
     _this.db.Command('jobproc', _this._transform("jobproc_save_note"), 
-      [dbtypes.VarChar(8), dbtypes.BigInt, dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX)], 
+      [dbtypes.VarChar(32), dbtypes.BigInt, dbtypes.VarChar(32), dbtypes.VarChar(dbtypes.MAX)], 
       sqlparams, function (err, rslt) {
       callback(err);
     });
@@ -300,7 +300,7 @@ AppSrvJobProc.prototype.SetJobResult = function (job, job_rslt, job_snotes, onCo
   sqlparams[_this._transform('job_rslt')] = job_rslt;
   sqlparams[_this._transform('job_snotes')] = job_snotes;
   sqlparams[_this._transform('job_id')] = job.job_id;
-  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_jobresult"), [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_jobresult"), [dbtypes.VarChar(32), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
     onComplete();
   });
 }
@@ -314,26 +314,26 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   var jobvalidate = new XValidate();
   var jrow = _this.map_db_rslt(_jrow);
   var job_sql = this.AppSrv.getSQL('',_this._transform('jobproc_add_BEGIN'));
-  var job_sql_ptypes = [dbtypes.VarChar(8), dbtypes.VarChar(8), dbtypes.VarChar(50), dbtypes.VarChar(dbtypes.MAX)];
+  var job_sql_ptypes = [dbtypes.VarChar(32), dbtypes.VarChar(32), dbtypes.VarChar(50), dbtypes.VarChar(dbtypes.MAX)];
   var job_sql_params = {};
   job_sql_params['job_source'] = jrow.job_source;
   job_sql_params['job_action'] = 'REPORT';
   job_sql_params['job_action_target'] = fullmodelid;
   job_sql_params['job_params'] = JSON.stringify(rparams);
-  jobvalidate.AddValidator('_obj.job_source', _transform('job_source'), 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
+  jobvalidate.AddValidator('_obj.job_source', _transform('job_source'), 'B', [XValidate._v_MaxLength(32), XValidate._v_Required()]);
   if ('doc_scope' in jrow) {
     //Add Document to Job
     if (!('doc_scope_id' in jrow) || !('doc_ctgr' in jrow) || !('doc_desc' in jrow)) throw new Error('Job with d_scope requires d_scope_id, d_ctgr, and d_desc');
     job_sql += this.AppSrv.getSQL('',_this._transform('jobproc_add_doc'));
-    job_sql_ptypes.push(dbtypes.VarChar(8));
+    job_sql_ptypes.push(dbtypes.VarChar(32));
     job_sql_params['doc_scope'] = jrow.doc_scope;
-    jobvalidate.AddValidator('_obj.doc_scope', _transform('doc_scope'), 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
+    jobvalidate.AddValidator('_obj.doc_scope', _transform('doc_scope'), 'B', [XValidate._v_MaxLength(32), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.BigInt);
     job_sql_params['doc_scope_id'] = jrow.doc_scope_id;
     jobvalidate.AddValidator('_obj.doc_scope_id', _transform('doc_scope_id'), 'B', [XValidate._v_IsNumeric(), XValidate._v_Required()]);
-    job_sql_ptypes.push(dbtypes.VarChar(8));
+    job_sql_ptypes.push(dbtypes.VarChar(32));
     job_sql_params['doc_ctgr'] = jrow.doc_ctgr;
-    jobvalidate.AddValidator('_obj.doc_ctgr', _transform('doc_ctgr'), 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
+    jobvalidate.AddValidator('_obj.doc_ctgr', _transform('doc_ctgr'), 'B', [XValidate._v_MaxLength(32), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.VarChar(255));
     job_sql_params['doc_desc'] = jrow.doc_desc;
     jobvalidate.AddValidator('_obj.doc_desc', _transform('doc_desc'), 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
@@ -346,7 +346,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
     jobvalidate.AddValidator('_obj.queue_name', _transform('queue_name'), 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.VarChar(dbtypes.MAX));
     job_sql_params['queue_message'] = jrow.queue_message || '';
-    jobvalidate.AddValidator('_obj.queue_message', _transform('queue_message'), 'B', [XValidate._v_MaxLength(8)]);
+    jobvalidate.AddValidator('_obj.queue_message', _transform('queue_message'), 'B', [XValidate._v_MaxLength(32)]);
   }
   if ('email_to' in jrow) {
     //Add Email to Job
@@ -394,15 +394,15 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
     //Add Note to Job
     if (!('note_scope_id' in jrow) || !('note_type' in jrow) || !('note_note' in jrow)) throw new Error('Job with n_scope requires n_scope_id, n_type, and n_note');
     job_sql += this.AppSrv.getSQL('',_this._transform('jobproc_add_note'));
-    job_sql_ptypes.push(dbtypes.VarChar(8));
+    job_sql_ptypes.push(dbtypes.VarChar(32));
     job_sql_params['note_scope'] = jrow.note_scope;
-    jobvalidate.AddValidator('_obj.note_scope', _transform('note_scope'), 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
+    jobvalidate.AddValidator('_obj.note_scope', _transform('note_scope'), 'B', [XValidate._v_MaxLength(32), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.BigInt);
     job_sql_params['note_scope_id'] = jrow.note_scope_id;
     jobvalidate.AddValidator('_obj.note_scope_id', _transform('note_scope_id'), 'B', [XValidate._v_IsNumeric(), XValidate._v_Required()]);
-    job_sql_ptypes.push(dbtypes.VarChar(8));
+    job_sql_ptypes.push(dbtypes.VarChar(32));
     job_sql_params['note_type'] = jrow.note_type;
-    jobvalidate.AddValidator('_obj.note_type', _transform('note_type'), 'B', [XValidate._v_MaxLength(8), XValidate._v_Required()]);
+    jobvalidate.AddValidator('_obj.note_type', _transform('note_type'), 'B', [XValidate._v_MaxLength(32), XValidate._v_Required()]);
     job_sql_ptypes.push(dbtypes.VarChar(dbtypes.MAX));
     job_sql_params['note_body'] = jrow.note_body;
     jobvalidate.AddValidator('_obj.note_body', _transform('note_body'), 'B', [XValidate._v_Required()]);
@@ -431,7 +431,7 @@ AppSrvJobProc.prototype.SetSubscriberQueueResult = function (queue_id, queue_rsl
   sqlparams[_this._transform('queue_rslt')] = queue_rslt;
   sqlparams[_this._transform('queue_snotes')] = queue_snotes;
   sqlparams[_this._transform('queue_id')] = queue_id;
-  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_queueresult"), [dbtypes.VarChar(8), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_queueresult"), [dbtypes.VarChar(32), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
     if (err) { _this.jsh.Log.error(err); }
     if (onComplete) onComplete();
   });

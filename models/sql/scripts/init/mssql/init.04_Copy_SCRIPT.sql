@@ -6,7 +6,7 @@ BEGIN TRANSACTION
 EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app'', N''CREATE TABLE [%%%schema%%%].[code_app_%%%name%%%](
 	[code_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [date] NULL,
@@ -332,8 +332,8 @@ END
 EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_app'', N''CREATE TABLE [%%%schema%%%].[code2_app_%%%name%%%](
 	[code2_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val1] [nvarchar](8) NOT NULL,
-	[code_va12] [nvarchar](8) NOT NULL,
+	[code_val1] [nvarchar](32) NOT NULL,
+	[code_va12] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_attrib] [nvarchar](50) NULL,
@@ -683,7 +683,7 @@ END
 EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_sys'', N''CREATE TABLE [%%%schema%%%].[code_sys_%%%name%%%](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -769,8 +769,8 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''System Code
 EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_sys'', N''CREATE TABLE [%%%schema%%%].[code2_sys_%%%name%%%](
 	[code2_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val1] [nvarchar](8) NOT NULL,
-	[code_va12] [nvarchar](8) NOT NULL,
+	[code_val1] [nvarchar](32) NOT NULL,
+	[code_va12] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_attrib] [nvarchar](50) NULL,

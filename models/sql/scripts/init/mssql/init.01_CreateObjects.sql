@@ -73,7 +73,7 @@ BEGIN
 DECLARE @adv_error INT
 DECLARE @c TINYINT
 DECLARE @rslt NVARCHAR(MAX)
-DECLARE @param_type NVARCHAR(8)
+DECLARE @param_type NVARCHAR(32)
 DECLARE @code_name NVARCHAR(128)
 DECLARE @is_param_app BIT
 DECLARE @is_param_user BIT
@@ -943,7 +943,7 @@ CREATE TABLE [jsharmony].[param__tbl](
 	[param_process] [nvarchar](32) NOT NULL,
 	[param_attrib] [nvarchar](16) NOT NULL,
 	[param_desc] [nvarchar](255) NOT NULL,
-	[param_type] [nvarchar](8) NOT NULL,
+	[param_type] [nvarchar](32) NOT NULL,
 	[code_name] [nvarchar](128) NULL,
 	[is_param_app] [bit] NOT NULL,
 	[is_param_user] [bit] NOT NULL,
@@ -1347,12 +1347,12 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[doc__tbl](
 	[doc_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[doc_scope] [nvarchar](8) NOT NULL,
+	[doc_scope] [nvarchar](32) NOT NULL,
 	[doc_scope_id] [bigint] NOT NULL,
 	[cust_id] [bigint] NULL,
 	[item_id] [bigint] NULL,
-	[doc_sts] [nvarchar](8) NOT NULL,
-	[doc_ctgr] [nvarchar](8) NOT NULL,
+	[doc_sts] [nvarchar](32) NOT NULL,
+	[doc_ctgr] [nvarchar](32) NOT NULL,
 	[doc_desc] [nvarchar](255) NULL,
 	[doc_ext] [nvarchar](16) NULL,
 	[doc_size] [bigint] NULL,
@@ -1480,7 +1480,7 @@ GO
 CREATE TABLE [jsharmony].[cust_role](
 	[cust_role_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[cust_role_seq] [smallint] NULL,
-	[cust_role_sts] [nvarchar](8) NOT NULL,
+	[cust_role_sts] [nvarchar](32) NOT NULL,
 	[cust_role_name] [nvarchar](16) NOT NULL,
 	[cust_role_desc] [nvarchar](255) NOT NULL,
 	[cust_role_code] [nvarchar](50) NULL,
@@ -1508,7 +1508,7 @@ CREATE TABLE [jsharmony].[menu__tbl](
 	[menu_id_auto] [bigint] IDENTITY(1,1) NOT NULL,
 	[menu_group] [char](1) NOT NULL,
 	[menu_id] [bigint] NOT NULL,
-	[menu_sts] [nvarchar](8) NOT NULL,
+	[menu_sts] [nvarchar](32) NOT NULL,
 	[menu_id_parent] [bigint] NULL,
 	[menu_name] [nvarchar](255) NOT NULL,
 	[menu_seq] [int] NULL,
@@ -1643,7 +1643,7 @@ GO
 CREATE TABLE [jsharmony].[sys_role](
 	[sys_role_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[sys_role_seq] [smallint] NOT NULL,
-	[sys_role_sts] [nvarchar](8) NOT NULL,
+	[sys_role_sts] [nvarchar](32) NOT NULL,
 	[sys_role_name] [nvarchar](16) NOT NULL,
 	[sys_role_desc] [nvarchar](255) NOT NULL,
 	[sys_role_code] [nvarchar](50) NULL,
@@ -2039,7 +2039,7 @@ GO
 CREATE TABLE [jsharmony].[cust_user](
 	[sys_user_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[cust_id] [bigint] NOT NULL,
-	[sys_user_sts] [nvarchar](8) NOT NULL,
+	[sys_user_sts] [nvarchar](32) NOT NULL,
 	[sys_user_stsdt] [date] NOT NULL,
 	[sys_user_fname] [nvarchar](35) NOT NULL,
 	[sys_user_mname] [nvarchar](35) NULL,
@@ -2098,8 +2098,8 @@ GO
 CREATE TABLE [jsharmony].[code2_doc_scope_doc_ctgr](
 	[code2_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val1] [nvarchar](8) NOT NULL,
-	[code_va12] [nvarchar](8) NOT NULL,
+	[code_val1] [nvarchar](32) NOT NULL,
+	[code_va12] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_attrib] [nvarchar](50) NULL,
@@ -2211,12 +2211,12 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [jsharmony].[note__tbl](
 	[note_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[note_scope] [nvarchar](8) NOT NULL,
+	[note_scope] [nvarchar](32) NOT NULL,
 	[note_scope_id] [bigint] NOT NULL,
-	[note_sts] [nvarchar](8) NOT NULL,
+	[note_sts] [nvarchar](32) NOT NULL,
 	[cust_id] [bigint] NULL,
 	[item_id] [bigint] NULL,
-	[note_type] [nvarchar](8) NOT NULL,
+	[note_type] [nvarchar](32) NOT NULL,
 	[note_body] [nvarchar](max) NOT NULL,
 	[note_etstmp] [datetime2](7) NOT NULL,
 	[note_euser] [nvarchar](20) NOT NULL,
@@ -2239,7 +2239,7 @@ SET ARITHABORT ON
 GO
 CREATE TABLE [jsharmony].[sys_user](
 	[sys_user_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[sys_user_sts] [nvarchar](8) NOT NULL,
+	[sys_user_sts] [nvarchar](32) NOT NULL,
 	[sys_user_stsdt] [date] NOT NULL,
 	[sys_user_fname] [nvarchar](35) NOT NULL,
 	[sys_user_mname] [nvarchar](35) NULL,
@@ -2247,10 +2247,10 @@ CREATE TABLE [jsharmony].[sys_user](
 	[sys_user_jobtitle] [nvarchar](35) NULL,
 	[sys_user_bphone] [nvarchar](30) NULL,
 	[sys_user_cphone] [nvarchar](30) NULL,
-	[sys_user_country] [nvarchar](8) NOT NULL,
+	[sys_user_country] [nvarchar](32) NOT NULL,
 	[sys_user_addr] [nvarchar](200) NULL,
 	[sys_user_city] [nvarchar](50) NULL,
-	[sys_user_state] [nvarchar](8) NULL,
+	[sys_user_state] [nvarchar](32) NULL,
 	[sys_user_zip] [nvarchar](20) NULL,
 	[sys_user_email] [nvarchar](255) NOT NULL,
 	[sys_user_startdt] [date] NOT NULL,
@@ -2289,7 +2289,7 @@ CREATE TABLE [jsharmony].[queue__tbl](
 	[queue_euser] [nvarchar](20) NOT NULL,
 	[queue_name] [nvarchar](255) NOT NULL,
 	[queue_message] [nvarchar](max) NOT NULL,
-	[queue_rslt] [nvarchar](8) NULL,
+	[queue_rslt] [nvarchar](32) NULL,
 	[queue_rslt_tstmp] [datetime2](7) NULL,
 	[queue_rslt_user] [nvarchar](20) NULL,
 	[queue_snotes] [nvarchar](max) NULL,
@@ -2307,12 +2307,12 @@ CREATE TABLE [jsharmony].[job__tbl](
 	[job_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[job_etstmp] [datetime2](7) NOT NULL,
 	[job_user] [nvarchar](20) NOT NULL,
-	[job_source] [nvarchar](8) NOT NULL,
-	[job_action] [nvarchar](8) NOT NULL,
+	[job_source] [nvarchar](32) NOT NULL,
+	[job_action] [nvarchar](32) NOT NULL,
 	[job_action_target] [nvarchar](50) NOT NULL,
 	[job_params] [nvarchar](max) NULL,
 	[job_tag] [nvarchar](255) NULL,
-	[job_rslt] [nvarchar](8) NULL,
+	[job_rslt] [nvarchar](32) NULL,
 	[job_rslt_tstmp] [datetime2](7) NULL,
 	[job_rslt_user] [nvarchar](20) NULL,
 	[job_snotes] [nvarchar](max) NULL,
@@ -2329,9 +2329,9 @@ GO
 CREATE TABLE [jsharmony].[job_doc](
 	[job_doc_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[job_id] [bigint] NOT NULL,
-	[doc_scope] [nvarchar](8) NULL,
+	[doc_scope] [nvarchar](32) NULL,
 	[doc_scope_id] [bigint] NULL,
-	[doc_ctgr] [nvarchar](8) NULL,
+	[doc_ctgr] [nvarchar](32) NULL,
 	[doc_desc] [nvarchar](255) NULL,
  CONSTRAINT [PK_job_doc] PRIMARY KEY CLUSTERED 
 (
@@ -2368,9 +2368,9 @@ GO
 CREATE TABLE [jsharmony].[job_note](
 	[job_note_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[job_id] [bigint] NOT NULL,
-	[note_scope] [nvarchar](8) NULL,
+	[note_scope] [nvarchar](32) NULL,
 	[note_scope_id] [bigint] NULL,
-	[note_type] [nvarchar](8) NULL,
+	[note_type] [nvarchar](32) NULL,
 	[note_body] [nvarchar](max) NULL,
  CONSTRAINT [PK_job_note] PRIMARY KEY CLUSTERED 
 (
@@ -2429,7 +2429,7 @@ GO
 CREATE TABLE [jsharmony].[sys_func](
 	[sys_func_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[sys_func_seq] [smallint] NOT NULL,
-	[sys_func_sts] [nvarchar](8) NOT NULL,
+	[sys_func_sts] [nvarchar](32) NOT NULL,
 	[sys_func_name] [nvarchar](16) NOT NULL,
 	[sys_func_desc] [nvarchar](255) NOT NULL,
 	[sys_func_code] [nvarchar](50) NULL,
@@ -2481,7 +2481,7 @@ GO
 CREATE TABLE [jsharmony].[txt__tbl](
 	[txt_process] [nvarchar](32) NOT NULL,
 	[txt_attrib] [nvarchar](32) NOT NULL,
-	[txt_type] [nvarchar](8) NOT NULL,
+	[txt_type] [nvarchar](32) NOT NULL,
 	[txt_title] [nvarchar](max) NULL,
 	[txt_body] [nvarchar](max) NULL,
 	[txt_bcc] [nvarchar](255) NULL,
@@ -2509,7 +2509,7 @@ GO
 CREATE TABLE [jsharmony].[code_ac](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2542,7 +2542,7 @@ GO
 CREATE TABLE [jsharmony].[code_ac1](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2575,7 +2575,7 @@ GO
 CREATE TABLE [jsharmony].[code_ahc](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2608,7 +2608,7 @@ GO
 CREATE TABLE [jsharmony].[code_country](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2641,7 +2641,7 @@ GO
 CREATE TABLE [jsharmony].[code_doc_scope](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2701,7 +2701,7 @@ GO
 CREATE TABLE [jsharmony].[code_note_scope](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2734,7 +2734,7 @@ GO
 CREATE TABLE [jsharmony].[code_note_type](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2767,7 +2767,7 @@ GO
 CREATE TABLE [jsharmony].[code_param_type](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2800,7 +2800,7 @@ GO
 CREATE TABLE [jsharmony].[code_job_action](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2833,7 +2833,7 @@ GO
 CREATE TABLE [jsharmony].[code_job_source](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2866,7 +2866,7 @@ GO
 CREATE TABLE [jsharmony].[code_txt_type](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2899,7 +2899,7 @@ GO
 CREATE TABLE [jsharmony].[code_version_sts](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](8) NOT NULL,
+	[code_val] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_end_dt] [datetime2](7) NULL,
@@ -2932,8 +2932,8 @@ GO
 CREATE TABLE [jsharmony].[code2_country_state](
 	[code2_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
-	[code_val1] [nvarchar](8) NOT NULL,
-	[code_va12] [nvarchar](8) NOT NULL,
+	[code_val1] [nvarchar](32) NOT NULL,
+	[code_va12] [nvarchar](32) NOT NULL,
 	[code_txt] [nvarchar](50) NULL,
 	[code_code] [nvarchar](50) NULL,
 	[code_attrib] [nvarchar](50) NULL,
@@ -2999,7 +2999,7 @@ CREATE TABLE [jsharmony].[version__tbl](
 	[version_no_minor] [int] NOT NULL,
 	[version_no_build] [int] NOT NULL,
 	[version_no_rev] [int] NOT NULL,
-	[version_sts] [nvarchar](8) NOT NULL,
+	[version_sts] [nvarchar](32) NOT NULL,
 	[version_note] [nvarchar](max) NULL,
 	[version_etstmp] [datetime2](7) NOT NULL,
 	[version_euser] [nvarchar](20) NOT NULL,
@@ -3848,7 +3848,7 @@ GO
 CREATE PROCEDURE  [jsharmony].[check_code]
 (
 	@in_tblname nvarchar(255),
-	@in_code_val nvarchar(8)
+	@in_code_val nvarchar(32)
 )	
 as
 BEGIN
@@ -3886,7 +3886,7 @@ GO
 CREATE PROCEDURE  [jsharmony].[check_code_exec]
 (
 	@in_tblname nvarchar(255),
-	@in_code_val nvarchar(8)
+	@in_code_val nvarchar(32)
 )	
 as
 BEGIN
@@ -3927,8 +3927,8 @@ GO
 CREATE PROCEDURE  [jsharmony].[check_code2]
 (
 	@in_tblname nvarchar(255),
-	@in_code_val1 nvarchar(8),
-	@in_code_val2 nvarchar(8)
+	@in_code_val1 nvarchar(32),
+	@in_code_val2 nvarchar(32)
 )	
 as
 BEGIN
@@ -3965,8 +3965,8 @@ GO
 CREATE PROCEDURE  [jsharmony].[check_code2_exec]
 (
 	@in_tblname nvarchar(255),
-	@in_code_val1 nvarchar(8),
-	@in_code_val2 nvarchar(8)
+	@in_code_val1 nvarchar(32),
+	@in_code_val2 nvarchar(32)
 )	
 as
 BEGIN

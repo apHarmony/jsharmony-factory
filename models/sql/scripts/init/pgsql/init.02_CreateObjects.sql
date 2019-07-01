@@ -369,7 +369,7 @@ CREATE FUNCTION check_param(in_table character varying, in_process character var
     AS $$
 DECLARE 
   cust bigint = 0;
-  param_type VARCHAR(8) = NULL;
+  param_type VARCHAR(32) = NULL;
   code_name VARCHAR(128);
   is_param_app boolean;
   is_param_user boolean;
@@ -3807,7 +3807,7 @@ ALTER SEQUENCE audit__tbl_audit_seq_seq OWNED BY audit__tbl.audit_seq;
 CREATE TABLE cust_user (
     sys_user_id bigint NOT NULL,
     cust_id bigint NOT NULL,
-    sys_user_sts character varying(8) NOT NULL,
+    sys_user_sts character varying(32) NOT NULL,
     sys_user_stsdt date DEFAULT my_now() NOT NULL,
     sys_user_fname character varying(35) NOT NULL,
     sys_user_mname character varying(35),
@@ -3909,7 +3909,7 @@ ALTER SEQUENCE cust_user_role_cust_user_role_id_seq OWNED BY cust_user_role.cust
 CREATE TABLE cust_role (
     cust_role_id bigint NOT NULL,
     cust_role_seq smallint NOT NULL,
-    cust_role_sts character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    cust_role_sts character varying(32) DEFAULT 'ACTIVE'::character varying NOT NULL,
     cust_role_name character varying(16) NOT NULL,
     cust_role_desc character varying(255) NOT NULL,
     cust_role_snotes character varying(255),
@@ -3996,12 +3996,12 @@ ALTER SEQUENCE cust_menu_role_cust_menu_role_id_seq OWNED BY cust_menu_role.cust
 
 CREATE TABLE doc__tbl (
     doc_id bigint NOT NULL,
-    doc_scope character varying(8) DEFAULT 'S'::character varying NOT NULL,
+    doc_scope character varying(32) DEFAULT 'S'::character varying NOT NULL,
     doc_scope_id bigint DEFAULT 0 NOT NULL,
     cust_id bigint,
     item_id bigint,
-    doc_sts character varying(8) DEFAULT 'A'::character varying NOT NULL,
-    doc_ctgr character varying(8) NOT NULL,
+    doc_sts character varying(32) DEFAULT 'A'::character varying NOT NULL,
+    doc_ctgr character varying(32) NOT NULL,
     doc_desc character varying(255),
     doc_ext character varying(16),
     doc_size bigint,
@@ -4243,7 +4243,7 @@ ALTER TABLE code_app_base_code_app_id_seq OWNER TO postgres;
 CREATE TABLE code_app_base (
     code_app_id bigint DEFAULT nextval('code_app_base_code_app_id_seq'::regclass) NOT NULL,
     code_seq smallint,
-    code_val character varying(8) NOT NULL,
+    code_val character varying(32) NOT NULL,
     code_txt character varying(50) NOT NULL,
     code_code character varying(50),
     code_end_dt date,
@@ -4288,8 +4288,8 @@ ALTER TABLE code2_app_base_code2_app_id_seq OWNER TO postgres;
 CREATE TABLE code2_app_base (
     code2_app_id bigint DEFAULT nextval('code2_app_base_code2_app_id_seq'::regclass) NOT NULL,
     code_seq smallint,
-    code_val1 character varying(8) NOT NULL,
-    code_va12 character varying(8) NOT NULL,
+    code_val1 character varying(32) NOT NULL,
+    code_va12 character varying(32) NOT NULL,
     code_txt character varying(50),
     code_code character varying(50),
     code_end_dt date,
@@ -4527,12 +4527,12 @@ ALTER SEQUENCE help_target_help_target_id_seq OWNED BY help_target.help_target_i
 
 CREATE TABLE note__tbl (
     note_id bigint NOT NULL,
-    note_scope character varying(8) DEFAULT 'S'::character varying NOT NULL,
+    note_scope character varying(32) DEFAULT 'S'::character varying NOT NULL,
     note_scope_id bigint DEFAULT 0 NOT NULL,
-    note_sts character varying(8) DEFAULT 'A'::character varying NOT NULL,
+    note_sts character varying(32) DEFAULT 'A'::character varying NOT NULL,
     cust_id bigint,
     item_id bigint,
-    note_type character varying(8) NOT NULL,
+    note_type character varying(32) NOT NULL,
     note_body text NOT NULL,
     note_etstmp timestamp without time zone DEFAULT my_now() NOT NULL,
     note_euser character varying(20) DEFAULT my_db_user() NOT NULL,
@@ -4703,7 +4703,7 @@ COMMENT ON TABLE number__tbl IS 'System Table (CONTROL)';
 
 CREATE TABLE sys_user (
     sys_user_id bigint NOT NULL,
-    sys_user_sts character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    sys_user_sts character varying(32) DEFAULT 'ACTIVE'::character varying NOT NULL,
     sys_user_stsdt date DEFAULT my_now() NOT NULL,
     sys_user_fname character varying(35) NOT NULL,
     sys_user_mname character varying(35),
@@ -4711,10 +4711,10 @@ CREATE TABLE sys_user (
     sys_user_jobtitle character varying(35),
     sys_user_bphone character varying(30),
     sys_user_cphone character varying(30),
-    sys_user_country character varying(8) DEFAULT 'USA'::character varying NOT NULL,
+    sys_user_country character varying(32) DEFAULT 'USA'::character varying NOT NULL,
     sys_user_addr character varying(200),
     sys_user_city character varying(50),
-    sys_user_state character varying(8),
+    sys_user_state character varying(32),
     sys_user_zip character varying(20),
     sys_user_email character varying(255) NOT NULL,
     sys_user_startdt date DEFAULT my_now() NOT NULL,
@@ -4794,7 +4794,7 @@ CREATE TABLE param__tbl (
     param_process character varying(32) NOT NULL,
     param_attrib character varying(16) NOT NULL,
     param_desc character varying(255) NOT NULL,
-    param_type character varying(8) NOT NULL,
+    param_type character varying(32) NOT NULL,
     code_name character varying(128),
     param_etstmp timestamp without time zone DEFAULT my_now() NOT NULL,
     param_euser character varying(20) DEFAULT my_db_user() NOT NULL,
@@ -4894,7 +4894,7 @@ CREATE TABLE queue__tbl (
     queue_euser character varying(20) DEFAULT my_db_user() NOT NULL,
     queue_name character varying(255) NOT NULL,
     queue_message text NOT NULL,
-    queue_rslt character varying(8),
+    queue_rslt character varying(32),
     queue_rslt_tstmp timestamp without time zone,
     queue_rslt_user character varying(20),
     queue_snotes text
@@ -4939,12 +4939,12 @@ CREATE TABLE job__tbl (
     job_id bigint NOT NULL,
     job_etstmp timestamp without time zone DEFAULT my_now() NOT NULL,
     job_user character varying(20) DEFAULT my_db_user() NOT NULL,
-    job_source character varying(8) NOT NULL,
-    job_action character varying(8) NOT NULL,
+    job_source character varying(32) NOT NULL,
+    job_action character varying(32) NOT NULL,
     job_action_target character varying(50) NOT NULL,
     job_params text,
     job_tag character varying(255),
-    job_rslt character varying(8),
+    job_rslt character varying(32),
     job_rslt_tstmp timestamp without time zone,
     job_rslt_user character varying(20),
     job_snotes text
@@ -4967,9 +4967,9 @@ COMMENT ON TABLE job__tbl IS 'Request (CONTROL)';
 CREATE TABLE job_doc (
     job_doc_id bigint NOT NULL,
     job_id bigint NOT NULL,
-    doc_scope character varying(8),
+    doc_scope character varying(32),
     doc_scope_id bigint,
-    doc_ctgr character varying(8),
+    doc_ctgr character varying(32),
     doc_desc character varying(255)
 );
 
@@ -5060,9 +5060,9 @@ ALTER SEQUENCE job_email_job_email_id_seq OWNED BY job_email.job_email_id;
 CREATE TABLE job_note (
     job_note_id bigint NOT NULL,
     job_id bigint NOT NULL,
-    note_scope character varying(8),
+    note_scope character varying(32),
     note_scope_id bigint,
-    note_type character varying(8),
+    note_type character varying(32),
     note_body text
 );
 
@@ -5210,7 +5210,7 @@ ALTER SEQUENCE job_sms_job_sms_id_seq OWNED BY job_sms.job_sms_id;
 CREATE TABLE sys_func (
     sys_func_id bigint NOT NULL,
     sys_func_seq smallint NOT NULL,
-    sys_func_sts character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    sys_func_sts character varying(32) DEFAULT 'ACTIVE'::character varying NOT NULL,
     sys_func_name character varying(16) NOT NULL,
     sys_func_desc character varying(255) NOT NULL,
     sys_func_snotes character varying(255),
@@ -5271,7 +5271,7 @@ CREATE TABLE menu__tbl (
     menu_id_auto bigint NOT NULL,
     menu_group character(1) DEFAULT 'S'::bpchar NOT NULL,
     menu_id bigint NOT NULL,
-    menu_sts character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    menu_sts character varying(32) DEFAULT 'ACTIVE'::character varying NOT NULL,
     menu_id_parent bigint,
     menu_name character varying(255) NOT NULL,
     menu_seq integer,
@@ -5407,7 +5407,7 @@ ALTER SEQUENCE sys_user_role_sys_user_role_id_seq OWNED BY sys_user_role.sys_use
 CREATE TABLE sys_role (
     sys_role_id bigint NOT NULL,
     sys_role_seq smallint NOT NULL,
-    sys_role_sts character varying(8) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    sys_role_sts character varying(32) DEFAULT 'ACTIVE'::character varying NOT NULL,
     sys_role_name character varying(16) NOT NULL,
     sys_role_desc character varying(255) NOT NULL,
     sys_role_snotes character varying(255),
@@ -5496,7 +5496,7 @@ CREATE TABLE txt__tbl (
     txt_id bigint NOT NULL,
     txt_process character varying(32) NOT NULL,
     txt_attrib character varying(32) NOT NULL,
-    txt_type character varying(8) DEFAULT 'TEXT'::character varying NOT NULL,
+    txt_type character varying(32) DEFAULT 'TEXT'::character varying NOT NULL,
     txt_title text,
     txt_body text,
     txt_bcc character varying(255),
@@ -5545,7 +5545,7 @@ ALTER SEQUENCE txt__tbl_txt_id_seq OWNED BY txt__tbl.txt_id;
 CREATE TABLE code_sys_base (
     code_sys_id bigint NOT NULL,
     code_seq smallint,
-    code_val character varying(8) NOT NULL,
+    code_val character varying(32) NOT NULL,
     code_txt character varying(50),
     code_code character varying(50),
     code_end_dt date,
@@ -5688,8 +5688,8 @@ ALTER TABLE code2_sys_base_code2_sys_id_seq OWNER TO postgres;
 CREATE TABLE code2_sys_base (
     code2_sys_id bigint DEFAULT nextval('code2_sys_base_code2_sys_id_seq'::regclass) NOT NULL,
     code_seq smallint,
-    code_val1 character varying(8) NOT NULL,
-    code_va12 character varying(8) NOT NULL,
+    code_val1 character varying(32) NOT NULL,
+    code_va12 character varying(32) NOT NULL,
     code_txt character varying(50),
     code_code character varying(50),
     code_end_dt date,
@@ -6305,7 +6305,7 @@ CREATE TABLE version__tbl (
     version_no_minor integer DEFAULT 0 NOT NULL,
     version_no_build integer DEFAULT 0 NOT NULL,
     version_no_rev integer DEFAULT 0 NOT NULL,
-    version_sts character varying(8) DEFAULT 'OK'::character varying NOT NULL,
+    version_sts character varying(32) DEFAULT 'OK'::character varying NOT NULL,
     version_note text,
     version_etstmp timestamp without time zone DEFAULT my_now() NOT NULL,
     version_euser character varying(20) DEFAULT my_db_user() NOT NULL,

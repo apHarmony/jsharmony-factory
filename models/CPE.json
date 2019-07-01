@@ -12,7 +12,7 @@
     "popup":[850,650],
     "fields":[
       {"name":"pe_id","type":"bigint","key":1,"datalock":{"c_id":"pe_id"},"control":"hidden"},
-      {"name":"pe_sts","type":"varchar","length":8,"actions":"BIU","control":"dropdown_S",
+      {"name":"pe_sts","type":"varchar","length":32,"actions":"BIU","control":"dropdown_S",
         "lov": { "code_sys": "ahc", "schema": "jsharmony"}, "validate": ["Required"], "default": "ACTIVE",
    	    "caption":"Status","captionstyle":"width:120px;text-align:right;"},
       {"name":"pe_stsdt","type":"date","actions":"B","control":"textbox_mmddyy",
