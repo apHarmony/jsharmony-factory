@@ -17,6 +17,8 @@
     "menu_subcommand": "sm_subcmd",
     "menu_parentname": "sm_parent_name",
     "{{code_val}}": "code_val",
+    "{{code_val1}}": "code_val1",
+    "{{code_val2}}": "code_val2",
     "{{code_txt}}": "code_txt",
     "{{code_seq}}": "code_seq",
     "{{code_parent}}": "code_parent",
