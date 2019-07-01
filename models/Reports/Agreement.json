@@ -1,14 +1,14 @@
 {
-  "AGREEMENT": {
-    "comment":"AGREEMENT",
-    "source_files_prefix":"AGREEMENT",
+  "Agreement": {
+    "comment":"Agreement",
+    "source_files_prefix":"Agreement",
     "layout": "report",
     "title": "Customer Agreement",
     "actions": "B",
     //"roles": { "client": {"CSYSADMIN":"*","CADMIN":"*"} },
     "menu":"reports",
     "description": "Generate Signed Customer Agreement",
-    "template": "AGREEMENT.ejs",
+    "template": "Agreement.ejs",
     "inherits": "TMPL_DEFAULT",
     "fields": [
       {"name":"c_id","type":"bigint","datalock":{"c_id":"c_c_id"},"nl":1,
