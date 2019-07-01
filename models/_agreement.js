@@ -26,6 +26,13 @@ var crypto = require('crypto');
 
 exports = module.exports = {};
 
+function _transform(jsh, elem){
+  if(!jsh) return elem;
+  if(!jsh.Modules['jsHarmonyFactory']) return elem;
+  console.log('!!!!!!!!!!');
+  return jsh.Modules['jsHarmonyFactory'].transform.mapping[elem];
+}
+
 exports.check = function (req, res, next) {
   var _this = this;
   if (!req.gdata[_this.jsh.map.client_agreement_tstmp]) {
@@ -104,15 +111,15 @@ exports.sign = function (req, res, next) {
   var dbtypes = appsrv.DB.types;
   var validate = new XValidate();
   
-  //sql = "update C set c_atstmp=getdate() where c_id=@c_id";
-  sql = "agreement_sign";
+  var job_params = {}
+  job_params['a_name'] = P.a_name;
+  job_params['a_dob'] = P.a_dob;
+  job_params[_transform(jsh,'cust_id')] = req.gdata[jsh.map.client_id];
+
+  sql = _transform(jsh,"agreement_sign");
   sql_ptypes.push(dbtypes.BigInt, dbtypes.VarChar(dbtypes.MAX));
-  sql_params['c_id'] = req.gdata[jsh.map.client_id];
-  sql_params['rqst_parms'] = JSON.stringify({
-    'a_name': P.a_name,
-    'a_dob': P.a_dob,
-    'c_id': req.gdata[jsh.map.client_id]
-  });
+  sql_params[_transform(jsh,'cust_id')] = req.gdata[jsh.map.client_id];
+  sql_params[_transform(jsh,'job_params')] = JSON.stringify(job_params);
   
   var fieldnames = _.keys(fields);
   _.each(fields, function (val, key) {
@@ -156,7 +163,7 @@ exports.paymentresult = function (req, res, next) {
   var validate = new XValidate();
   
   var fieldnames = _.keys(fields);
-  sql = "agreement_paymentresult";
+  sql = _transform(jsh,"agreement_paymentresult");
   _.each(fields, function (val, key) {
     validate.AddValidator('_obj.' + key, val.caption, 'B', val.validators);
     var dbtype = appsrv.getDBType(val);
@@ -174,15 +181,15 @@ exports.paymentresult = function (req, res, next) {
       if ((rslt != null) && (rslt.length == 1)) rslt = rslt[0];
       if (rslt != null) {
         rslt.key = '';
-        if (rslt.pe_id) {
-          rslt.key = crypto.createHash('sha1').update(rslt.pe_id + req.jshsite.auth.salt + rslt.pe_ll_tstmp).digest('hex');
+        if (rslt[jsh.map.user_id]) {
+          rslt.key = crypto.createHash('sha1').update(rslt[jsh.map.user_id] + req.jshsite.auth.salt + rslt[jsh.map.user_last_tstmp]).digest('hex');
         }
         rslt.new_client_error = 0;
-        if (!rslt.c_id || !rslt.pe_id || rslt.new_client_result) rslt.new_client_error = 1;
-        delete rslt.c_id;
-        delete rslt.pe_id;
-        delete rslt.pe_ll_tstmp;
-        delete rslt.new_client_result;
+        if (!rslt[_transform(jsh,'cust_id')] || !rslt[jsh.map.user_id] || rslt[_transform(jsh,'new_client_result')]) rslt.new_client_error = 1;
+        delete rslt[_transform(jsh,'cust_id')];
+        delete rslt[jsh.map.user_id];
+        delete rslt[jsh.map.user_last_tstmp];
+        delete rslt[_transform(jsh,'new_client_result')];
         rslt['_success'] = 1;
         res.end(JSON.stringify(rslt));
       }
