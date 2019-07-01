@@ -240,7 +240,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
         if (job.email_attach && tmppath){
           fs.exists(tmppath, function(exists){
             if(!exists) return cb(new Error('Report output does not exist'));
-            var filename = _transform('doc') + (doc_id||'0') + '.pdf';
+            var filename = _transform('doc__tbl') + (doc_id||'0') + '.pdf';
             if(job.email_attach.toString().substr(0,9)=='filename:') filename = job.email_attach.substr(9);
             attachments.push({ filename: filename, content: fs.createReadStream(tmppath) });
             return cb();
@@ -250,7 +250,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
       },
       function(cb){
         if (job.email_doc_id){
-          var email_doc_id_path = _this.jsh.Config.datadir + '/'+_transform('doc')+'/'+_transform('doc')+'_file_' + job.email_doc_id;
+          var email_doc_id_path = _this.jsh.Config.datadir + '/'+_transform('doc__tbl')+'/'+_transform('doc__tbl')+'_file_' + job.email_doc_id;
           fs.exists(email_doc_id_path, function(exists){
             if(!exists) return cb(new Error('Email '+_transform('email_doc_id')+' does not exist'));
             attachments.push({ filename: job.email_doc_filename, content: fs.createReadStream(email_doc_id_path) });
@@ -275,7 +275,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
   var execarr = [];
   if (job.doc_scope && tmppath) {
     execarr.push(saveD);
-    execarr.push(function (cb) { HelperFS.copyFile(tmppath, (_this.jsh.Config.datadir +_transform('doc')+'/'+_transform('doc')+'_file_' + doc_id), cb); });
+    execarr.push(function (cb) { HelperFS.copyFile(tmppath, (_this.jsh.Config.datadir +_transform('doc__tbl')+'/'+_transform('doc__tbl')+'_file_' + doc_id), cb); });
   }
   if (job.queue_name && tmppath) {
     execarr.push(saveRQ);
