@@ -525,7 +525,6 @@ transform.models = {
   "Admin/Param_User_Listing": "PPPL",
   "Dashboard_Note_Listing": "QNSSL",
   "Reports/Overview": "REPORTS",
-  "Reports/SysUser_Listing": "RPE",
   "Client/Reports/Overview": "REPORTS_CLIENT",
   "Admin/RestartSystem": "RESTART_SYSTEM",
   "Queue__model": "RQ",
@@ -563,7 +562,7 @@ transform.models = {
   "Dev/Code_Sys_Listing": "X_UCOD_HL",
   "Dev/Param_Sys_Listing": "X_XPPL",
   "Reports/Agreement": "reports/AGREEMENT",
-  "Reports/User_Listing": "reports/RPE",
+  "Reports/SysUser_Listing": "reports/SysUser_Listing",
   "Reports/Template_Default": "reports/TMPL_DEFAULT"
 };
 

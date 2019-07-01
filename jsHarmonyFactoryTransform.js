@@ -531,7 +531,6 @@ function jsHarmonyFactoryTransform(module){
     "Admin/Param_User_Listing": "Admin/Param_User_Listing",
     "Dashboard_Note_Listing": "Dashboard_Note_Listing",
     "Reports/Overview": "Reports/Overview",
-    "Reports/SysUser_Listing": "Reports/SysUser_Listing",
     "Client/Reports/Overview": "Client/Reports/Overview",
     "Admin/RestartSystem": "Admin/RestartSystem",
     "Queue__model": "Queue",
@@ -569,7 +568,7 @@ function jsHarmonyFactoryTransform(module){
     "Dev/Code_Sys_Listing": "Dev/Code_Sys_Listing",
     "Dev/Param_Sys_Listing": "Dev/Param_Sys_Listing",
     "Reports/Agreement": "Reports/Agreement",
-    "Reports/User_Listing": "Reports/User_Listing",
+    "Reports/SysUser_Listing": "Reports/SysUser_Listing",
     "Reports/Template_Default": "Reports/Template_Default",
   };
 

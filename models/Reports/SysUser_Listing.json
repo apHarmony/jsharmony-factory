@@ -1,7 +1,7 @@
 {
-  "RPE": {
-    "comment":"RPE",
-    "source_files_prefix":"RPE",
+  "SysUser_Listing": {
+    "comment":"SysUser_Listing",
+    "source_files_prefix":"SysUser_Listing",
     "layout": "report",
     "title": "User Listing",
     "inherits": "TMPL_DEFAULT",
