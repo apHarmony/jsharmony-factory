@@ -44,42 +44,42 @@ function jsHarmonyFactoryTransform(module){
     "help_target": "help_target",
     "code_prefix": "code",
     "code2_prefix": "code2",
-    "code_app": "code_app", //"code"
-    "code_sys": "code_sys", //"code"
-    "code_app_": "code_app_", //"code_"
-    "code_sys_": "code_sys_", //"code_"
-    "code_app_base": "code_app_base", //"code_base"
-    "code_sys_base": "code_sys_base", //"code_base"
-    "code_app_prefix": "code_app", //"code"
-    "code_sys_prefix": "code_sys", //"code"
-    "code_ac": "code_sys_ac", //"code_ac"
-    "code_ac1": "code_sys_ac1", //"code_ac1"
-    "code_ahc": "code_sys_ahc", //"code_ahc"
-    "code_country": "code_sys_country", //"code_country"
-    "code_doc_scope": "code_sys_doc_scope", //"code_doc_scope"
+    "code_app": "code",
+    "code_sys": "code",
+    "code_app_": "code_",
+    "code_sys_": "code_",
+    "code_app_base": "code_base",
+    "code_sys_base": "code_base",
+    "code_app_prefix": "code",
+    "code_sys_prefix": "code",
+    "code_ac": "code_ac",
+    "code_ac1": "code_ac1",
+    "code_ahc": "code_ahc",
+    "code_country": "code_country",
+    "code_doc_scope": "code_doc_scope",
     "code_param_user_process": "code_param_user_process",
     "code_param_app_process": "code_param_app_process",
     "code_param_sys_process": "code_param_sys_process",
-    "code2_app": "code2_app", //"code2"
-    "code2_sys": "code2_sys", //"code2"
-    "code2_app_": "code2_app_", //"code2_"
-    "code2_sys_": "code2_sys_", //"code2_"
-    "code2_app_base": "code2_app_base", //"code2_base"
-    "code2_sys_base": "code2_sys_base", //"code2_base"
-    "code2_app_prefix": "code2_app", //"code2"
-    "code2_sys_prefix": "code2_sys", //"code2"
-    "code2_doc_scope_doc_ctgr": "code2_app_doc_scope_doc_ctgr", //"code2_doc_scope_doc_ctgr"
-    "code2_country_state": "code2_sys_country_state", //"code2_country_state"
+    "code2_app": "code2",
+    "code2_sys": "code2",
+    "code2_app_": "code2_",
+    "code2_sys_": "code2_",
+    "code2_app_base": "code2_base",
+    "code2_sys_base": "code2_base",
+    "code2_app_prefix": "code2",
+    "code2_sys_prefix": "code2",
+    "code2_doc_scope_doc_ctgr": "code2_doc_scope_doc_ctgr",
+    "code2_country_state": "code2_country_state",
     "code2_param_user_attrib": "code2_param_user_attrib",
     "code2_param_app_attrib": "code2_param_app_attrib",
     "code2_param_sys_attrib": "code2_param_sys_attrib",
-    "code_note_scope": "code_sys_note_scope", //"code_note_scope"
-    "code_note_type": "code_sys_note_type", //"code_note_type"
-    "code_param_type": "code_sys_param_type", //"code_param_type"
-    "code_job_action": "code_sys_job_action", //"code_job_action"
-    "code_job_source": "code_sys_job_source", //"code_job_source"
-    "code_txt_type": "code_sys_txt_type", //"code_txt_type"
-    "code_version_sts": "code_sys_version_sts", //"code_version_sts"
+    "code_note_scope": "code_note_scope",
+    "code_note_type": "code_note_type",
+    "code_param_type": "code_param_type",
+    "code_job_action": "code_job_action",
+    "code_job_source": "code_job_source",
+    "code_txt_type": "code_txt_type",
+    "code_version_sts": "code_version_sts",
     "queue__tbl": "queue",
     "script__tbl": "script",
     "job__tbl": "job",
@@ -205,10 +205,10 @@ function jsHarmonyFactoryTransform(module){
     "email_text": "email_text",
     "email_to": "email_to",
     "email_txt_attrib": "email_txt_attrib",
-    "code_app_h_id": "code_app_h_id",
-    "code_app_id": "code_app_id",
-    "code2_app_h_id": "code2_app_h_id",
-    "code2_app_id": "code2_app_id",
+    "code_app_h_id": "code_h_id",
+    "code_app_id": "code_id",
+    "code2_app_h_id": "code2_h_id",
+    "code2_app_id": "code2_id",
     "param_app_attrib": "param_app_attrib",
     "param_app_etstmp": "param_app_etstmp",
     "param_app_euser": "param_app_euser",
@@ -414,10 +414,10 @@ function jsHarmonyFactoryTransform(module){
     "txt_title": "txt_title",
     "txt_type": "txt_type",
     "txt_body": "txt_body",
-    "code_sys_h_id": "code_sys_h_id",
-    "code_sys_id": "code_sys_id",
-    "code2_sys_h_id": "code2_sys_h_id",
-    "code2_sys_id": "code2_sys_id",
+    "code_sys_h_id": "code_h_id",
+    "code_sys_id": "code_id",
+    "code2_sys_h_id": "code2_h_id",
+    "code2_sys_id": "code2_id",
     "version_component": "version_component",
     "version_etstmp": "version_etstmp",
     "version_euser": "version_euser",
@@ -455,7 +455,6 @@ function jsHarmonyFactoryTransform(module){
     "Base/CustUser": "Base/CustUser",
     "CustUser_Role": "CustUser_Role",
     "Base/CustUser_Role": "Base/CustUser_Role",
-    "CreateCodeSys": "CreateCodeSys",
     "Dev/CustMenuRoleSelection_Role": "Dev/CustMenuRoleSelection_Role",
     "Dev/CustRoleMenuSelection_Menu": "Dev/CustRoleMenuSelection_Menu",
     "Client/Dashboard": "Client/Dashboard",
@@ -474,10 +473,10 @@ function jsHarmonyFactoryTransform(module){
     "Doc_Listing": "Doc_Listing",
     "Base/Doc_Listing": "Base/Doc_Listing",
     "Base/Doc": "Base/Doc",
-    "Admin/Code2Value_App_Listing": "Admin/Code2Value_App_Listing",
-    "Admin/Code2_App_Listing": "Admin/Code2_App_Listing",
-    "Admin/CodeValue_App_Listing": "Admin/CodeValue_App_Listing",
-    "Admin/Code_App_Listing": "Admin/Code_App_Listing",
+    "Admin/Code2Value_App_Listing": "Admin/Code2Value_Listing",
+    "Admin/Code2_App_Listing": "Admin/Code2_Listing",
+    "Admin/CodeValue_App_Listing": "Admin/CodeValue_Listing",
+    "Admin/Code_App_Listing": "Admin/Code_Listing",
     "Admin/SysUser_Doc": "Admin/SysUser_Doc",
     "Admin/SysUser_Doc_Listing": "Admin/SysUser_Doc_Listing",
     "Admin/SysUser_Note": "Admin/SysUser_Note",
@@ -523,11 +522,11 @@ function jsHarmonyFactoryTransform(module){
     "Admin/SysUser_Func": "Admin/SysUser_Func",
     "Admin/SysUser_Role": "Admin/SysUser_Role",
     "Dev/PopupExec": "Dev/PopupExec",
-    "Dev/CreateCode_App": "Dev/CreateCode_App",
-    "Dev/CreateCode2_App": "Dev/CreateCode2_App",
+    "Dev/CreateCode_App": "Dev/CreateCode",
+    "Dev/CreateCode2_App": "Dev/CreateCode2",
     "Dev/CreateCode_Base": "Dev/CreateCode_Base",
-    "Dev/CreateCode_Sys": "Dev/CreateCode_Sys",
-    "Dev/CreateCode2_Sys": "Dev/CreateCode2_Sys",
+    "Dev/CreateCode_Sys": "Dev/CreateCode",
+    "Dev/CreateCode2_Sys": "Dev/CreateCode2",
     "Admin/Param_User_Listing": "Admin/Param_User_Listing",
     "Dashboard_Note_Listing": "Dashboard_Note_Listing",
     "Reports/Overview": "Reports/Overview",
@@ -538,17 +537,17 @@ function jsHarmonyFactoryTransform(module){
     "Dev/SysRoleMenuSelection_Menu": "Dev/SysRoleMenuSelection_Menu",
     "Admin/Txt": "Admin/Txt",
     "Admin/Txt_Listing": "Admin/Txt_Listing",
-    "Dev/Code2Value_Sys_Listing": "Dev/Code2Value_Sys_Listing",
-    "Dev/Code2_Sys_Listing_Browse": "Dev/Code2_Sys_Listing_Browse",
-    "Dev/CodeValue_Sys_Listing": "Dev/CodeValue_Sys_Listing",
-    "Dev/Code_Sys_Listing_Browse": "Dev/Code_Sys_Listing_Browse",
+    "Dev/Code2Value_Sys_Listing": "Dev/Code2Value_Listing",
+    "Dev/Code2_Sys_Listing_Browse": "Dev/Code2_Listing_Browse",
+    "Dev/CodeValue_Sys_Listing": "Dev/CodeValue_Listing",
+    "Dev/Code_Sys_Listing_Browse": "Dev/Code_Listing_Browse",
     "Dev/CustRole_Listing": "Dev/CustRole_Listing",
     "Dev/CustMenuRoleSelection": "Dev/CustMenuRoleSelection",
     "Dev/CustRoleMenuSelection": "Dev/CustRoleMenuSelection",
-    "Dev/Code2Value_App_Listing": "Dev/Code2Value_App_Listing",
-    "Dev/Code2_App_Listing": "Dev/Code2_App_Listing",
-    "Dev/CodeValue_App_Listing": "Dev/CodeValue_App_Listing",
-    "Dev/Code_App_Listing": "Dev/Code_App_Listing",
+    "Dev/Code2Value_App_Listing": "Dev/Code2Value_Listing",
+    "Dev/Code2_App_Listing": "Dev/Code2_Listing",
+    "Dev/CodeValue_App_Listing": "Dev/CodeValue_Listing",
+    "Dev/Code_App_Listing": "Dev/Code_Listing",
     "Dev/Param_App_Listing": "Dev/Param_App_Listing",
     "Dev/HelpTarget_Listing": "Dev/HelpTarget_Listing",
     "Dev/Model_Listing": "Dev/Model_Listing",
@@ -564,8 +563,8 @@ function jsHarmonyFactoryTransform(module){
     "Dev/SysRoleMenuSelection": "Dev/SysRoleMenuSelection",
     "Dev/Txt": "Dev/Txt",
     "Dev/Txt_Listing": "Dev/Txt_Listing",
-    "Dev/Code2_Sys_Listing": "Dev/Code2_Sys_Listing",
-    "Dev/Code_Sys_Listing": "Dev/Code_Sys_Listing",
+    "Dev/Code2_Sys_Listing": "Dev/Code2_Listing",
+    "Dev/Code_Sys_Listing": "Dev/Code_Listing",
     "Dev/Param_Sys_Listing": "Dev/Param_Sys_Listing",
     "Reports/Agreement": "Reports/Agreement",
     "Reports/SysUser_Listing": "Reports/SysUser_Listing",
@@ -650,10 +649,10 @@ function jsHarmonyFactoryTransform(module){
     "client_sql_passwordreset": "client_sql_passwordreset",
     "client_sql_superlogin": "client_sql_superlogin",
     "str_concat": "str_concat",
-    "create_code_app": "create_code_app",
-    "create_code2_app": "create_code2_app",
-    "create_code_sys": "create_code_sys",
-    "create_code2_sys": "create_code2_sys",
+    "create_code_app": "create_code",
+    "create_code2_app": "create_code2",
+    "create_code_sys": "create_code",
+    "create_code2_sys": "create_code2",
     "context_user": "context_user",
     "doc_ctgr_table": "doc_ctgr_table",
     "doc_filename": "doc_filename",
@@ -736,7 +735,7 @@ function jsHarmonyFactoryTransform(module){
     "agreement_doc_scope":"AGREEMENT",
     "cust_agreement_tstmp": "cust_agreement_tstmp",
     "cust": "cust",
-    "code_sys_cust_sts": "code_sys_cust_sts", //"code_cust_sts"
+    "code_sys_cust_sts": "code_cust_sts",
     "cust_sts": "cust_sts",
     "item__tbl": "item",
     "sys_user_code": "U",
@@ -782,6 +781,7 @@ function jsHarmonyFactoryTransform(module){
     "@sms_txt_attrib": "@sms_txt_attrib",
     "@sms_to": "@sms_to",
     "@sms_body": "@sms_body",
+    "separate_code_type_tables": "0",
   };
 
   this.ignore_errors = {

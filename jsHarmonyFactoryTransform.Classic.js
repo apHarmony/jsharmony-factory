@@ -775,7 +775,8 @@ transform.sql = {
   "@email_doc_id": "@email_d_id",
   "@sms_txt_attrib": "@sms_txt_attrib",
   "@sms_to": "@sms_to",
-  "@sms_body": "@sms_body",  
+  "@sms_body": "@sms_body",
+  "separate_code_type_tables": "1",
 }
 
 transform.ignore_errors = {
