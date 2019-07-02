@@ -1,3 +1,5 @@
+begin;
+
 INSERT INTO {schema}_single (single_dummy, single_ident, single_integer, single_text) VALUES ('X', 1, NULL, NULL);
 
 insert into {schema}_code_ac (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL);
@@ -1324,3 +1326,5 @@ INSERT INTO {schema}_number__tbl (number_val) VALUES (996);
 INSERT INTO {schema}_number__tbl (number_val) VALUES (997);
 INSERT INTO {schema}_number__tbl (number_val) VALUES (998);
 INSERT INTO {schema}_number__tbl (number_val) VALUES (999);
+
+end;
