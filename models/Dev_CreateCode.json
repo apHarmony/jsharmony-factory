@@ -13,7 +13,7 @@
     {"name":"codemean","type":"varchar","length":"128","actions":"BU",
      "default": "js:XExt.UndefinedBlank(_GET['codemean'])","control":"hidden"}
   ]
- }, 
+ },
  "POPUP_EXEC_CREATE_UCOD": {
   "inherits": "POPUP_EXEC_CREATE_TABLE",
   "title": "UCOD Table Create",

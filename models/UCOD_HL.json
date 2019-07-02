@@ -62,19 +62,5 @@
       [ "ucod_h_codeschema_codename_key", "Duplicate Key (Schema + Code Table Name)" ],
       [ "ucod_h_coalesce_codename_idx", "Duplicate Key (Schema + Code Table name)" ]
     ]
-  },
-  "CREATE_UCOD": {
-      "layout": "exec",
-      "title": "Create UCOD",
-      "actions": "U",
-      //ADD ROLES
-      "sqlexec": "select jsharmony.create_ucod(@codeschema, @codename, @codemean);", 
-      "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
-      "popup":[450,250],
-      "fields": [
-        {"name":"codeschema","type":"varchar","length":"128","actions":"U","control":"hidden"},
-        {"name":"codename","type":"varchar","length":"128","actions":"U","control":"hidden"},
-        {"name":"codemean","type":"varchar","length":"128","actions":"U","control":"hidden"}
-      ]
   }
 }
