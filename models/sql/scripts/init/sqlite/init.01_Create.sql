@@ -534,7 +534,7 @@ CREATE TABLE {schema}_sys_menu_role (
 );
 
 /***************code_sys***************/
-CREATE TABLE {schema}_code_sys (
+CREATE TABLE if not exists {schema}_code_sys (
     code_sys_h_id  integer primary key autoincrement NOT NULL,
     code_name text NOT NULL,
     code_desc text,
@@ -550,7 +550,7 @@ CREATE TABLE {schema}_code_sys (
 );
 
 /***************code2_sys***************/
-CREATE TABLE {schema}_code2_sys (
+CREATE TABLE if not exists {schema}_code2_sys (
     code2_sys_h_id  integer primary key autoincrement NOT NULL,
     code_name text NOT NULL,
     code_desc text,

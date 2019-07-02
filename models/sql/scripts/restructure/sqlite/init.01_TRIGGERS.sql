@@ -675,7 +675,7 @@ end;
 
 /***************code_sys***************/
 
-create trigger {schema}_code_sys_after_insert after insert on {schema}_code_sys
+create trigger if not exists {schema}_code_sys_after_insert after insert on {schema}_code_sys
 begin
   update {schema}_code_sys set 
     code_h_euser     = (select context from jsharmony_meta limit 1),
@@ -685,7 +685,7 @@ begin
     where rowid = new.rowid\;
 end;
 
-create trigger {schema}_code_sys_after_update after update on {schema}_code_sys
+create trigger  if not exists {schema}_code_sys_after_update after update on {schema}_code_sys
 begin
   update {schema}_code_sys set 
     code_h_muser     = (select context from jsharmony_meta limit 1),
@@ -695,7 +695,7 @@ end;
 
 /***************code2_sys***************/
 
-create trigger {schema}_code2_sys_after_insert after insert on {schema}_code2_sys
+create trigger  if not exists {schema}_code2_sys_after_insert after insert on {schema}_code2_sys
 begin
   update {schema}_code2_sys set 
     code_h_euser     = (select context from jsharmony_meta limit 1),
@@ -705,7 +705,7 @@ begin
     where rowid = new.rowid\;
 end;
 
-create trigger {schema}_code2_sys_after_update after update on {schema}_code2_sys
+create trigger  if not exists {schema}_code2_sys_after_update after update on {schema}_code2_sys
 begin
   update {schema}_code2_sys set 
     code_h_muser     = (select context from jsharmony_meta limit 1),
