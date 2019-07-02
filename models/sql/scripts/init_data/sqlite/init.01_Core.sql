@@ -282,8 +282,10 @@ INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (800, 'DEV');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (80000, 'DEV');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90016, 'DEV');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90017, 'DEV');
-INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) select 90018, 'DEV' where (separate_code_type_tables = 1);
-INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) select 90019, 'DEV' where (separate_code_type_tables = 1);
+:if:separate_code_type_tables:
+INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90018, 'DEV');
+INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90019, 'DEV');
+:endif:
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90020, 'DEV');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90021, 'DEV');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90022, 'DEV');

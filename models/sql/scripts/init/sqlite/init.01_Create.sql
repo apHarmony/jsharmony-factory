@@ -449,6 +449,7 @@ CREATE TABLE {schema}_code_app (
     code_snotes text,
     code_attrib_desc text,
     code_schema text,
+    {{code_sys}} int,
     UNIQUE (code_schema, code_name)
 );
 
@@ -465,6 +466,7 @@ CREATE TABLE {schema}_code2_app (
     code_snotes text,
     code_attrib_desc text,
     code_schema text,
+    {{code_sys}} int,
     UNIQUE (code_schema, code_name)
 );
 
