@@ -788,6 +788,19 @@ function jsHarmonyFactoryTransform(module){
       'code_sys': true,
       'code2_app': true,
       'code2_sys': true,
+
+      'create_code': true,
+      'create_code2': true,
+      'code_h_id': true,
+      'code_id': true,
+      'code2_h_id': true,
+      'code2_id': true,
+      'code': true,
+      'code_': true,
+      'code_base': true,
+      'code2': true,
+      'code2_': true,
+      'code2_base': true,
     }
   };
 
