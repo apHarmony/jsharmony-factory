@@ -124,6 +124,7 @@ transform.fields = {
   "code_h_euser": "cod_h_eu",
   "code_h_mtstmp": "cod_h_mtstmp",
   "code_h_muser": "cod_h_mu",
+  "code_type": "codetype",
   "code_mtstmp": "cod_mtstmp",
   "code_muser": "cod_mu",
   "code_muser_fmt": "cod_mu_fmt",

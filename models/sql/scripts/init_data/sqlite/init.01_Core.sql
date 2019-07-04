@@ -205,10 +205,12 @@ INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, m
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90013, 'ACTIVE', 900, 'Dev/Param_Listing', 90021, 'Settings Definitions', NULL, NULL, '%%%NAMESPACE%%%Dev/Param_Listing', NULL, NULL);
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90014, 'ACTIVE', 900, 'Dev/Param_App_Listing', 90022, 'System Settings', NULL, NULL, '%%%NAMESPACE%%%Dev/Param_App_Listing', NULL, NULL);
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90015, 'ACTIVE', 900, 'Dev/Param_Sys_Listing', 90023, 'Developer Settings', NULL, NULL, '%%%NAMESPACE%%%Dev/Param_Sys_Listing', NULL, NULL);
-INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) select 'S', 90016, 'ACTIVE', 900, 'Dev/Code_App_Listing', 90031, 'Admin 1D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code_App_Listing', NULL, NULL;
-INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) select 'S', 90017, 'ACTIVE', 900, 'Dev/Code2_App_Listing', 90032, 'Admin 2D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code2_App_Listing', NULL, NULL;
-INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) select 'S', 90018, 'ACTIVE', 900, 'Dev/Code_Sys_Listing', 90033, 'System 1D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code_Sys_Listing', NULL, NULL where (separate_code_type_tables = 1);
-INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) select 'S', 90019, 'ACTIVE', 900, 'Dev/Code2_Sys_Listing', 90034, 'System 2D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code2_Sys_Listing', NULL, NULL where (separate_code_type_tables = 1);
+INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90016, 'ACTIVE', 900, 'Dev/Code_App_Listing', 90031, 'Admin 1D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code_App_Listing', NULL, NULL);
+INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90017, 'ACTIVE', 900, 'Dev/Code2_App_Listing', 90032, 'Admin 2D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code2_App_Listing', NULL, NULL);
+:if:separate_code_type_tables:
+INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90018, 'ACTIVE', 900, 'Dev/Code_Sys_Listing', 90033, 'System 1D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code_Sys_Listing', NULL, NULL);
+INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90019, 'ACTIVE', 900, 'Dev/Code2_Sys_Listing', 90034, 'System 2D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code2_Sys_Listing', NULL, NULL);
+:endif:
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90021, 'ACTIVE', 900, 'Dev/Txt_Listing', 90041, 'Text Maint', NULL, NULL, '%%%NAMESPACE%%%Dev/Txt_Listing', NULL, NULL);
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90022, 'ACTIVE', 900, 'Dev/HelpTarget_Listing', 90042, 'Help Panels', NULL, NULL, '%%%NAMESPACE%%%Dev/HelpTarget_Listing', NULL, NULL);
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90023, 'ACTIVE', 900, 'Dev/DBSQL', 90043, 'DB SQL', NULL, NULL, '%%%NAMESPACE%%%Dev/DBSQL', NULL, NULL);
@@ -253,7 +255,7 @@ INSERT INTO {schema}_cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_n
 INSERT INTO {schema}_cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (200, NULL, 'CX_X');
 INSERT INTO {schema}_cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (200, NULL, 'CUSER');
 
-INSERT INTO {schema}_code2_app (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('doc_scope_doc_ctgr', 'Scope - Documents', NULL, NULL, '{schema}');
+INSERT INTO {schema}_code2_app (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('doc_scope_doc_ctgr', 'Scope - Documents', NULL, NULL, '{schema}', 'app');
 
 INSERT INTO {schema}_param_app (param_app_process, param_app_attrib, param_app_val) VALUES ('HOUSE', 'STATE', 'IL');
 INSERT INTO {schema}_param_app (param_app_process, param_app_attrib, param_app_val) VALUES ('HOUSE', 'CITY', 'Anytown');
@@ -306,20 +308,20 @@ INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (80082, 'SYSA
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (70801, 'SYSADMIN');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (700, 'SYSADMIN');
 
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('ac', 'ACTIVE-CLOSED', NULL, NULL, '{schema}');
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('ac1', 'ACTIVE-CLOSED 1 Character', NULL, NULL, '{schema}');
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('ahc', 'ACTIVE-HOLD-CLOSED', NULL, NULL, '{schema}');
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('country', 'Country', NULL, NULL, '{schema}');
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('doc_scope', 'Document Scope', 'Client User Y/N', NULL, '{schema}');
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('note_scope', 'Note Scope', NULL, NULL, '{schema}');
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('note_type', 'Note Type', NULL, NULL, '{schema}');
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('param_type', 'Parameter Type', NULL, NULL, '{schema}');
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('job_action', 'Request Action Type', NULL, NULL, '{schema}');
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('job_source', 'Request Source', NULL, NULL, '{schema}');
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('txt_type', 'Text Type', NULL, NULL, '{schema}');
-INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('version_sts', 'Version Status', NULL, NULL, '{schema}');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('ac', 'ACTIVE-CLOSED', NULL, NULL, '{schema}', 'sys');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('ac1', 'ACTIVE-CLOSED 1 Character', NULL, NULL, '{schema}', 'sys');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('ahc', 'ACTIVE-HOLD-CLOSED', NULL, NULL, '{schema}', 'sys');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('country', 'Country', NULL, NULL, '{schema}', 'sys');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('doc_scope', 'Document Scope', 'Client User Y/N', NULL, '{schema}', 'sys');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('note_scope', 'Note Scope', NULL, NULL, '{schema}', 'sys');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('note_type', 'Note Type', NULL, NULL, '{schema}', 'sys');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('param_type', 'Parameter Type', NULL, NULL, '{schema}', 'sys');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('job_action', 'Request Action Type', NULL, NULL, '{schema}', 'sys');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('job_source', 'Request Source', NULL, NULL, '{schema}', 'sys');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('txt_type', 'Text Type', NULL, NULL, '{schema}', 'sys');
+INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('version_sts', 'Version Status', NULL, NULL, '{schema}', 'sys');
 
-INSERT INTO {schema}_code2_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema) VALUES ('country_state', 'Country - States', NULL, NULL, '{schema}');
+INSERT INTO {schema}_code2_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('country_state', 'Country - States', NULL, NULL, '{schema}', 'sys');
 
 INSERT INTO {schema}_param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('USERS', 'HASH_SEED_C', 'NOT CONFIGURED');
 INSERT INTO {schema}_param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('USERS', 'HASH_SEED_S', 'NOT CONFIGURED');

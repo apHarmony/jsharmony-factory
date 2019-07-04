@@ -449,7 +449,7 @@ CREATE TABLE {schema}_code_app (
     code_snotes text,
     code_attrib_desc text,
     code_schema text,
-    {{code_sys}} int,
+    code_type text default 'app',
     UNIQUE (code_schema, code_name)
 );
 
@@ -466,7 +466,7 @@ CREATE TABLE {schema}_code2_app (
     code_snotes text,
     code_attrib_desc text,
     code_schema text,
-    {{code_sys}} int,
+    code_type text default 'app',
     UNIQUE (code_schema, code_name)
 );
 
@@ -548,6 +548,7 @@ CREATE TABLE if not exists {schema}_code_sys (
     code_snotes text,
     code_attrib_desc text,
     code_schema text,
+    code_type text default 'sys',
     UNIQUE (code_schema, code_name)
 );
 
@@ -564,6 +565,7 @@ CREATE TABLE if not exists {schema}_code2_sys (
     code_snotes text,
     code_attrib_desc text,
     code_schema text,
+    code_type text default 'sys',
     UNIQUE (code_schema, code_name)
 );
 

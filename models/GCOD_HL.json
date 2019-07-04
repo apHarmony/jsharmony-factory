@@ -8,6 +8,9 @@
     "roles": {"X_B":"B","DADMIN":"*"},
 	  "sort":["^codename"], 
     "menu":"GCOD_HL",
+    //:if:separate_code_type_tables::else:
+    "sqlwhere":"codetype='app'",
+    //:endif:
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",

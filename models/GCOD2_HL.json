@@ -4,23 +4,26 @@
     "table":"jsharmony.gcod2_h",
     "actions":"B",
     "layout":"grid", 
-	"caption":[0,"Code2 Table","Code2 Tables"],
+    "caption":[0,"Code2 Table","Code2 Tables"],
     "roles": {"X_B":"B","DADMIN":"*"},
-	"sort":["^codename"],
+    "sort":["^codename"],
     "menu":"GCOD2_HL",
+    //:if:separate_code_type_tables::else:
+    "sqlwhere":"codetype='app'",
+    //:endif:
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
-	"fields":[
+    "fields":[
       {"name":"codeschema","type":"varchar","length":"128","actions":"B","caption":"Schema","control":"hidden"},
-	  {"name":"codename","type":"varchar","length":"128","key":1,"control": "html", 
+      {"name":"codename","type":"varchar","length":"128","key":1,"control": "html", 
        "caption":"Code2 Table Name","actions":"B","controlstyle":"width:120px;","validate":["Required"],
        "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>GCOD2L?codename=<%=data['codename']%>&codeschema=<%=data['codeschema']%>'><%=data['codename']%></a>"},
-	  {"name":"codemean","type":"varchar","length":"128","validate":["Required"],
+      {"name":"codemean","type":"varchar","length":"128","validate":["Required"],
        "caption":"Table Description","actions":"B","controlstyle":"width:260px;","control": "html", 
        "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>GCOD2L?codename=<%=data['codename']%>&codeschema=<%=data['codeschema']%>'><%=data['codemean']%></a>"},
-	  {"name":"codecodemean","type":"varchar","length":"128",
+      {"name":"codecodemean","type":"varchar","length":"128",
        "caption":"Code","actions":"B","controlstyle":"width:160px;"},
       {"name":"codeattribmean","type":"varchar","length":"128",
        "caption":"Attribute","actions":"B","controlstyle":"width:160px;"},
@@ -28,8 +31,8 @@
        "sqlselect":"(case jsharmony.table_type(codeschema,{{concat}}('gcod2_',codename)) when 'BASE TABLE' then NULL else 'CREATE' end)",
        "link":"update:POPUP_EXEC_CREATE_GCOD2&codeschema=codeschema&codename=codename&codemean=codemean",
        "caption":"Create Table","actions":""}
-	]
-  },	
+    ]
+  },    
   "X_GCOD2_HL": {
     "inherits":"GCOD2_HL",
     "dev":1,

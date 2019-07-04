@@ -14,7 +14,11 @@ else if(params && params.post && params.post.codeschema) codeschema = params.pos
 
 //Check if code exists
 var dbtypes = jsh.AppSrv.DB.types;
-jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean from jsharmony.gcod2_h where codename=@codename and coalesce(codeschema,'')=coalesce(@codeschema,'')", [dbtypes.VarChar(128),dbtypes.VarChar(128)], { 'codename': codename, 'codeschema': codeschema }, function (err, rslt) {
+var sql_code_type = '';
+//:if:separate_code_type_tables::else:
+sql_code_type = " and code_type='app' ";
+//:endif:
+jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean from jsharmony.gcod2_h where codename=@codename "+sql_code_type+" and coalesce(codeschema,'')=coalesce(@codeschema,'')", [dbtypes.VarChar(128),dbtypes.VarChar(128)], { 'codename': codename, 'codeschema': codeschema }, function (err, rslt) {
   if (err) { jsh.Log.error(err); Helper.GenError(req, res, -99999, "An unexpected error has occurred"); return; }
   if (rslt && rslt.length && rslt[0]) {
     //Set title
