@@ -789,6 +789,125 @@ $_$;
 ALTER FUNCTION {schema}.cust_user_role_iud() OWNER TO postgres;
 
 --
+-- Name: create_code(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+--
+
+CREATE FUNCTION create_code(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) RETURNS bigint
+    LANGUAGE plpgsql SECURITY DEFINER COST 10
+    AS $$
+DECLARE
+    rslt          bigint;
+    wk_code_schema text;
+    runmesql      text;
+BEGIN
+
+  rslt := 0;
+
+  wk_code_schema = coalesce(in_code_schema, 'public');
+
+  SET client_min_messages to ERROR;
+
+  runmesql := 'CREATE TABLE '||wk_code_schema||'.code_'||in_code_name||' '
+            ||'( '
+            ||'  CONSTRAINT code_'||in_code_name||'_pkey PRIMARY KEY (code_id), '
+            ||'  CONSTRAINT code_'||in_code_name||'_code_val_key UNIQUE (code_val), '
+            ||'  CONSTRAINT code_'||in_code_name||'_code_txt_key UNIQUE (code_txt) '
+            ||') '
+            ||'INHERITS ('||'{schema}'||'.code_base) '
+            ||'WITH ( '
+            ||'  OIDS=FALSE '
+            ||');';
+  EXECUTE runmesql ; 
+
+  runmesql := 'CREATE TRIGGER code_'||in_code_name||' '
+            ||'BEFORE INSERT OR UPDATE OR DELETE '
+            ||'ON '||wk_code_schema||'.code_'||in_code_name||' ' 
+            ||'FOR EACH ROW '
+            ||'EXECUTE PROCEDURE '||'{schema}'||'.code_base_iud();';
+  EXECUTE runmesql ; 
+
+  runmesql := 'COMMENT ON TABLE '||wk_code_schema||'.code_'||in_code_name||' IS ''User Codes - '||coalesce(in_code_desc,'')||''';';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_exec;';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_dev;';
+  EXECUTE runmesql ; 
+
+  RETURN rslt;
+
+EXCEPTION WHEN OTHERS THEN
+
+  raise notice '% %', SQLERRM, SQLSTATE;
+
+END;
+$$;
+
+
+ALTER FUNCTION {schema}.create_code(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) OWNER TO postgres;
+
+--
+-- Name: create_code2(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+--
+
+CREATE FUNCTION create_code2(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) RETURNS bigint
+    LANGUAGE plpgsql SECURITY DEFINER COST 10
+    AS $$
+DECLARE
+    rslt          bigint;
+    wk_code_schema text;
+    runmesql      text;
+BEGIN
+
+  rslt := 0;
+
+  wk_code_schema = coalesce(in_code_schema, 'public');
+
+  SET client_min_messages to ERROR;
+
+  runmesql := 'CREATE TABLE '||wk_code_schema||'.code2_'||in_code_name||' '
+            ||'( '
+            ||'  CONSTRAINT code2_'||in_code_name||'_pkey PRIMARY KEY (code2_id), '
+            ||'  CONSTRAINT code2_'||in_code_name||'_code_val1_code_val2_key UNIQUE (code_val1,code_val2), '
+            ||'  CONSTRAINT code2_'||in_code_name||'_code_val1_code_txt_key UNIQUE (code_val1,code_txt) '
+            ||') '
+            ||'INHERITS ('||'{schema}'||'.code2_base) '
+            ||'WITH ( '
+            ||'  OIDS=FALSE '
+            ||');';
+
+  EXECUTE runmesql ; 
+
+  runmesql := 'CREATE TRIGGER code2_'||in_code_name||' '
+            ||'BEFORE INSERT OR UPDATE OR DELETE '
+            ||'ON '||wk_code_schema||'.code2_'||in_code_name||' ' 
+            ||'FOR EACH ROW '
+            ||'EXECUTE PROCEDURE '||'{schema}'||'.code2_base_iud();';
+  EXECUTE runmesql ; 
+
+  runmesql := 'COMMENT ON TABLE '||wk_code_schema||'.code2_'||in_code_name||' IS ''User Codes 2 - '||coalesce(in_code_desc,'')||''';';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code2_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_exec;';
+  EXECUTE runmesql ; 
+
+  runmesql := 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE '||wk_code_schema||'.code2_'||in_code_name||' TO {schema}_'||lower(current_database())||'_role_dev;';
+  EXECUTE runmesql ; 
+
+  RETURN rslt;
+
+EXCEPTION WHEN OTHERS THEN
+
+  raise notice '% %', SQLERRM, SQLSTATE;
+
+END;
+$$;
+
+
+ALTER FUNCTION {schema}.create_code2(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) OWNER TO postgres;
+
+--
 -- Name: create_code_app(character varying, character varying, character varying); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -4345,7 +4464,8 @@ CREATE TABLE code2_app (
     code_h_muser character varying(20) DEFAULT my_db_user() NOT NULL,
     code_snotes character varying(255),
     code_attrib_desc character varying(128),
-    code_schema character varying(128)
+    code_schema character varying(128),
+    code_type character varying(32) default 'app'
 );
 
 
@@ -4372,7 +4492,8 @@ CREATE TABLE code_app (
     code_h_muser character varying(20) DEFAULT my_db_user() NOT NULL,
     code_snotes character varying(255),
     code_attrib_desc character varying(128),
-    code_schema character varying(128)
+    code_schema character varying(128),
+    code_type character varying(32) default 'app'
 );
 
 
@@ -5542,7 +5663,7 @@ ALTER SEQUENCE txt__tbl_txt_id_seq OWNED BY txt__tbl.txt_id;
 -- Name: code_sys_base; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE code_sys_base (
+CREATE TABLE IF NOT EXISTS code_sys_base (
     code_sys_id bigint NOT NULL,
     code_seq smallint,
     code_val character varying(32) NOT NULL,
@@ -5685,7 +5806,7 @@ ALTER TABLE code2_sys_base_code2_sys_id_seq OWNER TO postgres;
 -- Name: code2_sys_base; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE code2_sys_base (
+CREATE TABLE IF NOT EXISTS code2_sys_base (
     code2_sys_id bigint DEFAULT nextval('code2_sys_base_code2_sys_id_seq'::regclass) NOT NULL,
     code_seq smallint,
     code_val1 character varying(32) NOT NULL,
@@ -5864,7 +5985,7 @@ ALTER TABLE code2_param_app_attrib OWNER TO postgres;
 -- Name: code2_sys; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE code2_sys (
+CREATE TABLE if not exists code2_sys (
     code_name character varying(128) NOT NULL,
     code_desc character varying(128),
     code_code_desc character varying(128),
@@ -5875,6 +5996,7 @@ CREATE TABLE code2_sys (
     code_snotes character varying(255),
     code_attrib_desc character varying(128),
     code_schema character varying(128),
+    code_type character varying(32) default 'sys',
     code2_sys_h_id bigint NOT NULL
 );
 
@@ -6068,7 +6190,7 @@ ALTER TABLE code_param_app_process OWNER TO postgres;
 -- Name: code_sys; Type: TABLE; Schema: jsharmony; Owner: postgres
 --
 
-CREATE TABLE code_sys (
+CREATE TABLE if not exists code_sys (
     code_name character varying(128) NOT NULL,
     code_desc character varying(128),
     code_code_desc character varying(128),
@@ -6079,6 +6201,7 @@ CREATE TABLE code_sys (
     code_snotes character varying(255),
     code_attrib_desc character varying(128),
     code_schema character varying(128),
+    code_type character varying(32) default 'sys',
     code_sys_h_id bigint NOT NULL
 );
 
@@ -9058,6 +9181,26 @@ GRANT ALL ON FUNCTION cust_user_role_iud() TO postgres;
 GRANT ALL ON FUNCTION cust_user_role_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION cust_user_role_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 GRANT ALL ON FUNCTION cust_user_role_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: create_code(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION create_code(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION create_code(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) FROM postgres;
+GRANT ALL ON FUNCTION create_code(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) TO postgres;
+GRANT ALL ON FUNCTION create_code(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: create_code2(character varying, character varying, character varying); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION create_code2(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) FROM PUBLIC;
+REVOKE ALL ON FUNCTION create_code2(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) FROM postgres;
+GRANT ALL ON FUNCTION create_code2(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) TO postgres;
+GRANT ALL ON FUNCTION create_code2(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --

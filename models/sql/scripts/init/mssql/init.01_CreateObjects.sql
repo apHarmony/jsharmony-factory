@@ -2085,6 +2085,7 @@ CREATE TABLE [jsharmony].[code_app](
 	[code_h_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_schema] [nvarchar](128) NULL,
+  [code_type] [nvarchar](32) NULL default 'app',
  CONSTRAINT [pk_code_app] PRIMARY KEY CLUSTERED 
 (
 	[code_name] ASC
@@ -2144,6 +2145,7 @@ CREATE TABLE [jsharmony].[code2_app](
 	[code_h_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_schema] [nvarchar](128) NULL,
+  [code_type] [nvarchar](32) NULL default 'app',
  CONSTRAINT [pk_code2_app] PRIMARY KEY CLUSTERED 
 (
 	[code_name] ASC
@@ -2671,6 +2673,8 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+if not exists(select * from sys.tables where name = N'code_sys' and schema_name(schema_id)='jsharmony' and type='U')
+begin
 CREATE TABLE [jsharmony].[code_sys](
 	[code_name] [nvarchar](128) NOT NULL,
 	[code_desc] [nvarchar](128) NULL,
@@ -2682,6 +2686,7 @@ CREATE TABLE [jsharmony].[code_sys](
 	[code_h_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_schema] [nvarchar](128) NULL,
+  [code_type] [nvarchar](32) NULL default 'sys',
 	[code_sys_h_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [pk_code_sys] PRIMARY KEY CLUSTERED 
 (
@@ -2693,6 +2698,7 @@ CREATE TABLE [jsharmony].[code_sys](
 	[code_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+end
 GO
 SET ANSI_NULLS ON
 GO
@@ -2965,6 +2971,8 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+if not exists(select * from sys.tables where name = N'code2_sys' and schema_name(schema_id)='jsharmony' and type='U')
+begin
 CREATE TABLE [jsharmony].[code2_sys](
 	[code_name] [nvarchar](128) NOT NULL,
 	[code_desc] [nvarchar](128) NULL,
@@ -2976,6 +2984,7 @@ CREATE TABLE [jsharmony].[code2_sys](
 	[code_h_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_schema] [nvarchar](128) NULL,
+  [code_type] [nvarchar](32) NULL default 'sys',
 	[code2_sys_h_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [pk_code2_sys] PRIMARY KEY CLUSTERED 
 (
@@ -2987,6 +2996,7 @@ CREATE TABLE [jsharmony].[code2_sys](
 	[code_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+end
 GO
 SET ANSI_NULLS ON
 GO
@@ -4065,6 +4075,106 @@ END
 
 
 
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE  [jsharmony].[create_code]
+(
+	@in_code_schema nvarchar(max),
+	@in_code_name   nvarchar(max),
+	@in_code_desc   nvarchar(max)
+)	
+as
+BEGIN
+
+  DECLARE @rslt INT = 0
+  DECLARE @rrr NVARCHAR(max)
+  DECLARE @rrrt NVARCHAR(max)
+
+  select @rrr = script_txt
+    from {schema}.script__tbl
+   where script_name = 'create_code';
+
+  set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull(@in_code_schema,'dbo')))
+  set @rrr = replace(@rrr, '%%%name%%%', lower(@in_code_name))
+  set @rrr = replace(@rrr, '%%%mean%%%', lower(@in_code_desc))
+
+  EXEC (@rrr)      
+
+  select @rrrt = script_txt
+    from {schema}.script__tbl
+   where script_name = 'create_code_TRIGGER';
+
+  set @rrrt = replace(@rrrt, '%%%schema%%%', lower(isnull(@in_code_schema,'dbo')))
+  set @rrrt = replace(@rrrt, '%%%name%%%', lower(@in_code_name))
+  set @rrrt = replace(@rrrt, '%%%mean%%%', lower(@in_code_desc))
+
+  EXEC (@rrrt)      
+
+  return (@rslt)
+
+END
+
+
+
+
+
+
+GO
+GRANT EXECUTE ON [jsharmony].[create_code] TO [{schema}_role_dev] AS [dbo]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE  [jsharmony].[create_code2]
+(
+	@in_code_schema nvarchar(max),
+	@in_code_name   nvarchar(max),
+	@in_code_desc   nvarchar(max)
+)	
+as
+BEGIN
+
+  DECLARE @rslt INT = 0
+  DECLARE @rrr NVARCHAR(max)
+  DECLARE @rrrt NVARCHAR(max)
+
+  select @rrr = script_txt
+    from {schema}.script__tbl
+   where script_name = 'create_code2';
+
+  set @rrr = replace(@rrr, '%%%schema%%%', lower(isnull(@in_code_schema,'dbo')))
+  set @rrr = replace(@rrr, '%%%name%%%', lower(@in_code_name))
+  set @rrr = replace(@rrr, '%%%mean%%%', lower(@in_code_desc))
+
+  EXEC (@rrr)      
+
+  select @rrrt = script_txt
+    from {schema}.script__tbl
+   where script_name = 'create_code2_TRIGGER';
+
+  set @rrrt = replace(@rrrt, '%%%schema%%%', lower(isnull(@in_code_schema,'dbo')))
+  set @rrrt = replace(@rrrt, '%%%name%%%', lower(@in_code_name))
+  set @rrrt = replace(@rrrt, '%%%mean%%%', lower(@in_code_desc))
+
+  EXEC (@rrrt)      
+
+  return (@rslt)
+
+END
+
+
+
+
+
+
+GO
+GRANT EXECUTE ON [jsharmony].[create_code2] TO [{schema}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
