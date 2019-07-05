@@ -58,6 +58,7 @@
       //:if:separate_code_type_tables::else:
       {"name":"codetype","type":"varchar","length":"32",
         "lov": { "values": { "sys": "System", "app": "App (Admin-Editable)" } },
+        "default": "sys", "validate": ["Required"],
         "caption":"Type","actions":"BIU","__AFTER__": "codeattribmean"},
       //:endif:
       {"name":"my_create","actions": "B"}

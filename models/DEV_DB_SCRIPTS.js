@@ -52,10 +52,14 @@ jsh.App[modelid] = new (function(){
 
     function union(a,b){
       var rslt = {};
+      if((a=='...')||(b=='...')) return '...';
       for(var key in a){
         if(key in b) rslt[key] = union(a[key],b[key]);
+        else rslt[key] = a[key];
       }
-      if(_.isEmpty(rslt)) return { "...": "..." };
+      for(var key in b){
+        if(!(key in a)) rslt[key] = b[key];
+      }
       return rslt;
     }
 
