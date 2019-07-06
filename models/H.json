@@ -10,15 +10,17 @@
 	  "fields":[
       {"name":"h_id","type":"bigint","key":1,"control":"hidden"},
       
-      {"name":"hp_code","type":"varchar","length":50,"actions":"BIU","nl":1,
+      {"name":"hp_code","type":"varchar","length":50,"actions":"BIU",
         //"control":"dropdown_VL","sample":"Test - General","lov":{"sql":"select hp_code as %%%jsh.map.{{code_val}}%%%,hp_desc as %%%jsh.map.{{code_txt}}%%% from jsharmony.hp order by hp_desc","blank":""},
         "control":"textbox_L","validate":["Required"],
-        "caption":"Target"},
+        "caption":"Target","captionstyle":"width:120px;text-align:right;"},
+      {"control":"html","value":"Help Target"},
       {"name":"hp_code_select_target","unbound":true,"control":"hidden",
         "popuplov": {"target":  "HELP_TARGETS", "codeval": "hp_code", "popupstyle": "height:400px;width:770px;",
           "popup_copy_results": { "hp_code": "hp_code" },
           "popupiconstyle":"position:relative;top:5px;"}
       },
+      {"control":"html","value":"&nbsp; Model"},
       {"name":"hp_code_select_model","unbound":true,"control":"hidden",
         "popuplov": {"target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
           "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
@@ -37,8 +39,8 @@
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Client Portal","default":"1",
        "captionstyle":"width:120px;text-align:right;"},
 
-       {"name":"h_title","type":"varchar","length":70,"actions":"BIU","control":"textbox_VL",
-        "validate":["Required"],"caption":"Title","captionstyle":"width:120px;text-align:right;"},
+       {"name":"h_title","type":"varchar","length":70,"actions":"BIU","control":"textbox_VL","nl":1,
+        "validate":["Required"],"caption":"Title"},
 
 	    {"name":"h_text","type":"varchar","length":99999,"actions":"BIU","nl":1,
 	     "control":"htmlarea","controlstyle":"width:590px;height:400px;","sample":"Here goes the text ...........",

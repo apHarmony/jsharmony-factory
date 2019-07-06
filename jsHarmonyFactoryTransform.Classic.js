@@ -547,7 +547,7 @@ transform.models = {
   "Dev/Param_App_Listing": "X_GPPL",
   "Dev/HelpTarget_Listing": "X_HPL",
   "Dev/Model_Listing": "X_MODELS",
-  "Dev/HelpTarget_Popup_Listing": "X_HELP_TARGETS",
+  "Admin/HelpTarget_Popup_Listing": "HELP_TARGETS",
   "Dev/Param_Listing": "X_PPDL",
   "Dev/SysFunc_Listing": "X_SFL",
   "Dev/Menu_Listing": "X_SML",
