@@ -162,6 +162,7 @@ CREATE TABLE {schema}_help_target (
 CREATE TABLE {schema}_help__tbl (
   help_id integer primary key autoincrement NOT NULL,
   help_target_code text,
+  help_target_id integer,
   help_title text NOT NULL,
   help_text text NOT NULL,
   help_etstmp text,

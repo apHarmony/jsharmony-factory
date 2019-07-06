@@ -2003,6 +2003,28 @@ $$;
 ALTER FUNCTION {schema}.help__tbl_iud() OWNER TO postgres;
 
 --
+-- Name: help_target_iud(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
+--
+
+CREATE FUNCTION help_target_iud() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+    DECLARE
+    BEGIN
+
+        IF TG_OP = 'UPDATE' THEN
+          update {schema}.help__tbl set 
+            help_target_code = NEW.help_target_code
+            where {schema}.help__tbl.help_target_id = NEW.help_target_id;
+        END IF;
+
+    END;
+$$;
+
+
+ALTER FUNCTION {schema}.help_target_iud() OWNER TO postgres;
+
+--
 -- Name: my_db_user(); Type: FUNCTION; Schema: jsharmony; Owner: postgres
 --
 
@@ -4556,6 +4578,7 @@ ALTER SEQUENCE param_app_param_app_id_seq OWNED BY param_app.param_app_id;
 CREATE TABLE help__tbl (
     help_id bigint NOT NULL,
     help_target_code character varying(50),
+    help_target_id bigint,
     help_title character varying(70) NOT NULL,
     help_text text NOT NULL,
     help_etstmp timestamp without time zone DEFAULT my_now() NOT NULL,
@@ -8624,6 +8647,13 @@ CREATE TRIGGER help__tbl_iud BEFORE INSERT OR DELETE OR UPDATE ON help__tbl FOR 
 
 
 --
+-- Name: help_target_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
+--
+
+CREATE TRIGGER help_target_iud BEFORE INSERT OR DELETE OR UPDATE ON help_target FOR EACH ROW EXECUTE PROCEDURE help_target_iud();
+
+
+--
 -- Name: note__tbl_iud; Type: TRIGGER; Schema: jsharmony; Owner: postgres
 --
 
@@ -9371,6 +9401,18 @@ GRANT ALL ON FUNCTION help__tbl_iud() TO postgres;
 GRANT ALL ON FUNCTION help__tbl_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION help__tbl_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 GRANT ALL ON FUNCTION help__tbl_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: help_target_iud(); Type: ACL; Schema: jsharmony; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION help_target_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION help_target_iud() FROM postgres;
+GRANT ALL ON FUNCTION help_target_iud() TO postgres;
+GRANT ALL ON FUNCTION help_target_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION help_target_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION help_target_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --

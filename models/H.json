@@ -9,24 +9,27 @@
     "breadcrumbs": { "parents": ["HL"] },
 	  "fields":[
       {"name":"h_id","type":"bigint","key":1,"control":"hidden"},
+
+      {"name":"hp_id","type":"bigint","actions":"BIU","control":"hidden"},
       
       {"name":"hp_code","type":"varchar","length":50,"actions":"BIU",
         //"control":"dropdown_VL","sample":"Test - General","lov":{"sql":"select hp_code as %%%jsh.map.{{code_val}}%%%,hp_desc as %%%jsh.map.{{code_txt}}%%% from jsharmony.hp order by hp_desc","blank":""},
         "control":"textbox_L","validate":["Required"],
         "caption":"Target","captionstyle":"width:120px;text-align:right;"},
-      {"control":"html","value":"Help Target"},
       {"name":"hp_code_select_target","unbound":true,"control":"hidden",
         "popuplov": {"target":  "HELP_TARGETS", "codeval": "hp_code", "popupstyle": "height:400px;width:770px;",
-          "popup_copy_results": { "hp_code": "hp_code" },
-          "popupiconstyle":"position:relative;top:5px;left:6px;"}
+          "popup_copy_results": { "hp_code": "hp_code", "hp_id": "hp_id" },
+          "popupiconstyle":"position:relative;top:5px;left:6px;padding-left:15px;"},
+        "onchange":"var jobj = jsh.$root('.xelem'+xmodel.class+'.hp_code'); if(newval){ XPage.Enable(jobj); } else { XPage.Disable(jobj); }"
       },
-      {"control":"html","value":"&nbsp; &nbsp; Model"},
+      {"control":"html","value":"Help Target"},
       {"name":"hp_code_select_model","unbound":true,"control":"hidden",
         "popuplov": {"target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
           "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
           "popup_copy_results": { "hp_code": "model_id" },
-          "popupiconstyle":"position:relative;top:5px;left:6px;"}
+          "popupiconstyle":"position:relative;top:5px;left:6px;padding-left:15px;"}
       },
+      {"control":"html","value":"Model"},
 
       {"name":"h_seq","type":"int","actions":"BIU","control":"textbox_VS","nl":1,
        "caption":"Sequence","captionstyle":"width:120px;text-align:right;"},

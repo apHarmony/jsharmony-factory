@@ -2161,6 +2161,7 @@ GO
 CREATE TABLE [jsharmony].[help__tbl](
 	[help_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[help_target_code] [varchar](50) NULL,
+  [help_target_id] [bigint] NULL,
 	[help_title] [nvarchar](70) NOT NULL,
 	[help_text] [nvarchar](max) NOT NULL,
 	[help_etstmp] [datetime2](7) NOT NULL,
@@ -6023,6 +6024,92 @@ BEGIN
 END
 GO
 ALTER TABLE [jsharmony].[help__tbl] ENABLE TRIGGER [help__tbl_IUD]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE trigger [jsharmony].[help_target_IUD] on [jsharmony].[help_target]
+for insert, update, delete
+AS
+BEGIN
+  set nocount on
+  DECLARE @TP char(1)
+  DECLARE CUR_help_target_IUD CURSOR LOCAL FOR
+     SELECT  del.help_target_id, i.help_target_id,
+	         del.help_target_code, i.help_target_code,
+	         del.help_target_desc, i.help_target_desc
+       FROM deleted del FULL OUTER JOIN inserted i
+                       ON i.help_target_id = del.help_target_id;
+  DECLARE @D_help_target_id bigint
+  DECLARE @I_help_target_id bigint
+  DECLARE @D_help_target_code NVARCHAR(MAX)
+  DECLARE @I_help_target_code NVARCHAR(MAX)
+  DECLARE @D_help_target_desc NVARCHAR(MAX)
+  DECLARE @I_help_target_desc NVARCHAR(MAX)
+
+  DECLARE @return_value int,
+		  @out_msg nvarchar(max),
+		  @out_rslt nvarchar(255)
+
+
+  if exists (select * from inserted)
+    if exists (select * from deleted)
+      set @TP = 'U'
+    else
+      set @TP = 'I'
+  else
+    if exists (select * from deleted)
+	  set @TP = 'D'
+    ELSE
+    BEGIN
+      RETURN
+    END    
+  
+  OPEN CUR_help_target_IUD
+  FETCH NEXT FROM CUR_help_target_IUD
+        INTO @D_help_target_id, @I_help_target_id,
+             @D_help_target_code, @I_help_target_code,
+             @D_help_target_desc, @I_help_target_desc
+
+  WHILE (@@Fetch_Status = 0)
+  BEGIN
+
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - BEGIN ******/
+	/******************************************/
+
+    IF (@TP='U')
+	BEGIN
+      UPDATE {schema}.help__tbl
+        help_target_code = @I_help_target_code
+        where {schema}.help__tbl.help_target_id = @I_help_target_id;
+    END  
+
+	/******************************************/
+	/****** SPECIAL FRONT ACTION - END   ******/
+	/******************************************/
+
+
+
+            
+    FETCH NEXT FROM CUR_help_target_IUD
+        INTO @D_help_target_id, @I_help_target_id,
+             @D_help_target_code,  @I_help_target_code,
+             @D_help_target_desc, @I_help_target_desc
+
+
+  END
+  CLOSE CUR_help_target_IUD
+  DEALLOCATE CUR_help_target_IUD
+
+  RETURN
+
+END
+GO
+ALTER TABLE [jsharmony].[help_target] ENABLE TRIGGER [help_target_IUD]
 GO
 SET ANSI_NULLS ON
 GO

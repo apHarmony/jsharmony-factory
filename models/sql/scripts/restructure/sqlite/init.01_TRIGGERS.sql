@@ -491,6 +491,15 @@ begin
   update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
+/***************help_target***************/
+
+create trigger {schema}_help_target_after_update after update on {schema}_help_target
+begin
+  update {schema}_help__tbl set 
+    help_target_code = new.help_target_code
+    where {schema}_help__tbl.help_target_id = new.help_target_id\;
+end;
+
 /***************sys_user_func***************/
 
 create trigger {schema}_sys_user_func_after_insert after insert on {schema}_sys_user_func
