@@ -7,7 +7,6 @@
     "caption":[0,"Help Target","Help Targets"],
     "sort":["^hp_code"],
     "grid_expand_search":1,
-    "hide_system_buttons" : ["clear"],
     "fields":[
       {"name":"hp_id","type":"bigint","key":1,"control":"hidden","disable_search":true},
       {"name":"hp_code","type":"varchar","length":50,"actions": "B","caption":"Code"},

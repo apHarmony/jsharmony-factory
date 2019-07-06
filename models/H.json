@@ -20,7 +20,7 @@
       {"name":"hp_code_select_target","unbound":true,"control":"hidden",
         "popuplov": {"target":  "HELP_TARGETS", "codeval": "hp_code", "popupstyle": "height:400px;width:770px;",
           "popup_copy_results": { "hp_code": "hp_code", "hp_id": "hp_id", "hp_desc": "hp_desc" },
-          "popupiconstyle":"position:relative;top:5px;left:6px;"},
+          "popupiconstyle":"position:relative;top:5px;"},
         "onchange":"var jobj = jsh.$root('.xelem'+xmodel.class+'.hp_code'); if(newval){ XPage.Disable(jobj); } else { XPage.Enable(jobj); }"
       },
       {"name":"hp_code","type":"varchar","length":50,"actions":"BIU","nl":1,
@@ -29,11 +29,10 @@
         "caption":"Model","captionstyle":"width:120px;text-align:right;"},
       {"name":"hp_code_select_model","unbound":true,"control":"hidden",
         "popuplov": {"target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
-          "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
+          "onpopup": "if(xmodel.get('hp_id')){ return XExt.Alert('Please clear Help Target before selecting a different model.'); } jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
           "popup_copy_results": { "hp_code": "model_id" },
-          "popupiconstyle":"position:relative;top:5px;left:6px;"}
+          "popupiconstyle":"position:relative;top:5px;"}
       },
-      {"control":"html","value":"Model"},
 
       {"name":"h_seq","type":"int","actions":"BIU","control":"textbox_VS","nl":1,
        "caption":"Sequence","captionstyle":"width:120px;text-align:right;"},
