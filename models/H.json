@@ -25,7 +25,7 @@
         "popuplov": {"target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
           "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
           "popup_copy_results": { "hp_code": "model_id" },
-          "popupiconstyle":"position:relative;top:5px;"}
+          "popupiconstyle":"position:relative;top:5px;left:6px;"}
       },
 
       {"name":"h_seq","type":"int","actions":"BIU","control":"textbox_VS","nl":1,
