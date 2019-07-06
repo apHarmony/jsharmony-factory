@@ -1,0 +1,18 @@
+{
+  "X_HELP_TARGETS": {
+    "layout":"grid",
+    "title":"Help Targets",
+    "table":"jsharmony.hp",
+    "actions":"B",
+    "caption":[0,"Help Target","Help Targets"],
+    "sort":["^model_id"],
+    "grid_expand_search":1,
+    "hide_system_buttons" : ["clear"],
+    "fields":[
+      {"name":"model_id","type":"varchar","actions":"B","key":1,"caption":"Model ID"},
+      {"name":"hp_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"hp_code","type":"varchar","length":50,"actions": "B","caption":"Code"},
+      {"name":"hp_desc","type":"varchar","length":"50","actions":"B","caption":"Name"}
+    ]
+  }
+}  

@@ -1,10 +1,10 @@
 {
   "X_HPL": {
-    "title":"Help Panels",
+    "title":"Help Targets",
     "dev":1,
     "table":"jsharmony.hp",
     "actions":"BIUD", 
-    "caption":[0,"Help Panel","Help Panels"],
+    "caption":[0,"Help Target","Help Targets"],
     "layout":"grid", 
     "sort":[{"hp_desc":"asc"}], 
     "menu":"X_HPL",
@@ -17,16 +17,16 @@
       {"name":"hp_code","type":"varchar","length":50,"actions": "BIU","control": "textbox_L",
        "caption":"Code",
        "popuplov": {"target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
-          "onpopup": "jsh.App[popupmodelid].ShowBaseModels(popupmodelid, parentmodelid, fieldid, onComplete);",
+          "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
           "popupiconstyle":"position:relative;top:5px;"}},
       {"name":"hp_desc","type":"varchar","length":"50","validate":["Required","MaxLength:50"],"actions":"BIU",
        "control":"textbox_L", "caption":"Name"}
     ],
-    "oninit":"jsh.$root('.xtbl.xelem'+xmodel.class).before('<div>** Help Panels should reference the Base Model (without Model Parents), unless a custom model.helpid is used</div>');",
+    "oninit":"jsh.$root('.xtbl.xelem'+xmodel.class).before('<div>** Help Targets should reference the Base Model (without Model Parents), unless a custom model.helpid is used</div>');",
     "dberrors": [
-      [ "hp_hp_code_key", "Duplicate Help Panel Code" ],
-      [ "hp_hp_desc_key", "Duplicate Help Panel Name" ],
-      [ "h_hp_code_fkey", "Cannot delete. This Help Panel already referred by Help Module" ]
+      [ "hp_hp_code_key", "Duplicate Help Target Code" ],
+      [ "hp_hp_desc_key", "Duplicate Help Target Name" ],
+      [ "h_hp_code_fkey", "Cannot delete. This Help Target already referred by Help Module" ]
     ]
   }    
 }

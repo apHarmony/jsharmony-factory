@@ -8494,11 +8494,11 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help - Show on
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'help__tbl'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'help_target', @level2type=N'COLUMN',@level2name=N'help_target_code'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Target Code' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'help_target', @level2type=N'COLUMN',@level2name=N'help_target_code'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'help_target', @level2type=N'COLUMN',@level2name=N'help_target_desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Target Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'help_target', @level2type=N'COLUMN',@level2name=N'help_target_desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Panel ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'help_target', @level2type=N'COLUMN',@level2name=N'help_target_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Target ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'help_target', @level2type=N'COLUMN',@level2name=N'help_target_id'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Help Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'help_target'
 GO

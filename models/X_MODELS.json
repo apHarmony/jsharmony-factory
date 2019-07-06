@@ -5,10 +5,8 @@
     "title":"Models",
     "table":"jsharmony:models",
     "actions":"B",
-    "dev":1,
     "caption":[0,"Model","Models"],
     "sort":["^model_id"],
-    "menu":"DEV_MODELS",
     "grid_expand_search":1,
     "hide_system_buttons" : ["clear"],
     "fields":[
