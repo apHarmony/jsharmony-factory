@@ -7,27 +7,31 @@
     "caption": [ "", "Help Screen", "Help Screens" ],
     "menu":"HL",
     "breadcrumbs": { "parents": ["HL"] },
+    "onload":"if(xmodel.get('hp_id')) XPage.Disable(jsh.$root('.xelem'+xmodel.class+'.hp_code'));",
 	  "fields":[
       {"name":"h_id","type":"bigint","key":1,"control":"hidden"},
 
       {"name":"hp_id","type":"bigint","actions":"BIU","control":"hidden"},
       
-      {"name":"hp_code","type":"varchar","length":50,"actions":"BIU",
-        //"control":"dropdown_VL","sample":"Test - General","lov":{"sql":"select hp_code as %%%jsh.map.{{code_val}}%%%,hp_desc as %%%jsh.map.{{code_txt}}%%% from jsharmony.hp order by hp_desc","blank":""},
+      {"name":"hp_desc","type":"varchar","length":50,"actions":"B",
+        "sqlselect":"(select hp_desc from jsharmony.hp where jsharmony.hp.hp_id = jsharmony.h.hp_id)",
         "control":"textbox_L","validate":["Required"],
-        "caption":"Target","captionstyle":"width:120px;text-align:right;"},
+        "caption":"Help Target","captionstyle":"width:120px;text-align:right;"},
       {"name":"hp_code_select_target","unbound":true,"control":"hidden",
         "popuplov": {"target":  "HELP_TARGETS", "codeval": "hp_code", "popupstyle": "height:400px;width:770px;",
-          "popup_copy_results": { "hp_code": "hp_code", "hp_id": "hp_id" },
-          "popupiconstyle":"position:relative;top:5px;left:6px;padding-left:15px;"},
-        "onchange":"var jobj = jsh.$root('.xelem'+xmodel.class+'.hp_code'); if(newval){ XPage.Enable(jobj); } else { XPage.Disable(jobj); }"
+          "popup_copy_results": { "hp_code": "hp_code", "hp_id": "hp_id", "hp_desc": "hp_desc" },
+          "popupiconstyle":"position:relative;top:5px;left:6px;"},
+        "onchange":"var jobj = jsh.$root('.xelem'+xmodel.class+'.hp_code'); if(newval){ XPage.Disable(jobj); } else { XPage.Enable(jobj); }"
       },
-      {"control":"html","value":"Help Target"},
+      {"name":"hp_code","type":"varchar","length":50,"actions":"BIU","nl":1,
+        //"control":"dropdown_VL","sample":"Test - General","lov":{"sql":"select hp_code as %%%jsh.map.{{code_val}}%%%,hp_desc as %%%jsh.map.{{code_txt}}%%% from jsharmony.hp order by hp_desc","blank":""},
+        "control":"textbox_L","validate":["Required"],
+        "caption":"Model","captionstyle":"width:120px;text-align:right;"},
       {"name":"hp_code_select_model","unbound":true,"control":"hidden",
         "popuplov": {"target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
           "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
           "popup_copy_results": { "hp_code": "model_id" },
-          "popupiconstyle":"position:relative;top:5px;left:6px;padding-left:15px;"}
+          "popupiconstyle":"position:relative;top:5px;left:6px;"}
       },
       {"control":"html","value":"Model"},
 
