@@ -18,9 +18,9 @@
       {"name":"hp_code_select_target","unbound":true,"control":"hidden",
         "popuplov": {"target":  "HELP_TARGETS", "codeval": "hp_code", "popupstyle": "height:400px;width:770px;",
           "popup_copy_results": { "hp_code": "hp_code" },
-          "popupiconstyle":"position:relative;top:5px;"}
+          "popupiconstyle":"position:relative;top:5px;left:6px;"}
       },
-      {"control":"html","value":"&nbsp; Model"},
+      {"control":"html","value":"&nbsp; &nbsp; Model"},
       {"name":"hp_code_select_model","unbound":true,"control":"hidden",
         "popuplov": {"target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
           "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
