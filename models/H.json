@@ -14,10 +14,17 @@
         //"control":"dropdown_VL","sample":"Test - General","lov":{"sql":"select hp_code as %%%jsh.map.{{code_val}}%%%,hp_desc as %%%jsh.map.{{code_txt}}%%% from jsharmony.hp order by hp_desc","blank":""},
         "control":"textbox_L","validate":["Required"],
         "caption":"Target"},
-      {"name":"hp_code_select_target","unbound":true,"popup_copy_results": { "hp_code": "hp_code" },"control":"hidden",
-        "popuplov": {"target":  "X_HELP_TARGETS", "codeval": "hp_code", "popupstyle": "height:400px;width:770px;",
+      {"name":"hp_code_select_target","unbound":true,"control":"hidden",
+        "popuplov": {"target":  "HELP_TARGETS", "codeval": "hp_code", "popupstyle": "height:400px;width:770px;",
+          "popup_copy_results": { "hp_code": "hp_code" },
           "popupiconstyle":"position:relative;top:5px;"}
-      }
+      },
+      {"name":"hp_code_select_model","unbound":true,"control":"hidden",
+        "popuplov": {"target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
+          "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
+          "popup_copy_results": { "hp_code": "model_id" },
+          "popupiconstyle":"position:relative;top:5px;"}
+      },
 
       {"name":"h_seq","type":"int","actions":"BIU","control":"textbox_VS","nl":1,
        "caption":"Sequence","captionstyle":"width:120px;text-align:right;"},
