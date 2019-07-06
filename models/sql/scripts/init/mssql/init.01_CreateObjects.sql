@@ -3425,9 +3425,6 @@ REFERENCES [jsharmony].[param__tbl] ([param_process], [param_attrib])
 GO
 ALTER TABLE [jsharmony].[param_app] CHECK CONSTRAINT [fk_param_app_param__tbl]
 GO
-ALTER TABLE [jsharmony].[help__tbl]  WITH CHECK ADD  CONSTRAINT [fk_help__tbl_help_target] FOREIGN KEY([help_target_code])
-REFERENCES [jsharmony].[help_target] ([help_target_code])
-GO
 ALTER TABLE [jsharmony].[help__tbl] CHECK CONSTRAINT [fk_help__tbl_help_target]
 GO
 ALTER TABLE [jsharmony].[note__tbl]  WITH CHECK ADD  CONSTRAINT [fk_note__tbl_code_ac1] FOREIGN KEY([note_sts])
@@ -5889,14 +5886,6 @@ BEGIN
   BEGIN
     EXEC [jsharmony].[zz-filedebug] 'TRIGGER','help__tbl_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
-    ROLLBACK TRANSACTION
-    return
-  END
-
-  IF @TP = 'U' AND UPDATE(help_target_code)
-  BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','help__tbl_IUD','ERR', 'Cannot update help_target_code'
-    raiserror('Cannot update foreign key help_target_code',16,1)
     ROLLBACK TRANSACTION
     return
   END

@@ -471,7 +471,6 @@ end;
 create trigger {schema}_help__tbl_before_update before update on {schema}_help__tbl
 begin
   select case when ifnull(old.help_id,'')<>ifnull(NEW.help_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
-  select case when ifnull(old.help_target_code,'')<>ifnull(NEW.help_target_code,'') then raise(FAIL,'Application Error - help_target Code cannot be updated.') end\;
 end;
 
 create trigger {schema}_help__tbl_after_update after update on {schema}_help__tbl

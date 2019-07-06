@@ -171,8 +171,7 @@ CREATE TABLE {schema}_help__tbl (
   help_seq integer,
   help_listing_main integer NOT NULL DEFAULT 1,
   help_listing_client integer NOT NULL DEFAULT 1,
-  UNIQUE (help_title),
-  FOREIGN KEY (help_target_code) REFERENCES {schema}_help_target (help_target_code)
+  UNIQUE (help_title)
 );
 
 /***************note__tbl***************/

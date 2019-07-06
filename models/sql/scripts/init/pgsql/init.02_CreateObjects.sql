@@ -1920,9 +1920,6 @@ CREATE FUNCTION help__tbl_iud() RETURNS trigger
           IF {schema}.nequal(NEW.help_id, OLD.help_id) THEN
             RAISE EXCEPTION  'Application Error - ID cannot be updated.';
           END IF;
-          IF {schema}.nequal(NEW.help_target_code, OLD.help_target_code) THEN
-            RAISE EXCEPTION  'Application Error - help_target Code cannot be updated..';
-          END IF;
         END IF;
           
 
@@ -8774,14 +8771,6 @@ ALTER TABLE ONLY doc__tbl
 
 ALTER TABLE ONLY param_app
     ADD CONSTRAINT param_app_param__tbl_fkey FOREIGN KEY (param_app_process, param_app_attrib) REFERENCES param__tbl(param_process, param_attrib);
-
-
---
--- Name: help__tbl_help_target_code_fkey; Type: FK CONSTRAINT; Schema: jsharmony; Owner: postgres
---
-
-ALTER TABLE ONLY help__tbl
-    ADD CONSTRAINT help__tbl_help_target_code_fkey FOREIGN KEY (help_target_code) REFERENCES help_target(help_target_code);
 
 
 --
