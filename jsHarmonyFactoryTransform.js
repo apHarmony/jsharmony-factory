@@ -805,6 +805,9 @@ function jsHarmonyFactoryTransform(module){
       'code2': true,
       'code2_': true,
       'code2_base': true,
+
+      '0': true,
+      '1': true,
     }
   };
 
