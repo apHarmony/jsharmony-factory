@@ -109,7 +109,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
   
     if(scriptConfig._ORIG_DBPASS == scriptConfig.DEFAULT_DB_PASS){ scriptConfig._ORIG_DBPASS = '';  jsh.DBConfig['default'].password = ''; }
     else scriptConfig._ORIG_DEFAULTS = false;
-  
+
     scriptConfig._JSH_DBSERVER = '';
     scriptConfig._JSH_DBNAME = '';
     scriptConfig._JSH_DBUSER = '';
@@ -124,6 +124,21 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     scriptConfig._ADMIN_DBPASS = '';
     scriptConfig._JSH_ADMIN_EMAIL = '';
     scriptConfig._JSH_ADMIN_PASS = '';
+
+    //Read command line arguments for user / pass
+    for(var i=1;i<process.argv.length;i++){
+      var arg = process.argv[i];
+      var nextarg = '';
+      if(process.argv.length > (i+1)) nextarg = process.argv[i+1];
+      if(arg=='--db-user'){
+        jsh.DBConfig['default'].user = nextarg;
+        i++;
+      }
+      else if(arg=='--db-pass'){
+        jsh.DBConfig['default'].password = nextarg;
+        i++;
+      }
+    }
   
     Promise.resolve()
 
@@ -160,7 +175,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         //Ask for the database admin user
         .then(xlib.getStringAsync(function(){
           if(jsh.DBConfig['default'].user){
-            console.log('Database user: ' + jsh.DBConfig['default'].user + '   (from app.config.js)');
+            console.log('Database user: ' + jsh.DBConfig['default'].user + '   (from app.config.js / params)');
             return false;
           }
           process.stdout.write('Please enter an ADMIN database user for running the scripts: ');
@@ -172,7 +187,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         //Ask for admin user
         .then(xlib.getStringAsync(function(){
           if(jsh.DBConfig['default'].password){
-            console.log('Database password: ******   (from app.config.js)');
+            console.log('Database password: ******   (from app.config.js / params)');
             return false;
           }
           process.stdout.write('Please enter the password for user "'+jsh.DBConfig['default'].user+'": ');

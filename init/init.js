@@ -83,6 +83,21 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     scriptConfig._JSH_DBTYPE = dbs.getDBType();
     scriptConfig._ADMIN_DBUSER = '';
     scriptConfig._ADMIN_DBPASS = '';
+
+    //Read command line arguments for user / pass
+    for(var i=1;i<process.argv.length;i++){
+      var arg = process.argv[i];
+      var nextarg = '';
+      if(process.argv.length > (i+1)) nextarg = process.argv[i+1];
+      if(arg=='--db-user'){
+        jsh.DBConfig['default'].user = nextarg;
+        i++;
+      }
+      else if(arg=='--db-user'){
+        jsh.DBConfig['default'].password = nextarg;
+        i++;
+      }
+    }
   
     Promise.resolve()
   
@@ -117,7 +132,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
         //Ask for the database admin user
         .then(xlib.getStringAsync(function(){
           if(jsh.DBConfig['default'].user){
-            console.log('Database user: ' + jsh.DBConfig['default'].user + '   (from app.config.js)');
+            console.log('Database user: ' + jsh.DBConfig['default'].user + '   (from app.config.js / params)');
             return false;
           }
           process.stdout.write('Please enter an ADMIN database user for running the scripts: ');
@@ -129,7 +144,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
         //Ask for admin password
         .then(xlib.getStringAsync(function(){
           if(jsh.DBConfig['default'].password){
-            console.log('Database password: ******   (from app.config.js)');
+            console.log('Database password: ******   (from app.config.js / params)');
             return false;
           }
           process.stdout.write('Please enter the password for user "'+jsh.DBConfig['default'].user+'": ');
