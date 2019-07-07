@@ -36,7 +36,7 @@
        "validate":["Required"],"caption":"Display Name"},
       {"name":"sm_cmd","type":"varchar","length":255,"actions": "BIU","control": "textbox_M","caption":"Model / Command",
        "popuplov": {
-          "target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
+          "target":  "X_MODELS", "{{code_val}}": "model_id", "popupstyle": "height:400px;width:770px;",
           "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);"
         }
        },
