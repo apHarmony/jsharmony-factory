@@ -16,9 +16,9 @@
     "where job_rslt is null limit 1"
   ],
   "jobproc_save_doc": [
-    "with xrslt as (insert into doc__tbl(doc_scope,doc_scope_id,cust_id,doc_sts,doc_ctgr,doc_desc,doc_ext,doc_size,doc_upuser) values(@doc_scope,@doc_scope_id, ",
+    "with xrslt as (insert into doc__tbl(doc_scope,doc_scope_id,cust_id,doc_sts,doc_ctgr,doc_desc,doc_ext,doc_size,doc_upuser,doc_uptstmp) values(@doc_scope,@doc_scope_id, ",
     "case @doc_scope when 'C' then @doc_scope_id else null end, ",
-    "'A',@doc_ctgr,@doc_desc, '.pdf',@doc_size, 'jobproc') returning doc_id) select doc_id from xrslt;"
+    "'A',@doc_ctgr,@doc_desc, '.pdf',@doc_size, 'jobproc', %%%get_tstmp%%%) returning doc_id) select doc_id from xrslt;"
   ],
   "jobproc_save_queue": "with xrslt as (insert into {schema}.queue__tbl(queue_name,queue_message) values(@queue_name,'{}') returning queue_id) select queue_id from xrslt;",
   "jobproc_save_queue_message": "update {schema}.queue__tbl set queue_message = @queue_message where queue_id=@queue_id;",
