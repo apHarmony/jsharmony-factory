@@ -779,6 +779,7 @@ transform.sql = {
   "@sms_to": "@sms_to",
   "@sms_body": "@sms_body",
   "separate_code_type_tables": "1",
+  "help_target_required": "1",
 }
 
 transform.ignore_errors = {

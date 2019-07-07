@@ -19,17 +19,19 @@
       {"name":"hp_code_select_target","unbound":true,"control":"hidden",
         "popuplov": {"target":  "HELP_TARGETS", "codeval": "hp_code", "popupstyle": "height:400px;width:770px;",
           "popup_copy_results": { "hp_code": "hp_code", "hp_id": "hp_id", "hp_desc": "hp_desc" },
-          "popupiconstyle":"position:relative;top:5px;"},
+          "popupiconstyle":"position:relative;top:5px;"}
       },
       {"name":"hp_code","type":"varchar","length":50,"actions":"BIU","readonly":true,"nl":1,
         "control":"textbox_L",
         "caption":"Model","captionstyle":"width:120px;text-align:right;"},
+      //:if:help_target_required::else:
       {"name":"hp_code_select_model","unbound":true,"control":"hidden",
         "popuplov": {"target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
           "onpopup": "if(xmodel.get('hp_id')){ return XExt.Alert('Please clear Help Target before selecting a different model.'); } jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
           "popup_copy_results": { "hp_code": "model_id" },
           "popupiconstyle":"position:relative;top:5px;"}
       },
+      //:endif:
 
       {"name":"h_seq","type":"int","actions":"BIU","control":"textbox_VS","nl":1,
        "caption":"Sequence","captionstyle":"width:120px;text-align:right;"},
