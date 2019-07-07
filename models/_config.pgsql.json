@@ -43,14 +43,14 @@
     "client_overdue_ignore": "inv_overdue_ignore"
   },
   "ui_field_mapping": {
-    "code_val": "code_val",
-    "code_txt": "code_txt",
+    "{{code_val}}": "code_val",
+    "{{code_txt}}": "code_txt",
     "code_parent_id": "code_parent_id",
     "code_icon": "code_icon",
     "code_id": "code_id",
     "code_parent": "code_parent",
-    "code_seq": "code_seq",
-    "code_type": "code_type"
+    "{{code_seq}}": "code_seq",
+    "{{code_type}}": "code_type"
   },
   "modules":{
     "jsHarmonyFactory": {
