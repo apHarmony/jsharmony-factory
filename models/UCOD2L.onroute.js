@@ -18,7 +18,7 @@ jsh.AppSrv.ExecRow(req._DBContext, "select codemean,codecodemean,codeattribmean 
   if (err) { jsh.Log.error(err); Helper.GenError(req, res, -99999, "An unexpected error has occurred"); return; }
   if (rslt && rslt.length && rslt[0]) {
     //Set title
-    model.title = 'SYSTEM TABLE - '+rslt[0]['codemean']+' - '+codeschema;
+    model.title = rslt[0]['codemean']+' - '+codeschema;
     //Set table
     model.table = 'ucod2_'+codename;
     if(codeschema){ 

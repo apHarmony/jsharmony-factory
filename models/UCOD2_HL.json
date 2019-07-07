@@ -1,11 +1,11 @@
 {
   "UCOD2_HL": {
-    "title":"System 2-Dimensional Code Tables",
+    "title":"2-Dimensional Code Tables",
     "dev":1,
     "table":"jsharmony.ucod2_h",
     "actions":"B",
     "layout":"grid", 
-	"caption":[0,"System Code2 Table","System Code2 Tables"],
+	"caption":[0,"Code2 Table","Code2 Tables"],
     "roles": {"X_B":"B","DADMIN":"*"},
     "sort":["^codename","^codeschema"], 
 	"menu":"X_UCOD2_HL",
