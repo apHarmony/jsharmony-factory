@@ -1,7 +1,7 @@
 {
-  "SysUser_Listing": {
+  "Reports/SysUser_Listing": {
     "comment":"SysUser_Listing",
-    "source_files_prefix":"SysUser_Listing",
+    "source_files_prefix":"Reports_SysUser_Listing",
     "layout": "report",
     "title": "User Listing",
     "inherits": "TMPL_DEFAULT",
