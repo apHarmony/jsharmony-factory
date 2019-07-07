@@ -450,7 +450,6 @@ transform.models = {
   "Base/CustUser": "CPE_BASE",
   "CustUser_Role": "CPE_CPER",
   "Base/CustUser_Role": "CPE_CPER_BASE",
-  "CreateCodeSys": "CREATE_UCOD",
   "Dev/CustMenuRoleSelection_Role": "CRMSELR_SEL",
   "Dev/CustRoleMenuSelection_Menu": "CRMSEL_SEL",
   "Client/Dashboard": "C_DASHBOARD",
@@ -546,7 +545,7 @@ transform.models = {
   "Dev/Code_App_Listing": "X_GCOD_HL",
   "Dev/Param_App_Listing": "X_GPPL",
   "Dev/HelpTarget_Listing": "X_HPL",
-  "Dev/Model_Listing": "X_MODELS",
+  "Admin/Model_Popup_Listing": "X_MODELS",
   "Admin/HelpTarget_Popup_Listing": "HELP_TARGETS",
   "Dev/Param_Listing": "X_PPDL",
   "Dev/SysFunc_Listing": "X_SFL",
@@ -783,7 +782,13 @@ transform.sql = {
 }
 
 transform.ignore_errors = {
-  value: { 'n': true }
+  value: {
+    'n': true,
+    'ucod': true,
+    'gcod': true,
+    'ucod2': true,
+    'gcod2': true,
+  }
 };
 
 exports = module.exports = transform;
