@@ -59,11 +59,14 @@ AppSrvJobProc.prototype.map_db_rslt = function(row) {
   var _this = this;
   if (!row) return row;
   var rslt = {};
+  var foundkeys = {};
+  for(var mapkey in _this.jshFactory.Config.job_field_mapping){
+    var mapval = _this.jshFactory.Config.job_field_mapping[mapkey];
+    if(mapval in row) rslt[mapkey] = row[mapval];
+    foundkeys[mapval] = true;
+  }
   for (var f in row) {
-    if (f in _this.jshFactory.Config.job_field_mapping) {
-      rslt[_this.jshFactory.Config.job_field_mapping[f]] = row[f];
-    }
-    else rslt[f] = row[f];
+    if(!(f in foundkeys)) rslt[f] = row[f];
   }
   return rslt;
 }
