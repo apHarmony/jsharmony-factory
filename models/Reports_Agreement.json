@@ -9,7 +9,7 @@
     "menu":"reports",
     "description": "Generate Signed Customer Agreement",
     "template": "Agreement.ejs",
-    "inherits": "TMPL_DEFAULT",
+    "inherits": "Reports/TMPL_DEFAULT",
     "fields": [
       {"name":"c_id","type":"bigint","datalock":{"c_id":"c_c_id"},"nl":1,
           "control":"dropdown_L","actions": "B",
