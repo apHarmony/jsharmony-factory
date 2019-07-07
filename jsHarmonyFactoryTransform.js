@@ -805,6 +805,10 @@ function jsHarmonyFactoryTransform(module){
       'code2': true,
       'code2_': true,
       'code2_base': true,
+      'code_etstmp': true,
+      'code_euser': true,
+      'code_mtstmp': true,
+      'code_muser': true,
 
       '0': true,
       '1': true,
