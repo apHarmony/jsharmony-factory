@@ -10,7 +10,7 @@ BEGIN TRANSACTION
 
 
 
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code'', N''CREATE TABLE [%%%schema%%%].[code_%%%name%%%](
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code'', N''CREATE TABLE [%%%schema%%%].[code_%%%name%%%](
 	[code_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -24,8 +24,8 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
-	[code_euser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_euser])),
-	[code_muser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_muser])),
+	[code_euser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_euser])),
+	[code_muser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_muser])),
 	[code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
@@ -43,16 +43,16 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_id''''
@@ -80,7 +80,7 @@ EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code 
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry User'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema'')')
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'%%%'', @level1type=N''TABLE'',@level1name=N''code_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_euser''
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'%%%'', @level1type=N''TABLE'',@level1name=N''code_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_euser''
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
@@ -97,7 +97,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code'
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code_%%%name%%%_IUD] on [%%%schema%%%].[code_%%%name%%%]
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code_%%%name%%%_IUD] on [%%%schema%%%].[code_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -175,7 +175,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
     raiserror(''''Cannot update identity'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -183,7 +183,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val''''
     raiserror(''''Cannot update foreign key code_val'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -236,7 +236,7 @@ BEGIN
 
       IF (@TP = ''''D'''' AND @D_code_seq IS NOT NULL OR
           @TP = ''''U'''' AND {schema}.nequal_num(@D_code_seq, @I_'')')
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
 		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''code_%%%name%%%'', @I_code_id, @MYUSER, @CURDTTM
@@ -336,7 +336,7 @@ END
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code_TRIGGER'
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2'', N''CREATE TABLE [%%%schema%%%].[code2_%%%name%%%](
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2'', N''CREATE TABLE [%%%schema%%%].[code2_%%%name%%%](
 	[code2_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](32) NOT NULL,
@@ -352,8 +352,8 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
-	[code_euser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_euser])),
-	[code_muser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_muser])),
+	[code_euser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_euser])),
+	[code_muser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_muser])),
  CONSTRAINT [pk_code2_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[code2_id] ASC
@@ -372,16 +372,16 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code2_id''''
@@ -412,7 +412,7 @@ EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code 
 ;
 
 EXEC sys.sp_addextendedproper'')')
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'ty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'ty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_muser''
@@ -426,7 +426,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code2'
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code2_%%%name%%%_IUD] on [%%%schema%%%].[code2_%%%name%%%]
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code2_%%%name%%%_IUD] on [%%%schema%%%].[code2_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -506,7 +506,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code2_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
     raiserror(''''Cannot update identity'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -514,7 +514,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val1)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val1''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val1''''
     raiserror(''''Cannot update foreign key code_val1'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -522,7 +522,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val2)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val2''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val2''''
     raiserror(''''Cannot update foreign key code_val2'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -562,7 +562,7 @@ BEGIN
 	/****** SPECIAL FRONT ACTION - END   ******/
 	/******************'')')
 EXEC(N'DECLARE @pv binary(16)
-'+N'UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N''************************/
+'+N'UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N''************************/
 
 
     SET @MY_audit_seq = 0
@@ -668,7 +668,7 @@ EXEC(N'DECLARE @pv binary(16)
              @D_code_end_dt, @I_code_end_dt,
              @D_code_val1, @I_code_val1,
              @D_code_val2, @I_CO'',NULL,NULL) WHERE [script_name]=N''create_code2_TRIGGER''
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N''DEVAL2,
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N''DEVAL2,
              @D_code_txt, @I_code_txt,
              @D_code_code, @I_code_code,
              @D_code_attrib, @I_code_attrib,
@@ -693,7 +693,7 @@ END
 
 
 
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app'', N''CREATE TABLE [%%%schema%%%].[code_app_%%%name%%%](
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app'', N''CREATE TABLE [%%%schema%%%].[code_app_%%%name%%%](
 	[code_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -707,8 +707,8 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
-	[code_euser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_euser])),
-	[code_muser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_muser])),
+	[code_euser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_euser])),
+	[code_muser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_muser])),
 	[code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_app_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
@@ -726,16 +726,16 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_app_id''''
@@ -763,7 +763,7 @@ EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code 
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Entry User'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema'')')
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'%%%'', @level1type=N''TABLE'',@level1name=N''code_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_euser''
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'%%%'', @level1type=N''TABLE'',@level1name=N''code_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_euser''
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
@@ -780,7 +780,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code_app'
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code_app_%%%name%%%_IUD] on [%%%schema%%%].[code_app_%%%name%%%]
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code_app_%%%name%%%_IUD] on [%%%schema%%%].[code_app_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -858,7 +858,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_app_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
     raiserror(''''Cannot update identity'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -866,7 +866,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val''''
     raiserror(''''Cannot update foreign key code_val'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -919,7 +919,7 @@ BEGIN
 
       IF (@TP = ''''D'''' AND @D_code_seq IS NOT NULL OR
           @TP = ''''U'''' AND {schema}.nequal_num(@D_code_seq, @I_'')')
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
 		  EXEC	@MY_audit_seq = {schema}.log_audit_base ''U'', ''code_app_%%%name%%%'', @I_code_app_id, @MYUSER, @CURDTTM
@@ -1019,7 +1019,7 @@ END
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code_app_TRIGGER'
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_app'', N''CREATE TABLE [%%%schema%%%].[code2_app_%%%name%%%](
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_app'', N''CREATE TABLE [%%%schema%%%].[code2_app_%%%name%%%](
 	[code2_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](32) NOT NULL,
@@ -1035,8 +1035,8 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 	[code_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
-	[code_euser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_euser])),
-	[code_muser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_muser])),
+	[code_euser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_euser])),
+	[code_muser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_muser])),
  CONSTRAINT [pk_code2_app_%%%name%%%] PRIMARY KEY CLUSTERED 
 (
 	[code2_app_id] ASC
@@ -1055,16 +1055,16 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code2_app_id''''
@@ -1095,7 +1095,7 @@ EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code 
 ;
 
 EXEC sys.sp_addextendedproper'')')
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'ty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'ty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_app_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_muser''
@@ -1109,7 +1109,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code2_app'
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code2_app_%%%name%%%_IUD] on [%%%schema%%%].[code2_app_%%%name%%%]
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code2_app_%%%name%%%_IUD] on [%%%schema%%%].[code2_app_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -1189,7 +1189,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code2_app_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
     raiserror(''''Cannot update identity'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -1197,7 +1197,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val1)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val1''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val1''''
     raiserror(''''Cannot update foreign key code_val1'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -1205,7 +1205,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val2)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val2''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val2''''
     raiserror(''''Cannot update foreign key code_val2'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -1245,7 +1245,7 @@ BEGIN
 	/****** SPECIAL FRONT ACTION - END   ******/
 	/******************'')')
 EXEC(N'DECLARE @pv binary(16)
-'+N'UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N''************************/
+'+N'UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N''************************/
 
 
     SET @MY_audit_seq = 0
@@ -1351,7 +1351,7 @@ EXEC(N'DECLARE @pv binary(16)
              @D_code_end_dt, @I_code_end_dt,
              @D_code_val1, @I_code_val1,
              @D_code_val2, @I_CO'',NULL,NULL) WHERE [script_name]=N''create_code2_app_TRIGGER''
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N''DEVAL2,
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N''DEVAL2,
              @D_code_txt, @I_code_txt,
              @D_code_code, @I_code_code,
              @D_code_attrib, @I_code_attrib,
@@ -1380,7 +1380,7 @@ END
 
 
 
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_sys'', N''CREATE TABLE [%%%schema%%%].[code_sys_%%%name%%%](
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_sys'', N''CREATE TABLE [%%%schema%%%].[code_sys_%%%name%%%](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -1411,16 +1411,16 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_sys_id''''
@@ -1451,7 +1451,7 @@ EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code 
 ;
 
 '')')
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'
 EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification Timestamp'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code_sys_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
 ;
 
@@ -1466,7 +1466,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''System Code
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code_sys'
-EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_sys'', N''CREATE TABLE [%%%schema%%%].[code2_sys_%%%name%%%](
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_sys'', N''CREATE TABLE [%%%schema%%%].[code2_sys_%%%name%%%](
 	[code2_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](32) NOT NULL,
@@ -1500,16 +1500,16 @@ EXEC(N'INSERT INTO [jsharmony].[script__tbl] ([script_name], [script_txt]) VALUE
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code2_sys_id''''
@@ -1540,7 +1540,7 @@ EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code 
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value Last Modification Timestamp'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%'')')
-UPDATE [jsharmony].[script__tbl] SET [script_txt].WRITE(N'%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_sys_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_sys_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_mtstmp''
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Code Value Last Modification User'' , @level0type=N''SCHEMA'',@level0name=N''%%%schema%%%'', @level1type=N''TABLE'',@level1name=N''code2_sys_%%%name%%%'', @level2type=N''COLUMN'',@level2name=N''code_muser''

@@ -4,7 +4,7 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
-SET search_path = jsharmony, pg_catalog;
+SET search_path = {schema}, pg_catalog;
 
 
 INSERT INTO code_ahc (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL, NULL, NULL, NULL, NULL);

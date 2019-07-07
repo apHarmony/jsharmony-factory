@@ -16,9 +16,9 @@ GO
 GRANT VIEW ANY COLUMN ENCRYPTION KEY DEFINITION TO [public] AS [dbo]
 GRANT VIEW ANY COLUMN MASTER KEY DEFINITION TO [public] AS [dbo]
 */
-CREATE SCHEMA [jsharmony]
+CREATE SCHEMA [{schema}]
 GO
-GRANT ALTER ON SCHEMA::[jsharmony] TO [{schema}_role_dev] AS [dbo]
+GRANT ALTER ON SCHEMA::[{schema}] TO [{schema}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -27,7 +27,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[log_audit_info] 
+CREATE FUNCTION [{schema}].[log_audit_info] 
 (@etstmp datetime2(7),
  @euser     nvarchar(max),
  @mtstmp datetime2(7),
@@ -47,8 +47,8 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[log_audit_info] TO [{schema}_role_exec] AS [dbo]
-GRANT EXECUTE ON [jsharmony].[log_audit_info] TO [{schema}_role_dev] AS [dbo]
+GRANT EXECUTE ON [{schema}].[log_audit_info] TO [{schema}_role_exec] AS [dbo]
+GRANT EXECUTE ON [{schema}].[log_audit_info] TO [{schema}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -60,7 +60,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[check_param]
+CREATE FUNCTION [{schema}].[check_param]
 (
 	@in_table nvarchar(3),
 	@in_process nvarchar(32),
@@ -140,7 +140,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE FUNCTION [jsharmony].[doc_filename]
+CREATE FUNCTION [{schema}].[doc_filename]
 (
 	@in_doc_id bigint,
 	@in_doc_ext NVARCHAR(MAX)
@@ -170,7 +170,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE FUNCTION [jsharmony].[exists_doc]
+CREATE FUNCTION [{schema}].[exists_doc]
 (
 	@tbl nvarchar(MAX),
 	@id bigint
@@ -212,7 +212,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[exists_note]
+CREATE FUNCTION [{schema}].[exists_note]
 (
 	@tbl nvarchar(MAX),
 	@id bigint
@@ -248,7 +248,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[get_cust_user_name]
+CREATE FUNCTION [{schema}].[get_cust_user_name]
 (
 	@in_sys_user_id BIGINT
 )	
@@ -267,7 +267,7 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[get_cust_user_name] TO [{schema}_role_exec] AS [dbo]
+GRANT EXECUTE ON [{schema}].[get_cust_user_name] TO [{schema}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -276,7 +276,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[get_sys_user_name]
+CREATE FUNCTION [{schema}].[get_sys_user_name]
 (
 	@in_sys_user_id BIGINT
 )	
@@ -294,9 +294,9 @@ DECLARE @rslt NVARCHAR(MAX) = NULL
 END
 
 GO
-GRANT EXECUTE ON [jsharmony].[get_sys_user_name] TO [{schema}_role_exec] AS [dbo]
+GRANT EXECUTE ON [{schema}].[get_sys_user_name] TO [{schema}_role_exec] AS [dbo]
 GO
-GRANT EXECUTE ON [jsharmony].[get_sys_user_name] TO [{schema}_role_dev] AS [dbo]
+GRANT EXECUTE ON [{schema}].[get_sys_user_name] TO [{schema}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -306,7 +306,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[get_param_desc]
+CREATE FUNCTION [{schema}].[get_param_desc]
 (
 	@in_param_process NVARCHAR(MAX),
 	@in_param_attrib NVARCHAR(MAX)
@@ -325,9 +325,9 @@ DECLARE @rslt NVARCHAR(MAX) = NULL
 
 END
 GO
-GRANT EXECUTE ON [jsharmony].[get_param_desc] TO [{schema}_role_exec] AS [dbo]
+GRANT EXECUTE ON [{schema}].[get_param_desc] TO [{schema}_role_exec] AS [dbo]
 GO
-GRANT EXECUTE ON [jsharmony].[get_param_desc] TO [{schema}_role_dev] AS [dbo]
+GRANT EXECUTE ON [{schema}].[get_param_desc] TO [{schema}_role_dev] AS [dbo]
 GO
 
 
@@ -343,7 +343,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_db_user]
+CREATE FUNCTION [{schema}].[my_db_user]
 ()	
 RETURNS varchar(20)   
 AS 
@@ -359,9 +359,9 @@ END
 
 
 GO
-GRANT REFERENCES ON [jsharmony].[my_db_user] TO [{schema}_role_dev] AS [dbo]
+GRANT REFERENCES ON [{schema}].[my_db_user] TO [{schema}_role_dev] AS [dbo]
 GO
-GRANT EXECUTE ON [jsharmony].[my_db_user] TO [{schema}_role_exec] AS [dbo]
+GRANT EXECUTE ON [{schema}].[my_db_user] TO [{schema}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -374,7 +374,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_db_user_exec]
+CREATE FUNCTION [{schema}].[my_db_user_exec]
 ()	
 RETURNS varchar(20)   
 AS 
@@ -411,7 +411,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_db_user_fmt]
+CREATE FUNCTION [{schema}].[my_db_user_fmt]
 (@USER VARCHAR(20))	
 RETURNS nvarchar(120)   
 AS 
@@ -428,9 +428,9 @@ END
 
 
 GO
-GRANT REFERENCES ON [jsharmony].[my_db_user_fmt] TO [{schema}_role_dev] AS [dbo]
+GRANT REFERENCES ON [{schema}].[my_db_user_fmt] TO [{schema}_role_dev] AS [dbo]
 GO
-GRANT EXECUTE ON [jsharmony].[my_db_user_fmt] TO [{schema}_role_exec] AS [dbo]
+GRANT EXECUTE ON [{schema}].[my_db_user_fmt] TO [{schema}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -443,7 +443,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_db_user_fmt_exec]
+CREATE FUNCTION [{schema}].[my_db_user_fmt_exec]
 (@USER VARCHAR(20))	
 RETURNS nvarchar(120)   
 AS 
@@ -490,7 +490,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_hash]
+CREATE FUNCTION [{schema}].[my_hash]
 (@TYPE CHAR(1),
  @sys_user_id bigint,
  @pw nvarchar(255))	
@@ -543,7 +543,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_mmddyyhhmi] (@X DATETIME2(7))
+CREATE FUNCTION [{schema}].[my_mmddyyhhmi] (@X DATETIME2(7))
 RETURNS varchar(140)
 AS
 BEGIN
@@ -562,7 +562,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_now]
+CREATE FUNCTION [{schema}].[my_now]
 ()
 RETURNS DATETIME2(7)   
 AS 
@@ -577,9 +577,9 @@ END
 
 
 GO
-GRANT REFERENCES ON [jsharmony].[my_now] TO [{schema}_role_dev] AS [dbo]
+GRANT REFERENCES ON [{schema}].[my_now] TO [{schema}_role_dev] AS [dbo]
 GO
-GRANT EXECUTE ON [jsharmony].[my_now] TO [{schema}_role_exec] AS [dbo]
+GRANT EXECUTE ON [{schema}].[my_now] TO [{schema}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -592,7 +592,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_now_exec]
+CREATE FUNCTION [{schema}].[my_now_exec]
 ()
 RETURNS DATETIME2(7)   
 AS 
@@ -617,7 +617,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_sys_user_id]
+CREATE FUNCTION [{schema}].[my_sys_user_id]
 ()	
 RETURNS bigint   
 AS 
@@ -640,7 +640,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE FUNCTION [jsharmony].[my_user_do]
+CREATE FUNCTION [{schema}].[my_user_do]
 ()	
 RETURNS bigint   
 AS 
@@ -671,7 +671,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_cust_user_id]
+CREATE FUNCTION [{schema}].[my_cust_user_id]
 ()	
 RETURNS bigint   
 AS 
@@ -695,7 +695,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_cust_user_id_exec]
+CREATE FUNCTION [{schema}].[my_cust_user_id_exec]
 ()	
 RETURNS bigint   
 AS 
@@ -724,7 +724,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_to_date] (@X DATETIME2(7))
+CREATE FUNCTION [{schema}].[my_to_date] (@X DATETIME2(7))
 RETURNS date
 AS
 BEGIN
@@ -746,7 +746,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_today] ()
+CREATE FUNCTION [{schema}].[my_today] ()
 RETURNS date
 AS
 BEGIN
@@ -756,7 +756,7 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[my_today] TO [{schema}_role_exec] AS [dbo]
+GRANT EXECUTE ON [{schema}].[my_today] TO [{schema}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -767,7 +767,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[my_today_exec] ()
+CREATE FUNCTION [{schema}].[my_today_exec] ()
 RETURNS date
 AS
 BEGIN
@@ -791,7 +791,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[nequal_chr]
+CREATE FUNCTION [{schema}].[nequal_chr]
 (
 	@in1 nvarchar(MAX),
 	@in2 nvarchar(MAX)
@@ -830,7 +830,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[nequal_date]
+CREATE FUNCTION [{schema}].[nequal_date]
 (
 	@in1 DATETIME2(7),
 	@in2 DATETIME2(7)
@@ -875,7 +875,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[nequal_num]
+CREATE FUNCTION [{schema}].[nequal_num]
 (
 	@in1 numeric(30,10),
 	@in2 numeric(30,10)
@@ -911,7 +911,7 @@ GO
 
 
 
-CREATE FUNCTION [jsharmony].[table_type]
+CREATE FUNCTION [{schema}].[table_type]
 (
 	@in_schema varchar(max),
 	@in_name varchar(max)
@@ -933,13 +933,13 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[table_type] TO [{schema}_role_exec] AS [dbo]
+GRANT EXECUTE ON [{schema}].[table_type] TO [{schema}_role_exec] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[param__tbl](
+CREATE TABLE [{schema}].[param__tbl](
 	[param_process] [nvarchar](32) NOT NULL,
 	[param_attrib] [nvarchar](16) NOT NULL,
 	[param_desc] [nvarchar](255) NOT NULL,
@@ -969,7 +969,7 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[code_param_user_process] as
+create view [{schema}].[code_param_user_process] as
 SELECT distinct
        NULL code_seq
       ,param_process code_val
@@ -985,7 +985,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[audit__tbl](
+CREATE TABLE [{schema}].[audit__tbl](
 	[audit_seq] [bigint] IDENTITY(1,1) NOT NULL,
 	[audit_table_name] [varchar](32) NOT NULL,
 	[audit_table_id] [bigint] NOT NULL,
@@ -1008,7 +1008,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[audit_detail](
+CREATE TABLE [{schema}].[audit_detail](
 	[audit_seq] [bigint] NOT NULL,
 	[audit_column_name] [varchar](30) NOT NULL,
 	[audit_column_val] [nvarchar](max) NULL,
@@ -1035,7 +1035,7 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[v_audit_detail]
+CREATE VIEW [{schema}].[v_audit_detail]
 AS
 SELECT  audit__tbl.audit_seq,
         audit__tbl.cust_id,
@@ -1070,7 +1070,7 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[code_param_sys_process] as
+create view [{schema}].[code_param_sys_process] as
 SELECT distinct
        NULL code_seq
       ,param_process code_val
@@ -1089,7 +1089,7 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[code2_param_app_attrib] as
+create view [{schema}].[code2_param_app_attrib] as
 SELECT NULL code_seq
       ,param_process code_val1
       ,param_attrib code_val2
@@ -1114,7 +1114,7 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[code2_param_user_attrib] as
+create view [{schema}].[code2_param_user_attrib] as
 SELECT NULL code_seq
       ,param_process code_val1
       ,param_attrib code_val2
@@ -1140,7 +1140,7 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[code2_param_sys_attrib] as
+create view [{schema}].[code2_param_sys_attrib] as
 SELECT NULL code_seq
       ,param_process code_val1
       ,param_attrib code_val2
@@ -1162,7 +1162,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[sys_user_role](
+CREATE TABLE [{schema}].[sys_user_role](
 	[sys_user_id] [bigint] NOT NULL,
 	[sys_user_role_snotes] [nvarchar](255) NULL,
 	[sys_user_role_id] [bigint] IDENTITY(1,1) NOT NULL,
@@ -1186,7 +1186,7 @@ GO
 
 
 
-CREATE view [jsharmony].[v_my_roles] as
+CREATE view [{schema}].[v_my_roles] as
 select sys_user_role.sys_role_name
   from {schema}.sys_user_role
  where sys_user_role.sys_user_id = {schema}.my_sys_user_id()
@@ -1197,7 +1197,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[number__tbl](
+CREATE TABLE [{schema}].[number__tbl](
 	[number_val] [smallint] NOT NULL,
  CONSTRAINT [pk_number__tbl] PRIMARY KEY CLUSTERED 
 (
@@ -1217,7 +1217,7 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-CREATE view [jsharmony].[v_month] as
+CREATE view [{schema}].[v_month] as
 select number_val month_val,
        right('0'+convert(nvarchar(50),number_val),2) month_txt2,
        right('0'+convert(nvarchar(50),number_val),2) month_txt
@@ -1239,7 +1239,7 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-CREATE view [jsharmony].[v_year] as
+CREATE view [{schema}].[v_year] as
 select datepart(year_txt,sysdatetime())+number_val-1 year_val,
        datepart(year_txt,sysdatetime())+number_val-1 year_txt
   from {schema}.number__tbl
@@ -1252,7 +1252,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[param_user](
+CREATE TABLE [{schema}].[param_user](
 	[sys_user_id] [bigint] NOT NULL,
 	[param_user_process] [nvarchar](32) NOT NULL,
 	[param_user_attrib] [nvarchar](16) NOT NULL,
@@ -1274,7 +1274,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[param_app](
+CREATE TABLE [{schema}].[param_app](
 	[param_app_process] [nvarchar](32) NOT NULL,
 	[param_app_attrib] [nvarchar](16) NOT NULL,
 	[param_app_val] [varchar](256) NULL,
@@ -1294,7 +1294,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[param_sys](
+CREATE TABLE [{schema}].[param_sys](
 	[param_sys_process] [nvarchar](32) NOT NULL,
 	[param_sys_attrib] [nvarchar](16) NOT NULL,
 	[param_sys_val] [varchar](256) NOT NULL,
@@ -1319,7 +1319,7 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[v_param_cur] AS
+CREATE VIEW [{schema}].[v_param_cur] AS
  SELECT param__tbl.param_process AS param_cur_process, 
         param__tbl.param_attrib AS param_cur_attrib, 
 		    CASE WHEN param_user_val IS NULL OR param_user_val = '' 
@@ -1345,7 +1345,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[doc__tbl](
+CREATE TABLE [{schema}].[doc__tbl](
 	[doc_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[doc_scope] [nvarchar](32) NOT NULL,
 	[doc_scope_id] [bigint] NOT NULL,
@@ -1378,7 +1378,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[v_doc_filename] as
+create view [{schema}].[v_doc_filename] as
 SELECT doc_id
       ,doc_scope
       ,doc_scope_id
@@ -1405,7 +1405,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[single](
+CREATE TABLE [{schema}].[single](
 	[single_dummy] [nvarchar](1) NOT NULL,
 	[single_ident] [bigint] NOT NULL,
 	[dual_bigint] [bigint] NULL,
@@ -1427,7 +1427,7 @@ GO
 
 
 
-CREATE view [jsharmony].[v_app_info] as
+CREATE view [{schema}].[v_app_info] as
 select NAME.param_cur_val app_title,
        ADDR.param_cur_val app_addr,
 	     CITY.param_cur_val app_city,
@@ -1457,7 +1457,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[cust_menu_role](
+CREATE TABLE [{schema}].[cust_menu_role](
 	[menu_id] [bigint] NOT NULL,
 	[cust_menu_role_snotes] [nvarchar](255) NULL,
 	[cust_menu_role_id] [bigint] IDENTITY(1,1) NOT NULL,
@@ -1477,7 +1477,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[cust_role](
+CREATE TABLE [{schema}].[cust_role](
 	[cust_role_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[cust_role_seq] [smallint] NULL,
 	[cust_role_sts] [nvarchar](32) NOT NULL,
@@ -1504,7 +1504,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[menu__tbl](
+CREATE TABLE [{schema}].[menu__tbl](
 	[menu_id_auto] [bigint] IDENTITY(1,1) NOT NULL,
 	[menu_group] [char](1) NOT NULL,
 	[menu_id] [bigint] NOT NULL,
@@ -1548,7 +1548,7 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[v_cust_menu_role_selection]
+CREATE VIEW [{schema}].[v_cust_menu_role_selection]
 AS
 SELECT {schema}.cust_menu_role.cust_menu_role_id, 
        ISNULL({schema}.single.dual_nvarchar50, '') AS new_cust_role_name, 
@@ -1607,7 +1607,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[cust_user_role](
+CREATE TABLE [{schema}].[cust_user_role](
 	[sys_user_id] [bigint] NOT NULL,
 	[cust_user_role_snotes] [nvarchar](255) NULL,
 	[cust_user_role_id] [bigint] IDENTITY(1,1) NOT NULL,
@@ -1630,7 +1630,7 @@ GO
 
 
 
-CREATE view [jsharmony].[v_cust_user_nostar] as
+CREATE view [{schema}].[v_cust_user_nostar] as
 select *
   from {schema}.cust_user_role
  where cust_role_name <> 'C*';
@@ -1640,7 +1640,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[sys_role](
+CREATE TABLE [{schema}].[sys_role](
 	[sys_role_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[sys_role_seq] [smallint] NOT NULL,
 	[sys_role_sts] [nvarchar](32) NOT NULL,
@@ -1667,7 +1667,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[sys_menu_role](
+CREATE TABLE [{schema}].[sys_menu_role](
 	[menu_id] [bigint] NOT NULL,
 	[sys_menu_role_snotes] [nvarchar](255) NULL,
 	[sys_menu_role_id] [bigint] IDENTITY(1,1) NOT NULL,
@@ -1691,7 +1691,7 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[v_sys_menu_role_selection]
+CREATE VIEW [{schema}].[v_sys_menu_role_selection]
 AS
 SELECT {schema}.sys_menu_role.sys_menu_role_id, 
        ISNULL({schema}.single.dual_nvarchar50, '') AS new_sys_role_name, 
@@ -1783,7 +1783,7 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[v_param_app] AS
+CREATE VIEW [{schema}].[v_param_app] AS
 SELECT {schema}.param_app.*,
        {schema}.get_param_desc(param_app_process, param_app_attrib) param_desc,
 	   {schema}.log_audit_info(param_app_etstmp, param_app_euser, param_app_mtstmp, param_app_muser) param_app_info
@@ -1846,7 +1846,7 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[v_param_user] AS
+CREATE VIEW [{schema}].[v_param_user] AS
 SELECT param_user.*,
        {schema}.get_param_desc(param_user_process, param_user_attrib) param_desc,
 	   {schema}.log_audit_info(param_user_etstmp, param_user_euser, param_user_mtstmp, param_user_muser) param_user_info
@@ -1908,7 +1908,7 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[v_param_sys] AS
+CREATE VIEW [{schema}].[v_param_sys] AS
 SELECT param_sys.*,
        {schema}.get_param_desc(param_sys_process, param_sys_attrib) param_desc,
 	   {schema}.log_audit_info(param_sys_etstmp, param_sys_euser, param_sys_mtstmp, param_sys_muser) param_sys_info
@@ -1978,7 +1978,7 @@ GO
 
 
 
-CREATE VIEW [jsharmony].[v_param] AS
+CREATE VIEW [{schema}].[v_param] AS
 SELECT param__tbl.*,
 	   {schema}.log_audit_info(param_etstmp, param_euser, param_mtstmp, param_muser) param_info
   FROM {schema}.param__tbl;
@@ -2008,7 +2008,7 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-create view [jsharmony].[code_param_app_process] as
+create view [{schema}].[code_param_app_process] as
 SELECT distinct
        NULL code_seq
       ,param_process code_val
@@ -2025,7 +2025,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-create view [jsharmony].[v_my_user] as
+create view [{schema}].[v_my_user] as
 select {schema}.my_sys_user_id() my_sys_user_id
 GO
 
@@ -2036,7 +2036,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ARITHABORT ON
 GO
-CREATE TABLE [jsharmony].[cust_user](
+CREATE TABLE [{schema}].[cust_user](
 	[sys_user_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[cust_id] [bigint] NOT NULL,
 	[sys_user_sts] [nvarchar](32) NOT NULL,
@@ -2074,7 +2074,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_app](
+CREATE TABLE [{schema}].[code_app](
 	[code_name] [nvarchar](128) NOT NULL,
 	[code_desc] [nvarchar](128) NULL,
 	[code_code_desc] [nvarchar](128) NULL,
@@ -2096,7 +2096,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code2_doc_scope_doc_ctgr](
+CREATE TABLE [{schema}].[code2_doc_scope_doc_ctgr](
 	[code2_app_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](32) NOT NULL,
@@ -2112,8 +2112,8 @@ CREATE TABLE [jsharmony].[code2_doc_scope_doc_ctgr](
 	[code_muser] [nvarchar](20) NULL,
 	[code_snotes] [nvarchar](255) NULL,
 	[code_notes] [nvarchar](255) NULL,
-	[code_euser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_euser])),
-	[code_muser_fmt]  AS ([jsharmony].[my_db_user_fmt]([code_muser])),
+	[code_euser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_euser])),
+	[code_muser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_muser])),
  CONSTRAINT [pk_code2_doc_scope_doc_ctgr] PRIMARY KEY CLUSTERED 
 (
 	[code2_app_id] ASC
@@ -2134,7 +2134,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code2_app](
+CREATE TABLE [{schema}].[code2_app](
 	[code_name] [nvarchar](128) NOT NULL,
 	[code_desc] [nvarchar](128) NULL,
 	[code_code_desc] [nvarchar](128) NULL,
@@ -2158,7 +2158,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ARITHABORT ON
 GO
-CREATE TABLE [jsharmony].[help__tbl](
+CREATE TABLE [{schema}].[help__tbl](
 	[help_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[help_target_code] [varchar](50) NULL,
   [help_target_id] [bigint] NULL,
@@ -2190,7 +2190,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[help_target](
+CREATE TABLE [{schema}].[help_target](
 	[help_target_code] [varchar](50) NOT NULL,
 	[help_target_desc] [nvarchar](50) NOT NULL,
 	[help_target_id] [bigint] IDENTITY(1,1) NOT NULL,
@@ -2212,7 +2212,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[note__tbl](
+CREATE TABLE [{schema}].[note__tbl](
 	[note_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[note_scope] [nvarchar](32) NOT NULL,
 	[note_scope_id] [bigint] NOT NULL,
@@ -2240,7 +2240,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ARITHABORT ON
 GO
-CREATE TABLE [jsharmony].[sys_user](
+CREATE TABLE [{schema}].[sys_user](
 	[sys_user_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[sys_user_sts] [nvarchar](32) NOT NULL,
 	[sys_user_stsdt] [date] NOT NULL,
@@ -2286,7 +2286,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[queue__tbl](
+CREATE TABLE [{schema}].[queue__tbl](
 	[queue_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[queue_etstmp] [datetime2](7) NOT NULL,
 	[queue_euser] [nvarchar](20) NOT NULL,
@@ -2306,7 +2306,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[job__tbl](
+CREATE TABLE [{schema}].[job__tbl](
 	[job_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[job_etstmp] [datetime2](7) NOT NULL,
 	[job_user] [nvarchar](20) NOT NULL,
@@ -2329,7 +2329,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[job_doc](
+CREATE TABLE [{schema}].[job_doc](
 	[job_doc_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[job_id] [bigint] NOT NULL,
 	[doc_scope] [nvarchar](32) NULL,
@@ -2346,7 +2346,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[job_email](
+CREATE TABLE [{schema}].[job_email](
 	[job_email_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[job_id] [bigint] NOT NULL,
 	[email_txt_attrib] [nvarchar](32) NULL,
@@ -2368,7 +2368,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[job_note](
+CREATE TABLE [{schema}].[job_note](
 	[job_note_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[job_id] [bigint] NOT NULL,
 	[note_scope] [nvarchar](32) NULL,
@@ -2385,7 +2385,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[job_queue](
+CREATE TABLE [{schema}].[job_queue](
 	[job_queue_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[job_id] [bigint] NOT NULL,
 	[queue_name] [nvarchar](255) NOT NULL,
@@ -2400,7 +2400,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[job_sms](
+CREATE TABLE [{schema}].[job_sms](
 	[job_sms_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[job_id] [bigint] NOT NULL,
 	[sms_txt_attrib] [nvarchar](32) NULL,
@@ -2416,7 +2416,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[script__tbl](
+CREATE TABLE [{schema}].[script__tbl](
 	[script_name] [nvarchar](32) NOT NULL,
 	[script_txt] [nvarchar](max) NULL,
  CONSTRAINT [pk_SCRIPT] PRIMARY KEY CLUSTERED 
@@ -2429,7 +2429,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[sys_func](
+CREATE TABLE [{schema}].[sys_func](
 	[sys_func_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[sys_func_seq] [smallint] NOT NULL,
 	[sys_func_sts] [nvarchar](32) NOT NULL,
@@ -2461,7 +2461,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[sys_user_func](
+CREATE TABLE [{schema}].[sys_user_func](
 	[sys_user_id] [bigint] NOT NULL,
 	[sys_user_func_snotes] [nvarchar](255) NULL,
 	[sys_user_func_id] [bigint] IDENTITY(1,1) NOT NULL,
@@ -2481,7 +2481,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[txt__tbl](
+CREATE TABLE [{schema}].[txt__tbl](
 	[txt_process] [nvarchar](32) NOT NULL,
 	[txt_attrib] [nvarchar](32) NOT NULL,
 	[txt_type] [nvarchar](32) NOT NULL,
@@ -2509,7 +2509,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_ac](
+CREATE TABLE [{schema}].[code_ac](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2542,7 +2542,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_ac1](
+CREATE TABLE [{schema}].[code_ac1](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2575,7 +2575,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_ahc](
+CREATE TABLE [{schema}].[code_ahc](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2608,7 +2608,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_country](
+CREATE TABLE [{schema}].[code_country](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2641,7 +2641,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_doc_scope](
+CREATE TABLE [{schema}].[code_doc_scope](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2674,9 +2674,9 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-if not exists(select * from sys.tables where name = N'code_sys' and schema_name(schema_id)='jsharmony' and type='U')
+if not exists(select * from sys.tables where name = N'code_sys' and schema_name(schema_id)='{schema}' and type='U')
 begin
-CREATE TABLE [jsharmony].[code_sys](
+CREATE TABLE [{schema}].[code_sys](
 	[code_name] [nvarchar](128) NOT NULL,
 	[code_desc] [nvarchar](128) NULL,
 	[code_code_desc] [nvarchar](128) NULL,
@@ -2705,7 +2705,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_note_scope](
+CREATE TABLE [{schema}].[code_note_scope](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2738,7 +2738,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_note_type](
+CREATE TABLE [{schema}].[code_note_type](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2771,7 +2771,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_param_type](
+CREATE TABLE [{schema}].[code_param_type](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2804,7 +2804,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_job_action](
+CREATE TABLE [{schema}].[code_job_action](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2837,7 +2837,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_job_source](
+CREATE TABLE [{schema}].[code_job_source](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2870,7 +2870,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_txt_type](
+CREATE TABLE [{schema}].[code_txt_type](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2903,7 +2903,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code_version_sts](
+CREATE TABLE [{schema}].[code_version_sts](
 	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val] [nvarchar](32) NOT NULL,
@@ -2936,7 +2936,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[code2_country_state](
+CREATE TABLE [{schema}].[code2_country_state](
 	[code2_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[code_seq] [smallint] NULL,
 	[code_val1] [nvarchar](32) NOT NULL,
@@ -2972,9 +2972,9 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-if not exists(select * from sys.tables where name = N'code2_sys' and schema_name(schema_id)='jsharmony' and type='U')
+if not exists(select * from sys.tables where name = N'code2_sys' and schema_name(schema_id)='{schema}' and type='U')
 begin
-CREATE TABLE [jsharmony].[code2_sys](
+CREATE TABLE [{schema}].[code2_sys](
 	[code_name] [nvarchar](128) NOT NULL,
 	[code_desc] [nvarchar](128) NULL,
 	[code_code_desc] [nvarchar](128) NULL,
@@ -3003,7 +3003,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [jsharmony].[version__tbl](
+CREATE TABLE [{schema}].[version__tbl](
 	[version_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[version_component] [nvarchar](50) NOT NULL,
 	[version_no_major] [int] NOT NULL,
@@ -3026,19 +3026,19 @@ CREATE TABLE [jsharmony].[version__tbl](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [IX_cust_user_cust_id] ON [jsharmony].[cust_user]
+CREATE NONCLUSTERED INDEX [IX_cust_user_cust_id] ON [{schema}].[cust_user]
 (
 	[cust_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [IX_doc__tbl_cust_id] ON [jsharmony].[doc__tbl]
+CREATE NONCLUSTERED INDEX [IX_doc__tbl_cust_id] ON [{schema}].[doc__tbl]
 (
 	[cust_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-CREATE NONCLUSTERED INDEX [IX_doc_scope] ON [jsharmony].[doc__tbl]
+CREATE NONCLUSTERED INDEX [IX_doc_scope] ON [{schema}].[doc__tbl]
 (
 	[doc_scope] ASC,
 	[doc_scope_id] ASC
@@ -3046,549 +3046,549 @@ CREATE NONCLUSTERED INDEX [IX_doc_scope] ON [jsharmony].[doc__tbl]
 GO
 SET ANSI_PADDING ON
 GO
-CREATE NONCLUSTERED INDEX [IX_help__tbl] ON [jsharmony].[help__tbl]
+CREATE NONCLUSTERED INDEX [IX_help__tbl] ON [{schema}].[help__tbl]
 (
 	[help_target_code] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-CREATE NONCLUSTERED INDEX [IX_queue__tbl_queue_name] ON [jsharmony].[queue__tbl]
+CREATE NONCLUSTERED INDEX [IX_queue__tbl_queue_name] ON [{schema}].[queue__tbl]
 (
 	[queue_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-ALTER TABLE [jsharmony].[audit__tbl] ADD  CONSTRAINT [DF_audit__tbl_db_id]  DEFAULT ('0') FOR [db_id]
+ALTER TABLE [{schema}].[audit__tbl] ADD  CONSTRAINT [DF_audit__tbl_db_id]  DEFAULT ('0') FOR [db_id]
 GO
-ALTER TABLE [jsharmony].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_sts]  DEFAULT (N'ACTIVE') FOR [sys_user_sts]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_sts]  DEFAULT (N'ACTIVE') FOR [sys_user_sts]
 GO
-ALTER TABLE [jsharmony].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_sts_Dt]  DEFAULT ([jsharmony].[my_today]()) FOR [sys_user_stsdt]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_sts_Dt]  DEFAULT ([{schema}].[my_today]()) FOR [sys_user_stsdt]
 GO
-ALTER TABLE [jsharmony].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [sys_user_etstmp]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_etstmp]
 GO
-ALTER TABLE [jsharmony].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [sys_user_euser]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_euser]
 GO
-ALTER TABLE [jsharmony].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [sys_user_mtstmp]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_mtstmp]
 GO
-ALTER TABLE [jsharmony].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [sys_user_muser]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_muser]
 GO
-ALTER TABLE [jsharmony].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_hash]  DEFAULT ((0)) FOR [sys_user_hash]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_hash]  DEFAULT ((0)) FOR [sys_user_hash]
 GO
-ALTER TABLE [jsharmony].[cust_role] ADD  CONSTRAINT [DF_cust_role_cust_role_sts]  DEFAULT ('ACTIVE') FOR [cust_role_sts]
+ALTER TABLE [{schema}].[cust_role] ADD  CONSTRAINT [DF_cust_role_cust_role_sts]  DEFAULT ('ACTIVE') FOR [cust_role_sts]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_scope]  DEFAULT (N'S') FOR [doc_scope]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_scope]  DEFAULT (N'S') FOR [doc_scope]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_scope_id]  DEFAULT ((0)) FOR [doc_scope_id]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_scope_id]  DEFAULT ((0)) FOR [doc_scope_id]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_cust_id]  DEFAULT (NULL) FOR [cust_id]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_cust_id]  DEFAULT (NULL) FOR [cust_id]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_item_id]  DEFAULT (NULL) FOR [item_id]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_item_id]  DEFAULT (NULL) FOR [item_id]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_sts]  DEFAULT (N'A') FOR [doc_sts]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_sts]  DEFAULT (N'A') FOR [doc_sts]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [doc_etstmp]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [doc_etstmp]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [doc_euser]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [doc_euser]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [doc_mtstmp]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [doc_mtstmp]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [doc_muser]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [doc_muser]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_uptstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [doc_uptstmp]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_uptstmp]  DEFAULT ([{schema}].[my_now]()) FOR [doc_uptstmp]
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_upuser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [doc_upuser]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_upuser]  DEFAULT ([{schema}].[my_db_user]()) FOR [doc_upuser]
 GO
-ALTER TABLE [jsharmony].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_Edt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_etstmp]
+ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_Edt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_h_euser]
+ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
 GO
-ALTER TABLE [jsharmony].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_mtstmp]
+ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_h_muser]
+ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
 GO
-ALTER TABLE [jsharmony].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_Edt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_etstmp]
+ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_Edt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
 GO
-ALTER TABLE [jsharmony].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_h_euser]
+ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
 GO
-ALTER TABLE [jsharmony].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_mtstmp]
+ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_h_muser]
+ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
 GO
-ALTER TABLE [jsharmony].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [param_app_etstmp]
+ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_app_etstmp]
 GO
-ALTER TABLE [jsharmony].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [param_app_euser]
+ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_app_euser]
 GO
-ALTER TABLE [jsharmony].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [param_app_mtstmp]
+ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_app_mtstmp]
 GO
-ALTER TABLE [jsharmony].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [param_app_muser]
+ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_app_muser]
 GO
-ALTER TABLE [jsharmony].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [help_etstmp]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [help_etstmp]
 GO
-ALTER TABLE [jsharmony].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [help_euser]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [help_euser]
 GO
-ALTER TABLE [jsharmony].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [help_mtstmp]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [help_mtstmp]
 GO
-ALTER TABLE [jsharmony].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [help_muser]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [help_muser]
 GO
-ALTER TABLE [jsharmony].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_listing_main]  DEFAULT ((1)) FOR [help_listing_main]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_listing_main]  DEFAULT ((1)) FOR [help_listing_main]
 GO
-ALTER TABLE [jsharmony].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_listing_client]  DEFAULT ((1)) FOR [help_listing_client]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_listing_client]  DEFAULT ((1)) FOR [help_listing_client]
 GO
-ALTER TABLE [jsharmony].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_scope]  DEFAULT (N'S') FOR [note_scope]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_scope]  DEFAULT (N'S') FOR [note_scope]
 GO
-ALTER TABLE [jsharmony].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_scope_id]  DEFAULT ((0)) FOR [note_scope_id]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_scope_id]  DEFAULT ((0)) FOR [note_scope_id]
 GO
-ALTER TABLE [jsharmony].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_sts]  DEFAULT ('A') FOR [note_sts]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_sts]  DEFAULT ('A') FOR [note_sts]
 GO
-ALTER TABLE [jsharmony].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_cust_id]  DEFAULT (NULL) FOR [cust_id]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_cust_id]  DEFAULT (NULL) FOR [cust_id]
 GO
-ALTER TABLE [jsharmony].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_item_id]  DEFAULT (NULL) FOR [item_id]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_item_id]  DEFAULT (NULL) FOR [item_id]
 GO
-ALTER TABLE [jsharmony].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [note_etstmp]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [note_etstmp]
 GO
-ALTER TABLE [jsharmony].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [note_euser]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [note_euser]
 GO
-ALTER TABLE [jsharmony].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [note_mtstmp]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [note_mtstmp]
 GO
-ALTER TABLE [jsharmony].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [note_muser]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [note_muser]
 GO
-ALTER TABLE [jsharmony].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_sts]  DEFAULT (N'ACTIVE') FOR [sys_user_sts]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_sts]  DEFAULT (N'ACTIVE') FOR [sys_user_sts]
 GO
-ALTER TABLE [jsharmony].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_sts_Dt__17C286CF]  DEFAULT ([jsharmony].[my_today]()) FOR [sys_user_stsdt]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_sts_Dt__17C286CF]  DEFAULT ([{schema}].[my_today]()) FOR [sys_user_stsdt]
 GO
-ALTER TABLE [jsharmony].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_country]  DEFAULT ('USA') FOR [sys_user_country]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_country]  DEFAULT ('USA') FOR [sys_user_country]
 GO
-ALTER TABLE [jsharmony].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_startdt]  DEFAULT ([jsharmony].[my_now]()) FOR [sys_user_startdt]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_startdt]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_startdt]
 GO
-ALTER TABLE [jsharmony].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [sys_user_etstmp]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_etstmp]
 GO
-ALTER TABLE [jsharmony].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [sys_user_euser]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_euser]
 GO
-ALTER TABLE [jsharmony].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [sys_user_mtstmp]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_mtstmp]
 GO
-ALTER TABLE [jsharmony].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [sys_user_muser]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_muser]
 GO
-ALTER TABLE [jsharmony].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_hash__597119F2]  DEFAULT ((0)) FOR [sys_user_hash]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_hash__597119F2]  DEFAULT ((0)) FOR [sys_user_hash]
 GO
-ALTER TABLE [jsharmony].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_is_param_app]  DEFAULT ((0)) FOR [is_param_app]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_is_param_app]  DEFAULT ((0)) FOR [is_param_app]
 GO
-ALTER TABLE [jsharmony].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_is_param_user]  DEFAULT ((0)) FOR [is_param_user]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_is_param_user]  DEFAULT ((0)) FOR [is_param_user]
 GO
-ALTER TABLE [jsharmony].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_is_param_sys]  DEFAULT ((0)) FOR [is_param_sys]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_is_param_sys]  DEFAULT ((0)) FOR [is_param_sys]
 GO
-ALTER TABLE [jsharmony].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [param_etstmp]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_etstmp]
 GO
-ALTER TABLE [jsharmony].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param__tbl_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [param_euser]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param__tbl_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_euser]
 GO
-ALTER TABLE [jsharmony].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [param_mtstmp]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_mtstmp]
 GO
-ALTER TABLE [jsharmony].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param__tbl_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [param_muser]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param__tbl_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_muser]
 GO
-ALTER TABLE [jsharmony].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [param_user_etstmp]
+ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_user_etstmp]
 GO
-ALTER TABLE [jsharmony].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [param_user_euser]
+ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_user_euser]
 GO
-ALTER TABLE [jsharmony].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [param_user_mtstmp]
+ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_user_mtstmp]
 GO
-ALTER TABLE [jsharmony].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [param_user_muser]
+ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_user_muser]
 GO
-ALTER TABLE [jsharmony].[queue__tbl] ADD  CONSTRAINT [DF_queue__tbl_queue_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [queue_etstmp]
+ALTER TABLE [{schema}].[queue__tbl] ADD  CONSTRAINT [DF_queue__tbl_queue_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [queue_etstmp]
 GO
-ALTER TABLE [jsharmony].[queue__tbl] ADD  CONSTRAINT [DF_queue__tbl_queue_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [queue_euser]
+ALTER TABLE [{schema}].[queue__tbl] ADD  CONSTRAINT [DF_queue__tbl_queue_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [queue_euser]
 GO
-ALTER TABLE [jsharmony].[job__tbl] ADD  CONSTRAINT [DF_job__tbl_job_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [job_etstmp]
+ALTER TABLE [{schema}].[job__tbl] ADD  CONSTRAINT [DF_job__tbl_job_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [job_etstmp]
 GO
-ALTER TABLE [jsharmony].[job__tbl] ADD  CONSTRAINT [DF_job__tbl_job_user]  DEFAULT ([jsharmony].[my_db_user]()) FOR [job_user]
+ALTER TABLE [{schema}].[job__tbl] ADD  CONSTRAINT [DF_job__tbl_job_user]  DEFAULT ([{schema}].[my_db_user]()) FOR [job_user]
 GO
-ALTER TABLE [jsharmony].[sys_func] ADD  CONSTRAINT [DF_sys_func_sys_func_sts]  DEFAULT ('ACTIVE') FOR [sys_func_sts]
+ALTER TABLE [{schema}].[sys_func] ADD  CONSTRAINT [DF_sys_func_sys_func_sts]  DEFAULT ('ACTIVE') FOR [sys_func_sts]
 GO
-ALTER TABLE [jsharmony].[menu__tbl] ADD  CONSTRAINT [DF_menu__tbl_menu_group]  DEFAULT ('S') FOR [menu_group]
+ALTER TABLE [{schema}].[menu__tbl] ADD  CONSTRAINT [DF_menu__tbl_menu_group]  DEFAULT ('S') FOR [menu_group]
 GO
-ALTER TABLE [jsharmony].[menu__tbl] ADD  CONSTRAINT [DF_menu__tbl_menu_sts]  DEFAULT ('ACTIVE') FOR [menu_sts]
+ALTER TABLE [{schema}].[menu__tbl] ADD  CONSTRAINT [DF_menu__tbl_menu_sts]  DEFAULT ('ACTIVE') FOR [menu_sts]
 GO
-ALTER TABLE [jsharmony].[sys_role] ADD  CONSTRAINT [DF_sys_role_sys_role_sts]  DEFAULT ('ACTIVE') FOR [sys_role_sts]
+ALTER TABLE [{schema}].[sys_role] ADD  CONSTRAINT [DF_sys_role_sys_role_sts]  DEFAULT ('ACTIVE') FOR [sys_role_sts]
 GO
-ALTER TABLE [jsharmony].[txt__tbl] ADD  CONSTRAINT [DF_TXT_txt_type]  DEFAULT ('TEXT') FOR [txt_type]
+ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [DF_TXT_txt_type]  DEFAULT ('TEXT') FOR [txt_type]
 GO
-ALTER TABLE [jsharmony].[txt__tbl] ADD  CONSTRAINT [DF_TXT_txt_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [txt_etstmp]
+ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [DF_TXT_txt_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [txt_etstmp]
 GO
-ALTER TABLE [jsharmony].[txt__tbl] ADD  CONSTRAINT [DF_TXT_TXT_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [txt_euser]
+ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [DF_TXT_TXT_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [txt_euser]
 GO
-ALTER TABLE [jsharmony].[txt__tbl] ADD  CONSTRAINT [DF_TXT_txt_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [txt_mtstmp]
+ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [DF_TXT_txt_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [txt_mtstmp]
 GO
-ALTER TABLE [jsharmony].[txt__tbl] ADD  CONSTRAINT [DF_TXT_TXT_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [txt_muser]
+ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [DF_TXT_TXT_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [txt_muser]
 GO
-ALTER TABLE [jsharmony].[code_ac] ADD  CONSTRAINT [DF_code_ac_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [DF_code_ac_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_ac] ADD  CONSTRAINT [DF_code_ac_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [DF_code_ac_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_ac] ADD  CONSTRAINT [DF_code_ac_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [DF_code_ac_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_ac] ADD  CONSTRAINT [DF_code_ac_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [DF_code_ac_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_code_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_country] ADD  CONSTRAINT [DF_code_country_code_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [DF_code_country_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_country] ADD  CONSTRAINT [DF_code_country_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [DF_code_country_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_country] ADD  CONSTRAINT [DF_code_country_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [DF_code_country_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_country] ADD  CONSTRAINT [DF_code_country_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [DF_code_country_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_code_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_code_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_Edt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_etstmp]
+ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_Edt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_h_euser]
+ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
 GO
-ALTER TABLE [jsharmony].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_mtstmp]
+ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_h_muser]
+ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
 GO
-ALTER TABLE [jsharmony].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_COD_EDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [jsharmony].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_cod_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [jsharmony].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_COD_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_cod_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [jsharmony].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_Edt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_etstmp]
+ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_Edt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
 GO
-ALTER TABLE [jsharmony].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_h_euser]
+ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
 GO
-ALTER TABLE [jsharmony].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_MDt]  DEFAULT ([jsharmony].[my_now]()) FOR [code_h_mtstmp]
+ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
 GO
-ALTER TABLE [jsharmony].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [code_h_muser]
+ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
 GO
-ALTER TABLE [jsharmony].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_major]  DEFAULT ((0)) FOR [version_no_major]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_major]  DEFAULT ((0)) FOR [version_no_major]
 GO
-ALTER TABLE [jsharmony].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_minor]  DEFAULT ((0)) FOR [version_no_minor]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_minor]  DEFAULT ((0)) FOR [version_no_minor]
 GO
-ALTER TABLE [jsharmony].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_build]  DEFAULT ((0)) FOR [version_no_build]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_build]  DEFAULT ((0)) FOR [version_no_build]
 GO
-ALTER TABLE [jsharmony].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_rev]  DEFAULT ((0)) FOR [version_no_rev]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_rev]  DEFAULT ((0)) FOR [version_no_rev]
 GO
-ALTER TABLE [jsharmony].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_sts]  DEFAULT ('OK') FOR [version_sts]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_sts]  DEFAULT ('OK') FOR [version_sts]
 GO
-ALTER TABLE [jsharmony].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [version_etstmp]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [version_etstmp]
 GO
-ALTER TABLE [jsharmony].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_euser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [version_euser]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [version_euser]
 GO
-ALTER TABLE [jsharmony].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [version_mtstmp]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [version_mtstmp]
 GO
-ALTER TABLE [jsharmony].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_muser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [version_muser]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [version_muser]
 GO
-ALTER TABLE [jsharmony].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_etstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [param_sys_etstmp]
+ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_sys_etstmp]
 GO
-ALTER TABLE [jsharmony].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_EUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [param_sys_euser]
+ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_sys_euser]
 GO
-ALTER TABLE [jsharmony].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_mtstmp]  DEFAULT ([jsharmony].[my_now]()) FOR [param_sys_mtstmp]
+ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_sys_mtstmp]
 GO
-ALTER TABLE [jsharmony].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_MUser]  DEFAULT ([jsharmony].[my_db_user]()) FOR [param_sys_muser]
+ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_sys_muser]
 GO
-ALTER TABLE [jsharmony].[audit_detail]  WITH CHECK ADD  CONSTRAINT [fk_audit_detail_audit__tbl] FOREIGN KEY([audit_seq])
-REFERENCES [jsharmony].[audit__tbl] ([audit_seq])
+ALTER TABLE [{schema}].[audit_detail]  WITH CHECK ADD  CONSTRAINT [fk_audit_detail_audit__tbl] FOREIGN KEY([audit_seq])
+REFERENCES [{schema}].[audit__tbl] ([audit_seq])
 GO
-ALTER TABLE [jsharmony].[audit_detail] CHECK CONSTRAINT [fk_audit_detail_audit__tbl]
+ALTER TABLE [{schema}].[audit_detail] CHECK CONSTRAINT [fk_audit_detail_audit__tbl]
 GO
-ALTER TABLE [jsharmony].[cust_user]  WITH CHECK ADD  CONSTRAINT [fk_cust_user_code_ahc] FOREIGN KEY([sys_user_sts])
-REFERENCES [jsharmony].[code_ahc] ([code_val])
+ALTER TABLE [{schema}].[cust_user]  WITH CHECK ADD  CONSTRAINT [fk_cust_user_code_ahc] FOREIGN KEY([sys_user_sts])
+REFERENCES [{schema}].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[cust_user] CHECK CONSTRAINT [fk_cust_user_code_ahc]
+ALTER TABLE [{schema}].[cust_user] CHECK CONSTRAINT [fk_cust_user_code_ahc]
 GO
-ALTER TABLE [jsharmony].[cust_user_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_user_role_cust_user] FOREIGN KEY([sys_user_id])
-REFERENCES [jsharmony].[cust_user] ([sys_user_id])
+ALTER TABLE [{schema}].[cust_user_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_user_role_cust_user] FOREIGN KEY([sys_user_id])
+REFERENCES [{schema}].[cust_user] ([sys_user_id])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[cust_user_role] CHECK CONSTRAINT [fk_cust_user_role_cust_user]
+ALTER TABLE [{schema}].[cust_user_role] CHECK CONSTRAINT [fk_cust_user_role_cust_user]
 GO
-ALTER TABLE [jsharmony].[cust_user_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_user_role_cust_role_cust_role_name] FOREIGN KEY([cust_role_name])
-REFERENCES [jsharmony].[cust_role] ([cust_role_name])
+ALTER TABLE [{schema}].[cust_user_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_user_role_cust_role_cust_role_name] FOREIGN KEY([cust_role_name])
+REFERENCES [{schema}].[cust_role] ([cust_role_name])
 GO
-ALTER TABLE [jsharmony].[cust_user_role] CHECK CONSTRAINT [fk_cust_user_role_cust_role_cust_role_name]
+ALTER TABLE [{schema}].[cust_user_role] CHECK CONSTRAINT [fk_cust_user_role_cust_role_cust_role_name]
 GO
-ALTER TABLE [jsharmony].[cust_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_role_code_ahc] FOREIGN KEY([cust_role_sts])
-REFERENCES [jsharmony].[code_ahc] ([code_val])
+ALTER TABLE [{schema}].[cust_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_role_code_ahc] FOREIGN KEY([cust_role_sts])
+REFERENCES [{schema}].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[cust_role] CHECK CONSTRAINT [fk_cust_role_code_ahc]
+ALTER TABLE [{schema}].[cust_role] CHECK CONSTRAINT [fk_cust_role_code_ahc]
 GO
-ALTER TABLE [jsharmony].[cust_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_menu_role_cust_role_cust_role_name] FOREIGN KEY([cust_role_name])
-REFERENCES [jsharmony].[cust_role] ([cust_role_name])
+ALTER TABLE [{schema}].[cust_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_menu_role_cust_role_cust_role_name] FOREIGN KEY([cust_role_name])
+REFERENCES [{schema}].[cust_role] ([cust_role_name])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[cust_menu_role] CHECK CONSTRAINT [fk_cust_menu_role_cust_role_cust_role_name]
+ALTER TABLE [{schema}].[cust_menu_role] CHECK CONSTRAINT [fk_cust_menu_role_cust_role_cust_role_name]
 GO
-ALTER TABLE [jsharmony].[cust_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_menu_role_menu__tbl] FOREIGN KEY([menu_id])
-REFERENCES [jsharmony].[menu__tbl] ([menu_id])
+ALTER TABLE [{schema}].[cust_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_menu_role_menu__tbl] FOREIGN KEY([menu_id])
+REFERENCES [{schema}].[menu__tbl] ([menu_id])
 ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[cust_menu_role] CHECK CONSTRAINT [fk_cust_menu_role_menu__tbl]
+ALTER TABLE [{schema}].[cust_menu_role] CHECK CONSTRAINT [fk_cust_menu_role_menu__tbl]
 GO
-ALTER TABLE [jsharmony].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [fk_doc__tbl_code2_doc_scope_doc_ctgr] FOREIGN KEY([doc_scope], [doc_ctgr])
-REFERENCES [jsharmony].[code2_doc_scope_doc_ctgr] ([code_val1], [code_val2])
+ALTER TABLE [{schema}].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [fk_doc__tbl_code2_doc_scope_doc_ctgr] FOREIGN KEY([doc_scope], [doc_ctgr])
+REFERENCES [{schema}].[code2_doc_scope_doc_ctgr] ([code_val1], [code_val2])
 GO
-ALTER TABLE [jsharmony].[doc__tbl] CHECK CONSTRAINT [fk_doc__tbl_code2_doc_scope_doc_ctgr]
+ALTER TABLE [{schema}].[doc__tbl] CHECK CONSTRAINT [fk_doc__tbl_code2_doc_scope_doc_ctgr]
 GO
-ALTER TABLE [jsharmony].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [fk_doc__tbl_code_doc_scope] FOREIGN KEY([doc_scope])
-REFERENCES [jsharmony].[code_doc_scope] ([code_val])
+ALTER TABLE [{schema}].[doc__tbl]  WITH CHECK ADD  CONSTRAINT [fk_doc__tbl_code_doc_scope] FOREIGN KEY([doc_scope])
+REFERENCES [{schema}].[code_doc_scope] ([code_val])
 GO
-ALTER TABLE [jsharmony].[doc__tbl] CHECK CONSTRAINT [fk_doc__tbl_code_doc_scope]
+ALTER TABLE [{schema}].[doc__tbl] CHECK CONSTRAINT [fk_doc__tbl_code_doc_scope]
 GO
-ALTER TABLE [jsharmony].[param_app]  WITH CHECK ADD  CONSTRAINT [fk_param_app_param__tbl] FOREIGN KEY([param_app_process], [param_app_attrib])
-REFERENCES [jsharmony].[param__tbl] ([param_process], [param_attrib])
+ALTER TABLE [{schema}].[param_app]  WITH CHECK ADD  CONSTRAINT [fk_param_app_param__tbl] FOREIGN KEY([param_app_process], [param_app_attrib])
+REFERENCES [{schema}].[param__tbl] ([param_process], [param_attrib])
 GO
-ALTER TABLE [jsharmony].[param_app] CHECK CONSTRAINT [fk_param_app_param__tbl]
+ALTER TABLE [{schema}].[param_app] CHECK CONSTRAINT [fk_param_app_param__tbl]
 GO
-ALTER TABLE [jsharmony].[help__tbl] CHECK CONSTRAINT [fk_help__tbl_help_target]
+ALTER TABLE [{schema}].[help__tbl] CHECK CONSTRAINT [fk_help__tbl_help_target]
 GO
-ALTER TABLE [jsharmony].[note__tbl]  WITH CHECK ADD  CONSTRAINT [fk_note__tbl_code_ac1] FOREIGN KEY([note_sts])
-REFERENCES [jsharmony].[code_ac1] ([code_val])
+ALTER TABLE [{schema}].[note__tbl]  WITH CHECK ADD  CONSTRAINT [fk_note__tbl_code_ac1] FOREIGN KEY([note_sts])
+REFERENCES [{schema}].[code_ac1] ([code_val])
 GO
-ALTER TABLE [jsharmony].[note__tbl] CHECK CONSTRAINT [fk_note__tbl_code_ac1]
+ALTER TABLE [{schema}].[note__tbl] CHECK CONSTRAINT [fk_note__tbl_code_ac1]
 GO
-ALTER TABLE [jsharmony].[note__tbl]  WITH CHECK ADD  CONSTRAINT [fk_note__tbl_code_note_scope] FOREIGN KEY([note_scope])
-REFERENCES [jsharmony].[code_note_scope] ([code_val])
+ALTER TABLE [{schema}].[note__tbl]  WITH CHECK ADD  CONSTRAINT [fk_note__tbl_code_note_scope] FOREIGN KEY([note_scope])
+REFERENCES [{schema}].[code_note_scope] ([code_val])
 GO
-ALTER TABLE [jsharmony].[note__tbl] CHECK CONSTRAINT [fk_note__tbl_code_note_scope]
+ALTER TABLE [{schema}].[note__tbl] CHECK CONSTRAINT [fk_note__tbl_code_note_scope]
 GO
-ALTER TABLE [jsharmony].[note__tbl]  WITH CHECK ADD  CONSTRAINT [fk_note__tbl_code_note_type] FOREIGN KEY([note_type])
-REFERENCES [jsharmony].[code_note_type] ([code_val])
+ALTER TABLE [{schema}].[note__tbl]  WITH CHECK ADD  CONSTRAINT [fk_note__tbl_code_note_type] FOREIGN KEY([note_type])
+REFERENCES [{schema}].[code_note_type] ([code_val])
 GO
-ALTER TABLE [jsharmony].[note__tbl] CHECK CONSTRAINT [fk_note__tbl_code_note_type]
+ALTER TABLE [{schema}].[note__tbl] CHECK CONSTRAINT [fk_note__tbl_code_note_type]
 GO
-ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_code_ahc] FOREIGN KEY([sys_user_sts])
-REFERENCES [jsharmony].[code_ahc] ([code_val])
+ALTER TABLE [{schema}].[sys_user]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_code_ahc] FOREIGN KEY([sys_user_sts])
+REFERENCES [{schema}].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [fk_sys_user_code_ahc]
+ALTER TABLE [{schema}].[sys_user] CHECK CONSTRAINT [fk_sys_user_code_ahc]
 GO
-ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_code_country] FOREIGN KEY([sys_user_country])
-REFERENCES [jsharmony].[code_country] ([code_val])
+ALTER TABLE [{schema}].[sys_user]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_code_country] FOREIGN KEY([sys_user_country])
+REFERENCES [{schema}].[code_country] ([code_val])
 GO
-ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [fk_sys_user_code_country]
+ALTER TABLE [{schema}].[sys_user] CHECK CONSTRAINT [fk_sys_user_code_country]
 GO
-ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_code2_country_state] FOREIGN KEY([sys_user_country], [sys_user_state])
-REFERENCES [jsharmony].[code2_country_state] ([code_val1], [code_val2])
+ALTER TABLE [{schema}].[sys_user]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_code2_country_state] FOREIGN KEY([sys_user_country], [sys_user_state])
+REFERENCES [{schema}].[code2_country_state] ([code_val1], [code_val2])
 GO
-ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [fk_sys_user_code2_country_state]
+ALTER TABLE [{schema}].[sys_user] CHECK CONSTRAINT [fk_sys_user_code2_country_state]
 GO
-ALTER TABLE [jsharmony].[param__tbl]  WITH CHECK ADD  CONSTRAINT [fk_param__tbl_code_param_type] FOREIGN KEY([param_type])
-REFERENCES [jsharmony].[code_param_type] ([code_val])
+ALTER TABLE [{schema}].[param__tbl]  WITH CHECK ADD  CONSTRAINT [fk_param__tbl_code_param_type] FOREIGN KEY([param_type])
+REFERENCES [{schema}].[code_param_type] ([code_val])
 GO
-ALTER TABLE [jsharmony].[param__tbl] CHECK CONSTRAINT [fk_param__tbl_code_param_type]
+ALTER TABLE [{schema}].[param__tbl] CHECK CONSTRAINT [fk_param__tbl_code_param_type]
 GO
-ALTER TABLE [jsharmony].[param_user]  WITH CHECK ADD  CONSTRAINT [fk_param_user_sys_user] FOREIGN KEY([sys_user_id])
-REFERENCES [jsharmony].[sys_user] ([sys_user_id])
+ALTER TABLE [{schema}].[param_user]  WITH CHECK ADD  CONSTRAINT [fk_param_user_sys_user] FOREIGN KEY([sys_user_id])
+REFERENCES [{schema}].[sys_user] ([sys_user_id])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[param_user] CHECK CONSTRAINT [fk_param_user_sys_user]
+ALTER TABLE [{schema}].[param_user] CHECK CONSTRAINT [fk_param_user_sys_user]
 GO
-ALTER TABLE [jsharmony].[param_user]  WITH CHECK ADD  CONSTRAINT [fk_param_user_param__tbl] FOREIGN KEY([param_user_process], [param_user_attrib])
-REFERENCES [jsharmony].[param__tbl] ([param_process], [param_attrib])
+ALTER TABLE [{schema}].[param_user]  WITH CHECK ADD  CONSTRAINT [fk_param_user_param__tbl] FOREIGN KEY([param_user_process], [param_user_attrib])
+REFERENCES [{schema}].[param__tbl] ([param_process], [param_attrib])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[param_user] CHECK CONSTRAINT [fk_param_user_param__tbl]
+ALTER TABLE [{schema}].[param_user] CHECK CONSTRAINT [fk_param_user_param__tbl]
 GO
-ALTER TABLE [jsharmony].[job__tbl]  WITH CHECK ADD  CONSTRAINT [fk_job__tbl_code_job_action] FOREIGN KEY([job_action])
-REFERENCES [jsharmony].[code_job_action] ([code_val])
+ALTER TABLE [{schema}].[job__tbl]  WITH CHECK ADD  CONSTRAINT [fk_job__tbl_code_job_action] FOREIGN KEY([job_action])
+REFERENCES [{schema}].[code_job_action] ([code_val])
 GO
-ALTER TABLE [jsharmony].[job__tbl] CHECK CONSTRAINT [fk_job__tbl_code_job_action]
+ALTER TABLE [{schema}].[job__tbl] CHECK CONSTRAINT [fk_job__tbl_code_job_action]
 GO
-ALTER TABLE [jsharmony].[job__tbl]  WITH CHECK ADD  CONSTRAINT [fk_job__tbl_code_job_source] FOREIGN KEY([job_source])
-REFERENCES [jsharmony].[code_job_source] ([code_val])
+ALTER TABLE [{schema}].[job__tbl]  WITH CHECK ADD  CONSTRAINT [fk_job__tbl_code_job_source] FOREIGN KEY([job_source])
+REFERENCES [{schema}].[code_job_source] ([code_val])
 GO
-ALTER TABLE [jsharmony].[job__tbl] CHECK CONSTRAINT [fk_job__tbl_code_job_source]
+ALTER TABLE [{schema}].[job__tbl] CHECK CONSTRAINT [fk_job__tbl_code_job_source]
 GO
-ALTER TABLE [jsharmony].[job_doc]  WITH CHECK ADD  CONSTRAINT [fk_job_doc_job__tbl] FOREIGN KEY([job_id])
-REFERENCES [jsharmony].[job__tbl] ([job_id])
+ALTER TABLE [{schema}].[job_doc]  WITH CHECK ADD  CONSTRAINT [fk_job_doc_job__tbl] FOREIGN KEY([job_id])
+REFERENCES [{schema}].[job__tbl] ([job_id])
 GO
-ALTER TABLE [jsharmony].[job_doc] CHECK CONSTRAINT [fk_job_doc_job__tbl]
+ALTER TABLE [{schema}].[job_doc] CHECK CONSTRAINT [fk_job_doc_job__tbl]
 GO
-ALTER TABLE [jsharmony].[job_email]  WITH CHECK ADD  CONSTRAINT [fk_job_email_job__tbl] FOREIGN KEY([job_id])
-REFERENCES [jsharmony].[job__tbl] ([job_id])
+ALTER TABLE [{schema}].[job_email]  WITH CHECK ADD  CONSTRAINT [fk_job_email_job__tbl] FOREIGN KEY([job_id])
+REFERENCES [{schema}].[job__tbl] ([job_id])
 GO
-ALTER TABLE [jsharmony].[job_email] CHECK CONSTRAINT [fk_job_email_job__tbl]
+ALTER TABLE [{schema}].[job_email] CHECK CONSTRAINT [fk_job_email_job__tbl]
 GO
-ALTER TABLE [jsharmony].[job_note]  WITH CHECK ADD  CONSTRAINT [fk_job_note_job__tbl] FOREIGN KEY([job_id])
-REFERENCES [jsharmony].[job__tbl] ([job_id])
+ALTER TABLE [{schema}].[job_note]  WITH CHECK ADD  CONSTRAINT [fk_job_note_job__tbl] FOREIGN KEY([job_id])
+REFERENCES [{schema}].[job__tbl] ([job_id])
 GO
-ALTER TABLE [jsharmony].[job_note] CHECK CONSTRAINT [fk_job_note_job__tbl]
+ALTER TABLE [{schema}].[job_note] CHECK CONSTRAINT [fk_job_note_job__tbl]
 GO
-ALTER TABLE [jsharmony].[job_queue]  WITH CHECK ADD  CONSTRAINT [fk_job_queue_job__tbl] FOREIGN KEY([job_id])
-REFERENCES [jsharmony].[job__tbl] ([job_id])
+ALTER TABLE [{schema}].[job_queue]  WITH CHECK ADD  CONSTRAINT [fk_job_queue_job__tbl] FOREIGN KEY([job_id])
+REFERENCES [{schema}].[job__tbl] ([job_id])
 GO
-ALTER TABLE [jsharmony].[job_queue] CHECK CONSTRAINT [fk_job_queue_job__tbl]
+ALTER TABLE [{schema}].[job_queue] CHECK CONSTRAINT [fk_job_queue_job__tbl]
 GO
-ALTER TABLE [jsharmony].[job_sms]  WITH CHECK ADD  CONSTRAINT [fk_job_sms_job__tbl] FOREIGN KEY([job_id])
-REFERENCES [jsharmony].[job__tbl] ([job_id])
+ALTER TABLE [{schema}].[job_sms]  WITH CHECK ADD  CONSTRAINT [fk_job_sms_job__tbl] FOREIGN KEY([job_id])
+REFERENCES [{schema}].[job__tbl] ([job_id])
 GO
-ALTER TABLE [jsharmony].[job_sms] CHECK CONSTRAINT [fk_job_sms_job__tbl]
+ALTER TABLE [{schema}].[job_sms] CHECK CONSTRAINT [fk_job_sms_job__tbl]
 GO
-ALTER TABLE [jsharmony].[sys_func]  WITH CHECK ADD  CONSTRAINT [fk_sys_func_code_ahc] FOREIGN KEY([sys_func_sts])
-REFERENCES [jsharmony].[code_ahc] ([code_val])
+ALTER TABLE [{schema}].[sys_func]  WITH CHECK ADD  CONSTRAINT [fk_sys_func_code_ahc] FOREIGN KEY([sys_func_sts])
+REFERENCES [{schema}].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[sys_func] CHECK CONSTRAINT [fk_sys_func_code_ahc]
+ALTER TABLE [{schema}].[sys_func] CHECK CONSTRAINT [fk_sys_func_code_ahc]
 GO
-ALTER TABLE [jsharmony].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [fk_menu__tbl_menu__tbl] FOREIGN KEY([menu_id_parent])
-REFERENCES [jsharmony].[menu__tbl] ([menu_id])
+ALTER TABLE [{schema}].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [fk_menu__tbl_menu__tbl] FOREIGN KEY([menu_id_parent])
+REFERENCES [{schema}].[menu__tbl] ([menu_id])
 GO
-ALTER TABLE [jsharmony].[menu__tbl] CHECK CONSTRAINT [fk_menu__tbl_menu__tbl]
+ALTER TABLE [{schema}].[menu__tbl] CHECK CONSTRAINT [fk_menu__tbl_menu__tbl]
 GO
-ALTER TABLE [jsharmony].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [fk_menu__tbl_code_ahc] FOREIGN KEY([menu_sts])
-REFERENCES [jsharmony].[code_ahc] ([code_val])
+ALTER TABLE [{schema}].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [fk_menu__tbl_code_ahc] FOREIGN KEY([menu_sts])
+REFERENCES [{schema}].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[menu__tbl] CHECK CONSTRAINT [fk_menu__tbl_code_ahc]
+ALTER TABLE [{schema}].[menu__tbl] CHECK CONSTRAINT [fk_menu__tbl_code_ahc]
 GO
-ALTER TABLE [jsharmony].[sys_user_func]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_func_sys_user] FOREIGN KEY([sys_user_id])
-REFERENCES [jsharmony].[sys_user] ([sys_user_id])
+ALTER TABLE [{schema}].[sys_user_func]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_func_sys_user] FOREIGN KEY([sys_user_id])
+REFERENCES [{schema}].[sys_user] ([sys_user_id])
 GO
-ALTER TABLE [jsharmony].[sys_user_func] CHECK CONSTRAINT [fk_sys_user_func_sys_user]
+ALTER TABLE [{schema}].[sys_user_func] CHECK CONSTRAINT [fk_sys_user_func_sys_user]
 GO
-ALTER TABLE [jsharmony].[sys_user_func]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_func_sys_func_sys_func_name] FOREIGN KEY([sys_func_name])
-REFERENCES [jsharmony].[sys_func] ([sys_func_name])
+ALTER TABLE [{schema}].[sys_user_func]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_func_sys_func_sys_func_name] FOREIGN KEY([sys_func_name])
+REFERENCES [{schema}].[sys_func] ([sys_func_name])
 GO
-ALTER TABLE [jsharmony].[sys_user_func] CHECK CONSTRAINT [fk_sys_user_func_sys_func_sys_func_name]
+ALTER TABLE [{schema}].[sys_user_func] CHECK CONSTRAINT [fk_sys_user_func_sys_func_sys_func_name]
 GO
-ALTER TABLE [jsharmony].[sys_user_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_role_sys_user] FOREIGN KEY([sys_user_id])
-REFERENCES [jsharmony].[sys_user] ([sys_user_id])
+ALTER TABLE [{schema}].[sys_user_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_role_sys_user] FOREIGN KEY([sys_user_id])
+REFERENCES [{schema}].[sys_user] ([sys_user_id])
 GO
-ALTER TABLE [jsharmony].[sys_user_role] CHECK CONSTRAINT [fk_sys_user_role_sys_user]
+ALTER TABLE [{schema}].[sys_user_role] CHECK CONSTRAINT [fk_sys_user_role_sys_user]
 GO
-ALTER TABLE [jsharmony].[sys_user_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_role_sys_role_sys_role_name] FOREIGN KEY([sys_role_name])
-REFERENCES [jsharmony].[sys_role] ([sys_role_name])
+ALTER TABLE [{schema}].[sys_user_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_role_sys_role_sys_role_name] FOREIGN KEY([sys_role_name])
+REFERENCES [{schema}].[sys_role] ([sys_role_name])
 GO
-ALTER TABLE [jsharmony].[sys_user_role] CHECK CONSTRAINT [fk_sys_user_role_sys_role_sys_role_name]
+ALTER TABLE [{schema}].[sys_user_role] CHECK CONSTRAINT [fk_sys_user_role_sys_role_sys_role_name]
 GO
-ALTER TABLE [jsharmony].[sys_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_role_code_ahc] FOREIGN KEY([sys_role_sts])
-REFERENCES [jsharmony].[code_ahc] ([code_val])
+ALTER TABLE [{schema}].[sys_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_role_code_ahc] FOREIGN KEY([sys_role_sts])
+REFERENCES [{schema}].[code_ahc] ([code_val])
 GO
-ALTER TABLE [jsharmony].[sys_role] CHECK CONSTRAINT [fk_sys_role_code_ahc]
+ALTER TABLE [{schema}].[sys_role] CHECK CONSTRAINT [fk_sys_role_code_ahc]
 GO
-ALTER TABLE [jsharmony].[sys_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_menu_role_menu__tbl] FOREIGN KEY([menu_id])
-REFERENCES [jsharmony].[menu__tbl] ([menu_id])
+ALTER TABLE [{schema}].[sys_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_menu_role_menu__tbl] FOREIGN KEY([menu_id])
+REFERENCES [{schema}].[menu__tbl] ([menu_id])
 ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[sys_menu_role] CHECK CONSTRAINT [fk_sys_menu_role_menu__tbl]
+ALTER TABLE [{schema}].[sys_menu_role] CHECK CONSTRAINT [fk_sys_menu_role_menu__tbl]
 GO
-ALTER TABLE [jsharmony].[sys_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_menu_role_sys_role_sys_role_name] FOREIGN KEY([sys_role_name])
-REFERENCES [jsharmony].[sys_role] ([sys_role_name])
+ALTER TABLE [{schema}].[sys_menu_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_menu_role_sys_role_sys_role_name] FOREIGN KEY([sys_role_name])
+REFERENCES [{schema}].[sys_role] ([sys_role_name])
 ON DELETE CASCADE
 GO
-ALTER TABLE [jsharmony].[sys_menu_role] CHECK CONSTRAINT [fk_sys_menu_role_sys_role_sys_role_name]
+ALTER TABLE [{schema}].[sys_menu_role] CHECK CONSTRAINT [fk_sys_menu_role_sys_role_sys_role_name]
 GO
-ALTER TABLE [jsharmony].[txt__tbl]  WITH CHECK ADD  CONSTRAINT [fk_TXT_code_txt_type] FOREIGN KEY([txt_type])
-REFERENCES [jsharmony].[code_txt_type] ([code_val])
+ALTER TABLE [{schema}].[txt__tbl]  WITH CHECK ADD  CONSTRAINT [fk_TXT_code_txt_type] FOREIGN KEY([txt_type])
+REFERENCES [{schema}].[code_txt_type] ([code_val])
 GO
-ALTER TABLE [jsharmony].[txt__tbl] CHECK CONSTRAINT [fk_TXT_code_txt_type]
+ALTER TABLE [{schema}].[txt__tbl] CHECK CONSTRAINT [fk_TXT_code_txt_type]
 GO
-ALTER TABLE [jsharmony].[version__tbl]  WITH CHECK ADD  CONSTRAINT [fk_version__tbl_code_version_sts] FOREIGN KEY([version_sts])
-REFERENCES [jsharmony].[code_version_sts] ([code_val])
+ALTER TABLE [{schema}].[version__tbl]  WITH CHECK ADD  CONSTRAINT [fk_version__tbl_code_version_sts] FOREIGN KEY([version_sts])
+REFERENCES [{schema}].[code_version_sts] ([code_val])
 GO
-ALTER TABLE [jsharmony].[version__tbl] CHECK CONSTRAINT [fk_version__tbl_code_version_sts]
+ALTER TABLE [{schema}].[version__tbl] CHECK CONSTRAINT [fk_version__tbl_code_version_sts]
 GO
-ALTER TABLE [jsharmony].[param_sys]  WITH CHECK ADD  CONSTRAINT [fk_param_sys_param__tbl] FOREIGN KEY([param_sys_process], [param_sys_attrib])
-REFERENCES [jsharmony].[param__tbl] ([param_process], [param_attrib])
+ALTER TABLE [{schema}].[param_sys]  WITH CHECK ADD  CONSTRAINT [fk_param_sys_param__tbl] FOREIGN KEY([param_sys_process], [param_sys_attrib])
+REFERENCES [{schema}].[param__tbl] ([param_process], [param_attrib])
 GO
-ALTER TABLE [jsharmony].[param_sys] CHECK CONSTRAINT [fk_param_sys_param__tbl]
+ALTER TABLE [{schema}].[param_sys] CHECK CONSTRAINT [fk_param_sys_param__tbl]
 GO
-ALTER TABLE [jsharmony].[cust_user]  WITH CHECK ADD  CONSTRAINT [ck_cust_user_sys_user_email] CHECK  ((isnull([sys_user_email],'')<>''))
+ALTER TABLE [{schema}].[cust_user]  WITH CHECK ADD  CONSTRAINT [ck_cust_user_sys_user_email] CHECK  ((isnull([sys_user_email],'')<>''))
 GO
-ALTER TABLE [jsharmony].[cust_user] CHECK CONSTRAINT [ck_cust_user_sys_user_email]
+ALTER TABLE [{schema}].[cust_user] CHECK CONSTRAINT [ck_cust_user_sys_user_email]
 GO
-ALTER TABLE [jsharmony].[sys_user]  WITH CHECK ADD  CONSTRAINT [ck_sys_user_sys_user_email] CHECK  ((isnull([sys_user_email],'')<>''))
+ALTER TABLE [{schema}].[sys_user]  WITH CHECK ADD  CONSTRAINT [ck_sys_user_sys_user_email] CHECK  ((isnull([sys_user_email],'')<>''))
 GO
-ALTER TABLE [jsharmony].[sys_user] CHECK CONSTRAINT [ck_sys_user_sys_user_email]
+ALTER TABLE [{schema}].[sys_user] CHECK CONSTRAINT [ck_sys_user_sys_user_email]
 GO
-ALTER TABLE [jsharmony].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [ck_menu__tbl_menu_group] CHECK  (([menu_group]='C' OR [menu_group]='S'))
+ALTER TABLE [{schema}].[menu__tbl]  WITH CHECK ADD  CONSTRAINT [ck_menu__tbl_menu_group] CHECK  (([menu_group]='C' OR [menu_group]='S'))
 GO
-ALTER TABLE [jsharmony].[menu__tbl] CHECK CONSTRAINT [ck_menu__tbl_menu_group]
+ALTER TABLE [{schema}].[menu__tbl] CHECK CONSTRAINT [ck_menu__tbl_menu_group]
 GO
 SET ANSI_NULLS ON
 GO
@@ -3596,7 +3596,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE  [jsharmony].[log_audit]
+CREATE PROCEDURE  [{schema}].[log_audit]
 (
 	@op           nvarchar(max),
 	@tname        NVARCHAR(MAX),
@@ -3757,7 +3757,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE  [jsharmony].[log_audit_base]
+CREATE PROCEDURE  [{schema}].[log_audit_base]
 (
 	@op           nvarchar(max),
 	@tname        NVARCHAR(MAX),
@@ -3853,7 +3853,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[check_code]
+CREATE PROCEDURE  [{schema}].[check_code]
 (
 	@in_tblname nvarchar(255),
 	@in_code_val nvarchar(32)
@@ -3864,7 +3864,7 @@ BEGIN
 DECLARE	@return_value int
 
 BEGIN TRY
-EXEC	@return_value = [jsharmony].[check_code_exec]
+EXEC	@return_value = [{schema}].[check_code_exec]
 		@in_tblname = @in_tblname,
 		@in_code_val = @in_code_val
 END TRY	
@@ -3891,7 +3891,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[check_code_exec]
+CREATE PROCEDURE  [{schema}].[check_code_exec]
 (
 	@in_tblname nvarchar(255),
 	@in_code_val nvarchar(32)
@@ -3932,7 +3932,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[check_code2]
+CREATE PROCEDURE  [{schema}].[check_code2]
 (
 	@in_tblname nvarchar(255),
 	@in_code_val1 nvarchar(32),
@@ -3944,7 +3944,7 @@ BEGIN
 DECLARE	@return_value int
 
 BEGIN TRY
-EXEC	@return_value = [jsharmony].[check_code2_exec]
+EXEC	@return_value = [{schema}].[check_code2_exec]
 		@in_tblname = @in_tblname,
 		@in_code_val1 = @in_code_val1,
 		@in_code_val2 = @in_code_val2
@@ -3970,7 +3970,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[check_code2_exec]
+CREATE PROCEDURE  [{schema}].[check_code2_exec]
 (
 	@in_tblname nvarchar(255),
 	@in_code_val1 nvarchar(32),
@@ -4010,7 +4010,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[check_foreign_key]
+CREATE PROCEDURE  [{schema}].[check_foreign_key]
 (
 	@in_tblname nvarchar(128),
 	@in_tblid bigint
@@ -4021,7 +4021,7 @@ BEGIN
 DECLARE	@return_value int
 
 BEGIN TRY
-EXEC	@return_value = [jsharmony].[check_foreign_key_exec]
+EXEC	@return_value = [{schema}].[check_foreign_key_exec]
 		@in_tblname = @in_tblname,
 		@in_tblid = @in_tblid
 END TRY	
@@ -4044,7 +4044,7 @@ GO
 
 
 
-CREATE PROCEDURE  [jsharmony].[check_foreign_key_exec]
+CREATE PROCEDURE  [{schema}].[check_foreign_key_exec]
 (
 	@in_tblname nvarchar(128),
 	@in_tblid bigint
@@ -4079,7 +4079,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE  [jsharmony].[create_code]
+CREATE PROCEDURE  [{schema}].[create_code]
 (
 	@in_code_schema nvarchar(max),
 	@in_code_name   nvarchar(max),
@@ -4122,14 +4122,14 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[create_code] TO [{schema}_role_dev] AS [dbo]
+GRANT EXECUTE ON [{schema}].[create_code] TO [{schema}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE  [jsharmony].[create_code2]
+CREATE PROCEDURE  [{schema}].[create_code2]
 (
 	@in_code_schema nvarchar(max),
 	@in_code_name   nvarchar(max),
@@ -4172,14 +4172,14 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[create_code2] TO [{schema}_role_dev] AS [dbo]
+GRANT EXECUTE ON [{schema}].[create_code2] TO [{schema}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE  [jsharmony].[create_code_app]
+CREATE PROCEDURE  [{schema}].[create_code_app]
 (
 	@in_code_schema nvarchar(max),
 	@in_code_name   nvarchar(max),
@@ -4222,14 +4222,14 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[create_code_app] TO [{schema}_role_dev] AS [dbo]
+GRANT EXECUTE ON [{schema}].[create_code_app] TO [{schema}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE  [jsharmony].[create_code2_app]
+CREATE PROCEDURE  [{schema}].[create_code2_app]
 (
 	@in_code_schema nvarchar(max),
 	@in_code_name   nvarchar(max),
@@ -4272,14 +4272,14 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[create_code2_app] TO [{schema}_role_dev] AS [dbo]
+GRANT EXECUTE ON [{schema}].[create_code2_app] TO [{schema}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE  [jsharmony].[create_code_sys]
+CREATE PROCEDURE  [{schema}].[create_code_sys]
 (
 	@in_code_schema nvarchar(max),
 	@in_code_name   nvarchar(max),
@@ -4311,14 +4311,14 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[create_code_sys] TO [{schema}_role_dev] AS [dbo]
+GRANT EXECUTE ON [{schema}].[create_code_sys] TO [{schema}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-create PROCEDURE  [jsharmony].[create_code2_sys]
+create PROCEDURE  [{schema}].[create_code2_sys]
 (
 	@in_code_schema nvarchar(max),
 	@in_code_name   nvarchar(max),
@@ -4350,7 +4350,7 @@ END
 
 
 GO
-GRANT EXECUTE ON [jsharmony].[create_code2_sys] TO [{schema}_role_dev] AS [dbo]
+GRANT EXECUTE ON [{schema}].[create_code2_sys] TO [{schema}_role_dev] AS [dbo]
 GO
 SET ANSI_NULLS ON
 GO
@@ -4362,7 +4362,7 @@ GO
 
 
 /*@ SEND DEBUGGING INFO TO TEXT FILE @*/
-CREATE PROCEDURE  [jsharmony].[zz-filedebug]
+CREATE PROCEDURE  [{schema}].[zz-filedebug]
 (
 	@in_type nvarchar(MAX),
 	@in_object nvarchar(MAX),
@@ -4430,7 +4430,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[cust_user_IUD] on [jsharmony].[cust_user]
+CREATE trigger [{schema}].[cust_user_IUD] on [{schema}].[cust_user]
 for insert, update, delete
 AS
 BEGIN
@@ -4525,7 +4525,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','cust_user_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -4533,7 +4533,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(cust_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','cust_user_IUD','ERR', 'Cannot update Customer ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_IUD','ERR', 'Cannot update Customer ID'
     raiserror('Cannot update foreign key cust_id',16,1)
     ROLLBACK TRANSACTION
     return
@@ -4595,7 +4595,7 @@ BEGIN
 	    OR 
 		@TP='U' AND {schema}.nequal_num(@D_cust_id, @I_cust_id) > 0)
 	BEGIN
-		EXEC	@C = [jsharmony].[check_foreign_key]
+		EXEC	@C = [{schema}].[check_foreign_key]
 	     	@in_tblname ='cust',
 		    @in_tblid = @I_cust_id
 		IF @C <= 0
@@ -4811,21 +4811,21 @@ BEGIN
   DEALLOCATE CUR_cust_user_IUD
 
   /*
-  EXEC [jsharmony].[zz-filedebug] 'TRIGGER','cust_user_IUD','RETURN', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_IUD','RETURN', ''
   */
 
   RETURN
 
 END
 GO
-ALTER TABLE [jsharmony].[cust_user] ENABLE TRIGGER [cust_user_IUD]
+ALTER TABLE [{schema}].[cust_user] ENABLE TRIGGER [cust_user_IUD]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[cust_user_role_IUD] on [jsharmony].[cust_user_role]
+CREATE trigger [{schema}].[cust_user_role_IUD] on [{schema}].[cust_user_role]
 for insert, update, delete
 AS
 BEGIN
@@ -4862,7 +4862,7 @@ BEGIN
   DECLARE @code_val NVARCHAR(MAX)
 
   /*
-  EXEC [jsharmony].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','START', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','START', ''
   */
 
   if exists (select * from inserted)
@@ -4884,7 +4884,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(cust_user_role_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -4892,7 +4892,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Cannot update sys_user_id'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Cannot update sys_user_id'
     raiserror('Cannot update foreign key',16,1)
     ROLLBACK TRANSACTION
     return
@@ -4912,7 +4912,7 @@ BEGIN
 	SET @xtxt = 'I_cust_user_role_id=' + LTRIM(ISNULL(STR(@I_cust_user_role_id),'null')) +
 	            ' doc__tbl_cust_user_role_id=' + LTRIM(ISNULL(STR(@D_cust_user_role_id),'null')) 
     /*
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','cust_user_role_IUD',@xloc, @xtxt
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD',@xloc, @xtxt
 	*/
 
 	/******************************************/
@@ -4941,7 +4941,7 @@ BEGIN
       BEGIN
 	    IF @I_cust_role_name not in ('C*','CUSER','CMGR','CADMIN')
         BEGIN
-          EXEC [jsharmony].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Invalid Role'
+          EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Invalid Role'
           raiserror('Role not compatible with LVL2',16,1)
           ROLLBACK TRANSACTION
           return
@@ -4951,7 +4951,7 @@ BEGIN
 	  BEGIN
 	    IF @I_cust_role_name not in ('C*','CL1')
         BEGIN
-          EXEC [jsharmony].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Invalid Role'
+          EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Invalid Role'
           raiserror('Role not compatible with LVL1',16,1)
           ROLLBACK TRANSACTION
           return
@@ -5010,13 +5010,13 @@ BEGIN
   CLOSE CUR_cust_user_role_IUD
   DEALLOCATE CUR_cust_user_role_IUD
   /*
-  EXEC [jsharmony].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','RETURN', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','RETURN', ''
   */
   RETURN
 
 END
 GO
-ALTER TABLE [jsharmony].[cust_user_role] ENABLE TRIGGER [cust_user_role_IUD]
+ALTER TABLE [{schema}].[cust_user_role] ENABLE TRIGGER [cust_user_role_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -5024,7 +5024,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[doc__tbl_IUD] on [jsharmony].[doc__tbl]
+CREATE trigger [{schema}].[doc__tbl_IUD] on [{schema}].[doc__tbl]
 for insert, update, delete
 AS
 BEGIN
@@ -5115,7 +5115,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(doc_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','doc__tbl_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','doc__tbl_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5123,7 +5123,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(doc_scope)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','doc__tbl_IUD','ERR', 'Cannot update doc_scope'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','doc__tbl_IUD','ERR', 'Cannot update doc_scope'
     raiserror('Cannot update foreign key doc_scope',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5131,7 +5131,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(doc_scope_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','doc__tbl_IUD','ERR', 'Cannot update doc_scope_id'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','doc__tbl_IUD','ERR', 'Cannot update doc_scope_id'
     raiserror('Cannot update foreign key doc_scope_id',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5193,7 +5193,7 @@ BEGIN
  
     IF (@TP='I' OR @TP='U')
 	BEGIN
-		EXEC	@C = [jsharmony].[check_foreign_key]
+		EXEC	@C = [{schema}].[check_foreign_key]
 	     	@in_tblname = @I_doc_scope,
 		    @in_tblid = @I_doc_scope_id
 		IF @C <= 0
@@ -5212,7 +5212,7 @@ BEGIN
     IF (@TP='I' OR @TP='U')
 	BEGIN
 	    SET @doc_ctgr_table = isnull(@doc_ctgr_table,'')
-		EXEC	@C = [jsharmony].[check_code2]
+		EXEC	@C = [{schema}].[check_code2]
 	     	@in_tblname = @doc_ctgr_table,
 		    @in_code_val1 = @I_doc_scope,
 		    @in_code_val2 = @I_doc_ctgr
@@ -5380,14 +5380,14 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[doc__tbl] ENABLE TRIGGER [doc__tbl_IUD]
+ALTER TABLE [{schema}].[doc__tbl] ENABLE TRIGGER [doc__tbl_IUD]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[code2_doc_scope_doc_ctgr_IUD] on [jsharmony].[code2_doc_scope_doc_ctgr]
+CREATE trigger [{schema}].[code2_doc_scope_doc_ctgr_IUD] on [{schema}].[code2_doc_scope_doc_ctgr]
 for insert, update, delete
 AS
 BEGIN
@@ -5467,7 +5467,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(code2_app_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5475,7 +5475,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(code_val1)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update code_val1'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update code_val1'
     raiserror('Cannot update foreign key code_val1',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5483,7 +5483,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(code_val2)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update code_val2'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update code_val2'
     raiserror('Cannot update foreign key code_val2',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5642,7 +5642,7 @@ BEGIN
 
 END
 GO
-ALTER TABLE [jsharmony].[code2_doc_scope_doc_ctgr] ENABLE TRIGGER [code2_doc_scope_doc_ctgr_IUD]
+ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ENABLE TRIGGER [code2_doc_scope_doc_ctgr_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -5650,7 +5650,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[param_app_IUD] on [jsharmony].[param_app]
+CREATE trigger [{schema}].[param_app_IUD] on [{schema}].[param_app]
 for insert, update, delete
 AS
 BEGIN
@@ -5803,14 +5803,14 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[param_app] ENABLE TRIGGER [param_app_IUD]
+ALTER TABLE [{schema}].[param_app] ENABLE TRIGGER [param_app_IUD]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[help__tbl_IUD] on [jsharmony].[help__tbl]
+CREATE trigger [{schema}].[help__tbl_IUD] on [{schema}].[help__tbl]
 for insert, update, delete
 AS
 BEGIN
@@ -5885,7 +5885,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(help_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','help__tbl_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','help__tbl_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6023,7 +6023,7 @@ BEGIN
 
 END
 GO
-ALTER TABLE [jsharmony].[help__tbl] ENABLE TRIGGER [help__tbl_IUD]
+ALTER TABLE [{schema}].[help__tbl] ENABLE TRIGGER [help__tbl_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6031,7 +6031,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[help_target_IUD] on [jsharmony].[help_target]
+CREATE trigger [{schema}].[help_target_IUD] on [{schema}].[help_target]
 for insert, update, delete
 AS
 BEGIN
@@ -6109,7 +6109,7 @@ BEGIN
 
 END
 GO
-ALTER TABLE [jsharmony].[help_target] ENABLE TRIGGER [help_target_IUD]
+ALTER TABLE [{schema}].[help_target] ENABLE TRIGGER [help_target_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6117,7 +6117,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[note__tbl_IUD] on [jsharmony].[note__tbl]
+CREATE trigger [{schema}].[note__tbl_IUD] on [{schema}].[note__tbl]
 for insert, update, delete
 AS
 BEGIN
@@ -6201,7 +6201,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(note_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6209,7 +6209,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(note_scope)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update note_scope'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update note_scope'
     raiserror('Cannot update foreign key note_scope',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6217,7 +6217,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(note_scope_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update note_scope_id'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update note_scope_id'
     raiserror('Cannot update foreign key note_scope_id',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6225,7 +6225,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(note_type)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update note_type'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update note_type'
     raiserror('Cannot update foreign key note_type',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6270,7 +6270,7 @@ BEGIN
  
     IF (@TP='I' OR @TP='U')
 	BEGIN
-		EXEC @C = [jsharmony].[check_foreign_key]
+		EXEC @C = [{schema}].[check_foreign_key]
 	     	 @in_tblname = @I_note_scope,
 		     @in_tblid = @I_note_scope_id
 		IF @C <= 0
@@ -6413,7 +6413,7 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[note__tbl] ENABLE TRIGGER [note__tbl_IUD]
+ALTER TABLE [{schema}].[note__tbl] ENABLE TRIGGER [note__tbl_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6422,7 +6422,7 @@ GO
 
 
 
-CREATE trigger [jsharmony].[sys_user_IUD] on [jsharmony].[sys_user]
+CREATE trigger [{schema}].[sys_user_IUD] on [{schema}].[sys_user]
 for insert, update, delete
 AS
 BEGIN
@@ -6495,7 +6495,7 @@ BEGIN
 		  @M nvarchar(max)
 
   /*
-  EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_IUD','START', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_IUD','START', ''
   */
 
   if exists (select * from inserted)
@@ -6517,7 +6517,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6776,14 +6776,14 @@ BEGIN
   DEALLOCATE CUR_sys_user_IUD
 
   /*
-  EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_IUD','RETURN', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_IUD','RETURN', ''
   */
 
   RETURN
 
 END
 GO
-ALTER TABLE [jsharmony].[sys_user] ENABLE TRIGGER [sys_user_IUD]
+ALTER TABLE [{schema}].[sys_user] ENABLE TRIGGER [sys_user_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6793,7 +6793,7 @@ GO
 
 
 
-CREATE trigger [jsharmony].[param__tbl_IUD] on [jsharmony].[param__tbl]
+CREATE trigger [{schema}].[param__tbl_IUD] on [{schema}].[param__tbl]
 for insert, update, delete
 AS
 BEGIN
@@ -6850,7 +6850,7 @@ END
 
 
 GO
-ALTER TABLE [jsharmony].[param__tbl] ENABLE TRIGGER [param__tbl_IUD]
+ALTER TABLE [{schema}].[param__tbl] ENABLE TRIGGER [param__tbl_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6858,7 +6858,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[param_user_IUD] on [jsharmony].[param_user]
+CREATE trigger [{schema}].[param_user_IUD] on [{schema}].[param_user]
 for insert, update, delete
 AS
 BEGIN
@@ -7014,14 +7014,14 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[param_user] ENABLE TRIGGER [param_user_IUD]
+ALTER TABLE [{schema}].[param_user] ENABLE TRIGGER [param_user_IUD]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[sys_user_func_IUD] on [jsharmony].[sys_user_func]
+CREATE trigger [{schema}].[sys_user_func_IUD] on [{schema}].[sys_user_func]
 for insert, update, delete
 AS
 BEGIN
@@ -7058,7 +7058,7 @@ BEGIN
   DECLARE @code_val NVARCHAR(MAX)
 
   /*
-  EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','START', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','START', ''
   */
 
   if exists (select * from inserted)
@@ -7080,7 +7080,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_func_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -7088,7 +7088,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','ERR', 'Cannot update sys_user_id'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','ERR', 'Cannot update sys_user_id'
     raiserror('Cannot update foreign key',16,1)
     ROLLBACK TRANSACTION
     return
@@ -7108,7 +7108,7 @@ BEGIN
 	SET @xtxt = 'I_sys_user_func_id=' + LTRIM(ISNULL(STR(@I_sys_user_func_id),'null')) +
 	            ' doc__tbl_sys_user_func_id=' + LTRIM(ISNULL(STR(@D_sys_user_func_id),'null')) 
     /* 
-	EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_func_IUD',@xloc, @xtxt 
+	EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_IUD',@xloc, @xtxt 
 	*/
 
 	/******************************************/
@@ -7167,20 +7167,20 @@ BEGIN
   CLOSE CUR_sys_user_func_IUD
   DEALLOCATE CUR_sys_user_func_IUD
   /*
-  EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','RETURN', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','RETURN', ''
   */
   RETURN
 
 END
 GO
-ALTER TABLE [jsharmony].[sys_user_func] ENABLE TRIGGER [sys_user_func_IUD]
+ALTER TABLE [{schema}].[sys_user_func] ENABLE TRIGGER [sys_user_func_IUD]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [jsharmony].[sys_user_role_IUD] on [jsharmony].[sys_user_role]
+CREATE trigger [{schema}].[sys_user_role_IUD] on [{schema}].[sys_user_role]
 for insert, update, delete
 AS
 BEGIN
@@ -7219,7 +7219,7 @@ BEGIN
   DECLARE @MY_sys_user_id BIGINT = {schema}.my_sys_user_id()
 
   /*
-  EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','START', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','START', ''
   */
 
   if exists (select * from inserted)
@@ -7241,7 +7241,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_role_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -7249,7 +7249,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Cannot update sys_user_id'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Cannot update sys_user_id'
     raiserror('Cannot update foreign key',16,1)
     ROLLBACK TRANSACTION
     return
@@ -7269,7 +7269,7 @@ BEGIN
 	SET @xtxt = 'I_sys_user_role_id=' + LTRIM(ISNULL(STR(@I_sys_user_role_id),'null')) +
 	            ' doc__tbl_sys_user_role_id=' + LTRIM(ISNULL(STR(@D_sys_user_role_id),'null')) 
     /*
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_role_IUD',@xloc, @xtxt
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD',@xloc, @xtxt
 	*/
 
 	/******************************************/
@@ -7287,7 +7287,7 @@ BEGIN
                            from {schema}.v_my_roles
                           where sys_role_name = 'DEV') 
           BEGIN
-            EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Only Developer can maintain Developer Role(1)'
+            EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Only Developer can maintain Developer Role(1)'
             raiserror('Application Error - Only Developer can maintain Developer Role(1).',16,1)
             ROLLBACK TRANSACTION
             return
@@ -7299,7 +7299,7 @@ BEGIN
 	    /* ME */
         IF @TP <> 'D' and @I_sys_role_name = 'DEV' 
 	    BEGIN
-          EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Only Developer can maintain Developer Role(2)'
+          EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Only Developer can maintain Developer Role(2)'
           raiserror('Application Error - Only Developer can maintain Developer Role(2).',16,1)
           ROLLBACK TRANSACTION
           return
@@ -7360,14 +7360,14 @@ BEGIN
   DEALLOCATE CUR_sys_user_role_IUD
 
   /*
-  EXEC [jsharmony].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','RETURN', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','RETURN', ''
   */
 
   RETURN
 
 END
 GO
-ALTER TABLE [jsharmony].[sys_user_role] ENABLE TRIGGER [sys_user_role_IUD]
+ALTER TABLE [{schema}].[sys_user_role] ENABLE TRIGGER [sys_user_role_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -7375,7 +7375,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[txt__tbl_IUD] on [jsharmony].[txt__tbl]
+CREATE trigger [{schema}].[txt__tbl_IUD] on [{schema}].[txt__tbl]
 for insert, update, delete
 AS
 BEGIN
@@ -7451,7 +7451,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(txt_id)
   BEGIN
-    EXEC [jsharmony].[zz-filedebug] 'TRIGGER','txt__tbl_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','txt__tbl_IUD','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -7608,7 +7608,7 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[txt__tbl] ENABLE TRIGGER [txt__tbl_IUD]
+ALTER TABLE [{schema}].[txt__tbl] ENABLE TRIGGER [txt__tbl_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -7616,7 +7616,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [jsharmony].[param_sys_IUD] on [jsharmony].[param_sys]
+CREATE trigger [{schema}].[param_sys_IUD] on [{schema}].[param_sys]
 for insert, update, delete
 AS
 BEGIN
@@ -7768,7 +7768,7 @@ BEGIN
 END
 
 GO
-ALTER TABLE [jsharmony].[param_sys] ENABLE TRIGGER [param_sys_IUD]
+ALTER TABLE [{schema}].[param_sys] ENABLE TRIGGER [param_sys_IUD]
 GO
 SET ANSI_NULLS ON
 GO
@@ -7779,7 +7779,7 @@ GO
 
 
 
-CREATE trigger [jsharmony].[v_cust_menu_role_selection_IUD_INSTEADOF_UPDATE] on [jsharmony].[v_cust_menu_role_selection]
+CREATE trigger [{schema}].[v_cust_menu_role_selection_IUD_INSTEADOF_UPDATE] on [{schema}].[v_cust_menu_role_selection]
 instead of update
 as
 begin
@@ -7829,7 +7829,7 @@ GO
 
 
 
-CREATE trigger [jsharmony].[v_sys_menu_role_selection_IUD_INSTEADOF_UPDATE] on [jsharmony].[v_sys_menu_role_selection]
+CREATE trigger [{schema}].[v_sys_menu_role_selection_IUD_INSTEADOF_UPDATE] on [{schema}].[v_sys_menu_role_selection]
 instead of update
 as
 begin
@@ -9994,7 +9994,7 @@ GO
 
 
 
-/****** Object:  View [jsharmony].[v_doc]    Script Date: 10/24/2018 12:14:05 PM ******/
+/****** Object:  View [{schema}].[v_doc]    Script Date: 10/24/2018 12:14:05 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -10003,7 +10003,7 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-CREATE VIEW [jsharmony].[v_doc] AS
+CREATE VIEW [{schema}].[v_doc] AS
 SELECT doc__tbl.doc_id
       ,doc__tbl.doc_scope
       ,doc__tbl.doc_scope_id
@@ -10045,7 +10045,7 @@ GO
 
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-CREATE VIEW [jsharmony].[v_note] as
+CREATE VIEW [{schema}].[v_note] as
 SELECT note__tbl.note_id
       ,note__tbl.note_scope
       ,note__tbl.note_scope_id
@@ -10074,7 +10074,7 @@ SELECT note__tbl.note_id
 
 GO
 
-CREATE VIEW [jsharmony].[v_doc_ext] AS
+CREATE VIEW [{schema}].[v_doc_ext] AS
 SELECT doc__tbl.doc_id
       ,doc__tbl.doc_scope
       ,doc__tbl.doc_scope_id
@@ -10103,7 +10103,7 @@ SELECT doc__tbl.doc_id
       ,null item_name
   FROM {schema}.doc__tbl
 
-CREATE VIEW [jsharmony].[v_note_ext] AS
+CREATE VIEW [{schema}].[v_note_ext] AS
 SELECT note__tbl.note_id
       ,note__tbl.note_scope
       ,note__tbl.note_scope_id
