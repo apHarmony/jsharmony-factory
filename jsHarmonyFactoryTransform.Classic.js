@@ -182,6 +182,7 @@ transform.fields = {
   "doc_uptstmp": "d_utstmp",
   "doc_upuser": "d_uu",
   "doc_img": "D_IMG",
+  "doc_file": "d_file",
   "db_id": "db_k",
   "dual_bigint": "dual_bigint",
   "single_ident": "dual_ident",
