@@ -56,6 +56,8 @@ drop trigger if exists {schema}_help__tbl_before_update;
 drop trigger if exists {schema}_help__tbl_after_update;
 drop trigger if exists {schema}_help__tbl_delete;
 
+drop trigger if exists {schema}_help_target_after_update;
+
 drop trigger if exists {schema}_sys_user_func_after_insert;
 drop trigger if exists {schema}_sys_user_func_before_update;
 drop trigger if exists {schema}_sys_user_func_after_update;

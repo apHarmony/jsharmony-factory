@@ -421,8 +421,10 @@ CREATE TABLE {schema}_cust_user_role (
   cust_role_name text NOT NULL,
   cust_user_role_snotes text,
   UNIQUE (sys_user_id, cust_role_name),
-  FOREIGN KEY (sys_user_id) REFERENCES {schema}_cust_user(sys_user_id),
+  FOREIGN KEY (sys_user_id) REFERENCES {schema}_cust_user(sys_user_id)
+              ON UPDATE NO ACTION ON DELETE CASCADE,
   FOREIGN KEY (cust_role_name) REFERENCES {schema}_cust_role(cust_role_name)
+              ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 /***************cust_menu_role***************/
@@ -509,8 +511,10 @@ CREATE TABLE {schema}_sys_user_func (
   sys_func_name text NOT NULL,
   sys_user_func_snotes text,
   UNIQUE (sys_user_id, sys_func_name),
-  FOREIGN KEY (sys_user_id) REFERENCES {schema}_sys_user(sys_user_id),
+  FOREIGN KEY (sys_user_id) REFERENCES {schema}_sys_user(sys_user_id)
+              ON UPDATE NO ACTION ON DELETE CASCADE,
   FOREIGN KEY (sys_func_name) REFERENCES {schema}_sys_func(sys_func_name)
+              ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 /***************sys_user_role***************/
@@ -520,8 +524,10 @@ CREATE TABLE {schema}_sys_user_role (
   sys_role_name text NOT NULL,
   sys_user_role_snotes text,
   UNIQUE (sys_user_id, sys_role_name),
-  FOREIGN KEY (sys_user_id) REFERENCES {schema}_sys_user(sys_user_id),
+  FOREIGN KEY (sys_user_id) REFERENCES {schema}_sys_user(sys_user_id)
+              ON UPDATE NO ACTION ON DELETE CASCADE,
   FOREIGN KEY (sys_role_name) REFERENCES {schema}_sys_role(sys_role_name)
+              ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 /***************sys_menu_role***************/
