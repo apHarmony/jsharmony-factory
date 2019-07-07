@@ -7,7 +7,6 @@
     "caption": [ "", "Help Screen", "Help Screens" ],
     "menu":"HL",
     "breadcrumbs": { "parents": ["HL"] },
-    "onload":"if(xmodel.get('hp_id')) XPage.Disable(jsh.$root('.xelem'+xmodel.class+'.hp_code'));",
 	  "fields":[
       {"name":"h_id","type":"bigint","key":1,"control":"hidden"},
 
@@ -21,11 +20,9 @@
         "popuplov": {"target":  "HELP_TARGETS", "codeval": "hp_code", "popupstyle": "height:400px;width:770px;",
           "popup_copy_results": { "hp_code": "hp_code", "hp_id": "hp_id", "hp_desc": "hp_desc" },
           "popupiconstyle":"position:relative;top:5px;"},
-        "onchange":"var jobj = jsh.$root('.xelem'+xmodel.class+'.hp_code'); if(newval){ XPage.Disable(jobj); } else { XPage.Enable(jobj); }"
       },
-      {"name":"hp_code","type":"varchar","length":50,"actions":"BIU","nl":1,
-        //"control":"dropdown_VL","sample":"Test - General","lov":{"sql":"select hp_code as %%%jsh.map.{{code_val}}%%%,hp_desc as %%%jsh.map.{{code_txt}}%%% from jsharmony.hp order by hp_desc","blank":""},
-        "control":"textbox_L","validate":["Required"],
+      {"name":"hp_code","type":"varchar","length":50,"actions":"BIU","readonly":true,"nl":1,
+        "control":"textbox_L",
         "caption":"Model","captionstyle":"width:120px;text-align:right;"},
       {"name":"hp_code_select_model","unbound":true,"control":"hidden",
         "popuplov": {"target":  "X_MODELS", "codeval": "model_id", "popupstyle": "height:400px;width:770px;",
