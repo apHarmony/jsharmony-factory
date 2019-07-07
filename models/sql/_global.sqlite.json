@@ -1,4 +1,6 @@
 {
+  "Helper_SendTXTEmail": "select txt_title,txt_body,txt_bcc,txt_type from jsharmony_txt where txt_process='EMAIL' and txt_attrib=@txt_attrib",
+  "HelperRender_getTXT": "select txt_body from jsharmony_txt where txt_process=@txt_process and txt_attrib=@txt_attrib",
   "get_tstmp": "datetime('now','localtime')",
   "context_user": "(select context from jsharmony_meta limit 1)",
   "sms_send_txt": "select txt_title,txt_body,txt_bcc from {schema}_txt__tbl where txt_process='SMS' and txt_attrib=@txt_attrib",
