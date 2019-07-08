@@ -403,7 +403,7 @@
       "update jsharmony_meta set {{audit_seq}} = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
       "  where exists(select * from jsharmony_meta where {{audit_seq}} is null) and (%%%nequal(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
       "insert into {schema}_audit_detail(audit_seq,audit_column_name,audit_column_val)",
-      "  select (select {{audit_seq}} from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%",
+      "  select (select {{audit_seq}} from jsharmony_meta),lower('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%",
       "  where (%%%nequal(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
       ""
     ]
@@ -446,7 +446,7 @@
       "  where exists(select * from jsharmony_meta where {{audit_seq}} is null)\\;",
 
       "insert into {schema}_audit_detail(audit_seq,audit_column_name,audit_column_val)",
-      "  select (select {{audit_seq}} from jsharmony_meta),upper('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%\\;",
+      "  select (select {{audit_seq}} from jsharmony_meta),lower('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%\\;",
       ""
     ]
   },

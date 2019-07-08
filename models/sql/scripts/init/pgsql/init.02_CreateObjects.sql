@@ -104,7 +104,7 @@ CREATE FUNCTION audit(toa toaudit, INOUT par_audit_seq bigint, par_audit_table_i
         IF toa.op in ('UPDATE','DELETE') THEN
           insert into {schema}.audit_detail 
                             (audit_seq, audit_column_name, audit_column_val)
-                     values (par_audit_seq, upper(par_audit_column_name), par_audit_column_val);
+                     values (par_audit_seq, lower(par_audit_column_name), par_audit_column_val);
         END IF;           
     END;
 $$;
@@ -168,7 +168,7 @@ CREATE FUNCTION audit_base(toa toaudit, INOUT par_audit_seq bigint, par_audit_ta
         IF toa.op in ('UPDATE','DELETE') THEN
           insert into {schema}.audit_detail 
                              (audit_seq, audit_column_name, audit_column_val)
-                     values (par_audit_seq, upper(par_audit_column_name), par_audit_column_val);
+                     values (par_audit_seq, lower(par_audit_column_name), par_audit_column_val);
         END IF;           
     END;
 $$;
@@ -394,23 +394,23 @@ BEGIN
     RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not defined in param__tbl';
   END IF;  
   
-  IF upper(in_table) NOT IN ('param_app','param_user','param_sys') THEN
-    RETURN 'Table '||upper(in_table) || ' is not defined';
+  IF lower(in_table) NOT IN ('param_app','param_user','param_sys') THEN
+    RETURN 'Table '||lower(in_table) || ' is not defined';
   END IF;  
  
-  IF upper(in_table)='param_app' AND is_param_app=false THEN
-    RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||upper(in_table);
-  ELSIF upper(in_table)='param_user' AND is_param_user=false THEN
-    RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||upper(in_table);
-  ELSIF upper(in_table)='param_sys' AND is_param_sys=false THEN
-    RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||upper(in_table);
+  IF lower(in_table)='param_app' AND is_param_app=false THEN
+    RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||lower(in_table);
+  ELSIF lower(in_table)='param_user' AND is_param_user=false THEN
+    RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||lower(in_table);
+  ELSIF lower(in_table)='param_sys' AND is_param_sys=false THEN
+    RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||lower(in_table);
   END IF;  
 
   IF coalesce(in_val,'') = '' THEN
     RETURN 'Value has to be present';
   END IF;  
 
-  IF param_type='note__tbl' AND not {schema}.myISNUMERIC(in_val) THEN
+  IF param_type='n' AND not {schema}.myISNUMERIC(in_val) THEN
     RETURN 'Value '||in_val||' is not numeric';
   END IF;  
 
@@ -462,7 +462,7 @@ CREATE FUNCTION cust_user_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := case when TG_OP = 'DELETE' then NULL else NEW.cust_id end;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -685,7 +685,7 @@ CREATE FUNCTION cust_user_role_iud() RETURNS trigger
 
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := wk_cust_id;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -1194,7 +1194,7 @@ CREATE FUNCTION doc__tbl_iud() RETURNS trigger
         end if;
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := case when TG_OP = 'DELETE' then NULL else my_cust_id end;
         my_toa.item_id := case when TG_OP = 'DELETE' then NULL else my_item_id end;
         my_toa.audit_ref_name := NULL;
@@ -1395,7 +1395,7 @@ ALTER FUNCTION {schema}.doc_filename(bigint, text) OWNER TO postgres;
 --
 
 CREATE FUNCTION digest(bytea, text) RETURNS bytea
-    LANGUAGE cust IMMUTABLE STRICT
+    LANGUAGE C IMMUTABLE STRICT
     AS '$libdir/pgcrypto', 'pg_digest';
 
 
@@ -1406,7 +1406,7 @@ ALTER FUNCTION {schema}.digest(bytea, text) OWNER TO postgres;
 --
 
 CREATE FUNCTION digest(text, text) RETURNS bytea
-    LANGUAGE cust IMMUTABLE STRICT
+    LANGUAGE C IMMUTABLE STRICT
     AS '$libdir/pgcrypto', 'pg_digest';
 
 
@@ -1432,7 +1432,7 @@ CREATE FUNCTION code2_app_base_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := NULL;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -1566,7 +1566,7 @@ CREATE FUNCTION code_app_base_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := NULL;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -1774,7 +1774,7 @@ CREATE FUNCTION param_app_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := NULL;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -1905,7 +1905,7 @@ CREATE FUNCTION help__tbl_iud() RETURNS trigger
          where help_target.help_target_code = help_target_code;           
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := NULL;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -2016,6 +2016,18 @@ CREATE FUNCTION help_target_iud() RETURNS trigger
           update {schema}.help__tbl set 
             help_target_code = NEW.help_target_code
             where {schema}.help__tbl.help_target_id = NEW.help_target_id;
+        END IF;
+
+        /**********************************/
+        /* RETURN                         */ 
+        /**********************************/
+    
+        IF TG_OP = 'INSERT' THEN
+          RETURN NEW;
+        ELSIF TG_OP = 'UPDATE' THEN
+          RETURN NEW;
+        ELSIF TG_OP = 'DELETE' THEN
+          RETURN OLD;
         END IF;
 
     END;
@@ -2316,7 +2328,7 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
 
         if TG_OP = 'DELETE' then
           my_toa.cust_id := NULL;
@@ -2699,7 +2711,7 @@ CREATE FUNCTION sys_user_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := NULL;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -2906,7 +2918,7 @@ CREATE FUNCTION param__tbl_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := NULL;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -3035,7 +3047,7 @@ CREATE FUNCTION param_user_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.audit_ref_name := NULL;
         my_toa.audit_ref_id := NULL;
         my_toa.audit_subject := case when TG_OP = 'DELETE' then NULL else (select coalesce(sys_user_lname,'')||', '||coalesce(sys_user_fname,'') from {schema}.sys_user where sys_user_id = NEW.sys_user_id) end;
@@ -3217,7 +3229,7 @@ CREATE FUNCTION sys_user_func_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := NULL;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -3313,7 +3325,7 @@ CREATE FUNCTION sys_user_role_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := NULL;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -3449,7 +3461,7 @@ CREATE FUNCTION txt__tbl_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := NULL;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -3661,7 +3673,7 @@ CREATE FUNCTION param_sys_iud() RETURNS trigger
         /**********************************/
 
         my_toa.op := TG_OP;
-        my_toa.audit_table_name := upper(TG_audit_table_name::text);
+        my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
         my_toa.cust_id := NULL;
         my_toa.item_id := NULL;
         my_toa.audit_ref_name := NULL;
@@ -4484,7 +4496,8 @@ CREATE TABLE code2_app (
     code_snotes character varying(255),
     code_attrib_desc character varying(128),
     code_schema character varying(128),
-    code_type character varying(32) default 'app'
+    code_type character varying(32) default 'app',
+    code2_app_h_id bigint NOT NULL
 );
 
 
@@ -4495,6 +4508,26 @@ ALTER TABLE code2_app OWNER TO postgres;
 --
 
 COMMENT ON TABLE code2_app IS 'User Codes 2 Header (CONTROL)';
+
+
+--
+-- Name: code2_app_code2_app_h_id_seq; Type: SEQUENCE; Schema: {schema}; Owner: postgres
+--
+CREATE SEQUENCE code2_app_code2_app_h_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE code2_app_code2_app_h_id_seq OWNER TO postgres;
+
+--
+-- Name: code2_app_code2_app_h_id_seq; Type: SEQUENCE OWNED BY; Schema: {schema}; Owner: postgres
+--
+
+ALTER SEQUENCE code2_app_code2_app_h_id_seq OWNED BY code2_app.code2_app_h_id;
 
 
 --
@@ -4512,7 +4545,8 @@ CREATE TABLE code_app (
     code_snotes character varying(255),
     code_attrib_desc character varying(128),
     code_schema character varying(128),
-    code_type character varying(32) default 'app'
+    code_type character varying(32) default 'app',
+    code_app_h_id bigint NOT NULL
 );
 
 
@@ -4523,6 +4557,26 @@ ALTER TABLE code_app OWNER TO postgres;
 --
 
 COMMENT ON TABLE code_app IS 'User Codes Header (CONTROL)';
+
+
+--
+-- Name: code_app_code_app_h_id_seq; Type: SEQUENCE; Schema: {schema}; Owner: postgres
+--
+CREATE SEQUENCE code_app_code_app_h_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE code_app_code_app_h_id_seq OWNER TO postgres;
+
+--
+-- Name: code_app_code_app_h_id_seq; Type: SEQUENCE OWNED BY; Schema: {schema}; Owner: postgres
+--
+
+ALTER SEQUENCE code_app_code_app_h_id_seq OWNED BY code_app.code_app_h_id;
 
 
 --
@@ -5807,7 +5861,7 @@ COMMENT ON COLUMN code_sys_base.code_notes IS 'Code Value Notes';
 
 COMMENT ON COLUMN code_sys_base.code_attrib IS 'Code Value Additional Attribute';
 
-
+:if:separate_code_type_tables:
 --
 -- Name: code2_sys_base_code2_sys_id_seq; Type: SEQUENCE; Schema: {schema}; Owner: postgres
 --
@@ -5821,6 +5875,7 @@ CREATE SEQUENCE code2_sys_base_code2_sys_id_seq
 
 
 ALTER TABLE code2_sys_base_code2_sys_id_seq OWNER TO postgres;
+:endif:
 
 --
 -- Name: code2_sys_base; Type: TABLE; Schema: {schema}; Owner: postgres
@@ -6030,10 +6085,10 @@ ALTER TABLE code2_sys OWNER TO postgres;
 COMMENT ON TABLE code2_sys IS 'System Codes 2 Header (CONTROL)';
 
 
+:if:separate_code_type_tables:
 --
 -- Name: code2_sys_code2_sys_h_id_seq; Type: SEQUENCE; Schema: {schema}; Owner: postgres
 --
-
 CREATE SEQUENCE code2_sys_code2_sys_h_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -6049,6 +6104,7 @@ ALTER TABLE code2_sys_code2_sys_h_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE code2_sys_code2_sys_h_id_seq OWNED BY code2_sys.code2_sys_h_id;
+:endif:
 
 
 --
@@ -6235,6 +6291,7 @@ ALTER TABLE code_sys OWNER TO postgres;
 COMMENT ON TABLE code_sys IS 'System Codes Header (CONTROL)';
 
 
+:if:separate_code_type_tables:
 --
 -- Name: code_sys_code_sys_h_id_seq; Type: SEQUENCE; Schema: {schema}; Owner: postgres
 --
@@ -6254,6 +6311,7 @@ ALTER TABLE code_sys_code_sys_h_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE code_sys_code_sys_h_id_seq OWNED BY code_sys.code_sys_h_id;
+:endif:
 
 
 --
@@ -6381,6 +6439,7 @@ ALTER TABLE code_txt_type OWNER TO postgres;
 COMMENT ON TABLE code_txt_type IS 'System Codes - Text Type (Control)';
 
 
+:if:separate_code_type_tables:
 --
 -- Name: code_sys_base_code_sys_id_seq; Type: SEQUENCE; Schema: {schema}; Owner: postgres
 --
@@ -6400,6 +6459,7 @@ ALTER TABLE code_sys_base_code_sys_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE code_sys_base_code_sys_id_seq OWNED BY code_sys_base.code_sys_id;
+:endif:
 
 
 --
@@ -7314,11 +7374,13 @@ ALTER TABLE ONLY sys_menu_role ALTER COLUMN sys_menu_role_id SET DEFAULT nextval
 ALTER TABLE ONLY txt__tbl ALTER COLUMN txt_id SET DEFAULT nextval('txt__tbl_txt_id_seq'::regclass);
 
 
+:if:separate_code_type_tables:
 --
 -- Name: code_sys_id; Type: DEFAULT; Schema: {schema}; Owner: postgres
 --
 
 ALTER TABLE ONLY code_sys_base ALTER COLUMN code_sys_id SET DEFAULT nextval('code_sys_base_code_sys_id_seq'::regclass);
+:endif:
 
 
 --
@@ -7357,10 +7419,19 @@ ALTER TABLE ONLY code2_country_state ALTER COLUMN code_muser SET DEFAULT my_db_u
 
 
 --
+-- Name: code2_app_h_id; Type: DEFAULT; Schema: {schema}; Owner: postgres
+--
+
+ALTER TABLE ONLY code2_app ALTER COLUMN code2_app_h_id SET DEFAULT nextval('code2_app_code2_app_h_id_seq'::regclass);
+
+
+:if:separate_code_type_tables:
+--
 -- Name: code2_sys_h_id; Type: DEFAULT; Schema: {schema}; Owner: postgres
 --
 
 ALTER TABLE ONLY code2_sys ALTER COLUMN code2_sys_h_id SET DEFAULT nextval('code2_sys_code2_sys_h_id_seq'::regclass);
+:endif:
 
 
 --
@@ -7539,10 +7610,19 @@ ALTER TABLE ONLY code_doc_scope ALTER COLUMN code_muser SET DEFAULT my_db_user()
 
 
 --
+-- Name: code_app_h_id; Type: DEFAULT; Schema: {schema}; Owner: postgres
+--
+
+ALTER TABLE ONLY code_app ALTER COLUMN code_app_h_id SET DEFAULT nextval('code_app_code_app_h_id_seq'::regclass);
+
+
+:if:separate_code_type_tables:
+--
 -- Name: code_sys_h_id; Type: DEFAULT; Schema: {schema}; Owner: postgres
 --
 
 ALTER TABLE ONLY code_sys ALTER COLUMN code_sys_h_id SET DEFAULT nextval('code_sys_code_sys_h_id_seq'::regclass);
+:endif:
 
 
 --
@@ -7973,19 +8053,19 @@ ALTER TABLE ONLY code_app_base
 
 
 --
--- Name: code_app_base_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
+-- Name: code_app_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
 --
 
-ALTER TABLE ONLY code_app_base
-    ADD CONSTRAINT code_app_base_pkey PRIMARY KEY (code_name);
+ALTER TABLE ONLY code_app
+    ADD CONSTRAINT code_app_pkey PRIMARY KEY (code_name);
 
 
 --
 -- Name: code_app_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
 --
 
-ALTER TABLE ONLY code_app
-    ADD CONSTRAINT code_app_pkey PRIMARY KEY (code_app_id);
+ALTER TABLE ONLY code_app_base
+    ADD CONSTRAINT code_app_base_pkey PRIMARY KEY (code_app_id);
 
 
 --
@@ -8308,6 +8388,7 @@ ALTER TABLE ONLY txt__tbl
     ADD CONSTRAINT txt__tbl_txt_process_txt_attrib_key UNIQUE (txt_process, txt_attrib);
 
 
+:if:separate_code_type_tables:
 --
 -- Name: code2_sys_base_code_val1_code_val2_key; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
 --
@@ -8324,6 +8405,7 @@ ALTER TABLE ONLY code2_sys_base
 
 ALTER TABLE ONLY code2_sys_base
     ADD CONSTRAINT code2_sys_base_code_val1_code_txt_key UNIQUE (code_val1, code_txt);
+:endif:
 
 
 --
@@ -8352,6 +8434,7 @@ ALTER TABLE ONLY code2_country_state
     ADD CONSTRAINT code2_country_state_pkey PRIMARY KEY (code2_sys_id);
 
 
+:if:separate_code_type_tables:
 --
 -- Name: code2_sys_code_schema_code_name_key; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
 --
@@ -8374,6 +8457,7 @@ ALTER TABLE ONLY code2_sys
 
 ALTER TABLE ONLY code2_sys_base
     ADD CONSTRAINT code2_sys_base_pkey PRIMARY KEY (code2_sys_id);
+:endif:
 
 
 ALTER TABLE ONLY code_ac1
@@ -8397,12 +8481,14 @@ ALTER TABLE ONLY code_ahc
 ALTER TABLE ONLY code_ahc
     ADD CONSTRAINT code_ahc_code_val_key UNIQUE (code_val);
 
+:if:separate_code_type_tables:
 ALTER TABLE ONLY code_sys_base
     ADD CONSTRAINT code_sys_base_pkey PRIMARY KEY (code_sys_id);
 ALTER TABLE ONLY code_sys_base
     ADD CONSTRAINT code_sys_base_code_txt_key UNIQUE (code_txt);
 ALTER TABLE ONLY code_sys_base
     ADD CONSTRAINT code_sys_base_code_val_key UNIQUE (code_val);
+:endif:
 
 ALTER TABLE ONLY code_country
     ADD CONSTRAINT code_country_pkey PRIMARY KEY (code_sys_id);
@@ -8419,6 +8505,7 @@ ALTER TABLE ONLY code_doc_scope
     ADD CONSTRAINT code_doc_scope_code_val_key UNIQUE (code_val);
 
 
+:if:separate_code_type_tables:
 --
 -- Name: code_sys_code_schema_code_name_key; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
 --
@@ -8433,6 +8520,7 @@ ALTER TABLE ONLY code_sys
 
 ALTER TABLE ONLY code_sys
     ADD CONSTRAINT code_sys_pkey PRIMARY KEY (code_sys_h_id);
+:endif:
 
 
 ALTER TABLE ONLY code_note_scope

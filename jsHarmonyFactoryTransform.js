@@ -788,6 +788,7 @@ function jsHarmonyFactoryTransform(module){
     "@sms_body": "@sms_body",
     "separate_code_type_tables": "0",
     "help_target_required": "0",
+    "debug_halt": "0",
   };
 
   this.ignore_errors = {

@@ -108,7 +108,7 @@ DECLARE @is_param_sys BIT
   IF ISNULL(@in_val,'') = ''
     RETURN 'Value has to be present'
 
-  IF @param_type='note__tbl' AND ISNUMERIC(@in_val)=0
+  IF @param_type='N' AND ISNUMERIC(@in_val)=0
     RETURN 'Value '+@in_val+' is not numeric'
 
   IF ISNULL(@code_name,'') != ''

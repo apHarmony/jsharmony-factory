@@ -343,7 +343,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     .then(function(){ return new Promise(function(resolve, reject){
       console.log('');
       console.log('=============================');
-      console.log('Running INIT Database Scriptss');
+      console.log('Running INIT Database Scripts');
       console.log('=============================');
       dbs.Run(['*','init','init'],function(){
         dbs.Run(['*','restructure'],function(){

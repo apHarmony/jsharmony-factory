@@ -33,7 +33,7 @@ insert into {schema}_code_note_type (code_seq, code_val, code_txt, code_code, co
 insert into {schema}_code_note_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'U', 'User', NULL, NULL);
 
 insert into {schema}_code_param_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'C', 'Character', NULL, NULL);
-insert into {schema}_code_param_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'note__tbl', 'Number', NULL, NULL);
+insert into {schema}_code_param_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'N', 'Number', NULL, NULL);
 
 insert into {schema}_code_job_action (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'MESSAGE', 'Message', NULL, NULL);
 insert into {schema}_code_job_action (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'REPORT', 'Report Program', NULL, NULL);

@@ -94,7 +94,7 @@ INSERT INTO code2_app (code_name, code_desc, code_code_desc, code_snotes, code_a
 
 
 INSERT INTO code_param_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'C', 'Character', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO code_param_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'note__tbl', 'Number', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO code_param_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'N', 'Number', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 

@@ -267,7 +267,7 @@ create trigger {schema}_param_app_before_insert before insert on {schema}_param_
 begin
   select case when not exists(select * from {schema}_param__tbl where param_process=new.param_app_process and param_attrib = new.param_app_attrib and is_param_app=1) then raise(FAIL,'Application Error - Process parameter is not assigned for param_app in param__tbl') end\;
   select case when new.param_app_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select param_type from {schema}_param__tbl where param_process=new.param_app_process and param_attrib = new.param_app_attrib))='note__tbl') and (cast(new.param_app_val as float)<>new.param_app_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (lower((select param_type from {schema}_param__tbl where param_process=new.param_app_process and param_attrib = new.param_app_attrib))='n') and (cast(new.param_app_val as float)<>new.param_app_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_param_app_after_insert after insert on {schema}_param_app
@@ -291,7 +291,7 @@ begin
 
   select case when not exists(select * from {schema}_param__tbl where param_process=new.param_app_process and param_attrib = new.param_app_attrib and is_param_app=1) then raise(FAIL,'Application Error - Process parameter is not assigned for param_app in param__tbl') end\;
   select case when new.param_app_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select param_type from {schema}_param__tbl where param_process=new.param_app_process and param_attrib = new.param_app_attrib))='note__tbl') and (cast(new.param_app_val as float)<>new.param_app_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (lower((select param_type from {schema}_param__tbl where param_process=new.param_app_process and param_attrib = new.param_app_attrib))='n') and (cast(new.param_app_val as float)<>new.param_app_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_param_app_after_update after update on {schema}_param_app
@@ -318,7 +318,7 @@ create trigger {schema}_param_sys_before_insert before insert on {schema}_param_
 begin
   select case when not exists(select * from {schema}_param__tbl where param_process=new.param_sys_process and param_attrib = new.param_sys_attrib and is_param_sys=1) then raise(FAIL,'Application Error - Process parameter is not assigned for param_sys in param__tbl') end\;
   select case when new.param_sys_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select param_type from {schema}_param__tbl where param_process=new.param_sys_process and param_attrib = new.param_sys_attrib))='note__tbl') and (cast(new.param_sys_val as float)<>new.param_sys_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (lower((select param_type from {schema}_param__tbl where param_process=new.param_sys_process and param_attrib = new.param_sys_attrib))='n') and (cast(new.param_sys_val as float)<>new.param_sys_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_param_sys_after_insert after insert on {schema}_param_sys
@@ -342,7 +342,7 @@ begin
 
   select case when not exists(select * from {schema}_param__tbl where param_process=new.param_sys_process and param_attrib = new.param_sys_attrib and is_param_sys=1) then raise(FAIL,'Application Error - Process parameter is not assigned for param_sys in param__tbl') end\;
   select case when new.param_sys_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select param_type from {schema}_param__tbl where param_process=new.param_sys_process and param_attrib = new.param_sys_attrib))='note__tbl') and (cast(new.param_sys_val as float)<>new.param_sys_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (lower((select param_type from {schema}_param__tbl where param_process=new.param_sys_process and param_attrib = new.param_sys_attrib))='n') and (cast(new.param_sys_val as float)<>new.param_sys_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_param_sys_after_update after update on {schema}_param_sys
@@ -369,7 +369,7 @@ create trigger {schema}_param_user_before_insert before insert on {schema}_param
 begin
   select case when not exists(select * from {schema}_param__tbl where param_process=new.param_user_process and param_attrib = new.param_user_attrib and is_param_user=1) then raise(FAIL,'Application Error - Process parameter is not assigned for param_user in param__tbl') end\;
   select case when new.param_user_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select param_type from {schema}_param__tbl where param_process=new.param_user_process and param_attrib = new.param_user_attrib))='note__tbl') and (cast(new.param_user_val as float)<>new.param_user_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (lower((select param_type from {schema}_param__tbl where param_process=new.param_user_process and param_attrib = new.param_user_attrib))='n') and (cast(new.param_user_val as float)<>new.param_user_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_param_user_after_insert after insert on {schema}_param_user
@@ -394,7 +394,7 @@ begin
 
   select case when not exists(select * from {schema}_param__tbl where param_process=new.param_user_process and param_attrib = new.param_user_attrib and is_param_user=1) then raise(FAIL,'Application Error - Process parameter is not assigned for param_user in param__tbl') end\;
   select case when new.param_user_val = '' then raise(FAIL,'Application Error - Value is required') end\;
-  select case when (upper((select param_type from {schema}_param__tbl where param_process=new.param_user_process and param_attrib = new.param_user_attrib))='note__tbl') and (cast(new.param_user_val as float)<>new.param_user_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
+  select case when (lower((select param_type from {schema}_param__tbl where param_process=new.param_user_process and param_attrib = new.param_user_attrib))='n') and (cast(new.param_user_val as float)<>new.param_user_val) then raise(FAIL,'Application Error - Value is not numeric') end\;
 end;
 
 create trigger {schema}_param_user_after_update after update on {schema}_param_user
