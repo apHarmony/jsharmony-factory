@@ -3,34 +3,30 @@ begin;
 INSERT INTO {schema}_single (single_dummy, single_ident, single_integer, single_text) VALUES ('X', 1, NULL, NULL);
 
 insert into {schema}_code_ac (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL);
-insert into {schema}_code_ac (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL);
+insert into {schema}_code_ac (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'CLOSED', 'Closed', NULL, NULL);
 
 insert into {schema}_code_ac1 (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'A', 'Active', NULL, NULL);
 insert into {schema}_code_ac1 (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'C', 'Closed', NULL, NULL);
 
 insert into {schema}_code_ahc (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL);
-insert into {schema}_code_ahc (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL);
 insert into {schema}_code_ahc (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'HOLD', 'Hold', NULL, NULL);
+insert into {schema}_code_ahc (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL);
 
 insert into {schema}_code_country(code_seq,code_val,code_txt,code_code,code_attrib) values (NULL,'USA','United States',NULL,NULL);
 insert into {schema}_code_country(code_seq,code_val,code_txt,code_code,code_attrib) values (NULL,'CANADA','Canada',NULL,NULL);
 insert into {schema}_code_country(code_seq,code_val,code_txt,code_code,code_attrib) values (NULL,'MEXICO','Mexico',NULL,NULL);
 
-insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL);
 insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'S', 'System', NULL, NULL);
-insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (3, 'O', 'Order', NULL, NULL);
-insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL);
-insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (5, 'sys_user_code', 'User', NULL, NULL);
+insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL);
+insert into {schema}_code_doc_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (3, 'sys_user_code', 'User', NULL, NULL);
 
-insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL);
 insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'S', 'System', NULL, NULL);
-insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (3, 'CT', 'Cust Contact', NULL, NULL);
-insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL);
-insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (5, 'sys_user_code', 'User', NULL, NULL);
+insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL);
+insert into {schema}_code_note_scope (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (3, 'sys_user_code', 'User', NULL, NULL);
 
+insert into {schema}_code_note_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'U', 'User', NULL, NULL);
 insert into {schema}_code_note_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'C', 'Client', NULL, NULL);
 insert into {schema}_code_note_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (3, 'S', 'System', NULL, NULL);
-insert into {schema}_code_note_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'U', 'User', NULL, NULL);
 
 insert into {schema}_code_param_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'C', 'Character', NULL, NULL);
 insert into {schema}_code_param_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'N', 'Number', NULL, NULL);
@@ -41,11 +37,11 @@ insert into {schema}_code_job_action (code_seq, code_val, code_txt, code_code, c
 insert into {schema}_code_job_source (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'MAIN', 'Main Interface', NULL, NULL);
 insert into {schema}_code_job_source (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'CLIENT', 'Client Interface', NULL, NULL);
 
-insert into {schema}_code_txt_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'HTML', 'HTML', NULL, NULL);
 insert into {schema}_code_txt_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'TEXT', 'Text', NULL, NULL);
+insert into {schema}_code_txt_type (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'HTML', 'HTML', NULL, NULL);
 
-insert into {schema}_code_version_sts (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'ERROR', 'Error', NULL, NULL);
 insert into {schema}_code_version_sts (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (1, 'OK', 'OK', NULL, NULL);
+insert into {schema}_code_version_sts (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (2, 'ERROR', 'Error', NULL, NULL);
 
 insert into {schema}_code2_country_state(code_val1,code_val2,code_txt) values ('CANADA','AB','Alberta');
 insert into {schema}_code2_country_state(code_val1,code_val2,code_txt) values ('CANADA','BC','British Columbia');

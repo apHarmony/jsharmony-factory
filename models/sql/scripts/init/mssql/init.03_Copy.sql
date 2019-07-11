@@ -1,16 +1,18 @@
 
 
 INSERT INTO {schema}.code_ahc (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code_ahc (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code_ahc (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'HOLD', 'Hold', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO {schema}.code_ahc (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
-INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'CSYSADMIN', 'Administrator', NULL, NULL, NULL);
-INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (2, 'ACTIVE', 'CX_B', 'Browse', NULL, NULL, NULL);
-INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (3, 'ACTIVE', 'CX_X', 'Entry / Update', NULL, NULL, NULL);
-INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'CUSER', 'Client User', NULL, NULL, NULL);
 INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (0, 'ACTIVE', 'C*', 'All Users', NULL, NULL, NULL);
+INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'CUSER', 'Client User', NULL, NULL, NULL);
+INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (2, 'ACTIVE', 'CSYSADMIN', 'Administrator', NULL, NULL, NULL);
+INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (3, 'ACTIVE', 'CX_B', 'Browse', NULL, NULL, NULL);
+INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (4, 'ACTIVE', 'CX_X', 'Entry / Update', NULL, NULL, NULL);
+
+
 
 
 
@@ -123,8 +125,6 @@ INSERT INTO {schema}.param_app (param_app_process, param_app_attrib, param_app_v
 
 
 
-INSERT INTO {schema}.help_target (help_target_code, help_target_desc) VALUES ('CT', 'Customer Contact');
-INSERT INTO {schema}.help_target (help_target_code, help_target_desc) VALUES ('C', 'Customer');
 
 
 
@@ -1187,8 +1187,8 @@ INSERT INTO {schema}.sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name
 INSERT INTO {schema}.sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (280000, NULL, 'SYSADMIN');
 
 
-INSERT INTO {schema}.code_txt_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'HTML', 'HTML', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code_txt_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'TEXT', 'Text', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO {schema}.code_txt_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'HTML', 'HTML', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
@@ -1324,7 +1324,7 @@ INSERT INTO {schema}.code2_sys (code_name, code_desc, code_code_desc, code_snote
 
 
 INSERT INTO {schema}.code_ac (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code_ac (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO {schema}.code_ac (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'CLOSED', 'Closed', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
@@ -1339,11 +1339,9 @@ INSERT INTO {schema}.code_country (code_seq, code_val, code_txt, code_code, code
 
 
 
-INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'S', 'System', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'O', 'Order', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (5, 'sys_user_code', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO {schema}.code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'sys_user_code', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
@@ -1362,17 +1360,15 @@ INSERT INTO {schema}.code_sys (code_name, code_desc, code_code_desc, code_snotes
 
 
 
-INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'S', 'System', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'CT', 'Cust Contact', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (5, 'sys_user_code', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO {schema}.code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'sys_user_code', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
+INSERT INTO {schema}.code_note_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'U', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code_note_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'C', 'Client', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code_note_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'S', 'System', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO {schema}.code_note_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'U', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
@@ -1386,8 +1382,8 @@ INSERT INTO {schema}.code_job_source (code_seq, code_val, code_txt, code_code, c
 
 
 
-INSERT INTO {schema}.code_version_sts (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'ERROR', 'Error', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.code_version_sts (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'OK', 'OK', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO {schema}.code_version_sts (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'ERROR', 'Error', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 

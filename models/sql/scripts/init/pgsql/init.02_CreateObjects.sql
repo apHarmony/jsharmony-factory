@@ -260,7 +260,7 @@ BEGIN
            ' where code_val1 = $1 and code_val2 = $2;'
     into runmesql
     from pg_tables
-   where tablename = lower(in_tblname) 
+   where lower(tablename) = lower(in_tblname) 
    order by (case schemaname when '{schema}' then 1 else 2 end), schemaname
    limit 1;
 
@@ -290,7 +290,7 @@ BEGIN
   select 'select count(*) from ' || schemaname || '.' || tablename || ' where code_val = $1 ;'
     into runmesql
     from pg_tables
-   where tablename = lower(in_tblname) 
+   where lower(tablename) = lower(in_tblname) 
    order by (case schemaname when '{schema}' then 1 else 2 end), schemaname
    limit 1;
 
@@ -302,63 +302,6 @@ $_$;
 
 
 ALTER FUNCTION {schema}.check_code_exec(in_tblname character varying, in_code_val character varying) OWNER TO postgres;
-
---
--- Name: check_foreign_key(character varying, bigint); Type: FUNCTION; Schema: {schema}; Owner: postgres
---
-
-CREATE FUNCTION check_foreign_key(in_tblname character varying, in_tblid bigint) RETURNS bigint
-    LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
-    AS $$
-DECLARE
-    rslt     bigint;
-    runmesql text;
-BEGIN
-
-  rslt := {schema}.check_foreign_key_exec(in_tblname, in_tblid);
-
-  RETURN rslt;
-
-EXCEPTION WHEN OTHERS THEN
-
-  RETURN -1;
-
-END;
-$$;
-
-
-ALTER FUNCTION {schema}.check_foreign_key(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
-
---
--- Name: check_foreign_key_exec(character varying, bigint); Type: FUNCTION; Schema: {schema}; Owner: postgres
---
-
-CREATE FUNCTION check_foreign_key_exec(in_tblname character varying, in_tblid bigint) RETURNS bigint
-    LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 10
-    AS $_$
-DECLARE
-    rslt     bigint;
-    runmesql text;
-BEGIN
-
-  rslt := 0;
-
-  select 'select count(*) from ' || schemaname || '.' || tablename || 
-           ' where ' || tablename || '_id = $1 ;'
-    into runmesql
-    from pg_tables
-   where tablename = lower(in_tblname) 
-   order by (case schemaname when '{schema}' then 1 else 2 end), schemaname
-   limit 1;
-
-  EXECUTE runmesql INTO rslt USING in_tblid;
-  
-  RETURN rslt;
-END;
-$_$;
-
-
-ALTER FUNCTION {schema}.check_foreign_key_exec(in_tblname character varying, in_tblid bigint) OWNER TO postgres;
 
 --
 -- Name: check_param(character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: {schema}; Owner: postgres
@@ -394,15 +337,15 @@ BEGIN
     RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not defined in param__tbl';
   END IF;  
   
-  IF lower(in_table) NOT IN ('param_app','param_user','param_sys') THEN
+  IF lower(in_table) NOT IN (lower('param_app'),lower('param_user'),lower('param_sys')) THEN
     RETURN 'Table '||lower(in_table) || ' is not defined';
   END IF;  
  
-  IF lower(in_table)='param_app' AND is_param_app=false THEN
+  IF lower(in_table)=lower('param_app') AND is_param_app=false THEN
     RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||lower(in_table);
-  ELSIF lower(in_table)='param_user' AND is_param_user=false THEN
+  ELSIF lower(in_table)=lower('param_user') AND is_param_user=false THEN
     RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||lower(in_table);
-  ELSIF lower(in_table)='param_sys' AND is_param_sys=false THEN
+  ELSIF lower(in_table)=lower('param_sys') AND is_param_sys=false THEN
     RETURN 'Process parameter '||in_process||'.'||in_attrib||' is not assigned to '||lower(in_table);
   END IF;  
 
@@ -498,7 +441,7 @@ CREATE FUNCTION cust_user_iud() RETURNS trigger
         IF (TG_OP='INSERT' 
             OR 
             TG_OP='UPDATE' AND {schema}.nequal(NEW.cust_id, OLD.cust_id)) THEN
-          IF {schema}.check_foreign_key('C', NEW.cust_id) <= 0THEN
+          IF coalesce({schema}.get_cust_id('cust', NEW.cust_id),0) <= 0 THEN
             RAISE EXCEPTION  'Table cust does not contain record % .', NEW.cust_id::text ;
 	  END IF;
 	END IF;   
@@ -582,7 +525,7 @@ CREATE FUNCTION cust_user_iud() RETURNS trigger
         
           newpw = btrim(NEW.sys_user_pw1);
           if newpw is not null then
-            hash = my_hash('C', NEW.sys_user_id, newpw);
+            hash = {schema}.my_hash('C', NEW.sys_user_id, newpw);
             if (hash is null) then
               RAISE EXCEPTION  'Application Error - Missing or Incorrect Password.';
             end if;
@@ -840,6 +783,7 @@ BEGIN
 EXCEPTION WHEN OTHERS THEN
 
   raise notice '% %', SQLERRM, SQLSTATE;
+  RETURN NULL;
 
 END;
 $$;
@@ -900,6 +844,7 @@ BEGIN
 EXCEPTION WHEN OTHERS THEN
 
   raise notice '% %', SQLERRM, SQLSTATE;
+  RETURN NULL;
 
 END;
 $$;
@@ -959,6 +904,7 @@ BEGIN
 EXCEPTION WHEN OTHERS THEN
 
   raise notice '% %', SQLERRM, SQLSTATE;
+  RETURN NULL;
 
 END;
 $$;
@@ -1019,6 +965,7 @@ BEGIN
 EXCEPTION WHEN OTHERS THEN
 
   raise notice '% %', SQLERRM, SQLSTATE;
+  RETURN NULL;
 
 END;
 $$;
@@ -1072,6 +1019,7 @@ BEGIN
 EXCEPTION WHEN OTHERS THEN
 
   raise notice '% %', SQLERRM, SQLSTATE;
+  RETURN NULL;
 
 END;
 $$;
@@ -1125,12 +1073,81 @@ BEGIN
 EXCEPTION WHEN OTHERS THEN
 
   raise notice '% %', SQLERRM, SQLSTATE;
+  RETURN NULL;
 
 END;
 $$;
 
 
 ALTER FUNCTION {schema}.create_code2_sys(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) OWNER TO postgres;
+
+
+
+--
+-- Name: get_cust_id(in_tabn character varying, in_tabid bigint); Type: FUNCTION; Schema: {schema}; Owner: postgres
+--
+
+CREATE FUNCTION get_cust_id(in_tabn character varying, in_tabid bigint) RETURNS bigint
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+    sqlcmd          text;
+    get_cust_id     text;
+    wk_cust_id      bigint;
+BEGIN
+
+ select param_cur_val
+          into get_cust_id
+          from {schema}.v_param_cur 
+         where param_cur_process = 'SQL'
+           and param_cur_attrib = 'get_cust_id'; 
+  sqlcmd := 'select '||get_cust_id||'($1,$2);';
+  EXECUTE sqlcmd INTO wk_cust_id USING in_tabn, in_tabid;
+
+  RETURN(wk_cust_id);
+
+EXCEPTION WHEN OTHERS THEN
+  raise exception '% %', SQLERRM, SQLSTATE;
+  return(null);
+END;
+$_$;
+
+
+ALTER FUNCTION {schema}.get_cust_id(in_tabn character varying, in_tabid bigint) OWNER TO postgres;
+
+
+--
+-- Name: check_scope_id(in_scope character varying, in_scope_id bigint, in_cust_id bigint); Type: FUNCTION; Schema: {schema}; Owner: postgres
+--
+
+CREATE FUNCTION check_scope_id(in_scope character varying, in_scope_id bigint, in_cust_id bigint) RETURNS bigint
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+    sqlcmd          text;
+    check_scope_id     text;
+    rslt      bigint;
+BEGIN
+
+ select param_cur_val
+          into check_scope_id
+          from {schema}.v_param_cur 
+         where param_cur_process = 'SQL'
+           and param_cur_attrib = 'check_scope_id'; 
+  sqlcmd := 'select '||check_scope_id||'($1,$2,$3);';
+  EXECUTE sqlcmd INTO rslt USING in_scope, in_scope_id, in_cust_id;
+
+  RETURN(rslt);
+
+EXCEPTION WHEN OTHERS THEN
+  raise exception '% %', SQLERRM, SQLSTATE;
+  return(null);
+END;
+$_$;
+
+
+ALTER FUNCTION {schema}.check_scope_id(in_scope character varying, in_scope_id bigint, in_cust_id bigint) OWNER TO postgres;
+
 
 --
 -- Name: doc__tbl_iud(); Type: FUNCTION; Schema: {schema}; Owner: postgres
@@ -1155,6 +1172,7 @@ CREATE FUNCTION doc__tbl_iud() RETURNS trigger
       my_item_id    bigint = NULL;
       user_cust_id  bigint = NULL;
       my_doc_scope text = NULL;
+      my_doc_scope_tbl text = NULL;
       my_doc_scope_id bigint = NULL;
       cust_user_user   boolean;
     BEGIN
@@ -1181,16 +1199,17 @@ CREATE FUNCTION doc__tbl_iud() RETURNS trigger
            and param_cur_attrib = 'doc_ctgr_table'; 
 
         my_doc_scope = case TG_OP when 'DELETE' then OLD.doc_scope else NEW.doc_scope end;
+        select coalesce(code_code,code_val) into my_doc_scope_tbl from {schema}.code_doc_scope where code_val = my_doc_scope;
         my_doc_scope_id = case TG_OP when 'DELETE' then OLD.doc_scope_id else NEW.doc_scope_id end;
 
         if get_cust_id is not null and my_doc_scope not in ('sys_user_code') then
           sqlcmd := 'select '||get_cust_id||'($1,$2);';
-          EXECUTE sqlcmd INTO my_cust_id USING my_doc_scope, my_doc_scope_id;
+          EXECUTE sqlcmd INTO my_cust_id USING my_doc_scope_tbl, my_doc_scope_id;
         end if;
 
         if get_item_id is not null and my_doc_scope not in ('sys_user_code') then
           sqlcmd := 'select '||get_item_id||'($1,$2);';
-          EXECUTE sqlcmd INTO my_item_id USING my_doc_scope, my_doc_scope_id;
+          EXECUTE sqlcmd INTO my_item_id USING my_doc_scope_tbl, my_doc_scope_id;
         end if;
 
         my_toa.op := TG_OP;
@@ -1247,16 +1266,16 @@ CREATE FUNCTION doc__tbl_iud() RETURNS trigger
 	END IF;   
 
         IF (cust_user_user) THEN
-	  IF coalesce(USER_cust_id,0) <> coalesce(my_cust_id,0)
+	  IF coalesce(user_cust_id,0) <> coalesce(my_cust_id,0)
 	     OR
-             my_doc_scope not in ('C','E','J','O') THEN
+             (coalesce({schema}.check_scope_id(NEW.doc_scope, NEW.doc_scope_id, USER_cust_id),0) <= 0) THEN
             RAISE EXCEPTION  'Application Error - Client User has no rights to perform this operation';
 	  END IF; 
         END IF;
 
         IF (TG_OP='INSERT' OR TG_OP='UPDATE') THEN
-          IF NOT {schema}.check_foreign_key(NEW.doc_scope, NEW.doc_scope_id)>0 THEN
-            RAISE EXCEPTION  'Table % does not contain record % .', NEW.doc_scope, NEW.doc_scope_id::text ;
+          IF (coalesce({schema}.check_scope_id(NEW.doc_scope, NEW.doc_scope_id, null),0) <= 0) THEN
+            RAISE EXCEPTION  'Table scope % does not contain record % .', NEW.doc_scope, NEW.doc_scope_id::text ;
 	  END IF;
 	END IF;   
 
@@ -2320,6 +2339,7 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
       my_cust_id    bigint = NULL;
       user_cust_id  bigint = NULL;
       my_note_scope text = NULL;
+      my_note_scope_tbl text = NULL;
       cust_user_user   boolean;
     BEGIN
 
@@ -2331,13 +2351,15 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
         my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
 
         if TG_OP = 'DELETE' then
+          select coalesce(code_code,code_val) into my_note_scope_tbl from {schema}.code_note_scope where code_val = OLD.note_scope;
           my_toa.cust_id := NULL;
         else
+          select coalesce(code_code,code_val) into my_note_scope_tbl from {schema}.code_note_scope where code_val = NEW.note_scope;
           if NEW.note_scope in ('sys_user_code')
           then 
             my_toa.cust_id := NULL;
           else  
-            my_toa.cust_id := get_cust_id(NEW.note_scope, NEW.note_scope_id);
+            my_toa.cust_id := {schema}.get_cust_id(my_note_scope_tbl, NEW.note_scope_id);
           end if;  
         end if; 
         
@@ -2351,7 +2373,7 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
           then 
             my_cust_id := NULL;
           else  
-            my_cust_id := get_cust_id(OLD.note_scope, OLD.note_scope_id);
+            my_cust_id := {schema}.get_cust_id(my_note_scope_tbl, OLD.note_scope_id);
           end if;  
           my_note_scope := OLD.note_scope;
         else
@@ -2359,7 +2381,7 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
           then 
             my_cust_id := NULL;
           else  
-            my_cust_id := get_cust_id(NEW.note_scope, NEW.note_scope_id);
+            my_cust_id := {schema}.get_cust_id(my_note_scope_tbl, NEW.note_scope_id);
           end if;  
           my_note_scope := NEW.note_scope;
         end if; 
@@ -2385,7 +2407,7 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
         IF (cust_user_user) THEN
 	  IF coalesce(USER_cust_id,0) <> coalesce(my_cust_id,0)
 	     OR
-             my_note_scope not in ('C','E','J','O') THEN
+             (coalesce({schema}.check_scope_id(NEW.note_scope, NEW.note_scope_id, USER_cust_id),0) <= 0) THEN
             RAISE EXCEPTION  'Application Error - Client User has no rights to perform this operation';
 	  END IF; 
         END IF;
@@ -2408,8 +2430,8 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
           
 
         IF (TG_OP='INSERT' OR TG_OP='UPDATE') THEN
-          IF NOT {schema}.check_foreign_key(NEW.note_scope, NEW.note_scope_id)>0 THEN
-            RAISE EXCEPTION  'Table % does not contain record % .', NEW.note_scope, NEW.note_scope_id::text ;
+          IF (coalesce({schema}.check_scope_id(NEW.note_scope, NEW.note_scope_id, null),0) <= 0) THEN
+            RAISE EXCEPTION  'Table for scope % does not contain record % .', NEW.note_scope, NEW.note_scope_id::text ;
 	  END IF;
 	END IF;   
 
@@ -3426,8 +3448,8 @@ BEGIN
   select table_type
     into rslt
     from information_schema.tables
-   where table_schema = lower(coalesce(in_schema,'public'))
-     and audit_table_name = lower(in_name); 
+   where lower(table_schema) = lower(coalesce(in_schema,'public'))
+     and lower(table_name) = lower(in_name); 
 
   RETURN rslt;
 
@@ -7115,7 +7137,7 @@ ALTER TABLE v_param_sys OWNER TO postgres;
 --
 
 CREATE VIEW v_year AS
- SELECT ((date_part('year_txt'::text, my_now()) + (number__tbl.number_val)::double precision) - (1)::double precision) AS year_val
+ SELECT ((date_part('year'::text, my_now()) + (number__tbl.number_val)::double precision) - (1)::double precision) AS year_val
    FROM number__tbl
   WHERE (number__tbl.number_val <= 10);
 
@@ -9048,7 +9070,7 @@ ALTER TABLE ONLY menu__tbl
 --
 
 ALTER TABLE ONLY sys_user_func
-    ADD CONSTRAINT sys_user_func_sys_user_id_fkey FOREIGN KEY (sys_user_id) REFERENCES sys_user(sys_user_id);
+    ADD CONSTRAINT sys_user_func_sys_user_id_fkey FOREIGN KEY (sys_user_id) REFERENCES sys_user(sys_user_id) ON DELETE CASCADE;;
 
 
 --
@@ -9064,7 +9086,7 @@ ALTER TABLE ONLY sys_user_func
 --
 
 ALTER TABLE ONLY sys_user_role
-    ADD CONSTRAINT sys_user_role_sys_user_id_fkey FOREIGN KEY (sys_user_id) REFERENCES sys_user(sys_user_id);
+    ADD CONSTRAINT sys_user_role_sys_user_id_fkey FOREIGN KEY (sys_user_id) REFERENCES sys_user(sys_user_id) ON DELETE CASCADE;;
 
 
 --
@@ -9219,30 +9241,6 @@ GRANT ALL ON FUNCTION check_code_exec(in_tblname character varying, in_code_val 
 
 
 --
--- Name: check_foreign_key(character varying, bigint); Type: ACL; Schema: {schema}; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION check_foreign_key(in_tblname character varying, in_tblid bigint) FROM PUBLIC;
-REVOKE ALL ON FUNCTION check_foreign_key(in_tblname character varying, in_tblid bigint) FROM postgres;
-GRANT ALL ON FUNCTION check_foreign_key(in_tblname character varying, in_tblid bigint) TO postgres;
-GRANT ALL ON FUNCTION check_foreign_key(in_tblname character varying, in_tblid bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION check_foreign_key(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_foreign_key(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
--- Name: check_foreign_key_exec(character varying, bigint); Type: ACL; Schema: {schema}; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION check_foreign_key_exec(in_tblname character varying, in_tblid bigint) FROM PUBLIC;
-REVOKE ALL ON FUNCTION check_foreign_key_exec(in_tblname character varying, in_tblid bigint) FROM postgres;
-GRANT ALL ON FUNCTION check_foreign_key_exec(in_tblname character varying, in_tblid bigint) TO postgres;
-GRANT ALL ON FUNCTION check_foreign_key_exec(in_tblname character varying, in_tblid bigint) TO PUBLIC;
-GRANT ALL ON FUNCTION check_foreign_key_exec(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
-GRANT ALL ON FUNCTION check_foreign_key_exec(in_tblname character varying, in_tblid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
-
-
---
 -- Name: check_param(character varying, character varying, character varying, character varying); Type: ACL; Schema: {schema}; Owner: postgres
 --
 
@@ -9348,6 +9346,26 @@ REVOKE ALL ON FUNCTION create_code2_sys(in_code_schema character varying, in_cod
 REVOKE ALL ON FUNCTION create_code2_sys(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) FROM postgres;
 GRANT ALL ON FUNCTION create_code2_sys(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) TO postgres;
 GRANT ALL ON FUNCTION create_code2_sys(in_code_schema character varying, in_code_name character varying, in_code_desc character varying) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: get_cust_id(in_tabn character varying, in_tabid bigint); Type: ACL; Schema: {schema}; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION get_cust_id(in_tabn character varying, in_tabid bigint) FROM PUBLIC;
+REVOKE ALL ON FUNCTION get_cust_id(in_tabn character varying, in_tabid bigint) FROM postgres;
+GRANT ALL ON FUNCTION get_cust_id(in_tabn character varying, in_tabid bigint) TO postgres;
+GRANT ALL ON FUNCTION get_cust_id(in_tabn character varying, in_tabid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: check_scope_id(in_scope character varying, in_scope_id bigint, in_cust_id bigint); Type: ACL; Schema: {schema}; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION check_scope_id(in_scope character varying, in_scope_id bigint, in_cust_id bigint) FROM PUBLIC;
+REVOKE ALL ON FUNCTION check_scope_id(in_scope character varying, in_scope_id bigint, in_cust_id bigint) FROM postgres;
+GRANT ALL ON FUNCTION check_scope_id(in_scope character varying, in_scope_id bigint, in_cust_id bigint) TO postgres;
+GRANT ALL ON FUNCTION check_scope_id(in_scope character varying, in_scope_id bigint, in_cust_id bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --

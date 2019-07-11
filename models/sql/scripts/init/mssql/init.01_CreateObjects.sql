@@ -924,7 +924,7 @@ DECLARE @rslt VARCHAR(MAX) = NULL
   select @rslt = table_type
     from information_schema.tables
    where table_schema = coalesce(@in_schema,'dbo')
-     and audit_table_name = @in_name; 
+     and table_name = @in_name; 
 	
   RETURN (@rslt)
 
@@ -1240,8 +1240,8 @@ GO
 
 /****** Script for SelectTopNRows command from SSMS  ******/
 CREATE view [{schema}].[v_year] as
-select datepart(year_txt,sysdatetime())+number_val-1 year_val,
-       datepart(year_txt,sysdatetime())+number_val-1 year_txt
+select datepart(year,sysdatetime())+number_val-1 year_val,
+       datepart(year,sysdatetime())+number_val-1 year_txt
   from {schema}.number__tbl
  where number_val <=10;
 
@@ -3658,14 +3658,14 @@ BEGIN
          if @@ROWCOUNT = 0
 		 begin
 
-           if (@custid is null and lower(@tname) <> 'cust')
+           if (@custid is null and lower(@tname) <> lower('cust'))
 		   begin	
 	         SET @SQLCMD = 'select @my_cust_id  = ' + @get_cust_id + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	         EXECUTE sp_executesql @SQLCMD, N'@my_cust_id bigint OUTPUT', @MY_cust_id=@my_cust_id OUTPUT
 	         SET @cust_id = @MY_cust_id
            end
 
-           if (@itemid is null and lower(@tname) <> 'item__tbl')
+           if (@itemid is null and lower(@tname) <> lower('item__tbl'))
 		   begin	
 	         SET @SQLCMD = 'select @my_item_id  = ' + @get_item_id + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	         EXECUTE sp_executesql @SQLCMD, N'@my_item_id bigint OUTPUT', @MY_item_id=@my_item_id OUTPUT
@@ -3673,10 +3673,10 @@ BEGIN
 		   end
 
 		   select @WK_cust_id = case when @custid is not null then @custid
-		                          when lower(@tname) = 'cust' then @tid 
+		                          when lower(@tname) = lower('cust') then @tid 
 							      else @cust_id end,  
 		          @WK_item_id = case when @itemid is not null then @itemid
-		                          when lower(@tname)  = 'item__tbl' then @tid 
+		                          when lower(@tname)  = lower('item__tbl') then @tid 
 								  else @item_id end, 
 		          @WK_audit_ref_name = @audit_ref_name,
 		          @WK_audit_ref_id = @audit_ref_id,
@@ -3686,14 +3686,14 @@ BEGIN
     ELSE
 	begin
 
-        if (@custid is null and lower(@tname) <> 'cust')
+        if (@custid is null and lower(@tname) <> lower('cust'))
 		begin	
 	      SET @SQLCMD = 'select @my_cust_id  = ' + @get_cust_id + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	      EXECUTE sp_executesql @SQLCMD, N'@my_cust_id bigint OUTPUT', @MY_cust_id=@my_cust_id OUTPUT
 	      SET @cust_id = @MY_cust_id
         end
 
-        if (@itemid is null and lower(@tname) <> 'item__tbl')
+        if (@itemid is null and lower(@tname) <> lower('item__tbl'))
 		begin	
 	      SET @SQLCMD = 'select @my_item_id  = ' + @get_item_id + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
 	      EXECUTE sp_executesql @SQLCMD, N'@my_item_id bigint OUTPUT', @MY_item_id=@my_item_id OUTPUT
@@ -3701,10 +3701,10 @@ BEGIN
 		end
 
 		SET @WK_cust_id = case when @custid is not null then @custid
-		                    when lower(@tname) = 'cust' then @tid 
+		                    when lower(@tname) = lower('cust') then @tid 
 							else @cust_id end;  
 		SET @WK_item_id = case when @itemid is not null then @itemid
-		                    when lower(@tname) = 'item__tbl' then @tid 
+		                    when lower(@tname) = lower('item__tbl') then @tid 
 							else @item_id end; 
 		SET @WK_audit_ref_name = @audit_ref_name;
 		SET @WK_audit_ref_id = @audit_ref_id;
@@ -3904,10 +3904,10 @@ BEGIN
 
   SELECT @rslt = 0
   SELECT top(1)
-         @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + audit_table_name + '] where code_val = ''' + 
+         @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + table_name + '] where code_val = ''' + 
 		             isnull(@in_code_val,'') + ''''
     from information_schema.tables
-   where audit_table_name = @in_tblname
+   where table_name = @in_tblname
    order by (case table_schema when '{schema}' then 1 else 2 end),table_schema;
 
   exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output 	
@@ -3984,10 +3984,10 @@ BEGIN
 
   SELECT @rslt = 0
   SELECT top(1)
-         @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + audit_table_name + '] where code_val1 = ''' + 
+         @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + table_name + '] where code_val1 = ''' + 
 		             isnull(@in_code_val1,'') + ''' and code_val2 = ''' + isnull(@in_code_val2,'') +  ''''
     from information_schema.tables
-   where audit_table_name = @in_tblname
+   where table_name = @in_tblname
    order by (case table_schema when '{schema}' then 1 else 2 end),table_schema;
 
   exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output 	
@@ -4008,76 +4008,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-
-
-CREATE PROCEDURE  [{schema}].[check_foreign_key]
-(
-	@in_tblname nvarchar(128),
-	@in_tblid bigint
-)	
-as
-BEGIN
-
-DECLARE	@return_value int
-
-BEGIN TRY
-EXEC	@return_value = [{schema}].[check_foreign_key_exec]
-		@in_tblname = @in_tblname,
-		@in_tblid = @in_tblid
-END TRY	
-BEGIN CATCH	
-SELECT @return_value = -1
-END CATCH
-
-RETURN( @return_value)
-
-END
-
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
-
-
-CREATE PROCEDURE  [{schema}].[check_foreign_key_exec]
-(
-	@in_tblname nvarchar(128),
-	@in_tblid bigint
-)	
-as
-BEGIN
-
-  DECLARE @rslt INT
-  DECLARE @runmesql NVARCHAR(512)
-
-  SELECT @rslt = 0
-  SELECT top(1)
-         @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + audit_table_name + '] where ' + audit_table_name +
-                     '_id = ' + CAST(@in_tblid AS VARCHAR(255)) 
-    from information_schema.tables
-   where audit_table_name = @in_tblname
-   order by (case table_schema when '{schema}' then 1 else 2 end),table_schema;
-
-  exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output 	
-      
-  return (@rslt)
-
-END
-
-
-
-
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 
 CREATE PROCEDURE  [{schema}].[create_code]
 (
@@ -10036,7 +9966,7 @@ SELECT doc__tbl.doc_id
 GO
 
 
-/****** Object:  View [dbo].[v_note]    Script Date: 10/24/2018 12:27:37 PM ******/
+/****** Object:  View [{schema}].[v_note]    Script Date: 10/24/2018 12:27:37 PM ******/
 SET ANSI_NULLS ON
 GO
 

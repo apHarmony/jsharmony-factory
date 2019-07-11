@@ -8,16 +8,17 @@ SET search_path = {schema}, pg_catalog;
 
 
 INSERT INTO code_ahc (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO code_ahc (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO code_ahc (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'HOLD', 'Hold', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO code_ahc (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
-INSERT INTO cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'CSYSADMIN', 'Administrator', NULL, NULL, NULL);
-INSERT INTO cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (2, 'ACTIVE', 'CX_B', 'Browse', NULL, NULL, NULL);
-INSERT INTO cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (3, 'ACTIVE', 'CX_X', 'Entry / Update', NULL, NULL, NULL);
-INSERT INTO cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'CUSER', 'Client User', NULL, NULL, NULL);
 INSERT INTO cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (0, 'ACTIVE', 'C*', 'All Users', NULL, NULL, NULL);
+INSERT INTO cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (1, 'ACTIVE', 'CUSER', 'Client User', NULL, NULL, NULL);
+INSERT INTO cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (2, 'ACTIVE', 'CSYSADMIN', 'Administrator', NULL, NULL, NULL);
+INSERT INTO cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (3, 'ACTIVE', 'CX_B', 'Browse', NULL, NULL, NULL);
+INSERT INTO cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (4, 'ACTIVE', 'CX_X', 'Entry / Update', NULL, NULL, NULL);
+
 
 
 
@@ -107,8 +108,9 @@ INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, cod
 INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('HOUSE', 'EMAIL', 'HOUSE Email', 'C', NULL, NULL, true, false, false);
 INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('HOUSE', 'FAX', 'HOUSE Fax', 'C', NULL, NULL, true, false, false);
 INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'doc_ctgr_table', 'Code table - Document Types by Scope', 'C', NULL, NULL, false, false, true);
-INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'get_cust_id', 'SQL Function GET_cust_id', 'C', NULL, NULL, false, false, true);
-INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'get_item_id', 'SQL Function GET_item_id', 'C', NULL, NULL, false, false, true);
+INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'get_cust_id', 'SQL Function get_cust_id', 'C', NULL, NULL, false, false, true);
+INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'get_item_id', 'SQL Function get_item_id', 'C', NULL, NULL, false, false, true);
+INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'check_scope_id', 'SQL Function check_scope_id', 'C', NULL, NULL, false, false, true);
 INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('HOUSE', 'ZIP', 'HOUSE ZIP', 'C', NULL, NULL, true, false, false);
 INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('HOUSE', 'STATE', 'HOUSE State', 'C', NULL, NULL, true, false, false);
 INSERT INTO param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('HOUSE', 'NAME', 'HOUSE Name', 'C', NULL, NULL, true, false, false);
@@ -134,8 +136,6 @@ INSERT INTO param_app (param_app_process, param_app_attrib, param_app_val) VALUE
 
 
 
-INSERT INTO help_target (help_target_code, help_target_desc) VALUES ('CT', 'Customer Contact');
-INSERT INTO help_target (help_target_code, help_target_desc) VALUES ('C', 'Customer');
 
 
 
@@ -1198,8 +1198,8 @@ INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES 
 INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (280000, NULL, 'SYSADMIN');
 
 
-INSERT INTO code_txt_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'HTML', 'HTML', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO code_txt_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'TEXT', 'Text', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO code_txt_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'HTML', 'HTML', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
@@ -1335,7 +1335,7 @@ INSERT INTO code2_sys (code_name, code_desc, code_code_desc, code_snotes, code_a
 
 
 INSERT INTO code_ac (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'ACTIVE', 'Active', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO code_ac (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'CLOSED', 'Closed', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO code_ac (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'CLOSED', 'Closed', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
@@ -1350,11 +1350,9 @@ INSERT INTO code_country (code_seq, code_val, code_txt, code_code, code_end_dt, 
 
 
 
-INSERT INTO code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'S', 'System', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'O', 'Order', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (5, 'sys_user_code', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO code_doc_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'sys_user_code', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
@@ -1373,17 +1371,15 @@ INSERT INTO code_sys (code_name, code_desc, code_code_desc, code_snotes, code_at
 
 
 
-INSERT INTO code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'S', 'System', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'CT', 'Cust Contact', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (4, 'VEN', 'Vendor', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (5, 'sys_user_code', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'C', 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO code_note_scope (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'sys_user_code', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
+INSERT INTO code_note_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'U', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO code_note_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'C', 'Client', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO code_note_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (3, 'S', 'System', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO code_note_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'U', 'User', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
@@ -1397,8 +1393,8 @@ INSERT INTO code_job_source (code_seq, code_val, code_txt, code_code, code_end_d
 
 
 
-INSERT INTO code_version_sts (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'ERROR', 'Error', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO code_version_sts (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'OK', 'OK', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO code_version_sts (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (2, 'ERROR', 'Error', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 
@@ -1407,5 +1403,6 @@ INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUE
 INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'doc_ctgr_table', 'code2_doc_scope_doc_ctgr');
 INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'get_cust_id', 'public.get_cust_id');
 INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'get_item_id', 'public.get_item_id');
+INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'check_scope_id', 'public.check_scope_id');
 INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'https://localhost');
 INSERT INTO param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('EMAIL', 'NOTIF_SYS', 'user@company.com');
