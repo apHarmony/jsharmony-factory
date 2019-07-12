@@ -138,6 +138,10 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         jsh.DBConfig['default'].password = nextarg;
         i++;
       }
+      else if(arg=='--admin-pass'){
+        scriptConfig._JSH_ADMIN_PASS = nextarg;
+        i++;
+      }
     }
   
     Promise.resolve()

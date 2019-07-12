@@ -98,8 +98,9 @@ INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_
 INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('HOUSE', 'EMAIL', 'HOUSE Email', 'C', NULL, NULL, 1, 0, 0);
 INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('HOUSE', 'FAX', 'HOUSE Fax', 'C', NULL, NULL, 1, 0, 0);
 INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'doc_ctgr_table', 'Code table - Document Types by Scope', 'C', NULL, NULL, 0, 0, 1);
-INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'get_cust_id', 'SQL Function GET_cust_id', 'C', NULL, NULL, 0, 0, 1);
-INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'get_item_id', 'SQL Function GET_item_id', 'C', NULL, NULL, 0, 0, 1);
+INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'get_cust_id', 'SQL Function get_cust_id', 'C', NULL, NULL, 0, 0, 1);
+INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'get_item_id', 'SQL Function get_item_id', 'C', NULL, NULL, 0, 0, 1);
+INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SQL', 'check_scope_id', 'SQL Function check_scope_id', 'C', NULL, NULL, 0, 0, 1);
 INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('HOUSE', 'ZIP', 'HOUSE ZIP', 'C', NULL, NULL, 1, 0, 0);
 INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('HOUSE', 'STATE', 'HOUSE State', 'C', NULL, NULL, 1, 0, 0);
 INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('HOUSE', 'NAME', 'HOUSE Name', 'C', NULL, NULL, 1, 0, 0);
@@ -109,7 +110,6 @@ INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_
 INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'Client Portal URL', 'C', NULL, NULL, 0, 0, 1);
 INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('SYSTEM', 'SYS_URL', 'System URL', 'C', NULL, NULL, 0, 0, 1);
 INSERT INTO {schema}.param__tbl (param_process, param_attrib, param_desc, param_type, code_name, param_snotes, is_param_app, is_param_user, is_param_sys) VALUES ('USERS', 'HASH_SEED_C', 'Hash Seed Client Users', 'C', NULL, NULL, 0, 0, 1);
-
 
 
 INSERT INTO {schema}.param_app (param_app_process, param_app_attrib, param_app_val) VALUES ('HOUSE', 'STATE', 'IL');
@@ -1390,7 +1390,5 @@ INSERT INTO {schema}.code_version_sts (code_seq, code_val, code_txt, code_code, 
 INSERT INTO {schema}.param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('USERS', 'HASH_SEED_C', 'AAA');
 INSERT INTO {schema}.param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('USERS', 'HASH_SEED_S', 'BBB');
 INSERT INTO {schema}.param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'doc_ctgr_table', 'code2_doc_scope_doc_ctgr');
-INSERT INTO {schema}.param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'get_cust_id', 'public.get_cust_id');
-INSERT INTO {schema}.param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SQL', 'get_item_id', 'public.get_item_id');
 INSERT INTO {schema}.param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('SYSTEM', 'CLIENT_SYS_URL', 'https://localhost');
 INSERT INTO {schema}.param_sys (param_sys_process, param_sys_attrib, param_sys_val) VALUES ('EMAIL', 'NOTIF_SYS', 'user@company.com');

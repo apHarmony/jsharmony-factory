@@ -43,16 +43,16 @@ EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [df_code_%%%name%%%_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [df_code_%%%name%%%_COD_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [df_code_%%%name%%%_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [DF_code_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code_%%%name%%%] ADD  CONSTRAINT [df_code_%%%name%%%_COD_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_id''''
@@ -97,7 +97,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code'
-EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code_%%%name%%%_IUD] on [%%%schema%%%].[code_%%%name%%%]
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code_%%%name%%%_iud] on [%%%schema%%%].[code_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -109,7 +109,7 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_code_%%%name%%%_IUD CURSOR LOCAL FOR
+  DECLARE CUR_code_%%%name%%%_iud CURSOR LOCAL FOR
      SELECT  del.code_id, i.code_id,
 	         del.code_seq, i.code_seq,
 	         del.code_end_dt, i.code_end_dt,
@@ -175,7 +175,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_%%%name%%%_iud'''',''''ERR'''', ''''Cannot update ID''''
     raiserror(''''Cannot update identity'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -183,15 +183,15 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_%%%name%%%_iud'''',''''ERR'''', ''''Cannot update code_val''''
     raiserror(''''Cannot update foreign key code_val'''',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_code_%%%name%%%_IUD
-  FETCH NEXT FROM CUR_code_%%%name%%%_IUD
+  OPEN CUR_code_%%%name%%%_iud
+  FETCH NEXT FROM CUR_code_%%%name%%%_iud
         INTO @D_code_id, @I_code_id,
              @D_code_seq, @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -313,7 +313,7 @@ UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
 
 
             
-    FETCH NEXT FROM CUR_code_%%%name%%%_IUD
+    FETCH NEXT FROM CUR_code_%%%name%%%_iud
         INTO @D_code_id, @I_code_id,
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -325,8 +325,8 @@ UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
 
 
   END
-  CLOSE CUR_code_%%%name%%%_IUD
-  DEALLOCATE CUR_code_%%%name%%%_IUD
+  CLOSE CUR_code_%%%name%%%_iud
+  DEALLOCATE CUR_code_%%%name%%%_iud
 
 
   RETURN
@@ -372,16 +372,16 @@ EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [df_code2_%%%name%%%_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [df_code2_%%%name%%%_COD_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [df_code2_%%%name%%%_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [DF_code2_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code2_%%%name%%%] ADD  CONSTRAINT [df_code2_%%%name%%%_COD_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code2_id''''
@@ -426,7 +426,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code2'
-EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code2_%%%name%%%_IUD] on [%%%schema%%%].[code2_%%%name%%%]
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code2_%%%name%%%_iud] on [%%%schema%%%].[code2_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -438,7 +438,7 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_code2_%%%name%%%_IUD CURSOR LOCAL FOR
+  DECLARE CUR_code2_%%%name%%%_iud CURSOR LOCAL FOR
      SELECT  del.code2_id, i.code2_id,
 	         del.code_seq, i.code_seq,
 	         del.code_end_dt, i.code_end_dt,
@@ -506,7 +506,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code2_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_iud'''',''''ERR'''', ''''Cannot update ID''''
     raiserror(''''Cannot update identity'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -514,7 +514,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val1)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val1''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_iud'''',''''ERR'''', ''''Cannot update code_val1''''
     raiserror(''''Cannot update foreign key code_val1'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -522,15 +522,15 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val2)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val2''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_%%%name%%%_iud'''',''''ERR'''', ''''Cannot update code_val2''''
     raiserror(''''Cannot update foreign key code_val2'''',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_code2_%%%name%%%_IUD
-  FETCH NEXT FROM CUR_code2_%%%name%%%_IUD
+  OPEN CUR_code2_%%%name%%%_iud
+  FETCH NEXT FROM CUR_code2_%%%name%%%_iud
         INTO @D_code2_id, @I_code2_id,
              @D_code_seq, @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -662,7 +662,7 @@ EXEC(N'DECLARE @pv binary(16)
 
 
             
-    FETCH NEXT FROM CUR_code2_%%%name%%%_IUD
+    FETCH NEXT FROM CUR_code2_%%%name%%%_iud
         INTO @D_code2_id, @I_code2_id,
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -676,8 +676,8 @@ UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N''DEVAL2,
 
 
   END
-  CLOSE CUR_code2_%%%name%%%_IUD
-  DEALLOCATE CUR_code2_%%%name%%%_IUD
+  CLOSE CUR_code2_%%%name%%%_iud
+  DEALLOCATE CUR_code2_%%%name%%%_iud
 
 
   RETURN
@@ -726,16 +726,16 @@ EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [df_code_app_%%%name%%%_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [df_code_app_%%%name%%%_COD_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [df_code_app_%%%name%%%_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [DF_code_app_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code_app_%%%name%%%] ADD  CONSTRAINT [df_code_app_%%%name%%%_COD_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_app_id''''
@@ -780,7 +780,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code_app'
-EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code_app_%%%name%%%_IUD] on [%%%schema%%%].[code_app_%%%name%%%]
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code_app_%%%name%%%_iud] on [%%%schema%%%].[code_app_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -792,7 +792,7 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_code_app_%%%name%%%_IUD CURSOR LOCAL FOR
+  DECLARE CUR_code_app_%%%name%%%_iud CURSOR LOCAL FOR
      SELECT  del.code_app_id, i.code_app_id,
 	         del.code_seq, i.code_seq,
 	         del.code_end_dt, i.code_end_dt,
@@ -858,7 +858,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_app_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_app_%%%name%%%_iud'''',''''ERR'''', ''''Cannot update ID''''
     raiserror(''''Cannot update identity'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -866,15 +866,15 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code_app_%%%name%%%_iud'''',''''ERR'''', ''''Cannot update code_val''''
     raiserror(''''Cannot update foreign key code_val'''',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_code_app_%%%name%%%_IUD
-  FETCH NEXT FROM CUR_code_app_%%%name%%%_IUD
+  OPEN CUR_code_app_%%%name%%%_iud
+  FETCH NEXT FROM CUR_code_app_%%%name%%%_iud
         INTO @D_code_app_id, @I_code_app_id,
              @D_code_seq, @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -996,7 +996,7 @@ UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
 
 
             
-    FETCH NEXT FROM CUR_code_app_%%%name%%%_IUD
+    FETCH NEXT FROM CUR_code_app_%%%name%%%_iud
         INTO @D_code_app_id, @I_code_app_id,
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -1008,8 +1008,8 @@ UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N'code_seq) > 0)
 
 
   END
-  CLOSE CUR_code_app_%%%name%%%_IUD
-  DEALLOCATE CUR_code_app_%%%name%%%_IUD
+  CLOSE CUR_code_app_%%%name%%%_iud
+  DEALLOCATE CUR_code_app_%%%name%%%_iud
 
 
   RETURN
@@ -1055,16 +1055,16 @@ EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [df_code2_app_%%%name%%%_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [df_code2_app_%%%name%%%_COD_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [df_code2_app_%%%name%%%_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [DF_code2_app_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code2_app_%%%name%%%] ADD  CONSTRAINT [df_code2_app_%%%name%%%_COD_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_app_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code2_app_id''''
@@ -1109,7 +1109,7 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''User Codes 
 
 
 ',NULL,NULL) WHERE [script_name]=N'create_code2_app'
-EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code2_app_%%%name%%%_IUD] on [%%%schema%%%].[code2_app_%%%name%%%]
+EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES (N''create_code2_app_TRIGGER'', N''CREATE trigger [%%%schema%%%].[code2_app_%%%name%%%_iud] on [%%%schema%%%].[code2_app_%%%name%%%]
 for insert, update, delete
 AS
 BEGIN
@@ -1121,7 +1121,7 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_code2_app_%%%name%%%_IUD CURSOR LOCAL FOR
+  DECLARE CUR_code2_app_%%%name%%%_iud CURSOR LOCAL FOR
      SELECT  del.code2_app_id, i.code2_app_id,
 	         del.code_seq, i.code_seq,
 	         del.code_end_dt, i.code_end_dt,
@@ -1189,7 +1189,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code2_app_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update ID''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_iud'''',''''ERR'''', ''''Cannot update ID''''
     raiserror(''''Cannot update identity'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -1197,7 +1197,7 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val1)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val1''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_iud'''',''''ERR'''', ''''Cannot update code_val1''''
     raiserror(''''Cannot update foreign key code_val1'''',16,1)
     ROLLBACK TRANSACTION
     return
@@ -1205,15 +1205,15 @@ BEGIN
 
   IF @TP = ''''U'''' AND UPDATE(code_val2)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_IUD'''',''''ERR'''', ''''Cannot update code_val2''''
+    EXEC [{schema}].[zz-filedebug] ''''TRIGGER'''',''''code2_app_%%%name%%%_iud'''',''''ERR'''', ''''Cannot update code_val2''''
     raiserror(''''Cannot update foreign key code_val2'''',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_code2_app_%%%name%%%_IUD
-  FETCH NEXT FROM CUR_code2_app_%%%name%%%_IUD
+  OPEN CUR_code2_app_%%%name%%%_iud
+  FETCH NEXT FROM CUR_code2_app_%%%name%%%_iud
         INTO @D_code2_app_id, @I_code2_app_id,
              @D_code_seq, @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -1345,7 +1345,7 @@ EXEC(N'DECLARE @pv binary(16)
 
 
             
-    FETCH NEXT FROM CUR_code2_app_%%%name%%%_IUD
+    FETCH NEXT FROM CUR_code2_app_%%%name%%%_iud
         INTO @D_code2_app_id, @I_code2_app_id,
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -1359,8 +1359,8 @@ UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N''DEVAL2,
 
 
   END
-  CLOSE CUR_code2_app_%%%name%%%_IUD
-  DEALLOCATE CUR_code2_app_%%%name%%%_IUD
+  CLOSE CUR_code2_app_%%%name%%%_iud
+  DEALLOCATE CUR_code2_app_%%%name%%%_iud
 
 
   RETURN
@@ -1411,16 +1411,16 @@ EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [df_code_sys_%%%name%%%_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [df_code_sys_%%%name%%%_COD_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [df_code_sys_%%%name%%%_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [DF_code_sys_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code_sys_%%%name%%%] ADD  CONSTRAINT [df_code_sys_%%%name%%%_COD_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code_sys_id''''
@@ -1500,16 +1500,16 @@ EXEC(N'INSERT INTO [{schema}].[script__tbl] ([script_name], [script_txt]) VALUES
 
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [df_code2_sys_%%%name%%%_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [df_code2_sys_%%%name%%%_COD_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [df_code2_sys_%%%name%%%_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 ;
 
-ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [DF_code2_sys_%%%name%%%_COD_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [%%%schema%%%].[code2_sys_%%%name%%%] ADD  CONSTRAINT [df_code2_sys_%%%name%%%_COD_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 ;
 
 EXEC sys.sp_addextendedproperty @name=N''''MS_Description'''', @value=N''''Code Value ID'''' , @level0type=N''''SCHEMA'''',@level0name=N''''%%%schema%%%'''', @level1type=N''''TABLE'''',@level1name=N''''code2_sys_%%%name%%%'''', @level2type=N''''COLUMN'''',@level2name=N''''code2_sys_id''''

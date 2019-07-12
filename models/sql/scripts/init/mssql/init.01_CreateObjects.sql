@@ -39,7 +39,7 @@ BEGIN
 
   SET @rslt =  'INFO'+char(13)+char(10)+ 
                '         Entered:  '+{schema}.my_mmddyyhhmi(@etstmp)+'  '+{schema}.my_db_user_fmt(@euser)+
-			   char(13)+char(10)+ 
+               char(13)+char(10)+ 
                'Last Updated:  '+{schema}.my_mmddyyhhmi(@mtstmp)+'  '+{schema}.my_db_user_fmt(@muser); 
 
   RETURN @rslt
@@ -62,11 +62,11 @@ GO
 
 CREATE FUNCTION [{schema}].[check_param]
 (
-	@in_table nvarchar(3),
-	@in_process nvarchar(32),
-	@in_attrib nvarchar(16),
-	@in_val nvarchar(256)
-)	
+    @in_table nvarchar(32),
+    @in_process nvarchar(32),
+    @in_attrib nvarchar(16),
+    @in_val nvarchar(256)
+)    
 RETURNS NVARCHAR(MAX)  
 AS 
 BEGIN
@@ -142,9 +142,9 @@ GO
 
 CREATE FUNCTION [{schema}].[doc_filename]
 (
-	@in_doc_id bigint,
-	@in_doc_ext NVARCHAR(MAX)
-)	
+    @in_doc_id bigint,
+    @in_doc_ext NVARCHAR(MAX)
+)    
 RETURNS NVARCHAR(MAX)  
 AS 
 BEGIN
@@ -172,9 +172,9 @@ GO
 
 CREATE FUNCTION [{schema}].[exists_doc]
 (
-	@tbl nvarchar(MAX),
-	@id bigint
-)	
+    @tbl nvarchar(MAX),
+    @id bigint
+)    
 RETURNS bit  
 AS 
 BEGIN
@@ -183,7 +183,7 @@ DECLARE @rslt BIT = 0
   select top(1) @rslt=1
     from {schema}.doc__tbl
    where doc_scope = @tbl
-     and doc_scope_id = @id;	 
+     and doc_scope_id = @id;     
 
 return(isnull(@rslt,0))
   
@@ -214,9 +214,9 @@ GO
 
 CREATE FUNCTION [{schema}].[exists_note]
 (
-	@tbl nvarchar(MAX),
-	@id bigint
-)	
+    @tbl nvarchar(MAX),
+    @id bigint
+)    
 RETURNS bit  
 AS 
 BEGIN
@@ -225,7 +225,7 @@ DECLARE @rslt BIT = 0
   select top(1) @rslt=1
     from {schema}.note__tbl
    where note_scope = @tbl
-     and note_scope_id = @id;	 
+     and note_scope_id = @id;     
 
 return(isnull(@rslt,0))
   
@@ -250,8 +250,8 @@ GO
 
 CREATE FUNCTION [{schema}].[get_cust_user_name]
 (
-	@in_sys_user_id BIGINT
-)	
+    @in_sys_user_id BIGINT
+)    
 RETURNS NVARCHAR(MAX)  
 AS 
 BEGIN
@@ -278,8 +278,8 @@ GO
 
 CREATE FUNCTION [{schema}].[get_sys_user_name]
 (
-	@in_sys_user_id BIGINT
-)	
+    @in_sys_user_id BIGINT
+)    
 RETURNS NVARCHAR(MAX)  
 AS 
 BEGIN
@@ -308,9 +308,9 @@ GO
 
 CREATE FUNCTION [{schema}].[get_param_desc]
 (
-	@in_param_process NVARCHAR(MAX),
-	@in_param_attrib NVARCHAR(MAX)
-)	
+    @in_param_process NVARCHAR(MAX),
+    @in_param_attrib NVARCHAR(MAX)
+)    
 RETURNS NVARCHAR(MAX)  
 AS 
 BEGIN
@@ -344,7 +344,7 @@ GO
 
 
 CREATE FUNCTION [{schema}].[my_db_user]
-()	
+()    
 RETURNS varchar(20)   
 AS 
 BEGIN
@@ -375,7 +375,7 @@ GO
 
 
 CREATE FUNCTION [{schema}].[my_db_user_exec]
-()	
+()    
 RETURNS varchar(20)   
 AS 
 BEGIN
@@ -388,10 +388,10 @@ DECLARE @sys_user_id BIGINT=-1;
   IF ((@an IS NOT NULL) AND (@an <> 'DBAPP')) 
   BEGIN 
     SELECT @sys_user_id=sys_user_id
-	  FROM {schema}.sys_user
+      FROM {schema}.sys_user
      WHERE sys_user_email = @an;
-	
-	SET @rslt = CASE WHEN @sys_user_id=(-1) THEN @an ELSE 'P'+CONVERT(VARCHAR(30),@sys_user_id) END
+    
+    SET @rslt = CASE WHEN @sys_user_id=(-1) THEN @an ELSE 'P'+CONVERT(VARCHAR(30),@sys_user_id) END
   END 
   return (@rslt)
 END
@@ -412,7 +412,7 @@ GO
 
 
 CREATE FUNCTION [{schema}].[my_db_user_fmt]
-(@USER VARCHAR(20))	
+(@USER VARCHAR(20))    
 RETURNS nvarchar(120)   
 AS 
 BEGIN
@@ -444,7 +444,7 @@ GO
 
 
 CREATE FUNCTION [{schema}].[my_db_user_fmt_exec]
-(@USER VARCHAR(20))	
+(@USER VARCHAR(20))    
 RETURNS nvarchar(120)   
 AS 
 BEGIN
@@ -458,14 +458,14 @@ DECLARE @rslt nvarchar(255)
   begin
     set @rslt = @USER;
     select @rslt = 'S-'+isnull(sys_user_name,'')
-	 from {schema}.sys_user
+     from {schema}.sys_user
     where convert(varchar(50),sys_user_id)=substring(@USER,2,1024);
   end
   else if (substring(@USER,1,1)='C' and isnumeric(substring(@USER,2,1024))=1)
   begin
     set @rslt = @USER;
     select @rslt = 'C-'+isnull(sys_user_name,'')
-	 from {schema}.cust_user
+     from {schema}.cust_user
     where convert(varchar(50),sys_user_id)=substring(@USER,2,1024);
   end
 
@@ -493,7 +493,7 @@ GO
 CREATE FUNCTION [{schema}].[my_hash]
 (@TYPE CHAR(1),
  @sys_user_id bigint,
- @pw nvarchar(255))	
+ @pw nvarchar(255))    
 RETURNS varbinary(200)   
 AS 
 BEGIN
@@ -504,21 +504,21 @@ DECLARE @val varchar(255)
   if (@TYPE = 'S')
   BEGIN
     select @seed = param_cur_val
-	  from {schema}.v_param_cur
+      from {schema}.v_param_cur
      where param_cur_process = 'USERS'
-	   and param_cur_attrib = 'HASH_SEED_S';
+       and param_cur_attrib = 'HASH_SEED_S';
   END
   else if (@TYPE = 'C')
   BEGIN
     select @seed = param_cur_val
-	  from {schema}.v_param_cur
+      from {schema}.v_param_cur
      where param_cur_process = 'USERS'
-	   and param_cur_attrib = 'HASH_SEED_C';
+       and param_cur_attrib = 'HASH_SEED_C';
   END
 
   if (@seed is not null
       and isnull(@sys_user_id,0) > 0
-	  and isnull(@pw,'') <> '')
+      and isnull(@pw,'') <> '')
   begin
     select @val = (convert(varchar(50),@sys_user_id)+@pw+@seed)
     select @rslt = hashbytes('sha1',@val)
@@ -547,7 +547,7 @@ CREATE FUNCTION [{schema}].[my_mmddyyhhmi] (@X DATETIME2(7))
 RETURNS varchar(140)
 AS
 BEGIN
-	RETURN convert(varchar(50),@X,1)+' '+substring(convert(varchar(50),@X,14),1,5)
+    RETURN convert(varchar(50),@X,1)+' '+substring(convert(varchar(50),@X,14),1,5)
 END
 
 GO
@@ -618,7 +618,7 @@ GO
 
 
 CREATE FUNCTION [{schema}].[my_sys_user_id]
-()	
+()    
 RETURNS bigint   
 AS 
 BEGIN
@@ -641,7 +641,7 @@ GO
 
 
 CREATE FUNCTION [{schema}].[my_user_do]
-()	
+()    
 RETURNS bigint   
 AS 
 BEGIN
@@ -654,7 +654,7 @@ DECLARE @sys_user_id BIGINT=-1;
   IF ((@an IS NOT NULL) AND (@an <> 'DBAPP')) 
   BEGIN
     if substring(@an,1,1) = 'S' and isnumeric(substring(@an,2,100))<>0
-	  set @rslt = convert(bigint,substring(@an,2,100)) 
+      set @rslt = convert(bigint,substring(@an,2,100)) 
   END 
   return (@rslt);
 END
@@ -672,7 +672,7 @@ GO
 
 
 CREATE FUNCTION [{schema}].[my_cust_user_id]
-()	
+()    
 RETURNS bigint   
 AS 
 BEGIN
@@ -696,7 +696,7 @@ GO
 
 
 CREATE FUNCTION [{schema}].[my_cust_user_id_exec]
-()	
+()    
 RETURNS bigint   
 AS 
 BEGIN
@@ -709,7 +709,7 @@ DECLARE @sys_user_id BIGINT=-1;
   IF ((@an IS NOT NULL) AND (@an <> 'DBAPP')) 
   BEGIN
     if substring(@an,1,1) = 'C' and isnumeric(substring(@an,2,100))<>0
-	  set @rslt = convert(bigint,substring(@an,2,100)) 
+      set @rslt = convert(bigint,substring(@an,2,100)) 
   END 
   return (@rslt);
 END
@@ -728,8 +728,8 @@ CREATE FUNCTION [{schema}].[my_to_date] (@X DATETIME2(7))
 RETURNS date
 AS
 BEGIN
-	
-	RETURN DATEADD(day, DATEDIFF(day, 0, @X), 0)
+    
+    RETURN DATEADD(day, DATEDIFF(day, 0, @X), 0)
 
 
 END
@@ -750,7 +750,7 @@ CREATE FUNCTION [{schema}].[my_today] ()
 RETURNS date
 AS
 BEGIN
-	RETURN ({schema}.my_today_exec())
+    RETURN ({schema}.my_today_exec())
 END
 
 
@@ -771,8 +771,8 @@ CREATE FUNCTION [{schema}].[my_today_exec] ()
 RETURNS date
 AS
 BEGIN
-	
-	RETURN DATEADD(day, DATEDIFF(day, 0, {schema}.my_now()), 0)
+    
+    RETURN DATEADD(day, DATEDIFF(day, 0, {schema}.my_now()), 0)
 
 
 END
@@ -793,9 +793,9 @@ GO
 
 CREATE FUNCTION [{schema}].[nequal_chr]
 (
-	@in1 nvarchar(MAX),
-	@in2 nvarchar(MAX)
-)	
+    @in1 nvarchar(MAX),
+    @in2 nvarchar(MAX)
+)    
 RETURNS bit  
 AS 
 BEGIN
@@ -832,9 +832,9 @@ GO
 
 CREATE FUNCTION [{schema}].[nequal_date]
 (
-	@in1 DATETIME2(7),
-	@in2 DATETIME2(7)
-)	
+    @in1 DATETIME2(7),
+    @in2 DATETIME2(7)
+)    
 RETURNS bit  
 AS 
 BEGIN
@@ -877,9 +877,9 @@ GO
 
 CREATE FUNCTION [{schema}].[nequal_num]
 (
-	@in1 numeric(30,10),
-	@in2 numeric(30,10)
-)	
+    @in1 numeric(30,10),
+    @in2 numeric(30,10)
+)    
 RETURNS bit  
 AS 
 BEGIN
@@ -913,9 +913,9 @@ GO
 
 CREATE FUNCTION [{schema}].[table_type]
 (
-	@in_schema varchar(max),
-	@in_name varchar(max)
-)	
+    @in_schema varchar(max),
+    @in_name varchar(max)
+)    
 RETURNS VARCHAR(max)  
 AS 
 BEGIN
@@ -925,7 +925,7 @@ DECLARE @rslt VARCHAR(MAX) = NULL
     from information_schema.tables
    where table_schema = coalesce(@in_schema,'dbo')
      and table_name = @in_name; 
-	
+    
   RETURN (@rslt)
 
 END
@@ -940,24 +940,24 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[param__tbl](
-	[param_process] [nvarchar](32) NOT NULL,
-	[param_attrib] [nvarchar](16) NOT NULL,
-	[param_desc] [nvarchar](255) NOT NULL,
-	[param_type] [nvarchar](32) NOT NULL,
-	[code_name] [nvarchar](128) NULL,
-	[is_param_app] [bit] NOT NULL,
-	[is_param_user] [bit] NOT NULL,
-	[is_param_sys] [bit] NOT NULL,
-	[param_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[param_etstmp] [datetime2](7) NOT NULL,
-	[param_euser] [nvarchar](20) NOT NULL,
-	[param_mtstmp] [datetime2](7) NOT NULL,
-	[param_muser] [nvarchar](20) NOT NULL,
-	[param_snotes] [nvarchar](max) NULL,
+    [param_process] [nvarchar](32) NOT NULL,
+    [param_attrib] [nvarchar](16) NOT NULL,
+    [param_desc] [nvarchar](255) NOT NULL,
+    [param_type] [nvarchar](32) NOT NULL,
+    [code_name] [nvarchar](128) NULL,
+    [is_param_app] [bit] NOT NULL,
+    [is_param_user] [bit] NOT NULL,
+    [is_param_sys] [bit] NOT NULL,
+    [param_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [param_etstmp] [datetime2](7) NOT NULL,
+    [param_euser] [nvarchar](20) NOT NULL,
+    [param_mtstmp] [datetime2](7) NOT NULL,
+    [param_muser] [nvarchar](20) NOT NULL,
+    [param_snotes] [nvarchar](max) NULL,
  CONSTRAINT [pk_param__tbl] PRIMARY KEY CLUSTERED 
 (
-	[param_process] ASC,
-	[param_attrib] ASC
+    [param_process] ASC,
+    [param_attrib] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -986,21 +986,21 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[audit__tbl](
-	[audit_seq] [bigint] IDENTITY(1,1) NOT NULL,
-	[audit_table_name] [varchar](32) NOT NULL,
-	[audit_table_id] [bigint] NOT NULL,
-	[audit_op] [char](10) NOT NULL,
-	[audit_user] [nvarchar](20) NOT NULL,
-	[db_id] [char](1) NOT NULL,
-	[audit_tstmp] [datetime2](7) NOT NULL,
-	[cust_id] [bigint] NULL,
-	[item_id] [bigint] NULL,
-	[audit_ref_name] [varchar](32) NULL,
-	[audit_ref_id] [bigint] NULL,
-	[audit_subject] [nvarchar](255) NULL,
+    [audit_seq] [bigint] IDENTITY(1,1) NOT NULL,
+    [audit_table_name] [varchar](32) NOT NULL,
+    [audit_table_id] [bigint] NOT NULL,
+    [audit_op] [char](10) NOT NULL,
+    [audit_user] [nvarchar](20) NOT NULL,
+    [db_id] [char](1) NOT NULL,
+    [audit_tstmp] [datetime2](7) NOT NULL,
+    [cust_id] [bigint] NULL,
+    [item_id] [bigint] NULL,
+    [audit_ref_name] [varchar](32) NULL,
+    [audit_ref_id] [bigint] NULL,
+    [audit_subject] [nvarchar](255) NULL,
  CONSTRAINT [pk_audit__tbl] PRIMARY KEY CLUSTERED 
 (
-	[audit_seq] ASC
+    [audit_seq] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1009,13 +1009,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[audit_detail](
-	[audit_seq] [bigint] NOT NULL,
-	[audit_column_name] [varchar](30) NOT NULL,
-	[audit_column_val] [nvarchar](max) NULL,
+    [audit_seq] [bigint] NOT NULL,
+    [audit_column_name] [varchar](30) NOT NULL,
+    [audit_column_val] [nvarchar](max) NULL,
  CONSTRAINT [pk_audit_detail] PRIMARY KEY CLUSTERED 
 (
-	[audit_seq] ASC,
-	[audit_column_name] ASC
+    [audit_seq] ASC,
+    [audit_column_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -1044,14 +1044,14 @@ SELECT  audit__tbl.audit_seq,
         audit__tbl.audit_table_id,
         audit__tbl.audit_op,
         audit__tbl.audit_user,
-			  {schema}.my_db_user_fmt(audit__tbl.audit_user) sys_user_name,
-			  audit__tbl.db_id,
-			  audit__tbl.audit_tstmp,
-			  audit__tbl.audit_ref_name,
-			  audit__tbl.audit_ref_id,
-			  audit__tbl.audit_subject,
+              {schema}.my_db_user_fmt(audit__tbl.audit_user) sys_user_name,
+              audit__tbl.db_id,
+              audit__tbl.audit_tstmp,
+              audit__tbl.audit_ref_name,
+              audit__tbl.audit_ref_id,
+              audit__tbl.audit_subject,
         audit_detail.audit_column_name, 
-			  audit_detail.audit_column_val
+              audit_detail.audit_column_val
 FROM          {schema}.audit__tbl 
 LEFT OUTER JOIN {schema}.audit_detail ON audit__tbl.audit_seq = audit_detail.audit_seq
 
@@ -1163,18 +1163,18 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[sys_user_role](
-	[sys_user_id] [bigint] NOT NULL,
-	[sys_user_role_snotes] [nvarchar](255) NULL,
-	[sys_user_role_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[sys_role_name] [nvarchar](16) NOT NULL,
+    [sys_user_id] [bigint] NOT NULL,
+    [sys_user_role_snotes] [nvarchar](255) NULL,
+    [sys_user_role_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [sys_role_name] [nvarchar](16) NOT NULL,
  CONSTRAINT [pk_sys_user_role] PRIMARY KEY CLUSTERED 
 (
-	[sys_user_id] ASC,
-	[sys_role_name] ASC
+    [sys_user_id] ASC,
+    [sys_role_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_sys_user_role] UNIQUE NONCLUSTERED 
 (
-	[sys_user_role_id] ASC
+    [sys_user_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1198,10 +1198,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[number__tbl](
-	[number_val] [smallint] NOT NULL,
+    [number_val] [smallint] NOT NULL,
  CONSTRAINT [pk_number__tbl] PRIMARY KEY CLUSTERED 
 (
-	[number_val] ASC
+    [number_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1253,20 +1253,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[param_user](
-	[sys_user_id] [bigint] NOT NULL,
-	[param_user_process] [nvarchar](32) NOT NULL,
-	[param_user_attrib] [nvarchar](16) NOT NULL,
-	[param_user_val] [varchar](256) NULL,
-	[param_user_etstmp] [datetime2](7) NOT NULL,
-	[param_user_euser] [nvarchar](20) NOT NULL,
-	[param_user_mtstmp] [datetime2](7) NOT NULL,
-	[param_user_muser] [nvarchar](20) NOT NULL,
-	[param_user_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [sys_user_id] [bigint] NOT NULL,
+    [param_user_process] [nvarchar](32) NOT NULL,
+    [param_user_attrib] [nvarchar](16) NOT NULL,
+    [param_user_val] [varchar](256) NULL,
+    [param_user_etstmp] [datetime2](7) NOT NULL,
+    [param_user_euser] [nvarchar](20) NOT NULL,
+    [param_user_mtstmp] [datetime2](7) NOT NULL,
+    [param_user_muser] [nvarchar](20) NOT NULL,
+    [param_user_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [pk_param_user] PRIMARY KEY CLUSTERED 
 (
-	[sys_user_id] ASC,
-	[param_user_process] ASC,
-	[param_user_attrib] ASC
+    [sys_user_id] ASC,
+    [param_user_process] ASC,
+    [param_user_attrib] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1275,18 +1275,18 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[param_app](
-	[param_app_process] [nvarchar](32) NOT NULL,
-	[param_app_attrib] [nvarchar](16) NOT NULL,
-	[param_app_val] [varchar](256) NULL,
-	[param_app_etstmp] [datetime2](7) NOT NULL,
-	[param_app_euser] [nvarchar](20) NOT NULL,
-	[param_app_mtstmp] [datetime2](7) NOT NULL,
-	[param_app_muser] [nvarchar](20) NOT NULL,
-	[param_app_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [param_app_process] [nvarchar](32) NOT NULL,
+    [param_app_attrib] [nvarchar](16) NOT NULL,
+    [param_app_val] [varchar](256) NULL,
+    [param_app_etstmp] [datetime2](7) NOT NULL,
+    [param_app_euser] [nvarchar](20) NOT NULL,
+    [param_app_mtstmp] [datetime2](7) NOT NULL,
+    [param_app_muser] [nvarchar](20) NOT NULL,
+    [param_app_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [pk_param_app] PRIMARY KEY CLUSTERED 
 (
-	[param_app_process] ASC,
-	[param_app_attrib] ASC
+    [param_app_process] ASC,
+    [param_app_attrib] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1295,18 +1295,18 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[param_sys](
-	[param_sys_process] [nvarchar](32) NOT NULL,
-	[param_sys_attrib] [nvarchar](16) NOT NULL,
-	[param_sys_val] [varchar](256) NOT NULL,
-	[param_sys_etstmp] [datetime2](7) NOT NULL,
-	[param_sys_euser] [nvarchar](20) NOT NULL,
-	[param_sys_mtstmp] [datetime2](7) NOT NULL,
-	[param_sys_muser] [nvarchar](20) NOT NULL,
-	[param_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [param_sys_process] [nvarchar](32) NOT NULL,
+    [param_sys_attrib] [nvarchar](16) NOT NULL,
+    [param_sys_val] [varchar](256) NOT NULL,
+    [param_sys_etstmp] [datetime2](7) NOT NULL,
+    [param_sys_euser] [nvarchar](20) NOT NULL,
+    [param_sys_mtstmp] [datetime2](7) NOT NULL,
+    [param_sys_muser] [nvarchar](20) NOT NULL,
+    [param_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [pk_param_sys] PRIMARY KEY CLUSTERED 
 (
-	[param_sys_process] ASC,
-	[param_sys_attrib] ASC
+    [param_sys_process] ASC,
+    [param_sys_attrib] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1322,16 +1322,16 @@ GO
 CREATE VIEW [{schema}].[v_param_cur] AS
  SELECT param__tbl.param_process AS param_cur_process, 
         param__tbl.param_attrib AS param_cur_attrib, 
-		    CASE WHEN param_user_val IS NULL OR param_user_val = '' 
-		         THEN CASE WHEN param_app_val IS NULL OR param_app_val = '' 
-			                 THEN param_sys_val 
-					   ELSE param_app_val END 
-			  ELSE param_user_val END AS param_cur_val, 
-		    CASE WHEN param_user_val IS NULL OR param_user_val = '' 
-		         THEN CASE WHEN param_app_val IS NULL OR param_app_val = '' 
-			                 THEN 'param_sys' 
-					             ELSE 'param_app' END 
-			  ELSE convert(varchar,param_user.sys_user_id) END AS param_cur_source 
+            CASE WHEN param_user_val IS NULL OR param_user_val = '' 
+                 THEN CASE WHEN param_app_val IS NULL OR param_app_val = '' 
+                             THEN param_sys_val 
+                       ELSE param_app_val END 
+              ELSE param_user_val END AS param_cur_val, 
+            CASE WHEN param_user_val IS NULL OR param_user_val = '' 
+                 THEN CASE WHEN param_app_val IS NULL OR param_app_val = '' 
+                             THEN 'param_sys' 
+                                 ELSE 'param_app' END 
+              ELSE convert(varchar,param_user.sys_user_id) END AS param_cur_source 
    FROM {schema}.param__tbl 
    LEFT OUTER JOIN {schema}.param_sys ON param__tbl.param_process = param_sys.param_sys_process AND param__tbl.param_attrib = param_sys.param_sys_attrib 
    LEFT OUTER JOIN {schema}.param_app ON param__tbl.param_process = param_app.param_app_process AND param__tbl.param_attrib = param_app.param_app_attrib 
@@ -1346,29 +1346,29 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[doc__tbl](
-	[doc_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[doc_scope] [nvarchar](32) NOT NULL,
-	[doc_scope_id] [bigint] NOT NULL,
-	[cust_id] [bigint] NULL,
-	[item_id] [bigint] NULL,
-	[doc_sts] [nvarchar](32) NOT NULL,
-	[doc_ctgr] [nvarchar](32) NOT NULL,
-	[doc_desc] [nvarchar](255) NULL,
-	[doc_ext] [nvarchar](16) NULL,
-	[doc_size] [bigint] NULL,
-	[doc_filename]  AS (('D'+CONVERT([varchar](50),[doc_id],(0)))+isnull([doc_ext],'')) PERSISTED,
-	[doc_etstmp] [datetime2](7) NOT NULL,
-	[doc_euser] [nvarchar](20) NOT NULL,
-	[doc_mtstmp] [datetime2](7) NOT NULL,
-	[doc_muser] [nvarchar](20) NOT NULL,
-	[doc_uptstmp] [datetime2](7) NOT NULL,
-	[doc_upuser] [nvarchar](20) NOT NULL,
-	[doc_sync_tstmp] [datetime2](7) NULL,
-	[doc_snotes] [nvarchar](255) NULL,
-	[doc_sync_id] [bigint] NULL,
+    [doc_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [doc_scope] [nvarchar](32) NOT NULL,
+    [doc_scope_id] [bigint] NOT NULL,
+    [cust_id] [bigint] NULL,
+    [item_id] [bigint] NULL,
+    [doc_sts] [nvarchar](32) NOT NULL,
+    [doc_ctgr] [nvarchar](32) NOT NULL,
+    [doc_desc] [nvarchar](255) NULL,
+    [doc_ext] [nvarchar](16) NULL,
+    [doc_size] [bigint] NULL,
+    [doc_filename]  AS (('D'+CONVERT([varchar](50),[doc_id],(0)))+isnull([doc_ext],'')) PERSISTED,
+    [doc_etstmp] [datetime2](7) NOT NULL,
+    [doc_euser] [nvarchar](20) NOT NULL,
+    [doc_mtstmp] [datetime2](7) NOT NULL,
+    [doc_muser] [nvarchar](20) NOT NULL,
+    [doc_uptstmp] [datetime2](7) NOT NULL,
+    [doc_upuser] [nvarchar](20) NOT NULL,
+    [doc_sync_tstmp] [datetime2](7) NULL,
+    [doc_snotes] [nvarchar](255) NULL,
+    [doc_sync_id] [bigint] NULL,
  CONSTRAINT [pk_doc__tbl] PRIMARY KEY CLUSTERED 
 (
-	[doc_id] ASC
+    [doc_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1406,13 +1406,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[single](
-	[single_dummy] [nvarchar](1) NOT NULL,
-	[single_ident] [bigint] NOT NULL,
-	[dual_bigint] [bigint] NULL,
-	[dual_nvarchar50] [nvarchar](50) NULL,
+    [single_dummy] [nvarchar](1) NOT NULL,
+    [single_ident] [bigint] NOT NULL,
+    [dual_bigint] [bigint] NULL,
+    [dual_nvarchar50] [nvarchar](50) NULL,
  CONSTRAINT [pk_single] PRIMARY KEY CLUSTERED 
 (
-	[single_ident] ASC
+    [single_ident] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1430,14 +1430,14 @@ GO
 CREATE view [{schema}].[v_app_info] as
 select NAME.param_cur_val app_title,
        ADDR.param_cur_val app_addr,
-	     CITY.param_cur_val app_city,
-	     [STATE].param_cur_val app_state,
-	     ZIP.param_cur_val app_zip,
+         CITY.param_cur_val app_city,
+         [STATE].param_cur_val app_state,
+         ZIP.param_cur_val app_zip,
        isnull(ADDR.param_cur_val,'')+', '+isnull(CITY.param_cur_val,'')+' '+isnull([STATE].param_cur_val,'')+' '+isnull(ZIP.param_cur_val,'') app_full_addr,
-	     BPHONE.param_cur_val app_bphone,
-	     FAX.param_cur_val app_fax,
-	     EMAIL.param_cur_val app_email,
-	     CONTACT.param_cur_val app_contact
+         BPHONE.param_cur_val app_bphone,
+         FAX.param_cur_val app_fax,
+         EMAIL.param_cur_val app_email,
+         CONTACT.param_cur_val app_contact
   from {schema}.single
  left outer join {schema}.v_param_cur NAME on NAME.param_cur_process='HOUSE' and NAME.param_cur_attrib='NAME'
  left outer join {schema}.v_param_cur ADDR on ADDR.param_cur_process='HOUSE' and ADDR.param_cur_attrib='ADDR'
@@ -1458,18 +1458,18 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[cust_menu_role](
-	[menu_id] [bigint] NOT NULL,
-	[cust_menu_role_snotes] [nvarchar](255) NULL,
-	[cust_menu_role_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[cust_role_name] [nvarchar](16) NOT NULL,
+    [menu_id] [bigint] NOT NULL,
+    [cust_menu_role_snotes] [nvarchar](255) NULL,
+    [cust_menu_role_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [cust_role_name] [nvarchar](16) NOT NULL,
  CONSTRAINT [pk_cust_menu_role] PRIMARY KEY CLUSTERED 
 (
-	[cust_role_name] ASC,
-	[menu_id] ASC
+    [cust_role_name] ASC,
+    [menu_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_cust_menu_role] UNIQUE NONCLUSTERED 
 (
-	[cust_menu_role_id] ASC
+    [cust_menu_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1478,25 +1478,25 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[cust_role](
-	[cust_role_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[cust_role_seq] [smallint] NULL,
-	[cust_role_sts] [nvarchar](32) NOT NULL,
-	[cust_role_name] [nvarchar](16) NOT NULL,
-	[cust_role_desc] [nvarchar](255) NOT NULL,
-	[cust_role_code] [nvarchar](50) NULL,
-	[cust_role_attrib] [nvarchar](50) NULL,
-	[cust_role_snotes] [nvarchar](255) NULL,
+    [cust_role_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [cust_role_seq] [smallint] NULL,
+    [cust_role_sts] [nvarchar](32) NOT NULL,
+    [cust_role_name] [nvarchar](16) NOT NULL,
+    [cust_role_desc] [nvarchar](255) NOT NULL,
+    [cust_role_code] [nvarchar](50) NULL,
+    [cust_role_attrib] [nvarchar](50) NULL,
+    [cust_role_snotes] [nvarchar](255) NULL,
  CONSTRAINT [pk_cust_role] PRIMARY KEY CLUSTERED 
 (
-	[cust_role_name] ASC
+    [cust_role_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_cust_role_cust_role_desc] UNIQUE NONCLUSTERED 
 (
-	[cust_role_desc] ASC
+    [cust_role_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_cust_role_cust_role_id] UNIQUE NONCLUSTERED 
 (
-	[cust_role_id] ASC
+    [cust_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1505,36 +1505,36 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[menu__tbl](
-	[menu_id_auto] [bigint] IDENTITY(1,1) NOT NULL,
-	[menu_group] [char](1) NOT NULL,
-	[menu_id] [bigint] NOT NULL,
-	[menu_sts] [nvarchar](32) NOT NULL,
-	[menu_id_parent] [bigint] NULL,
-	[menu_name] [nvarchar](255) NOT NULL,
-	[menu_seq] [int] NULL,
-	[menu_desc] [nvarchar](255) NOT NULL,
-	[menu_desc_ext] [nvarchar](max) NULL,
-	[menu_desc_ext2] [nvarchar](max) NULL,
-	[menu_cmd] [varchar](255) NULL,
-	[menu_image] [nvarchar](255) NULL,
-	[menu_snotes] [nvarchar](255) NULL,
-	[menu_subcmd] [varchar](255) NULL,
+    [menu_id_auto] [bigint] IDENTITY(1,1) NOT NULL,
+    [menu_group] [char](1) NOT NULL,
+    [menu_id] [bigint] NOT NULL,
+    [menu_sts] [nvarchar](32) NOT NULL,
+    [menu_id_parent] [bigint] NULL,
+    [menu_name] [nvarchar](255) NOT NULL,
+    [menu_seq] [int] NULL,
+    [menu_desc] [nvarchar](255) NOT NULL,
+    [menu_desc_ext] [nvarchar](max) NULL,
+    [menu_desc_ext2] [nvarchar](max) NULL,
+    [menu_cmd] [varchar](255) NULL,
+    [menu_image] [nvarchar](255) NULL,
+    [menu_snotes] [nvarchar](255) NULL,
+    [menu_subcmd] [varchar](255) NULL,
  CONSTRAINT [pk_menu__tbl] PRIMARY KEY CLUSTERED 
 (
-	[menu_id_auto] ASC
+    [menu_id_auto] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_menu__tbl_menu_desc] UNIQUE NONCLUSTERED 
 (
-	[menu_id_parent] ASC,
-	[menu_desc] ASC
+    [menu_id_parent] ASC,
+    [menu_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_menu__tbl_menu_id] UNIQUE NONCLUSTERED 
 (
-	[menu_id] ASC
+    [menu_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_menu__tbl_menu_name] UNIQUE NONCLUSTERED 
 (
-	[menu_name] ASC
+    [menu_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -1552,50 +1552,50 @@ CREATE VIEW [{schema}].[v_cust_menu_role_selection]
 AS
 SELECT {schema}.cust_menu_role.cust_menu_role_id, 
        ISNULL({schema}.single.dual_nvarchar50, '') AS new_cust_role_name, 
-	     single.dual_bigint AS new_menu_id,
-	     CASE WHEN cust_menu_role.cust_menu_role_id IS NULL 
-	          THEN 0 
-			 ELSE 1 END AS cust_menu_role_selection, 
-	     M.cust_role_id, 
-	     M.cust_role_seq, 
-	     M.cust_role_sts, 
-	     M.cust_role_name, 
-	     M.cust_role_desc, 
-	     M.menu_id_auto, 
-	     M.menu_group, 
+         single.dual_bigint AS new_menu_id,
+         CASE WHEN cust_menu_role.cust_menu_role_id IS NULL 
+              THEN 0 
+             ELSE 1 END AS cust_menu_role_selection, 
+         M.cust_role_id, 
+         M.cust_role_seq, 
+         M.cust_role_sts, 
+         M.cust_role_name, 
+         M.cust_role_desc, 
+         M.menu_id_auto, 
+         M.menu_group, 
        M.menu_id, 
-	     M.menu_sts, 
-	     M.menu_id_parent, 
-	     M.menu_name, 
-	     M.menu_seq, 
-	     M.menu_desc, 
-	     M.menu_desc_ext, 
-	     M.menu_desc_ext2, 
-	     M.menu_cmd, 
-	     M.menu_image, 
-	     M.menu_snotes,
-	     M.menu_subcmd
+         M.menu_sts, 
+         M.menu_id_parent, 
+         M.menu_name, 
+         M.menu_seq, 
+         M.menu_desc, 
+         M.menu_desc_ext, 
+         M.menu_desc_ext2, 
+         M.menu_cmd, 
+         M.menu_image, 
+         M.menu_snotes,
+         M.menu_subcmd
   FROM (SELECT {schema}.cust_role.cust_role_id,
                {schema}.cust_role.cust_role_seq, 
                {schema}.cust_role.cust_role_sts, 
                {schema}.cust_role.cust_role_name, 
                {schema}.cust_role.cust_role_desc, 
                {schema}.menu__tbl.menu_id_auto, 
-			   {schema}.menu__tbl.menu_group, 
-			   {schema}.menu__tbl.menu_id, 
-			   {schema}.menu__tbl.menu_sts, 
-			   {schema}.menu__tbl.menu_id_parent, 
-			   {schema}.menu__tbl.menu_name, 
+               {schema}.menu__tbl.menu_group, 
+               {schema}.menu__tbl.menu_id, 
+               {schema}.menu__tbl.menu_sts, 
+               {schema}.menu__tbl.menu_id_parent, 
+               {schema}.menu__tbl.menu_name, 
                {schema}.menu__tbl.menu_seq, 
-			   {schema}.menu__tbl.menu_desc, 
-			   {schema}.menu__tbl.menu_desc_ext, 
-			   {schema}.menu__tbl.menu_desc_ext2, 
-			   {schema}.menu__tbl.menu_cmd, 
-			   {schema}.menu__tbl.menu_image, 
-			   {schema}.menu__tbl.menu_snotes, 
+               {schema}.menu__tbl.menu_desc, 
+               {schema}.menu__tbl.menu_desc_ext, 
+               {schema}.menu__tbl.menu_desc_ext2, 
+               {schema}.menu__tbl.menu_cmd, 
+               {schema}.menu__tbl.menu_image, 
+               {schema}.menu__tbl.menu_snotes, 
                {schema}.menu__tbl.menu_subcmd
           FROM {schema}.cust_role 
-		  LEFT OUTER JOIN {schema}.menu__tbl ON {schema}.menu__tbl.menu_group = 'C') AS M 
+          LEFT OUTER JOIN {schema}.menu__tbl ON {schema}.menu__tbl.menu_group = 'C') AS M 
  INNER JOIN {schema}.single ON 1 = 1 
   LEFT OUTER JOIN {schema}.cust_menu_role ON {schema}.cust_menu_role.cust_role_name = M.cust_role_name AND {schema}.cust_menu_role.menu_id = M.menu_id;
 
@@ -1608,18 +1608,18 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[cust_user_role](
-	[sys_user_id] [bigint] NOT NULL,
-	[cust_user_role_snotes] [nvarchar](255) NULL,
-	[cust_user_role_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[cust_role_name] [nvarchar](16) NOT NULL,
+    [sys_user_id] [bigint] NOT NULL,
+    [cust_user_role_snotes] [nvarchar](255) NULL,
+    [cust_user_role_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [cust_role_name] [nvarchar](16) NOT NULL,
  CONSTRAINT [pk_cust_user_role] PRIMARY KEY CLUSTERED 
 (
-	[sys_user_id] ASC,
-	[cust_role_name] ASC
+    [sys_user_id] ASC,
+    [cust_role_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_cust_user_role] UNIQUE NONCLUSTERED 
 (
-	[cust_user_role_id] ASC
+    [cust_user_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1641,25 +1641,25 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[sys_role](
-	[sys_role_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[sys_role_seq] [smallint] NOT NULL,
-	[sys_role_sts] [nvarchar](32) NOT NULL,
-	[sys_role_name] [nvarchar](16) NOT NULL,
-	[sys_role_desc] [nvarchar](255) NOT NULL,
-	[sys_role_code] [nvarchar](50) NULL,
-	[sys_role_attrib] [nvarchar](50) NULL,
-	[sys_role_snotes] [nvarchar](255) NULL,
+    [sys_role_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [sys_role_seq] [smallint] NOT NULL,
+    [sys_role_sts] [nvarchar](32) NOT NULL,
+    [sys_role_name] [nvarchar](16) NOT NULL,
+    [sys_role_desc] [nvarchar](255) NOT NULL,
+    [sys_role_code] [nvarchar](50) NULL,
+    [sys_role_attrib] [nvarchar](50) NULL,
+    [sys_role_snotes] [nvarchar](255) NULL,
  CONSTRAINT [pk_sys_role] PRIMARY KEY CLUSTERED 
 (
-	[sys_role_name] ASC
+    [sys_role_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_sys_role_sys_role_desc] UNIQUE NONCLUSTERED 
 (
-	[sys_role_desc] ASC
+    [sys_role_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_sys_role_sys_role_id] UNIQUE NONCLUSTERED 
 (
-	[sys_role_id] ASC
+    [sys_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1668,18 +1668,18 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[sys_menu_role](
-	[menu_id] [bigint] NOT NULL,
-	[sys_menu_role_snotes] [nvarchar](255) NULL,
-	[sys_menu_role_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[sys_role_name] [nvarchar](16) NOT NULL,
+    [menu_id] [bigint] NOT NULL,
+    [sys_menu_role_snotes] [nvarchar](255) NULL,
+    [sys_menu_role_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [sys_role_name] [nvarchar](16) NOT NULL,
  CONSTRAINT [pk_sys_menu_role] PRIMARY KEY CLUSTERED 
 (
-	[sys_role_name] ASC,
-	[menu_id] ASC
+    [sys_role_name] ASC,
+    [menu_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_sys_menu_role] UNIQUE NONCLUSTERED 
 (
-	[sys_menu_role_id] ASC
+    [sys_menu_role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -1695,50 +1695,50 @@ CREATE VIEW [{schema}].[v_sys_menu_role_selection]
 AS
 SELECT {schema}.sys_menu_role.sys_menu_role_id, 
        ISNULL({schema}.single.dual_nvarchar50, '') AS new_sys_role_name, 
-	   single.dual_bigint AS new_menu_id,
-	   CASE WHEN sys_menu_role.sys_menu_role_id IS NULL 
-	        THEN 0 
-			ELSE 1 END AS sys_menu_role_selection, 
-	     M.sys_role_id, 
+       single.dual_bigint AS new_menu_id,
+       CASE WHEN sys_menu_role.sys_menu_role_id IS NULL 
+            THEN 0 
+            ELSE 1 END AS sys_menu_role_selection, 
+         M.sys_role_id, 
        M.sys_role_seq, 
        M.sys_role_sts, 
        M.sys_role_name, 
        M.sys_role_desc, 
-	   M.menu_id_auto, 
-	   M.menu_group, 
+       M.menu_id_auto, 
+       M.menu_group, 
        M.menu_id, 
-	   M.menu_sts, 
-	   M.menu_id_parent, 
-	   M.menu_name, 
-	   M.menu_seq, 
-	   M.menu_desc, 
-	   M.menu_desc_ext, 
-	   M.menu_desc_ext2, 
-	   M.menu_cmd, 
-	   M.menu_image, 
-	   M.menu_snotes,
-	   M.menu_subcmd
+       M.menu_sts, 
+       M.menu_id_parent, 
+       M.menu_name, 
+       M.menu_seq, 
+       M.menu_desc, 
+       M.menu_desc_ext, 
+       M.menu_desc_ext2, 
+       M.menu_cmd, 
+       M.menu_image, 
+       M.menu_snotes,
+       M.menu_subcmd
   FROM (SELECT {schema}.sys_role.sys_role_id, 
                {schema}.sys_role.sys_role_seq, 
                {schema}.sys_role.sys_role_sts, 
                {schema}.sys_role.sys_role_name, 
                {schema}.sys_role.sys_role_desc, 
                {schema}.menu__tbl.menu_id_auto, 
-			   {schema}.menu__tbl.menu_group, 
-			   {schema}.menu__tbl.menu_id, 
-			   {schema}.menu__tbl.menu_sts, 
-			   {schema}.menu__tbl.menu_id_parent, 
-			   {schema}.menu__tbl.menu_name, 
+               {schema}.menu__tbl.menu_group, 
+               {schema}.menu__tbl.menu_id, 
+               {schema}.menu__tbl.menu_sts, 
+               {schema}.menu__tbl.menu_id_parent, 
+               {schema}.menu__tbl.menu_name, 
                {schema}.menu__tbl.menu_seq, 
-			   {schema}.menu__tbl.menu_desc, 
-			   {schema}.menu__tbl.menu_desc_ext, 
-			   {schema}.menu__tbl.menu_desc_ext2, 
-			   {schema}.menu__tbl.menu_cmd, 
-			   {schema}.menu__tbl.menu_image, 
-			   {schema}.menu__tbl.menu_snotes, 
+               {schema}.menu__tbl.menu_desc, 
+               {schema}.menu__tbl.menu_desc_ext, 
+               {schema}.menu__tbl.menu_desc_ext2, 
+               {schema}.menu__tbl.menu_cmd, 
+               {schema}.menu__tbl.menu_image, 
+               {schema}.menu__tbl.menu_snotes, 
                {schema}.menu__tbl.menu_subcmd
           FROM {schema}.sys_role 
-		  LEFT OUTER JOIN {schema}.menu__tbl ON {schema}.menu__tbl.menu_group = 'S') AS M 
+          LEFT OUTER JOIN {schema}.menu__tbl ON {schema}.menu__tbl.menu_group = 'S') AS M 
  INNER JOIN {schema}.single ON 1 = 1 
   LEFT OUTER JOIN {schema}.sys_menu_role ON {schema}.sys_menu_role.sys_role_name = M.sys_role_name AND {schema}.sys_menu_role.menu_id = M.menu_id;
 
@@ -1786,7 +1786,7 @@ GO
 CREATE VIEW [{schema}].[v_param_app] AS
 SELECT {schema}.param_app.*,
        {schema}.get_param_desc(param_app_process, param_app_attrib) param_desc,
-	   {schema}.log_audit_info(param_app_etstmp, param_app_euser, param_app_mtstmp, param_app_muser) param_app_info
+       {schema}.log_audit_info(param_app_etstmp, param_app_euser, param_app_mtstmp, param_app_muser) param_app_info
   FROM {schema}.param_app;
 
 
@@ -1849,7 +1849,7 @@ GO
 CREATE VIEW [{schema}].[v_param_user] AS
 SELECT param_user.*,
        {schema}.get_param_desc(param_user_process, param_user_attrib) param_desc,
-	   {schema}.log_audit_info(param_user_etstmp, param_user_euser, param_user_mtstmp, param_user_muser) param_user_info
+       {schema}.log_audit_info(param_user_etstmp, param_user_euser, param_user_mtstmp, param_user_muser) param_user_info
   FROM {schema}.param_user
 
 
@@ -1911,7 +1911,7 @@ GO
 CREATE VIEW [{schema}].[v_param_sys] AS
 SELECT param_sys.*,
        {schema}.get_param_desc(param_sys_process, param_sys_attrib) param_desc,
-	   {schema}.log_audit_info(param_sys_etstmp, param_sys_euser, param_sys_mtstmp, param_sys_muser) param_sys_info
+       {schema}.log_audit_info(param_sys_etstmp, param_sys_euser, param_sys_mtstmp, param_sys_muser) param_sys_info
 
 
 
@@ -1980,7 +1980,7 @@ GO
 
 CREATE VIEW [{schema}].[v_param] AS
 SELECT param__tbl.*,
-	   {schema}.log_audit_info(param_etstmp, param_euser, param_mtstmp, param_muser) param_info
+       {schema}.log_audit_info(param_etstmp, param_euser, param_mtstmp, param_muser) param_info
   FROM {schema}.param__tbl;
 
 
@@ -2037,36 +2037,36 @@ GO
 SET ARITHABORT ON
 GO
 CREATE TABLE [{schema}].[cust_user](
-	[sys_user_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[cust_id] [bigint] NOT NULL,
-	[sys_user_sts] [nvarchar](32) NOT NULL,
-	[sys_user_stsdt] [date] NOT NULL,
-	[sys_user_fname] [nvarchar](35) NOT NULL,
-	[sys_user_mname] [nvarchar](35) NULL,
-	[sys_user_lname] [nvarchar](35) NOT NULL,
-	[sys_user_jobtitle] [nvarchar](35) NULL,
-	[sys_user_bphone] [nvarchar](30) NULL,
-	[sys_user_cphone] [nvarchar](30) NULL,
-	[sys_user_email] [nvarchar](255) NOT NULL,
-	[sys_user_etstmp] [datetime2](7) NOT NULL,
-	[sys_user_euser] [nvarchar](20) NOT NULL,
-	[sys_user_mtstmp] [datetime2](7) NOT NULL,
-	[sys_user_muser] [nvarchar](20) NOT NULL,
-	[sys_user_pw1] [nvarchar](255) NULL,
-	[sys_user_pw2] [nvarchar](255) NULL,
-	[sys_user_hash] [varbinary](200) NOT NULL,
-	[sys_user_lastlogin_ip] [nvarchar](255) NULL,
-	[sys_user_lastlogin_tstmp] [datetime2](7) NULL,
-	[sys_user_snotes] [nvarchar](255) NULL,
-	[sys_user_name]  AS (([sys_user_lname]+', ')+[sys_user_fname]) PERSISTED NOT NULL,
-	[sys_user_unq_email]  AS (case when [sys_user_sts]='ACTIVE' then case when isnull([sys_user_email],'')='' then 'E'+CONVERT([varchar](50),[sys_user_id],(0)) else 'S'+[sys_user_email] end else 'E'+CONVERT([varchar](50),[sys_user_id],(0)) end) PERSISTED,
+    [sys_user_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [cust_id] [bigint] NOT NULL,
+    [sys_user_sts] [nvarchar](32) NOT NULL,
+    [sys_user_stsdt] [date] NOT NULL,
+    [sys_user_fname] [nvarchar](35) NOT NULL,
+    [sys_user_mname] [nvarchar](35) NULL,
+    [sys_user_lname] [nvarchar](35) NOT NULL,
+    [sys_user_jobtitle] [nvarchar](35) NULL,
+    [sys_user_bphone] [nvarchar](30) NULL,
+    [sys_user_cphone] [nvarchar](30) NULL,
+    [sys_user_email] [nvarchar](255) NOT NULL,
+    [sys_user_etstmp] [datetime2](7) NOT NULL,
+    [sys_user_euser] [nvarchar](20) NOT NULL,
+    [sys_user_mtstmp] [datetime2](7) NOT NULL,
+    [sys_user_muser] [nvarchar](20) NOT NULL,
+    [sys_user_pw1] [nvarchar](255) NULL,
+    [sys_user_pw2] [nvarchar](255) NULL,
+    [sys_user_hash] [varbinary](200) NOT NULL,
+    [sys_user_lastlogin_ip] [nvarchar](255) NULL,
+    [sys_user_lastlogin_tstmp] [datetime2](7) NULL,
+    [sys_user_snotes] [nvarchar](255) NULL,
+    [sys_user_name]  AS (([sys_user_lname]+', ')+[sys_user_fname]) PERSISTED NOT NULL,
+    [sys_user_unq_email]  AS (case when [sys_user_sts]='ACTIVE' then case when isnull([sys_user_email],'')='' then 'E'+CONVERT([varchar](50),[sys_user_id],(0)) else 'S'+[sys_user_email] end else 'E'+CONVERT([varchar](50),[sys_user_id],(0)) end) PERSISTED,
  CONSTRAINT [pk_cust_user] PRIMARY KEY CLUSTERED 
 (
-	[sys_user_id] ASC
+    [sys_user_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_cust_user_sys_user_email] UNIQUE NONCLUSTERED 
 (
-	[sys_user_unq_email] ASC
+    [sys_user_unq_email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2075,20 +2075,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_app](
-	[code_name] [nvarchar](128) NOT NULL,
-	[code_desc] [nvarchar](128) NULL,
-	[code_code_desc] [nvarchar](128) NULL,
-	[code_attrib_desc] [nvarchar](128) NULL,
-	[code_h_etstmp] [datetime2](7) NULL,
-	[code_h_euser] [nvarchar](20) NULL,
-	[code_h_mtstmp] [datetime2](7) NULL,
-	[code_h_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_schema] [nvarchar](128) NULL,
+    [code_name] [nvarchar](128) NOT NULL,
+    [code_desc] [nvarchar](128) NULL,
+    [code_code_desc] [nvarchar](128) NULL,
+    [code_attrib_desc] [nvarchar](128) NULL,
+    [code_h_etstmp] [datetime2](7) NULL,
+    [code_h_euser] [nvarchar](20) NULL,
+    [code_h_mtstmp] [datetime2](7) NULL,
+    [code_h_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_schema] [nvarchar](128) NULL,
   [code_type] [nvarchar](32) NULL default 'app',
  CONSTRAINT [pk_code_app] PRIMARY KEY CLUSTERED 
 (
-	[code_name] ASC
+    [code_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2097,36 +2097,36 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code2_doc_scope_doc_ctgr](
-	[code2_app_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val1] [nvarchar](32) NOT NULL,
-	[code_val2] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_attrib] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_euser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_euser])),
-	[code_muser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_muser])),
+    [code2_app_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val1] [nvarchar](32) NOT NULL,
+    [code_val2] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_attrib] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_euser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_euser])),
+    [code_muser_fmt]  AS ([{schema}].[my_db_user_fmt]([code_muser])),
  CONSTRAINT [pk_code2_doc_scope_doc_ctgr] PRIMARY KEY CLUSTERED 
 (
-	[code2_app_id] ASC
+    [code2_app_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code2_doc_scope_doc_ctgr_code_val1_code_val2] UNIQUE NONCLUSTERED 
 (
-	[code_val1] ASC,
-	[code_val2] ASC
+    [code_val1] ASC,
+    [code_val2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code2_doc_scope_doc_ctgr_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
-	[code_val1] ASC,
-	[code_txt] ASC
+    [code_val1] ASC,
+    [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2135,20 +2135,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code2_app](
-	[code_name] [nvarchar](128) NOT NULL,
-	[code_desc] [nvarchar](128) NULL,
-	[code_code_desc] [nvarchar](128) NULL,
-	[code_attrib_desc] [nvarchar](128) NULL,
-	[code_h_etstmp] [datetime2](7) NULL,
-	[code_h_euser] [nvarchar](20) NULL,
-	[code_h_mtstmp] [datetime2](7) NULL,
-	[code_h_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_schema] [nvarchar](128) NULL,
+    [code_name] [nvarchar](128) NOT NULL,
+    [code_desc] [nvarchar](128) NULL,
+    [code_code_desc] [nvarchar](128) NULL,
+    [code_attrib_desc] [nvarchar](128) NULL,
+    [code_h_etstmp] [datetime2](7) NULL,
+    [code_h_euser] [nvarchar](20) NULL,
+    [code_h_mtstmp] [datetime2](7) NULL,
+    [code_h_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_schema] [nvarchar](128) NULL,
   [code_type] [nvarchar](32) NULL default 'app',
  CONSTRAINT [pk_code2_app] PRIMARY KEY CLUSTERED 
 (
-	[code_name] ASC
+    [code_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2159,30 +2159,30 @@ GO
 SET ARITHABORT ON
 GO
 CREATE TABLE [{schema}].[help__tbl](
-	[help_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[help_target_code] [varchar](50) NULL,
+    [help_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [help_target_code] [varchar](50) NULL,
   [help_target_id] [bigint] NULL,
-	[help_title] [nvarchar](70) NOT NULL,
-	[help_text] [nvarchar](max) NOT NULL,
-	[help_etstmp] [datetime2](7) NOT NULL,
-	[help_euser] [nvarchar](20) NOT NULL,
-	[help_mtstmp] [datetime2](7) NOT NULL,
-	[help_muser] [nvarchar](20) NOT NULL,
-	[help_unq_code]  AS (case when [help_target_code] IS NOT NULL then 'X'+[help_target_code] else 'Y'+CONVERT([varchar](50),[help_id],(0)) end) PERSISTED,
-	[help_seq] [int] NULL,
-	[help_listing_main] [bit] NOT NULL,
-	[help_listing_client] [bit] NOT NULL,
+    [help_title] [nvarchar](70) NOT NULL,
+    [help_text] [nvarchar](max) NOT NULL,
+    [help_etstmp] [datetime2](7) NOT NULL,
+    [help_euser] [nvarchar](20) NOT NULL,
+    [help_mtstmp] [datetime2](7) NOT NULL,
+    [help_muser] [nvarchar](20) NOT NULL,
+    [help_unq_code]  AS (case when [help_target_code] IS NOT NULL then 'X'+[help_target_code] else 'Y'+CONVERT([varchar](50),[help_id],(0)) end) PERSISTED,
+    [help_seq] [int] NULL,
+    [help_listing_main] [bit] NOT NULL,
+    [help_listing_client] [bit] NOT NULL,
  CONSTRAINT [pk_help__tbl] PRIMARY KEY CLUSTERED 
 (
-	[help_id] ASC
+    [help_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_help__tbl_help_title] UNIQUE NONCLUSTERED 
 (
-	[help_title] ASC
+    [help_title] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_help__tbl_help_unq_code] UNIQUE NONCLUSTERED 
 (
-	[help_unq_code] ASC
+    [help_unq_code] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2191,20 +2191,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[help_target](
-	[help_target_code] [varchar](50) NOT NULL,
-	[help_target_desc] [nvarchar](50) NOT NULL,
-	[help_target_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [help_target_code] [varchar](50) NOT NULL,
+    [help_target_desc] [nvarchar](50) NOT NULL,
+    [help_target_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [pk_help_target] PRIMARY KEY CLUSTERED 
 (
-	[help_target_code] ASC
+    [help_target_code] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_help_target_help_target_desc] UNIQUE NONCLUSTERED 
 (
-	[help_target_desc] ASC
+    [help_target_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_help_target_help_target_id] UNIQUE NONCLUSTERED 
 (
-	[help_target_id] ASC
+    [help_target_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2213,24 +2213,24 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[note__tbl](
-	[note_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[note_scope] [nvarchar](32) NOT NULL,
-	[note_scope_id] [bigint] NOT NULL,
-	[note_sts] [nvarchar](32) NOT NULL,
-	[cust_id] [bigint] NULL,
-	[item_id] [bigint] NULL,
-	[note_type] [nvarchar](32) NOT NULL,
-	[note_body] [nvarchar](max) NOT NULL,
-	[note_etstmp] [datetime2](7) NOT NULL,
-	[note_euser] [nvarchar](20) NOT NULL,
-	[note_mtstmp] [datetime2](7) NOT NULL,
-	[note_muser] [nvarchar](20) NOT NULL,
-	[note_sync_tstmp] [datetime2](7) NULL,
-	[note_snotes] [nvarchar](255) NULL,
-	[note_sync_id] [bigint] NULL,
+    [note_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [note_scope] [nvarchar](32) NOT NULL,
+    [note_scope_id] [bigint] NOT NULL,
+    [note_sts] [nvarchar](32) NOT NULL,
+    [cust_id] [bigint] NULL,
+    [item_id] [bigint] NULL,
+    [note_type] [nvarchar](32) NOT NULL,
+    [note_body] [nvarchar](max) NOT NULL,
+    [note_etstmp] [datetime2](7) NOT NULL,
+    [note_euser] [nvarchar](20) NOT NULL,
+    [note_mtstmp] [datetime2](7) NOT NULL,
+    [note_muser] [nvarchar](20) NOT NULL,
+    [note_sync_tstmp] [datetime2](7) NULL,
+    [note_snotes] [nvarchar](255) NULL,
+    [note_sync_id] [bigint] NULL,
  CONSTRAINT [pk_note__tbl] PRIMARY KEY CLUSTERED 
 (
-	[note_id] ASC
+    [note_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2241,44 +2241,44 @@ GO
 SET ARITHABORT ON
 GO
 CREATE TABLE [{schema}].[sys_user](
-	[sys_user_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[sys_user_sts] [nvarchar](32) NOT NULL,
-	[sys_user_stsdt] [date] NOT NULL,
-	[sys_user_fname] [nvarchar](35) NOT NULL,
-	[sys_user_mname] [nvarchar](35) NULL,
-	[sys_user_lname] [nvarchar](35) NOT NULL,
-	[sys_user_jobtitle] [nvarchar](35) NULL,
-	[sys_user_bphone] [nvarchar](30) NULL,
-	[sys_user_cphone] [nvarchar](30) NULL,
-	[sys_user_country] [nvarchar](32) NOT NULL,
-	[sys_user_addr] [nvarchar](200) NULL,
-	[sys_user_city] [nvarchar](50) NULL,
-	[sys_user_state] [nvarchar](32) NULL,
-	[sys_user_zip] [nvarchar](20) NULL,
-	[sys_user_email] [nvarchar](255) NOT NULL,
-	[sys_user_startdt] [date] NOT NULL,
-	[sys_user_enddt] [date] NULL,
-	[sys_user_unotes] [nvarchar](4000) NULL,
-	[sys_user_etstmp] [datetime2](7) NOT NULL,
-	[sys_user_euser] [nvarchar](20) NOT NULL,
-	[sys_user_mtstmp] [datetime2](7) NOT NULL,
-	[sys_user_muser] [nvarchar](20) NOT NULL,
-	[sys_user_pw1] [nvarchar](255) NULL,
-	[sys_user_pw2] [nvarchar](255) NULL,
-	[sys_user_hash] [varbinary](200) NOT NULL,
-	[sys_user_lastlogin_ip] [nvarchar](255) NULL,
-	[sys_user_lastlogin_tstmp] [datetime2](7) NULL,
-	[sys_user_snotes] [nvarchar](255) NULL,
-	[sys_user_name]  AS (([sys_user_lname]+', ')+[sys_user_fname]) PERSISTED NOT NULL,
-	[sys_user_initials]  AS ((isnull(substring([sys_user_fname],(1),(1)),'')+isnull(substring([sys_user_mname],(1),(1)),''))+isnull(substring([sys_user_lname],(1),(1)),'')) PERSISTED NOT NULL,
-	[sys_user_unq_email]  AS (case when [sys_user_sts]='ACTIVE' then case when isnull([sys_user_email],'')='' then 'E'+CONVERT([varchar](50),[sys_user_id],(0)) else 'S'+[sys_user_email] end else 'E'+CONVERT([varchar](50),[sys_user_id],(0)) end) PERSISTED,
+    [sys_user_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [sys_user_sts] [nvarchar](32) NOT NULL,
+    [sys_user_stsdt] [date] NOT NULL,
+    [sys_user_fname] [nvarchar](35) NOT NULL,
+    [sys_user_mname] [nvarchar](35) NULL,
+    [sys_user_lname] [nvarchar](35) NOT NULL,
+    [sys_user_jobtitle] [nvarchar](35) NULL,
+    [sys_user_bphone] [nvarchar](30) NULL,
+    [sys_user_cphone] [nvarchar](30) NULL,
+    [sys_user_country] [nvarchar](32) NOT NULL,
+    [sys_user_addr] [nvarchar](200) NULL,
+    [sys_user_city] [nvarchar](50) NULL,
+    [sys_user_state] [nvarchar](32) NULL,
+    [sys_user_zip] [nvarchar](20) NULL,
+    [sys_user_email] [nvarchar](255) NOT NULL,
+    [sys_user_startdt] [date] NOT NULL,
+    [sys_user_enddt] [date] NULL,
+    [sys_user_unotes] [nvarchar](4000) NULL,
+    [sys_user_etstmp] [datetime2](7) NOT NULL,
+    [sys_user_euser] [nvarchar](20) NOT NULL,
+    [sys_user_mtstmp] [datetime2](7) NOT NULL,
+    [sys_user_muser] [nvarchar](20) NOT NULL,
+    [sys_user_pw1] [nvarchar](255) NULL,
+    [sys_user_pw2] [nvarchar](255) NULL,
+    [sys_user_hash] [varbinary](200) NOT NULL,
+    [sys_user_lastlogin_ip] [nvarchar](255) NULL,
+    [sys_user_lastlogin_tstmp] [datetime2](7) NULL,
+    [sys_user_snotes] [nvarchar](255) NULL,
+    [sys_user_name]  AS (([sys_user_lname]+', ')+[sys_user_fname]) PERSISTED NOT NULL,
+    [sys_user_initials]  AS ((isnull(substring([sys_user_fname],(1),(1)),'')+isnull(substring([sys_user_mname],(1),(1)),''))+isnull(substring([sys_user_lname],(1),(1)),'')) PERSISTED NOT NULL,
+    [sys_user_unq_email]  AS (case when [sys_user_sts]='ACTIVE' then case when isnull([sys_user_email],'')='' then 'E'+CONVERT([varchar](50),[sys_user_id],(0)) else 'S'+[sys_user_email] end else 'E'+CONVERT([varchar](50),[sys_user_id],(0)) end) PERSISTED,
  CONSTRAINT [pk_sys_user] PRIMARY KEY CLUSTERED 
 (
-	[sys_user_id] ASC
+    [sys_user_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_sys_user_sys_user_email] UNIQUE NONCLUSTERED 
 (
-	[sys_user_unq_email] ASC
+    [sys_user_unq_email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2287,18 +2287,18 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[queue__tbl](
-	[queue_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[queue_etstmp] [datetime2](7) NOT NULL,
-	[queue_euser] [nvarchar](20) NOT NULL,
-	[queue_name] [nvarchar](255) NOT NULL,
-	[queue_message] [nvarchar](max) NOT NULL,
-	[queue_rslt] [nvarchar](32) NULL,
-	[queue_rslt_tstmp] [datetime2](7) NULL,
-	[queue_rslt_user] [nvarchar](20) NULL,
-	[queue_snotes] [nvarchar](max) NULL,
+    [queue_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [queue_etstmp] [datetime2](7) NOT NULL,
+    [queue_euser] [nvarchar](20) NOT NULL,
+    [queue_name] [nvarchar](255) NOT NULL,
+    [queue_message] [nvarchar](max) NOT NULL,
+    [queue_rslt] [nvarchar](32) NULL,
+    [queue_rslt_tstmp] [datetime2](7) NULL,
+    [queue_rslt_user] [nvarchar](20) NULL,
+    [queue_snotes] [nvarchar](max) NULL,
  CONSTRAINT [pk_queue__tbl] PRIMARY KEY CLUSTERED 
 (
-	[queue_id] ASC
+    [queue_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2307,21 +2307,21 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[job__tbl](
-	[job_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[job_etstmp] [datetime2](7) NOT NULL,
-	[job_user] [nvarchar](20) NOT NULL,
-	[job_source] [nvarchar](32) NOT NULL,
-	[job_action] [nvarchar](32) NOT NULL,
-	[job_action_target] [nvarchar](50) NOT NULL,
-	[job_params] [nvarchar](max) NULL,
-	[job_tag] [nvarchar](255) NULL,
-	[job_rslt] [nvarchar](32) NULL,
-	[job_rslt_tstmp] [datetime2](7) NULL,
-	[job_rslt_user] [nvarchar](20) NULL,
-	[job_snotes] [nvarchar](max) NULL,
+    [job_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [job_etstmp] [datetime2](7) NOT NULL,
+    [job_user] [nvarchar](20) NOT NULL,
+    [job_source] [nvarchar](32) NOT NULL,
+    [job_action] [nvarchar](32) NOT NULL,
+    [job_action_target] [nvarchar](50) NOT NULL,
+    [job_params] [nvarchar](max) NULL,
+    [job_tag] [nvarchar](255) NULL,
+    [job_rslt] [nvarchar](32) NULL,
+    [job_rslt_tstmp] [datetime2](7) NULL,
+    [job_rslt_user] [nvarchar](20) NULL,
+    [job_snotes] [nvarchar](max) NULL,
  CONSTRAINT [pk_job__tbl] PRIMARY KEY CLUSTERED 
 (
-	[job_id] ASC
+    [job_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2330,15 +2330,15 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[job_doc](
-	[job_doc_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[job_id] [bigint] NOT NULL,
-	[doc_scope] [nvarchar](32) NULL,
-	[doc_scope_id] [bigint] NULL,
-	[doc_ctgr] [nvarchar](32) NULL,
-	[doc_desc] [nvarchar](255) NULL,
+    [job_doc_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [job_id] [bigint] NOT NULL,
+    [doc_scope] [nvarchar](32) NULL,
+    [doc_scope_id] [bigint] NULL,
+    [doc_ctgr] [nvarchar](32) NULL,
+    [doc_desc] [nvarchar](255) NULL,
  CONSTRAINT [pk_job_doc] PRIMARY KEY CLUSTERED 
 (
-	[job_doc_id] ASC
+    [job_doc_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2347,20 +2347,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[job_email](
-	[job_email_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[job_id] [bigint] NOT NULL,
-	[email_txt_attrib] [nvarchar](32) NULL,
-	[email_to] [nvarchar](255) NOT NULL,
-	[email_cc] [nvarchar](255) NULL,
-	[email_bcc] [nvarchar](255) NULL,
-	[email_attach] [nvarchar](max) NULL,
-	[email_subject] [nvarchar](500) NULL,
-	[email_text] [ntext] NULL,
-	[email_html] [ntext] NULL,
-	[email_doc_id] [bigint] NULL,
+    [job_email_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [job_id] [bigint] NOT NULL,
+    [email_txt_attrib] [nvarchar](32) NULL,
+    [email_to] [nvarchar](255) NOT NULL,
+    [email_cc] [nvarchar](255) NULL,
+    [email_bcc] [nvarchar](255) NULL,
+    [email_attach] [nvarchar](max) NULL,
+    [email_subject] [nvarchar](500) NULL,
+    [email_text] [ntext] NULL,
+    [email_html] [ntext] NULL,
+    [email_doc_id] [bigint] NULL,
  CONSTRAINT [pk_job_email] PRIMARY KEY CLUSTERED 
 (
-	[job_email_id] ASC
+    [job_email_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2369,15 +2369,15 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[job_note](
-	[job_note_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[job_id] [bigint] NOT NULL,
-	[note_scope] [nvarchar](32) NULL,
-	[note_scope_id] [bigint] NULL,
-	[note_type] [nvarchar](32) NULL,
-	[note_body] [nvarchar](max) NULL,
+    [job_note_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [job_id] [bigint] NOT NULL,
+    [note_scope] [nvarchar](32) NULL,
+    [note_scope_id] [bigint] NULL,
+    [note_type] [nvarchar](32) NULL,
+    [note_body] [nvarchar](max) NULL,
  CONSTRAINT [pk_job_note] PRIMARY KEY CLUSTERED 
 (
-	[job_note_id] ASC
+    [job_note_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2386,13 +2386,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[job_queue](
-	[job_queue_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[job_id] [bigint] NOT NULL,
-	[queue_name] [nvarchar](255) NOT NULL,
-	[queue_message] [nvarchar](max) NULL,
+    [job_queue_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [job_id] [bigint] NOT NULL,
+    [queue_name] [nvarchar](255) NOT NULL,
+    [queue_message] [nvarchar](max) NULL,
  CONSTRAINT [pk_job_queue] PRIMARY KEY CLUSTERED 
 (
-	[job_queue_id] ASC
+    [job_queue_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2401,14 +2401,14 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[job_sms](
-	[job_sms_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[job_id] [bigint] NOT NULL,
-	[sms_txt_attrib] [nvarchar](32) NULL,
-	[sms_to] [nvarchar](255) NOT NULL,
-	[sms_body] [ntext] NULL,
+    [job_sms_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [job_id] [bigint] NOT NULL,
+    [sms_txt_attrib] [nvarchar](32) NULL,
+    [sms_to] [nvarchar](255) NOT NULL,
+    [sms_body] [ntext] NULL,
  CONSTRAINT [pk_job_sms] PRIMARY KEY CLUSTERED 
 (
-	[job_sms_id] ASC
+    [job_sms_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2417,11 +2417,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[script__tbl](
-	[script_name] [nvarchar](32) NOT NULL,
-	[script_txt] [nvarchar](max) NULL,
+    [script_name] [nvarchar](32) NOT NULL,
+    [script_txt] [nvarchar](max) NULL,
  CONSTRAINT [pk_SCRIPT] PRIMARY KEY CLUSTERED 
 (
-	[script_name] ASC
+    [script_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2430,30 +2430,30 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[sys_func](
-	[sys_func_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[sys_func_seq] [smallint] NOT NULL,
-	[sys_func_sts] [nvarchar](32) NOT NULL,
-	[sys_func_name] [nvarchar](16) NOT NULL,
-	[sys_func_desc] [nvarchar](255) NOT NULL,
-	[sys_func_code] [nvarchar](50) NULL,
-	[sys_func_attrib] [nvarchar](50) NULL,
-	[sys_func_snotes] [nvarchar](255) NULL,
+    [sys_func_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [sys_func_seq] [smallint] NOT NULL,
+    [sys_func_sts] [nvarchar](32) NOT NULL,
+    [sys_func_name] [nvarchar](16) NOT NULL,
+    [sys_func_desc] [nvarchar](255) NOT NULL,
+    [sys_func_code] [nvarchar](50) NULL,
+    [sys_func_attrib] [nvarchar](50) NULL,
+    [sys_func_snotes] [nvarchar](255) NULL,
  CONSTRAINT [pk_sys_func] PRIMARY KEY CLUSTERED 
 (
-	[sys_func_name] ASC
+    [sys_func_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_sys_func_sys_func_code_sys_func_name] UNIQUE NONCLUSTERED 
 (
-	[sys_func_code] ASC,
-	[sys_func_name] ASC
+    [sys_func_code] ASC,
+    [sys_func_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_sys_func_sys_func_desc] UNIQUE NONCLUSTERED 
 (
-	[sys_func_desc] ASC
+    [sys_func_desc] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_sys_func_sys_func_id] UNIQUE NONCLUSTERED 
 (
-	[sys_func_id] ASC
+    [sys_func_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2462,18 +2462,18 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[sys_user_func](
-	[sys_user_id] [bigint] NOT NULL,
-	[sys_user_func_snotes] [nvarchar](255) NULL,
-	[sys_user_func_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[sys_func_name] [nvarchar](16) NOT NULL,
+    [sys_user_id] [bigint] NOT NULL,
+    [sys_user_func_snotes] [nvarchar](255) NULL,
+    [sys_user_func_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [sys_func_name] [nvarchar](16) NOT NULL,
  CONSTRAINT [pk_sys_user_func] PRIMARY KEY CLUSTERED 
 (
-	[sys_user_id] ASC,
-	[sys_func_name] ASC
+    [sys_user_id] ASC,
+    [sys_func_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_sys_user_func] UNIQUE NONCLUSTERED 
 (
-	[sys_user_func_id] ASC
+    [sys_user_func_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2482,26 +2482,26 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[txt__tbl](
-	[txt_process] [nvarchar](32) NOT NULL,
-	[txt_attrib] [nvarchar](32) NOT NULL,
-	[txt_type] [nvarchar](32) NOT NULL,
-	[txt_title] [nvarchar](max) NULL,
-	[txt_body] [nvarchar](max) NULL,
-	[txt_bcc] [nvarchar](255) NULL,
-	[txt_desc] [nvarchar](255) NULL,
-	[txt_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[txt_etstmp] [datetime2](7) NOT NULL,
-	[txt_euser] [varchar](64) NOT NULL,
-	[txt_mtstmp] [datetime2](7) NOT NULL,
-	[txt_muser] [varchar](64) NOT NULL,
- CONSTRAINT [pk_TXT] PRIMARY KEY CLUSTERED 
+    [txt_process] [nvarchar](32) NOT NULL,
+    [txt_attrib] [nvarchar](32) NOT NULL,
+    [txt_type] [nvarchar](32) NOT NULL,
+    [txt_title] [nvarchar](max) NULL,
+    [txt_body] [nvarchar](max) NULL,
+    [txt_bcc] [nvarchar](255) NULL,
+    [txt_desc] [nvarchar](255) NULL,
+    [txt_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [txt_etstmp] [datetime2](7) NOT NULL,
+    [txt_euser] [varchar](64) NOT NULL,
+    [txt_mtstmp] [datetime2](7) NOT NULL,
+    [txt_muser] [varchar](64) NOT NULL,
+ CONSTRAINT [pk_txt__tbl] PRIMARY KEY CLUSTERED 
 (
-	[txt_id] ASC
+    [txt_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [unq_TXT] UNIQUE NONCLUSTERED 
+ CONSTRAINT [unq_txt__tbl] UNIQUE NONCLUSTERED 
 (
-	[txt_process] ASC,
-	[txt_attrib] ASC
+    [txt_process] ASC,
+    [txt_attrib] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -2510,23 +2510,23 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_ac](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_ac] PRIMARY KEY CLUSTERED 
 (
-	[code_sys_id] ASC
+    [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code_ac_code_txt] UNIQUE NONCLUSTERED 
 (
@@ -2543,20 +2543,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_ac1](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_ac1] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
@@ -2576,20 +2576,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_ahc](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_ahc] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
@@ -2609,20 +2609,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_country](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_country] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
@@ -2642,20 +2642,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_doc_scope](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_doc_scope] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
@@ -2677,26 +2677,26 @@ GO
 if not exists(select * from sys.tables where name = N'code_sys' and schema_name(schema_id)='{schema}' and type='U')
 begin
 CREATE TABLE [{schema}].[code_sys](
-	[code_name] [nvarchar](128) NOT NULL,
-	[code_desc] [nvarchar](128) NULL,
-	[code_code_desc] [nvarchar](128) NULL,
-	[code_attrib_desc] [nvarchar](128) NULL,
-	[code_h_etstmp] [datetime2](7) NULL,
-	[code_h_euser] [nvarchar](20) NULL,
-	[code_h_mtstmp] [datetime2](7) NULL,
-	[code_h_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_schema] [nvarchar](128) NULL,
+    [code_name] [nvarchar](128) NOT NULL,
+    [code_desc] [nvarchar](128) NULL,
+    [code_code_desc] [nvarchar](128) NULL,
+    [code_attrib_desc] [nvarchar](128) NULL,
+    [code_h_etstmp] [datetime2](7) NULL,
+    [code_h_euser] [nvarchar](20) NULL,
+    [code_h_mtstmp] [datetime2](7) NULL,
+    [code_h_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_schema] [nvarchar](128) NULL,
   [code_type] [nvarchar](32) NULL default 'sys',
-	[code_sys_h_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_sys_h_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [pk_code_sys] PRIMARY KEY CLUSTERED 
 (
-	[code_sys_h_id] ASC
+    [code_sys_h_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code_sys] UNIQUE NONCLUSTERED 
 (
-	[code_schema] ASC,
-	[code_name] ASC
+    [code_schema] ASC,
+    [code_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 end
@@ -2706,20 +2706,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_note_scope](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_note_scope] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
@@ -2739,20 +2739,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_note_type](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_note_type] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
@@ -2772,20 +2772,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_param_type](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_param_type] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
@@ -2805,20 +2805,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_job_action](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_job_action] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
@@ -2838,20 +2838,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_job_source](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_job_source] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
@@ -2871,20 +2871,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_txt_type](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_txt_type] PRIMARY KEY CLUSTERED 
 (
   [code_sys_id] ASC
@@ -2904,31 +2904,31 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code_version_sts](
-	[code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
-	[code_attrib] [nvarchar](50) NULL,
+    [code_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
+    [code_attrib] [nvarchar](50) NULL,
  CONSTRAINT [pk_code_version_sts] PRIMARY KEY CLUSTERED 
 (
-	[code_sys_id] ASC
+    [code_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code_version_sts_code_txt] UNIQUE NONCLUSTERED 
 (
-	[code_txt] ASC
+    [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code_version_sts_code_val] UNIQUE NONCLUSTERED 
 (
-	[code_val] ASC
+    [code_val] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2937,34 +2937,34 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[code2_country_state](
-	[code2_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[code_seq] [smallint] NULL,
-	[code_val1] [nvarchar](32) NOT NULL,
-	[code_val2] [nvarchar](32) NOT NULL,
-	[code_txt] [nvarchar](50) NULL,
-	[code_code] [nvarchar](50) NULL,
-	[code_attrib] [nvarchar](50) NULL,
-	[code_end_dt] [datetime2](7) NULL,
-	[code_end_reason] [nvarchar](50) NULL,
-	[code_etstmp] [datetime2](7) NULL,
-	[code_euser] [nvarchar](20) NULL,
-	[code_mtstmp] [datetime2](7) NULL,
-	[code_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_notes] [nvarchar](255) NULL,
+    [code2_sys_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code_seq] [smallint] NULL,
+    [code_val1] [nvarchar](32) NOT NULL,
+    [code_val2] [nvarchar](32) NOT NULL,
+    [code_txt] [nvarchar](50) NULL,
+    [code_code] [nvarchar](50) NULL,
+    [code_attrib] [nvarchar](50) NULL,
+    [code_end_dt] [datetime2](7) NULL,
+    [code_end_reason] [nvarchar](50) NULL,
+    [code_etstmp] [datetime2](7) NULL,
+    [code_euser] [nvarchar](20) NULL,
+    [code_mtstmp] [datetime2](7) NULL,
+    [code_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_notes] [nvarchar](255) NULL,
  CONSTRAINT [pk_code2_country_state] PRIMARY KEY CLUSTERED 
 (
-	[code2_sys_id] ASC
+    [code2_sys_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code2_country_state_code_val1_code_val2] UNIQUE NONCLUSTERED 
 (
-	[code_val1] ASC,
-	[code_val2] ASC
+    [code_val1] ASC,
+    [code_val2] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code2_country_state_code_val1_code_txt] UNIQUE NONCLUSTERED 
 (
-	[code_val1] ASC,
-	[code_txt] ASC
+    [code_val1] ASC,
+    [code_txt] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -2975,26 +2975,26 @@ GO
 if not exists(select * from sys.tables where name = N'code2_sys' and schema_name(schema_id)='{schema}' and type='U')
 begin
 CREATE TABLE [{schema}].[code2_sys](
-	[code_name] [nvarchar](128) NOT NULL,
-	[code_desc] [nvarchar](128) NULL,
-	[code_code_desc] [nvarchar](128) NULL,
-	[code_attrib_desc] [nvarchar](128) NULL,
-	[code_h_etstmp] [datetime2](7) NULL,
-	[code_h_euser] [nvarchar](20) NULL,
-	[code_h_mtstmp] [datetime2](7) NULL,
-	[code_h_muser] [nvarchar](20) NULL,
-	[code_snotes] [nvarchar](255) NULL,
-	[code_schema] [nvarchar](128) NULL,
+    [code_name] [nvarchar](128) NOT NULL,
+    [code_desc] [nvarchar](128) NULL,
+    [code_code_desc] [nvarchar](128) NULL,
+    [code_attrib_desc] [nvarchar](128) NULL,
+    [code_h_etstmp] [datetime2](7) NULL,
+    [code_h_euser] [nvarchar](20) NULL,
+    [code_h_mtstmp] [datetime2](7) NULL,
+    [code_h_muser] [nvarchar](20) NULL,
+    [code_snotes] [nvarchar](255) NULL,
+    [code_schema] [nvarchar](128) NULL,
   [code_type] [nvarchar](32) NULL default 'sys',
-	[code2_sys_h_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [code2_sys_h_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [pk_code2_sys] PRIMARY KEY CLUSTERED 
 (
-	[code2_sys_h_id] ASC
+    [code2_sys_h_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [unq_code2_sys] UNIQUE NONCLUSTERED 
 (
-	[code_schema] ASC,
-	[code_name] ASC
+    [code_schema] ASC,
+    [code_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 end
@@ -3004,373 +3004,377 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[version__tbl](
-	[version_id] [bigint] IDENTITY(1,1) NOT NULL,
-	[version_component] [nvarchar](50) NOT NULL,
-	[version_no_major] [int] NOT NULL,
-	[version_no_minor] [int] NOT NULL,
-	[version_no_build] [int] NOT NULL,
-	[version_no_rev] [int] NOT NULL,
-	[version_sts] [nvarchar](32) NOT NULL,
-	[version_note] [nvarchar](max) NULL,
-	[version_etstmp] [datetime2](7) NOT NULL,
-	[version_euser] [nvarchar](20) NOT NULL,
-	[version_mtstmp] [datetime2](7) NOT NULL,
-	[version_muser] [nvarchar](20) NOT NULL,
-	[version_snotes] [nvarchar](255) NULL,
+    [version_id] [bigint] IDENTITY(1,1) NOT NULL,
+    [version_component] [nvarchar](50) NOT NULL,
+    [version_no_major] [int] NOT NULL,
+    [version_no_minor] [int] NOT NULL,
+    [version_no_build] [int] NOT NULL,
+    [version_no_rev] [int] NOT NULL,
+    [version_sts] [nvarchar](32) NOT NULL,
+    [version_note] [nvarchar](max) NULL,
+    [version_etstmp] [datetime2](7) NOT NULL,
+    [version_euser] [nvarchar](20) NOT NULL,
+    [version_mtstmp] [datetime2](7) NOT NULL,
+    [version_muser] [nvarchar](20) NOT NULL,
+    [version_snotes] [nvarchar](255) NULL,
  CONSTRAINT [unq_version__tbl] PRIMARY KEY CLUSTERED 
 (
-	[version_no_major] ASC,
-	[version_no_minor] ASC,
-	[version_no_build] ASC,
-	[version_no_rev] ASC
+    [version_no_major] ASC,
+    [version_no_minor] ASC,
+    [version_no_build] ASC,
+    [version_no_rev] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [IX_cust_user_cust_id] ON [{schema}].[cust_user]
 (
-	[cust_id] ASC
+    [cust_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [IX_doc__tbl_cust_id] ON [{schema}].[doc__tbl]
 (
-	[cust_id] ASC
+    [cust_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
 CREATE NONCLUSTERED INDEX [IX_doc_scope] ON [{schema}].[doc__tbl]
 (
-	[doc_scope] ASC,
-	[doc_scope_id] ASC
+    [doc_scope] ASC,
+    [doc_scope_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
 CREATE NONCLUSTERED INDEX [IX_help__tbl] ON [{schema}].[help__tbl]
 (
-	[help_target_code] ASC
+    [help_target_code] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
 CREATE NONCLUSTERED INDEX [IX_queue__tbl_queue_name] ON [{schema}].[queue__tbl]
 (
-	[queue_name] ASC
+    [queue_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-ALTER TABLE [{schema}].[audit__tbl] ADD  CONSTRAINT [DF_audit__tbl_db_id]  DEFAULT ('0') FOR [db_id]
+ALTER TABLE [{schema}].[audit__tbl] ADD  CONSTRAINT [df_audit__tbl_db_id]  DEFAULT ('0') FOR [db_id]
 GO
-ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_sts]  DEFAULT (N'ACTIVE') FOR [sys_user_sts]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [df_cust_user_sys_user_sts]  DEFAULT (N'ACTIVE') FOR [sys_user_sts]
 GO
-ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_sts_Dt]  DEFAULT ([{schema}].[my_today]()) FOR [sys_user_stsdt]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [df_cust_user_sys_user_sts_Dt]  DEFAULT ([{schema}].[my_today]()) FOR [sys_user_stsdt]
 GO
-ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_etstmp]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [df_cust_user_sys_user_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_etstmp]
 GO
-ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_euser]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [df_cust_user_sys_user_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_euser]
 GO
-ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_mtstmp]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [df_cust_user_sys_user_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_mtstmp]
 GO
-ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_muser]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [df_cust_user_sys_user_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_muser]
 GO
-ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [DF_cust_user_sys_user_hash]  DEFAULT ((0)) FOR [sys_user_hash]
+ALTER TABLE [{schema}].[cust_user] ADD  CONSTRAINT [df_cust_user_sys_user_hash]  DEFAULT ((0)) FOR [sys_user_hash]
 GO
-ALTER TABLE [{schema}].[cust_role] ADD  CONSTRAINT [DF_cust_role_cust_role_sts]  DEFAULT ('ACTIVE') FOR [cust_role_sts]
+ALTER TABLE [{schema}].[cust_role] ADD  CONSTRAINT [df_cust_role_cust_role_sts]  DEFAULT ('ACTIVE') FOR [cust_role_sts]
 GO
-ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_scope]  DEFAULT (N'S') FOR [doc_scope]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [df_doc__tbl_doc_scope]  DEFAULT (N'S') FOR [doc_scope]
 GO
-ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_scope_id]  DEFAULT ((0)) FOR [doc_scope_id]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [df_doc__tbl_doc_scope_id]  DEFAULT ((0)) FOR [doc_scope_id]
 GO
-ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_cust_id]  DEFAULT (NULL) FOR [cust_id]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [df_doc__tbl_cust_id]  DEFAULT (NULL) FOR [cust_id]
 GO
-ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_item_id]  DEFAULT (NULL) FOR [item_id]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [df_doc__tbl_item_id]  DEFAULT (NULL) FOR [item_id]
 GO
-ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_sts]  DEFAULT (N'A') FOR [doc_sts]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [df_doc__tbl_doc_sts]  DEFAULT (N'A') FOR [doc_sts]
 GO
-ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [doc_etstmp]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [df_doc__tbl_doc_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [doc_etstmp]
 GO
-ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [doc_euser]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [df_doc__tbl_doc_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [doc_euser]
 GO
-ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [doc_mtstmp]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [df_doc__tbl_doc_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [doc_mtstmp]
 GO
-ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [doc_muser]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [df_doc__tbl_doc_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [doc_muser]
 GO
-ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_uptstmp]  DEFAULT ([{schema}].[my_now]()) FOR [doc_uptstmp]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [df_doc__tbl_doc_uptstmp]  DEFAULT ([{schema}].[my_now]()) FOR [doc_uptstmp]
 GO
-ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [DF_doc__tbl_doc_upuser]  DEFAULT ([{schema}].[my_db_user]()) FOR [doc_upuser]
+ALTER TABLE [{schema}].[doc__tbl] ADD  CONSTRAINT [df_doc__tbl_doc_upuser]  DEFAULT ([{schema}].[my_db_user]()) FOR [doc_upuser]
 GO
-ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_Edt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
+ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [df_code_app_code_app_Edt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
 GO
-ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
+ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [df_code_app_code_app_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
 GO
-ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
+ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [df_code_app_code_app_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [DF_code_app_code_app_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
+ALTER TABLE [{schema}].[code_app] ADD  CONSTRAINT [df_code_app_code_app_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
 GO
-ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [df_code2_doc_scope_doc_ctgr_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [df_code2_doc_scope_doc_ctgr_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [df_code2_doc_scope_doc_ctgr_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [DF_code2_doc_scope_doc_ctgr_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ADD  CONSTRAINT [df_code2_doc_scope_doc_ctgr_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_Edt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
+ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [df_code2_app_code2_app_Edt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
 GO
-ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
+ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [df_code2_app_code2_app_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
 GO
-ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
+ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [df_code2_app_code2_app_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
 GO
-ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [DF_code2_app_code2_app_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
+ALTER TABLE [{schema}].[code2_app] ADD  CONSTRAINT [df_code2_app_code2_app_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
 GO
-ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_app_etstmp]
+ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [df_param_app_param_app_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_app_etstmp]
 GO
-ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_app_euser]
+ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [df_param_app_param_app_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_app_euser]
 GO
-ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_app_mtstmp]
+ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [df_param_app_param_app_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_app_mtstmp]
 GO
-ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [DF_param_app_param_app_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_app_muser]
+ALTER TABLE [{schema}].[param_app] ADD  CONSTRAINT [df_param_app_param_app_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_app_muser]
 GO
-ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [help_etstmp]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [df_help__tbl_help_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [help_etstmp]
 GO
-ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [help_euser]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [df_help__tbl_help_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [help_euser]
 GO
-ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [help_mtstmp]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [df_help__tbl_help_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [help_mtstmp]
 GO
-ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [help_muser]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [df_help__tbl_help_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [help_muser]
 GO
-ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_listing_main]  DEFAULT ((1)) FOR [help_listing_main]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [df_help__tbl_help_listing_main]  DEFAULT ((1)) FOR [help_listing_main]
 GO
-ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [DF_help__tbl_help_listing_client]  DEFAULT ((1)) FOR [help_listing_client]
+ALTER TABLE [{schema}].[help__tbl] ADD  CONSTRAINT [df_help__tbl_help_listing_client]  DEFAULT ((1)) FOR [help_listing_client]
 GO
-ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_scope]  DEFAULT (N'S') FOR [note_scope]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [df_note__tbl_note_scope]  DEFAULT (N'S') FOR [note_scope]
 GO
-ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_scope_id]  DEFAULT ((0)) FOR [note_scope_id]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [df_note__tbl_note_scope_id]  DEFAULT ((0)) FOR [note_scope_id]
 GO
-ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_sts]  DEFAULT ('A') FOR [note_sts]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [df_note__tbl_note_sts]  DEFAULT ('A') FOR [note_sts]
 GO
-ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_cust_id]  DEFAULT (NULL) FOR [cust_id]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [df_note__tbl_cust_id]  DEFAULT (NULL) FOR [cust_id]
 GO
-ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_item_id]  DEFAULT (NULL) FOR [item_id]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [df_note__tbl_item_id]  DEFAULT (NULL) FOR [item_id]
 GO
-ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [note_etstmp]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [df_note__tbl_note_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [note_etstmp]
 GO
-ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [note_euser]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [df_note__tbl_note_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [note_euser]
 GO
-ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [note_mtstmp]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [df_note__tbl_note_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [note_mtstmp]
 GO
-ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [DF_note__tbl_note_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [note_muser]
+ALTER TABLE [{schema}].[note__tbl] ADD  CONSTRAINT [df_note__tbl_note_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [note_muser]
 GO
-ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_sts]  DEFAULT (N'ACTIVE') FOR [sys_user_sts]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [df_sys_user_sys_user_sts]  DEFAULT (N'ACTIVE') FOR [sys_user_sts]
 GO
-ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_sts_Dt__17C286CF]  DEFAULT ([{schema}].[my_today]()) FOR [sys_user_stsdt]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [df_sys_user_sys_user_stsdt]  DEFAULT ([{schema}].[my_today]()) FOR [sys_user_stsdt]
 GO
-ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_country]  DEFAULT ('USA') FOR [sys_user_country]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [df_sys_user_sys_user_country]  DEFAULT ('USA') FOR [sys_user_country]
 GO
-ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_startdt]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_startdt]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [df_sys_user_sys_user_startdt]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_startdt]
 GO
-ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF_sys_user_sys_user_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_etstmp]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [df_sys_user_sys_user_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_etstmp]
 GO
-ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_euser]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [df_sys_user_sys_user_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_euser]
 GO
-ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_mtstmp]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [df_sys_user_sys_user_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [sys_user_mtstmp]
 GO
-ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_muser]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [df_sys_user_sys_user_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [sys_user_muser]
 GO
-ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [DF__sys_user__sys_user_hash__597119F2]  DEFAULT ((0)) FOR [sys_user_hash]
+ALTER TABLE [{schema}].[sys_user] ADD  CONSTRAINT [df_sys_user_sys_user_hash]  DEFAULT ((0)) FOR [sys_user_hash]
 GO
-ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_is_param_app]  DEFAULT ((0)) FOR [is_param_app]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [df_param__tbl_is_param_app]  DEFAULT ((0)) FOR [is_param_app]
 GO
-ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_is_param_user]  DEFAULT ((0)) FOR [is_param_user]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [df_param__tbl_is_param_user]  DEFAULT ((0)) FOR [is_param_user]
 GO
-ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_is_param_sys]  DEFAULT ((0)) FOR [is_param_sys]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [df_param__tbl_is_param_sys]  DEFAULT ((0)) FOR [is_param_sys]
 GO
-ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_etstmp]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [df_param__tbl_param_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_etstmp]
 GO
-ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param__tbl_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_euser]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [df_param__tbl_param__tbl_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_euser]
 GO
-ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_mtstmp]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [df_param__tbl_param_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_mtstmp]
 GO
-ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [DF_param__tbl_param__tbl_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_muser]
+ALTER TABLE [{schema}].[param__tbl] ADD  CONSTRAINT [df_param__tbl_param__tbl_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_muser]
 GO
-ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_user_etstmp]
+ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [df_param_user_param_user_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_user_etstmp]
 GO
-ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_user_euser]
+ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [df_param_user_param_user_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_user_euser]
 GO
-ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_user_mtstmp]
+ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [df_param_user_param_user_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_user_mtstmp]
 GO
-ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [DF_param_user_param_user_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_user_muser]
+ALTER TABLE [{schema}].[param_user] ADD  CONSTRAINT [df_param_user_param_user_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_user_muser]
 GO
-ALTER TABLE [{schema}].[queue__tbl] ADD  CONSTRAINT [DF_queue__tbl_queue_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [queue_etstmp]
+ALTER TABLE [{schema}].[queue__tbl] ADD  CONSTRAINT [df_queue__tbl_queue_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [queue_etstmp]
 GO
-ALTER TABLE [{schema}].[queue__tbl] ADD  CONSTRAINT [DF_queue__tbl_queue_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [queue_euser]
+ALTER TABLE [{schema}].[queue__tbl] ADD  CONSTRAINT [df_queue__tbl_queue_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [queue_euser]
 GO
-ALTER TABLE [{schema}].[job__tbl] ADD  CONSTRAINT [DF_job__tbl_job_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [job_etstmp]
+ALTER TABLE [{schema}].[job__tbl] ADD  CONSTRAINT [df_job__tbl_job_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [job_etstmp]
 GO
-ALTER TABLE [{schema}].[job__tbl] ADD  CONSTRAINT [DF_job__tbl_job_user]  DEFAULT ([{schema}].[my_db_user]()) FOR [job_user]
+ALTER TABLE [{schema}].[job__tbl] ADD  CONSTRAINT [df_job__tbl_job_user]  DEFAULT ([{schema}].[my_db_user]()) FOR [job_user]
 GO
-ALTER TABLE [{schema}].[sys_func] ADD  CONSTRAINT [DF_sys_func_sys_func_sts]  DEFAULT ('ACTIVE') FOR [sys_func_sts]
+ALTER TABLE [{schema}].[sys_func] ADD  CONSTRAINT [df_sys_func_sys_func_sts]  DEFAULT ('ACTIVE') FOR [sys_func_sts]
 GO
-ALTER TABLE [{schema}].[menu__tbl] ADD  CONSTRAINT [DF_menu__tbl_menu_group]  DEFAULT ('S') FOR [menu_group]
+ALTER TABLE [{schema}].[menu__tbl] ADD  CONSTRAINT [df_menu__tbl_menu_group]  DEFAULT ('S') FOR [menu_group]
 GO
-ALTER TABLE [{schema}].[menu__tbl] ADD  CONSTRAINT [DF_menu__tbl_menu_sts]  DEFAULT ('ACTIVE') FOR [menu_sts]
+ALTER TABLE [{schema}].[menu__tbl] ADD  CONSTRAINT [df_menu__tbl_menu_sts]  DEFAULT ('ACTIVE') FOR [menu_sts]
 GO
-ALTER TABLE [{schema}].[sys_role] ADD  CONSTRAINT [DF_sys_role_sys_role_sts]  DEFAULT ('ACTIVE') FOR [sys_role_sts]
+ALTER TABLE [{schema}].[sys_role] ADD  CONSTRAINT [df_sys_role_sys_role_sts]  DEFAULT ('ACTIVE') FOR [sys_role_sts]
 GO
-ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [DF_TXT_txt_type]  DEFAULT ('TEXT') FOR [txt_type]
+ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [df_txt__tbl_txt_type]  DEFAULT ('TEXT') FOR [txt_type]
 GO
-ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [DF_TXT_txt_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [txt_etstmp]
+ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [df_txt__tbl_txt_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [txt_etstmp]
 GO
-ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [DF_TXT_TXT_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [txt_euser]
+ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [df_txt__tbl_txt_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [txt_euser]
 GO
-ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [DF_TXT_txt_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [txt_mtstmp]
+ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [df_txt__tbl_txt_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [txt_mtstmp]
 GO
-ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [DF_TXT_TXT_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [txt_muser]
+ALTER TABLE [{schema}].[txt__tbl] ADD  CONSTRAINT [df_txt__tbl_txt_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [txt_muser]
 GO
-ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [DF_code_ac_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [df_code_ac_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [DF_code_ac_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [df_code_ac_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [DF_code_ac_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [df_code_ac_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [DF_code_ac_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_ac] ADD  CONSTRAINT [df_code_ac_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [df_code_ac1_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [df_code_ac1_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [df_code_ac1_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [DF_code_ac1_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_ac1] ADD  CONSTRAINT [df_code_ac1_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [df_code_ahc_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [df_code_ahc_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [df_code_ahc_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [DF_code_ahc_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_ahc] ADD  CONSTRAINT [df_code_ahc_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [DF_code_country_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [df_code_country_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [DF_code_country_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [df_code_country_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [DF_code_country_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [df_code_country_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [DF_code_country_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_country] ADD  CONSTRAINT [df_code_country_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [df_code_doc_scope_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [df_code_doc_scope_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [df_code_doc_scope_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [DF_code_doc_scope_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_doc_scope] ADD  CONSTRAINT [df_code_doc_scope_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_Edt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
+:if:separate_code_type_tables:
+ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [df_code_sys_code_h_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
 GO
-ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
+ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [df_code_sys_code_h_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
 GO
-ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
+ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [df_code_sys_code_h_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [DF_COD_help__tbl_COD_help__tbl_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
+ALTER TABLE [{schema}].[code_sys] ADD  CONSTRAINT [df_code_sys_code_h_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
 GO
-ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+:endif:
+ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [df_code_note_scope_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [df_code_note_scope_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [df_code_note_scope_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [DF_UCON_SCOPE_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_note_scope] ADD  CONSTRAINT [df_code_note_scope_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [df_code_note_type_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [df_code_note_type_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [df_code_note_type_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [DF_code_note_type_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_note_type] ADD  CONSTRAINT [df_code_note_type_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [df_code_param_type_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [df_code_param_type_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [df_code_param_type_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [DF_code_param_type_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_param_type] ADD  CONSTRAINT [df_code_param_type_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [df_code_job_action_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [df_code_job_action_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [df_code_job_action_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [DF_code_job_action_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_job_action] ADD  CONSTRAINT [df_code_job_action_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [df_code_job_source_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [df_code_job_source_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [df_code_job_source_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [DF_code_job_source_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_job_source] ADD  CONSTRAINT [df_code_job_source_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [df_code_txt_type_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [df_code_txt_type_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [df_code_txt_type_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [DF_code_txt_type_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_txt_type] ADD  CONSTRAINT [df_code_txt_type_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [df_code_version_sts_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [df_code_version_sts_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [df_code_version_sts_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [DF_code_version_sts_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code_version_sts] ADD  CONSTRAINT [df_code_version_sts_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_COD_EDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
+ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [df_code2_country_state_code_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_etstmp]
 GO
-ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_cod_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
+ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [df_code2_country_state_code_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_euser]
 GO
-ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_COD_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
+ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [df_code2_country_state_code_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [code_mtstmp]
 GO
-ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [DF_code2_country_state_cod_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
+ALTER TABLE [{schema}].[code2_country_state] ADD  CONSTRAINT [df_code2_country_state_code_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_muser]
 GO
-ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_Edt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
+:if:separate_code_type_tables:
+ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [df_code2_sys_code2_sys_Edt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_etstmp]
 GO
-ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
+ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [df_code2_sys_code2_sys_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_euser]
 GO
-ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
+ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [df_code2_sys_code2_sys_MDt]  DEFAULT ([{schema}].[my_now]()) FOR [code_h_mtstmp]
 GO
-ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [DF_code2_sys_code2_sys_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
+ALTER TABLE [{schema}].[code2_sys] ADD  CONSTRAINT [df_code2_sys_code2_sys_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [code_h_muser]
 GO
-ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_major]  DEFAULT ((0)) FOR [version_no_major]
+:endif:
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [df_version__tbl_version_no_major]  DEFAULT ((0)) FOR [version_no_major]
 GO
-ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_minor]  DEFAULT ((0)) FOR [version_no_minor]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [df_version__tbl_version_no_minor]  DEFAULT ((0)) FOR [version_no_minor]
 GO
-ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_build]  DEFAULT ((0)) FOR [version_no_build]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [df_version__tbl_version_no_build]  DEFAULT ((0)) FOR [version_no_build]
 GO
-ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_no_rev]  DEFAULT ((0)) FOR [version_no_rev]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [df_version__tbl_version_no_rev]  DEFAULT ((0)) FOR [version_no_rev]
 GO
-ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_sts]  DEFAULT ('OK') FOR [version_sts]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [df_version__tbl_version_sts]  DEFAULT ('OK') FOR [version_sts]
 GO
-ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [version_etstmp]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [df_version__tbl_version_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [version_etstmp]
 GO
-ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [version_euser]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [df_version__tbl_version_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [version_euser]
 GO
-ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [version_mtstmp]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [df_version__tbl_version_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [version_mtstmp]
 GO
-ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [DF_version__tbl_version_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [version_muser]
+ALTER TABLE [{schema}].[version__tbl] ADD  CONSTRAINT [df_version__tbl_version_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [version_muser]
 GO
-ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_sys_etstmp]
+ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [df_param_sys_param_sys_etstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_sys_etstmp]
 GO
-ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_EUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_sys_euser]
+ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [df_param_sys_param_sys_euser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_sys_euser]
 GO
-ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_sys_mtstmp]
+ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [df_param_sys_param_sys_mtstmp]  DEFAULT ([{schema}].[my_now]()) FOR [param_sys_mtstmp]
 GO
-ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [DF_param_sys_param_sys_MUser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_sys_muser]
+ALTER TABLE [{schema}].[param_sys] ADD  CONSTRAINT [df_param_sys_param_sys_muser]  DEFAULT ([{schema}].[my_db_user]()) FOR [param_sys_muser]
 GO
 ALTER TABLE [{schema}].[audit_detail]  WITH CHECK ADD  CONSTRAINT [fk_audit_detail_audit__tbl] FOREIGN KEY([audit_seq])
 REFERENCES [{schema}].[audit__tbl] ([audit_seq])
@@ -3425,6 +3429,9 @@ ALTER TABLE [{schema}].[param_app]  WITH CHECK ADD  CONSTRAINT [fk_param_app_par
 REFERENCES [{schema}].[param__tbl] ([param_process], [param_attrib])
 GO
 ALTER TABLE [{schema}].[param_app] CHECK CONSTRAINT [fk_param_app_param__tbl]
+GO
+ALTER TABLE [{schema}].[help__tbl]  WITH CHECK ADD  CONSTRAINT [fk_help__tbl_help_target] FOREIGN KEY([help_target_id])
+REFERENCES [{schema}].[help_target] ([help_target_id])
 GO
 ALTER TABLE [{schema}].[help__tbl] CHECK CONSTRAINT [fk_help__tbl_help_target]
 GO
@@ -3563,10 +3570,10 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [{schema}].[sys_menu_role] CHECK CONSTRAINT [fk_sys_menu_role_sys_role_sys_role_name]
 GO
-ALTER TABLE [{schema}].[txt__tbl]  WITH CHECK ADD  CONSTRAINT [fk_TXT_code_txt_type] FOREIGN KEY([txt_type])
+ALTER TABLE [{schema}].[txt__tbl]  WITH CHECK ADD  CONSTRAINT [fk_txt__tbl_code_txt_type] FOREIGN KEY([txt_type])
 REFERENCES [{schema}].[code_txt_type] ([code_val])
 GO
-ALTER TABLE [{schema}].[txt__tbl] CHECK CONSTRAINT [fk_TXT_code_txt_type]
+ALTER TABLE [{schema}].[txt__tbl] CHECK CONSTRAINT [fk_txt__tbl_code_txt_type]
 GO
 ALTER TABLE [{schema}].[version__tbl]  WITH CHECK ADD  CONSTRAINT [fk_version__tbl_code_version_sts] FOREIGN KEY([version_sts])
 REFERENCES [{schema}].[code_version_sts] ([code_val])
@@ -3598,17 +3605,17 @@ GO
 
 CREATE PROCEDURE  [{schema}].[log_audit]
 (
-	@op           nvarchar(max),
-	@tname        NVARCHAR(MAX),
-	@tid          bigint,
-	@u            NVARCHAR(MAX),
-	@tstmp        DATETIME2(7),
-	@audit_ref_name     varchar(32) = NULL,
-	@audit_ref_id       bigint = NULL,
-	@audit_subject         nvarchar(255) = NULL,
-	@custid          bigint = NULL, 
-	@itemid          bigint = NULL 
-)	
+    @op           nvarchar(max),
+    @tname        NVARCHAR(MAX),
+    @tid          bigint,
+    @u            NVARCHAR(MAX),
+    @tstmp        DATETIME2(7),
+    @audit_ref_name     varchar(32) = NULL,
+    @audit_ref_id       bigint = NULL,
+    @audit_subject         nvarchar(255) = NULL,
+    @custid          bigint = NULL, 
+    @itemid          bigint = NULL 
+)    
 as
 BEGIN
   DECLARE @MY_audit_seq BIGINT=0
@@ -3619,110 +3626,78 @@ BEGIN
   DECLARE @WK_audit_ref_id bigint = NULL
   DECLARE @WK_audit_subject nvarchar(255) = NULL
  
-  DECLARE @SQLCMD nvarchar(max)
-  DECLARE @get_cust_id nvarchar(max)
-  DECLARE @get_item_id nvarchar(max)
   DECLARE @doc_ctgr_table nvarchar(max)
-  DECLARE @MY_cust_id bigint
-  DECLARE @MY_item_id bigint
   DECLARE @cust_id bigint
   DECLARE @item_id bigint
 
   BEGIN TRY  
 
-    SELECT @get_cust_id = param_cur_val
-	  FROM {schema}.v_param_cur
-     where param_cur_process = 'SQL'
-	   and param_cur_attrib = 'get_cust_id';
-
-    SELECT @get_item_id = param_cur_val
-	  FROM {schema}.v_param_cur
-     where param_cur_process = 'SQL'
-	   and param_cur_attrib = 'get_item_id';
-
     SET @MYUSER = CASE WHEN @u IS NULL THEN {schema}.my_db_user() ELSE @u END
 
     if (@op = 'D')
-	begin
-		select top(1)
-			     @WK_cust_id = cust_id,
-		       @WK_item_id = item_id,
-		       @WK_audit_ref_name = audit_ref_name,
-		       @WK_audit_ref_id = audit_ref_id,
-		       @WK_audit_subject = audit_subject
-		  from {schema}.audit__tbl
+    begin
+        select top(1)
+                 @WK_cust_id = cust_id,
+               @WK_item_id = item_id,
+               @WK_audit_ref_name = audit_ref_name,
+               @WK_audit_ref_id = audit_ref_id,
+               @WK_audit_subject = audit_subject
+          from {schema}.audit__tbl
          where audit_table_name = lower(@tname)
-		   and audit_table_id = @tid
-		   and audit_op = 'I'
+           and audit_table_id = @tid
+           and audit_op = 'I'
          order by audit_seq desc; 
          if @@ROWCOUNT = 0
-		 begin
+         begin
 
-           if (@custid is null and lower(@tname) <> lower('cust'))
-		   begin	
-	         SET @SQLCMD = 'select @my_cust_id  = ' + @get_cust_id + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
-	         EXECUTE sp_executesql @SQLCMD, N'@my_cust_id bigint OUTPUT', @MY_cust_id=@my_cust_id OUTPUT
-	         SET @cust_id = @MY_cust_id
-           end
+          if (@custid is null and lower(@tname) <> lower('cust'))
+            select @cust_id = {schema}.get_cust_id(lower(@tname), @tid);
+          if (@itemid is null and lower(@tname) <> lower('item__tbl'))
+            select @item_id = {schema}.get_item_id(lower(@tname), @tid);
 
-           if (@itemid is null and lower(@tname) <> lower('item__tbl'))
-		   begin	
-	         SET @SQLCMD = 'select @my_item_id  = ' + @get_item_id + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
-	         EXECUTE sp_executesql @SQLCMD, N'@my_item_id bigint OUTPUT', @MY_item_id=@my_item_id OUTPUT
-	         SET @item_id = @MY_item_id
-		   end
-
-		   select @WK_cust_id = case when @custid is not null then @custid
-		                          when lower(@tname) = lower('cust') then @tid 
-							      else @cust_id end,  
-		          @WK_item_id = case when @itemid is not null then @itemid
-		                          when lower(@tname)  = lower('item__tbl') then @tid 
-								  else @item_id end, 
-		          @WK_audit_ref_name = @audit_ref_name,
-		          @WK_audit_ref_id = @audit_ref_id,
-		          @WK_audit_subject = @audit_subject;
-		 end
-	end
+           select @WK_cust_id = case when @custid is not null then @custid
+                                  when lower(@tname) = lower('cust') then @tid 
+                                  else @cust_id end,  
+                  @WK_item_id = case when @itemid is not null then @itemid
+                                  when lower(@tname)  = lower('item__tbl') then @tid 
+                                  else @item_id end, 
+                  @WK_audit_ref_name = @audit_ref_name,
+                  @WK_audit_ref_id = @audit_ref_id,
+                  @WK_audit_subject = @audit_subject;
+         end
+    end
     ELSE
-	begin
+    begin
 
         if (@custid is null and lower(@tname) <> lower('cust'))
-		begin	
-	      SET @SQLCMD = 'select @my_cust_id  = ' + @get_cust_id + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
-	      EXECUTE sp_executesql @SQLCMD, N'@my_cust_id bigint OUTPUT', @MY_cust_id=@my_cust_id OUTPUT
-	      SET @cust_id = @MY_cust_id
-        end
+          select @cust_id = {schema}.get_cust_id(lower(@tname), @tid);
 
         if (@itemid is null and lower(@tname) <> lower('item__tbl'))
-		begin	
-	      SET @SQLCMD = 'select @my_item_id  = ' + @get_item_id + '(''' + lower(@tname) + ''',' + convert(varchar,@tid) + ')'
-	      EXECUTE sp_executesql @SQLCMD, N'@my_item_id bigint OUTPUT', @MY_item_id=@my_item_id OUTPUT
-	      SET @item_id = @MY_item_id
-		end
+          select @item_id = {schema}.get_item_id(lower(@tname), @tid);
 
-		SET @WK_cust_id = case when @custid is not null then @custid
-		                    when lower(@tname) = lower('cust') then @tid 
-							else @cust_id end;  
-		SET @WK_item_id = case when @itemid is not null then @itemid
-		                    when lower(@tname) = lower('item__tbl') then @tid 
-							else @item_id end; 
-		SET @WK_audit_ref_name = @audit_ref_name;
-		SET @WK_audit_ref_id = @audit_ref_id;
-		SET @WK_audit_subject = @audit_subject;
-	end
+        SET @WK_cust_id = case when @custid is not null then @custid
+                            when lower(@tname) = lower('cust') then @tid 
+                            else @cust_id end;  
+        SET @WK_item_id = case when @itemid is not null then @itemid
+                            when lower(@tname) = lower('item__tbl') then @tid 
+                            else @item_id end; 
+        SET @WK_audit_ref_name = @audit_ref_name;
+        SET @WK_audit_ref_id = @audit_ref_id;
+        SET @WK_audit_subject = @audit_subject;
+    end
 
     INSERT INTO {schema}.audit__tbl 
-	                  (audit_table_name, audit_table_id, audit_op, audit_user, audit_tstmp, cust_id, item_id, audit_ref_name, audit_ref_id, audit_subject) 
+                      (audit_table_name, audit_table_id, audit_op, audit_user, audit_tstmp, cust_id, item_id, audit_ref_name, audit_ref_id, audit_subject) 
                VALUES (lower(@tname), 
-			           @tid, 
-					   @op, 
-					   @MYUSER, 
-					   @tstmp, 
-					   isnull(@custid, @WK_cust_id), 
-					   isnull(@itemid, @WK_item_id),
-					   @WK_audit_ref_name,
-					   @WK_audit_ref_id,
-					   @WK_audit_subject)
+                       @tid, 
+                       @op, 
+                       @MYUSER, 
+                       @tstmp, 
+                       isnull(@custid, @WK_cust_id), 
+                       isnull(@itemid, @WK_item_id),
+                       @WK_audit_ref_name,
+                       @WK_audit_ref_id,
+                       @WK_audit_subject)
     SET @MY_audit_seq = SCOPE_IDENTITY() 
     
   END TRY
@@ -3759,15 +3734,15 @@ GO
 
 CREATE PROCEDURE  [{schema}].[log_audit_base]
 (
-	@op           nvarchar(max),
-	@tname        NVARCHAR(MAX),
-	@tid          bigint,
-	@u            NVARCHAR(MAX),
-	@tstmp        DATETIME2(7),
-	@audit_ref_name     varchar(32) = NULL,
-	@audit_ref_id       bigint = NULL,
-	@audit_subject         nvarchar(255) = NULL
-)	
+    @op           nvarchar(max),
+    @tname        NVARCHAR(MAX),
+    @tid          bigint,
+    @u            NVARCHAR(MAX),
+    @tstmp        DATETIME2(7),
+    @audit_ref_name     varchar(32) = NULL,
+    @audit_ref_id       bigint = NULL,
+    @audit_subject         nvarchar(255) = NULL
+)    
 as
 BEGIN
   DECLARE @MY_audit_seq BIGINT=0
@@ -3781,40 +3756,40 @@ BEGIN
     SET @MYUSER = CASE WHEN @u IS NULL THEN {schema}.my_db_user() ELSE @u END
 
     if (@op = 'D')
-	begin
-		select top(1)
-		       @WK_audit_ref_name = audit_ref_name,
-		       @WK_audit_ref_id = audit_ref_id,
-		       @WK_audit_subject = audit_subject
-		  from {schema}.audit__tbl
+    begin
+        select top(1)
+               @WK_audit_ref_name = audit_ref_name,
+               @WK_audit_ref_id = audit_ref_id,
+               @WK_audit_subject = audit_subject
+          from {schema}.audit__tbl
          where audit_table_name = lower(@tname)
-		   and audit_table_id = @tid
-		   and audit_op = 'I'
+           and audit_table_id = @tid
+           and audit_op = 'I'
          order by audit_seq desc; 
          if @@ROWCOUNT = 0
-		 begin
-		   select @WK_audit_ref_name = @audit_ref_name,
-		          @WK_audit_ref_id = @audit_ref_id,
-		          @WK_audit_subject = @audit_subject;
-		 end
-	end
+         begin
+           select @WK_audit_ref_name = @audit_ref_name,
+                  @WK_audit_ref_id = @audit_ref_id,
+                  @WK_audit_subject = @audit_subject;
+         end
+    end
     ELSE
-	begin
-		SET @WK_audit_ref_name = @audit_ref_name;
-		SET @WK_audit_ref_id = @audit_ref_id;
-		SET @WK_audit_subject = @audit_subject;
-	end
+    begin
+        SET @WK_audit_ref_name = @audit_ref_name;
+        SET @WK_audit_ref_id = @audit_ref_id;
+        SET @WK_audit_subject = @audit_subject;
+    end
 
     INSERT INTO {schema}.audit__tbl 
-	                  (audit_table_name, audit_table_id, audit_op, audit_user, audit_tstmp, audit_ref_name, audit_ref_id, audit_subject) 
+                      (audit_table_name, audit_table_id, audit_op, audit_user, audit_tstmp, audit_ref_name, audit_ref_id, audit_subject) 
                VALUES (lower(@tname), 
-			           @tid, 
-					   @op, 
-					   @MYUSER, 
-					   @tstmp, 
-					   @WK_audit_ref_name,
-					   @WK_audit_ref_id,
-					   @WK_audit_subject)
+                       @tid, 
+                       @op, 
+                       @MYUSER, 
+                       @tstmp, 
+                       @WK_audit_ref_name,
+                       @WK_audit_ref_id,
+                       @WK_audit_subject)
     SET @MY_audit_seq = SCOPE_IDENTITY() 
     
   END TRY
@@ -3853,26 +3828,29 @@ GO
 
 
 
-CREATE PROCEDURE  [{schema}].[check_code]
+
+CREATE PROCEDURE  [{schema}].[check_code_exec]
 (
-	@in_tblname nvarchar(255),
-	@in_code_val nvarchar(32)
-)	
+    @in_tblname nvarchar(255),
+    @in_code_val nvarchar(32)
+)    
 as
 BEGIN
 
-DECLARE	@return_value int
+  DECLARE @rslt INT
+  DECLARE @runmesql NVARCHAR(512)
 
-BEGIN TRY
-EXEC	@return_value = [{schema}].[check_code_exec]
-		@in_tblname = @in_tblname,
-		@in_code_val = @in_code_val
-END TRY	
-BEGIN CATCH	
-SELECT @return_value = -1
-END CATCH
+  SELECT @rslt = 0
+  SELECT top(1)
+         @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + table_name + '] where code_val = ''' + 
+                     isnull(@in_code_val,'') + ''''
+    from information_schema.tables
+   where table_name = @in_tblname
+   order by (case table_schema when '{schema}' then 1 else 2 end),table_schema;
 
-RETURN( @return_value)
+  exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output     
+      
+  return (@rslt)
 
 END
 
@@ -3889,13 +3867,53 @@ GO
 
 
 
-
-
-CREATE PROCEDURE  [{schema}].[check_code_exec]
+CREATE PROCEDURE  [{schema}].[check_code]
 (
-	@in_tblname nvarchar(255),
-	@in_code_val nvarchar(32)
-)	
+    @in_tblname nvarchar(255),
+    @in_code_val nvarchar(32)
+)    
+as
+BEGIN
+
+DECLARE    @return_value int
+
+BEGIN TRY
+EXEC    @return_value = [{schema}].[check_code_exec]
+        @in_tblname = @in_tblname,
+        @in_code_val = @in_code_val
+END TRY    
+BEGIN CATCH    
+SELECT @return_value = -1
+END CATCH
+
+RETURN( @return_value)
+
+END
+
+
+
+
+
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+
+
+
+CREATE PROCEDURE  [{schema}].[check_code2_exec]
+(
+    @in_tblname nvarchar(255),
+    @in_code_val1 nvarchar(32),
+    @in_code_val2 nvarchar(32)
+)    
 as
 BEGIN
 
@@ -3904,18 +3922,17 @@ BEGIN
 
   SELECT @rslt = 0
   SELECT top(1)
-         @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + table_name + '] where code_val = ''' + 
-		             isnull(@in_code_val,'') + ''''
+         @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + table_name + '] where code_val1 = ''' + 
+                     isnull(@in_code_val1,'') + ''' and code_val2 = ''' + isnull(@in_code_val2,'') +  ''''
     from information_schema.tables
    where table_name = @in_tblname
    order by (case table_schema when '{schema}' then 1 else 2 end),table_schema;
 
-  exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output 	
+  exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output     
       
   return (@rslt)
 
 END
-
 
 
 
@@ -3934,22 +3951,22 @@ GO
 
 CREATE PROCEDURE  [{schema}].[check_code2]
 (
-	@in_tblname nvarchar(255),
-	@in_code_val1 nvarchar(32),
-	@in_code_val2 nvarchar(32)
-)	
+    @in_tblname nvarchar(255),
+    @in_code_val1 nvarchar(32),
+    @in_code_val2 nvarchar(32)
+)    
 as
 BEGIN
 
-DECLARE	@return_value int
+DECLARE    @return_value int
 
 BEGIN TRY
-EXEC	@return_value = [{schema}].[check_code2_exec]
-		@in_tblname = @in_tblname,
-		@in_code_val1 = @in_code_val1,
-		@in_code_val2 = @in_code_val2
-END TRY	
-BEGIN CATCH	
+EXEC    @return_value = [{schema}].[check_code2_exec]
+        @in_tblname = @in_tblname,
+        @in_code_val1 = @in_code_val1,
+        @in_code_val2 = @in_code_val2
+END TRY    
+BEGIN CATCH    
 SELECT @return_value = -1
 END CATCH
 
@@ -3968,53 +3985,12 @@ GO
 
 
 
-
-
-CREATE PROCEDURE  [{schema}].[check_code2_exec]
-(
-	@in_tblname nvarchar(255),
-	@in_code_val1 nvarchar(32),
-	@in_code_val2 nvarchar(32)
-)	
-as
-BEGIN
-
-  DECLARE @rslt INT
-  DECLARE @runmesql NVARCHAR(512)
-
-  SELECT @rslt = 0
-  SELECT top(1)
-         @runmesql = 'select @irslt = count(*) from ['+table_schema+'].[' + table_name + '] where code_val1 = ''' + 
-		             isnull(@in_code_val1,'') + ''' and code_val2 = ''' + isnull(@in_code_val2,'') +  ''''
-    from information_schema.tables
-   where table_name = @in_tblname
-   order by (case table_schema when '{schema}' then 1 else 2 end),table_schema;
-
-  exec sp_executesql @runmesql, N'@irslt bigint output', @irslt = @rslt output 	
-      
-  return (@rslt)
-
-END
-
-
-
-
-
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
 CREATE PROCEDURE  [{schema}].[create_code]
 (
-	@in_code_schema nvarchar(max),
-	@in_code_name   nvarchar(max),
-	@in_code_desc   nvarchar(max)
-)	
+    @in_code_schema nvarchar(max),
+    @in_code_name   nvarchar(max),
+    @in_code_desc   nvarchar(max)
+)    
 as
 BEGIN
 
@@ -4061,10 +4037,10 @@ GO
 
 CREATE PROCEDURE  [{schema}].[create_code2]
 (
-	@in_code_schema nvarchar(max),
-	@in_code_name   nvarchar(max),
-	@in_code_desc   nvarchar(max)
-)	
+    @in_code_schema nvarchar(max),
+    @in_code_name   nvarchar(max),
+    @in_code_desc   nvarchar(max)
+)    
 as
 BEGIN
 
@@ -4111,10 +4087,10 @@ GO
 
 CREATE PROCEDURE  [{schema}].[create_code_app]
 (
-	@in_code_schema nvarchar(max),
-	@in_code_name   nvarchar(max),
-	@in_code_desc   nvarchar(max)
-)	
+    @in_code_schema nvarchar(max),
+    @in_code_name   nvarchar(max),
+    @in_code_desc   nvarchar(max)
+)    
 as
 BEGIN
 
@@ -4161,10 +4137,10 @@ GO
 
 CREATE PROCEDURE  [{schema}].[create_code2_app]
 (
-	@in_code_schema nvarchar(max),
-	@in_code_name   nvarchar(max),
-	@in_code_desc   nvarchar(max)
-)	
+    @in_code_schema nvarchar(max),
+    @in_code_name   nvarchar(max),
+    @in_code_desc   nvarchar(max)
+)    
 as
 BEGIN
 
@@ -4211,10 +4187,10 @@ GO
 
 CREATE PROCEDURE  [{schema}].[create_code_sys]
 (
-	@in_code_schema nvarchar(max),
-	@in_code_name   nvarchar(max),
-	@in_code_desc   nvarchar(max)
-)	
+    @in_code_schema nvarchar(max),
+    @in_code_name   nvarchar(max),
+    @in_code_desc   nvarchar(max)
+)    
 as
 BEGIN
 
@@ -4248,12 +4224,15 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
+
+
 create PROCEDURE  [{schema}].[create_code2_sys]
 (
-	@in_code_schema nvarchar(max),
-	@in_code_name   nvarchar(max),
-	@in_code_desc   nvarchar(max)
-)	
+    @in_code_schema nvarchar(max),
+    @in_code_name   nvarchar(max),
+    @in_code_desc   nvarchar(max)
+)    
 as
 BEGIN
 
@@ -4291,14 +4270,122 @@ GO
 
 
 
+create PROCEDURE  [{schema}].[get_cust_id]
+(
+    @in_tabn  nvarchar(32),
+    @in_tabid bigint
+)    
+as
+BEGIN
+
+  DECLARE @sqlcmd nvarchar(max)
+  DECLARE @get_cust_id nvarchar(max)
+  DECLARE @rslt bigint
+
+  
+
+  SELECT @get_cust_id = param_cur_val FROM {schema}.v_param_cur where param_cur_process = 'SQL' and param_cur_attrib = 'get_cust_id';
+  if(@get_cust_id is null) return (null);
+  SET @sqlcmd = 'select @rslt  = ' + @get_cust_id + '(''' + @in_tabn + ''',' + convert(varchar,@in_tabid) + ')'
+  EXECUTE sp_executesql @sqlcmd, N'@rslt bigint OUTPUT', @rslt=@rslt OUTPUT
+  
+  return (@rslt)
+
+END
+
+GO
+GRANT EXECUTE ON [{schema}].[get_cust_id] TO [{schema}_role_dev] AS [dbo]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+
+
+create PROCEDURE  [{schema}].[get_item_id]
+(
+    @in_tabn  nvarchar(32),
+    @in_tabid bigint
+)    
+as
+BEGIN
+
+  DECLARE @sqlcmd nvarchar(max)
+  DECLARE @get_item_id nvarchar(max)
+  DECLARE @rslt bigint
+
+
+  SELECT @get_item_id = param_cur_val FROM {schema}.v_param_cur where param_cur_process = 'SQL' and param_cur_attrib = 'get_item_id';
+  if(@get_item_id is null) return (null);
+  SET @sqlcmd = 'select @rslt  = ' + @get_item_id + '(''' + @in_tabn + ''',' + convert(varchar,@in_tabid) + ')'
+  EXECUTE sp_executesql @sqlcmd, N'@rslt bigint OUTPUT', @rslt=@rslt OUTPUT
+
+  return (@rslt)
+
+END
+
+GO
+GRANT EXECUTE ON [{schema}].[get_item_id] TO [{schema}_role_dev] AS [dbo]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+create PROCEDURE  [{schema}].[check_scope_id]
+(
+    @in_scope  nvarchar(32),
+    @in_scope_id bigint,
+  @in_cust_id bigint
+)    
+as
+BEGIN
+
+  DECLARE @sqlcmd nvarchar(max)
+  DECLARE @check_scope_id nvarchar(max)
+  DECLARE @rslt bigint
+
+  SELECT @check_scope_id = param_cur_val FROM {schema}.v_param_cur where param_cur_process = 'SQL' and param_cur_attrib = 'check_scope_id';
+  if(@check_scope_id is null)
+  begin
+    if (@in_scope='U') select @rslt = sys_user_id from jsharmony.sys_user where sys_user_id=@in_scope_id;
+    else if (@in_scope='S') select @rslt = 1;
+    else select @rslt = null;
+    return (@rslt);
+  end
+  SET @sqlcmd = 'select @rslt  = ' + @check_scope_id + '(''' + @in_scope + ''',' + convert(varchar,@in_scope_id) + ',' + convert(varchar,@in_cust_id) + ')'
+  EXECUTE sp_executesql @sqlcmd, N'@rslt bigint OUTPUT', @rslt=@rslt OUTPUT
+
+  return (@rslt)
+
+END
+
+GO
+GRANT EXECUTE ON [{schema}].[check_scope_id] TO [{schema}_role_dev] AS [dbo]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
 /*@ SEND DEBUGGING INFO TO TEXT FILE @*/
 CREATE PROCEDURE  [{schema}].[zz-filedebug]
 (
-	@in_type nvarchar(MAX),
-	@in_object nvarchar(MAX),
-	@in_loc nvarchar(MAX),
-	@in_txt nvarchar(MAX)
-)	
+    @in_type nvarchar(MAX),
+    @in_object nvarchar(MAX),
+    @in_loc nvarchar(MAX),
+    @in_txt nvarchar(MAX)
+)    
 as
 BEGIN
   -- SET NOCOUNT ON added to prevent extra result sets from
@@ -4332,10 +4419,10 @@ BEGIN
 /*
           INSERT INTO ZZ_LOG (LOG_PLACE, LOG_VALUE)
            VALUES('Q_UPDATE',
-		             ' TP=' + @TP + 
-		             ' doc__tbl_QT_TNAME=' + @D_QT_TNAME + 
-			         ' doc__tbl_Q_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_Q_ID),'null'))) +
-			         ' doc__tbl_CT_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_CT_ID),'null'))) );
+                     ' TP=' + @TP + 
+                     ' doc__tbl_QT_TNAME=' + @D_QT_TNAME + 
+                     ' doc__tbl_Q_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_Q_ID),'null'))) +
+                     ' doc__tbl_CT_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_CT_ID),'null'))) );
 */
 END
 
@@ -4360,7 +4447,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [{schema}].[cust_user_IUD] on [{schema}].[cust_user]
+CREATE trigger [{schema}].[cust_user_iud] on [{schema}].[cust_user]
 for insert, update, delete
 AS
 BEGIN
@@ -4371,20 +4458,20 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_cust_user_IUD CURSOR LOCAL FOR
+  DECLARE CUR_cust_user_iud CURSOR LOCAL FOR
      SELECT  del.sys_user_id, i.sys_user_id,
-	         del.cust_id, i.cust_id,
-	         del.sys_user_sts, i.sys_user_sts,
-	         del.sys_user_fname, i.sys_user_fname,
-			 del.sys_user_mname, i.sys_user_mname,
-			 del.sys_user_lname, i.sys_user_lname,
+             del.cust_id, i.cust_id,
+             del.sys_user_sts, i.sys_user_sts,
+             del.sys_user_fname, i.sys_user_fname,
+             del.sys_user_mname, i.sys_user_mname,
+             del.sys_user_lname, i.sys_user_lname,
              del.sys_user_jobtitle, i.sys_user_jobtitle,
              del.sys_user_bphone, i.sys_user_bphone,
              del.sys_user_cphone, i.sys_user_cphone,
              del.sys_user_email, i.sys_user_email,
              del.sys_user_pw1, i.sys_user_pw1,
              del.sys_user_pw2, i.sys_user_pw2,
-			 del.sys_user_lastlogin_tstmp, i.sys_user_lastlogin_tstmp
+             del.sys_user_lastlogin_tstmp, i.sys_user_lastlogin_tstmp
        FROM deleted del FULL OUTER JOIN inserted i
                        ON i.sys_user_id = del.sys_user_id;
   DECLARE @D_sys_user_id bigint
@@ -4431,10 +4518,10 @@ BEGIN
   DECLARE @UPDATE_PW CHAR(1)
 
   DECLARE @return_value int,
-		  @out_msg nvarchar(max),
-		  @out_rslt nvarchar(255),
-		  @hash varbinary(200),
-		  @M nvarchar(max)
+          @out_msg nvarchar(max),
+          @out_rslt nvarchar(255),
+          @hash varbinary(200),
+          @M nvarchar(max)
 
   if exists (select * from inserted)
     if exists (select * from deleted)
@@ -4443,7 +4530,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -4455,7 +4542,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_iud','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -4463,21 +4550,21 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(cust_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_IUD','ERR', 'Cannot update Customer ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_iud','ERR', 'Cannot update Customer ID'
     raiserror('Cannot update foreign key cust_id',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_cust_user_IUD
-  FETCH NEXT FROM CUR_cust_user_IUD
+  OPEN CUR_cust_user_iud
+  FETCH NEXT FROM CUR_cust_user_iud
         INTO @D_sys_user_id, @I_sys_user_id,
              @D_cust_id, @I_cust_id,
              @D_sys_user_sts, @I_sys_user_sts,
              @D_sys_user_fname, @I_sys_user_fname,
-			 @D_sys_user_mname, @I_sys_user_mname,
-			 @D_sys_user_lname, @I_sys_user_lname,
+             @D_sys_user_mname, @I_sys_user_mname,
+             @D_sys_user_lname, @I_sys_user_lname,
              @D_sys_user_jobtitle, @I_sys_user_jobtitle,
              @D_sys_user_bphone, @I_sys_user_bphone,
              @D_sys_user_cphone, @I_sys_user_cphone,
@@ -4492,62 +4579,60 @@ BEGIN
     SET @M = NULL
     SET @hash = NULL
 
-	SET @NEWPW = NUll;
+    SET @NEWPW = NUll;
     SET @UPDATE_PW = 'note__tbl'
 
-	SET @WK_cust_id = ISNULL(@I_cust_id,@D_cust_id)
+    SET @WK_cust_id = ISNULL(@I_cust_id,@D_cust_id)
 
     IF (@TP='I' or @TP='U')
-	BEGIN
-	  if ({schema}.nequal_chr(@I_sys_user_pw1, @I_sys_user_pw2) > 0)
+    BEGIN
+      if ({schema}.nequal_chr(@I_sys_user_pw1, @I_sys_user_pw2) > 0)
         SET @M = 'Application Error - New Password and Repeat Password are different'
-	  else if ((@TP='I' or isnull(@I_sys_user_pw1,'')>'') and len(ltrim(rtrim(isnull(@I_sys_user_pw1,'')))) < 6)
+      else if ((@TP='I' or isnull(@I_sys_user_pw1,'')>'') and len(ltrim(rtrim(isnull(@I_sys_user_pw1,'')))) < 6)
         SET @M = 'Application Error - Password length - at least 6 characters required'
 
       IF (@M is not null)
-	  BEGIN
-        CLOSE CUR_cust_user_IUD
-        DEALLOCATE CUR_cust_user_IUD
+      BEGIN
+        CLOSE CUR_cust_user_iud
+        DEALLOCATE CUR_cust_user_iud
         raiserror(@M,16,1)
         ROLLBACK TRANSACTION
         return
       END
-	  ELSE
-	    SET @NEWPW = ltrim(rtrim(@I_sys_user_pw1))
-	END
+      ELSE
+        SET @NEWPW = ltrim(rtrim(@I_sys_user_pw1))
+    END
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - BEGIN ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - BEGIN ******/
+    /******************************************/
 
 
     IF (@TP='I' 
-	    OR 
-		@TP='U' AND {schema}.nequal_num(@D_cust_id, @I_cust_id) > 0)
-	BEGIN
-		EXEC	@C = [{schema}].[check_foreign_key]
-	     	@in_tblname ='cust',
-		    @in_tblid = @I_cust_id
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_cust_user_IUD
-			DEALLOCATE CUR_cust_user_IUD
-			SET @M = 'Table cust does not contain record ' + CONVERT(NVARCHAR(MAX),@I_cust_id)
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	END   
+        OR 
+        @TP='U' AND {schema}.nequal_num(@D_cust_id, @I_cust_id) > 0)
+    BEGIN
+    select @C = isnull([{schema}].[get_cust_id]('cust', @I_cust_id),0);
+        IF @C <= 0
+        BEGIN
+            CLOSE CUR_cust_user_iud
+            DEALLOCATE CUR_cust_user_iud
+            SET @M = 'Table cust does not contain record ' + CONVERT(NVARCHAR(MAX),@I_cust_id)
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+    END   
 
     IF (@TP='I')
-	BEGIN
+    BEGIN
 
-	  set @hash = {schema}.my_hash('C', @I_sys_user_id, @NEWPW);
+      set @hash = {schema}.my_hash('C', @I_sys_user_id, @NEWPW);
 
-	  if (@hash is null)
+      if (@hash is null)
       BEGIN
-        CLOSE CUR_cust_user_IUD
-        DEALLOCATE CUR_cust_user_IUD
+        CLOSE CUR_cust_user_iud
+        DEALLOCATE CUR_cust_user_iud
         SET @M = 'Application Error - Missing or Incorrect Password'
         raiserror(@M,16,1)
         ROLLBACK TRANSACTION
@@ -4555,42 +4640,42 @@ BEGIN
       END
 
       UPDATE {schema}.cust_user
-	     SET sys_user_stsdt = @CURDTTM,
-		     sys_user_etstmp = @CURDTTM,
-			 sys_user_euser = @MYUSER,
-		     sys_user_mtstmp = @CURDTTM,
-			 sys_user_muser = @MYUSER,
-			 sys_user_hash = @hash,
-			 sys_user_pw1 = NULL,
-			 sys_user_pw2 = NULL
+         SET sys_user_stsdt = @CURDTTM,
+             sys_user_etstmp = @CURDTTM,
+             sys_user_euser = @MYUSER,
+             sys_user_mtstmp = @CURDTTM,
+             sys_user_muser = @MYUSER,
+             sys_user_hash = @hash,
+             sys_user_pw1 = NULL,
+             sys_user_pw2 = NULL
        WHERE cust_user.sys_user_id = @I_sys_user_id;
 
       INSERT INTO {schema}.cust_user_role (sys_user_id, cust_role_name)
-	             VALUES(@I_sys_user_id, 'C*');
+                 VALUES(@I_sys_user_id, 'C*');
 
     END  
 
     SET @WK_audit_subject = ISNULL(@I_sys_user_lname,'')+', '+ISNULL(@I_sys_user_fname,'') 
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - END   ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - END   ******/
+    /******************************************/
 
     SET @MY_audit_seq = 0
-	IF (@TP='I' OR @TP='D')
-	BEGIN  
-	  SET @WK_sys_user_id = ISNULL(@D_sys_user_id,@I_sys_user_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit @TP, 'cust_user', @WK_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
-	END
+    IF (@TP='I' OR @TP='D')
+    BEGIN  
+      SET @WK_sys_user_id = ISNULL(@D_sys_user_id,@I_sys_user_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit @TP, 'cust_user', @WK_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+    END
  
     IF @TP='U' OR @TP='D'
-	BEGIN
+    BEGIN
 
       IF (@TP = 'D' AND @D_cust_id IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_chr(@D_cust_id, @I_cust_id) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('cust_id'), @D_cust_id)
       END
 
@@ -4598,7 +4683,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_sts, @I_sys_user_sts) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_sts'), @D_sys_user_sts)
       END
 
@@ -4606,7 +4691,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_fname, @I_sys_user_fname) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_fname'), @D_sys_user_fname)
       END
 
@@ -4614,7 +4699,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_mname, @I_sys_user_mname) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_mname'), @D_sys_user_mname)
       END
 
@@ -4622,7 +4707,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_lname, @I_sys_user_lname) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_lname'), @D_sys_user_lname)
       END
 
@@ -4630,7 +4715,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_jobtitle, @I_sys_user_jobtitle) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_jobtitle'), @D_sys_user_jobtitle)
       END
 
@@ -4638,7 +4723,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_bphone, @I_sys_user_bphone) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_bphone'), @D_sys_user_bphone)
       END
 
@@ -4646,7 +4731,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_cphone, @I_sys_user_cphone) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_cphone'), @D_sys_user_cphone)
       END
 
@@ -4654,7 +4739,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_email, @I_sys_user_email) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_email'), @D_sys_user_email)
       END
 
@@ -4662,72 +4747,72 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_date(@D_sys_user_lastlogin_tstmp, @I_sys_user_lastlogin_tstmp) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_lastlogin_tstmp'), @D_sys_user_lastlogin_tstmp)
       END
 
-	  IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
-	  BEGIN
-		set @hash = {schema}.my_hash('C', @I_sys_user_id, @NEWPW);
+      IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
+      BEGIN
+        set @hash = {schema}.my_hash('C', @I_sys_user_id, @NEWPW);
 
-		if (@hash is null)
-		BEGIN
-			CLOSE CUR_cust_user_IUD
-			DEALLOCATE CUR_cust_user_IUD
-			SET @M = 'Application Error - Incorrect Password'
-			raiserror(@M,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END
+        if (@hash is null)
+        BEGIN
+            CLOSE CUR_cust_user_iud
+            DEALLOCATE CUR_cust_user_iud
+            SET @M = 'Application Error - Incorrect Password'
+            raiserror(@M,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END
 
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject,@WK_cust_id
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_PW'), '*')
 
-	    SET @UPDATE_PW = 'Y'
-	  END
+        SET @UPDATE_PW = 'Y'
+      END
 
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-	/******************************************/
-	/****** SPECIAL BACK ACTION - BEGIN  ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL BACK ACTION - BEGIN  ******/
+    /******************************************/
 
     IF (@TP='U' AND @MY_audit_seq <> 0)
-	BEGIN
+    BEGIN
       UPDATE {schema}.cust_user
-	     SET sys_user_stsdt = CASE WHEN {schema}.nequal_chr(@D_sys_user_sts, @I_sys_user_sts) > 0 THEN @CURDTTM ELSE sys_user_stsdt END,
-		     sys_user_mtstmp = @CURDTTM,
-			 sys_user_muser = @MYUSER,
-			 sys_user_hash = case @UPDATE_PW when 'Y' then @hash else sys_user_hash end,
-			 sys_user_pw1 = NULL,
-			 sys_user_pw2 = NULL
+         SET sys_user_stsdt = CASE WHEN {schema}.nequal_chr(@D_sys_user_sts, @I_sys_user_sts) > 0 THEN @CURDTTM ELSE sys_user_stsdt END,
+             sys_user_mtstmp = @CURDTTM,
+             sys_user_muser = @MYUSER,
+             sys_user_hash = case @UPDATE_PW when 'Y' then @hash else sys_user_hash end,
+             sys_user_pw1 = NULL,
+             sys_user_pw2 = NULL
        WHERE cust_user.sys_user_id = @I_sys_user_id;
     END  
     ELSE IF (@TP='U' AND (@I_sys_user_pw1 is not null or @I_sys_user_pw2 is not null))
-	BEGIN
+    BEGIN
       UPDATE {schema}.cust_user
-	     SET sys_user_pw1 = NULL,
-			 sys_user_pw2 = NULL
+         SET sys_user_pw1 = NULL,
+             sys_user_pw2 = NULL
        WHERE cust_user.sys_user_id = @I_sys_user_id;
     END  
 
-	/*****************************************/
-	/****** SPECIAL BACK ACTION - END   ******/
-	/*****************************************/
+    /*****************************************/
+    /****** SPECIAL BACK ACTION - END   ******/
+    /*****************************************/
 
 
 
             
-    FETCH NEXT FROM CUR_cust_user_IUD
+    FETCH NEXT FROM CUR_cust_user_iud
         INTO @D_sys_user_id, @I_sys_user_id,
              @D_cust_id, @I_cust_id,
              @D_sys_user_sts, @I_sys_user_sts,
              @D_sys_user_fname, @I_sys_user_fname,
-			 @D_sys_user_mname, @I_sys_user_mname,
-			 @D_sys_user_lname, @I_sys_user_lname,
+             @D_sys_user_mname, @I_sys_user_mname,
+             @D_sys_user_lname, @I_sys_user_lname,
              @D_sys_user_jobtitle, @I_sys_user_jobtitle,
              @D_sys_user_bphone, @I_sys_user_bphone,
              @D_sys_user_cphone, @I_sys_user_cphone,
@@ -4737,25 +4822,25 @@ BEGIN
              @D_sys_user_lastlogin_tstmp, @I_sys_user_lastlogin_tstmp
 
   END
-  CLOSE CUR_cust_user_IUD
-  DEALLOCATE CUR_cust_user_IUD
+  CLOSE CUR_cust_user_iud
+  DEALLOCATE CUR_cust_user_iud
 
   /*
-  EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_IUD','RETURN', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_iud','RETURN', ''
   */
 
   RETURN
 
 END
 GO
-ALTER TABLE [{schema}].[cust_user] ENABLE TRIGGER [cust_user_IUD]
+ALTER TABLE [{schema}].[cust_user] ENABLE TRIGGER [cust_user_iud]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [{schema}].[cust_user_role_IUD] on [{schema}].[cust_user_role]
+CREATE trigger [{schema}].[cust_user_role_iud] on [{schema}].[cust_user_role]
 for insert, update, delete
 AS
 BEGIN
@@ -4766,10 +4851,10 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_cust_user_role_IUD CURSOR LOCAL FOR
+  DECLARE CUR_cust_user_role_iud CURSOR LOCAL FOR
      SELECT  del.cust_user_role_id, i.cust_user_role_id,
-	         del.sys_user_id, i.sys_user_id,
-	         del.cust_role_name, i.cust_role_name
+             del.sys_user_id, i.sys_user_id,
+             del.cust_role_name, i.cust_role_name
        FROM deleted del FULL OUTER JOIN inserted i
                        ON i.cust_user_role_id = del.cust_user_role_id;
   DECLARE @D_cust_user_role_id bigint
@@ -4792,7 +4877,7 @@ BEGIN
   DECLARE @code_val NVARCHAR(MAX)
 
   /*
-  EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','START', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_iud','START', ''
   */
 
   if exists (select * from inserted)
@@ -4802,7 +4887,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -4814,7 +4899,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(cust_user_role_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_iud','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -4822,15 +4907,15 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Cannot update sys_user_id'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_iud','ERR', 'Cannot update sys_user_id'
     raiserror('Cannot update foreign key',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_cust_user_role_IUD
-  FETCH NEXT FROM CUR_cust_user_role_IUD
+  OPEN CUR_cust_user_role_iud
+  FETCH NEXT FROM CUR_cust_user_role_iud
         INTO @D_cust_user_role_id, @I_cust_user_role_id,
              @D_sys_user_id, @I_sys_user_id,
              @D_cust_role_name, @I_cust_role_name
@@ -4839,18 +4924,18 @@ BEGIN
   BEGIN
       
     SET @xloc = 'TP=' + ISNULL(@TP,'null')
-	SET @xtxt = 'I_cust_user_role_id=' + LTRIM(ISNULL(STR(@I_cust_user_role_id),'null')) +
-	            ' doc__tbl_cust_user_role_id=' + LTRIM(ISNULL(STR(@D_cust_user_role_id),'null')) 
+    SET @xtxt = 'I_cust_user_role_id=' + LTRIM(ISNULL(STR(@I_cust_user_role_id),'null')) +
+                ' doc__tbl_cust_user_role_id=' + LTRIM(ISNULL(STR(@D_cust_user_role_id),'null')) 
     /*
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD',@xloc, @xtxt
-	*/
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_iud',@xloc, @xtxt
+    */
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - BEGIN ******/
-	/******************************************/
-	
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - BEGIN ******/
+    /******************************************/
+    
     SELECT @WK_audit_subject = isnull(sys_user_lname,'')+', '+isnull(sys_user_fname,'')
-	  FROM {schema}.cust_user
+      FROM {schema}.cust_user
      WHERE sys_user_id = @I_sys_user_id; 
 
 
@@ -4859,58 +4944,58 @@ BEGIN
   BUT COULD BE SKIPPED
 
     IF @I_cust_role_name IS NOT NULL
-	   AND
-	   @I_sys_user_id IS NOT NULL
+       AND
+       @I_sys_user_id IS NOT NULL
     BEGIN
 
-	  IF EXISTS (select 1
-	               from CF
+      IF EXISTS (select 1
+                   from CF
                   inner join {schema}.cust_user on cust_user.cust_id = CF.cust_id
                   where cust_user.sys_user_id = @I_sys_user_id
-				    and CF.CF_TYPE = 'LVL2')
+                    and CF.CF_TYPE = 'LVL2')
       BEGIN
-	    IF @I_cust_role_name not in ('C*','CUSER','CMGR','CADMIN')
+        IF @I_cust_role_name not in ('C*','CUSER','CMGR','CADMIN')
         BEGIN
-          EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Invalid Role'
+          EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_iud','ERR', 'Invalid Role'
           raiserror('Role not compatible with LVL2',16,1)
           ROLLBACK TRANSACTION
           return
         END
-	  END
-	  ELSE
-	  BEGIN
-	    IF @I_cust_role_name not in ('C*','CL1')
+      END
+      ELSE
+      BEGIN
+        IF @I_cust_role_name not in ('C*','CL1')
         BEGIN
-          EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','ERR', 'Invalid Role'
+          EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_iud','ERR', 'Invalid Role'
           raiserror('Role not compatible with LVL1',16,1)
           ROLLBACK TRANSACTION
           return
         END
-	  END
+      END
 
-	END
+    END
 */
 
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - END   ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - END   ******/
+    /******************************************/
 
     SET @MY_audit_seq = 0
-	IF (@TP='I' OR @TP='D')
-	BEGIN  
-	  SET @WK_cust_user_role_id = ISNULL(@D_cust_user_role_id,@I_cust_user_role_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit @TP, 'cust_user_role', @WK_cust_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
-	END
+    IF (@TP='I' OR @TP='D')
+    BEGIN  
+      SET @WK_cust_user_role_id = ISNULL(@D_cust_user_role_id,@I_cust_user_role_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit @TP, 'cust_user_role', @WK_cust_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+    END
 
     IF @TP='U' OR @TP='D'
-	BEGIN
+    BEGIN
 
       IF (@TP = 'D' AND @D_sys_user_id IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_num(@D_sys_user_id, @I_sys_user_id) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user_role', @I_cust_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user_role', @I_cust_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_id'), @D_sys_user_id)
       END
 
@@ -4918,35 +5003,35 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_cust_role_name, @I_cust_role_name) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit 'U', 'cust_user_role', @I_cust_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit 'U', 'cust_user_role', @I_cust_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('cust_role_name'), @D_cust_role_name)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
-	/******************************************/
-	/****** SPECIAL BACK ACTION - BEGIN  ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL BACK ACTION - BEGIN  ******/
+    /******************************************/
 
-	/*****************************************/
-	/****** SPECIAL BACK ACTION - END   ******/
-	/*****************************************/
+    /*****************************************/
+    /****** SPECIAL BACK ACTION - END   ******/
+    /*****************************************/
             
-    FETCH NEXT FROM CUR_cust_user_role_IUD
+    FETCH NEXT FROM CUR_cust_user_role_iud
           INTO @D_cust_user_role_id, @I_cust_user_role_id,
                @D_sys_user_id,  @I_sys_user_id,
                @D_cust_role_name,  @I_cust_role_name
   END
-  CLOSE CUR_cust_user_role_IUD
-  DEALLOCATE CUR_cust_user_role_IUD
+  CLOSE CUR_cust_user_role_iud
+  DEALLOCATE CUR_cust_user_role_iud
   /*
-  EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_IUD','RETURN', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_iud','RETURN', ''
   */
   RETURN
 
 END
 GO
-ALTER TABLE [{schema}].[cust_user_role] ENABLE TRIGGER [cust_user_role_IUD]
+ALTER TABLE [{schema}].[cust_user_role] ENABLE TRIGGER [cust_user_role_iud]
 GO
 SET ANSI_NULLS ON
 GO
@@ -4954,7 +5039,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [{schema}].[doc__tbl_IUD] on [{schema}].[doc__tbl]
+CREATE trigger [{schema}].[doc__tbl_iud] on [{schema}].[doc__tbl]
 for insert, update, delete
 AS
 BEGIN
@@ -4965,18 +5050,18 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_doc__tbl_IUD CURSOR LOCAL FOR
+  DECLARE CUR_doc__tbl_iud CURSOR LOCAL FOR
      SELECT  del.doc_id, i.doc_id,
-	         del.doc_scope, i.doc_scope,
-	         del.doc_scope_id, i.doc_scope_id,
-	         del.doc_sts, i.doc_sts,
-			 del.doc_ctgr, i.doc_ctgr,
-			 del.doc_desc, i.doc_desc,
-			 del.doc_uptstmp, i.doc_uptstmp,
-			 del.doc_upuser, i.doc_upuser,
-			 del.doc_sync_tstmp, i.doc_sync_tstmp,
-			 del.cust_id, i.cust_id,
-			 del.item_id, i.item_id
+             del.doc_scope, i.doc_scope,
+             del.doc_scope_id, i.doc_scope_id,
+             del.doc_sts, i.doc_sts,
+             del.doc_ctgr, i.doc_ctgr,
+             del.doc_desc, i.doc_desc,
+             del.doc_uptstmp, i.doc_uptstmp,
+             del.doc_upuser, i.doc_upuser,
+             del.doc_sync_tstmp, i.doc_sync_tstmp,
+             del.cust_id, i.cust_id,
+             del.item_id, i.item_id
        FROM deleted del FULL OUTER JOIN inserted i
                        ON i.doc_id = del.doc_id;
   DECLARE @D_doc_id bigint
@@ -5023,8 +5108,8 @@ BEGIN
   DECLARE @DB_OUT datetime2(7)
 
   DECLARE @return_value int,
-		  @out_msg nvarchar(max),
-		  @out_rslt nvarchar(255)
+          @out_msg nvarchar(max),
+          @out_rslt nvarchar(255)
 
   if exists (select * from inserted)
     if exists (select * from deleted)
@@ -5033,7 +5118,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -5045,7 +5130,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(doc_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','doc__tbl_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','doc__tbl_iud','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5053,7 +5138,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(doc_scope)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','doc__tbl_IUD','ERR', 'Cannot update doc_scope'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','doc__tbl_iud','ERR', 'Cannot update doc_scope'
     raiserror('Cannot update foreign key doc_scope',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5061,16 +5146,16 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(doc_scope_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','doc__tbl_IUD','ERR', 'Cannot update doc_scope_id'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','doc__tbl_iud','ERR', 'Cannot update doc_scope_id'
     raiserror('Cannot update foreign key doc_scope_id',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   SELECT @doc_ctgr_table = param_cur_val
-	FROM {schema}.v_param_cur
+    FROM {schema}.v_param_cur
    where param_cur_process = 'SQL'
-	 and param_cur_attrib = 'doc_ctgr_table';
+     and param_cur_attrib = 'doc_ctgr_table';
   IF (@TP='I' OR @TP='U') AND @doc_ctgr_table IS NULL
   BEGIN
     raiserror('doc_ctgr_table parameter not set',16,1)
@@ -5079,123 +5164,239 @@ BEGIN
   END
 
   
-  OPEN CUR_doc__tbl_IUD
-  FETCH NEXT FROM CUR_doc__tbl_IUD
+  OPEN CUR_doc__tbl_iud
+  FETCH NEXT FROM CUR_doc__tbl_iud
         INTO @D_doc_id, @I_doc_id,
              @D_doc_scope, @I_doc_scope,
              @D_doc_scope_id, @I_doc_scope_id,
              @D_doc_sts, @I_doc_sts,
-			 @D_doc_ctgr, @I_doc_ctgr,
-			 @D_doc_desc, @I_doc_desc,
-			 @D_doc_uptstmp, @I_doc_uptstmp,
-			 @D_doc_upuser, @I_doc_upuser,
-			 @D_doc_sync_tstmp, @I_doc_sync_tstmp,
-			 @D_cust_id, @I_cust_id,
-			 @D_item_id, @I_item_id
+             @D_doc_ctgr, @I_doc_ctgr,
+             @D_doc_desc, @I_doc_desc,
+             @D_doc_uptstmp, @I_doc_uptstmp,
+             @D_doc_upuser, @I_doc_upuser,
+             @D_doc_sync_tstmp, @I_doc_sync_tstmp,
+             @D_cust_id, @I_cust_id,
+             @D_item_id, @I_item_id
 
   WHILE (@@Fetch_Status = 0)
   BEGIN
-	  
+      
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - BEGIN ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - BEGIN ******/
+    /******************************************/
 
  
     IF (@TP='I' 
-	    OR 
-		@TP='U' AND ({schema}.nequal_chr(@D_doc_scope, @I_doc_scope)>0
-		             OR
-					 {schema}.nequal_num(@D_doc_scope_id, @I_doc_scope_id)>0))
-	BEGIN
-		IF @I_doc_scope = 'S' AND @I_doc_scope_id <> 0
-		   OR
-		   @I_doc_scope <> 'S' AND @I_doc_scope_id is NULL
-		BEGIN
-			CLOSE CUR_doc__tbl_IUD
-			DEALLOCATE CUR_doc__tbl_IUD
-			SET @M = 'SCOPE ID INCONSISTENT WITH SCOPE'
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	END   
+        OR 
+        @TP='U' AND ({schema}.nequal_chr(@D_doc_scope, @I_doc_scope)>0
+                     OR
+                     {schema}.nequal_num(@D_doc_scope_id, @I_doc_scope_id)>0))
+    BEGIN
+        IF @I_doc_scope = 'S' AND @I_doc_scope_id <> 0
+           OR
+           @I_doc_scope <> 'S' AND @I_doc_scope_id is NULL
+        BEGIN
+            CLOSE CUR_doc__tbl_iud
+            DEALLOCATE CUR_doc__tbl_iud
+            SET @M = 'SCOPE ID INCONSISTENT WITH SCOPE'
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+    END   
  
     IF (@TP='I' OR @TP='U')
-	BEGIN
-		EXEC	@C = [{schema}].[check_foreign_key]
-	     	@in_tblname = @I_doc_scope,
-		    @in_tblid = @I_doc_scope_id
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_doc__tbl_IUD
-			DEALLOCATE CUR_doc__tbl_IUD
-			SET @M = 'Table ' + @I_doc_scope + ' does not contain record ' + CONVERT(NVARCHAR(MAX),@I_doc_scope_id)
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	END   
+    BEGIN
+        select @C = isnull([{schema}].[check_scope_id](@I_doc_scope, @I_doc_scope_id, null),0)
+        IF @C <= 0
+        BEGIN
+            CLOSE CUR_doc__tbl_iud
+            DEALLOCATE CUR_doc__tbl_iud
+            SET @M = 'Table ' + @I_doc_scope + ' does not contain record ' + CONVERT(NVARCHAR(MAX),@I_doc_scope_id)
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+    END   
 
 
  
     IF (@TP='I' OR @TP='U')
-	BEGIN
-	    SET @doc_ctgr_table = isnull(@doc_ctgr_table,'')
-		EXEC	@C = [{schema}].[check_code2]
-	     	@in_tblname = @doc_ctgr_table,
-		    @in_code_val1 = @I_doc_scope,
-		    @in_code_val2 = @I_doc_ctgr
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_doc__tbl_IUD
-			DEALLOCATE CUR_doc__tbl_IUD
-			SET @M = 'Document Type not allowed for selected Scope'
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	END   
+    BEGIN
+        SET @doc_ctgr_table = isnull(@doc_ctgr_table,'')
+        EXEC    @C = [{schema}].[check_code2]
+             @in_tblname = @doc_ctgr_table,
+            @in_code_val1 = @I_doc_scope,
+            @in_code_val2 = @I_doc_ctgr
+        IF @C <= 0
+        BEGIN
+            CLOSE CUR_doc__tbl_iud
+            DEALLOCATE CUR_doc__tbl_iud
+            SET @M = 'Document Type not allowed for selected Scope'
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+    END   
 
+    SET @CPE_USER = 0
+    SET @USER_C_ID = NULL      
+    IF SUBSTRING(@MYUSER,1,1) = 'C'
+    BEGIN
+      SELECT @USER_C_ID = C_ID
+        FROM jsharmony.CPE
+       WHERE substring(@MYUSER,2,1024)=convert(varchar, PE_ID);   
+      
+      IF @USER_C_ID is not null
+        SET @CPE_USER = 1
+    END
+
+    SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + isnull(isnull(@I_D_SCOPE,@D_D_SCOPE),'') + ''',' +
+                        isnull(convert(nvarchar,isnull(@I_D_SCOPE_ID,@D_D_SCOPE_ID)),'') + ')'
+    EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
+    SET @C_ID = @MY_C_ID
+
+    SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + isnull(isnull(@I_D_SCOPE,@D_D_SCOPE),'') + ''',' +
+                        isnull(convert(nvarchar,isnull(@I_D_SCOPE_ID,@D_D_SCOPE_ID)),'') + ')'
+    EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
+    SET @E_ID = @MY_E_ID
+
+
+
+
+
+    IF (@CPE_USER = 1)
+    BEGIN
+
+      IF @USER_C_ID <> isnull(@C_ID,0)
+         OR
+         isnull(@I_D_SCOPE,@D_D_SCOPE) not in 
+                      (select CODEVAL
+                         from jsharmony.UCOD_D_SCOPE
+                        where CODECODE = 'Y')
+      BEGIN
+        CLOSE CUR_D_IUD
+        DEALLOCATE CUR_D_IUD
+        SET @M = 'Application Error - Client User has no rights to perform this operation'
+        raiserror(@M ,16,1)
+        ROLLBACK TRANSACTION
+        return
+      END 
+
+    END
 
     IF (@TP='I')
-	BEGIN
+    BEGIN
+
+      IF @C_ID is not null
+      BEGIN
+        EXEC    @C = [jsharmony].[CHECK_FOREIGN]
+             @in_tblname ='C',
+            @in_tblid = @C_ID
+        IF @C <= 0
+        BEGIN
+            CLOSE CUR_D_IUD
+            DEALLOCATE CUR_D_IUD
+            SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@C_ID)
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+      END   
+
+      IF @E_ID is not null
+      BEGIN
+        EXEC    @C = [jsharmony].[CHECK_FOREIGN]
+             @in_tblname ='E',
+            @in_tblid = @E_ID
+        IF @C <= 0
+        BEGIN
+            CLOSE CUR_D_IUD
+            DEALLOCATE CUR_D_IUD
+            SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@E_ID)
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+      END   
 
 
-	  IF (@I_doc_sync_tstmp is null)
+      IF (@I_doc_sync_tstmp is null)
         UPDATE {schema}.doc__tbl
-	     SET cust_id = NULL,
-		     item_id = NULL,
-		     doc_etstmp = @CURDTTM,
-			 doc_euser = @MYUSER,
-		     doc_mtstmp = @CURDTTM,
-			 doc_muser = @MYUSER
+         SET cust_id = NULL,
+             item_id = NULL,
+             doc_etstmp = @CURDTTM,
+             doc_euser = @MYUSER,
+             doc_mtstmp = @CURDTTM,
+             doc_muser = @MYUSER
          WHERE doc__tbl.doc_id = @I_doc_id;
     END  
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - END   ******/
-	/******************************************/
+    IF (@TP='U')
+    BEGIN
+
+      IF @I_C_ID is not null
+         and
+         jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0
+      BEGIN
+        EXEC    @C = [jsharmony].[CHECK_FOREIGN]
+             @in_tblname ='C',
+            @in_tblid = @I_C_ID
+        IF @C <= 0
+        BEGIN
+            CLOSE CUR_D_IUD
+            DEALLOCATE CUR_D_IUD
+            SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+      END   
+
+      IF @I_E_ID is not null
+         and
+         jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0
+      BEGIN
+        EXEC    @C = [jsharmony].[CHECK_FOREIGN]
+             @in_tblname ='E',
+            @in_tblid = @I_E_ID
+        IF @C <= 0
+        BEGIN
+            CLOSE CUR_D_IUD
+            DEALLOCATE CUR_D_IUD
+            SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@I_E_ID)
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+      END
+         
+    END
+
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - END   ******/
+    /******************************************/
 
 
     SET @MY_audit_seq = 0
-	IF (@TP='I' OR @TP='D')
-	BEGIN  
-	  SET @WK_doc_id = ISNULL(@D_doc_id,@I_doc_id)
-	  SET @WK_audit_ref_name = ISNULL(@D_doc_scope,@I_doc_scope)
-	  SET @WK_audit_ref_id = ISNULL(@D_doc_scope_id,@I_doc_scope_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base  @TP, 'D', @WK_doc_id, @MYUSER, @CURDTTM, @WK_audit_ref_name, @WK_audit_ref_id, default
-	END
+    IF (@TP='I' OR @TP='D')
+    BEGIN  
+      SET @WK_doc_id = ISNULL(@D_doc_id,@I_doc_id)
+      SET @WK_audit_ref_name = ISNULL(@D_doc_scope,@I_doc_scope)
+      SET @WK_audit_ref_id = ISNULL(@D_doc_scope_id,@I_doc_scope_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base  @TP, 'D', @WK_doc_id, @MYUSER, @CURDTTM, @WK_audit_ref_name, @WK_audit_ref_id, default
+    END
 
  
     IF @TP='U' OR @TP='D'
-	BEGIN
+    BEGIN
 
       IF (@TP = 'D' AND @D_doc_scope IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_chr(@D_doc_scope, @I_doc_scope) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_scope'), @D_doc_scope)
       END
 
@@ -5203,7 +5404,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_num(@D_doc_scope_id, @I_doc_scope_id) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_scope_id'), @D_doc_scope_id)
       END
 
@@ -5211,7 +5412,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_doc_sts, @I_doc_sts) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_sts'), @D_doc_sts)
       END
 
@@ -5219,7 +5420,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_doc_ctgr, @I_doc_ctgr) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_ctgr'), @D_doc_ctgr)
       END
 
@@ -5227,7 +5428,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_doc_desc, @I_doc_desc) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_desc'), @D_doc_desc)
       END
 
@@ -5235,7 +5436,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_date(@D_doc_uptstmp, @I_doc_uptstmp) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_uptstmp'), @D_doc_uptstmp)
       END
 
@@ -5243,7 +5444,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_doc_upuser, @I_doc_upuser) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('doc_upuser'), @D_doc_upuser)
       END
 
@@ -5251,7 +5452,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_num(@D_cust_id, @I_cust_id) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('cust_id'), @D_cust_id)
       END
 
@@ -5259,7 +5460,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_num(@D_item_id, @I_item_id) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'D', @I_doc_id, @MYUSER, @CURDTTM, @I_doc_scope, @I_doc_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('item_id'), @D_item_id)
       END
 
@@ -5267,57 +5468,57 @@ BEGIN
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-	/******************************************/
-	/****** SPECIAL BACK ACTION - BEGIN  ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL BACK ACTION - BEGIN  ******/
+    /******************************************/
 
     IF (@TP='U' AND @MY_audit_seq <> 0)
-	BEGIN
- 	  if ({schema}.nequal_date(@D_doc_sync_tstmp, @I_doc_sync_tstmp) <= 0)
+    BEGIN
+       if ({schema}.nequal_date(@D_doc_sync_tstmp, @I_doc_sync_tstmp) <= 0)
         UPDATE {schema}.doc__tbl
-	     SET doc_mtstmp = @CURDTTM,
-			 doc_muser = @MYUSER,
-			 doc_sync_tstmp = NULL
+         SET doc_mtstmp = @CURDTTM,
+             doc_muser = @MYUSER,
+             doc_sync_tstmp = NULL
          WHERE doc__tbl.doc_id = @I_doc_id;
     END  
 
-	/*****************************************/
-	/****** SPECIAL BACK ACTION - END   ******/
-	/*****************************************/
+    /*****************************************/
+    /****** SPECIAL BACK ACTION - END   ******/
+    /*****************************************/
 
 
 
             
-    FETCH NEXT FROM CUR_doc__tbl_IUD
+    FETCH NEXT FROM CUR_doc__tbl_iud
         INTO @D_doc_id, @I_doc_id,
              @D_doc_scope,  @I_doc_scope,
              @D_doc_scope_id, @I_doc_scope_id,
              @D_doc_sts, @I_doc_sts,
-			 @D_doc_ctgr, @I_doc_ctgr,
-			 @D_doc_desc, @I_doc_desc,
-			 @D_doc_uptstmp, @I_doc_uptstmp,
-			 @D_doc_upuser, @I_doc_upuser,
-			 @D_doc_sync_tstmp, @I_doc_sync_tstmp,
-			 @D_cust_id, @I_cust_id,
-			 @D_item_id, @I_item_id
+             @D_doc_ctgr, @I_doc_ctgr,
+             @D_doc_desc, @I_doc_desc,
+             @D_doc_uptstmp, @I_doc_uptstmp,
+             @D_doc_upuser, @I_doc_upuser,
+             @D_doc_sync_tstmp, @I_doc_sync_tstmp,
+             @D_cust_id, @I_cust_id,
+             @D_item_id, @I_item_id
 
   END
-  CLOSE CUR_doc__tbl_IUD
-  DEALLOCATE CUR_doc__tbl_IUD
+  CLOSE CUR_doc__tbl_iud
+  DEALLOCATE CUR_doc__tbl_iud
 
   RETURN
 
 END
 
 GO
-ALTER TABLE [{schema}].[doc__tbl] ENABLE TRIGGER [doc__tbl_IUD]
+ALTER TABLE [{schema}].[doc__tbl] ENABLE TRIGGER [doc__tbl_iud]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [{schema}].[code2_doc_scope_doc_ctgr_IUD] on [{schema}].[code2_doc_scope_doc_ctgr]
+CREATE trigger [{schema}].[code2_doc_scope_doc_ctgr_iud] on [{schema}].[code2_doc_scope_doc_ctgr]
 for insert, update, delete
 AS
 BEGIN
@@ -5329,16 +5530,16 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_code2_doc_scope_doc_ctgr_IUD CURSOR LOCAL FOR
+  DECLARE CUR_code2_doc_scope_doc_ctgr_iud CURSOR LOCAL FOR
      SELECT  del.code2_app_id, i.code2_app_id,
-	         del.code_seq, i.code_seq,
-	         del.code_end_dt, i.code_end_dt,
-	         del.code_val1, i.code_val1,
-	         del.code_val2, i.code_val2,
-	         del.code_txt, i.code_txt,
-	         del.code_code, i.code_code,
-	         del.code_attrib, i.code_attrib,
-	         del.code_end_reason, i.code_end_reason
+             del.code_seq, i.code_seq,
+             del.code_end_dt, i.code_end_dt,
+             del.code_val1, i.code_val1,
+             del.code_val2, i.code_val2,
+             del.code_txt, i.code_txt,
+             del.code_code, i.code_code,
+             del.code_attrib, i.code_attrib,
+             del.code_end_reason, i.code_end_reason
        FROM deleted del FULL OUTER JOIN inserted i
                        ON i.code2_app_id = del.code2_app_id;
   DECLARE @D_code2_app_id bigint
@@ -5373,8 +5574,8 @@ BEGIN
   DECLARE @WK_code2_app_id BIGINT
 
   DECLARE @return_value int,
-		  @out_msg nvarchar(max),
-		  @out_rslt nvarchar(255)
+          @out_msg nvarchar(max),
+          @out_rslt nvarchar(255)
 
 
   if exists (select * from inserted)
@@ -5384,7 +5585,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -5397,7 +5598,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(code2_app_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_iud','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5405,7 +5606,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(code_val1)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update code_val1'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_iud','ERR', 'Cannot update code_val1'
     raiserror('Cannot update foreign key code_val1',16,1)
     ROLLBACK TRANSACTION
     return
@@ -5413,15 +5614,15 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(code_val2)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_IUD','ERR', 'Cannot update code_val2'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','code2_doc_scope_doc_ctgr_iud','ERR', 'Cannot update code_val2'
     raiserror('Cannot update foreign key code_val2',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_code2_doc_scope_doc_ctgr_IUD
-  FETCH NEXT FROM CUR_code2_doc_scope_doc_ctgr_IUD
+  OPEN CUR_code2_doc_scope_doc_ctgr_iud
+  FETCH NEXT FROM CUR_code2_doc_scope_doc_ctgr_iud
         INTO @D_code2_app_id, @I_code2_app_id,
              @D_code_seq, @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -5435,41 +5636,41 @@ BEGIN
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - BEGIN ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - BEGIN ******/
+    /******************************************/
 
     IF (@TP='I')
-	BEGIN
+    BEGIN
       UPDATE {schema}.code2_doc_scope_doc_ctgr
-	     SET code_etstmp = @CURDTTM,
-			 code_euser = @MYUSER,
-		     code_mtstmp = @CURDTTM,
-			 code_muser = @MYUSER
+         SET code_etstmp = @CURDTTM,
+             code_euser = @MYUSER,
+             code_mtstmp = @CURDTTM,
+             code_muser = @MYUSER
        WHERE code2_doc_scope_doc_ctgr.code2_app_id = @I_code2_app_id;
     END  
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - END   ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - END   ******/
+    /******************************************/
 
 
     SET @MY_audit_seq = 0
-	IF (@TP='I' OR @TP='D')
-	BEGIN  
-	  SET @WK_code2_app_id = ISNULL(@D_code2_app_id,@I_code2_app_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'code2_doc_scope_doc_ctgr', @WK_code2_app_id, @MYUSER, @CURDTTM
-	END
+    IF (@TP='I' OR @TP='D')
+    BEGIN  
+      SET @WK_code2_app_id = ISNULL(@D_code2_app_id,@I_code2_app_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'code2_doc_scope_doc_ctgr', @WK_code2_app_id, @MYUSER, @CURDTTM
+    END
 
  
     IF @TP='U' OR @TP='D'
-	BEGIN
+    BEGIN
 
       IF (@TP = 'D' AND @D_code_seq IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_num(@D_code_seq, @I_code_seq) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_seq'), @D_code_seq)
       END
 
@@ -5477,7 +5678,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_date(@D_code_end_dt, @I_code_end_dt) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_end_dt'), @D_code_end_dt)
       END
 
@@ -5485,7 +5686,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_val1, @I_code_val1) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_val1'), @D_code_val1)
       END
 
@@ -5493,7 +5694,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_val2, @I_code_val2) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_val2'), @D_code_val2)
       END
 
@@ -5501,7 +5702,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_txt, @I_code_txt) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_txt'), @D_code_txt)
       END
 
@@ -5509,7 +5710,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_code, @I_code_code) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_code'), @D_code_code)
       END
 
@@ -5517,7 +5718,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_attrib, @I_code_attrib) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_attrib'), @D_code_attrib)
       END
 
@@ -5525,33 +5726,33 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_code_end_reason, @I_code_end_reason) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'code2_doc_scope_doc_ctgr', @I_code2_app_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('code_end_reason'), @D_code_end_reason)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-	/******************************************/
-	/****** SPECIAL BACK ACTION - BEGIN  ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL BACK ACTION - BEGIN  ******/
+    /******************************************/
 
     IF (@TP='U' AND @MY_audit_seq <> 0)
-	BEGIN
+    BEGIN
       UPDATE {schema}.code2_doc_scope_doc_ctgr
-	     SET code_mtstmp = @CURDTTM,
-			 code_muser = @MYUSER
+         SET code_mtstmp = @CURDTTM,
+             code_muser = @MYUSER
        WHERE code2_doc_scope_doc_ctgr.code2_app_id = @I_code2_app_id;
     END  
 
-	/*****************************************/
-	/****** SPECIAL BACK ACTION - END   ******/
-	/*****************************************/
+    /*****************************************/
+    /****** SPECIAL BACK ACTION - END   ******/
+    /*****************************************/
 
 
 
             
-    FETCH NEXT FROM CUR_code2_doc_scope_doc_ctgr_IUD
+    FETCH NEXT FROM CUR_code2_doc_scope_doc_ctgr_iud
         INTO @D_code2_app_id, @I_code2_app_id,
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
@@ -5564,15 +5765,15 @@ BEGIN
 
 
   END
-  CLOSE CUR_code2_doc_scope_doc_ctgr_IUD
-  DEALLOCATE CUR_code2_doc_scope_doc_ctgr_IUD
+  CLOSE CUR_code2_doc_scope_doc_ctgr_iud
+  DEALLOCATE CUR_code2_doc_scope_doc_ctgr_iud
 
 
   RETURN
 
 END
 GO
-ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ENABLE TRIGGER [code2_doc_scope_doc_ctgr_IUD]
+ALTER TABLE [{schema}].[code2_doc_scope_doc_ctgr] ENABLE TRIGGER [code2_doc_scope_doc_ctgr_iud]
 GO
 SET ANSI_NULLS ON
 GO
@@ -5580,7 +5781,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [{schema}].[param_app_IUD] on [{schema}].[param_app]
+CREATE trigger [{schema}].[param_app_iud] on [{schema}].[param_app]
 for insert, update, delete
 AS
 BEGIN
@@ -5623,7 +5824,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     else
       return
   
@@ -5636,7 +5837,7 @@ BEGIN
   IF @TP = 'U' AND UPDATE(param_app_id)
   BEGIN
     raiserror('Cannot update identity',16,1)
-	ROLLBACK TRANSACTION
+    ROLLBACK TRANSACTION
     return
   END
 
@@ -5664,13 +5865,13 @@ BEGIN
         IF @ERRTXT IS NOT null  
         BEGIN
           raiserror(@ERRTXT,16,1)
-	      ROLLBACK TRANSACTION
+          ROLLBACK TRANSACTION
           return
         END
       END
 
-	  SET @WK_ID = ISNULL(@I_param_app_id,@D_param_app_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'param_app', @WK_ID, @MYUSER, @CURDTTM
+      SET @WK_ID = ISNULL(@I_param_app_id,@D_param_app_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'param_app', @WK_ID, @MYUSER, @CURDTTM
 
       FETCH NEXT FROM CUR_param_app_I INTO @I_param_app_id, 
                                      @I_param_app_process, 
@@ -5707,7 +5908,7 @@ BEGIN
           IF @ERRTXT IS NOT null  
           BEGIN
             raiserror(@ERRTXT,16,1)
-	        ROLLBACK TRANSACTION
+            ROLLBACK TRANSACTION
             return
           END
         END
@@ -5715,8 +5916,8 @@ BEGIN
 
       END
 
-	  SET @WK_ID = ISNULL(@I_param_app_id,@D_param_app_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'param_app', @WK_ID, @MYUSER, @CURDTTM
+      SET @WK_ID = ISNULL(@I_param_app_id,@D_param_app_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'param_app', @WK_ID, @MYUSER, @CURDTTM
             
       FETCH NEXT FROM CUR_param_app_DU
             INTO @D_param_app_id, @I_param_app_id,
@@ -5733,14 +5934,14 @@ BEGIN
 END
 
 GO
-ALTER TABLE [{schema}].[param_app] ENABLE TRIGGER [param_app_IUD]
+ALTER TABLE [{schema}].[param_app] ENABLE TRIGGER [param_app_iud]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [{schema}].[help__tbl_IUD] on [{schema}].[help__tbl]
+CREATE trigger [{schema}].[help__tbl_iud] on [{schema}].[help__tbl]
 for insert, update, delete
 AS
 BEGIN
@@ -5752,14 +5953,14 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_help__tbl_IUD CURSOR LOCAL FOR
+  DECLARE CUR_help__tbl_iud CURSOR LOCAL FOR
      SELECT  del.help_id, i.help_id,
-	         del.help_target_code, i.help_target_code,
-	         del.help_title, i.help_title,
-	         del.help_text, i.help_text,
-	         del.help_seq, i.help_seq,
-	         del.help_listing_main, i.help_listing_main,
-	         del.help_listing_client, i.help_listing_client
+             del.help_target_code, i.help_target_code,
+             del.help_title, i.help_title,
+             del.help_text, i.help_text,
+             del.help_seq, i.help_seq,
+             del.help_listing_main, i.help_listing_main,
+             del.help_listing_client, i.help_listing_client
        FROM deleted del FULL OUTER JOIN inserted i
                        ON i.help_id = del.help_id;
   DECLARE @D_help_id bigint
@@ -5791,8 +5992,8 @@ BEGIN
   DECLARE @cust_user_USER BIT
 
   DECLARE @return_value int,
-		  @out_msg nvarchar(max),
-		  @out_rslt nvarchar(255)
+          @out_msg nvarchar(max),
+          @out_rslt nvarchar(255)
 
 
   if exists (select * from inserted)
@@ -5802,7 +6003,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -5815,15 +6016,15 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(help_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','help__tbl_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','help__tbl_iud','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_help__tbl_IUD
-  FETCH NEXT FROM CUR_help__tbl_IUD
+  OPEN CUR_help__tbl_iud
+  FETCH NEXT FROM CUR_help__tbl_iud
         INTO @D_help_id, @I_help_id,
              @D_help_target_code, @I_help_target_code,
              @D_help_title, @I_help_title,
@@ -5835,41 +6036,41 @@ BEGIN
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - BEGIN ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - BEGIN ******/
+    /******************************************/
 
     IF (@TP='I')
-	BEGIN
+    BEGIN
       UPDATE {schema}.help__tbl
-	     SET help_etstmp = @CURDTTM,
-			 help_euser = @MYUSER,
-		     help_mtstmp = @CURDTTM,
-			 help_muser = @MYUSER
+         SET help_etstmp = @CURDTTM,
+             help_euser = @MYUSER,
+             help_mtstmp = @CURDTTM,
+             help_muser = @MYUSER
        WHERE help__tbl.help_id = @I_help_id;
     END  
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - END   ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - END   ******/
+    /******************************************/
 
 
     SET @MY_audit_seq = 0
-	IF (@TP='I' OR @TP='D')
-	BEGIN  
-	  SET @WK_help_id = ISNULL(@D_help_id,@I_help_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'help__tbl', @WK_help_id, @MYUSER, @CURDTTM
-	END
+    IF (@TP='I' OR @TP='D')
+    BEGIN  
+      SET @WK_help_id = ISNULL(@D_help_id,@I_help_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'help__tbl', @WK_help_id, @MYUSER, @CURDTTM
+    END
 
  
     IF @TP='U' OR @TP='D'
-	BEGIN
+    BEGIN
 
       IF (@TP = 'D' AND @D_help_target_code IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_chr(@D_help_target_code, @I_help_target_code) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('help_target_code'), @D_help_target_code)
       END
 
@@ -5877,7 +6078,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_help_title, @I_help_title) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('help_title'), @D_help_title)
       END
 
@@ -5885,7 +6086,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_help_text, @I_help_text) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('help_text'), @D_help_text)
       END
 
@@ -5893,7 +6094,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_num(@D_help_seq, @I_help_seq) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('help_seq'), @D_help_seq)
       END
 
@@ -5901,7 +6102,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_num(@D_help_listing_main, @I_help_listing_main) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('help_listing_main'), @D_help_listing_main)
       END
 
@@ -5909,33 +6110,33 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_num(@D_help_listing_client, @I_help_listing_client) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'help__tbl', @I_help_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('help_listing_client'), @D_help_listing_client)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-	/******************************************/
-	/****** SPECIAL BACK ACTION - BEGIN  ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL BACK ACTION - BEGIN  ******/
+    /******************************************/
 
     IF (@TP='U' AND @MY_audit_seq <> 0)
-	BEGIN
+    BEGIN
       UPDATE {schema}.help__tbl
-	     SET help_mtstmp = @CURDTTM,
-			 help_muser = @MYUSER
+         SET help_mtstmp = @CURDTTM,
+             help_muser = @MYUSER
        WHERE help__tbl.help_id = @I_help_id;
     END  
 
-	/*****************************************/
-	/****** SPECIAL BACK ACTION - END   ******/
-	/*****************************************/
+    /*****************************************/
+    /****** SPECIAL BACK ACTION - END   ******/
+    /*****************************************/
 
 
 
             
-    FETCH NEXT FROM CUR_help__tbl_IUD
+    FETCH NEXT FROM CUR_help__tbl_iud
         INTO @D_help_id, @I_help_id,
              @D_help_target_code,  @I_help_target_code,
              @D_help_title, @I_help_title,
@@ -5946,14 +6147,14 @@ BEGIN
 
 
   END
-  CLOSE CUR_help__tbl_IUD
-  DEALLOCATE CUR_help__tbl_IUD
+  CLOSE CUR_help__tbl_iud
+  DEALLOCATE CUR_help__tbl_iud
 
   RETURN
 
 END
 GO
-ALTER TABLE [{schema}].[help__tbl] ENABLE TRIGGER [help__tbl_IUD]
+ALTER TABLE [{schema}].[help__tbl] ENABLE TRIGGER [help__tbl_iud]
 GO
 SET ANSI_NULLS ON
 GO
@@ -5961,16 +6162,16 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [{schema}].[help_target_IUD] on [{schema}].[help_target]
+CREATE trigger [{schema}].[help_target_iud] on [{schema}].[help_target]
 for insert, update, delete
 AS
 BEGIN
   set nocount on
   DECLARE @TP char(1)
-  DECLARE CUR_help_target_IUD CURSOR LOCAL FOR
+  DECLARE CUR_help_target_iud CURSOR LOCAL FOR
      SELECT  del.help_target_id, i.help_target_id,
-	         del.help_target_code, i.help_target_code,
-	         del.help_target_desc, i.help_target_desc
+             del.help_target_code, i.help_target_code,
+             del.help_target_desc, i.help_target_desc
        FROM deleted del FULL OUTER JOIN inserted i
                        ON i.help_target_id = del.help_target_id;
   DECLARE @D_help_target_id bigint
@@ -5981,8 +6182,8 @@ BEGIN
   DECLARE @I_help_target_desc NVARCHAR(MAX)
 
   DECLARE @return_value int,
-		  @out_msg nvarchar(max),
-		  @out_rslt nvarchar(255)
+          @out_msg nvarchar(max),
+          @out_rslt nvarchar(255)
 
 
   if exists (select * from inserted)
@@ -5992,14 +6193,14 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     ELSE
     BEGIN
       RETURN
     END    
   
-  OPEN CUR_help_target_IUD
-  FETCH NEXT FROM CUR_help_target_IUD
+  OPEN CUR_help_target_iud
+  FETCH NEXT FROM CUR_help_target_iud
         INTO @D_help_target_id, @I_help_target_id,
              @D_help_target_code, @I_help_target_code,
              @D_help_target_desc, @I_help_target_desc
@@ -6007,39 +6208,39 @@ BEGIN
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - BEGIN ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - BEGIN ******/
+    /******************************************/
 
     IF (@TP='U')
-	BEGIN
-      UPDATE {schema}.help__tbl
+    BEGIN
+      UPDATE {schema}.help__tbl set
         help_target_code = @I_help_target_code
         where {schema}.help__tbl.help_target_id = @I_help_target_id;
     END  
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - END   ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - END   ******/
+    /******************************************/
 
 
 
             
-    FETCH NEXT FROM CUR_help_target_IUD
+    FETCH NEXT FROM CUR_help_target_iud
         INTO @D_help_target_id, @I_help_target_id,
              @D_help_target_code,  @I_help_target_code,
              @D_help_target_desc, @I_help_target_desc
 
 
   END
-  CLOSE CUR_help_target_IUD
-  DEALLOCATE CUR_help_target_IUD
+  CLOSE CUR_help_target_iud
+  DEALLOCATE CUR_help_target_iud
 
   RETURN
 
 END
 GO
-ALTER TABLE [{schema}].[help_target] ENABLE TRIGGER [help_target_IUD]
+ALTER TABLE [{schema}].[help_target] ENABLE TRIGGER [help_target_iud]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6047,7 +6248,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [{schema}].[note__tbl_IUD] on [{schema}].[note__tbl]
+CREATE trigger [{schema}].[note__tbl_iud] on [{schema}].[note__tbl]
 for insert, update, delete
 AS
 BEGIN
@@ -6058,15 +6259,15 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_note__tbl_IUD CURSOR LOCAL FOR
+  DECLARE CUR_note__tbl_iud CURSOR LOCAL FOR
      SELECT  del.note_id, i.note_id,
-	         del.note_scope, i.note_scope,
-	         del.note_scope_id, i.note_scope_id,
-	         del.note_sts, i.note_sts,
-			 del.note_type, i.note_type,
-			 del.note_body, i.note_body,
-			 del.cust_id, i.cust_id,
-			 del.item_id, i.item_id
+             del.note_scope, i.note_scope,
+             del.note_scope_id, i.note_scope_id,
+             del.note_sts, i.note_sts,
+             del.note_type, i.note_type,
+             del.note_body, i.note_body,
+             del.cust_id, i.cust_id,
+             del.item_id, i.item_id
        FROM deleted del FULL OUTER JOIN inserted i
                        ON i.note_id = del.note_id;
   DECLARE @D_note_id bigint
@@ -6101,15 +6302,13 @@ BEGIN
   DECLARE @code_val NVARCHAR(MAX)
 
   DECLARE @SQLCMD nvarchar(max)
-  DECLARE @get_cust_id nvarchar(max)
-  DECLARE @get_item_id nvarchar(max)
 
   DECLARE @cust_id BIGINT = NULL;
   DECLARE @item_id BIGINT = NULL;
 
   DECLARE @return_value int,
-		  @out_msg nvarchar(max),
-		  @out_rslt nvarchar(255)
+          @out_msg nvarchar(max),
+          @out_rslt nvarchar(255)
 
 
   if exists (select * from inserted)
@@ -6119,7 +6318,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -6131,7 +6330,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(note_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_iud','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6139,7 +6338,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(note_scope)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update note_scope'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_iud','ERR', 'Cannot update note_scope'
     raiserror('Cannot update foreign key note_scope',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6147,7 +6346,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(note_scope_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update note_scope_id'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_iud','ERR', 'Cannot update note_scope_id'
     raiserror('Cannot update foreign key note_scope_id',16,1)
     ROLLBACK TRANSACTION
     return
@@ -6155,102 +6354,102 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(note_type)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_IUD','ERR', 'Cannot update note_type'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','note__tbl_iud','ERR', 'Cannot update note_type'
     raiserror('Cannot update foreign key note_type',16,1)
     ROLLBACK TRANSACTION
     return
   END
   
-  OPEN CUR_note__tbl_IUD
-  FETCH NEXT FROM CUR_note__tbl_IUD
+  OPEN CUR_note__tbl_iud
+  FETCH NEXT FROM CUR_note__tbl_iud
         INTO @D_note_id, @I_note_id,
              @D_note_scope, @I_note_scope,
              @D_note_scope_id, @I_note_scope_id,
              @D_note_sts, @I_note_sts,
-			 @D_note_type, @I_note_type,
-			 @D_note_body, @I_note_body,
-			 @D_cust_id, @I_cust_id,
-			 @D_item_id, @I_item_id
+             @D_note_type, @I_note_type,
+             @D_note_body, @I_note_body,
+             @D_cust_id, @I_cust_id,
+             @D_item_id, @I_item_id
 
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - BEGIN ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - BEGIN ******/
+    /******************************************/
  
     IF (@TP='I' 
-	    OR 
-		@TP='U' AND ({schema}.nequal_chr(@D_note_scope, @I_note_scope)>0
-		             OR
-					 {schema}.nequal_num(@D_note_scope_id, @I_note_scope_id)>0))
-	BEGIN
-		IF @I_note_scope = 'S' AND @I_note_scope_id <> 0
-		   OR
-		   @I_note_scope <> 'S' AND @I_note_scope_id is NULL
-		BEGIN
-			CLOSE CUR_note__tbl_IUD
-			DEALLOCATE CUR_note__tbl_IUD
-			SET @M = 'SCOPE ID INCONSISTENT WITH SCOPE'
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	END   
+        OR 
+        @TP='U' AND ({schema}.nequal_chr(@D_note_scope, @I_note_scope)>0
+                     OR
+                     {schema}.nequal_num(@D_note_scope_id, @I_note_scope_id)>0))
+    BEGIN
+        IF @I_note_scope = 'S' AND @I_note_scope_id <> 0
+           OR
+           @I_note_scope <> 'S' AND @I_note_scope_id is NULL
+        BEGIN
+            CLOSE CUR_note__tbl_iud
+            DEALLOCATE CUR_note__tbl_iud
+            SET @M = 'SCOPE ID INCONSISTENT WITH SCOPE'
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+    END   
  
     IF (@TP='I' OR @TP='U')
-	BEGIN
-		EXEC @C = [{schema}].[check_foreign_key]
-	     	 @in_tblname = @I_note_scope,
-		     @in_tblid = @I_note_scope_id
-		IF @C <= 0
-		BEGIN
-			CLOSE CUR_note__tbl_IUD
-			DEALLOCATE CUR_note__tbl_IUD
-			SET @M = 'Table ' + @I_note_scope + ' does not contain record ' + CONVERT(NVARCHAR(MAX),@I_note_scope_id)
-			raiserror(@M ,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END 
-	END   
+    BEGIN
+        EXEC @C = [{schema}].[check_foreign_key]
+              @in_tblname = @I_note_scope,
+             @in_tblid = @I_note_scope_id
+        IF @C <= 0
+        BEGIN
+            CLOSE CUR_note__tbl_iud
+            DEALLOCATE CUR_note__tbl_iud
+            SET @M = 'Table ' + @I_note_scope + ' does not contain record ' + CONVERT(NVARCHAR(MAX),@I_note_scope_id)
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+    END   
 
     IF (@TP='I')
-	BEGIN
+    BEGIN
 
       UPDATE {schema}.note__tbl
-	     SET cust_id = NULL,
-		     item_id = NULL,
-		     note_etstmp = @CURDTTM,
-			 note_euser = @MYUSER,
-		     note_mtstmp = @CURDTTM,
-			 note_muser = @MYUSER
+         SET cust_id = NULL,
+             item_id = NULL,
+             note_etstmp = @CURDTTM,
+             note_euser = @MYUSER,
+             note_mtstmp = @CURDTTM,
+             note_muser = @MYUSER
          WHERE note__tbl.note_id = @I_note_id;
 
     END  
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - END   ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - END   ******/
+    /******************************************/
 
 
     SET @MY_audit_seq = 0
-	IF (@TP='I' OR @TP='D')
-	BEGIN  
-	  SET @WK_note_id = ISNULL(@D_note_id,@I_note_id)
-	  SET @WK_audit_ref_name = ISNULL(@D_note_scope,@I_note_scope)
-	  SET @WK_audit_ref_id = ISNULL(@D_note_scope_id,@I_note_scope_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'note__tbl', @WK_note_id, @MYUSER, @CURDTTM, @WK_audit_ref_name, @WK_audit_ref_id, default
-	END
+    IF (@TP='I' OR @TP='D')
+    BEGIN  
+      SET @WK_note_id = ISNULL(@D_note_id,@I_note_id)
+      SET @WK_audit_ref_name = ISNULL(@D_note_scope,@I_note_scope)
+      SET @WK_audit_ref_id = ISNULL(@D_note_scope_id,@I_note_scope_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'note__tbl', @WK_note_id, @MYUSER, @CURDTTM, @WK_audit_ref_name, @WK_audit_ref_id, default
+    END
 
  
     IF @TP='U' OR @TP='D'
-	BEGIN
+    BEGIN
 
       IF (@TP = 'D' AND @D_note_scope IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_chr(@D_note_scope, @I_note_scope) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('note_scope'), @D_note_scope)
       END
 
@@ -6258,7 +6457,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_num(@D_note_scope_id, @I_note_scope_id) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('note_scope_id'), @D_note_scope_id)
       END
 
@@ -6266,7 +6465,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_note_sts, @I_note_sts) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('note_sts'), @D_note_sts)
       END
 
@@ -6274,7 +6473,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_note_type, @I_note_type) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('note_type'), @D_note_type)
       END
 
@@ -6282,15 +6481,15 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_note_body, @I_note_body) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('note_body'), @D_note_body)
       END
 
-	  IF (@TP = 'D' AND @D_cust_id IS NOT NULL OR
+      IF (@TP = 'D' AND @D_cust_id IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_num(@D_cust_id, @I_cust_id) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('cust_id'), @D_cust_id)
       END
 
@@ -6298,52 +6497,52 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_num(@D_item_id, @I_item_id) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
+          EXEC    @MY_audit_seq = {schema}.log_audit_base  'U', 'note__tbl', @I_note_id, @MYUSER, @CURDTTM, @I_note_scope, @I_note_scope_id, default
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('item_id'), @D_item_id)
       END
 
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
-	/******************************************/
-	/****** SPECIAL BACK ACTION - BEGIN  ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL BACK ACTION - BEGIN  ******/
+    /******************************************/
 
     IF (@TP='U' AND @MY_audit_seq <> 0)
-	BEGIN
+    BEGIN
         UPDATE {schema}.note__tbl
-	     SET note_mtstmp = @CURDTTM,
-			 note_muser = @MYUSER
+         SET note_mtstmp = @CURDTTM,
+             note_muser = @MYUSER
          WHERE note__tbl.note_id = @I_note_id;
     END  
 
-	/*****************************************/
-	/****** SPECIAL BACK ACTION - END   ******/
-	/*****************************************/
+    /*****************************************/
+    /****** SPECIAL BACK ACTION - END   ******/
+    /*****************************************/
 
 
 
             
-    FETCH NEXT FROM CUR_note__tbl_IUD
+    FETCH NEXT FROM CUR_note__tbl_iud
         INTO @D_note_id, @I_note_id,
              @D_note_scope,  @I_note_scope,
              @D_note_scope_id, @I_note_scope_id,
              @D_note_sts, @I_note_sts,
-			 @D_note_type, @I_note_type,
-			 @D_note_body, @I_note_body,
-			 @D_cust_id, @I_cust_id,
-			 @D_item_id, @I_item_id
+             @D_note_type, @I_note_type,
+             @D_note_body, @I_note_body,
+             @D_cust_id, @I_cust_id,
+             @D_item_id, @I_item_id
 
   END
-  CLOSE CUR_note__tbl_IUD
-  DEALLOCATE CUR_note__tbl_IUD
+  CLOSE CUR_note__tbl_iud
+  DEALLOCATE CUR_note__tbl_iud
 
   RETURN
 
 END
 
 GO
-ALTER TABLE [{schema}].[note__tbl] ENABLE TRIGGER [note__tbl_IUD]
+ALTER TABLE [{schema}].[note__tbl] ENABLE TRIGGER [note__tbl_iud]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6352,7 +6551,7 @@ GO
 
 
 
-CREATE trigger [{schema}].[sys_user_IUD] on [{schema}].[sys_user]
+CREATE trigger [{schema}].[sys_user_iud] on [{schema}].[sys_user]
 for insert, update, delete
 AS
 BEGIN
@@ -6363,19 +6562,19 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_sys_user_IUD CURSOR LOCAL FOR
+  DECLARE CUR_sys_user_iud CURSOR LOCAL FOR
      SELECT  del.sys_user_id, i.sys_user_id,
-	         del.sys_user_sts, i.sys_user_sts,
-	         del.sys_user_fname, i.sys_user_fname,
-			 del.sys_user_mname, i.sys_user_mname,
-			 del.sys_user_lname, i.sys_user_lname,
+             del.sys_user_sts, i.sys_user_sts,
+             del.sys_user_fname, i.sys_user_fname,
+             del.sys_user_mname, i.sys_user_mname,
+             del.sys_user_lname, i.sys_user_lname,
              del.sys_user_jobtitle, i.sys_user_jobtitle,
              del.sys_user_bphone, i.sys_user_bphone,
              del.sys_user_cphone, i.sys_user_cphone,
              del.sys_user_email, i.sys_user_email,
              del.sys_user_pw1, i.sys_user_pw1,
              del.sys_user_pw2, i.sys_user_pw2,
-			 del.sys_user_lastlogin_tstmp, i.sys_user_lastlogin_tstmp
+             del.sys_user_lastlogin_tstmp, i.sys_user_lastlogin_tstmp
        FROM deleted del FULL OUTER JOIN inserted i
                        ON i.sys_user_id = del.sys_user_id;
   DECLARE @D_sys_user_id bigint
@@ -6419,13 +6618,13 @@ BEGIN
   DECLARE @UPDATE_PW CHAR(1)
 
   DECLARE @return_value int,
-		  @out_msg nvarchar(max),
-		  @out_rslt nvarchar(255),
-		  @hash varbinary(200),
-		  @M nvarchar(max)
+          @out_msg nvarchar(max),
+          @out_rslt nvarchar(255),
+          @hash varbinary(200),
+          @M nvarchar(max)
 
   /*
-  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_IUD','START', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_iud','START', ''
   */
 
   if exists (select * from inserted)
@@ -6435,7 +6634,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -6447,20 +6646,20 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_iud','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_sys_user_IUD
-  FETCH NEXT FROM CUR_sys_user_IUD
+  OPEN CUR_sys_user_iud
+  FETCH NEXT FROM CUR_sys_user_iud
         INTO @D_sys_user_id, @I_sys_user_id,
              @D_sys_user_sts, @I_sys_user_sts,
              @D_sys_user_fname, @I_sys_user_fname,
-			 @D_sys_user_mname, @I_sys_user_mname,
-			 @D_sys_user_lname, @I_sys_user_lname,
+             @D_sys_user_mname, @I_sys_user_mname,
+             @D_sys_user_lname, @I_sys_user_lname,
              @D_sys_user_jobtitle, @I_sys_user_jobtitle,
              @D_sys_user_bphone, @I_sys_user_bphone,
              @D_sys_user_cphone, @I_sys_user_cphone,
@@ -6472,59 +6671,59 @@ BEGIN
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
-	IF (@TP = 'D')
-	BEGIN
-	  
-	  if ({schema}.exists_doc('sys_user_code', @D_sys_user_id) > 0)
+    IF (@TP = 'D')
+    BEGIN
+      
+      if ({schema}.exists_doc('sys_user_code', @D_sys_user_id) > 0)
       begin
-		CLOSE CUR_sys_user_IUD
-		DEALLOCATE CUR_sys_user_IUD
-		SET @M = 'Application Error - User cannot be deleted if Documents are present.'
-		raiserror(@M ,16,1)
-		ROLLBACK TRANSACTION
-		return
-	  end
+        CLOSE CUR_sys_user_iud
+        DEALLOCATE CUR_sys_user_iud
+        SET @M = 'Application Error - User cannot be deleted if Documents are present.'
+        raiserror(@M ,16,1)
+        ROLLBACK TRANSACTION
+        return
+      end
 
     END
 
     SET @M = NULL
     SET @hash = NULL
 
-	SET @NEWPW = NUll;
+    SET @NEWPW = NUll;
     SET @UPDATE_PW = 'note__tbl'
 
     IF (@TP='I' or @TP='U')
-	BEGIN
-	  if ({schema}.nequal_chr(@I_sys_user_pw1, @I_sys_user_pw2) > 0)
+    BEGIN
+      if ({schema}.nequal_chr(@I_sys_user_pw1, @I_sys_user_pw2) > 0)
         SET @M = 'Application Error - New Password and Repeat Password are different'
-	  else if ((@TP='I' or isnull(@I_sys_user_pw1,'')>'') and len(ltrim(rtrim(isnull(@I_sys_user_pw1,'')))) < 6)
+      else if ((@TP='I' or isnull(@I_sys_user_pw1,'')>'') and len(ltrim(rtrim(isnull(@I_sys_user_pw1,'')))) < 6)
         SET @M = 'Application Error - Password length - at least 6 characters required'
 
      IF (@M is not null)
-	  BEGIN
-        CLOSE CUR_sys_user_IUD
-        DEALLOCATE CUR_sys_user_IUD
+      BEGIN
+        CLOSE CUR_sys_user_iud
+        DEALLOCATE CUR_sys_user_iud
         raiserror(@M,16,1)
         ROLLBACK TRANSACTION
         return
       END
-	  ELSE
-	    SET @NEWPW = ltrim(rtrim(@I_sys_user_pw1))
-	END
+      ELSE
+        SET @NEWPW = ltrim(rtrim(@I_sys_user_pw1))
+    END
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - BEGIN ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - BEGIN ******/
+    /******************************************/
 
     IF (@TP='I')
-	BEGIN
+    BEGIN
 
-	  set @hash = {schema}.my_hash('S', @I_sys_user_id, @NEWPW);
+      set @hash = {schema}.my_hash('S', @I_sys_user_id, @NEWPW);
 
-	  if (@hash is null)
+      if (@hash is null)
       BEGIN
-        CLOSE CUR_sys_user_IUD
-        DEALLOCATE CUR_sys_user_IUD
+        CLOSE CUR_sys_user_iud
+        DEALLOCATE CUR_sys_user_iud
         SET @M = 'Application Error - Missing or Incorrect Password'
         raiserror(@M,16,1)
         ROLLBACK TRANSACTION
@@ -6532,39 +6731,39 @@ BEGIN
       END
 
       UPDATE {schema}.sys_user
-	     SET sys_user_stsdt = @CURDTTM,
-		     sys_user_etstmp = @CURDTTM,
-			 sys_user_euser = @MYUSER,
-		     sys_user_mtstmp = @CURDTTM,
-			 sys_user_muser = @MYUSER,
-			 sys_user_hash = @hash,
-			 sys_user_pw1 = NULL,
-			 sys_user_pw2 = NULL
+         SET sys_user_stsdt = @CURDTTM,
+             sys_user_etstmp = @CURDTTM,
+             sys_user_euser = @MYUSER,
+             sys_user_mtstmp = @CURDTTM,
+             sys_user_muser = @MYUSER,
+             sys_user_hash = @hash,
+             sys_user_pw1 = NULL,
+             sys_user_pw2 = NULL
        WHERE sys_user.sys_user_id = @I_sys_user_id;
 
     END  
 
     SET @WK_audit_subject = ISNULL(@I_sys_user_lname,'')+', '+ISNULL(@I_sys_user_fname,'') 
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - END   ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - END   ******/
+    /******************************************/
 
     SET @MY_audit_seq = 0
-	IF (@TP='I' OR @TP='D')
-	BEGIN
-	  SET @WK_sys_user_id =  ISNULL(@D_sys_user_id,@I_sys_user_id) 
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'sys_user_code', @WK_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
-	END
+    IF (@TP='I' OR @TP='D')
+    BEGIN
+      SET @WK_sys_user_id =  ISNULL(@D_sys_user_id,@I_sys_user_id) 
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'sys_user_code', @WK_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+    END
  
     IF @TP='U' OR @TP='D'
-	BEGIN
+    BEGIN
 
       IF (@TP = 'D' AND @D_sys_user_sts IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_sts, @I_sys_user_sts) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_sts'), @D_sys_user_sts)
       END
 
@@ -6572,7 +6771,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_fname, @I_sys_user_fname) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_fname'), @D_sys_user_fname)
       END
 
@@ -6580,7 +6779,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_mname, @I_sys_user_mname) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_mname'), @D_sys_user_mname)
       END
 
@@ -6588,7 +6787,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_lname, @I_sys_user_lname) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_lname'), @D_sys_user_lname)
       END
 
@@ -6596,7 +6795,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_jobtitle, @I_sys_user_jobtitle) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_jobtitle'), @D_sys_user_jobtitle)
       END
 
@@ -6604,7 +6803,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_bphone, @I_sys_user_bphone) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_bphone'), @D_sys_user_bphone)
       END
 
@@ -6612,7 +6811,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_cphone, @I_sys_user_cphone) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_cphone'), @D_sys_user_cphone)
       END
 
@@ -6620,7 +6819,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_user_email, @I_sys_user_email) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_email'), @D_sys_user_email)
       END
 
@@ -6628,71 +6827,71 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_date(@D_sys_user_lastlogin_tstmp, @I_sys_user_lastlogin_tstmp) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_lastlogin_tstmp'), @D_sys_user_lastlogin_tstmp)
       END
 
-	  IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
-	  BEGIN
-		set @hash = {schema}.my_hash('S', @I_sys_user_id, @NEWPW);
+      IF (@TP = 'U' AND isnull(@NEWPW,'') <> '')
+      BEGIN
+        set @hash = {schema}.my_hash('S', @I_sys_user_id, @NEWPW);
 
-		if (@hash is null)
-		BEGIN
-			CLOSE CUR_sys_user_IUD
-			DEALLOCATE CUR_sys_user_IUD
-			SET @M = 'Application Error - Incorrect Password'
-			raiserror(@M,16,1)
-			ROLLBACK TRANSACTION
-			return
-		END
+        if (@hash is null)
+        BEGIN
+            CLOSE CUR_sys_user_iud
+            DEALLOCATE CUR_sys_user_iud
+            SET @M = 'Application Error - Incorrect Password'
+            raiserror(@M,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END
 
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_code', @I_sys_user_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_PW'), '*')
 
-	    SET @UPDATE_PW = 'Y'
-	  END
+        SET @UPDATE_PW = 'Y'
+      END
 
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-	/******************************************/
-	/****** SPECIAL BACK ACTION - BEGIN  ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL BACK ACTION - BEGIN  ******/
+    /******************************************/
 
     IF (@TP='U' AND @MY_audit_seq <> 0)
-	BEGIN
+    BEGIN
       UPDATE {schema}.sys_user
-	     SET sys_user_stsdt = CASE WHEN {schema}.nequal_chr(@D_sys_user_sts, @I_sys_user_sts) > 0 THEN @CURDTTM ELSE sys_user_stsdt END,
-		     sys_user_mtstmp = @CURDTTM,
-			 sys_user_muser = @MYUSER,
-			 sys_user_hash = case @UPDATE_PW when 'Y' then @hash else sys_user_hash end,
-			 sys_user_pw1 = NULL,
-			 sys_user_pw2 = NULL
+         SET sys_user_stsdt = CASE WHEN {schema}.nequal_chr(@D_sys_user_sts, @I_sys_user_sts) > 0 THEN @CURDTTM ELSE sys_user_stsdt END,
+             sys_user_mtstmp = @CURDTTM,
+             sys_user_muser = @MYUSER,
+             sys_user_hash = case @UPDATE_PW when 'Y' then @hash else sys_user_hash end,
+             sys_user_pw1 = NULL,
+             sys_user_pw2 = NULL
        WHERE sys_user.sys_user_id = @I_sys_user_id;
     END  
     ELSE IF (@TP='U' AND (@I_sys_user_pw1 is not null or @I_sys_user_pw2 is not null))
-	BEGIN
+    BEGIN
       UPDATE {schema}.sys_user
-	     SET sys_user_pw1 = NULL,
-			 sys_user_pw2 = NULL
+         SET sys_user_pw1 = NULL,
+             sys_user_pw2 = NULL
        WHERE sys_user.sys_user_id = @I_sys_user_id;
     END  
 
-	/*****************************************/
-	/****** SPECIAL BACK ACTION - END   ******/
-	/*****************************************/
+    /*****************************************/
+    /****** SPECIAL BACK ACTION - END   ******/
+    /*****************************************/
 
 
 
             
-    FETCH NEXT FROM CUR_sys_user_IUD
+    FETCH NEXT FROM CUR_sys_user_iud
         INTO @D_sys_user_id, @I_sys_user_id,
              @D_sys_user_sts, @I_sys_user_sts,
              @D_sys_user_fname, @I_sys_user_fname,
-			 @D_sys_user_mname, @I_sys_user_mname,
-			 @D_sys_user_lname, @I_sys_user_lname,
+             @D_sys_user_mname, @I_sys_user_mname,
+             @D_sys_user_lname, @I_sys_user_lname,
              @D_sys_user_jobtitle, @I_sys_user_jobtitle,
              @D_sys_user_bphone, @I_sys_user_bphone,
              @D_sys_user_cphone, @I_sys_user_cphone,
@@ -6702,18 +6901,18 @@ BEGIN
              @D_sys_user_lastlogin_tstmp, @I_sys_user_lastlogin_tstmp
 
   END
-  CLOSE CUR_sys_user_IUD
-  DEALLOCATE CUR_sys_user_IUD
+  CLOSE CUR_sys_user_iud
+  DEALLOCATE CUR_sys_user_iud
 
   /*
-  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_IUD','RETURN', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_iud','RETURN', ''
   */
 
   RETURN
 
 END
 GO
-ALTER TABLE [{schema}].[sys_user] ENABLE TRIGGER [sys_user_IUD]
+ALTER TABLE [{schema}].[sys_user] ENABLE TRIGGER [sys_user_iud]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6723,7 +6922,7 @@ GO
 
 
 
-CREATE trigger [{schema}].[param__tbl_IUD] on [{schema}].[param__tbl]
+CREATE trigger [{schema}].[param__tbl_iud] on [{schema}].[param__tbl]
 for insert, update, delete
 AS
 BEGIN
@@ -6739,7 +6938,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     else
       return
   
@@ -6780,7 +6979,7 @@ END
 
 
 GO
-ALTER TABLE [{schema}].[param__tbl] ENABLE TRIGGER [param__tbl_IUD]
+ALTER TABLE [{schema}].[param__tbl] ENABLE TRIGGER [param__tbl_iud]
 GO
 SET ANSI_NULLS ON
 GO
@@ -6788,7 +6987,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [{schema}].[param_user_IUD] on [{schema}].[param_user]
+CREATE trigger [{schema}].[param_user_iud] on [{schema}].[param_user]
 for insert, update, delete
 AS
 BEGIN
@@ -6831,7 +7030,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     else
       return
   
@@ -6844,7 +7043,7 @@ BEGIN
   IF @TP = 'U' AND UPDATE(param_user_id)
   BEGIN
     raiserror('Cannot update identity',16,1)
-	ROLLBACK TRANSACTION
+    ROLLBACK TRANSACTION
     return
   END
 
@@ -6874,13 +7073,13 @@ BEGIN
           CLOSE CUR_param_user_I
           DEALLOCATE CUR_param_user_I
           raiserror(@ERRTXT,16,1)
-	      ROLLBACK TRANSACTION
+          ROLLBACK TRANSACTION
           return
         END
       END
 
-	  SET @WK_ID = ISNULL(@I_param_user_id,@D_param_user_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'param_user', @WK_ID, @MYUSER, @CURDTTM
+      SET @WK_ID = ISNULL(@I_param_user_id,@D_param_user_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'param_user', @WK_ID, @MYUSER, @CURDTTM
 
       FETCH NEXT FROM CUR_param_user_I INTO @I_param_user_id, 
                                      @I_param_user_process, 
@@ -6920,14 +7119,14 @@ BEGIN
             CLOSE CUR_param_user_DU
             DEALLOCATE CUR_param_user_DU
             raiserror(@ERRTXT,16,1)
-	        ROLLBACK TRANSACTION
+            ROLLBACK TRANSACTION
             return
           END
         END
       END
 
-	  SET @WK_ID = ISNULL(@I_param_user_id,@D_param_user_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'param_user', @WK_ID, @MYUSER, @CURDTTM
+      SET @WK_ID = ISNULL(@I_param_user_id,@D_param_user_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'param_user', @WK_ID, @MYUSER, @CURDTTM
             
       FETCH NEXT FROM CUR_param_user_DU
             INTO @D_param_user_id, @I_param_user_id,
@@ -6944,14 +7143,14 @@ BEGIN
 END
 
 GO
-ALTER TABLE [{schema}].[param_user] ENABLE TRIGGER [param_user_IUD]
+ALTER TABLE [{schema}].[param_user] ENABLE TRIGGER [param_user_iud]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [{schema}].[sys_user_func_IUD] on [{schema}].[sys_user_func]
+CREATE trigger [{schema}].[sys_user_func_iud] on [{schema}].[sys_user_func]
 for insert, update, delete
 AS
 BEGIN
@@ -6962,10 +7161,10 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_sys_user_func_IUD CURSOR LOCAL FOR
+  DECLARE CUR_sys_user_func_iud CURSOR LOCAL FOR
      SELECT  del.sys_user_func_id, i.sys_user_func_id,
-	         del.sys_user_id, i.sys_user_id,
-	         del.sys_func_name, i.sys_func_name
+             del.sys_user_id, i.sys_user_id,
+             del.sys_func_name, i.sys_func_name
        FROM deleted del FULL OUTER JOIN inserted i
                        ON i.sys_user_func_id = del.sys_user_func_id;
   DECLARE @D_sys_user_func_id bigint
@@ -6988,7 +7187,7 @@ BEGIN
   DECLARE @code_val NVARCHAR(MAX)
 
   /*
-  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','START', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_iud','START', ''
   */
 
   if exists (select * from inserted)
@@ -6998,7 +7197,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -7010,7 +7209,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_func_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_iud','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -7018,15 +7217,15 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','ERR', 'Cannot update sys_user_id'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_iud','ERR', 'Cannot update sys_user_id'
     raiserror('Cannot update foreign key',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_sys_user_func_IUD
-  FETCH NEXT FROM CUR_sys_user_func_IUD
+  OPEN CUR_sys_user_func_iud
+  FETCH NEXT FROM CUR_sys_user_func_iud
         INTO @D_sys_user_func_id, @I_sys_user_func_id,
              @D_sys_user_id, @I_sys_user_id,
              @D_sys_func_name, @I_sys_func_name
@@ -7035,39 +7234,39 @@ BEGIN
   BEGIN
       
     SET @xloc = 'TP=' + ISNULL(@TP,'null')
-	SET @xtxt = 'I_sys_user_func_id=' + LTRIM(ISNULL(STR(@I_sys_user_func_id),'null')) +
-	            ' doc__tbl_sys_user_func_id=' + LTRIM(ISNULL(STR(@D_sys_user_func_id),'null')) 
+    SET @xtxt = 'I_sys_user_func_id=' + LTRIM(ISNULL(STR(@I_sys_user_func_id),'null')) +
+                ' doc__tbl_sys_user_func_id=' + LTRIM(ISNULL(STR(@D_sys_user_func_id),'null')) 
     /* 
-	EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_IUD',@xloc, @xtxt 
-	*/
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_iud',@xloc, @xtxt 
+    */
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - BEGIN ******/
-	/******************************************/
-	
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - BEGIN ******/
+    /******************************************/
+    
     SELECT @WK_audit_subject = isnull(sys_user_lname,'')+', '+isnull(sys_user_fname,'')
-	  FROM {schema}.sys_user
+      FROM {schema}.sys_user
      WHERE sys_user_id = @I_sys_user_id; 
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - END   ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - END   ******/
+    /******************************************/
 
     SET @MY_audit_seq = 0
-	IF (@TP='I' OR @TP='D')
-	BEGIN  
-	  SET @WK_sys_user_func_id = ISNULL(@D_sys_user_func_id,@I_sys_user_func_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'sys_user_func', @WK_sys_user_func_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
-	END
+    IF (@TP='I' OR @TP='D')
+    BEGIN  
+      SET @WK_sys_user_func_id = ISNULL(@D_sys_user_func_id,@I_sys_user_func_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'sys_user_func', @WK_sys_user_func_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+    END
 
     IF @TP='U' OR @TP='D'
-	BEGIN
+    BEGIN
 
       IF (@TP = 'D' AND @D_sys_user_id IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_num(@D_sys_user_id, @I_sys_user_id) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_func', @I_sys_user_func_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_func', @I_sys_user_func_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_id'), @D_sys_user_id)
       END
 
@@ -7075,42 +7274,42 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_func_name, @I_sys_func_name) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_func', @I_sys_user_func_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_func', @I_sys_user_func_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_func_name'), @D_sys_func_name)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
-	/******************************************/
-	/****** SPECIAL BACK ACTION - BEGIN  ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL BACK ACTION - BEGIN  ******/
+    /******************************************/
 
-	/*****************************************/
-	/****** SPECIAL BACK ACTION - END   ******/
-	/*****************************************/
+    /*****************************************/
+    /****** SPECIAL BACK ACTION - END   ******/
+    /*****************************************/
             
-    FETCH NEXT FROM CUR_sys_user_func_IUD
+    FETCH NEXT FROM CUR_sys_user_func_iud
           INTO @D_sys_user_func_id, @I_sys_user_func_id,
                @D_sys_user_id,  @I_sys_user_id,
                @D_sys_func_name,  @I_sys_func_name
   END
-  CLOSE CUR_sys_user_func_IUD
-  DEALLOCATE CUR_sys_user_func_IUD
+  CLOSE CUR_sys_user_func_iud
+  DEALLOCATE CUR_sys_user_func_iud
   /*
-  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_IUD','RETURN', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_func_iud','RETURN', ''
   */
   RETURN
 
 END
 GO
-ALTER TABLE [{schema}].[sys_user_func] ENABLE TRIGGER [sys_user_func_IUD]
+ALTER TABLE [{schema}].[sys_user_func] ENABLE TRIGGER [sys_user_func_iud]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE trigger [{schema}].[sys_user_role_IUD] on [{schema}].[sys_user_role]
+CREATE trigger [{schema}].[sys_user_role_iud] on [{schema}].[sys_user_role]
 for insert, update, delete
 AS
 BEGIN
@@ -7121,10 +7320,10 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_sys_user_role_IUD CURSOR LOCAL FOR
+  DECLARE CUR_sys_user_role_iud CURSOR LOCAL FOR
      SELECT  del.sys_user_role_id, i.sys_user_role_id,
-	         del.sys_user_id, i.sys_user_id,
-	         del.sys_role_name, i.sys_role_name
+             del.sys_user_id, i.sys_user_id,
+             del.sys_role_name, i.sys_role_name
        FROM deleted del FULL OUTER JOIN inserted i
                        ON i.sys_user_role_id = del.sys_user_role_id;
   DECLARE @D_sys_user_role_id bigint
@@ -7149,7 +7348,7 @@ BEGIN
   DECLARE @MY_sys_user_id BIGINT = {schema}.my_sys_user_id()
 
   /*
-  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','START', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_iud','START', ''
   */
 
   if exists (select * from inserted)
@@ -7159,7 +7358,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -7171,7 +7370,7 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_role_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_iud','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
@@ -7179,15 +7378,15 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(sys_user_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Cannot update sys_user_id'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_iud','ERR', 'Cannot update sys_user_id'
     raiserror('Cannot update foreign key',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_sys_user_role_IUD
-  FETCH NEXT FROM CUR_sys_user_role_IUD
+  OPEN CUR_sys_user_role_iud
+  FETCH NEXT FROM CUR_sys_user_role_iud
         INTO @D_sys_user_role_id, @I_sys_user_role_id,
              @D_sys_user_id, @I_sys_user_id,
              @D_sys_role_name, @I_sys_role_name
@@ -7196,70 +7395,70 @@ BEGIN
   BEGIN
       
     SET @xloc = 'TP=' + ISNULL(@TP,'null')
-	SET @xtxt = 'I_sys_user_role_id=' + LTRIM(ISNULL(STR(@I_sys_user_role_id),'null')) +
-	            ' doc__tbl_sys_user_role_id=' + LTRIM(ISNULL(STR(@D_sys_user_role_id),'null')) 
+    SET @xtxt = 'I_sys_user_role_id=' + LTRIM(ISNULL(STR(@I_sys_user_role_id),'null')) +
+                ' doc__tbl_sys_user_role_id=' + LTRIM(ISNULL(STR(@D_sys_user_role_id),'null')) 
     /*
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD',@xloc, @xtxt
-	*/
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_iud',@xloc, @xtxt
+    */
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - BEGIN ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - BEGIN ******/
+    /******************************************/
 
-	IF @MY_sys_user_id is not null
-	BEGIN
-	  IF isnull(@I_sys_user_id, @D_sys_user_id) <> @MY_sys_user_id
-	  BEGIN
-	    /* NOT ME */
+    IF @MY_sys_user_id is not null
+    BEGIN
+      IF isnull(@I_sys_user_id, @D_sys_user_id) <> @MY_sys_user_id
+      BEGIN
+        /* NOT ME */
         IF (case when @TP = 'D' then @D_sys_role_name else @I_sys_role_name end) = 'DEV' 
-	    BEGIN
+        BEGIN
           IF not exists (select sys_role_name
                            from {schema}.v_my_roles
                           where sys_role_name = 'DEV') 
           BEGIN
-            EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Only Developer can maintain Developer Role(1)'
+            EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_iud','ERR', 'Only Developer can maintain Developer Role(1)'
             raiserror('Application Error - Only Developer can maintain Developer Role(1).',16,1)
             ROLLBACK TRANSACTION
             return
-	      END
-	    END
+          END
+        END
       END
       ELSE 
-	  BEGIN
-	    /* ME */
+      BEGIN
+        /* ME */
         IF @TP <> 'D' and @I_sys_role_name = 'DEV' 
-	    BEGIN
-          EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','ERR', 'Only Developer can maintain Developer Role(2)'
+        BEGIN
+          EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_iud','ERR', 'Only Developer can maintain Developer Role(2)'
           raiserror('Application Error - Only Developer can maintain Developer Role(2).',16,1)
           ROLLBACK TRANSACTION
           return
-	    END
+        END
       END
-	END
+    END
 
     SELECT @WK_audit_subject = isnull(sys_user_lname,'')+', '+isnull(sys_user_fname,'')
-	  FROM {schema}.sys_user
+      FROM {schema}.sys_user
      WHERE sys_user_id = @I_sys_user_id; 
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - END   ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - END   ******/
+    /******************************************/
 
     SET @MY_audit_seq = 0
-	IF (@TP='I' OR @TP='D')
-	BEGIN  
-	  SET @WK_sys_user_role_id = ISNULL(@D_sys_user_role_id,@I_sys_user_role_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'sys_user_role', @WK_sys_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
-	END
+    IF (@TP='I' OR @TP='D')
+    BEGIN  
+      SET @WK_sys_user_role_id = ISNULL(@D_sys_user_role_id,@I_sys_user_role_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'sys_user_role', @WK_sys_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+    END
 
     IF @TP='U' OR @TP='D'
-	BEGIN
+    BEGIN
 
       IF (@TP = 'D' AND @D_sys_user_id IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_num(@D_sys_user_id, @I_sys_user_id) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_role', @I_sys_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_role', @I_sys_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_user_id'), @D_sys_user_id)
       END
 
@@ -7267,37 +7466,37 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_sys_role_name, @I_sys_role_name) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_role', @I_sys_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'sys_user_role', @I_sys_user_role_id, @MYUSER, @CURDTTM,default,default,@WK_audit_subject
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('sys_role_name'), @D_sys_role_name)
       END
 
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
-	/******************************************/
-	/****** SPECIAL BACK ACTION - BEGIN  ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL BACK ACTION - BEGIN  ******/
+    /******************************************/
 
-	/*****************************************/
-	/****** SPECIAL BACK ACTION - END   ******/
-	/*****************************************/
+    /*****************************************/
+    /****** SPECIAL BACK ACTION - END   ******/
+    /*****************************************/
             
-    FETCH NEXT FROM CUR_sys_user_role_IUD
+    FETCH NEXT FROM CUR_sys_user_role_iud
           INTO @D_sys_user_role_id, @I_sys_user_role_id,
                @D_sys_user_id,  @I_sys_user_id,
                @D_sys_role_name,  @I_sys_role_name
   END
-  CLOSE CUR_sys_user_role_IUD
-  DEALLOCATE CUR_sys_user_role_IUD
+  CLOSE CUR_sys_user_role_iud
+  DEALLOCATE CUR_sys_user_role_iud
 
   /*
-  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_IUD','RETURN', ''
+  EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_iud','RETURN', ''
   */
 
   RETURN
 
 END
 GO
-ALTER TABLE [{schema}].[sys_user_role] ENABLE TRIGGER [sys_user_role_IUD]
+ALTER TABLE [{schema}].[sys_user_role] ENABLE TRIGGER [sys_user_role_iud]
 GO
 SET ANSI_NULLS ON
 GO
@@ -7305,7 +7504,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [{schema}].[txt__tbl_IUD] on [{schema}].[txt__tbl]
+CREATE trigger [{schema}].[txt__tbl_iud] on [{schema}].[txt__tbl]
 for insert, update, delete
 AS
 BEGIN
@@ -7317,13 +7516,13 @@ BEGIN
   DECLARE @MYUSER NVARCHAR(20)
   DECLARE @ERRTXT NVARCHAR(500)
   DECLARE @MY_audit_seq NUMERIC(20,0)
-  DECLARE CUR_TXT_IUD CURSOR LOCAL FOR
+  DECLARE CUR_TXT_iud CURSOR LOCAL FOR
      SELECT  del.txt_id, i.txt_id,
-	         del.txt_process, i.txt_process,
-	         del.txt_attrib, i.txt_attrib,
-	         del.txt_type, i.txt_type,
-			 del.txt_title, i.txt_title,
-			 del.txt_body, i.txt_body,
+             del.txt_process, i.txt_process,
+             del.txt_attrib, i.txt_attrib,
+             del.txt_type, i.txt_type,
+             del.txt_title, i.txt_title,
+             del.txt_body, i.txt_body,
              del.txt_bcc, i.txt_bcc,
              del.txt_desc, i.txt_desc
        FROM deleted del FULL OUTER JOIN inserted i
@@ -7358,8 +7557,8 @@ BEGIN
   DECLARE @M NVARCHAR(MAX)
 
   DECLARE @return_value int,
-		  @out_msg nvarchar(max),
-		  @out_rslt nvarchar(255)
+          @out_msg nvarchar(max),
+          @out_rslt nvarchar(255)
 
   if exists (select * from inserted)
     if exists (select * from deleted)
@@ -7368,7 +7567,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     ELSE
     BEGIN
       RETURN
@@ -7381,62 +7580,62 @@ BEGIN
 
   IF @TP = 'U' AND UPDATE(txt_id)
   BEGIN
-    EXEC [{schema}].[zz-filedebug] 'TRIGGER','txt__tbl_IUD','ERR', 'Cannot update ID'
+    EXEC [{schema}].[zz-filedebug] 'TRIGGER','txt__tbl_iud','ERR', 'Cannot update ID'
     raiserror('Cannot update identity',16,1)
     ROLLBACK TRANSACTION
     return
   END
 
   
-  OPEN CUR_TXT_IUD
-  FETCH NEXT FROM CUR_TXT_IUD
+  OPEN CUR_TXT_iud
+  FETCH NEXT FROM CUR_TXT_iud
         INTO @D_txt_id, @I_txt_id,
              @D_txt_process, @I_txt_process,
              @D_txt_attrib, @I_txt_attrib,
              @D_txt_type, @I_txt_type,
-			 @D_txt_title, @I_txt_title,
-			 @D_txt_body, @I_txt_body,
+             @D_txt_title, @I_txt_title,
+             @D_txt_body, @I_txt_body,
              @D_txt_bcc, @I_txt_bcc,
              @D_txt_desc, @I_txt_desc
 
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - BEGIN ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - BEGIN ******/
+    /******************************************/
 
     IF (@TP='I')
-	BEGIN
+    BEGIN
       UPDATE {schema}.txt__tbl
-	     SET txt_etstmp = @CURDTTM,
-			 txt_euser = @MYUSER,
-		     txt_mtstmp = @CURDTTM,
-			 txt_muser = @MYUSER
+         SET txt_etstmp = @CURDTTM,
+             txt_euser = @MYUSER,
+             txt_mtstmp = @CURDTTM,
+             txt_muser = @MYUSER
        WHERE txt__tbl.txt_id = @I_txt_id;
     END  
 
-	/******************************************/
-	/****** SPECIAL FRONT ACTION - END   ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL FRONT ACTION - END   ******/
+    /******************************************/
 
 
     SET @MY_audit_seq = 0
-	IF (@TP='I' OR @TP='D')
-	BEGIN  
-	  SET @WK_txt_id = ISNULL(@D_txt_id,@I_txt_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'txt__tbl', @WK_txt_id, @MYUSER, @CURDTTM
-	END
+    IF (@TP='I' OR @TP='D')
+    BEGIN  
+      SET @WK_txt_id = ISNULL(@D_txt_id,@I_txt_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'txt__tbl', @WK_txt_id, @MYUSER, @CURDTTM
+    END
 
  
     IF @TP='U' OR @TP='D'
-	BEGIN
+    BEGIN
 
       IF (@TP = 'D' AND @D_txt_process IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_chr(@D_txt_process, @I_txt_process) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('txt_process'), @D_txt_process)
       END
 
@@ -7444,15 +7643,15 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_txt_attrib, @I_txt_attrib) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('txt_attrib'), @D_txt_attrib)
       END
-	  
+      
       IF (@TP = 'D' AND @D_txt_type IS NOT NULL OR
           @TP = 'U' AND {schema}.nequal_chr(@D_txt_type, @I_txt_type) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('txt_type'), @D_txt_type)
       END
 
@@ -7460,7 +7659,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_txt_title, @I_txt_title) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('txt_title'), @D_txt_title)
       END
 
@@ -7468,7 +7667,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_txt_body, @I_txt_body) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('txt_body'), @D_txt_body)
       END
 
@@ -7476,7 +7675,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_txt_bcc, @I_txt_bcc) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('txt_bcc'), @D_txt_bcc)
       END
 
@@ -7484,7 +7683,7 @@ BEGIN
           @TP = 'U' AND {schema}.nequal_chr(@D_txt_desc, @I_txt_desc) > 0)
       BEGIN
         IF (@MY_audit_seq=0)
-		  EXEC	@MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
+          EXEC    @MY_audit_seq = {schema}.log_audit_base 'U', 'txt__tbl', @I_txt_id, @MYUSER, @CURDTTM
         INSERT INTO {schema}.audit_detail VALUES (@MY_audit_seq, lower('txt_desc'), @D_txt_desc)
       END
 
@@ -7492,45 +7691,45 @@ BEGIN
     END  /* END OF "IF @TP='U' OR @TP='D'"  */
 
 
-	/******************************************/
-	/****** SPECIAL BACK ACTION - BEGIN  ******/
-	/******************************************/
+    /******************************************/
+    /****** SPECIAL BACK ACTION - BEGIN  ******/
+    /******************************************/
 
     IF (@TP='U' AND @MY_audit_seq <> 0)
-	BEGIN
+    BEGIN
       UPDATE {schema}.txt__tbl
-	     SET txt_mtstmp = @CURDTTM,
-			 txt_muser = @MYUSER
+         SET txt_mtstmp = @CURDTTM,
+             txt_muser = @MYUSER
        WHERE txt__tbl.txt_id = @I_txt_id;
     END  
 
-	/*****************************************/
-	/****** SPECIAL BACK ACTION - END   ******/
-	/*****************************************/
+    /*****************************************/
+    /****** SPECIAL BACK ACTION - END   ******/
+    /*****************************************/
 
 
 
             
-    FETCH NEXT FROM CUR_TXT_IUD
+    FETCH NEXT FROM CUR_TXT_iud
         INTO @D_txt_id, @I_txt_id,
              @D_txt_process,  @I_txt_process,
              @D_txt_attrib, @I_txt_attrib,
              @D_txt_type, @I_txt_type,
-			 @D_txt_title, @I_txt_title,
-			 @D_txt_body, @I_txt_body,
+             @D_txt_title, @I_txt_title,
+             @D_txt_body, @I_txt_body,
              @D_txt_bcc, @I_txt_bcc,
              @D_txt_desc, @I_txt_desc
 
   END
-  CLOSE CUR_TXT_IUD
-  DEALLOCATE CUR_TXT_IUD
+  CLOSE CUR_TXT_iud
+  DEALLOCATE CUR_TXT_iud
 
   RETURN
 
   ERROR_BAD:  
 
-  CLOSE CUR_PL_IUD
-  DEALLOCATE CUR_PL_IUD
+  CLOSE CUR_PL_iud
+  DEALLOCATE CUR_PL_iud
   raiserror(@M ,16,1)
   ROLLBACK TRANSACTION
   return
@@ -7538,7 +7737,7 @@ BEGIN
 END
 
 GO
-ALTER TABLE [{schema}].[txt__tbl] ENABLE TRIGGER [txt__tbl_IUD]
+ALTER TABLE [{schema}].[txt__tbl] ENABLE TRIGGER [txt__tbl_iud]
 GO
 SET ANSI_NULLS ON
 GO
@@ -7546,7 +7745,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE trigger [{schema}].[param_sys_IUD] on [{schema}].[param_sys]
+CREATE trigger [{schema}].[param_sys_iud] on [{schema}].[param_sys]
 for insert, update, delete
 AS
 BEGIN
@@ -7589,7 +7788,7 @@ BEGIN
       set @TP = 'I'
   else
     if exists (select * from deleted)
-	  set @TP = 'D'
+      set @TP = 'D'
     else
       return
   
@@ -7602,7 +7801,7 @@ BEGIN
   IF @TP = 'U' AND UPDATE(param_sys_id)
   BEGIN
     raiserror('Cannot update identity',16,1)
-	ROLLBACK TRANSACTION
+    ROLLBACK TRANSACTION
     return
   END
 
@@ -7631,12 +7830,12 @@ BEGIN
         CLOSE CUR_param_sys_I
         DEALLOCATE CUR_param_sys_I
         raiserror(@ERRTXT,16,1)
-	    ROLLBACK TRANSACTION
+        ROLLBACK TRANSACTION
         return
       END
 
-	  SET @WK_ID = ISNULL(@I_param_sys_id,@D_param_sys_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'param_sys', @WK_ID, @MYUSER, @CURDTTM
+      SET @WK_ID = ISNULL(@I_param_sys_id,@D_param_sys_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'param_sys', @WK_ID, @MYUSER, @CURDTTM
 
       FETCH NEXT FROM CUR_param_sys_I INTO @I_param_sys_id, 
                                      @I_param_sys_process, 
@@ -7675,13 +7874,13 @@ BEGIN
           CLOSE CUR_param_sys_DU
           DEALLOCATE CUR_param_sys_DU
           raiserror(@ERRTXT,16,1)
-	      ROLLBACK TRANSACTION
+          ROLLBACK TRANSACTION
           return
         END
       END
 
-	  SET @WK_ID = ISNULL(@I_param_sys_id,@D_param_sys_id)
-	  EXEC	@MY_audit_seq = {schema}.log_audit_base @TP, 'param_sys', @WK_ID, @MYUSER, @CURDTTM
+      SET @WK_ID = ISNULL(@I_param_sys_id,@D_param_sys_id)
+      EXEC    @MY_audit_seq = {schema}.log_audit_base @TP, 'param_sys', @WK_ID, @MYUSER, @CURDTTM
             
       FETCH NEXT FROM CUR_param_sys_DU
             INTO @D_param_sys_id, @I_param_sys_id,
@@ -7698,7 +7897,7 @@ BEGIN
 END
 
 GO
-ALTER TABLE [{schema}].[param_sys] ENABLE TRIGGER [param_sys_IUD]
+ALTER TABLE [{schema}].[param_sys] ENABLE TRIGGER [param_sys_iud]
 GO
 SET ANSI_NULLS ON
 GO
@@ -7709,7 +7908,7 @@ GO
 
 
 
-CREATE trigger [{schema}].[v_cust_menu_role_selection_IUD_INSTEADOF_UPDATE] on [{schema}].[v_cust_menu_role_selection]
+CREATE trigger [{schema}].[v_cust_menu_role_selection_iud_INSTEADOF_UPDATE] on [{schema}].[v_cust_menu_role_selection]
 instead of update
 as
 begin
@@ -7720,30 +7919,30 @@ begin
   set @I = 1
 
     delete from {schema}.cust_menu_role
-	 where cust_menu_role_id in (
-	   select i.cust_menu_role_id
-	     from inserted i
+     where cust_menu_role_id in (
+       select i.cust_menu_role_id
+         from inserted i
         inner join deleted del on del.menu_id=i.menu_id
         where {schema}.nequal_num(del.cust_menu_role_selection, i.cust_menu_role_selection) > 0
-		  and isnull(i.cust_menu_role_selection,0) = 0);
+          and isnull(i.cust_menu_role_selection,0) = 0);
 
-	 
+     
     insert into {schema}.cust_menu_role (cust_role_name, menu_id)
-	   select i.new_cust_role_name, i.menu_id
-	     from inserted i
+       select i.new_cust_role_name, i.menu_id
+         from inserted i
         inner join deleted del on del.menu_id=i.menu_id
         where {schema}.nequal_num(del.cust_menu_role_selection, i.cust_menu_role_selection) > 0
-		  and isnull(i.cust_menu_role_selection,0) = 1
-		  and isnull(i.new_cust_role_name,'')<>'';
-	 
+          and isnull(i.cust_menu_role_selection,0) = 1
+          and isnull(i.new_cust_role_name,'')<>'';
+     
     insert into {schema}.cust_menu_role (cust_role_name, menu_id)
-	   select i.cust_role_name, i.new_menu_id
-	     from inserted i
+       select i.cust_role_name, i.new_menu_id
+         from inserted i
         inner join deleted del on del.menu_id=i.menu_id
         where {schema}.nequal_num(del.cust_menu_role_selection, i.cust_menu_role_selection) > 0
-		  and isnull(i.cust_menu_role_selection,0) = 1
-		  and isnull(i.new_cust_role_name,'')='';
-	 
+          and isnull(i.cust_menu_role_selection,0) = 1
+          and isnull(i.new_cust_role_name,'')='';
+     
   END
 end
 
@@ -7759,7 +7958,7 @@ GO
 
 
 
-CREATE trigger [{schema}].[v_sys_menu_role_selection_IUD_INSTEADOF_UPDATE] on [{schema}].[v_sys_menu_role_selection]
+CREATE trigger [{schema}].[v_sys_menu_role_selection_iud_INSTEADOF_UPDATE] on [{schema}].[v_sys_menu_role_selection]
 instead of update
 as
 begin
@@ -7770,30 +7969,30 @@ begin
   set @I = 1
 
     delete from {schema}.sys_menu_role
-	 where sys_menu_role_id in (
-	   select i.sys_menu_role_id
-	     from inserted i
+     where sys_menu_role_id in (
+       select i.sys_menu_role_id
+         from inserted i
         inner join deleted del on del.menu_id=i.menu_id
         where {schema}.nequal_num(del.sys_menu_role_selection, i.sys_menu_role_selection) > 0
-		  and isnull(i.sys_menu_role_selection,0) = 0);
+          and isnull(i.sys_menu_role_selection,0) = 0);
 
-	 
+     
     insert into {schema}.sys_menu_role (sys_role_name, menu_id)
-	   select i.new_sys_role_name, i.menu_id
-	     from inserted i
+       select i.new_sys_role_name, i.menu_id
+         from inserted i
         inner join deleted del on del.menu_id=i.menu_id
         where {schema}.nequal_num(del.sys_menu_role_selection, i.sys_menu_role_selection) > 0
-		  and isnull(i.sys_menu_role_selection,0) = 1
-		  and isnull(i.new_sys_role_name,'')<>'';
-	 
+          and isnull(i.sys_menu_role_selection,0) = 1
+          and isnull(i.new_sys_role_name,'')<>'';
+     
     insert into {schema}.sys_menu_role (sys_role_name, menu_id)
-	   select i.sys_role_name, i.new_menu_id
-	     from inserted i
+       select i.sys_role_name, i.new_menu_id
+         from inserted i
         inner join deleted del on del.menu_id=i.menu_id
         where {schema}.nequal_num(del.sys_menu_role_selection, i.sys_menu_role_selection) > 0
-		  and isnull(i.sys_menu_role_selection,0) = 1
-		  and isnull(i.new_sys_role_name,'')='';
-	 
+          and isnull(i.sys_menu_role_selection,0) = 1
+          and isnull(i.new_sys_role_name,'')='';
+     
   END
 end
 
@@ -9377,6 +9576,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System No
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Document Scope' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_doc_scope'
 GO
+:if:separate_code_type_tables:
 EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_sys', @level2type=N'COLUMN',@level2name=N'code_name'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_sys', @level2type=N'COLUMN',@level2name=N'code_name'
@@ -9477,6 +9677,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_sys'
 GO
+:endif:
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_note_scope', @level2type=N'COLUMN',@level2name=N'code_sys_id'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_note_scope', @level2type=N'COLUMN',@level2name=N'code_seq'
@@ -9685,6 +9886,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System No
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 - Country / State' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_country_state'
 GO
+:if:separate_code_type_tables:
 EXEC sys.sp_addextendedproperty @name=N'MS_AggregateType', @value=-1 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_sys', @level2type=N'COLUMN',@level2name=N'code_name'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_ColumnHidden', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_sys', @level2type=N'COLUMN',@level2name=N'code_name'
@@ -9789,6 +9991,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes 2 Header (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code2_sys'
 GO
+:endif:
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version ID (internal)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'version__tbl', @level2type=N'COLUMN',@level2name=N'version_id'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Version Component Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'version__tbl', @level2type=N'COLUMN',@level2name=N'version_component'
@@ -9941,7 +10144,7 @@ SELECT doc__tbl.doc_id
       ,doc__tbl.item_id
       ,doc__tbl.doc_sts
       ,doc__tbl.doc_ctgr
-	    ,GDD.code_txt doc_ctgr_txt
+        ,GDD.code_txt doc_ctgr_txt
       ,doc__tbl.doc_desc
       ,doc__tbl.doc_ext
       ,doc__tbl.doc_size
@@ -9956,8 +10159,8 @@ SELECT doc__tbl.doc_id
       ,doc__tbl.doc_upuser
       ,{schema}.my_db_user_fmt(doc_upuser) doc_upuser_fmt
       ,doc__tbl.doc_snotes
-	    ,single.dual_nvarchar50 title_head
-	    ,single.dual_nvarchar50 title_detail
+        ,single.dual_nvarchar50 title_head
+        ,single.dual_nvarchar50 title_detail
   FROM {schema}.doc__tbl
   INNER JOIN {schema}.single on 1=1
   LEFT OUTER JOIN  {schema}.code2_doc_scope_doc_ctgr GDD ON GDD.code_val1 = doc__tbl.doc_scope
@@ -9979,12 +10182,12 @@ CREATE VIEW [{schema}].[v_note] as
 SELECT note__tbl.note_id
       ,note__tbl.note_scope
       ,note__tbl.note_scope_id
-	    ,note__tbl.note_sts
+        ,note__tbl.note_sts
       ,note__tbl.cust_id
-	    ,single.dual_nvarchar50 cust_name
-	    ,single.dual_nvarchar50 cust_name_ext
+        ,single.dual_nvarchar50 cust_name
+        ,single.dual_nvarchar50 cust_name_ext
       ,note__tbl.item_id
-	    ,single.dual_nvarchar50 item_name
+        ,single.dual_nvarchar50 item_name
       ,note__tbl.note_type
       ,note__tbl.note_body
       ,{schema}.my_to_date(note__tbl.note_etstmp) note_dt
@@ -9997,8 +10200,8 @@ SELECT note__tbl.note_id
       ,note__tbl.note_muser
       ,{schema}.my_db_user_fmt(note__tbl.note_muser) note_muser_fmt
       ,note__tbl.note_snotes
-	    ,single.dual_nvarchar50 title_head
-	    ,single.dual_nvarchar50 title_detail
+        ,single.dual_nvarchar50 title_head
+        ,single.dual_nvarchar50 title_detail
   FROM {schema}.note__tbl
   INNER JOIN {schema}.single ON 1=1
 
@@ -10026,18 +10229,20 @@ SELECT doc__tbl.doc_id
       ,doc__tbl.doc_upuser
       ,{schema}.my_db_user_fmt(doc_upuser) doc_upuser_fmt
       ,doc__tbl.doc_snotes
-	    ,null title_head
-	    ,null title_detail
+        ,null title_head
+        ,null title_detail
       ,null cust_name
       ,null cust_name_ext
       ,null item_name
   FROM {schema}.doc__tbl
 
+GO
+
 CREATE VIEW [{schema}].[v_note_ext] AS
 SELECT note__tbl.note_id
       ,note__tbl.note_scope
       ,note__tbl.note_scope_id
-	    ,note__tbl.note_sts
+        ,note__tbl.note_sts
       ,note__tbl.cust_id
       ,note__tbl.item_id
       ,note__tbl.note_type
@@ -10049,10 +10254,11 @@ SELECT note__tbl.note_id
       ,note__tbl.note_muser
       ,{schema}.my_db_user_fmt(note__tbl.note_muser) note_muser_fmt
       ,note__tbl.note_snotes
-	    ,null title_head
-	    ,null title_detail
+        ,null title_head
+        ,null title_detail
       ,null cust_name
-	    ,null cust_name_ext
+        ,null cust_name_ext
       ,null item_name
   FROM {schema}.note__tbl
 
+GO

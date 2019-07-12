@@ -607,7 +607,6 @@ CREATE FUNCTION cust_user_role_iud() RETURNS trigger
       my_toa     {schema}.toaudit;
 
       sqlcmd     text;
-      get_cust_id     text;
       wk_cust_id    bigint;
       wk_sys_user_id   bigint;
       
@@ -617,14 +616,10 @@ CREATE FUNCTION cust_user_role_iud() RETURNS trigger
         /* INITIALIZE                     */ 
         /**********************************/
 
-        select param_cur_val
-          into get_cust_id
-          from {schema}.v_param_cur 
-         where param_cur_process = 'SQL'
-           and param_cur_attrib = 'get_cust_id'; 
+        
+
         wk_sys_user_id := case TG_OP when 'DELETE' then OLD.sys_user_id else NEW.sys_user_id end;  
-        sqlcmd := 'select '||get_cust_id||'(''cust_user'',$1);';
-        EXECUTE sqlcmd INTO wk_cust_id USING wk_sys_user_id;
+        wk_cust_id := {schema}.get_cust_id('cust_user', wk_sys_user_id);
 
 
         my_toa.op := TG_OP;
@@ -1101,6 +1096,8 @@ BEGIN
           from {schema}.v_param_cur 
          where param_cur_process = 'SQL'
            and param_cur_attrib = 'get_cust_id'; 
+  if(get_cust_id is null) then return (null);
+  end if;
   sqlcmd := 'select '||get_cust_id||'($1,$2);';
   EXECUTE sqlcmd INTO wk_cust_id USING in_tabn, in_tabid;
 
@@ -1114,6 +1111,41 @@ $_$;
 
 
 ALTER FUNCTION {schema}.get_cust_id(in_tabn character varying, in_tabid bigint) OWNER TO postgres;
+
+
+--
+-- Name: get_item_id(in_tabn character varying, in_tabid bigint); Type: FUNCTION; Schema: {schema}; Owner: postgres
+--
+
+CREATE FUNCTION get_item_id(in_tabn character varying, in_tabid bigint) RETURNS bigint
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+    sqlcmd          text;
+    get_item_id     text;
+    wk_item_id      bigint;
+BEGIN
+
+ select param_cur_val
+          into get_item_id
+          from {schema}.v_param_cur 
+         where param_cur_process = 'SQL'
+           and param_cur_attrib = 'get_item_id'; 
+  if(get_item_id is null) then return (null);
+  end if;
+  sqlcmd := 'select '||get_item_id||'($1,$2);';
+  EXECUTE sqlcmd INTO wk_item_id USING in_tabn, in_tabid;
+
+  RETURN(wk_item_id);
+
+EXCEPTION WHEN OTHERS THEN
+  raise exception '% %', SQLERRM, SQLSTATE;
+  return(null);
+END;
+$_$;
+
+
+ALTER FUNCTION {schema}.get_item_id(in_tabn character varying, in_tabid bigint) OWNER TO postgres;
 
 
 --
@@ -1134,6 +1166,13 @@ BEGIN
           from {schema}.v_param_cur 
          where param_cur_process = 'SQL'
            and param_cur_attrib = 'check_scope_id'; 
+  if(check_scope_id is null) then
+    if (in_scope='U') then select sys_user_id into rslt from jsharmony.sys_user where sys_user_id=in_scope_id;
+    elsif (in_scope='S') then select 1 into rslt;
+    else select null into rslt;
+    end if;
+    return (rslt);
+  end if;
   sqlcmd := 'select '||check_scope_id||'($1,$2,$3);';
   EXECUTE sqlcmd INTO rslt USING in_scope, in_scope_id, in_cust_id;
 
@@ -1163,9 +1202,6 @@ CREATE FUNCTION doc__tbl_iud() RETURNS trigger
       my_id      bigint default case TG_OP when 'DELETE' then OLD.doc_id else NEW.doc_id end;
       my_toa     {schema}.toaudit;
 
-      sqlcmd     text;
-      get_cust_id     text = NULL;
-      get_item_id     text = NULL;
       doc_ctgr_table text = NULL;
 
       my_cust_id    bigint = NULL;
@@ -1180,17 +1216,6 @@ CREATE FUNCTION doc__tbl_iud() RETURNS trigger
         /**********************************/
         /* INITIALIZE                     */ 
         /**********************************/
-        select param_cur_val
-          into get_cust_id
-          from {schema}.v_param_cur 
-         where param_cur_process = 'SQL'
-           and param_cur_attrib = 'get_cust_id'; 
-
-        select param_cur_val
-          into get_item_id
-          from {schema}.v_param_cur 
-         where param_cur_process = 'SQL'
-           and param_cur_attrib = 'get_item_id'; 
 
         select param_cur_val
           into doc_ctgr_table
@@ -1202,14 +1227,12 @@ CREATE FUNCTION doc__tbl_iud() RETURNS trigger
         select coalesce(code_code,code_val) into my_doc_scope_tbl from {schema}.code_doc_scope where code_val = my_doc_scope;
         my_doc_scope_id = case TG_OP when 'DELETE' then OLD.doc_scope_id else NEW.doc_scope_id end;
 
-        if get_cust_id is not null and my_doc_scope not in ('sys_user_code') then
-          sqlcmd := 'select '||get_cust_id||'($1,$2);';
-          EXECUTE sqlcmd INTO my_cust_id USING my_doc_scope_tbl, my_doc_scope_id;
+        if my_doc_scope not in ('sys_user_code') then
+          my_cust_id := {schema}.get_cust_id(my_doc_scope_tbl, my_doc_scope_id);
         end if;
 
-        if get_item_id is not null and my_doc_scope not in ('sys_user_code') then
-          sqlcmd := 'select '||get_item_id||'($1,$2);';
-          EXECUTE sqlcmd INTO my_item_id USING my_doc_scope_tbl, my_doc_scope_id;
+        if my_doc_scope not in ('sys_user_code') then
+          my_item_id := {schema}.get_item_id(my_doc_scope_tbl, my_doc_scope_id);
         end if;
 
         my_toa.op := TG_OP;
@@ -2337,6 +2360,7 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
       my_toa     {schema}.toaudit;
 
       my_cust_id    bigint = NULL;
+      my_item_id    bigint = NULL;
       user_cust_id  bigint = NULL;
       my_note_scope text = NULL;
       my_note_scope_tbl text = NULL;
@@ -2372,16 +2396,20 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
           if OLD.note_scope in ('sys_user_code')
           then 
             my_cust_id := NULL;
+            my_item_id := NULL;
           else  
             my_cust_id := {schema}.get_cust_id(my_note_scope_tbl, OLD.note_scope_id);
+            my_item_id := {schema}.get_item_id(my_note_scope_tbl, OLD.note_scope_id);
           end if;  
           my_note_scope := OLD.note_scope;
         else
           if NEW.note_scope in ('sys_user_code')
           then 
             my_cust_id := NULL;
+            my_item_id := NULL;
           else  
             my_cust_id := {schema}.get_cust_id(my_note_scope_tbl, NEW.note_scope_id);
+            my_item_id := {schema}.get_item_id(my_note_scope_tbl, NEW.note_scope_id);
           end if;  
           my_note_scope := NEW.note_scope;
         end if; 
@@ -2456,6 +2484,11 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
                  else TG_OP = 'UPDATE' and {schema}.nequal(NEW.cust_id, OLD.cust_id) end) THEN
           SELECT par_audit_seq INTO audit_seq from {schema}.audit(my_toa, audit_seq, my_id, 'cust_id',OLD.cust_id::text);  
         END IF;
+
+        IF (case when TG_OP = 'DELETE' then OLD.item_id is not null 
+                 else TG_OP = 'UPDATE' and {schema}.nequal(NEW.item_id, OLD.item_id) end) THEN
+          SELECT par_audit_seq INTO audit_seq from {schema}.audit(my_toa, audit_seq, my_id, 'item_id',OLD.item_id::text);  
+        END IF;
      
         IF (case when TG_OP = 'DELETE' then OLD.note_scope is not null 
                  else TG_OP = 'UPDATE' and {schema}.nequal(NEW.note_scope, OLD.note_scope) end) THEN
@@ -2494,18 +2527,20 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
      
         IF TG_OP = 'INSERT' THEN
           NEW.cust_id = my_cust_id;
+          NEW.item_id = my_item_id;
           NEW.item_id = NULL::text;
-	  NEW.note_etstmp := curdttm;
-	  NEW.note_euser := myuser;
-	  NEW.note_mtstmp := curdttm;
-	  NEW.note_muser := myuser;
+	        NEW.note_etstmp := curdttm;
+	        NEW.note_euser := myuser;
+	        NEW.note_mtstmp := curdttm;
+	        NEW.note_muser := myuser;
         ELSIF TG_OP = 'UPDATE' THEN
           IF audit_seq is not NULL THEN
             NEW.cust_id = my_cust_id;
+            NEW.item_id = my_item_id;
             NEW.item_id = NULL::text;
-	    NEW.note_mtstmp := curdttm;
-	    NEW.note_muser := myuser;
-	  END IF;  
+	          NEW.note_mtstmp := curdttm;
+	          NEW.note_muser := myuser;
+	        END IF;  
         END IF;
 
 
@@ -9356,6 +9391,16 @@ REVOKE ALL ON FUNCTION get_cust_id(in_tabn character varying, in_tabid bigint) F
 REVOKE ALL ON FUNCTION get_cust_id(in_tabn character varying, in_tabid bigint) FROM postgres;
 GRANT ALL ON FUNCTION get_cust_id(in_tabn character varying, in_tabid bigint) TO postgres;
 GRANT ALL ON FUNCTION get_cust_id(in_tabn character varying, in_tabid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: get_item_id(in_tabn character varying, in_tabid bigint); Type: ACL; Schema: {schema}; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION get_item_id(in_tabn character varying, in_tabid bigint) FROM PUBLIC;
+REVOKE ALL ON FUNCTION get_item_id(in_tabn character varying, in_tabid bigint) FROM postgres;
+GRANT ALL ON FUNCTION get_item_id(in_tabn character varying, in_tabid bigint) TO postgres;
+GRANT ALL ON FUNCTION get_item_id(in_tabn character varying, in_tabid bigint) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --
