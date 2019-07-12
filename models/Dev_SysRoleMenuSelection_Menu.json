@@ -1,0 +1,49 @@
+{
+  "Dev/SysRoleMenuSelection_Menu": {
+    "source_files_prefix":"Dev_SysRoleMenuSelection_Menu",
+    "layout":"grid", 
+    "title": "Menu Items for Role <#=data.sys_role_name#>",
+    "table":"{schema}.v_sys_menu_role_selection",
+    "actions":"BU", 
+    "caption":[0,"Item","Items"],
+    "sort":[{"menu_id_parent":"asc"},{"menu_seq":"asc"},{"menu_name":"asc"}], 
+    "menu":"dev",
+    "grid_expand_search": 1,
+    "rowlimit":500,
+    "grid_rowcount":1,
+    "reselectafteredit": "row",      "comment1":"row, or blank",
+    "newrowposition": "last",        "comment2":"first or last",
+    "commitlevel": "cell",            "comment3":"cell, row, page, or none",
+    "validationlevel": "cell",        "comment4":"cell, or row",
+    "hide_system_buttons" : ["export"],    
+    "buttons": [
+      {"link":"js:jsh.App[modelid].SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
+      {"link":"js:jsh.App[modelid].DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
+    ],
+    "oninit": "jsh.App[modelid].oninit(xmodel);",
+    "oncommit": "jsh.App[modelid].oncommit();",
+    "fields":[
+      {"name":"sys_role_name","type":"varchar","length":16,"actions":"B","datalock":{"cust_id":"cust_id"},"control":"hidden","key":1,
+      "caption":""},
+        {"name":"sys_menu_role_selection","type":"smallint","actions":"BU","caption":"Select","control":"checkbox",
+        "controlparams":{"value_true":"1","value_false":"0","value_hidden":""},"captionstyle": "text-align:center;"},
+        {"name":"new_sys_role_name","type":"varchar","length":16,"actions":"BU","control":"hidden","captionstyle":"display:none;","cellstyle":"display:none;",
+        "sqlselect":"@sys_role_name"},
+        {"name":"menu_id","type":"bigint","actions": "B","control": "label","key":1,
+        "validate":["Required","IsNumeric:true","IsDecimal:0","MinValue:0"],"cellstyle": "text-align:right;",
+        "caption":"ID","captionstyle": "text-align:right;"},
+        {"name":"menu_id_parent","type":"bigint","actions": "B","control": "label",
+        "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"cellstyle": "text-align:right;",
+        "sqlsort":"(coalesce(menu_id_parent,0))",
+        "caption":"Parent","captionstyle": "text-align:right;"},
+        {"name":"menu_seq","type":"int","actions": "B","control": "label",
+        "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"cellstyle": "text-align:right;",
+        "sqlsort":"(coalesce(coalesce(menu_seq,menu_id),0))",
+        "caption":"Seq","captionstyle": "text-align:right;"},
+        {"name":"menu_name","type":"varchar","length":255,"actions": "B","control": "label",
+        "validate":["Required"],"caption":"Name"},
+        {"name":"menu_desc","type":"varchar","length":"255","actions":"B","control": "label",
+        "validate":["Required"],"caption":"Description"}
+    ]
+  }	
+}

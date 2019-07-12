@@ -1,0 +1,22 @@
+{
+  "Queue__model": {
+    "comment":"Queue__model",
+    "title":"Remote Queue",
+    "table":"{schema}.queue__tbl",
+    "actions":"BIUD", 
+    "layout":"form", 
+    "caption": [ "", "Request", "Requests" ],
+    "fields":[
+      {"name":"queue_id","type":"bigint","key": 1,"control":"hidden"},
+      {"name":"queue__tbl_file","type":"file","actions":"BIU","nl":1,
+        "control":"file_upload","caption":"Document",
+        "controlparams": { 
+          "sqlparams": {
+                        "FILE_NAME": "queue_id"
+          },
+          "data_folder": "queue__tbl"
+        },
+        "validate": [ "Required" ]}
+    ]	
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "Admin/SysUser_Func": {
+    "comment":"Admin/SysUser_Func",
+    "layout":"multisel", 
+    "actions":"BU",
+    "table":"{schema}.sys_user_func",
+    "title":"",
+    "caption":["","Function","Functions"],
+    "fields":[
+      {"name":"sys_user_id","type":"bigint","foreignkey":1,"control":"hidden"},
+      {"name":"sys_user_func_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"sys_func_name","type":"varchar","length":"32","cellstyle":"width:300px;",
+        "caption":"Function","actions":"B",
+        "lov": { "sql": ["select sys_func_name as %%%jsh.map.{{code_val}}%%%, ",
+                          "       sys_func_desc as %%%jsh.map.{{code_txt}}%%%,",
+                          "       sys_func_seq as %%%jsh.map.{{code_seq}}%%% ",
+                          "  from {schema}.sys_func"] }
+        }
+    ],
+    "dberrors":[
+      ["fk_sys_user_func_sys_user","Cannot delete a user with selected function(s)."],
+      ["fk_sys_user_func_sys_user","Cannot delete a user with selected function(s)."]
+    ]
+  }
+}

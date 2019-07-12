@@ -1,0 +1,25 @@
+{
+  "Admin/SysUser_Role": {
+    "comment":"Admin/SysUser_Role",
+    "layout":"multisel", 
+    "actions":"BU",
+    "table":"{schema}.sys_user_role",
+    "title":"",
+    "caption":["","Role","Roles"],
+    "fields":[
+      {"name":"sys_user_id","type":"bigint","foreignkey":1,"control":"hidden"},
+      {"name":"sys_user_role_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"sys_role_name","type":"varchar","length":"32","cellstyle":"width:300px;",
+        "caption":"Role","actions":"B",
+        "lov": { "sql": ["select sys_role_name as %%%jsh.map.{{code_val}}%%%, ",
+                          "       sys_role_desc as %%%jsh.map.{{code_txt}}%%%, ",
+                          "       sys_role_seq as %%%jsh.map.{{code_seq}}%%% ",
+                          "  from {schema}.sys_role"] }
+      }
+    ],
+    "dberrors":[
+      ["fk_sys_user_role_sys_user","Cannot delete a user with selected role(s)."],
+      ["fk_sys_user_role_sys_user","Cannot delete a user with selected role(s)."]
+    ]
+  }
+}

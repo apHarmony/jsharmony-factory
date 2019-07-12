@@ -1,0 +1,49 @@
+{
+  "Admin/Param_App_Listing": {
+    "title":"System Settings",
+    "table":"{schema}.param_app",
+    "actions":"BU", 
+    "caption":[0,"Parameter","Parameters"],
+    "layout":"grid", 
+    "sort":["^param_app_process","^param_app_attrib"], 
+    "menu":"Admin/Param_App_Listing",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"param_app_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"param_app_process","type":"varchar","length":32,"actions": "B","comment": "dropdown_S",
+       "lov": {"sql":"select code_val, code_txt from {schema}.code_param_app_process order by code_seq,code_txt","blank":1},"validate":["Required"],"control":"hidden",
+       "caption":"Process","captionstyle":"width:120px;text-align:right;"},
+      {"name":"param_app_attrib","type":"varchar","length":16,"actions": "B","comment": "dropdown_M",
+       "lov":{"sql2":"select code_val1 as %%%jsh.map.{{code_parent}}%%%, code_val2 as %%%jsh.map.{{code_val}}%%%, %%%jsh.map.{{code_txt}}%%% from {schema}.code2_param_app_attrib order by code_seq,code_txt",
+       "blank": 1,"parent":"param_app_process"},"validate":["Required"],
+       "caption":"Attribute","control":"hidden"},
+      {"name":"param_desc","type":"varchar","length":"255","caption":"Description","actions":"B",
+       "sqlselect":"{schema}.get_param_desc(param_app.param_app_process, param_app.param_app_attrib)"},
+      {"name":"param_app_val","type":"varchar","length":"256","validate":["Required"],"actions":"BIU","control":"textbox_L",
+       "caption":"Value"},
+      {"name":"param_app_info","type":"varchar","length":"500","actions":"B","control":"textzoom",
+       "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
+       "sqlselect":"{schema}.log_audit_info(param_app.param_app_etstmp, param_app.param_app_euser, param_app.param_app_mtstmp, param_app.param_app_muser)",
+       "controlstyle":"width:48px;display:none;"}
+    ],
+    "dberrors": [
+      [ "pk_param_app", "Duplicate Key (Process + Attribute)" ],
+      [ "param_app_param_app_process_param_app_attrib_key", "Duplicate Key (Process + Attribute)" ]
+    ]
+  },    
+  "Dev/Param_App_Listing": {
+    "inherits":"Admin/Param_App_Listing",
+    "dev":1,
+    "title":"System (G) Settings",
+    "actions":"BIUD", 
+    "menu":"Dev/Param_App_Listing",
+    "fields":[
+      {"name":"param_app_process","actions": "BIU","control": "dropdown_S"},
+      {"name":"param_app_attrib","actions": "BIU","control": "dropdown_M"},
+      {"name":"param_app_val","control": "textbox_M"}
+    ]     
+  }
+}

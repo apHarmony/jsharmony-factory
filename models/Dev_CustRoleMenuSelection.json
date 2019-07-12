@@ -1,0 +1,21 @@
+{
+  "Dev/CustRoleMenuSelection": {
+    "layout": "form", 
+    "dev":1,
+    "title":"",
+    "table": "{schema}.cust_role",
+    "actions": "B", 
+    "caption": [ 0, "Item", "Items" ],
+    "menu": "items",
+    "tabpos":"top",
+    "tabpanelstyle": "min-width:1000px;",
+    "popup":[1050,700],
+    "tabs":[
+      {"name":"SELECTOR","caption": "Menu Items Selector","target":"Dev/CustRoleMenuSelection_Menu","bindings":{"cust_role_name":"cust_role_name"}}
+    ],
+    "fields":[
+      {"name":"cust_role_id","type":"bigint","control":"hidden"},
+      {"name":"cust_role_name","type":"varchar","length":16,"actions":"B","key":1,"control":"hidden"}
+    ]
+  }  
+}

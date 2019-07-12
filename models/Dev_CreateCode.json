@@ -1,53 +1,53 @@
 {
- "POPUP_EXEC_CREATE_TABLE": {
-  "inherits": "POPUP_EXEC",
+ "Dev/CreateCode_Base": {
+  "inherits": "Dev/PopupExec",
   "title": "Table Create",
-  "onload":"jsh.$root('.get_codeschema').text(XExt.UndefinedBlank(_GET['codeschema']));jsh.$root('.get_codename').text(XExt.UndefinedBlank(_GET['codename']));jsh.$root('.get_codemean').text(XExt.UndefinedBlank(_GET['codemean']));",
+  "onload":"jsh.$root('.get_code_schema').text(XExt.UndefinedBlank(_GET['code_schema']));jsh.$root('.get_code_name').text(XExt.UndefinedBlank(_GET['code_name']));jsh.$root('.get_code_desc').text(XExt.UndefinedBlank(_GET['code_desc']));",
   "fields": [
     {"name":"question",
-     "value":"Are you sure you want to create table <span class='get_codeschema'></span>.ucod_<span class='get_codename'></span> ? <br /> <span class='get_codemean'></span>"},
-    {"name":"codeschema","type":"varchar","length":"128","actions":"BU",
-     "default": "js:XExt.UndefinedBlank(_GET['codeschema'])","control":"hidden"},
-    {"name":"codename","type":"varchar","length":"128","actions":"BU",
-     "default": "js:XExt.UndefinedBlank(_GET['codename'])","control":"hidden"},
-    {"name":"codemean","type":"varchar","length":"128","actions":"BU",
-     "default": "js:XExt.UndefinedBlank(_GET['codemean'])","control":"hidden"}
+     "value":"Are you sure you want to create table <span class='get_code_schema'></span>.code_sys_<span class='get_code_name'></span> ? <br /> <span class='get_code_desc'></span>"},
+    {"name":"code_schema","type":"varchar","length":"128","actions":"BU",
+     "default": "js:XExt.UndefinedBlank(_GET['code_schema'])","control":"hidden"},
+    {"name":"code_name","type":"varchar","length":"128","actions":"BU",
+     "default": "js:XExt.UndefinedBlank(_GET['code_name'])","control":"hidden"},
+    {"name":"code_desc","type":"varchar","length":"128","actions":"BU",
+     "default": "js:XExt.UndefinedBlank(_GET['code_desc'])","control":"hidden"}
   ]
  },
- "POPUP_EXEC_CREATE_UCOD": {
-  "inherits": "POPUP_EXEC_CREATE_TABLE",
+ "Dev/CreateCode_Sys": {
+  "inherits": "Dev/CreateCode_Base",
   "title": "UCOD Table Create",
-  "sqlexec": "%%%PROC_RUN%%% jsharmony.create_ucod%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
+  "sqlexec": "%%%proc_run%%% {schema}.create_code_sys%%%par_list_beg%%%@code_schema, @code_name, @code_desc%%%par_list_end%%%;", 
   "fields": [
     {"name":"question",
-     "value":"Are you sure you want to create table <span class='get_codeschema'></span>.ucod_<span class='get_codename'></span> ? <br /> <span class='get_codemean'></span>"}
+     "value":"Are you sure you want to create table <span class='get_code_schema'></span>.code_sys_<span class='get_code_name'></span> ? <br /> <span class='get_code_desc'></span>"}
   ]
  }, 
- "POPUP_EXEC_CREATE_UCOD2": {
-  "inherits": "POPUP_EXEC_CREATE_TABLE",
+ "Dev/CreateCode2_Sys": {
+  "inherits": "Dev/CreateCode_Base",
   "title": "UCOD2 Table Create",
-  "sqlexec": "%%%PROC_RUN%%% jsharmony.create_ucod2%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
+  "sqlexec": "%%%proc_run%%% {schema}.create_code2_sys%%%par_list_beg%%%@code_schema, @code_name, @code_desc%%%par_list_end%%%;", 
   "fields": [
     {"name":"question",
-     "value":"Are you sure you want to create table <span class='get_codeschema'></span>.ucod2_<span class='get_codename'></span> ? <br /> <span class='get_codemean'></span>"}
+     "value":"Are you sure you want to create table <span class='get_code_schema'></span>.code2_sys_<span class='get_code_name'></span> ? <br /> <span class='get_code_desc'></span>"}
   ]
  }, 
- "POPUP_EXEC_CREATE_GCOD": {
-  "inherits": "POPUP_EXEC_CREATE_TABLE",
+ "Dev/CreateCode_App": {
+  "inherits": "Dev/CreateCode_Base",
   "title": "GCOD Table Create",
-  "sqlexec": "%%%PROC_RUN%%% jsharmony.create_gcod%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
+  "sqlexec": "%%%proc_run%%% {schema}.create_code_app%%%par_list_beg%%%@code_schema, @code_name, @code_desc%%%par_list_end%%%;", 
   "fields": [
     {"name":"question",
-     "value":"Are you sure you want to create table <span class='get_codeschema'></span>.gcod_<span class='get_codename'></span> ? <br /> <span class='get_codemean'></span>"}
+     "value":"Are you sure you want to create table <span class='get_code_schema'></span>.code_app_<span class='get_code_name'></span> ? <br /> <span class='get_code_desc'></span>"}
   ]
  }, 
- "POPUP_EXEC_CREATE_GCOD2": {
-  "inherits": "POPUP_EXEC_CREATE_TABLE",
+ "Dev/CreateCode2_App": {
+  "inherits": "Dev/CreateCode_Base",
   "title": "GCOD2 Table Create",
-  "sqlexec": "%%%PROC_RUN%%% jsharmony.create_gcod2%%%PAR_LIST_BEG%%%@codeschema, @codename, @codemean%%%PAR_LIST_END%%%;", 
+  "sqlexec": "%%%proc_run%%% {schema}.create_code2_app%%%par_list_beg%%%@code_schema, @code_name, @code_desc%%%par_list_end%%%;", 
   "fields": [
     {"name":"question",
-     "value":"Are you sure you want to create table <span class='get_codeschema'></span>.gcod2_<span class='get_codename'></span> ? <br /> <span class='get_codemean'></span>"}
+     "value":"Are you sure you want to create table <span class='get_code_schema'></span>.code2_app_<span class='get_code_name'></span> ? <br /> <span class='get_code_desc'></span>"}
   ]
  } 
 }

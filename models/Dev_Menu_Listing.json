@@ -1,0 +1,68 @@
+{
+  "Dev/Menu_Listing": {
+    "title":"Menu Items",
+    "dev":1,
+    "table":"{schema}.menu__tbl",
+    "actions":"BIUD", 
+    "caption":[0,"Menu Item","Menu Items"],
+    "layout":"grid", 
+    "sort":[{"menu_group":"desc"},{"menu_id_parent":"asc"},{"menu_seq":"asc"},{"menu_name":"asc"}], 
+    "buttons": [{"link":"Dev/Menu_Tree_Editor&", "icon": "design", "text": "Tree View", "actions": "B" }],
+    "menu":"Dev/Menu_Tree_Editor",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"menu_id_auto","type":"bigint","key":1,"control":"hidden"},
+      {"name":"menu_group","type":"char","length":1,"actions": "BIU","control":"textbox_VS",
+       "validate":["Required","RegEx:'/S|C/','be one of the following S-System, C-Customer'"],
+       "controlstyle":"width:10px;","default":"S",
+       "caption":"T","caption_ext":"User Type","captionstyle":"text-align:center;"},
+      {"name":"menu_id","type":"bigint","actions": "BIU","control": "textbox_VS",
+       "validate":["Required","IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;width:60px;",
+       "caption":"ID #","captionstyle": "text-align:right;"},
+      {"name":"menu_id_parent","type":"bigint","actions": "BIU","control": "textbox_VS",
+       "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;width:60px;",
+       "sqlsort":"(coalesce(menu_id_parent,0))",
+       "caption":"Parent ID #","captionstyle": "text-align:right;"},
+      {"name":"menu_seq","type":"int","actions": "BIU","control": "textbox_VS",
+       "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
+       "sqlsort":"(coalesce(coalesce(menu_seq,menu_id),0))",
+       "caption":"Seq","captionstyle": "text-align:right;"},
+      {"name":"menu_name","type":"varchar","length":255,"actions": "BIU","control": "textbox_M",
+       "validate":["Required"],"caption":"Menu ID"},
+      {"name":"menu_desc","type":"varchar","length":"255","actions":"BIU","control": "textbox_M",
+       "validate":["Required"],"caption":"Display Name"},
+      {"name":"menu_cmd","type":"varchar","length":255,"actions": "BIU","control": "textbox_M","caption":"Model / Command",
+       "popuplov": {
+          "target":  "Admin/Model_Popup_Listing", "{{code_val}}": "model_id", "popupstyle": "height:400px;width:770px;",
+          "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);"
+        }
+       },
+      {"name":"menu_subcmd","type":"varchar","length":"255","actions":"BIU","control": "textbox_S",
+       "caption":"Querystring / Anchor"},
+      {"name":"menu_sts","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S",
+       "lov": {"sql":"select code_val, code_txt from {schema}.code_ahc order by code_seq,code_txt"},"validate":["Required"],"default":"ACTIVE",
+       "controlstyle":"width:70px;","caption":"Status"},
+      {"name":"privs","control": "html","disable_sort":"1","disable_search":1,"disable_search_all":1,
+       "value": ["<a href='<%=((data['menu_group']=='S')?jsh._BASEURL+xmodel.module_namespace+'Dev/SysMenuRoleSelection':jsh._BASEURL+xmodel.module_namespace+'Dev/CustMenuRoleSelection')%>?action=update&amp;menu_id=<%=data['menu_id']%>'",
+                 " class=\"privs_link xform_ctrl xelemX_SML xform_label uneditable\"",
+                 " onclick=\"window.open(<%=instance%>.$(this).attr('href'),'_blank','width=1200,height=700,resizable=1,scrollbars=1');return false;\"",
+                 "><%-((data['menu_id_auto'])?'<img src=\"/images/icon_update.png\" class=\"xicon\">':'')%></a>"],
+       "caption": "Privileges"}
+    ],
+    "dberrors": [
+      [ "unq_menu__tbl_menu_id", "Duplicate ID" ],
+      [ "menu__tbl_menu_id_key", "Duplicate ID" ],
+      [ "unq_menu__tbl_menu_name", "Duplicate Name" ],
+      [ "menu__tbl_menu_name_key", "Duplicate Menu ID" ],
+      [ "unq_menu__tbl_menu_desc", "Duplicate Description within Parent" ],
+      [ "menu__tbl_menu_id_parent_menu_desc_key", "Duplicate Description within Parent" ],
+      [ "fk_menu__tbl_menu__tbl", "Parent ID consistency error" ],
+      [ "menu__tbl_menu_id_parent_fkey", "Parent ID consistency error" ],
+      [ "ck_menu__tbl_menu_group", "User Type values: S-System, C-Customer" ],
+      [ "fk_sys_menu_role_menu__tbl", "This ID is used in SRM - cannot be modified or deleted" ]
+    ]
+  }
+}

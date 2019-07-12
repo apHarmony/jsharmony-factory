@@ -1,0 +1,21 @@
+{
+  "Client/Dashboard": {
+    "comment":"Client/Dashboard",
+    "layout":"form",
+    "title":"Dashboard",
+    "caption":["","Dashboard","Dashboard"],
+    "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
+    "actions":"B",
+    "menu":"Client/Dashboard",
+    "sqlselect": "select (select txt_body from {schema}.txt__tbl where txt_process='CMS' and txt_attrib='Client/Dashboard') as motd from {schema}.single where 1=1 %%%DATALOCKS%%%",
+    "nokey": 1,
+    "onload":"jsh.$root('.Dashboard__model_MOTD').html(xmodel.controller.form.Data.motd);",
+    "fields":[
+      {"name":"motd","type":"varchar","actions":"B","control":"hidden","caption":"","datalock":{"cust_id":"always"}},
+      {"control":"html","value":"<div class=\"clear Dashboard__model_MOTD\"></div>"},
+      {"name":"qnssl","control":"subform","target":"Client/Dashboard_Note_Listing","bindings":{"note_scope":"'C'","note_type":"'S'"},"actions": "BIUD",
+      "caption":"Notifications","controlstyle":"width:820px;float:left;margin-right:10px;"},
+      {"control":"html","value":"<div class=\"clear\"></div>"}
+    ]
+  }
+}

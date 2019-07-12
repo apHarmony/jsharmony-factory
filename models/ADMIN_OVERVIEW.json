@@ -1,6 +1,6 @@
 {
-  "ADMIN_OVERVIEW": {
-    "comment":"ADMIN_OVERVIEW",
+  "Admin/Overview": {
+    "comment":"Admin/Overview",
     "layout":"form", 
     "table":"",
     "caption":[0,"Administration","Administration"],

@@ -1,0 +1,38 @@
+{
+  "Dev/SysFunc_Listing": {
+    "title":"User Functions",
+    "dev":1,
+    "table":"{schema}.sys_func",
+    "actions":"BIUD", 
+    "caption":[0,"Function","Functions"],
+    "layout":"grid", 
+    "sort":[{"sys_func_seq":"asc"},{"sys_func_name":"asc"}], 
+    "menu":"admin",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"sys_func_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"sys_func_seq","type":"smallint","actions": "BIU","control": "textbox_VS",
+       "validate":["Required","IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
+       "caption":"Seq","captionstyle": "text-align:right;"},
+      {"name":"sys_func_name","type":"varchar","length":16,"actions": "BIU","control": "textbox_S",
+       "validate":["Required"],
+       "caption":"Name"},
+      {"name":"sys_func_desc","type":"varchar","length":"255","actions":"BIU","control": "textbox_M",
+       "validate":["Required"],"caption":"Description"},
+      {"name":"sys_func_code","type":"varchar","length":"255","actions":"BIU","control": "textbox_S","caption":"Code"},
+      {"name":"sys_func_attrib","type":"varchar","length":"255","actions":"BIU","control": "textbox_S","caption":"Attribute"},
+      {"name":"sys_func_sts","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S",
+       "lov": {"sql":"select code_val, code_txt from {schema}.code_ahc order by code_seq,code_txt"},"validate":["Required"],"default":"ACTIVE",
+       "controlstyle":"width:70px;","caption":"Status"}
+    ],
+    "dberrors": [
+      [ "pk_sys_func", "Duplicate Function Name" ],
+      [ "sys_func_pkey", "Duplicate Function Name" ],
+      [ "unq_sys_func_sys_func_desc", "Duplicate Function Description" ],
+      [ "sys_func_sys_func_desc_key", "Duplicate Function Description" ]
+    ]
+  }    
+}

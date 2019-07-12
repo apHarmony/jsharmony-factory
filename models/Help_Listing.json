@@ -1,0 +1,32 @@
+{
+  "Help_Listing": {
+    "source_files_prefix":"{{Help_Listing}}",
+    "title":"Help Index",
+    "caption":["","Help","Help"],
+    "table":"{schema}.help__tbl",
+    "sqlwhere":"(help_listing_main=%%%TRUE%%%)",
+    "actions":"B", 
+    "roles": {"*":"B"},
+    "layout":"grid", 
+    "hide_system_buttons": ["help","export"],
+    "sort":["^help_seq","^help_title"], 
+    "samplerepeat":5,
+    "popup":[850,525],
+    "fields":[
+      {"name":"help_id","type":"bigint","key": 1,"datalock":{"cust_id":"always"},"control":"hidden"},
+      {"name":"help_seq","type":"int","actions":"B","control":"hidden"},
+      {"name":"help_target_code","type":"varchar","length":50,"foreignkey":1,"datalock":{"cust_id":"always"},"control":"hidden"},
+      {"name":"help_title","type":"varchar","length":"70","caption":"Help Module","controlstyle":"width:350px;","actions":"B","link":"update:Help__model","sample":"Test - General Information"}
+    ],
+    "oninit": "_this.ran = false; if('help_target_code' in _GET) xmodel.controller.grid.Data['help_target_code'] = _GET.help_target_code;",
+    "onload": "if(_this.ran) return true; _this.ran = true; var xgrid = xmodel.controller.grid; if(!('help_target_code' in xgrid.Data)) return true; if(xgrid.RowCount == 0){ delete xgrid.Data.help_target_code; delete jsh._GET.help_target_code; jsh.XPage.Select(undefined, callback); } else { XExt.navTo(jsh.$root('.xgrid_'+xmodel.class+'_placeholder a').first().prop('href')); } return false;"
+  },
+  "Client/Help_Listing": {
+    "inherits": "Help_Listing",
+    "roles": { "client": {"C*":"B"} },
+    "sqlwhere":"(help_listing_client=%%%TRUE%%%)",
+    "fields":[
+      {"name":"help_title","link":"update:Client/Help"}
+    ]
+  }
+}

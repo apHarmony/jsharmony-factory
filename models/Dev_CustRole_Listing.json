@@ -1,0 +1,40 @@
+{
+  "Dev/CustRole_Listing": {
+    "title":"Client User Roles",
+    "dev":1,
+    "table":"{schema}.cust_role",
+    "actions":"BIUD", 
+    "caption":[0,"Role","Roles"],
+    "layout":"grid", 
+    "sort":[{"cust_role_seq":"asc"},{"cust_role_name":"asc"}], 
+    "menu":"Dev/CustRole_Listing",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"cust_role_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"cust_role_seq","type":"smallint","actions": "BIU","control": "textbox_VS",
+       "validate":["Required","IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
+       "caption":"Seq","captionstyle": "text-align:right;"},
+      {"name":"cust_role_name","type":"varchar","length":16,"actions": "BIU","control": "textbox_S",
+       "validate":["Required"],
+       "caption":"Name"},
+      {"name":"cust_role_desc","type":"varchar","length":"255","actions":"BIU","control": "textbox_M",
+       "validate":["Required"],"caption":"Description"},
+      {"name":"cust_role_code","type":"varchar","length":"255","actions":"BIU","control": "textbox_S","caption":"Code"},
+      {"name":"cust_role_attrib","type":"varchar","length":"255","actions":"BIU","control": "textbox_S","caption":"Attribute"},
+      {"name":"cust_role_sts","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S",
+       "lov": {"sql":"select code_val, code_txt from {schema}.code_ahc order by code_seq,code_txt"},"validate":["Required"],"default":"ACTIVE",
+       "controlstyle":"width:70px;","caption":"Status"},
+      {"name":"privs","caption":"Menu Access","control":"html","value":"<img src='/images/icon_update.png' class='xicon' />","link":"update:Dev/CustRoleMenuSelection&cust_role_name"}
+    ],
+    "dberrors": [
+      [ "pk_cust_role", "Duplicate Role Name" ],
+      [ "cust_role_pkey", "Duplicate Role Name" ],
+      [ "unq_cust_role_cust_role_desc", "Duplicate Role Description" ],
+      [ "cust_role_cust_role_desc_key", "Duplicate Role Description" ],
+      [ "cust_user_role_cust_role_name_fkey", "Role Name consistency error" ]
+    ]
+  }    
+}

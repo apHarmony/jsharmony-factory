@@ -1,21 +1,21 @@
 {
-  "PE": {
-    "inherits":"PE_BASE",  
+  "Admin/SysUser": {
+    "inherits":"Base/Admin/SysUser",  
     "fields":[
-      {"name":"pe_photo","actions":""}
+      {"name":"sys_user_photo","actions":""}
     ]
   },
-  "PEL": {
-    "inherits":"PEL_BASE",  
-    "buttons":[{"link":"insert:PE_NEW"}],
+  "Admin/SysUser_Listing": {
+    "inherits":"Base/Admin/SysUser_Listing",  
+    "buttons":[{"link":"insert:Admin/SysUser_Insert"}],
     "fields":[
-      {"name":"pe_id","link":"update:PEW"},
-      {"name":"pe_name1","link":"update:PEW"}
+      {"name":"sys_user_id","link":"update:Admin/SysUser_Tabs"},
+      {"name":"sys_user_name1","link":"update:Admin/SysUser_Tabs"}
     ]
   },
-  "PE_NEW": {
-    "inherits": "PE",
+  "Admin/SysUser_Insert": {
+    "inherits": "Admin/SysUser",
     "title":"New System User",
-    "oninsert": "XExt.navTo(jsh._BASEURL+xmodel.module_namespace+'PEW?action=update&pe_id='+urlkeys.pe_id); jsh.XPage.RefreshParent(); return false;"
+    "oninsert": "XExt.navTo(jsh._BASEURL+xmodel.module_namespace+'Admin/SysUser_Tabs?action=update&sys_user_id='+urlkeys.sys_user_id); jsh.XPage.RefreshParent(); return false;"
   }
 }

@@ -1,6 +1,6 @@
 {
-  "DEV_OVERVIEW": {
-    "comment":"DEV_OVERVIEW",
+  "Dev/Overview": {
+    "comment":"Dev/Overview",
     "layout":"form", 
     "table":"",
     "caption":[0,"Developer Tools","Developer Tools"],

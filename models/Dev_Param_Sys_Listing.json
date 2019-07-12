@@ -1,0 +1,39 @@
+{
+  "Dev/Param_Sys_Listing": {
+    "title":"Developer (X) Settings",
+    "dev":1,
+    "table":"{schema}.param_sys",
+    "actions":"BIUD", 
+    "caption":[0,"Parameter","Parameters"],
+    "layout":"grid", 
+    "sort":["^param_sys_process","^param_sys_attrib"], 
+    "menu":"Dev/Param_Sys_Listing",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"param_sys_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"param_sys_process","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S",
+       "lov": {"sql":"select code_val, code_txt from {schema}.code_param_sys_process order by code_seq,code_txt",
+       "blank":1},"validate":["Required"],
+       "caption":"Process","captionstyle":"width:120px;text-align:right;"},
+      {"name":"param_sys_attrib","type":"varchar","length":16,"actions": "BIU","control": "dropdown_M",
+       "lov":{"sql2":"select code_val1 as %%%jsh.map.{{code_parent}}%%%, code_val2 as %%%jsh.map.{{code_val}}%%%, %%%jsh.map.{{code_txt}}%%% from {schema}.code2_param_sys_attrib order by code_seq,code_txt",
+       "blank": 1,"parent":"param_sys_process"},"validate":["Required"],
+       "caption":"Attribute"},
+      {"name":"param_desc","type":"varchar","length":"255","caption":"Description","actions":"B",
+       "sqlselect":"{schema}.get_param_desc(param_sys.param_sys_process, param_sys.param_sys_attrib)"},
+      {"name":"param_sys_val","type":"varchar","length":"256","validate":["Required"],"actions":"BIU","control":"textbox_M",
+       "caption":"Value"},
+      {"name":"param_sys_info","type":"varchar","length":"500","actions":"B","control":"textzoom",
+       "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
+       "sqlselect":"{schema}.log_audit_info(param_sys.param_sys_etstmp, param_sys.param_sys_euser, param_sys.param_sys_mtstmp, param_sys.param_sys_muser)",
+       "controlstyle":"width:48px;display:none;"}
+    ],
+    "dberrors": [
+      [ "pk_param_sys", "Duplicate Key (Process + Attribute)" ],
+      [ "param_sys_param_sys_process_param_sys_attrib_key", "Duplicate Key (Process + Attribute)" ]
+    ]
+  }    
+}

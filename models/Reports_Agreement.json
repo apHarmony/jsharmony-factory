@@ -11,11 +11,11 @@
     "template": "Agreement.ejs",
     "inherits": "Reports/TMPL_DEFAULT",
     "fields": [
-      {"name":"c_id","type":"bigint","datalock":{"c_id":"c_c_id"},"nl":1,
+      {"name":"cust_id","type":"bigint","datalock":{"cust_id":"cust_cust_id"},"nl":1,
           "control":"dropdown_L","actions": "B",
-          "lov": { "sql": "agreement_COD_C_ID", "datalock":{"c_id":"c_id"}, "blank": 1 },
+          "lov": { "sql": "agreement_code_cust_id", "datalock":{"cust_id":"cust_id"}, "blank": 1 },
           "validate": [ "Required" ],
-          "default": "js:XExt.UndefinedBlank(_GET['c_id'])",
+          "default": "js:XExt.UndefinedBlank(_GET['cust_id'])",
           "caption":"Company Name"},
       {"name": "a_name","type": "varchar","length": 72,"nl": 1,
         "control": "textbox","actions": "B",
@@ -34,17 +34,17 @@
         "onclick": "jsh.XPage.RunQueue();"}
     ],
     "reportdata" : {
-      "cms_agreement": { "sql": "select txt_val \"txt_val\" from jsharmony.txt where txt_process='CMS' and txt_attrib='Client/Agreement'", "nodatalock": ["c_id"] },
+      "cms_agreement": { "sql": "select txt_body \"txt_body\" from {schema}.txt__tbl where txt_process='CMS' and txt_attrib='Client/Agreement'", "nodatalock": ["cust_id"] },
       "C":{
-        "sql":"select c_id \"c_id\" from c where c_id=@c_id %%%DATALOCKS%%%",
+        "sql":"select cust_id \"cust_id\" from cust where cust_id=@cust_id %%%DATALOCKS%%%",
         "children":{
           "NTYPE":{
-            "bindings":{"c_id":"c_id"},
-            "sql":"select distinct n.c_id \"c_id\",n_type \"n_type\" from jsharmony.n inner join c on c.c_id=n.c_id where n.c_id=@c_id %%%DATALOCKS%%%",
+            "bindings":{"cust_id":"cust_id"},
+            "sql":"select distinct note__tbl.cust_id \"cust_id\",note_type \"note_type\" from {schema}.note__tbl inner join cust on cust.cust_id=note__tbl.cust_id where note__tbl.cust_id=@cust_id %%%DATALOCKS%%%",
             "children":{
-              "N":{
-              "bindings":{"c_id":"c_id","n_type": "n_type"},
-              "sql":"agreement_report_N"
+              "Note__model":{
+              "bindings":{"cust_id":"cust_id","note_type": "note_type"},
+              "sql":"agreement_report_note"
               }
             }
           }
@@ -52,8 +52,8 @@
       }
     },
     "jobqueue": {
-      "sql": "select 'CLIENT' as rqst_source,'C' as d_scope,c_id as d_scope_id,'agreement_doc_scope' as d_ctgr,'Cust Agreement' as d_desc,c_id from c where c_id=@c_id %%%DATALOCKS%%%"
-        //'C' as n_scope, c_id as n_scope_id, 'S' as n_type, 'Test Note' n_note
+      "sql": "select 'CLIENT' as job_source,'C' as doc_scope,cust_id as doc_scope_id,'agreement_doc_scope' as doc_ctgr,'Cust Agreement' as doc_desc,cust_id from cust where cust_id=@cust_id %%%DATALOCKS%%%"
+        //'C' as note_scope, cust_id as note_scope_id, 'S' as note_type, 'Test Note' note_body
         //'test@test.com' as email_to,null as email_cc,null as email_bcc,'RCVD' as email_txt_attrib,1 as email_attach
         //'+12223334444' as sms_to, 'Client/Welcome' as sms_txt_attrib
     }

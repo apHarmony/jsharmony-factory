@@ -1,5 +1,5 @@
 {
-  "NWUCS_BASE": {
+  "Base/Note_UserCustSys_Tabs": {
     "layout":"form", 
 //    "table":"S",
     "caption":["","Note","Notes"],
@@ -7,20 +7,20 @@
     "unbound": 1,
     "tabpos":"top",
     "tabs": [
-      {"name":"User","target":"NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
-      {"name":"Cust","target":"NL_C","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
-      {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+      {"name":"User","target":"Note_User_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'U'"}},
+      {"name":"Cust","target":"Note_Cust_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'C'"}},
+      {"name":"System","target":"Note_Sys_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'S'"}}
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-	  {"name":"n_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
-      {"name":"n_scope_id", "type": "bigint","foreignkey":1,"actions":""}
+	  {"name":"note_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
+      {"name":"note_scope_id", "type": "bigint","foreignkey":1,"actions":""}
     ]
   },
-  "NWUCS":{
-    "inherits":"NWUCS_BASE"
+  "Note_UserCustSys_Tabs":{
+    "inherits":"Base/Note_UserCustSys_Tabs"
   },
-  "NWUS": {
+  "Note_UserSys_Tabs": {
     "layout":"form", 
 //    "table":"S",
     "caption":["","Note","Notes"],
@@ -28,16 +28,16 @@
     "tabpos":"top",
     "unbound": 1,
     "tabs": [
-      {"name":"User","target":"NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
-      {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+      {"name":"User","target":"Note_User_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'U'"}},
+      {"name":"System","target":"Note_Sys_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'S'"}}
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-      {"name":"n_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
-      {"name":"n_scope_id", "type": "bigint","foreignkey":1,"actions":""}
+      {"name":"note_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
+      {"name":"note_scope_id", "type": "bigint","foreignkey":1,"actions":""}
     ]
   }, 
-  "NWCS": {
+  "Note_CustSys_Tabs": {
     "layout":"form", 
 //    "table":"S",
     "caption":["","Note","Notes"],
@@ -45,16 +45,16 @@
     "tabpos":"top",
     "unbound": 1,
     "tabs": [
-      {"name":"Cust","target":"NL_C","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
-      {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+      {"name":"Cust","target":"Note_Cust_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'U'"}},
+      {"name":"System","target":"Note_Sys_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'S'"}}
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-      {"name":"n_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
-      {"name":"n_scope_id", "type": "bigint","foreignkey":1,"actions":""}
+      {"name":"note_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
+      {"name":"note_scope_id", "type": "bigint","foreignkey":1,"actions":""}
     ]
   }, 
-  "NWCSC_BASE":{
+  "Base/Note_CustSys_Tabs_Browse":{
     "layout":"form",
 //    "table":"S",
     "caption":["","Note","Notes"],
@@ -65,19 +65,19 @@
       "client":{ }
     },
     "tabs": [
-      {"name":"Client","target":"NL_CC","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
-      {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+      {"name":"Client","target":"Client/Note_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'C'"}},
+      {"name":"System","target":"Note_Sys_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'S'"}}
     ],
     "tabpanelstyle": "min-width:900px;",
       "fields":[
-        {"name":"n_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
-        {"name":"n_scope_id", "type": "bigint","foreignkey":1,"actions":""}
+        {"name":"note_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
+        {"name":"note_scope_id", "type": "bigint","foreignkey":1,"actions":""}
       ]
   },
-  "NWCSC":{
-    "inherits":"NWCSC_BASE"
+  "Client/Note_CustSys_Tabs":{
+    "inherits":"Base/Note_CustSys_Tabs_Browse"
   },
-  "NWCSCB":{
+  "Note_CustSys_Tabs_Browse":{
     "layout":"form", 
 //    "table":"S",
     "caption":["","Note","Notes"],
@@ -85,13 +85,13 @@
     "tabpos":"top",
     "unbound": 1,
     "tabs": [
-      {"name":"Client","target":"NL_CB","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'C'"}},
-      {"name":"System","target":"NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+      {"name":"Client","target":"Note_Cust_Listing_Browse","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'C'"}},
+      {"name":"System","target":"Note_Sys_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'S'"}}
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-      {"name":"n_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
-      {"name":"n_scope_id","type":"bigint","foreignkey":1 ,"actions":""}
+      {"name":"note_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
+      {"name":"note_scope_id","type":"bigint","foreignkey":1 ,"actions":""}
     ]
   }
 }

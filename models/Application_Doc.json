@@ -1,29 +1,29 @@
 {
-  "GPE_DL": {
-    "inherits": "DL",
-    "table":"jsharmony.v_dl",
-    "title":"Documents - <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
+  "Admin/SysUser_Doc_Listing": {
+    "inherits": "Doc_Listing",
+    "table":"{schema}.v_doc",
+    "title":"Documents - <#=bcrumbs.sys_user_lname#>, <#=bcrumbs.sys_user_fname#>",
     "roles": {"O_B":"B","O_X":"*"},
-    "buttons":[{"link":"insert:GPE_D","bindings":{"d_scope_id":"d_scope_id","d_scope":"d_scope"}}],
+    "buttons":[{"link":"insert:Admin/SysUser_Doc","bindings":{"doc_scope_id":"doc_scope_id","doc_scope":"doc_scope"}}],
     "breadcrumbs":{
-      "sql": ["select pe_fname, pe_lname from jsharmony.pe where pe_id=@d_scope_id"],
-      "sql_params": ["d_scope","d_scope_id"]
+      "sql": ["select sys_user_fname, sys_user_lname from {schema}.sys_user where sys_user_id=@doc_scope_id"],
+      "sql_params": ["doc_scope","doc_scope_id"]
     },
     "fields":[
-      {"name":"d_scope","foreignkey":1},
-      {"name":"d_utstmp","link":"update:GPE_D"},
-      {"name":"btndownload","value": "<a href='<%=jsh._BASEURL%>_dl/<%=xmodel.module_namespace%>GPE_D/<%=data['d_id']%>/d_file'>Download</a>"},
-      {"name":"btndetails","link":"update:GPE_D"}
+      {"name":"doc_scope","foreignkey":1},
+      {"name":"doc_uptstmp","link":"update:Admin/SysUser_Doc"},
+      {"name":"btndownload","value": "<a href='<%=jsh._BASEURL%>_dl/<%=xmodel.module_namespace%>Admin/SysUser_Doc/<%=data['doc_id']%>/doc_file'>Download</a>"},
+      {"name":"btndetails","link":"update:Admin/SysUser_Doc"}
     ]   
   },
-  "GPE_D": {
-    "inherits": "D",
-    "table":"jsharmony.d",
-    "title":"Document - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
+  "Admin/SysUser_Doc": {
+    "inherits": "Doc__model",
+    "table":"{schema}.doc__tbl",
+    "title":"Document - User: <#=bcrumbs.sys_user_lname#>, <#=bcrumbs.sys_user_fname#>",
     "breadcrumbs":{
-      "sql": ["select pe_fname, pe_lname from jsharmony.pe ",
-              " where pe_id=coalesce(@d_scope_id,(select d_scope_id from jsharmony.d where d_id = @d_id))"],
-      "sql_params": ["d_scope_id","d_scope"]
+      "sql": ["select sys_user_fname, sys_user_lname from {schema}.sys_user ",
+              " where sys_user_id=coalesce(@doc_scope_id,(select doc_scope_id from {schema}.doc__tbl where doc_id = @doc_id))"],
+      "sql_params": ["doc_scope_id","doc_scope"]
     },
     "roles": {"O_B":"B","O_X":"*"}
   }

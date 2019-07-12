@@ -1,0 +1,42 @@
+{
+  "Help__model": {
+  "title":"Help",
+  "caption":["","Help","Help"],
+  "table":"{schema}.help__tbl",
+  "actions":"B", 
+  "roles": {"*":"B"},
+  "layout":"form", 
+  "popup":[850,525],
+  "hide_system_buttons": ["help"],
+  "oninit": "xmodel.controller.form.Data.OnDBError = function(error){ if(error.Number==-1){ XExt.Alert('No help found for this screen',function(){ window.close(); }); return false; } }",
+  "onload": "jsh.$root('.help_text_disp').html(xmodel.controller.form.Data.help_text);",
+  "fields":[
+    {"name":"help_id","type":"bigint","key": 1,"datalock":{"cust_id":"always"},"control":"hidden"},
+    {"name":"help_title","type":"varchar","length":70,"actions":"BIU",
+      "control":"textbox_VL","sample":"Test - General Information","controlstyle":"background-color:#fff;border:0;font-size:23px;padding:0 0 10px 0;margin:0;",
+      "caption":"","captionstyle":"width:60px;"},
+    {"name":"help_text","type":"varchar","length":99999,"actions":"BIU","nl":1,
+      "control":"textarea","controlstyle":"display:none;width:590px;height:400px;","sample":"Here goes the text ...........",
+      "caption":"","captionstyle":"width:60px;height:400px;vertical-align:top;padding-top:3px;"},
+    {"control": "html","value": "<div class='help_text_disp' style='padding:15px 0;border-top:1px solid #aaa;'></div>"}
+  ]
+  },	
+  "Help_Code": {
+    "inherits":"Help__model",
+    "querystring": { "&action": "browse" },
+    "fields":[
+      {"name":"help_id","__REMOVE__":1},
+      {"name":"help_target_code","type":"varchar","length":50,"key":1,"datalock":{"cust_id":"always"},"control":"hidden"}
+    ]
+  },
+  "Client/Help": {
+    "inherits": "Help__model",
+    "roles": { "client": {"C*":"B"} },
+    "sqlwhere":"(help_listing_client=%%%TRUE%%%)"
+  },
+  "Client/Help_Code": {
+    "inherits":"Help_Code",
+    "roles": { "client": {"C*":"B"} },
+    "sqlwhere":"(help_listing_client=%%%TRUE%%%)"
+  }
+}

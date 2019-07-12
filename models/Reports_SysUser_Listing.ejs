@@ -25,7 +25,7 @@ body {
 <tr>
 <td colspan=5>
 <div class="report_header">
-  <br/>User Status:&nbsp; <%=data.params[0].pe_sts_txt%> <br />
+  <br/>User Status:&nbsp; <%=data.params[0].sys_user_sts_txt%> <br />
 </div>
 </td>
 </tr>
@@ -45,11 +45,11 @@ body {
 <!-- For Each user Record -->
 <% _.each(data.users,function(user,i){ %>
   <tr>
-    <td>{{user.pe_lname||''}}</td>
-    <td>{{user.pe_fname||''}}</td>
-    <td>{{user.pe_sts||''}}</td>
-    <td>{{ejsext.phone_format(user.pe_bphone)||''}}</td>
-    <td>{{user.pe_email||''}}</td>
+    <td>{{user.sys_user_lname||''}}</td>
+    <td>{{user.sys_user_fname||''}}</td>
+    <td>{{user.sys_user_sts||''}}</td>
+    <td>{{ejsext.phone_format(user.sys_user_bphone)||''}}</td>
+    <td>{{user.sys_user_email||''}}</td>
   </tr>
   <tr>
     <td colspan=5><hr width="100%" /></td>

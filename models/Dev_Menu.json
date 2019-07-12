@@ -1,0 +1,75 @@
+{
+  "Dev/Menu": {
+    "title":"",
+    "dev":1,
+    "table":"{schema}.menu__tbl",
+    "actions":"BU", 
+    "caption":[0,"Menu Item","Menu Items"],
+    "formstyle": "height:375px;",
+    "layout":"form", 
+    "menu":"dev",
+    "fields":[
+      {"name":"menu_id_auto","type":"bigint","key":1,"control":"hidden"},
+      {"name":"menu_name","type":"varchar","length":255,"actions": "BIU","control": "textbox_M",
+       "validate":["Required"],"caption":"Menu ID","captionstyle": "text-align:right;width:130px;"},
+      {"name":"menu_desc","type":"varchar","length":"255","actions":"BIU","control": "textbox_M","nl":1,
+       "validate":["Required"],"caption":"Display Name"},
+      {"name":"menu_cmd","type":"varchar","length":255,"actions": "BIU","control": "textbox_M","caption":"Model / Command","nl":1,
+       "popuplov": {
+          "target":  "Admin/Model_Popup_Listing", "{{code_val}}": "model_id", "popupstyle": "height:400px;width:770px;",
+          "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
+          "popupiconstyle":"position:relative;top:5px;"
+        }
+       },
+      {"name":"menu_subcmd","type":"varchar","length":"255","actions":"BIU","control": "textbox_M","nl":1,
+       "caption":"Querystring / Anchor"},
+      {"name":"menu_seq","type":"int","actions": "BIU","control": "textbox_VS","nl":1,
+       "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;",
+       "sqlsort":"(coalesce(coalesce(menu_seq,menu_id),0))",
+       "caption":"Sequence #"},
+      {"name":"menu_sts","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S","nl":1,
+       "lov": {"sql":"select code_val, code_txt from {schema}.code_ahc order by code_seq,code_txt"},"validate":["Required"],"default":"ACTIVE",
+       "controlstyle":"width:70px;","caption":"Status"},
+      {"name":"privs","actions":"B","control": "label","nl":1,"caption":"Privileges",
+        "value": ["<a href=\"<#=((data['menu_group']=='S')?jsh._BASEURL+xmodel.module_namespace+'Dev/SysMenuRoleSelection':jsh._BASEURL+xmodel.module_namespace+'Dev/CustMenuRoleSelection')#>?action=update&amp;menu_id=<#=data['menu_id']#>\"",
+                  " class=\"privs_link xform_ctrl xelemX_SML xform_label uneditable\"",
+                  " onclick=\"window.open(<#=instance#>.$(this).attr('href'),'_blank','width=1200,height=700,resizable=1,scrollbars=1');return false;\"",
+                  "><#-((data['menu_id_auto'])?'<img src=\"/images/icon_update.png\" class=\"xicon\">':'')#></a>"]
+      },
+      {"name":"menu_group","type":"char","length":1,"control":"hidden"},
+      {"name":"menu_id","type":"bigint","control":"hidden"},
+      {"name":"menu_id_parent","type":"bigint","control":"hidden"},
+
+
+
+      //{"control":"html","value":"<div style='padding-top:20px;padding-bottom:3px;font-weight:bold;width:120px;text-align:right;'>Menu Layout</div>"  },
+
+      //{"name":"menu_group","type":"char","length":1,"actions": "BIU","control":"dropdown","captionstyle": "text-align:right;width:120px;",
+      // "validate":["Required","RegEx:'/S|C/','be one of the following S-System, C-Customer'"],
+      // "lov": { "sql": "menu_group_lov" },
+      // "controlstyle":"width:80px;","default":"S",
+      // "caption":"Menu Type","caption_ext":"User Type"},
+      //{"name":"menu_id","type":"bigint","actions": "BIU","control": "textbox_VS","nl":1,
+      // "validate":["Required","IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;width:60px;",
+      // "caption":"Item ID #","captionstyle": "text-align:right;width:120px;"},
+      //{"name":"menu_id_parent","type":"bigint","actions": "BIU","control": "textbox_VS","nl":1,
+      // "validate":["IsNumeric:true","IsDecimal:0","MinValue:0"],"controlstyle": "text-align:right;width:60px;",
+      // "sqlsort":"(coalesce(menu_id_parent,0))",
+      // "caption":"Parent ID #"},
+
+       {"control":"html","value":"<div style='padding-bottom:10px;'></div>" }
+    ],
+    "dberrors": [
+      [ "unq_menu__tbl_menu_id", "Duplicate ID" ],
+      [ "menu__tbl_menu_id_key", "Duplicate ID" ],
+      [ "unq_menu__tbl_menu_name", "Duplicate Name" ],
+      [ "menu__tbl_menu_name_key", "Duplicate Name" ],
+      [ "unq_menu__tbl_menu_desc", "Duplicate Description within Parent" ],
+      [ "menu__tbl_menu_id_parent_menu_desc_key", "Duplicate Description within Parent" ],
+      [ "fk_menu__tbl_menu__tbl", "Non Existing Parent" ],
+      [ "menu__tbl_menu_id_parent_fkey", "Non Existing Parent" ],
+      [ "ck_menu__tbl_menu_group", "User Type values: S-System, C-Customer" ],
+      [ "fk_sys_menu_role_menu__tbl", "This ID is used in SRM - cannot be modified or deleted" ]
+    ]
+  }
+}

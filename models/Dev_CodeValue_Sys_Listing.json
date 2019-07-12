@@ -1,0 +1,52 @@
+{
+  "Dev/CodeValue_Sys_Listing": {
+    "source_files_prefix":"Dev_CodeValue_Sys_Listing",
+    "layout":"grid", 
+    "table":"",
+    "caption":[0,"Code","Codes"],
+    "actions":"BIUD", 
+    "sort":["^code_seq","^code_val"], 
+    "menu":"Dev/Code_Sys_Listing",
+    "roles": {"X_B":"B","DADMIN":"*"},
+    "breadcrumbs": { "parents": ["Dev/Code_Sys_Listing"] },
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "bindings":{"code_name":"code_name","code_schema":"code_schema"},
+  	"fields":[
+	    {"name":"code_sys_id","type":"bigint","actions":"B","key":1,"control":"hidden"}, //Previously had "F"
+      {"name":"code_name","type":"varchar","foreignkey":1,"actions":"IUD","sqlwhere":"1=1",
+       "sqlupdate":"","sqlinsert":"","length":128,"control":"hidden"},
+      {"name":"code_schema","type":"varchar","foreignkey":1,"actions":"IUD","sqlwhere":"1=1",
+       "sqlupdate":"","sqlinsert":"","length":128,"control":"hidden"},
+	    {"name":"code_seq","type":"smallint","actions":"BIU","control":"textbox_VS","format":["decimal","0"],
+	     "validate":["IsNumeric"],"controlstyle":"text-align:right;","caption":"Seq"},
+	    {"name":"code_val","type":"varchar","length":"32","actions":"BI","control":"textbox_S",
+	     "validate":["Required"],"caption":"Value"},
+      {"name":"code_txt","type":"varchar","length":"50","actions":"BIU","control":"textbox_S",
+       "validate":["Required"],"caption":"Description"},
+      {"name":"code_code","type":"varchar","length":"50","actions":"BIU","control":"textbox_S",
+       "caption":"Code"},
+      {"name":"code_attrib","type":"varchar","length":"50","actions":"BIU","control":"textbox_S",
+       "caption":"Attrib"},
+      {"name":"code_notes","type":"varchar","length":"255","actions":"BIU","control":"textbox_M",
+       "caption":"Annotations"},
+      {"name":"code_end_dt","type":"date","actions":"BIU","validate": ["IsDate"],
+       "control":"date",
+       "controlstyle":"width:60px;","caption":"Term. Dt","format":["date","MM/DD/YY"]},
+      {"name":"code_end_reason","type":"varchar","length":"50","actions":"BIU","control":"textbox_M",
+       "controlstyle":"width:130px;","caption":"Termination Comment"},
+      {"name":"info","type":"varchar","length":"500","actions":"B","control":"textzoom",
+       "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
+       "sqlselect":"({schema}.log_audit_info(code_etstmp,code_euser,code_mtstmp,code_muser))",
+       "controlstyle":"width:48px;display:none;"}
+	  ],
+    "dberrors": [
+      ["/unq_code_sys_.*_code_val/","CODE Value has to be unique"],
+      ["_code_val_key","CODE Value has to be unique"],
+      ["_code_txt_key","CODE Description has to be unique"],
+      ["/unq_code_sys_.*_code_txt/","CODE Description has to be unique"]
+    ]
+  }
+}

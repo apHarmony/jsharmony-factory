@@ -1,0 +1,32 @@
+{
+  "Dev/HelpTarget_Listing": {
+    "title":"Help Targets",
+    "dev":1,
+    "table":"{schema}.help_target",
+    "actions":"BIUD", 
+    "caption":[0,"Help Target","Help Targets"],
+    "layout":"grid", 
+    "sort":[{"help_target_desc":"asc"}], 
+    "menu":"Dev/HelpTarget_Listing",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"help_target_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"help_target_code","type":"varchar","length":50,"actions": "BIU","control": "textbox_L",
+       "caption":"Code",
+       "popuplov": {"target":  "Admin/Model_Popup_Listing", "{{code_val}}": "model_id", "popupstyle": "height:400px;width:770px;",
+          "onpopup": "jsh.App[popupmodelid].ShowUserModels(popupmodelid, parentmodelid, fieldid, onComplete);",
+          "popupiconstyle":"position:relative;top:5px;"}},
+      {"name":"help_target_desc","type":"varchar","length":"50","validate":["Required","MaxLength:50"],"actions":"BIU",
+       "control":"textbox_L", "caption":"Name"}
+    ],
+    "oninit":"jsh.$root('.xtbl.xelem'+xmodel.class).before('<div>** Help Targets should reference the Base Model (without Model Parents), unless a custom model.helpid is used</div>');",
+    "dberrors": [
+      [ "help_target_help_target_code_key", "Duplicate Help Target Code" ],
+      [ "help_target_help_target_desc_key", "Duplicate Help Target Name" ],
+      [ "help__tbl_help_target_code_fkey", "Cannot delete. This Help Target already referred by Help Module" ]
+    ]
+  }    
+}

@@ -1,0 +1,41 @@
+{
+  "Admin/Param_User_Listing": {
+    "title":"User Settings",
+	  "table":"{schema}.param_user",
+	  "sqlwhere":"(sys_user_id=(select my_sys_user_id from {schema}.v_my_user))",
+	  "actions":"BIUD", 
+	  "caption":[0,"Parameter","Parameters"],
+    "layout":"grid", 
+	  "sort":["^param_user_process","^param_user_attrib"], 
+	  "menu":"Admin/Param_User_Listing",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+	  "fields":[
+	    {"name":"param_user_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"sys_user_id","type":"bigint","actions":"BI","control":"hidden",
+       "default": "js:jsh.globalparams.user_id"},
+      {"name":"param_user_process","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S",
+       "lov": {"sql":"select code_val, code_txt from {schema}.code_param_user_process order by code_seq,code_txt",
+       "blank":1},"validate":["Required"],"comment":"hidden",
+       "caption":"Process","captionstyle":"width:120px;text-align:right;"},
+      {"name":"param_user_attrib","type":"varchar","length":16,"actions": "BIU","control": "dropdown_M",
+       "lov":{"sql2":"select code_val1 as %%%jsh.map.{{code_parent}}%%%, code_val2 as %%%jsh.map.{{code_val}}%%%, %%%jsh.map.{{code_txt}}%%% from {schema}.code2_param_user_attrib order by code_seq,code_txt",
+       "blank": 1,"parent":"param_user_process"},"validate":["Required"],
+       "caption":"Attribute","comment":"hidden"},
+      {"name":"param_desc","type":"varchar","length":"255","caption":"Description","actions":"B",
+       "sqlselect":"{schema}.get_param_desc(param_user.param_user_process, param_user.param_user_attrib)"},
+      {"name":"param_user_val","type":"varchar","length":"256","validate":["Required"],"actions":"BIU","control":"textbox_L",
+       "caption":"Value"},
+      {"name":"param_user_info","type":"varchar","length":"500","actions":"B","control":"textzoom",
+       "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
+       "sqlselect":"{schema}.log_audit_info(param_user.param_user_etstmp, param_user.param_user_euser, param_user.param_user_mtstmp, param_user.param_user_muser)",
+       "controlstyle":"width:48px;display:none;"}
+	],
+    "dberrors": [
+      [ "pk_param_user", "Duplicate Key (Process + Attribute)" ],
+      [ "param_user_param_user_process_param_user_attrib_key", "Duplicate Key (Process + Attribute)" ]
+    ]
+  }    
+}

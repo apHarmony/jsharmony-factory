@@ -1,0 +1,87 @@
+{
+  "Base/Note_Listing": {
+    "layout":"grid", 
+    "table":"{schema}.note__tbl",
+    "actions":"B", 
+    "sort":["vnote_etstmp"], 
+    "caption":[0,"Note","Notes"],
+    "buttons":[{"link":"insert:Note__model","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"note_type"}}],
+    "fields":[
+	    {"name":"note_id","type":"bigint","key":1,"datalock":{"cust_id":"note_id"},"control":"hidden"},
+	    {"name":"note_scope","type":"varchar","length":32,"foreignkey":1,"datalock":{"cust_id":"note_scope"},"control":"hidden"},
+	    {"name":"note_scope_id","type":"bigint","foreignkey":1,"datalock":{"cust_id":"always"},"control":"hidden"},
+	    {"name":"note_etstmp","type":"datetime","length":"7","format":"tstmp","caption":"Posted","actions":"B",
+       "link":"update:Note__model"},
+	    {"name":"note_type","type":"varchar","length":32,"foreignkey":1,"datalock":{"cust_id":"note_type"},"control":"hidden"},
+	    {"name":"note_sts","type":"varchar","length":32,"caption":"S","caption_ext":"Status","actions":"B"},
+      {"name":"note_euser_fmt","type":"varchar","length":120,"caption":"Author","actions":"B",
+       "sqlselect":"({schema}.my_db_user_fmt(note_euser))"},
+      {"name":"title_head","type":"varchar","length":32,"actions":""},
+      {"name":"cust_name_ext","type":"varchar","length":255,"actions":""},
+      {"name":"item_name","type":"varchar","length":120,"actions":""},
+	  {"name":"title_detail","type":"varchar","length":32,"caption":"Record","actions":""},
+	  {"name":"note_body","type":"varchar","length":"9999999","caption":"Note","actions":"B","controlstyle":"width:540px;"}
+	]
+  },
+  "Note_Listing": {
+    "inherits":"Base/Note_Listing"
+  },  
+  "Base/Note_User_Listing": {
+    "inherits": "Note_Listing",
+    "actions":"B", 
+    "title":"User Notes",
+    "caption":[0,"Note","User Notes"]
+  },
+  "Base/Note_Cust_Listing": {
+    "inherits": "Note_Listing",
+    "actions":"B", 
+    "title":"Customer Notes",
+    "caption":[0,"Note","Customer Notes"],
+    "buttons":[]
+  },
+  "Base/Note_Sys_Listing": {
+    "inherits": "Note_Listing",
+    "actions":"B", 
+    "title":"System Notes",
+    "caption":[0,"Note","System Notes"],
+    "roles": {
+      "main":{"X_B":"B","X_X":"B"},
+      "client":{"CX_B":"B","CX_X":"B","CSYSADMIN":"B"}
+    },
+    "buttons":[],
+    "fields": [
+      {"name": "note_euser_fmt", "actions":""},
+      {"name":"note_etstmp", "link":"update:Note_Browse"}
+    ]
+  },
+  "Base/Client/Note_Listing": {
+    "inherits": "Note_Listing",
+    "actions":"B", 
+    "title":"Customer Notes",
+    "caption":[0,"Note","Customer Notes"],
+    "roles": {
+      "client": {"CX_B":"B","CX_X":"*","CSYSADMIN":"*"}
+    }
+  },
+  "Base/Note_Cust_Listing_Browse": {
+    "inherits": "Note_Cust_Listing",
+    "fields": [
+      {"name":"note_etstmp", "link":"update:Note_Browse"}
+    ]
+  },
+  "Note_User_Listing": {
+    "inherits": "Base/Note_User_Listing"
+  },
+  "Note_Cust_Listing": {
+    "inherits": "Base/Note_Cust_Listing"
+  },
+  "Note_Sys_Listing": {
+    "inherits": "Base/Note_Sys_Listing"
+  },
+  "Client/Note_Listing": {
+    "inherits": "Base/Client/Note_Listing"
+  },
+  "Note_Cust_Listing_Browse": {
+    "inherits": "Base/Note_Cust_Listing_Browse"
+  }
+}

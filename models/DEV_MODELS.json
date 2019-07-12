@@ -1,13 +1,13 @@
 {
-  "DEV_MODELS": {
-    "comment":"DEV_MODELS",
-    "source_files_prefix":"DEV_MODELS",
+  "Dev/Models": {
+    "comment":"Dev/Models",
+    "source_files_prefix":"Dev_Models",
     "title":"Model Viewer",
     "table":"",
     "actions":"B", 
     "layout":"exec", 
     "dev":1,
-    "menu":"DEV_MODELS",
+    "menu":"Dev/Models",
     "caption": [ "", "Model Viewer", "Model Viewer" ],
     "hide_system_buttons":["print","help"],
     "fields":[	  ],

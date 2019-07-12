@@ -1,0 +1,22 @@
+{
+  "Admin/SysUser_Tabs": {
+    "layout": "form", 
+    "title": "System User - <#=data.sys_user_lname#>, <#=data.sys_user_fname#>",
+    "table": "{schema}.sys_user",
+    "actions": "B", 
+    "caption": [ 0, "User", "Users" ],
+    "menu": "Admin/SysUser_Listing",
+	"tabpos":"top",
+    "tabs":[
+      {"name":"General","target":"Admin/SysUser","bindings":{"sys_user_id":"sys_user_id"}},
+      {"name":"Documents","target":"Admin/SysUser_Doc_Listing","bindings":{"doc_scope_id":"sys_user_id","doc_scope":"'sys_user_code'"}},
+      {"name":"Notes","target":"Admin/SysUser_Note_UserSys_Tabs","bindings":{"note_scope_id":"sys_user_id","note_scope":"'sys_user_code'"}}
+    ],
+	"popup":[1100,900],
+	"fields":[
+      {"name":"sys_user_id","type":"bigint","key":1,"datalock":{"cust_id":"sys_user_id"},"control":"hidden"},
+      {"name":"sys_user_fname","type":"varchar","actions":"B","control":"hidden"},
+      {"name":"sys_user_lname","type":"varchar","actions":"B","control":"hidden"}
+	]
+  }
+}

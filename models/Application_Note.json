@@ -1,48 +1,48 @@
 {
-  "GPE_NWUS": {
-    "inherits": "NWUS",
+  "Admin/SysUser_Note_UserSys_Tabs": {
+    "inherits": "Note_UserSys_Tabs",
     "roles": {"O_B":"B","O_X":"*"},
     "tabs": [
-      {"name":"User","target":"GPE_NL_U","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'U'"}},
-      {"name":"System","target":"GPE_NL_S","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"'S'"}}
+      {"name":"User","target":"Admin/SysUser_Note_User_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'U'"}},
+      {"name":"System","target":"Admin/SysUser_Note_Sys_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'S'"}}
     ]
   },
-   "GPE_NL_U": {
-    "inherits": "NL_U",
-    "table":"jsharmony.v_nl",
+   "Admin/SysUser_Note_User_Listing": {
+    "inherits": "Note_User_Listing",
+    "table":"{schema}.v_note",
     "roles": {"O_B":"B","O_X":"*"},
-    "buttons":[{"link":"insert:GPE_N","bindings":{"n_scope_id":"n_scope_id","n_scope":"n_scope","n_type":"n_type"}}],
+    "buttons":[{"link":"insert:Admin/SysUser_Note","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"note_type"}}],
     "fields":[
-      {"name":"n_etstmp","link":"update:GPE_N"}
+      {"name":"note_etstmp","link":"update:Admin/SysUser_Note"}
     ]   
   },
-  "GPE_NL_S": {
-    "inherits": "NL_S",
-    "table":"jsharmony.v_nl",
+  "Admin/SysUser_Note_Sys_Listing": {
+    "inherits": "Note_Sys_Listing",
+    "table":"{schema}.v_note",
     "roles": {"O_B":"B","O_X":"*"},
     "fields":[
-      {"name":"n_etstmp","link":"update:GPE_NB"}
+      {"name":"note_etstmp","link":"update:Admin/SysUser_Note_Browse"}
     ]   
   },
-   "GPE_N": {
-    "inherits": "N",
-    "table":"jsharmony.n",
-    "title":"Note - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
+   "Admin/SysUser_Note": {
+    "inherits": "Note__model",
+    "table":"{schema}.note__tbl",
+    "title":"Note - User: <#=bcrumbs.sys_user_lname#>, <#=bcrumbs.sys_user_fname#>",
     "breadcrumbs":{
-      "sql": ["select pe_fname, pe_lname from jsharmony.pe ",
-              " where pe_id=coalesce(@n_scope_id,(select n_scope_id from jsharmony.n where n_id = @n_id))"],
-      "sql_params": ["n_scope_id","n_scope"]
+      "sql": ["select sys_user_fname, sys_user_lname from {schema}.sys_user ",
+              " where sys_user_id=coalesce(@note_scope_id,(select note_scope_id from {schema}.note__tbl where note_id = @note_id))"],
+      "sql_params": ["note_scope_id","note_scope"]
     },
     "roles": {"O_B":"B","O_X":"*"}
   },
-   "GPE_NB": {
-    "inherits": "NB",
-    "table":"jsharmony.n",
-    "title":"Note - User: <#=bcrumbs.pe_lname#>, <#=bcrumbs.pe_fname#>",
+   "Admin/SysUser_Note_Browse": {
+    "inherits": "Note_Browse",
+    "table":"{schema}.note__tbl",
+    "title":"Note - User: <#=bcrumbs.sys_user_lname#>, <#=bcrumbs.sys_user_fname#>",
     "breadcrumbs":{
-      "sql": ["select pe_fname, pe_lname from jsharmony.pe ",
-              " where pe_id=coalesce(@n_scope_id,(select n_scope_id from jsharmony.n where n_id = @n_id))"],
-      "sql_params": ["n_scope_id","n_scope"]
+      "sql": ["select sys_user_fname, sys_user_lname from {schema}.sys_user ",
+              " where sys_user_id=coalesce(@note_scope_id,(select note_scope_id from {schema}.note__tbl where note_id = @note_id))"],
+      "sql_params": ["note_scope_id","note_scope"]
     },
     "roles": {"O_B":"B","O_X":"*"}
   }

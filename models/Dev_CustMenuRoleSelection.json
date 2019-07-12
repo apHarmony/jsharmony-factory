@@ -1,0 +1,20 @@
+{
+  "Dev/CustMenuRoleSelection": {
+    "dev":1,
+    "layout": "form", 
+    "title":"",
+    "table": "{schema}.menu__tbl",
+    "actions": "B", 
+    "caption": [ 0, "Item", "Items" ],
+    "menu": "dev",
+    "tabpos":"top",
+    "tabpanelstyle": "min-width:1000px;",
+    "popup":[1050,700],
+    "tabs":[
+      {"name":"SELECTOR","caption": "Client Menu Item Privileges","target":"Dev/CustMenuRoleSelection_Role","bindings":{"menu_id":"menu_id"}}
+    ],
+    "fields":[
+      {"name":"menu_id","type":"bigint","actions":"B","key":1,"control":"hidden"}
+    ]
+  }  
+}

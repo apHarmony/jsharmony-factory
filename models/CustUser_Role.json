@@ -1,0 +1,31 @@
+{
+  "Base/CustUser_Role": {
+    "layout":"multisel", 
+    "table":"{schema}.v_cust_user_nostar",
+    "title":"",
+    "caption":["","Role","Roles"],
+    "actions":"BU",
+    "roles": {
+      "main": { "SYSADMIN":"*" },
+      "client": {"CSYSADMIN":"*"}
+    },
+    "fields":[
+      {"name":"sys_user_id","type":"bigint","foreignkey":1,"datalock":{"cust_id":"sys_user_id"},"control":"hidden"},
+      {"name":"cust_user_role_id","type":"bigint","key":1,"datalock":{"cust_id":"cust_user_role_id"},"control":"hidden"},
+      {"name":"cust_role_name","type":"varchar","length":"16","cellstyle":"width:300px;",
+        "caption":"Role","actions":"B",
+        "lov": { 
+          "sql": ["select cust_role_name as %%%jsh.map.{{code_val}}%%%, ",
+                  "       cust_role_desc as %%%jsh.map.{{code_txt}}%%%, ",
+                  "       cust_role_seq as %%%jsh.map.{{code_seq}}%%% ",
+                  "  from {schema}.cust_role ",
+                  " where cust_role_name<>'C*' %%%DATALOCKS%%%"],
+          "datalock":{"cust_id":"always"} 
+        }
+      }
+	  ]
+  }, 
+  "CustUser_Role": {
+    "inherits":"Base/CustUser_Role"
+  }
+}

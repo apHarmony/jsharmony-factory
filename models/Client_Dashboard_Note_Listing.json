@@ -1,0 +1,23 @@
+{
+  "Client/Dashboard_Note_Listing": {
+    "comment":"Client/Dashboard_Note_Listing - List of System Notes with Client Scope - One Client  ",
+    "layout":"grid", 
+    "title":"Notifications1",
+    "table":"{schema}.v_note",
+    "actions":"B", 
+    "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
+    "sort":["vnote_dt","vnote_id"], 
+    "caption":[0,"Note","System Notes"],
+    "menu":"Client/Dashboard",
+    "hide_system_buttons" : ["print","export"],
+    "rowlimit":10,
+    "disableautoload": 1,
+    "fields":[
+      {"name":"note_id","type":"bigint","key": 1,"datalock":{"cust_id":"note_id"},"control":"hidden"},
+      {"name":"note_scope","type":"varchar","length":32,"foreignkey":1,"datalock":{"cust_id":"note_scope"},"control":"hidden"},
+      {"name":"note_type","type":"varchar","length":32,"foreignkey":1,"datalock":{"cust_id":"note_type"},"control":"hidden"},
+      {"name":"note_dt","type":"date","format":["date","MM/DD/YY"],"caption":"Posted","actions":"B"},
+      {"name":"note_body","type":"varchar","length":"9999999","caption":"Note","actions":"B","controlstyle":"width:700px;"}
+    ]
+  }
+}

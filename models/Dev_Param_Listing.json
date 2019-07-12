@@ -1,0 +1,46 @@
+{
+  "Dev/Param_Listing": {
+    "title":"Settings Definitions",
+    "dev":1,
+    "table":"{schema}.param__tbl",
+    "actions":"BIUD", 
+    "caption":[0,"Parameter","Parameters"],
+    "layout":"grid", 
+    "sort":["^param_process","^param_attrib"], 
+    "menu":"Dev/Param_Listing",
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+    "fields":[
+      {"name":"param_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"param_process","type":"varchar","length":32,"actions": "BIU","control": "textbox_S",
+       "validate":["Required"],
+       "caption":"Process","captionstyle":"width:120px;"},
+      {"name":"param_attrib","type":"varchar","length":16,"actions": "BIU","control": "textbox_S",
+       "validate":["Required"],
+       "caption":"Attribute"},
+      {"name":"param_desc","type":"varchar","length":"255","actions":"BIU","control": "textbox_L",
+       "caption":"Description"},
+      {"name":"param_type","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S",
+       "lov": {"sql":"select code_val, code_txt from {schema}.code_param_type order by code_seq,code_txt","blank":1},"validate":["Required"],
+       "controlstyle":"width:82px;","caption":"Type"},
+      {"name":"code_name","type":"varchar","length":"128","actions":"BIU","control":"textbox_VS",
+       "caption":"Code"},
+      {"name":"is_param_sys","type":"boolean","actions":"BIU","control":"checkbox",
+       "controlparams":{"value_true":"true","value_false":"false"},"caption":"Developer","default":"0"},
+      {"name":"is_param_app","type":"boolean","actions":"BIU","control":"checkbox",
+       "controlparams":{"value_true":"true","value_false":"false"},"caption":"System","default":"0"},
+      {"name":"is_param_user","type":"boolean","actions":"BIU","control":"checkbox",
+       "controlparams":{"value_true":"true","value_false":"false"},"caption":"User","default":"0"},
+      {"name":"param_info","type":"varchar","length":"500","actions":"B","control":"textzoom",
+       "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
+       "sqlselect":"{schema}.log_audit_info(param__tbl.param_etstmp, param__tbl.param_euser, param__tbl.param_mtstmp, param__tbl.param_muser)",
+       "controlstyle":"width:48px;display:none;"}
+    ],
+    "dberrors": [
+      [ "pk_param__tbl", "Duplicate Key (Process + Attribute)" ],
+      [ "param__tbl_param_process_param_attrib_key", "Duplicate Key (Process + Attribute)" ]
+    ]
+  }    
+}

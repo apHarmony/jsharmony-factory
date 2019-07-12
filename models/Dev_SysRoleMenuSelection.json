@@ -1,0 +1,21 @@
+{
+  "Dev/SysRoleMenuSelection": {
+    "dev":1,
+    "layout": "form", 
+    "title":"",
+    "table": "{schema}.sys_role",
+    "actions": "B", 
+    "caption": [ 0, "Item", "Items" ],
+    "menu": "dev",
+    "tabpos":"top",
+    "tabpanelstyle": "min-width:1000px;",
+    "popup":[1050,700],
+    "tabs":[
+      {"name":"SELECTOR","caption": "Menu Items Selector","target":"Dev/SysRoleMenuSelection_Menu","bindings":{"sys_role_name":"sys_role_name"}}
+    ],
+    "fields":[
+      {"name":"sys_role_id","type":"bigint","control":"hidden"},
+      {"name":"sys_role_name","type":"varchar","length":16,"actions":"B","key":1,"control":"hidden"}
+    ]
+  }  
+}

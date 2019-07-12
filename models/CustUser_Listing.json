@@ -1,0 +1,36 @@
+{
+  "Base/CustUser_Listing": {
+    "layout":"grid", 
+    "title":"Customer Users",
+    "table":"{schema}.cust_user",
+    "actions":"B", 
+    "roles": {
+      "main": { "SYSADMIN":"*" },
+      "client": {"CSYSADMIN":"*","CADMIN":"*"}
+    },
+    "caption":[0,"Customer User","Customer Users"],
+    "sort":["^sys_user_name1"], 
+    "buttons":[{"link":"insert:CustUser"}],
+    "fields":[
+      {"name":"sys_user_id","type":"bigint","key":1,"datalock":{"cust_id":"sys_user_id"},"control":"hidden"},
+      {"name":"cust_id","type":"bigint","datalock":{"cust_id":"cust_id"},"foreignkey":1,"control":"hidden"},
+      {"name":"sys_user_sts","type":"varchar","length":"50","caption":"Status","actions":"B"},
+      {"name":"sys_user_name1","type":"varchar","length":"255","caption":"User","actions":"B","link":"update:CustUser",
+       "sqlselect":"({schema}.get_cust_user_name(sys_user_id))","sqlsearch":"({schema}.get_cust_user_name(sys_user_id))",
+       "sqlsort":"({schema}.get_cust_user_name(sys_user_id))"},
+      {"name":"sys_user_jobtitle","type":"varchar","length":"35","caption":"Title","actions":"B"},
+      {"name":"sys_user_etstmp","type":"date","caption":"Entered","actions":"B","format":"MMDDYY"},
+      {"name":"sys_user_bphone","type":"varchar","length":"14","caption":"Phone","actions":"B","format":"phone"},
+      {"name":"sys_user_cphone","type":"varchar","length":"14","caption":"C Phone","actions":"B","format":"phone"},
+      {"name":"sys_user_email","type":"varchar","length":"255","caption":"EMail","actions":"B"}
+    ]
+  },	
+  "CustUser_Listing": {
+    "inherits":"Base/CustUser_Listing" 
+  },
+  "Client/Admin/CustUser_Listing": {
+    "inherits": "CustUser_Listing",
+    "roles": { "client": {"CSYSADMIN":"*","CADMIN":"*"} },
+    "menu":"Client/Admin"
+  }
+}

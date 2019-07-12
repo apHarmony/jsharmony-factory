@@ -1,0 +1,16 @@
+{
+  "Dev/DBSchema": {
+    "comment":"Dev/DBSchema",
+    "source_files_prefix":"Dev_DBSchema",
+    "title":"Database Schema",
+    "table":"",
+    "actions":"B", 
+    "layout":"exec", 
+    "dev":1,
+    "menu":"Dev/DBSchema",
+    "caption": [ "", "Database Schema", "Database Schema" ],
+    "hide_system_buttons":["print","help"],
+    "fields":[	  ],
+    "oninit": "_this.oninit(xmodel);"
+	}
+}

@@ -1,0 +1,30 @@
+{
+  "Admin/Txt_Listing": {
+	  "title":"Text Maintenance",
+	  "table":"{schema}.txt__tbl",
+	  "actions":"B", 
+    "layout":"grid", 
+	  "caption":[0,"Text","Text"],
+	  "sort":["^txt_process","^txt_attrib"], 
+	  "menu":"Admin/Txt_Listing",
+    "fields":[
+      {"name":"txt_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"txt_process","type":"varchar","length":"32","caption":"Process","actions":"B","link":"update:Admin/Txt"},
+      {"name":"txt_attrib","type":"varchar","length":"32","caption":"Attribute","actions":"B","link":"update:Admin/Txt"},
+      {"name":"txt_desc","type":"varchar","length":"255","caption":"Description","actions":"B",
+       "controlstyle":"width:600px;","link":"update:Admin/Txt"}
+    ]
+  },	
+  "Dev/Txt_Listing": {
+    "inherits":"Admin/Txt_Listing",
+    "dev":1,
+    "actions":"B", 
+    "menu":"Dev/Txt_Listing",
+    "buttons":[{"link":"insert:Dev/Txt", "text": "Add Text Module"}],
+    "fields":[
+      {"name":"txt_process","link":"update:Dev/Txt"},
+      {"name":"txt_attrib","link":"update:Dev/Txt"},
+      {"name":"txt_desc","link":"update:Dev/Txt"}
+    ]
+  }
+}

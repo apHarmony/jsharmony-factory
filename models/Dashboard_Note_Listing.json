@@ -1,0 +1,22 @@
+{
+  "Dashboard_Note_Listing": {
+    "comment":"Dashboard_Note_Listing - List of System Notes with System Scope",
+    "layout":"grid",
+    "title":"System Notifications",
+    "table":"{schema}.note__tbl",
+    "actions":"B", 
+    "roles": {"X_B":"B","X_X":"*","DASH":"*"},
+    "sort":["vnote_etstmp","vnote_id"],
+    "caption":[0,"Note","System Notes"],
+    "menu":"dashboard",
+    "rowlimit":10,
+    "disableautoload": 1,
+    "fields":[
+      {"name":"note_id","type":"bigint","key": 1,"control":"hidden"},
+      {"name":"note_scope","type":"varchar","length":32,"foreignkey":1,"control":"hidden"},
+      {"name":"note_type","type":"varchar","length":32,"foreignkey":1,"control":"hidden"},
+      {"name":"note_etstmp","type":"date","format":["date","MM/DD/YY"],"caption":"Posted","actions":"B"},
+      {"name":"note_body","type":"varchar","length":"9999999","caption":"Note","actions":"B","controlstyle":"width:700px;"}
+    ]
+  }
+}

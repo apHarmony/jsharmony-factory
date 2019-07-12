@@ -1,36 +1,36 @@
 {
   "model_groups": {
-    "JSHARMONY_NOTES": ["NWUCS", "NWUS", "NWCS", "NWCSC_BASE", "NWCSC", "NWCSCB"],
-    "JSHARMONY_DOCUMENTS": ["DL_BASE"]
+    "JSHARMONY_NOTES": ["Note_UserCustSys_Tabs", "Note_UserSys_Tabs", "Note_CustSys_Tabs", "Base/Note_CustSys_Tabs_Browse", "Client/Note_CustSys_Tabs", "Note_CustSys_Tabs_Browse"],
+    "JSHARMONY_DOCUMENTS": ["Base/Doc_Listing"]
   },
   "datalocks": {
     "client": {
-      "c_id": {
-        "c_id": "c_id=@datalock_c_id",
-        "d_id": "d_id in (select d_id from jsharmony.d where jsharmony.d.c_id=@datalock_c_id or d_scope='S')",
-        "d_scope": "d_scope in ('C','E')",
-        "d_scope_id": "(((d_scope = 'S' or d_scope = 'C') and d_scope_id=@datalock_c_id) or (d_scope='E' and d_scope_id in (select e_id from e where e.c_id=@datalock_c_id)))",
-        "d_ctgr": "1=1",
-        "n_id": "n_id in (select n_id from jsharmony.n where jsharmony.n.c_id=@datalock_c_id)",
-        "n_scope": "n_scope in ('C','E')",
-        "n_scope_id": "((n_scope = 'C' and n_scope_id=@datalock_c_id) or (n_scope='E' and n_scope_id in (select e_id from e where e.c_id=@datalock_c_id)))",
-        "n_type": "n_type in ('S','C')",
-        "pe_id": "pe_id in (select pe_id from jsharmony.cpe where jsharmony.cpe.c_id=@datalock_c_id)",
-        "cper_id": "cper_id in (select cper_id from jsharmony.cper inner join jsharmony.cpe on jsharmony.cpe.pe_id=jsharmony.cper.pe_id where jsharmony.cpe.c_id=@datalock_c_id)",
+      "cust_id": {
+        "cust_id": "cust_id=@datalock_cust_id",
+        "doc_id": "doc_id in (select doc_id from {schema}.doc__tbl where {schema}.doc__tbl.cust_id=@datalock_cust_id or doc_scope='S')",
+        "doc_scope": "doc_scope in ('C','E')",
+        "doc_scope_id": "(((doc_scope = 'S' or doc_scope = 'C') and doc_scope_id=@datalock_cust_id) or (doc_scope='E' and doc_scope_id in (select item_id from e where e.cust_id=@datalock_cust_id)))",
+        "doc_ctgr": "1=1",
+        "note_id": "note_id in (select note_id from {schema}.note__tbl where {schema}.note__tbl.cust_id=@datalock_cust_id)",
+        "note_scope": "note_scope in ('C','E')",
+        "note_scope_id": "((note_scope = 'C' and note_scope_id=@datalock_cust_id) or (note_scope='E' and note_scope_id in (select item_id from e where e.cust_id=@datalock_cust_id)))",
+        "note_type": "note_type in ('S','C')",
+        "sys_user_id": "sys_user_id in (select sys_user_id from {schema}.cust_user where {schema}.cust_user.cust_id=@datalock_cust_id)",
+        "cust_user_role_id": "cust_user_role_id in (select cust_user_role_id from {schema}.cust_user_role inner join {schema}.cust_user on {schema}.cust_user.sys_user_id={schema}.cust_user_role.sys_user_id where {schema}.cust_user.cust_id=@datalock_cust_id)",
         "always": "1=1",
         "never": "1=2",
-        "n_scope_c": "n_scope = 'C'",
-        "d_scope_c": "d_scope = 'C'"
+        "note_scope_cust": "note_scope = 'C'",
+        "doc_scope_cust": "doc_scope = 'C'"
       }
     }
   },
   "modules":{
     "jsHarmonyFactory": {
       "help_view": {
-        "main": "HSHOWL",
-        "client": "C_HSHOWL"
+        "main": "Help_Listing",
+        "client": "Client/Help_Listing"
       },
-      "help_panelid": "hp_code"
+      "help_panelid": "help_target_code"
     }
   }
 }

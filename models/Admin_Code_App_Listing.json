@@ -1,0 +1,59 @@
+{
+  "Admin/Code_App_Listing": {
+	  "title":"Admin 1-Dimensional Code Tables",
+	  "table":"{schema}.code_app",
+	  "actions":"B", 
+    "layout":"grid", 
+    "caption":[0,"Code Table","Code Tables"],
+    "roles": {"X_B":"B","DADMIN":"*"},
+	  "sort":["^code_name"], 
+    "menu":"Admin/Code_App_Listing",
+    //:if:separate_code_type_tables::else:
+    "sqlwhere":"code_type='app'",
+    //:endif:
+    "reselectafteredit": "row",    "comment1":"row, or blank",
+    "newrowposition": "first",      "comment2":"first or last",
+    "commitlevel": "row",          "comment3":"cell, row, page, or none",
+    "validationlevel": "row",     "comment4":"cell, or row",
+	  "fields":[
+      {"name":"code_schema","type":"varchar","length":"128","actions":"B","caption":"Schema","control":"hidden"},
+      {"name":"code_name","type":"varchar","length":"128","key":1,"validate":["Required"],
+       "caption":"Code Table Name","actions":"B","controlstyle":"width:120px;","control": "html",
+       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Admin/CodeValue_App_Listing?code_name=<%=data['code_name']%>&code_schema=<%=data['code_schema']%>'><%=data['code_name']%></a>"},
+      {"name":"code_desc","type":"varchar","length":"128","validate":["Required"],
+       "caption":"Table Description","actions":"B","controlstyle":"width:260px;","control": "html",
+       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Admin/CodeValue_App_Listing?code_name=<%=data['code_name']%>&code_schema=<%=data['code_schema']%>'><%=data['code_desc']%></a>"},
+      {"name":"code_code_desc","type":"varchar","length":"128",
+       "caption":"Code","actions":"B","controlstyle":"width:160px;"},
+      {"name":"code_attrib_desc","type":"varchar","length":"128",
+       "caption":"Attribute","actions":"B","controlstyle":"width:160px;"},
+      {"name":"my_create","type":"varchar","length":"128","cellstyle":"text-align:center;",
+       "sqlselect":"(case {schema}.table_type(code_schema,{{concat}}('code_app_',code_name)) when 'BASE TABLE' then NULL else 'CREATE' end)",
+       "link":"update:Dev/CreateCode_App&code_schema=code_schema&code_name=code_name&code_desc=code_desc",
+       "caption":"Create Table","actions":""}
+	]
+  },    
+  "Dev/Code_App_Listing": {
+    "inherits":"Admin/Code_App_Listing",
+    "dev":1,
+    "actions":"BIUD",
+    "menu":"Dev/Code_App_Listing",
+    "fields":[
+      {"name":"code_schema","actions": "BI","control": "textbox"},
+      {"name":"code_name","actions": "BI","control": "textbox","value":"__REMOVEPROPERTY__"},
+      {"name":"code_desc","actions": "BIU","control": "textbox","value":"__REMOVEPROPERTY__"},
+      {"name":"code_code_desc","actions": "BIU","control": "textbox"},
+      {"name":"code_attrib_desc","actions": "BIU","control": "textbox"},
+      {"name":"my_create","actions": "B"},
+      {"name":"click2","type":"varchar","length":"128","validate":["Required"],
+       "sqlselect":"(case {schema}.table_type(code_schema,{{concat}}('code_app_',code_name)) when 'BASE TABLE' then 'U' else NULL end)",
+       "caption":"Edit Codes","actions":"B","control": "html","cellstyle": "text-align:center;",
+       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Dev/CodeValue_App_Listing?code_name=<%=data['code_name']%>&code_schema=<%=(data['code_schema']||'')%>'><% if(data['click2']){ %><img src='/images/icon_update.png' height='14' style='position:relative;top:2px;' /><% } %></a>",
+       "__AFTER__": "my_create"}
+    ],
+    "dberrors": [
+      [ "pk_param_sys", "Duplicate Key (Code Table name)" ],
+      [ "code_app_pk", "Duplicate Key (Code Table Name)" ]
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "Base/Admin/SysUser_Listing": {
+    "layout":"grid", 
+    "table":"{schema}.sys_user",
+    "caption":[0,"User","Users"],
+    "title":"System Users",
+    "actions":"B", 
+    "sort":["^sys_user_name1"],
+    "menu":"Admin/SysUser_Listing",
+    "buttons":[{"link":"insert:Admin/SysUser"}],
+    "fields":[
+      {"name":"sys_user_id","type":"bigint","key":"1","actions":"B","caption":"ID","link":"update:Admin/SysUser"},
+      {"name":"sys_user_sts","type":"varchar","length":"50","caption":"Status","actions":"B"},
+      {"name":"sys_user_name1","type":"varchar","length":"255","caption":"User","actions":"B","link":"update:Admin/SysUser",
+       "sqlselect":"({schema}.get_sys_user_name(sys_user_id))","sqlsearch":"({schema}.get_sys_user_name(sys_user_id))",
+       "sqlsort":"({schema}.get_sys_user_name(sys_user_id))"},
+      {"name":"sys_user_jobtitle","type":"varchar","length":"35","caption":"Title","actions":"B"},
+      {"name":"sys_user_etstmp","type":"date","caption":"Entered","actions":"B","format":"MMDDYY"},
+      {"name":"sys_user_bphone","type":"varchar","length":"14","caption":"Phone","actions":"B","format":"phone"},
+      {"name":"sys_user_cphone","type":"varchar","length":"14","caption":"C Phone","actions":"B","format":"phone"},
+      {"name":"sys_user_email","type":"varchar","length":"255","caption":"EMail","actions":"B"},
+      {"name":"sys_user_lastlogin_tstmp","type":"date","format":["date","MM/DD/YY"],"caption":"Last Login","actions":"B"}
+    ]
+  }
+}
