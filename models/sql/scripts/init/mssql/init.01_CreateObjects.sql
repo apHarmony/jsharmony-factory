@@ -2085,9 +2085,15 @@ CREATE TABLE [{schema}].[code_app](
     [code_h_muser] [nvarchar](20) NULL,
     [code_snotes] [nvarchar](255) NULL,
     [code_schema] [nvarchar](128) NULL,
-  [code_type] [nvarchar](32) NULL default 'app',
+    [code_type] [nvarchar](32) NULL default 'app',
+    [code_app_h_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [pk_code_app] PRIMARY KEY CLUSTERED 
 (
+    [code_app_h_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [unq_code_app] UNIQUE NONCLUSTERED 
+(
+    [code_schema] ASC,
     [code_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
@@ -2145,9 +2151,15 @@ CREATE TABLE [{schema}].[code2_app](
     [code_h_muser] [nvarchar](20) NULL,
     [code_snotes] [nvarchar](255) NULL,
     [code_schema] [nvarchar](128) NULL,
-  [code_type] [nvarchar](32) NULL default 'app',
+    [code_type] [nvarchar](32) NULL default 'app',
+    [code2_app_h_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [pk_code2_app] PRIMARY KEY CLUSTERED 
 (
+    [code2_app_h_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [unq_code2_app] UNIQUE NONCLUSTERED 
+(
+    [code_schema] ASC,
     [code_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
@@ -2985,7 +2997,7 @@ CREATE TABLE [{schema}].[code2_sys](
     [code_h_muser] [nvarchar](20) NULL,
     [code_snotes] [nvarchar](255) NULL,
     [code_schema] [nvarchar](128) NULL,
-  [code_type] [nvarchar](32) NULL default 'sys',
+    [code_type] [nvarchar](32) NULL default 'sys',
     [code2_sys_h_id] [bigint] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [pk_code2_sys] PRIMARY KEY CLUSTERED 
 (
@@ -3394,6 +3406,7 @@ ALTER TABLE [{schema}].[cust_user_role] CHECK CONSTRAINT [fk_cust_user_role_cust
 GO
 ALTER TABLE [{schema}].[cust_user_role]  WITH CHECK ADD  CONSTRAINT [fk_cust_user_role_cust_role_cust_role_name] FOREIGN KEY([cust_role_name])
 REFERENCES [{schema}].[cust_role] ([cust_role_name])
+ON DELETE CASCADE
 GO
 ALTER TABLE [{schema}].[cust_user_role] CHECK CONSTRAINT [fk_cust_user_role_cust_role_cust_role_name]
 GO
@@ -3534,6 +3547,7 @@ ALTER TABLE [{schema}].[menu__tbl] CHECK CONSTRAINT [fk_menu__tbl_code_ahc]
 GO
 ALTER TABLE [{schema}].[sys_user_func]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_func_sys_user] FOREIGN KEY([sys_user_id])
 REFERENCES [{schema}].[sys_user] ([sys_user_id])
+ON DELETE CASCADE
 GO
 ALTER TABLE [{schema}].[sys_user_func] CHECK CONSTRAINT [fk_sys_user_func_sys_user]
 GO
@@ -3544,11 +3558,13 @@ ALTER TABLE [{schema}].[sys_user_func] CHECK CONSTRAINT [fk_sys_user_func_sys_fu
 GO
 ALTER TABLE [{schema}].[sys_user_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_role_sys_user] FOREIGN KEY([sys_user_id])
 REFERENCES [{schema}].[sys_user] ([sys_user_id])
+ON DELETE CASCADE
 GO
 ALTER TABLE [{schema}].[sys_user_role] CHECK CONSTRAINT [fk_sys_user_role_sys_user]
 GO
 ALTER TABLE [{schema}].[sys_user_role]  WITH CHECK ADD  CONSTRAINT [fk_sys_user_role_sys_role_sys_role_name] FOREIGN KEY([sys_role_name])
 REFERENCES [{schema}].[sys_role] ([sys_role_name])
+ON DELETE CASCADE
 GO
 ALTER TABLE [{schema}].[sys_user_role] CHECK CONSTRAINT [fk_sys_user_role_sys_role_sys_role_name]
 GO
@@ -3603,6 +3619,125 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
+
+
+create procedure  [{schema}].[get_cust_id]
+(
+    @in_tabn  nvarchar(32),
+    @in_tabid bigint,
+    @rslt bigint output
+)    
+as
+BEGIN
+
+  DECLARE @sqlcmd nvarchar(max)
+  DECLARE @get_cust_id nvarchar(max)
+
+  
+
+  SELECT @get_cust_id = param_cur_val FROM {schema}.v_param_cur where param_cur_process = 'SQL' and param_cur_attrib = 'get_cust_id';
+  if(@get_cust_id is null)
+  begin
+    set @rslt = null;
+    return;
+  end
+  SET @sqlcmd = 'select @rslt  = ' + @get_cust_id + '(''' + @in_tabn + ''',' + isnull(convert(varchar,@in_tabid),'NULL') + ')'
+  EXECUTE sp_executesql @sqlcmd, N'@rslt bigint OUTPUT', @rslt=@rslt OUTPUT
+
+END
+
+GO
+GRANT EXECUTE ON [{schema}].[get_cust_id] TO [{schema}_role_dev] AS [dbo]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+
+
+create procedure  [{schema}].[get_item_id]
+(
+    @in_tabn  nvarchar(32),
+    @in_tabid bigint,
+    @rslt bigint output
+)    
+as
+BEGIN
+
+  DECLARE @sqlcmd nvarchar(max)
+  DECLARE @get_item_id nvarchar(max)
+
+
+  SELECT @get_item_id = param_cur_val FROM {schema}.v_param_cur where param_cur_process = 'SQL' and param_cur_attrib = 'get_item_id';
+  if(@get_item_id is null)
+  begin
+    set @rslt = null;
+    return;
+  end
+  SET @sqlcmd = 'select @rslt  = ' + @get_item_id + '(''' + @in_tabn + ''',' + isnull(convert(varchar,@in_tabid),'NULL') + ')'
+  EXECUTE sp_executesql @sqlcmd, N'@rslt bigint OUTPUT', @rslt=@rslt OUTPUT
+
+  return;
+
+END
+
+GO
+GRANT EXECUTE ON [{schema}].[get_item_id] TO [{schema}_role_dev] AS [dbo]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+create procedure  [{schema}].[check_scope_id]
+(
+    @in_scope  nvarchar(32),
+    @in_scope_id bigint,
+    @in_cust_id bigint,
+    @rslt bigint output
+)    
+as
+BEGIN
+
+  DECLARE @sqlcmd nvarchar(max)
+  DECLARE @check_scope_id nvarchar(max)
+
+  SELECT @check_scope_id = param_cur_val FROM {schema}.v_param_cur where param_cur_process = 'SQL' and param_cur_attrib = 'check_scope_id';
+  if(@check_scope_id is null)
+  begin
+    if (@in_scope='U') select @rslt = sys_user_id from {schema}.sys_user where sys_user_id=@in_scope_id;
+    else if (@in_scope='S') select @rslt = 1;
+    else select @rslt = null;
+    return;
+  end
+  SET @sqlcmd = 'select @rslt  = ' + @check_scope_id + '(''' + @in_scope + ''',' + isnull(convert(varchar,@in_scope_id),'NULL') + ',' + isnull(convert(varchar,@in_cust_id),'NULL') + ')'
+  EXECUTE sp_executesql @sqlcmd, N'@rslt bigint OUTPUT', @rslt=@rslt OUTPUT
+
+  return;
+
+END
+
+GO
+GRANT EXECUTE ON [{schema}].[check_scope_id] TO [{schema}_role_dev] AS [dbo]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+
+
+
 CREATE PROCEDURE  [{schema}].[log_audit]
 (
     @op           nvarchar(max),
@@ -3629,10 +3764,12 @@ BEGIN
   DECLARE @doc_ctgr_table nvarchar(max)
   DECLARE @cust_id bigint
   DECLARE @item_id bigint
+  DECLARE @tname_lower nvarchar(max)
 
   BEGIN TRY  
 
     SET @MYUSER = CASE WHEN @u IS NULL THEN {schema}.my_db_user() ELSE @u END
+    select @tname_lower = lower(@tname);
 
     if (@op = 'D')
     begin
@@ -3651,9 +3788,13 @@ BEGIN
          begin
 
           if (@custid is null and lower(@tname) <> lower('cust'))
-            select @cust_id = {schema}.get_cust_id(lower(@tname), @tid);
+          begin
+            exec {schema}.get_cust_id @tname_lower, @tid, @rslt = @cust_id output;
+          end
           if (@itemid is null and lower(@tname) <> lower('item__tbl'))
-            select @item_id = {schema}.get_item_id(lower(@tname), @tid);
+          begin
+            exec {schema}.get_item_id @tname_lower, @tid, @rslt = @item_id output;
+          end
 
            select @WK_cust_id = case when @custid is not null then @custid
                                   when lower(@tname) = lower('cust') then @tid 
@@ -3670,10 +3811,14 @@ BEGIN
     begin
 
         if (@custid is null and lower(@tname) <> lower('cust'))
-          select @cust_id = {schema}.get_cust_id(lower(@tname), @tid);
+        begin
+          exec {schema}.get_cust_id @tname_lower, @tid, @rslt = @cust_id output;
+        end
 
         if (@itemid is null and lower(@tname) <> lower('item__tbl'))
-          select @item_id = {schema}.get_item_id(lower(@tname), @tid);
+        begin
+          exec {schema}.get_item_id @tname_lower, @tid, @rslt = @item_id output;
+        end
 
         SET @WK_cust_id = case when @custid is not null then @custid
                             when lower(@tname) = lower('cust') then @tid 
@@ -4269,115 +4414,6 @@ GO
 
 
 
-
-create PROCEDURE  [{schema}].[get_cust_id]
-(
-    @in_tabn  nvarchar(32),
-    @in_tabid bigint
-)    
-as
-BEGIN
-
-  DECLARE @sqlcmd nvarchar(max)
-  DECLARE @get_cust_id nvarchar(max)
-  DECLARE @rslt bigint
-
-  
-
-  SELECT @get_cust_id = param_cur_val FROM {schema}.v_param_cur where param_cur_process = 'SQL' and param_cur_attrib = 'get_cust_id';
-  if(@get_cust_id is null) return (null);
-  SET @sqlcmd = 'select @rslt  = ' + @get_cust_id + '(''' + @in_tabn + ''',' + convert(varchar,@in_tabid) + ')'
-  EXECUTE sp_executesql @sqlcmd, N'@rslt bigint OUTPUT', @rslt=@rslt OUTPUT
-  
-  return (@rslt)
-
-END
-
-GO
-GRANT EXECUTE ON [{schema}].[get_cust_id] TO [{schema}_role_dev] AS [dbo]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
-
-
-
-create PROCEDURE  [{schema}].[get_item_id]
-(
-    @in_tabn  nvarchar(32),
-    @in_tabid bigint
-)    
-as
-BEGIN
-
-  DECLARE @sqlcmd nvarchar(max)
-  DECLARE @get_item_id nvarchar(max)
-  DECLARE @rslt bigint
-
-
-  SELECT @get_item_id = param_cur_val FROM {schema}.v_param_cur where param_cur_process = 'SQL' and param_cur_attrib = 'get_item_id';
-  if(@get_item_id is null) return (null);
-  SET @sqlcmd = 'select @rslt  = ' + @get_item_id + '(''' + @in_tabn + ''',' + convert(varchar,@in_tabid) + ')'
-  EXECUTE sp_executesql @sqlcmd, N'@rslt bigint OUTPUT', @rslt=@rslt OUTPUT
-
-  return (@rslt)
-
-END
-
-GO
-GRANT EXECUTE ON [{schema}].[get_item_id] TO [{schema}_role_dev] AS [dbo]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
-
-create PROCEDURE  [{schema}].[check_scope_id]
-(
-    @in_scope  nvarchar(32),
-    @in_scope_id bigint,
-  @in_cust_id bigint
-)    
-as
-BEGIN
-
-  DECLARE @sqlcmd nvarchar(max)
-  DECLARE @check_scope_id nvarchar(max)
-  DECLARE @rslt bigint
-
-  SELECT @check_scope_id = param_cur_val FROM {schema}.v_param_cur where param_cur_process = 'SQL' and param_cur_attrib = 'check_scope_id';
-  if(@check_scope_id is null)
-  begin
-    if (@in_scope='U') select @rslt = sys_user_id from jsharmony.sys_user where sys_user_id=@in_scope_id;
-    else if (@in_scope='S') select @rslt = 1;
-    else select @rslt = null;
-    return (@rslt);
-  end
-  SET @sqlcmd = 'select @rslt  = ' + @check_scope_id + '(''' + @in_scope + ''',' + convert(varchar,@in_scope_id) + ',' + convert(varchar,@in_cust_id) + ')'
-  EXECUTE sp_executesql @sqlcmd, N'@rslt bigint OUTPUT', @rslt=@rslt OUTPUT
-
-  return (@rslt)
-
-END
-
-GO
-GRANT EXECUTE ON [{schema}].[check_scope_id] TO [{schema}_role_dev] AS [dbo]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
-
 /*@ SEND DEBUGGING INFO TO TEXT FILE @*/
 CREATE PROCEDURE  [{schema}].[zz-filedebug]
 (
@@ -4612,8 +4648,8 @@ BEGIN
         OR 
         @TP='U' AND {schema}.nequal_num(@D_cust_id, @I_cust_id) > 0)
     BEGIN
-    select @C = isnull([{schema}].[get_cust_id]('cust', @I_cust_id),0);
-        IF @C <= 0
+        exec [{schema}].get_cust_id 'cust', @I_cust_id, @rslt = @C output;
+        IF isnull(@C,0) <= 0
         BEGIN
             CLOSE CUR_cust_user_iud
             DEALLOCATE CUR_cust_user_iud
@@ -5100,9 +5136,16 @@ BEGIN
   DECLARE @WK_audit_ref_id BIGINT
   DECLARE @M NVARCHAR(MAX)
   DECLARE @code_val NVARCHAR(MAX)
+  DECLARE @cust_user_user BIT
+  DECLARE @USER_cust_id BIGINT
 
   DECLARE @SQLCMD nvarchar(max)
   DECLARE @doc_ctgr_table nvarchar(max)
+  DECLARE @cust_id bigint
+  DECLARE @item_id bigint
+  declare @lookup_doc_scope nvarchar(max)
+  declare @lookup_doc_scope_id bigint
+  declare @lookup_doc_scope_tbl nvarchar(max)
 
   DECLARE @db_id NVARCHAR(MAX)
   DECLARE @DB_OUT datetime2(7)
@@ -5208,8 +5251,8 @@ BEGIN
  
     IF (@TP='I' OR @TP='U')
     BEGIN
-        select @C = isnull([{schema}].[check_scope_id](@I_doc_scope, @I_doc_scope_id, null),0)
-        IF @C <= 0
+        exec [{schema}].[check_scope_id] @I_doc_scope, @I_doc_scope_id, null, @rslt = @C output;
+        IF isnull(@C,0) <= 0
         BEGIN
             CLOSE CUR_doc__tbl_iud
             DEALLOCATE CUR_doc__tbl_iud
@@ -5240,44 +5283,34 @@ BEGIN
         END 
     END   
 
-    SET @CPE_USER = 0
-    SET @USER_C_ID = NULL      
+
+    SET @cust_user_user = 0
+    SET @USER_cust_id = NULL      
     IF SUBSTRING(@MYUSER,1,1) = 'C'
     BEGIN
-      SELECT @USER_C_ID = C_ID
-        FROM jsharmony.CPE
-       WHERE substring(@MYUSER,2,1024)=convert(varchar, PE_ID);   
+      SELECT @USER_cust_id = cust_id
+        FROM {schema}.cust_user
+       WHERE substring(@MYUSER,2,1024)=convert(varchar, sys_user_id);   
       
-      IF @USER_C_ID is not null
-        SET @CPE_USER = 1
+      IF @USER_cust_id is not null
+        SET @cust_user_user = 1
     END
 
-    SET @SQLCMD = 'select @my_c_id  = ' + @GETCID + '(''' + isnull(isnull(@I_D_SCOPE,@D_D_SCOPE),'') + ''',' +
-                        isnull(convert(nvarchar,isnull(@I_D_SCOPE_ID,@D_D_SCOPE_ID)),'') + ')'
-    EXECUTE sp_executesql @SQLCMD, N'@my_c_id bigint OUTPUT', @MY_C_ID=@my_c_id OUTPUT
-    SET @C_ID = @MY_C_ID
+    select @lookup_doc_scope = isnull(@I_doc_scope,@D_doc_scope);
+    select @lookup_doc_scope_id = isnull(convert(nvarchar,isnull(@I_doc_scope_id,@D_doc_scope_id)),'');
+    select @lookup_doc_scope_tbl = isnull(code_code, code_val) from {schema}.code_sys_doc_scope where code_val = @lookup_doc_scope;
 
-    SET @SQLCMD = 'select @my_e_id  = ' + @GETEID + '(''' + isnull(isnull(@I_D_SCOPE,@D_D_SCOPE),'') + ''',' +
-                        isnull(convert(nvarchar,isnull(@I_D_SCOPE_ID,@D_D_SCOPE_ID)),'') + ')'
-    EXECUTE sp_executesql @SQLCMD, N'@my_e_id bigint OUTPUT', @MY_E_ID=@my_e_id OUTPUT
-    SET @E_ID = @MY_E_ID
+    exec {schema}.get_cust_id @lookup_doc_scope_tbl, @lookup_doc_scope_id, @rslt = @cust_id output;
+    exec {schema}.get_item_id @lookup_doc_scope_tbl, @lookup_doc_scope_id, @rslt = @item_id output;
 
 
-
-
-
-    IF (@CPE_USER = 1)
+    IF (@cust_user_user = 1)
     BEGIN
 
-      IF @USER_C_ID <> isnull(@C_ID,0)
-         OR
-         isnull(@I_D_SCOPE,@D_D_SCOPE) not in 
-                      (select CODEVAL
-                         from jsharmony.UCOD_D_SCOPE
-                        where CODECODE = 'Y')
+      IF @USER_cust_id <> isnull(@cust_id,0)
       BEGIN
-        CLOSE CUR_D_IUD
-        DEALLOCATE CUR_D_IUD
+        CLOSE CUR_doc__tbl_iud
+        DEALLOCATE CUR_doc__tbl_iud
         SET @M = 'Application Error - Client User has no rights to perform this operation'
         raiserror(@M ,16,1)
         ROLLBACK TRANSACTION
@@ -5289,32 +5322,14 @@ BEGIN
     IF (@TP='I')
     BEGIN
 
-      IF @C_ID is not null
+      IF @cust_id is not null
       BEGIN
-        EXEC    @C = [jsharmony].[CHECK_FOREIGN]
-             @in_tblname ='C',
-            @in_tblid = @C_ID
-        IF @C <= 0
+        exec [{schema}].[check_scope_id] @I_doc_scope, @I_doc_scope_id, @cust_id, @rslt = @C output;
+        IF isnull(@C,0) <= 0
         BEGIN
-            CLOSE CUR_D_IUD
-            DEALLOCATE CUR_D_IUD
-            SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@C_ID)
-            raiserror(@M ,16,1)
-            ROLLBACK TRANSACTION
-            return
-        END 
-      END   
-
-      IF @E_ID is not null
-      BEGIN
-        EXEC    @C = [jsharmony].[CHECK_FOREIGN]
-             @in_tblname ='E',
-            @in_tblid = @E_ID
-        IF @C <= 0
-        BEGIN
-            CLOSE CUR_D_IUD
-            DEALLOCATE CUR_D_IUD
-            SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@E_ID)
+            CLOSE CUR_doc__tbl_iud
+            DEALLOCATE CUR_doc__tbl_iud
+            SET @M = 'Application Error - Client User has no rights to perform this operation'
             raiserror(@M ,16,1)
             ROLLBACK TRANSACTION
             return
@@ -5324,8 +5339,8 @@ BEGIN
 
       IF (@I_doc_sync_tstmp is null)
         UPDATE {schema}.doc__tbl
-         SET cust_id = NULL,
-             item_id = NULL,
+         SET cust_id = @cust_id,
+             item_id = @item_id,
              doc_etstmp = @CURDTTM,
              doc_euser = @MYUSER,
              doc_mtstmp = @CURDTTM,
@@ -5336,41 +5351,21 @@ BEGIN
     IF (@TP='U')
     BEGIN
 
-      IF @I_C_ID is not null
+      IF @I_cust_id is not null
          and
-         jsharmony.NONEQUALN(@D_C_ID, @I_C_ID) > 0
+         {schema}.nequal_num(@D_cust_id, @I_cust_id) > 0
       BEGIN
-        EXEC    @C = [jsharmony].[CHECK_FOREIGN]
-             @in_tblname ='C',
-            @in_tblid = @I_C_ID
-        IF @C <= 0
+        exec [{schema}].[check_scope_id] @I_doc_scope, @I_doc_scope_id, @I_cust_id, @rslt = @C output;
+        IF isnull(@C,0) <= 0
         BEGIN
-            CLOSE CUR_D_IUD
-            DEALLOCATE CUR_D_IUD
-            SET @M = 'Table C does not contain record ' + CONVERT(NVARCHAR(MAX),@I_C_ID)
+            CLOSE CUR_doc__tbl_iud
+            DEALLOCATE CUR_doc__tbl_iud
+            SET @M = 'Application Error - Client User has no rights to perform this operation'
             raiserror(@M ,16,1)
             ROLLBACK TRANSACTION
             return
         END 
       END   
-
-      IF @I_E_ID is not null
-         and
-         jsharmony.NONEQUALN(@D_E_ID, @I_E_ID) > 0
-      BEGIN
-        EXEC    @C = [jsharmony].[CHECK_FOREIGN]
-             @in_tblname ='E',
-            @in_tblid = @I_E_ID
-        IF @C <= 0
-        BEGIN
-            CLOSE CUR_D_IUD
-            DEALLOCATE CUR_D_IUD
-            SET @M = 'Table E does not contain record ' + CONVERT(NVARCHAR(MAX),@I_E_ID)
-            raiserror(@M ,16,1)
-            ROLLBACK TRANSACTION
-            return
-        END 
-      END
          
     END
 
@@ -5570,7 +5565,7 @@ BEGIN
   DECLARE @DYNSQL NVARCHAR(MAX)
   DECLARE @C BIGINT
   DECLARE @M NVARCHAR(MAX)
-  DECLARE @cust_user_USER BIT
+  DECLARE @cust_user_user BIT
   DECLARE @WK_code2_app_id BIGINT
 
   DECLARE @return_value int,
@@ -5989,7 +5984,7 @@ BEGIN
   DECLARE @code_val NVARCHAR(MAX)
   DECLARE @WK_help_id bigint
   DECLARE @M NVARCHAR(MAX)
-  DECLARE @cust_user_USER BIT
+  DECLARE @cust_user_user BIT
 
   DECLARE @return_value int,
           @out_msg nvarchar(max),
@@ -6300,11 +6295,16 @@ BEGIN
   DECLARE @WK_audit_ref_id BIGINT
   DECLARE @M NVARCHAR(MAX)
   DECLARE @code_val NVARCHAR(MAX)
+  DECLARE @cust_user_user bit
+  DECLARE @USER_cust_id bigint
 
   DECLARE @SQLCMD nvarchar(max)
 
   DECLARE @cust_id BIGINT = NULL;
   DECLARE @item_id BIGINT = NULL;
+  declare @lookup_note_scope nvarchar(max);
+  declare @lookup_note_scope_id bigint;
+  declare @lookup_note_scope_tbl nvarchar(max);
 
   DECLARE @return_value int,
           @out_msg nvarchar(max),
@@ -6399,10 +6399,8 @@ BEGIN
  
     IF (@TP='I' OR @TP='U')
     BEGIN
-        EXEC @C = [{schema}].[check_foreign_key]
-              @in_tblname = @I_note_scope,
-             @in_tblid = @I_note_scope_id
-        IF @C <= 0
+        exec [{schema}].[check_scope_id] @I_note_scope, @I_note_scope_id, null, @rslt = @C output;
+        IF isnull(@C,0) <= 0
         BEGIN
             CLOSE CUR_note__tbl_iud
             DEALLOCATE CUR_note__tbl_iud
@@ -6413,19 +6411,92 @@ BEGIN
         END 
     END   
 
+
+
+    SET @cust_user_USER = 0
+    SET @USER_cust_id = NULL      
+    IF SUBSTRING(@MYUSER,1,1) = 'C'
+    BEGIN
+      SELECT @USER_cust_id = cust_id
+        FROM {schema}.cust_user
+       WHERE substring(@MYUSER,2,1024)=convert(varchar, sys_user_id);   
+      
+      IF @USER_cust_id is not null
+        SET @cust_user_USER = 1
+    END
+
+    select @lookup_note_scope = isnull(@I_note_scope,@D_note_scope);
+    select @lookup_note_scope_id = isnull(convert(nvarchar,isnull(@I_note_scope_id,@D_note_scope_id)),'');
+    select @lookup_note_scope_tbl = isnull(code_code, code_val) from {schema}.code_sys_note_scope where code_val = @lookup_note_scope;
+
+    exec {schema}.get_cust_id @lookup_note_scope_tbl, @lookup_note_scope_id, @rslt = @cust_id output;
+    exec {schema}.get_item_id @lookup_note_scope_tbl, @lookup_note_scope_id, @rslt = @item_id output;
+
+
+    IF (@cust_user_USER = 1)
+    BEGIN
+
+      IF @USER_cust_id <> isnull(@cust_id,0)
+      BEGIN
+        CLOSE CUR_note__tbl_iud
+        DEALLOCATE CUR_note__tbl_iud
+        SET @M = 'Application Error - Customer User has no rights to perform this operation'
+        raiserror(@M ,16,1)
+        ROLLBACK TRANSACTION
+        return
+      END 
+
+    END
+
+
     IF (@TP='I')
     BEGIN
 
-      UPDATE {schema}.note__tbl
-         SET cust_id = NULL,
-             item_id = NULL,
+      IF @USER_cust_id is not null
+      BEGIN
+        exec [{schema}].[check_scope_id] @I_note_scope, @I_note_scope_id, @cust_id, @rslt = @C output;
+        IF isnull(@C,0) <= 0
+        BEGIN
+            CLOSE CUR_note__tbl_iud
+            DEALLOCATE CUR_note__tbl_iud
+            SET @M = 'Table cust does not contain record ' + CONVERT(NVARCHAR(MAX),@cust_id)
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+      END   
+
+        UPDATE {schema}.note__tbl
+         SET cust_id = @cust_id,
+             item_id = @item_id,
              note_etstmp = @CURDTTM,
              note_euser = @MYUSER,
              note_mtstmp = @CURDTTM,
              note_muser = @MYUSER
-         WHERE note__tbl.note_id = @I_note_id;
-
+         WHERE note_id = @I_note_id;
     END  
+
+    IF (@TP='U')
+    BEGIN
+
+      IF @I_cust_id is not null
+         and
+         {schema}.nequal_num(@D_cust_id, @I_cust_id) > 0
+      BEGIN
+        exec [{schema}].[check_scope_id] @I_note_scope, @I_note_scope_id, @I_cust_id, @rslt = @C output;
+        IF isnull(@C,0) <= 0
+        BEGIN
+            CLOSE CUR_note__tbl_iud
+            DEALLOCATE CUR_note__tbl_iud
+            SET @M = 'Table cust does not contain record ' + CONVERT(NVARCHAR(MAX),@I_cust_id)
+            raiserror(@M ,16,1)
+            ROLLBACK TRANSACTION
+            return
+        END 
+      END   
+
+    END
+
 
     /******************************************/
     /****** SPECIAL FRONT ACTION - END   ******/

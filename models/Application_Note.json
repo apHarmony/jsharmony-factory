@@ -30,8 +30,7 @@
     "title":"Note - User: <#=bcrumbs.sys_user_lname#>, <#=bcrumbs.sys_user_fname#>",
     "breadcrumbs":{
       "sql": ["select sys_user_fname, sys_user_lname from {schema}.sys_user ",
-              " where sys_user_id=coalesce(@note_scope_id,(select note_scope_id from {schema}.note__tbl where note_id = @note_id))"],
-      "sql_params": ["note_scope_id","note_scope"]
+              " where sys_user_id=coalesce(@note_scope_id,(select note_scope_id from {schema}.note__tbl where note_id = @note_id))"]
     },
     "roles": {"O_B":"B","O_X":"*"}
   },
@@ -41,8 +40,7 @@
     "title":"Note - User: <#=bcrumbs.sys_user_lname#>, <#=bcrumbs.sys_user_fname#>",
     "breadcrumbs":{
       "sql": ["select sys_user_fname, sys_user_lname from {schema}.sys_user ",
-              " where sys_user_id=coalesce(@note_scope_id,(select note_scope_id from {schema}.note__tbl where note_id = @note_id))"],
-      "sql_params": ["note_scope_id","note_scope"]
+              " where sys_user_id=coalesce(@note_scope_id,(select note_scope_id from {schema}.note__tbl where note_id = @note_id))"]
     },
     "roles": {"O_B":"B","O_X":"*"}
   }

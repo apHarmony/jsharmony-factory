@@ -30,18 +30,15 @@ create trigger {schema}_doc__tbl_before_insert before insert on {schema}_doc__tb
 begin
   select case when new.doc_scope='S' and new.doc_scope_id<>0 then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
   select case when new.doc_scope<>'S' and new.doc_scope_id is null then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
-  select case when ({schema}.my_cust_id() is not null) and 
-    (({schema}.get_cust_id(new.doc_scope,new.doc_scope_id)<>{schema}.my_cust_id()) or
-     (new.doc_scope not in %%%client_scope%%%))
-    then raise(FAIL,'Application Error - Client User has no rights to perform this operation') end\;
-  select case when not exists (select * from {schema}_code2_doc_scope_doc_ctgr where code_val1=new.doc_scope and code_val2=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
+  select case when (ifnull({schema}.check_scope_id(new.doc_scope,new.doc_scope_id,{schema}.my_cust_id()),0)<=0) then raise(FAIL,'Application Error - Invalid scope - user has no rights to perform this operation') end\;
+  select case when not exists (select * from {schema}_code2_app_doc_scope_doc_ctgr where code_val1=new.doc_scope and code_val2=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
 end;
 
 create trigger {schema}_doc__tbl_after_insert after insert on {schema}_doc__tbl
 begin
   update {schema}_doc__tbl set 
-    cust_id     = {schema}.get_cust_id(new.doc_scope,new.doc_scope_id),
-    item_id     = {schema}.get_item_id(new.doc_scope,new.doc_scope_id),
+    cust_id     = {schema}.get_cust_id((select ifnull(code_code, code_val) from {schema}_code_sys_doc_scope where code_val = new.doc_scope),new.doc_scope_id),
+    item_id     = {schema}.get_item_id((select ifnull(code_code, code_val) from {schema}_code_sys_doc_scope where code_val = new.doc_scope),new.doc_scope_id),
     doc_euser     = (select context from jsharmony_meta limit 1),
     doc_etstmp = datetime('now','localtime'),
     doc_muser     = (select context from jsharmony_meta limit 1),
@@ -58,7 +55,7 @@ begin
   select case when ifnull(old.doc_scope,'')<>ifnull(NEW.doc_scope,'') then raise(FAIL,'Application Error - Scope cannot be updated.') end\;
   select case when ifnull(old.doc_scope_id,'')<>ifnull(NEW.doc_scope_id,'') then raise(FAIL,'Application Error - Scope ID cannot be updated.') end\;
   select case when ifnull(old.doc_ctgr,'')<>ifnull(NEW.doc_ctgr,'') then raise(FAIL,'Application Error - Document Category cannot be updated.') end\;
-  select case when not exists (select * from {schema}_code2_doc_scope_doc_ctgr where code_val1=new.doc_scope and code_val2=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
+  select case when not exists (select * from {schema}_code2_app_doc_scope_doc_ctgr where code_val1=new.doc_scope and code_val2=new.doc_ctgr) then raise(FAIL,'Document type not allowed for selected scope') end\;
 end;
 
 create trigger {schema}_doc__tbl_after_update after update on {schema}_doc__tbl
@@ -66,8 +63,6 @@ begin
   %%%log_audit_update_mult("{schema}_doc__tbl","old.doc_id",["doc_id","cust_id","doc_scope","doc_scope_id","item_id","doc_sts","doc_ctgr","doc_desc","doc_uptstmp","doc_upuser","doc_sync_tstmp"],"null","null","null","{schema}.get_cust_id(new.doc_scope,new.doc_scope_id)","{schema}.get_item_id(new.doc_scope,new.doc_scope_id)")%%%
 
   update {schema}_doc__tbl set 
-    cust_id     = {schema}.get_cust_id(new.doc_scope,new.doc_scope_id),
-    item_id     = {schema}.get_item_id(new.doc_scope,new.doc_scope_id),
     doc_muser     = (select context from jsharmony_meta limit 1),
     doc_mtstmp = datetime('now','localtime')
     where doc_id = new.doc_id and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
@@ -87,17 +82,14 @@ create trigger {schema}_note__tbl_before_insert before insert on {schema}_note__
 begin
   select case when new.note_scope='S' and new.note_scope_id<>0 then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
   select case when new.note_scope<>'S' and new.note_scope_id is null then raise(FAIL,'Application Error - SCOPE_ID inconsistent with SCOPE') end\;
-  select case when ({schema}.my_cust_id() is not null) and 
-    (({schema}.get_cust_id(new.note_scope,new.note_scope_id)<>{schema}.my_cust_id()) or
-     (new.note_scope not in %%%client_scope%%%))
-    then raise(FAIL,'Application Error - Client User has no rights to perform this operation') end\;
+  select case when (ifnull({schema}.check_scope_id(new.note_scope,new.note_scope_id,{schema}.my_cust_id()),0)<=0) then raise(FAIL,'Application Error - Invalid scope - user has no rights to perform this operation') end\;
 end;
 
 create trigger {schema}_note__tbl_after_insert after insert on {schema}_note__tbl
 begin
   update {schema}_note__tbl set 
-    cust_id     = {schema}.get_cust_id(new.note_scope,new.note_scope_id),
-    item_id     = {schema}.get_item_id(new.note_scope,new.note_scope_id),
+    cust_id     = {schema}.get_cust_id((select ifnull(code_code, code_val) from {schema}_code_sys_note_scope where code_val = new.note_scope),new.note_scope_id),
+    item_id     = {schema}.get_item_id((select ifnull(code_code, code_val) from {schema}_code_sys_note_scope where code_val = new.note_scope),new.note_scope_id),
     note_euser     = (select context from jsharmony_meta limit 1),
     note_etstmp = datetime('now','localtime'),
     note_muser     = (select context from jsharmony_meta limit 1),
@@ -121,8 +113,6 @@ begin
   %%%log_audit_update_mult("{schema}_note__tbl","old.note_id",["note_id","cust_id","note_scope","note_scope_id","item_id","note_sts","note_type","note_body"],"null","null","null","{schema}.get_cust_id(new.note_scope,new.note_scope_id)","{schema}.get_item_id(new.note_scope,new.note_scope_id)")%%%
 
   update {schema}_note__tbl set 
-    cust_id     = {schema}.get_cust_id(new.note_scope,new.note_scope_id),
-    item_id     = {schema}.get_item_id(new.note_scope,new.note_scope_id),
     note_muser     = (select context from jsharmony_meta limit 1),
     note_mtstmp = datetime('now','localtime')
     where note_id = new.note_id and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 

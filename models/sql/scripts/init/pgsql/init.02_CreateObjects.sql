@@ -1224,7 +1224,7 @@ CREATE FUNCTION doc__tbl_iud() RETURNS trigger
            and param_cur_attrib = 'doc_ctgr_table'; 
 
         my_doc_scope = case TG_OP when 'DELETE' then OLD.doc_scope else NEW.doc_scope end;
-        select coalesce(code_code,code_val) into my_doc_scope_tbl from {schema}.code_doc_scope where code_val = my_doc_scope;
+        select coalesce(code_code, code_val) into my_doc_scope_tbl from {schema}.code_sys_doc_scope where code_val = my_doc_scope;
         my_doc_scope_id = case TG_OP when 'DELETE' then OLD.doc_scope_id else NEW.doc_scope_id end;
 
         if my_doc_scope not in ('sys_user_code') then
@@ -2375,10 +2375,10 @@ CREATE FUNCTION note__tbl_iud() RETURNS trigger
         my_toa.audit_table_name := lower(TG_TABLE_NAME::text);
 
         if TG_OP = 'DELETE' then
-          select coalesce(code_code,code_val) into my_note_scope_tbl from {schema}.code_note_scope where code_val = OLD.note_scope;
+          select coalesce(code_code, code_val) into my_note_scope_tbl from {schema}.code_sys_note_scope where code_val = OLD.note_scope;
           my_toa.cust_id := NULL;
         else
-          select coalesce(code_code,code_val) into my_note_scope_tbl from {schema}.code_note_scope where code_val = NEW.note_scope;
+          select coalesce(code_code, code_val) into my_note_scope_tbl from {schema}.code_sys_note_scope where code_val = NEW.note_scope;
           if NEW.note_scope in ('sys_user_code')
           then 
             my_toa.cust_id := NULL;

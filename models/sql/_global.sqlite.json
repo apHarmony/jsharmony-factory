@@ -450,7 +450,6 @@
       ""
     ]
   },
-  "client_scope": "('C','E')",
   "{schema}.get_cust_id":{
     "params": ["tabn","tabid"],
     "sql": [
