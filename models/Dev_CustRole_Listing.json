@@ -27,7 +27,7 @@
       {"name":"cust_role_sts","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S",
        "lov": {"sql":"select code_val, code_txt from {schema}.code_ahc order by code_seq,code_txt"},"validate":["Required"],"default":"ACTIVE",
        "controlstyle":"width:70px;","caption":"Status"},
-      {"name":"privs","caption":"Menu Access","control":"html","value":"<img src='/images/icon_update.png' class='xicon' />","link":"update:Dev/CustRoleMenuSelection&cust_role_name"}
+      {"name":"privs","caption":"Menu Access","control":"html","value":"<img src='/images/icon_update.png' class='xicon' />","link":"update:Dev/CustRoleMenu&cust_role_name"}
     ],
     "dberrors": [
       [ "pk_cust_role", "Duplicate Role Name" ],

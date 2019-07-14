@@ -1,6 +1,6 @@
 {
-  "Dev/CustRoleMenuSelection_Menu": {
-    "source_files_prefix":"Dev_CustRoleMenuSelection_Menu",
+  "Dev/CustRoleMenu_Listing": {
+    "source_files_prefix":"Dev_CustRoleMenu_Listing",
     "layout":"grid", 
     "title": "Menu Items for Role <#=data.cust_role_name#>",
     "table":"{schema}.v_cust_menu_role_selection",

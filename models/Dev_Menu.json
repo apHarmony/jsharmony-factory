@@ -31,7 +31,7 @@
        "lov": {"sql":"select code_val, code_txt from {schema}.code_ahc order by code_seq,code_txt"},"validate":["Required"],"default":"ACTIVE",
        "controlstyle":"width:70px;","caption":"Status"},
       {"name":"privs","actions":"B","control": "label","nl":1,"caption":"Privileges",
-        "value": ["<a href=\"<#=((data['menu_group']=='S')?jsh._BASEURL+xmodel.module_namespace+'Dev/SysMenuRoleSelection':jsh._BASEURL+xmodel.module_namespace+'Dev/CustMenuRoleSelection')#>?action=update&amp;menu_id=<#=data['menu_id']#>\"",
+        "value": ["<a href=\"<#=((data['menu_group']=='S')?jsh._BASEURL+xmodel.module_namespace+'Dev/SysMenuRole':jsh._BASEURL+xmodel.module_namespace+'Dev/CustMenuRole')#>?action=update&amp;menu_id=<#=data['menu_id']#>\"",
                   " class=\"privs_link xform_ctrl xelemX_SML xform_label uneditable\"",
                   " onclick=\"window.open(<#=instance#>.$(this).attr('href'),'_blank','width=1200,height=700,resizable=1,scrollbars=1');return false;\"",
                   "><#-((data['menu_id_auto'])?'<img src=\"/images/icon_update.png\" class=\"xicon\">':'')#></a>"]

@@ -1,5 +1,5 @@
 {
-  "Dev/SysRoleMenuSelection": {
+  "Dev/SysRoleMenu": {
     "dev":1,
     "layout": "form", 
     "title":"",
@@ -11,7 +11,7 @@
     "tabpanelstyle": "min-width:1000px;",
     "popup":[1050,700],
     "tabs":[
-      {"name":"SELECTOR","caption": "Menu Items Selector","target":"Dev/SysRoleMenuSelection_Menu","bindings":{"sys_role_name":"sys_role_name"}}
+      {"name":"SELECTOR","caption": "Menu Items Selector","target":"Dev/SysRoleMenu_Listing","bindings":{"sys_role_name":"sys_role_name"}}
     ],
     "fields":[
       {"name":"sys_role_id","type":"bigint","control":"hidden"},

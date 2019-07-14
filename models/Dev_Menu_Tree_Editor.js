@@ -46,7 +46,7 @@ jsh.App[modelid] = new (function(){
   }
 
   this.select_menu_id_auto = function(newval, cb){
-    xmodel.controller.form.Data.cur_menu_id_auto = newval;
+    xmodel.set('cur_menu_id_auto', newval);
     xmodel.controller.form.Data.menu_id_auto = newval;
     this.menu_id_auto = newval;
     jsh.XPage.Select({ modelid: XBase[xmodel.module_namespace+'Dev/Menu'][0], force: true }, cb);

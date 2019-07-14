@@ -1,6 +1,6 @@
 {
   "name": "jsharmony-factory",
-  "version": "1.1.56",
+  "version": "1.1.57",
   "description": "Enterprise framework for jsHarmony",
   "main": "index.js",
   "scripts": {
@@ -43,7 +43,7 @@
     "jsharmony": "^1.1.84",
     "jsharmony-db": "^1.1.17",
     "jsharmony-validate": "^1.1.5",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.14",
     "moment": "^2.24.0",
     "twilio": "^3.30.0"
   }

@@ -9,7 +9,7 @@
   "proc_run":"",
   "par_list_beg":"(",
   "par_list_end":")",
-  "menu_editor_top":"select case when @cur_menu_id_auto <> 0 then @cur_menu_id_auto else (select menu_id_auto from {schema}.menu__tbl where 1=1 order by menu_group desc,coalesce(menu__tbl.menu_seq,menu__tbl.menu_id),menu_name,menu__tbl.menu_id limit 1) end menu_id_auto from {schema}.single",
+  "menu_editor_top":"select @cur_menu_id_auto as cur_menu_id_auto, case when @cur_menu_id_auto <> 0 then @cur_menu_id_auto else (select menu_id_auto from {schema}.menu__tbl where 1=1 order by menu_group desc,coalesce(menu__tbl.menu_seq,menu__tbl.menu_id),menu_name,menu__tbl.menu_id limit 1) end menu_id_auto from {schema}.single",
   "menu_editor_insert":["update {schema}.menu__tbl set menu_seq=coalesce(menu_seq,menu_id)+1",
                   "  where coalesce(menu_seq,menu_id) > (select coalesce(menu_seq,menu_id) from {schema}.menu__tbl where menu_id=@menu_id_parent) ",
                   "    and menu_group = (select menu_group from {schema}.menu__tbl where menu_id=@menu_id_parent)",

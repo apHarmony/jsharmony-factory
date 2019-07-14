@@ -1,10 +1,10 @@
 {
   "Dev/SysFunc_Listing": {
-    "title":"User Flags",
+    "title":"User Functions",
     "dev":1,
     "table":"{schema}.sys_func",
     "actions":"BIUD", 
-    "caption":[0,"Flag","Flags"],
+    "caption":[0,"Function","Functions"],
     "layout":"grid", 
     "sort":[{"sys_func_seq":"asc"},{"sys_func_name":"asc"}], 
     "menu":"admin",
@@ -29,10 +29,10 @@
        "controlstyle":"width:70px;","caption":"Status"}
     ],
     "dberrors": [
-      [ "pk_sys_func", "Duplicate Flag Name" ],
-      [ "sys_func_pkey", "Duplicate Flag Name" ],
-      [ "unq_sys_func_sys_func_desc", "Duplicate Flag Description" ],
-      [ "sys_func_sys_func_desc_key", "Duplicate Flag Description" ]
+      [ "pk_sys_func", "Duplicate Function Name" ],
+      [ "sys_func_pkey", "Duplicate Function Name" ],
+      [ "unq_sys_func_sys_func_desc", "Duplicate Function Description" ],
+      [ "sys_func_sys_func_desc_key", "Duplicate Function Description" ]
     ]
   }    
 }

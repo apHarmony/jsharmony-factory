@@ -1,5 +1,5 @@
 {
-  "Dev/CustRoleMenuSelection": {
+  "Dev/CustRoleMenu": {
     "layout": "form", 
     "dev":1,
     "title":"",
@@ -11,7 +11,7 @@
     "tabpanelstyle": "min-width:1000px;",
     "popup":[1050,700],
     "tabs":[
-      {"name":"SELECTOR","caption": "Menu Items Selector","target":"Dev/CustRoleMenuSelection_Menu","bindings":{"cust_role_name":"cust_role_name"}}
+      {"name":"SELECTOR","caption": "Menu Items Selector","target":"Dev/CustRoleMenu_Listing","bindings":{"cust_role_name":"cust_role_name"}}
     ],
     "fields":[
       {"name":"cust_role_id","type":"bigint","control":"hidden"},

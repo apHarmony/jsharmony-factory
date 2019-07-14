@@ -1,6 +1,6 @@
 {
-  "Admin/Code2Value_App_Listing": {
-    "source_files_prefix":"Admin_Code2Value_App_Listing",
+  "Admin/Code2_App_Value_Listing": {
+    "source_files_prefix":"Admin_Code2_App_Value_Listing",
     "layout":"grid", 
     "table":"",
     "caption":[0,"Code","Codes"],
@@ -54,8 +54,8 @@
       ["doc_doc_scope_doc_ctgr","Scope - Document combination is used - cannot be removed."]
     ]
   },
-  "Dev/Code2Value_App_Listing": {
-    "inherits":"Admin/Code2Value_App_Listing",
+  "Dev/Code2_App_Value_Listing": {
+    "inherits":"Admin/Code2_App_Value_Listing",
     "dev":1,
     "menu":"Dev/Code2_App_Listing",
     "breadcrumbs": { "parents": ["Dev/Code2_App_Listing"] }

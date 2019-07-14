@@ -1,6 +1,6 @@
 {
-  "Dev/SysRoleMenuSelection_Menu": {
-    "source_files_prefix":"Dev_SysRoleMenuSelection_Menu",
+  "Dev/SysRoleMenu_Listing": {
+    "source_files_prefix":"Dev_SysRoleMenu_Listing",
     "layout":"grid", 
     "title": "Menu Items for Role <#=data.sys_role_name#>",
     "table":"{schema}.v_sys_menu_role_selection",

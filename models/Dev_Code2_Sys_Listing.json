@@ -18,14 +18,14 @@
       {"name":"click","type":"varchar","length":"128","validate":["Required"],
        "sqlselect":"(case {schema}.table_type(code_schema,{{concat}}('code2_sys_',code_name)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"","actions":"B","control": "html",
-       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Dev/Code2Value_Sys_Listing?code_name=<%=data['code_name']%>&code_schema=<%=data['code_schema']%>'><%=data['click']%></a>"},
+       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Dev/Code2_Sys_Value_Listing?code_name=<%=data['code_name']%>&code_schema=<%=data['code_schema']%>'><%=data['click']%></a>"},
       {"name":"code_schema","type":"varchar","length":"128","actions":"B","caption":"Schema"},
 	  {"name":"code_name","type":"varchar","length":"128","control": "html", 
        "caption":"Code2 Table Name","actions":"B","controlstyle":"width:120px;","validate":["Required"],
-       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Dev/Code2Value_Sys_Listing?code_name=<%=data['code_name']%>&code_schema=<%=data['code_schema']%>'><%=data['code_name']%></a>"},
+       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Dev/Code2_Sys_Value_Listing?code_name=<%=data['code_name']%>&code_schema=<%=data['code_schema']%>'><%=data['code_name']%></a>"},
 	  {"name":"code_desc","type":"varchar","length":"128","validate":["Required"],
        "caption":"Table Description","actions":"B","controlstyle":"width:260px;","control": "html", 
-       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Dev/Code2Value_Sys_Listing?code_name=<%=data['code_name']%>&code_schema=<%=data['code_schema']%>'><%=data['code_desc']%></a>"},
+       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Dev/Code2_Sys_Value_Listing?code_name=<%=data['code_name']%>&code_schema=<%=data['code_schema']%>'><%=data['code_desc']%></a>"},
 	  {"name":"code_code_desc","type":"varchar","length":"128",
        "caption":"Code","actions":"B","controlstyle":"width:160px;"},
       {"name":"code_attrib_desc","type":"varchar","length":"128",
@@ -37,7 +37,7 @@
       {"name":"click2","type":"varchar","length":"128","validate":["Required"],
        "sqlselect":"(case {schema}.table_type(code_schema,{{concat}}('code2_sys_',code_name)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"Edit Codes","actions":"B","control": "html","cellstyle": "text-align:center;",
-       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Dev/Code2Value_Sys_Listing?code_name=<%=data['code_name']%>&code_schema=<%=data['code_schema']%>'><% if(data['click2']){ %><img src='/images/icon_update.png' height='14' style='position:relative;top:2px;' /><% } %></a>"}
+       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Dev/Code2_Sys_Value_Listing?code_name=<%=data['code_name']%>&code_schema=<%=data['code_schema']%>'><% if(data['click2']){ %><img src='/images/icon_update.png' height='14' style='position:relative;top:2px;' /><% } %></a>"}
 	]
   },	
   "Dev/Code2_Sys_Listing": {

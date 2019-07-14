@@ -1141,7 +1141,7 @@ INSERT INTO number__tbl (number_val) VALUES (999);
 
 
 
-INSERT INTO sys_func (sys_func_seq, sys_func_sts, sys_func_name, sys_func_desc, sys_func_snotes, sys_func_code, sys_func_attrib) VALUES (1, 'ACTIVE', 'TBD', 'TBD', NULL, NULL, NULL);
+INSERT INTO sys_func (sys_func_seq, sys_func_sts, sys_func_name, sys_func_desc, sys_func_snotes, sys_func_code, sys_func_attrib) VALUES (1, 'ACTIVE', 'DEFAULT', 'Default', NULL, NULL, NULL);
 
 
 

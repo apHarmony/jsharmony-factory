@@ -8,12 +8,12 @@
     "actions":"B", 
     "caption":[0,"Menu Item","Menu Items"],
     "sqlselect": "menu_editor_top",
-    "querystring": { "|action": "update", "|cur_menu_id_auto": "0" },
+    "querystring": { "|action": "update" },
     "buttons": [{"link":"Dev/Menu_Listing&", "icon": "list", "text": "List View", "actions": "B" }],
     "menu":"Dev/Menu_Tree_Editor",
     "hide_system_buttons" : ["print","export"], 
     "fields":[
-	  { "control": "html", "value": "<div class=\"clear\" style=\"padding-bottom:15px;width:1000px;\"></div>" },
+      { "control": "html", "value": "<div class=\"clear\" style=\"padding-bottom:15px;width:1000px;\"></div>" },
       {"name": "cur_menu_id_auto", "type": "bigint", "key": 1, "control":"hidden" },
       {"name": "menu_id_auto","actions": "B","caption": "","control": "tree","unbound":true,"always_editable":true,
        "controlstyle": "display:inline-block;margin-right:10px;height:400px;width:300px;",
@@ -36,33 +36,33 @@
         "caption": "",
         "actions": "BIUD"
       }
-	  ],
+    ],
     "oninit": "jsh.App[modelid].oninit();"
   },
   "Dev/Menu_Exec_Insert": {
-      "layout": "exec",
-      "title": "Add Menu Item",
-      "actions": "U",
-      "dev": 1,
-      "sqlexec": "menu_editor_insert",
-      "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
-      "popup":[450,250],
-      "fields": [
-        {"name":"menu_id_parent","type":"bigint","actions":"U","control":"hidden"},
-        {"name":"menu_name","type":"varchar","length": 30,"actions":"U","control":"hidden"},
-        {"name":"menu_desc","type":"varchar","length": 255,"actions":"U","control":"hidden"}
-      ]
+    "layout": "exec",
+    "title": "Add Menu Item",
+    "actions": "U",
+    "dev": 1,
+    "sqlexec": "menu_editor_insert",
+    "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
+    "popup":[450,250],
+    "fields": [
+      {"name":"menu_id_parent","type":"bigint","actions":"U","control":"hidden"},
+      {"name":"menu_name","type":"varchar","length": 30,"actions":"U","control":"hidden"},
+      {"name":"menu_desc","type":"varchar","length": 255,"actions":"U","control":"hidden"}
+    ]
   },
   "Dev/Menu_Exec_Delete": {
-      "layout": "exec",
-      "title": "Delete Menu Item",
-      "actions": "U",
-      "dev": 1,
-      "sqlexec": ["delete from {schema}.menu__tbl where menu_id_auto=@menu_id_auto"],
-      "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
-      "popup":[450,250],
-      "fields": [
-        {"name":"menu_id_auto","type":"bigint","actions":"U","control":"hidden"}
-      ]
+    "layout": "exec",
+    "title": "Delete Menu Item",
+    "actions": "U",
+    "dev": 1,
+    "sqlexec": ["delete from {schema}.menu__tbl where menu_id_auto=@menu_id_auto"],
+    "sqlexec_comment":"Be sure to add %%%DATALOCKS%%% if applicable",
+    "popup":[450,250],
+    "fields": [
+      {"name":"menu_id_auto","type":"bigint","actions":"U","control":"hidden"}
+    ]
   }
 }
