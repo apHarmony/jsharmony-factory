@@ -9,7 +9,7 @@
       "main":{"X_B":"B","X_X":"*"},
       "client": {"CX_B":"B","CX_X":"*","CSYSADMIN":"*"}
     },
-	  "popup":[800,300],
+	  "popup":[850,300],
 	  "fields":[
 	    {"name":"note_id","type":"bigint","key": 1,"datalock":{"cust_id":"note_id"},"control":"hidden"},
       {"name":"note_scope_id","type":"bigint","actions":"BI","datalock":{"cust_id":"note_scope_id"},
