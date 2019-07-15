@@ -62,11 +62,11 @@
     {"name":"doc_file","type":"file","actions":"BIU","nl":1,
      "control":"file_upload","caption":"Document",
      "controlparams": { 
-         "sqlparams": {"FILE_SIZE": "doc_size",
-                       "FILE_EXT": "doc_ext",
-                       "FILE_uptstmp": "doc_uptstmp",
-                       "FILE_UU": "doc_upuser",
-                       "FILE_NAME": "doc_filename"
+         "sqlparams": {"file_size": "doc_size",
+                       "file_extension": "doc_ext",
+                       "file_upload_timestamp": "doc_uptstmp",
+                       "file_upload_user": "doc_upuser",
+                       "file_name": "doc_filename"
          },
      "download_button": "Download Document",
      "upload_button": "Upload New File",

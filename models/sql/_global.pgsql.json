@@ -20,7 +20,7 @@
                   "  returning menu_id_auto",
                   ") select menu_id_auto from xrslt;"],
   "menu_editor_lov":"select menu_id as code_id,menu_id_parent as code_parent_id,menu_id_auto as code_val,menu_desc as code_txt,'folder' as code_icon from {schema}.menu__tbl where 1=1 %%%DATALOCKS%%% order by menu_group desc,coalesce(menu__tbl.menu_seq,menu__tbl.menu_id),menu_name,menu__tbl.menu_id",
-  "menu_group_lov":"select * from (values('S','Main'),('C','Client')) as COD(code_val,code_txt)",
+  "menu_group_lov":"select * from (values('S','Main'),('C','Client')) as code(code_val,code_txt)",
   "JSHARMONY_FACTORY_INSTALLED":"select case when coalesce((select count(*) from INFORMATION_SCHEMA.COLUMNS where table_name = 'single' and table_schema='{schema}'),0) > 0 then 1 else 0 end JSHARMONY_FACTORY_INSTALLED",
   "{{concat}}":{
     "params": ["a","b"],

@@ -8405,7 +8405,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'cust_role', @level2type=N'COLUMN',@level2name=N'cust_role_sts'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'cust_role', @level2type=N'COLUMN',@level2name=N'cust_role_sts'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Client Role Status Code(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'cust_role', @level2type=N'COLUMN',@level2name=N'cust_role_sts'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'cust_role', @level2type=N'COLUMN',@level2name=N'cust_role_sts'
 GO
@@ -9081,7 +9081,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function ID' ,
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Sequence' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_func', @level2type=N'COLUMN',@level2name=N'sys_func_seq'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_func', @level2type=N'COLUMN',@level2name=N'sys_func_sts'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Status Code(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_func', @level2type=N'COLUMN',@level2name=N'sys_func_sts'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Function Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_func', @level2type=N'COLUMN',@level2name=N'sys_func_name'
 GO
@@ -9127,7 +9127,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'menu__tbl', @level2type=N'COLUMN',@level2name=N'menu_sts'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'menu__tbl', @level2type=N'COLUMN',@level2name=N'menu_sts'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Menu Item Status Code(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'menu__tbl', @level2type=N'COLUMN',@level2name=N'menu_sts'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'menu__tbl', @level2type=N'COLUMN',@level2name=N'menu_sts'
 GO
@@ -9303,7 +9303,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_ColumnWidth', @value=-1 , @level0type
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_CurrencyLCID', @value=0 , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_role', @level2type=N'COLUMN',@level2name=N'sys_role_sts'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Status COD(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_role', @level2type=N'COLUMN',@level2name=N'sys_role_sts'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Role Status Code(AHC) - ACTIVE, HOLD, CLOSED' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_role', @level2type=N'COLUMN',@level2name=N'sys_role_sts'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_TextAlign', @value=NULL , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'sys_role', @level2type=N'COLUMN',@level2name=N'sys_role_sts'
 GO
