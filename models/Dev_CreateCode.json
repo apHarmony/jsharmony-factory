@@ -16,7 +16,7 @@
  },
  "Dev/CreateCode_Sys": {
   "inherits": "Dev/CreateCode_Base",
-  "title": "UCOD Table Create",
+  "title": "Create Code Table",
   "sqlexec": "%%%proc_run%%% {schema}.create_code_sys%%%par_list_beg%%%@code_schema, @code_name, @code_desc%%%par_list_end%%%;", 
   "fields": [
     {"name":"question",
@@ -25,7 +25,7 @@
  }, 
  "Dev/CreateCode2_Sys": {
   "inherits": "Dev/CreateCode_Base",
-  "title": "UCOD2 Table Create",
+  "title": "Create Code2 Table",
   "sqlexec": "%%%proc_run%%% {schema}.create_code2_sys%%%par_list_beg%%%@code_schema, @code_name, @code_desc%%%par_list_end%%%;", 
   "fields": [
     {"name":"question",
@@ -34,7 +34,7 @@
  }, 
  "Dev/CreateCode_App": {
   "inherits": "Dev/CreateCode_Base",
-  "title": "GCOD Table Create",
+  "title": "Create Code Table",
   "sqlexec": "%%%proc_run%%% {schema}.create_code_app%%%par_list_beg%%%@code_schema, @code_name, @code_desc%%%par_list_end%%%;", 
   "fields": [
     {"name":"question",
@@ -43,7 +43,7 @@
  }, 
  "Dev/CreateCode2_App": {
   "inherits": "Dev/CreateCode_Base",
-  "title": "GCOD2 Table Create",
+  "title": "Create Code2 Table",
   "sqlexec": "%%%proc_run%%% {schema}.create_code2_app%%%par_list_beg%%%@code_schema, @code_name, @code_desc%%%par_list_end%%%;", 
   "fields": [
     {"name":"question",
