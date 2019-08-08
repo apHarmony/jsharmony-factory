@@ -77,7 +77,7 @@
         "{{email_text}}": "email_text",
         "{{email_html}}": "email_html",
         "{{email_doc_id}}": "email_doc_id",
-        "email_doc_filename": "email_doc_filename",
+        "{{email_doc_filename}}": "email_doc_filename",
         "{{sms_txt_attrib}}": "sms_txt_attrib",
         "{{sms_to}}": "sms_to",
         "{{sms_body}}": "sms_body",

@@ -200,6 +200,7 @@ transform.fields = {
   "email_bcc": "email_bcc",
   "email_cc": "email_cc",
   "email_doc_id": "email_d_id",
+  "email_doc_filename": "email_d_filename",
   "email_html": "email_html",
   "email_subject": "email_subject",
   "email_text": "email_text",

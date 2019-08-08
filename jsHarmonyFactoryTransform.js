@@ -205,6 +205,7 @@ function jsHarmonyFactoryTransform(module){
     "email_bcc": "email_bcc",
     "email_cc": "email_cc",
     "email_doc_id": "email_doc_id",
+    "email_doc_filename": "email_doc_filename",
     "email_html": "email_html",
     "email_subject": "email_subject",
     "email_text": "email_text",

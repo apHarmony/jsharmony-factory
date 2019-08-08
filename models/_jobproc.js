@@ -245,7 +245,6 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
             if(!exists) return cb(new Error('Report output does not exist'));
             var filename = _transform('doc__tbl') + (doc_id||'0') + '.pdf';
             if(job.email_attach.toString().substr(0,9)=='filename:') filename = job.email_attach.substr(9);
-            console.log(filename);
             attachments.push({ filename: filename, content: fs.createReadStream(tmppath) });
             return cb();
           });
