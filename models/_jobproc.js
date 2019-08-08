@@ -245,6 +245,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
             if(!exists) return cb(new Error('Report output does not exist'));
             var filename = _transform('doc__tbl') + (doc_id||'0') + '.pdf';
             if(job.email_attach.toString().substr(0,9)=='filename:') filename = job.email_attach.substr(9);
+            console.log(filename);
             attachments.push({ filename: filename, content: fs.createReadStream(tmppath) });
             return cb();
           });
@@ -395,7 +396,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   }
   if ('note_scope' in jrow) {
     //Add Note to Job
-    if (!('note_scope_id' in jrow) || !('note_type' in jrow) || !('note_note' in jrow)) throw new Error('Job with n_scope requires n_scope_id, n_type, and n_note');
+    if (!('note_scope_id' in jrow) || !('note_type' in jrow) || !('note_body' in jrow)) throw new Error('Job with n_scope requires n_scope_id, n_type, and n_note');
     job_sql += this.AppSrv.getSQL('',_this._transform('jobproc_add_note'));
     job_sql_ptypes.push(dbtypes.VarChar(32));
     job_sql_params['note_scope'] = jrow.note_scope;
@@ -413,7 +414,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   job_sql += this.AppSrv.getSQL('',_this._transform('jobproc_add_END'));
   var verrors = _.merge(verrors, jobvalidate.Validate('B', job_sql_params));
   //Transform job_sql_params
-  _this.transform_db_params(job_sql_params);
+  job_sql_params = _this.transform_db_params(job_sql_params);
   if (!_.isEmpty(verrors)) { Helper.GenError(req, res, -99999, 'Error during job queue: ' + verrors[''].join('\n') + ' ' + JSON.stringify(job_sql_params)); return; }
   //Add SQL to Transaction
   
