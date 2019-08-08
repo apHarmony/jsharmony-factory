@@ -1,0 +1,16 @@
+{
+  "Dev/DebugConsole": {
+    "comment":"Dev/DebugConsole",
+    "title":"Debug Console",
+    "table":"",
+    "actions":"B", 
+    "layout":"exec",
+    "dev":1,
+    "menu":"Dev/DebugConsole",
+    "caption": [ "", "Request", "Requests" ],
+	  "fields":[
+      {"control":"button","value":"Launch Debug Console","controlstyle": "padding:3px 8px;",
+        "onclick": "if(jsh.xDebugConsole.isRunning()) return XExt.Alert('Debug Console is already open'); jsh.xDebugConsole.start();"}
+	  ]
+	}
+}

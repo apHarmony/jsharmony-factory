@@ -52,6 +52,7 @@ INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name,
 INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90024, 'ACTIVE', 900, 'Dev/DBScripts', 90044, 'DB Scripts', NULL, NULL, '%%%NAMESPACE%%%Dev/DBScripts', NULL, NULL, NULL);
 INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90025, 'ACTIVE', 900, 'Dev/DBSchema', 90045, 'DB Schema', NULL, NULL, '%%%NAMESPACE%%%Dev/DBSchema', NULL, NULL, NULL);
 INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90026, 'ACTIVE', 900, 'Dev/Models', 90046, 'Model Viewer', NULL, NULL, '%%%NAMESPACE%%%Dev/Models', NULL, NULL, NULL);
+INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90027, 'ACTIVE', 900, 'Dev/DebugConsole', 90047, 'Debug Console', NULL, NULL, '%%%NAMESPACE%%%Dev/DebugConsole', NULL, NULL, NULL);
 
 
 
@@ -1191,6 +1192,7 @@ INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES 
 INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90024, NULL, 'DEV');
 INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90025, NULL, 'DEV');
 INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90026, NULL, 'DEV');
+INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90027, NULL, 'DEV');
 
 INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (2, NULL, 'SYSADMIN');
 INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (200, NULL, 'SYSADMIN');

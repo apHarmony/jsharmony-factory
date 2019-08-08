@@ -216,6 +216,7 @@ INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, m
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90024, 'ACTIVE', 900, 'Dev/DBScripts', 90044, 'DB Scripts', NULL, NULL, '%%%NAMESPACE%%%Dev/DBScripts', NULL, NULL);
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90025, 'ACTIVE', 900, 'Dev/DBSchema', 90045, 'DB Schema', NULL, NULL, '%%%NAMESPACE%%%Dev/DBSchema', NULL, NULL);
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90026, 'ACTIVE', 900, 'Dev/Models', 90046, 'Model Viewer', NULL, NULL, '%%%NAMESPACE%%%Dev/Models', NULL, NULL);
+INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 90027, 'ACTIVE', 900, 'Dev/DebugConsole', 90047, 'Debug Console', NULL, NULL, '%%%NAMESPACE%%%Dev/DebugConsole', NULL, NULL);
 
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('C', 200, 'ACTIVE', 2, 'Client/Dashboard', NULL, 'Dashboard', NULL, NULL, '%%%NAMESPACE%%%Client/Dashboard', NULL, NULL);
@@ -294,6 +295,7 @@ INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90023, 'DEV'
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90024, 'DEV');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90025, 'DEV');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90026, 'DEV');
+INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (90027, 'DEV');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (80086, 'SYSADMIN');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (80095, 'SYSADMIN');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (80096, 'SYSADMIN');
