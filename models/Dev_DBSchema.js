@@ -59,9 +59,11 @@ jsh.App[modelid] = new (function(){
     var jform = _this.getFormElement();
     var jobj = jform.find('.rslt');
     jobj.html('');
-    $('<div>\
-      <a href="#" class="show_all" onclick="return false;">[Show All]</a> | \
-      <a href="#" class="hide_all" onclick="return false;">[Hide All]</a>\
+    $('<div>Click on a database object for details:<br/><br/>\
+        <div>\
+          <a href="#" class="show_all" onclick="return false;">[Show All]</a> | \
+          <a href="#" class="hide_all" onclick="return false;">[Hide All]</a>\
+        </div>\
       </div>').appendTo(jobj);
     jobj.find('.show_all').click(function(){ jobj.find('table').show(); });
     jobj.find('.hide_all').click(function(){ jobj.find('table').hide(); });
@@ -138,6 +140,7 @@ jsh.App[modelid] = new (function(){
     });
     $('.expandable').click(function(){ _this.getTable(this).toggle(); });
     //jform.find('.rslt').text(JSON.stringify(schema));
+    jsh.XWindowResize();
   }
 
 })();

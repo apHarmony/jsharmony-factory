@@ -50,8 +50,8 @@ function jsHarmonyFactoryConfig(){
   //Debug settings
   this.debug_params = {
     job_requests: false,                      //Record all JOB requests on LOG/CONSOLE
-    //email_override: 'donotreply@company.com', //Send all emails to this address instead of to the client
-    //sms_override: '+12223334444',             //Send all SMS messages to this phone instead of to the client
+    //email_override: 'donotreply@company.com', //Send all job processor emails to this address instead of to the client
+    //sms_override: '+12223334444',             //Send all job processor SMS messages to this phone instead of to the client
     no_job_email: false,                      //Disable sending EMAILS from JOB
     no_job_sms: false,                        //Disable sending SMS messages from JOB
     disable_job_processor: false,             //Disable Job Processor
