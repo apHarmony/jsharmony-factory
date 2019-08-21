@@ -61,6 +61,8 @@ function jsHarmonyFactory(name, options){
   _this.funcs = new funcs(_this);
   _this.transform = new jsHarmonyFactoryTransform(_this);
   //_this.transform.Add(require('./jsHarmonyFactoryTransform.Classic.js'));
+
+  _this.onCreateServer = []; //function(server){}
 }
 
 jsHarmonyFactory.prototype = new jsHarmonyModule();
@@ -107,6 +109,8 @@ jsHarmonyFactory.prototype.Init = function(cb){
     _this.jsh.Servers['default'] = server;
 
     var app = _this.app = _this.jsh.Servers['default'].app;
+
+    Helper.trigger(_this.onCreateServer, server);
 
     _this.VerifyConfig();
 
