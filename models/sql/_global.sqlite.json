@@ -27,6 +27,20 @@
       "return rslt.replace(/'/g,\"''\").replace(/\\;/g,\"\\\\\\\\;\").replace(/\\r/g,\" \").replace(/\\n/g,\"\\\\n \");"
     ]
   },
+  "decode": {
+    "params": [],
+    "exec": [
+      "if(arguments.length<2) return 'null';",
+      "var rslt = '(case ('+arguments[0]+')';",
+      "for(var i=0;i<arguments.length-2;i+=2){",
+      "  rslt += ' when ('+arguments[i+1]+') then ('+arguments[i+2]+')'",
+      "}",
+      "if((arguments.length%2)==0) rslt += ' else ('+arguments[arguments.length-1]+')';",
+      "else rslt += ' else null';",
+      "rslt += ' end)';",
+      "return rslt;"
+    ]
+  },
   "{schema}.create_code" : {
     "params": ["SCHEMA","ID","COMMENT"],
     "sql": ["create_code(ifnull(%%%SCHEMA%%%||'_','')||'code_'||%%%ID%%%)"]

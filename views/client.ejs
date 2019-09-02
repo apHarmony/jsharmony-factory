@@ -19,9 +19,11 @@
 <div class="xhead">
   <% if(req.isAuthenticated){ %>
     <div class="xtoplinks"><img src="/images/toplinks_corner.png" class="xtoplinks_corner" alt="" title="" />
-      <b>Client Portal:</b>&nbsp; <%=(req.jshsite.globalparams.company_name(req)+' - '+req.user_name)%> &nbsp;|&nbsp; 
-      <a class="toplink_help static" href="<%-req.baseurl%><%=req.jshsite.globalparams.help_view(req)%>/" onclick="<%=req.jshsite.instance%>.XExt.popupForm('<%=req.jshsite.globalparams.help_view(req)%>'); return false;">Help</a> &nbsp;|&nbsp; 
-      <a href="/client/logout">Logout</a>
+      <div class="xtoplinks_body">
+        <b>Client Portal:</b>&nbsp; <%=(req.jshsite.globalparams.company_name(req)+' - '+req.user_name)%> &nbsp;|&nbsp; 
+        <a class="toplink_help static" href="<%-req.baseurl%><%=req.jshsite.globalparams.help_view(req)%>/" onclick="<%=req.jshsite.instance%>.XExt.popupForm('<%=req.jshsite.globalparams.help_view(req)%>'); return false;">Help</a> &nbsp;|&nbsp; 
+        <a href="/client/logout">Logout</a>
+      </div>
     </div>
   <% } %>
   <a class="xbrand_link" href="<%-ejsext.iif(req.isAuthenticated,'',req.jshsite.home_url)%>/">&nbsp;</a>

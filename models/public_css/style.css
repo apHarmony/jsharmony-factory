@@ -24,25 +24,29 @@ HEADER AND TOP BUTTONS
 */
 
 <%-(rootcss||'body')%> {
-	background-image:url('<%-req.jshsite.publicurl%>images/top.png');
 }
 <%-rootcss%> .xhead{
 	width:100%;
 	height:117px;
 }
 <%-rootcss%> .xtoplinks{
-	height:21px;
-	background-image:url('<%-req.jshsite.publicurl%>images/toplinks.png');
-	color:#fff;
-	font-size:12px;
-	padding-top:2px;
-	padding-right:15px;
-  padding-left:12px;
-	position:absolute;
-  white-space: nowrap;
+  background-color:#31245d;
+  padding-left:18px;
+  position:absolute;
 	top:0px;
 	right:0px;
   z-index:5;
+  white-space: nowrap;
+}
+<%-rootcss%> .xtoplinks_body{
+  background-image:url('<%-req.jshsite.publicurl%>images/toplinks.png');
+  height:21px;
+  color:#fff;
+  font-size:12px;
+  padding-left:12px;
+	padding-top:2px;
+	padding-right:15px;
+  white-space: nowrap;
 }
 <%-rootcss%> .xtoplinks a{
 	color:#fff;
@@ -54,7 +58,7 @@ HEADER AND TOP BUTTONS
 <%-rootcss%> .xtoplinks_corner{
 	float:left;
 	top:0px;
-  left:-18px;
+  left:0px;
 	position:absolute;
 }
 <%-rootcss%> .xbrand_link{
