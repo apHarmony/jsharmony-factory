@@ -31,12 +31,21 @@ HEADER AND TOP BUTTONS
 }
 <%-rootcss%> .xtoplinks{
   background-color:#31245d;
-  padding-left:18px;
+  padding-left:0px;
   position:absolute;
 	top:0px;
 	right:0px;
   z-index:5;
   white-space: nowrap;
+}
+<%-rootcss%> .xtoplinks:before {
+  content: '';
+  position:absolute;
+  top:0;
+  left:-18px;
+  border-left:18px solid transparent; 
+  border-top:23px solid #31245d; 
+  width:0;
 }
 <%-rootcss%> .xtoplinks_body{
   background-image:url('<%-req.jshsite.publicurl%>images/toplinks.png');
@@ -58,8 +67,8 @@ HEADER AND TOP BUTTONS
 <%-rootcss%> .xtoplinks_corner{
 	float:left;
 	top:0px;
-  left:0px;
-	position:absolute;
+  left:-18px;
+  position:absolute;
 }
 <%-rootcss%> .xbrand_link{
 	display:block;
