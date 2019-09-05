@@ -21,11 +21,12 @@ jsHarmonyFactoryConfigHelper = { };
 
 jsHarmonyFactoryConfigHelper.JobProc = { };
 
-jsHarmonyFactoryConfigHelper.JobProc.ExecuteSQL = function (sql){
+jsHarmonyFactoryConfigHelper.JobProc.ExecuteSQL = function (sql, cb){
   return function (jobproc){
     jobproc.AppSrv.ExecRecordset('jobproc', sql, [], { }, function (err, rslt) {
-      if (err) _this.jsh.Log.error('Error Running Task: '+err.toString());
-      if (rslt && rslt[0]) _this.jsh.Log.info('Task Result: '+JSON.stringify(rslt));
+      if (err) return jobproc.AppSrv.jsh.Log.error('Error Running Task: '+err.toString());
+      if (rslt && rslt[0]) jobproc.AppSrv.jsh.Log.info('Task Result: '+JSON.stringify(rslt));
+      if (cb) cb(rslt);
     });
   }
 }

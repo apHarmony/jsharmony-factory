@@ -2,7 +2,7 @@
   "Client/Dashboard_Note_Listing": {
     "comment":"Client/Dashboard_Note_Listing - List of System Notes with Client Scope - One Client  ",
     "layout":"grid", 
-    "title":"Notifications1",
+    "title":"Notifications",
     "table":"{schema}.v_note",
     "actions":"B", 
     "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
