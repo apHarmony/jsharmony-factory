@@ -48,7 +48,7 @@
       {"name":"click2","type":"varchar","length":"128","validate":["Required"],
        "sqlselect":"(case {schema}.table_type(code_schema,{{concat}}('code_app_',code_name)) when 'BASE TABLE' then 'U' else NULL end)",
        "caption":"Edit Codes","actions":"B","control": "html","cellstyle": "text-align:center;",
-       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Dev/Code_App_Value_Listing?code_name=<%=data['code_name']%>&code_schema=<%=(data['code_schema']||'')%>'><% if(data['click2']){ %><img src='/images/icon_update.png' height='14' style='position:relative;top:2px;' /><% } %></a>",
+       "value": "<a href='<%=jsh._BASEURL%><%=xmodel.module_namespace%>Dev/Code_App_Value_Listing?code_name=<%=data['code_name']%>&code_schema=<%=(data['code_schema']||'')%>'><% if(data['click2']){ %><img src='<%=jsh._PUBLICURL%>images/icon_update.png' height='14' style='position:relative;top:2px;' /><% } %></a>",
        "__AFTER__": "my_create"}
     ],
     "dberrors": [

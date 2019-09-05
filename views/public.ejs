@@ -3,9 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><%=jsh.Config.app_name%> - <%= title %></title>
-<link rel="stylesheet" type="text/css" href="/application.css" />
-<link href='/fonts/jsHarmonyFonts.css' rel='stylesheet' type='text/css' />
-<script type="text/javascript" src="/js/jsHarmony.js"></script>
+<link rel="stylesheet" type="text/css" href="<%-req.baseurl%>application.css" />
+<link href='<%-req.jshsite.publicurl%>fonts/jsHarmonyFonts.css' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="<%-req.jshsite.publicurl%>js/jsHarmony.js"></script>
 <script type="text/javascript">var <%-req.jshsite.instance%> = new jsHarmony(<%-req.getJSClientParams()%>);</script>
 <style type="text/css">
 .xmenu a{
@@ -34,7 +34,7 @@ body {
 <div class="xmain">
 
 <div class="xhead">
-  <div class="xtoplinks"><img src="/images/toplinks_corner.png" class="xtoplinks_corner" alt="" title="" />
+  <div class="xtoplinks"><img src="<%-req.jshsite.publicurl%>images/toplinks_corner.png" class="xtoplinks_corner" alt="" title="" />
     <div class="xtoplinks_body">
       <a href="<%-req.jshsite.home_url%>/">Home</a> &nbsp;|&nbsp; 
       <a href="<%-req.baseurl%>">Login</a>
@@ -42,7 +42,7 @@ body {
   </div>
   <a class="xbrand_link" href="<%-req.jshsite.home_url%>/">&nbsp;</a>
   <div class="xlogo">
-    <a class="xlogoimg" href="<%-req.jshsite.home_url%>/"><img src="/images/logo.png" alt="<%=jsh.Config.app_name%>" title="<%=jsh.Config.app_name%>" /></a>
+    <a class="xlogoimg" href="<%-req.jshsite.home_url%>/"><img src="<%-req.jshsite.publicurl%>images/logo.png" alt="<%=jsh.Config.app_name%>" title="<%=jsh.Config.app_name%>" /></a>
   </div>
   
   <div class="xmenu">

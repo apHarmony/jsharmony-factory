@@ -97,7 +97,7 @@ jsh.App[modelid] = new (function(){
       jchild.append(jchildlink);
       //Link to read script
       var jchildinfolink = $('<a class="info"></a>');
-      jchildinfolink.html('<img src="/images/icon_search.png" width="12" style="padding-left:8px;position:relative;top:2px;" />');
+      jchildinfolink.html('<img src="<%=jsh._PUBLICURL%>images/icon_search.png" width="12" style="padding-left:8px;position:relative;top:2px;" />');
       jchildinfolink.prop('href','#');
       jchild.append(jchildinfolink);
       //Children
