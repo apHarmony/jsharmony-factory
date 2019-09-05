@@ -25,9 +25,12 @@ HEADER AND TOP BUTTONS
 
 <%-(rootcss||'body')%> {
 }
-<%-rootcss%> .xhead{
+<%-rootcss%> .xhead {
 	width:100%;
-	height:117px;
+  height:117px;
+}
+<%-rootcss%> .xbody.with_xhead {
+  margin-top:117px;
 }
 <%-rootcss%> .xtoplinks{
   background-color:#31245d;

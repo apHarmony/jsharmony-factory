@@ -48,10 +48,9 @@ body {
   <div class="xmenu">
   </div>
   <div class="xmenuside"></div>
-
 </div>
 
-<div class="xbody">
+<div class="xbody with_xhead">
 <%-ejsext.BreadCrumbs(req, jsh, modelid)%><% if(title){ %>
 <h1 style="display:inline-block;" class="xform_title"><%= title %></h1>
 <% } %><%- body %>
