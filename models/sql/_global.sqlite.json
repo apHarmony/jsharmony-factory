@@ -6,6 +6,7 @@
   "sms_send_txt": "select txt_title,txt_body,txt_bcc from {schema}_txt__tbl where txt_process='SMS' and txt_attrib=@txt_attrib",
   "str_concat":"||",
   "func_prefix":"",
+  "$ifnull":{ "params": ["a","b"], "sql": "ifnull(%%%a%%%,%%%b%%%)" },
   "proc_run":"",
   "par_list_beg":"(",
   "par_list_end":")",
@@ -480,6 +481,24 @@
     "params": [],
     "sql": [
       "(select {schema}_cust_user.cust_id from {schema}_cust_user where {schema}_cust_user.sys_user_id={schema}.my_cust_user())"
+    ]
+  },
+  "{schema}.check_scope_id":{
+    "params": ["in_scope","in_scope_id","in_cust_id"],
+    "sql": [
+      "(case ",
+      "  when %%%in_cust_id%%% is null then",
+      "    (case %%%in_scope%%%",
+      "      when 'U' then (select sys_user_id from jsharmony.sys_user where sys_user_id=%%%in_scope_id%%%)",
+      "      when 'S' then 1",
+      "      else null",
+      "    end)",
+      "  when %%%in_cust_id%%% = (case %%%in_scope%%%",
+      "      when 'U' then null",
+      "      else null",
+      "    end) then %%%in_cust_id%%%",
+      "  else null",
+      "end)"
     ]
   },
   "{schema}.get_cust_name":{

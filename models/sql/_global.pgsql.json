@@ -6,6 +6,7 @@
   "sms_send_txt": "select txt_title,txt_body,txt_bcc from {schema}.txt__tbl where txt_process='SMS' and txt_attrib=@txt_attrib",
   "str_concat":"||",
   "func_prefix":"",
+  "$ifnull":{ "params": ["a","b"], "sql": "coalesce(%%%a%%%,%%%b%%%)" },
   "proc_run":"select ",
   "par_list_beg":"(",
   "par_list_end":")",
