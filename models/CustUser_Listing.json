@@ -31,6 +31,6 @@
   "Client/Admin/CustUser_Listing": {
     "inherits": "CustUser_Listing",
     "roles": { "client": {"CSYSADMIN":"*","CADMIN":"*"} },
-    "menu":"Client/Admin"
+    "menu":"Client/Admin/CustUser_Listing"
   }
 }

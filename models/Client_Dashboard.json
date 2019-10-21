@@ -13,7 +13,7 @@
     "fields":[
       {"name":"motd","type":"varchar","actions":"B","control":"hidden","caption":"","datalock":{"cust_id":"always"}},
       {"control":"html","value":"<div class=\"clear Dashboard__model_MOTD\"></div>"},
-      {"name":"qnssl","control":"subform","target":"Client/Dashboard_Note_Listing","bindings":{"note_scope":"'C'","note_type":"'S'"},"actions": "BIUD",
+      {"name":"qnssl","control":"subform","target":"Client/Dashboard_Note_Listing","bindings":{"note_scope":"'C'"},"actions": "BIUD",
       "caption":"Notifications","controlstyle":"width:820px;float:left;margin-right:10px;"},
       {"control":"html","value":"<div class=\"clear\"></div>"}
     ]

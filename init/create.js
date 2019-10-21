@@ -63,6 +63,8 @@ var scriptConfig = {
   _JSH_ADMIN_PASS: '',
 
   DB_USER_EXISTS: false,
+  CLIENT_PORTAL: undefined,
+  SAMPLE_DATA: false,
 
   sqlFuncs: [],
 };
@@ -124,6 +126,8 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     scriptConfig._ADMIN_DBPASS = '';
     scriptConfig._JSH_ADMIN_EMAIL = '';
     scriptConfig._JSH_ADMIN_PASS = '';
+    scriptConfig.CLIENT_PORTAL = undefined;
+    scriptConfig.SAMPLE_DATA = false;
 
     //Read command line arguments for user / pass
     for(var i=1;i<process.argv.length;i++){
@@ -142,6 +146,9 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         scriptConfig._JSH_ADMIN_PASS = nextarg;
         i++;
       }
+      else if(arg=='--with-client-portal') scriptConfig.CLIENT_PORTAL = true;
+      else if(arg=='--no-client-portal') scriptConfig.CLIENT_PORTAL = false;
+      else if(arg=='--with-sample-data') scriptConfig.SAMPLE_DATA = true;
     }
   
     Promise.resolve()
@@ -296,6 +303,18 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         });
       });
     }); })
+
+    //Ask for the database type
+    .then(xlib.getStringAsync(function(){
+      if(typeof scriptConfig.CLIENT_PORTAL != 'undefined') return false;
+      console.log('\r\nInitialize client portal?');
+      console.log('1) Yes');
+      console.log('2) No');
+    },function(rslt,retry){
+      if(rslt=="1"){ scriptConfig.CLIENT_PORTAL = true; return true; }
+      else if(rslt=="2"){ scriptConfig.CLIENT_PORTAL = false; return true; }
+      else{ console.log('Invalid entry.  Please enter the number of your selection'); retry(); }
+    }))
   
     //Create Database
     .then(function(){ return new Promise(function(resolve, reject){
@@ -303,7 +322,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
       console.log('===============================');
       console.log('Running CREATE Database Scripts');
       console.log('===============================');
-      dbs.Run(['*','init','create'],resolve);
+      dbs.Run(['*','init','core','create'],resolve);
     }); })
   
     //*** Update connection string in app.config.js
@@ -349,14 +368,37 @@ jsHarmonyFactory_Create.Run = function(run_cb){
       console.log('=============================');
       console.log('Running INIT Database Scripts');
       console.log('=============================');
-      dbs.Run(['*','init','init'],function(){
-        dbs.Run(['*','restructure'],function(){
-          dbs.Run(['*','init_data'],resolve);
+      dbs.Run(['*','init','core','init'],function(){
+        Helper.execif(scriptConfig.CLIENT_PORTAL, function(onComplete){
+          dbs.Run(['*','init','cust','init'],function(){
+            dbs.Run(['application','init'],onComplete);
+          });
+        },
+        function(){
+          dbs.Run(['*','restructure','core'],function(){
+            Helper.execif(scriptConfig.CLIENT_PORTAL, function(onComplete){
+              dbs.Run(['*','restructure','cust'],function(){
+                dbs.Run(['application','restructure'],onComplete);
+              });
+            },
+            function(){
+              dbs.Run(['*','init_data','core'],function(){
+                Helper.execif(scriptConfig.CLIENT_PORTAL, function(onComplete){
+                  dbs.Run(['*','init_data','cust'],onComplete);
+                },
+                function(){
+                  Helper.execif(scriptConfig.SAMPLE_DATA, function(onComplete){
+                    dbs.Run(['*','sample_data'],onComplete);
+                  },
+                  resolve);
+                });
+              });
+            });
+          });
         });
       });
     }); })
-  
-    
+
     .then(function(){ return new Promise(function(resolve, reject){
       if(!scriptConfig._ORIG_DEFAULTS &&
         ((scriptConfig._ORIG_DBSERVER != scriptConfig._JSH_DBSERVER) ||

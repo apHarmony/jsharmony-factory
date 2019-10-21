@@ -28,6 +28,18 @@
       "return rslt.replace(/'/g,\"''\").replace(/\\;/g,\"\\\\\\\\;\").replace(/\\r/g,\" \").replace(/\\n/g,\"\\\\n \");"
     ]
   },
+  "{{concat}}":{
+    "params": [],
+    "exec": [
+      "if(arguments.length<1) return 'null';",
+      "var rslt = '(' + arguments[0];",
+      "for(var i=1;i<arguments.length;i++){",
+      "  rslt += ' || ' + arguments[i];",
+      "}",
+      "rslt += ')';",
+      "return rslt;"
+    ]
+  },
   "decode": {
     "params": [],
     "exec": [
@@ -480,7 +492,11 @@
   "{schema}.my_cust_id":{
     "params": [],
     "sql": [
+      //:if:client_portal:
       "(select {schema}_cust_user.cust_id from {schema}_cust_user where {schema}_cust_user.sys_user_id={schema}.my_cust_user())"
+      //:else:
+      "(select null)"
+      //:endif:
     ]
   },
   "{schema}.check_scope_id":{
@@ -531,7 +547,9 @@
     "sql": [
       "(case substr(%%%u%%%,1,1)",
       "  when 'S' then (select my_db_user_fmt_sname from (select sys_user_id my_db_user_fmt_spe_id,'S-'||sys_user_lname||', '||sys_user_fname as my_db_user_fmt_sname from {schema}.sys_user) my_db_user_fmt_stbl where my_db_user_fmt_spe_id=substr(%%%u%%%,2,1024))",
+      //:if:client_portal:
       "  when 'C' then (select my_db_user_fmt_cname from (select sys_user_id my_db_user_fmt_cust_user_id,'C-'||sys_user_lname||', '||sys_user_fname as my_db_user_fmt_cname from {schema}.cust_user) my_db_user_fmt_ctbl where my_db_user_fmt_cust_user_id=substr(%%%u%%%,2,1024))",
+      //:endif:
       "  when 'U' then substr(%%%u%%%,2,2014)",
       "  else 'unknown'",
       "end)"
@@ -561,7 +579,11 @@
   "{schema}.get_cust_user_name":{
     "params": ["id"],
     "sql": [
+      //:if:client_portal:
       "(select get_cust_user_name_{schema}_cust_user_name from (select sys_user_id get_cust_user_name_{schema}_cust_user_id, sys_user_lname||', '||sys_user_fname get_cust_user_name_{schema}_cust_user_name from {schema}_cust_user) get_cust_user_name_{schema}_cust_user where get_cust_user_name_{schema}_cust_user_id = %%%id%%%)"
+      //:else:
+      "(select null)"
+      //:endif:
     ]
   },
   "{schema}.table_type":{
@@ -609,12 +631,6 @@
     "params": ["doc_id","doc_ext"],
     "sql": [
       "(cast(%%%doc_id%%% as text)||%%%doc_ext%%%)"
-    ]
-  },
-  "{{concat}}":{
-    "params": ["a","b"],
-    "sql": [
-      "(%%%a%%%||%%%b%%%)"
     ]
   }
 }

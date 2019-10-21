@@ -50,6 +50,9 @@ var scriptConfig = {
   _JSH_ADMIN_EMAIL: '',
   _JSH_ADMIN_PASS: '',
 
+  CLIENT_PORTAL: undefined,
+  SAMPLE_DATA: false,
+
   sqlFuncs: [],
 };
 
@@ -83,6 +86,8 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     scriptConfig._JSH_DBTYPE = dbs.getDBType();
     scriptConfig._ADMIN_DBUSER = '';
     scriptConfig._ADMIN_DBPASS = '';
+    scriptConfig.CLIENT_PORTAL = undefined;
+    scriptConfig.SAMPLE_DATA = false;
 
     //Read command line arguments for user / pass
     for(var i=1;i<process.argv.length;i++){
@@ -93,10 +98,13 @@ jsHarmonyFactory_Init.Run = function(run_cb){
         jsh.DBConfig['default'].user = nextarg;
         i++;
       }
-      else if(arg=='--db-user'){
+      else if(arg=='--db-pass'){
         jsh.DBConfig['default'].password = nextarg;
         i++;
       }
+      else if(arg=='--with-client-portal') scriptConfig.CLIENT_PORTAL = true;
+      else if(arg=='--no-client-portal') scriptConfig.CLIENT_PORTAL = false;
+      else if(arg=='--with-sample-data') scriptConfig.SAMPLE_DATA = true;
     }
   
     Promise.resolve()
@@ -187,6 +195,18 @@ jsHarmonyFactory_Init.Run = function(run_cb){
       try_login();
   
     }); })
+
+    //Ask for the database type
+    .then(xlib.getStringAsync(function(){
+      if(typeof scriptConfig.CLIENT_PORTAL != 'undefined') return false;
+      console.log('\r\nInitialize client portal?');
+      console.log('1) Yes');
+      console.log('2) No');
+    },function(rslt,retry){
+      if(rslt=="1"){ scriptConfig.CLIENT_PORTAL = true; return true; }
+      else if(rslt=="2"){ scriptConfig.CLIENT_PORTAL = false; return true; }
+      else{ console.log('Invalid entry.  Please enter the number of your selection'); retry(); }
+    }))
   
     //Initialize Database
     .then(function(){ return new Promise(function(resolve, reject){
@@ -194,9 +214,33 @@ jsHarmonyFactory_Init.Run = function(run_cb){
       console.log('=============================');
       console.log('Running INIT Database Scripts');
       console.log('=============================');
-      dbs.Run(['*','init','init'],function(){
-        dbs.Run(['*','restructure'],function(){
-          dbs.Run(['*','init_data'],resolve);
+      dbs.Run(['*','init','core','init'],function(){
+        Helper.execif(scriptConfig.CLIENT_PORTAL, function(onComplete){
+          dbs.Run(['*','init','cust','init'],function(){
+            dbs.Run(['application','init'],onComplete);
+          });
+        },
+        function(){
+          dbs.Run(['*','restructure','core'],function(){
+            Helper.execif(scriptConfig.CLIENT_PORTAL, function(onComplete){
+              dbs.Run(['*','restructure','cust'],function(){
+                dbs.Run(['application','restructure'],onComplete);
+              });
+            },
+            function(){
+              dbs.Run(['*','init_data','core'],function(){
+                Helper.execif(scriptConfig.CLIENT_PORTAL, function(onComplete){
+                  dbs.Run(['*','init_data','cust'],onComplete);
+                },
+                function(){
+                  Helper.execif(scriptConfig.SAMPLE_DATA, function(onComplete){
+                    dbs.Run(['*','sample_data'],onComplete);
+                  },
+                  resolve);
+                });
+              });
+            });
+          });
         });
       });
     }); })

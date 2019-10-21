@@ -45,7 +45,7 @@
           "control":"subform","controlstyle":"width:345px;float:left;",
           "target":"CustUser_Role",
           "bindings":{"sys_user_id":"sys_user_id"},
-          "caption":"Cust User Roles",
+          "caption":"Customer User Roles",
           "actions": "BIUD"},
       {"control":"html","value":"<div class=\"clear\"></div>"},
       {"name":"sys_user_etstmp","type":"datetime","length":7,"actions":"B","nl":1,

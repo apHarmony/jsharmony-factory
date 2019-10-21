@@ -25,7 +25,7 @@ jsHarmonyFactoryConfigHelper.JobProc.ExecuteSQL = function (sql, cb){
   return function (jobproc){
     jobproc.AppSrv.ExecRecordset('jobproc', sql, [], { }, function (err, rslt) {
       if (err) return jobproc.AppSrv.jsh.Log.error('Error Running Task: '+err.toString());
-      if (rslt && rslt[0]) jobproc.AppSrv.jsh.Log.info('Task Result: '+JSON.stringify(rslt));
+      if (rslt && rslt[0] && rslt[0].length) jobproc.AppSrv.jsh.Log.info('Task Result: '+JSON.stringify(rslt));
       if (cb) cb(rslt);
     });
   }

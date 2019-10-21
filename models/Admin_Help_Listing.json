@@ -22,8 +22,10 @@
       {"name":"help_seq","type":"int","caption":"Seq","actions":"BU","control":"textbox_VS"},
       {"name":"help_listing_main","type":"boolean","actions":"BU","control":"checkbox",
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Main System"},
+      //:if:client_portal:
       {"name":"help_listing_client","type":"boolean","actions":"BU","control":"checkbox",
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Client Portal"},
+      //:endif:
 	    {"name":"help_mtstmp","type":"datetime","length":"7","format":"tstmp","caption":"Last Update","actions":"B"}
 	  ]
   }

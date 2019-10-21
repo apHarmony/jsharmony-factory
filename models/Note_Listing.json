@@ -36,8 +36,7 @@
     "inherits": "Note_Listing",
     "actions":"B", 
     "title":"Customer Notes",
-    "caption":[0,"Note","Customer Notes"],
-    "buttons":[]
+    "caption":[0,"Note","Customer Notes"]
   },
   "Base/Note_Sys_Listing": {
     "inherits": "Note_Listing",

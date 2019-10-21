@@ -1,0 +1,20 @@
+{
+  "jsharmony.get_cust_name":{
+    "params": ["col"],
+    "sql": [
+      "(select cust_name from public.cust where cust_id=%%%col%%%)"
+    ]
+  },
+  "jsharmony.get_cust_name_ext":{
+    "params": ["col"],
+    "sql": [
+      "(select cust_name from public.cust where cust_id=%%%col%%%)"
+    ]
+  },
+  "{schema}.get_item_name":{
+    "params": ["col"],
+    "sql": [
+      "(select null)"
+    ]
+  }
+}

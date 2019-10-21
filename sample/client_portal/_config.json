@@ -1,0 +1,23 @@
+{
+  "datalocks": {
+    "client":{
+      "cust_id":{
+        "cust_id":"cust_id=@datalock_cust_id"
+      }
+    }
+  },
+  "dynamic_bindings": {
+    "JSHARMONY_NOTES": {
+      "note_scope_id": "key",
+      "note_scope": {
+        "key:cust_id": "'C'"
+      }
+    },
+    "JSHARMONY_DOCUMENTS": {
+      "doc_scope_id": "key",
+      "doc_scope": {
+        "key:cust_id": "'C'"
+      }
+    }
+  }
+}

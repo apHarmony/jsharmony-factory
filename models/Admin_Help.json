@@ -40,9 +40,11 @@
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Main System","default":"1",
        "captionstyle":"width:120px;text-align:right;"},
 
+      //:if:client_portal:
       {"name":"help_listing_client","type":"boolean","actions":"BIU","control":"checkbox",
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Client Portal","default":"1",
        "captionstyle":"width:120px;text-align:right;"},
+      //:endif:
 
        {"name":"help_title","type":"varchar","length":70,"actions":"BIU","control":"textbox_VL","nl":1,
         "validate":["Required"],"caption":"Title"},

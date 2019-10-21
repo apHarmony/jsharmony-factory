@@ -1,0 +1,26 @@
+{
+  "Dashboard": {
+    "layout":"form",
+    "title":"Dashboard",
+    "caption":["","Dashboard","Dashboard"],
+    "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
+    "actions":"B",
+    "menu":"Client/Dashboard",
+    "sqlselect": [
+      "select ",
+      "(select txt_body from jsharmony.txt where txt_process='CMS' and txt_attrib='Client/Dashboard') as motd",
+      "from jsharmony.single where 1=1 %%%DATALOCKS%%%"
+    ],
+    "nokey": 1,
+    "onload":"jsh.$root('.motd_'+xmodel.class).html(xmodel.controller.form.Data.motd);",
+    "fields":[
+      {"name":"motd","type":"varchar","actions":"B","control":"hidden","caption":"","datalock":{"cust_id":"always"}},
+      {"control":"html","value":"<div class='clear motd_<%=model.class%>' style='margin-top:10px;'></div>"},
+
+      {"name":"Dashboard_Note_Listing","control":"subform","target":"jsHarmonyFactory/Client/Dashboard_Note_Listing","bindings":{"note_scope":"'C'"},"actions": "BIUD",
+        "caption":"Notifications","controlstyle":"width:820px;float:left;margin-right:10px;"},
+
+      {"control":"html","value":"<div class='clear'></div>"}
+    ]
+  }
+}

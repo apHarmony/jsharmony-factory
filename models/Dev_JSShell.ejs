@@ -1,0 +1,53 @@
+<style type="text/css">
+.xbody_<%=model.class%> {
+  padding-left:0;
+  width:100%;
+}
+.xformcontainer.xelem<%=model.class%> .container, .xform_title {
+  padding-left:29px;
+  padding-right:30px;
+}
+.xformcontainer.xelem<%=model.class%> textarea.js {
+  width:100%;
+  min-width:800px;
+  height:300px;
+  white-space:nowrap;
+  margin-right:0px;
+  margin-left:0px;
+  box-sizing:border-box;
+  font-family:monospace;
+}
+.xformcontainer.xelem<%=model.class%> .rslt_container {
+  border:1px solid black;
+  min-width:800px;
+  height:500px;
+  overflow:scroll;
+}
+.xformcontainer.xelem<%=model.class%> .rslt {
+  padding:10px 15px;
+  margin-top:20px;
+  font-family:monospace;
+}
+.xformcontainer.xelem<%=model.class%> .rslt table { border-collapse: collapse; }
+.xformcontainer.xelem<%=model.class%> .rslt table td,
+.xformcontainer.xelem<%=model.class%> .rslt table th { padding:3px 10px; border:1px solid black; }
+.xformcontainer.xelem<%=model.class%> .rslt table td .null { color:#999; font-style:italic; }
+.xformcontainer.xelem<%=model.class%> .rslt table th { background-color:#f6f6f6; }
+.xformcontainer.xelem<%=model.class%> .rslt h1 { font-family:monospace; font-size:18px; }
+</style>
+<div class="container">
+  <div class="run" style="display:none;">
+    <table width="100%">
+      <tr>
+        <td></td>
+        <td align="right">
+          Samples:
+          <select class="samples" style="margin-right:0px;"></select>
+        </td>
+      </tr>
+    </table>
+    <textarea class="js"></textarea><br/>
+    <input type="button" class="runjs" value="Run JS" /><br/>
+    <div class="rslt_container"><div class="rslt"></div></div>
+  </div>
+</div>

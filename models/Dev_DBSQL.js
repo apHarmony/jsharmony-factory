@@ -6,6 +6,7 @@ jsh.App[modelid] = new (function(){
   this.samples = {};
   this.samples.mssql = {
     "Select": "select top 1000 * from TABLE;",
+    "Get DB / Server Name": "select db_name() db_name,@@servername server_name;",
     "List Tables": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='U' order by schema_name,table_name",
     "List Views": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='V' order by schema_name,table_name",
     "List Stored Procedures": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='P' order by schema_name,table_name",
@@ -17,6 +18,7 @@ jsh.App[modelid] = new (function(){
   };
   this.samples.pgsql = {
     "Select": "select * from TABLE limit 1000;",
+    "Get DB Name": "select current_database() db_name;",
     "List Tables": "select table_schema||'.'||table_name as table from information_schema.tables where table_type='BASE TABLE' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
     "List Views": "select table_schema||'.'||table_name as view from information_schema.tables where table_type='VIEW' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
     "List Stored Procedures": "SELECT nspname||'.'||proname as proc from pg_catalog.pg_namespace n inner join pg_catalog.pg_proc p on pronamespace = n.oid where nspname not in ('information_schema','pg_catalog') order by nspname,proname",

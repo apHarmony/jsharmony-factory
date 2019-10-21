@@ -7,11 +7,12 @@
     "actions":"B", 
     "roles": { "client": {"C*":"B","CX_B":"B","CX_X":"B","CUSER":"B","CADMIN":"B"} },
     "sort":["vnote_dt","vnote_id"], 
-    "caption":[0,"Note","System Notes"],
+    "caption":[0,"Note","Notes"],
     "menu":"Client/Dashboard",
     "hide_system_buttons" : ["print","export"],
     "rowlimit":10,
     "disableautoload": 1,
+    "sqlwhere":"(note_type='C' or note_type='S')",
     "fields":[
       {"name":"note_id","type":"bigint","key": 1,"datalock":{"cust_id":"note_id"},"control":"hidden"},
       {"name":"note_scope","type":"varchar","length":32,"foreignkey":1,"datalock":{"cust_id":"note_scope"},"control":"hidden"},

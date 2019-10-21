@@ -39,13 +39,18 @@ var funcs = require('./models/_funcs.js');
 var jsHarmonyFactoryTransform = require('./jsHarmonyFactoryTransform.js');
 
 function jsHarmonyFactory(name, options){
+  jsHarmonyModule.apply()
+
   options = _.extend({
     mainSiteID: 'main',
     clientSiteID: 'client',
     clientPortal: false,
     schema: 'jsharmony'
   }, options);
+
   var _this = this;
+  jsHarmonyModule.call(this, name);
+  
   if(name) _this.name = name;
   _this.Config = new jsHarmonyFactoryConfig();
   _this.typename = 'jsHarmonyFactory';

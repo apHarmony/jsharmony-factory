@@ -8,7 +8,7 @@
     "tabpos":"top",
     "tabs": [
       {"name":"User","target":"Note_User_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'U'"}},
-      {"name":"Cust","target":"Note_Cust_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'C'"}},
+      {"name":"Customer","target":"Note_Cust_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'C'"}},
       {"name":"System","target":"Note_Sys_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'S'"}}
     ],
     "tabpanelstyle": "min-width:900px;",
@@ -45,7 +45,7 @@
     "tabpos":"top",
     "unbound": 1,
     "tabs": [
-      {"name":"Cust","target":"Note_Cust_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'U'"}},
+      {"name":"Customer","target":"Note_Cust_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'U'"}},
       {"name":"System","target":"Note_Sys_Listing","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"'S'"}}
     ],
     "tabpanelstyle": "min-width:900px;",

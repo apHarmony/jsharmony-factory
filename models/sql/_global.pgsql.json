@@ -24,9 +24,140 @@
   "menu_group_lov":"select * from (values('S','Main'),('C','Client')) as code(code_val,code_txt)",
   "JSHARMONY_FACTORY_INSTALLED":"select case when coalesce((select count(*) from INFORMATION_SCHEMA.COLUMNS where table_name = 'single' and table_schema='{schema}'),0) > 0 then 1 else 0 end JSHARMONY_FACTORY_INSTALLED",
   "{{concat}}":{
-    "params": ["a","b"],
+    "params": [],
+    "exec": [
+      "if(arguments.length<1) return 'null';",
+      "var rslt = '(' + arguments[0];",
+      "for(var i=1;i<arguments.length;i++){",
+      "  rslt += ' || ' + arguments[i];",
+      "}",
+      "rslt += ')';",
+      "return rslt;"
+    ]
+  },
+  "decode": {
+    "params": [],
+    "exec": [
+      "if(arguments.length<2) return 'null';",
+      "var rslt = '(case ('+arguments[0]+')';",
+      "for(var i=0;i<arguments.length-2;i+=2){",
+      "  rslt += ' when ('+arguments[i+1]+') then ('+arguments[i+2]+')'",
+      "}",
+      "if((arguments.length%2)==0) rslt += ' else ('+arguments[arguments.length-1]+')';",
+      "else rslt += ' else null';",
+      "rslt += ' end)';",
+      "return rslt;"
+    ]
+  },
+  "trigger_errorif": {
+    "params": ["COND","MSG"],
+    "exec": [
+      "var rslt = 'if ('+COND.trim()+') then \\n';",
+      "MSG = MSG.trim();",
+      "if(MSG && (MSG[0]=='\\'')) MSG = '\\'Application Error - '+MSG.substr(1);",
+      "rslt += '  raise exception '+MSG+'; \\n';",
+      "rslt += 'end if;\\n';",
+      "return rslt;"
+    ]
+  },
+  "trigger_defaultvars": {
+    "params": [],
     "sql": [
-      "(%%%a%%%||%%%b%%%)"
+      "curdttm    timestamp default {schema}.my_now();",
+      "myuser     text default {schema}.my_db_user();",
+      "audit_seq    bigint default NULL;",
+      "my_toa     {schema}.toaudit;"
+    ]
+  },
+  "init_audit" : {
+    "params": ["audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "my_toa.op := TG_OP;",
+      "my_toa.audit_table_name := lower(TG_TABLE_NAME::text);",
+      "my_toa.audit_ref_name := %%%audit_ref_name%%%;",
+      "my_toa.audit_ref_id := %%%audit_ref_id%%%;",
+      "my_toa.audit_subject := %%%audit_subject%%%;",
+      "my_toa.cust_id := %%%cust_id%%%;",
+      "my_toa.item_id := %%%item_id%%%;"
+    ]
+  },
+  "log_audit_insert" : {
+    "params": ["ID","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "init_audit(%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%)",
+      "select par_audit_seq into audit_seq from {schema}.audit(my_toa, audit_seq, %%%ID%%%);"
+    ]
+  },
+  "log_audit_update_mult" : {
+    "params": ["ID","COL_ARRAY","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "rslt += 'init_audit('+audit_ref_name+','+audit_ref_id+','+audit_subject+','+cust_id+','+item_id+')\\r\\n';",
+      "var col_array = JSON.parse(COL_ARRAY);",
+      "for(var i=0;i<col_array.length;i++){",
+      "  rslt += 'log_audit_update_col('+ID+','+col_array[i]+')\\r\\n';",
+      "}",
+      "return rslt;"
+    ]
+  },
+  "log_audit_update" : {
+    "params": ["ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "init_audit(%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%)",
+      "log_audit_update_col(%%%ID%%%,%%%COL_NAME%%%)"
+    ]
+  },
+  "log_audit_update_col" : {
+    "params": ["ID","COL_NAME"],
+    "sql": [
+      "if ({schema}.nequal(new.%%%COL_NAME%%%, old.%%%COL_NAME%%%)) then\n",
+      "    select par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, %%%ID%%%, '%%%COL_NAME%%%', old.%%%COL_NAME%%%::text);",
+      "end if;\n"
+    ]
+  },
+  "log_audit_delete_mult" : {
+    "params": ["ID","COL_ARRAY","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "rslt += 'init_audit('+audit_ref_name+','+audit_ref_id+','+audit_subject+','+cust_id+','+item_id+')\\r\\n';",
+      "var col_array = JSON.parse(COL_ARRAY);",
+      "for(var i=0;i<col_array.length;i++){",
+      "  rslt += 'log_audit_delete_col('+ID+','+col_array[i]+')\\r\\n';",
+      "}",
+      "return rslt;"
+    ]
+  },
+  "log_audit_delete" : {
+    "params": ["ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "init_audit(%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%)",
+      "log_audit_delete_col(%%%ID%%%,%%%COL_NAME%%%)"
+    ]
+  },
+  "log_audit_delete_col" : {
+    "params": ["ID","COL_NAME"],
+    "sql": [
+      "if (old.%%%COL_NAME%%% is not null) then\n",
+      "    select par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, %%%ID%%%, '%%%COL_NAME%%%', old.%%%COL_NAME%%%::text);",
+      "end if;\n"
+    ]
+  },
+  "{schema}.get_cust_name":{
+    "params": ["col"],
+    "sql": [
+      "(select null)"
+    ]
+  },
+  "{schema}.get_cust_name_ext":{
+    "params": ["col"],
+    "sql": [
+      "(select null)"
+    ]
+  },
+  "{schema}.get_item_name":{
+    "params": ["col"],
+    "sql": [
+      "(select null)"
     ]
   }
 }

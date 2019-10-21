@@ -474,6 +474,7 @@ function jsHarmonyFactoryTransform(module){
     "Dev/DBSQL": "Dev/DBSQL",
     "Dev/DBSchema": "Dev/DBSchema",
     "Dev/DBScripts": "Dev/DBScripts",
+    "Dev/JSShell": "Dev/JSShell",
     "Dev/Models": "Dev/Models",
     "Dev/Overview": "Dev/Overview",
     "Doc_Listing": "Doc_Listing",
@@ -656,6 +657,7 @@ function jsHarmonyFactoryTransform(module){
     "client_sql_passwordreset": "client_sql_passwordreset",
     "client_sql_superlogin": "client_sql_superlogin",
     "str_concat": "str_concat",
+    "concat": "concat",
     "create_code": "create_code",
     "create_code2": "create_code2",
     "create_code_app": "create_code_app",
@@ -794,6 +796,7 @@ function jsHarmonyFactoryTransform(module){
     "separate_code_type_tables": "0",
     "help_target_required": "0",
     "debug_halt": "0",
+    "client_portal": (module.clientPortal? "1" : "0")
   };
 
   this.ignore_errors = {

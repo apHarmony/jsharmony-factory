@@ -22,9 +22,179 @@
   "menu_group_lov":"select * from (values('S','Main'),('C','Client')) as code(code_val,code_txt)",
   "JSHARMONY_FACTORY_INSTALLED":"select case when isnull((select count(*) from information_schema.columns where table_name = 'single' and table_schema='{schema}'),0) > 0 then 1 else 0 end JSHARMONY_FACTORY_INSTALLED",
   "{{concat}}":{
-    "params": ["a","b"],
+    "params": [],
+    "exec": [
+      "if(arguments.length<1) return 'null';",
+      "var rslt = '(' + arguments[0];",
+      "for(var i=1;i<arguments.length;i++){",
+      "  rslt += ' + ' + arguments[i];",
+      "}",
+      "rslt += ')';",
+      "return rslt;"
+    ]
+  },
+  "decode": {
+    "params": [],
+    "exec": [
+      "if(arguments.length<2) return 'null';",
+      "var rslt = '(case ('+arguments[0]+')';",
+      "for(var i=0;i<arguments.length-2;i+=2){",
+      "  rslt += ' when ('+arguments[i+1]+') then ('+arguments[i+2]+')'",
+      "}",
+      "if((arguments.length%2)==0) rslt += ' else ('+arguments[arguments.length-1]+')';",
+      "else rslt += ' else null';",
+      "rslt += ' end)';",
+      "return rslt;"
+    ]
+  },
+  "begin_trigger_cursor": {
+    "params": [],
+    "exec": [
+      "if(arguments.length<1) return '';",
+      "var rsltcur = 'declare rowcur cursor local for select ';",
+      "var rsltvars = '';",
+      "var rsltfetch = 'fetch next from rowcur into ';",
+      "for(var i=1;i<arguments.length;i++){",
+      "  var var_name = arguments[i].trim(); if(!var_name) continue;",
+      "  var var_type = 'nvarchar(max)';",
+      "  if(var_name.indexOf(' ')>=0){ var_type = var_name.substr(var_name.indexOf(' ')); var_name = var_name.substr(0,var_name.indexOf(' ')); }",
+      "  rsltcur += 'deleted.' + var_name + ', inserted.' + var_name + ',';",
+      "  rsltvars += ' declare @deleted_' + var_name + ' ' + var_type + ';\\n';",
+      "  rsltvars += ' declare @inserted_' + var_name + ' ' + var_type + ';\\n';",
+      "  rsltfetch += '@deleted_' + var_name + ', @inserted_' + var_name + ',';",
+      "}",
+      "if(rsltcur[rsltcur.length-1]==',') rsltcur = rsltcur.substr(0,rsltcur.length-1);",
+      "if(rsltfetch[rsltfetch.length-1]==',') rsltfetch = rsltfetch.substr(0,rsltfetch.length-1);",
+      "rsltcur += ' from deleted full outer join inserted on inserted.'+arguments[0]+'=deleted.'+arguments[0]+';\\n';",
+      "rsltfetch += ';\\n';",
+      "var rslt = rsltcur + rsltvars;",
+      "rslt += 'declare @MY_audit_seq numeric(20,0);\\n';",
+      "rslt += 'set @MY_audit_seq = 0;\\n';",
+      "rslt += 'declare @CURDTTM datetime2(7);\\n';",
+      "rslt += 'set @CURDTTM = {schema}.my_now_exec();\\n';",
+      "rslt += 'declare @CURDTTM_CHAR nvarchar(max);\\n';",
+      "rslt += 'set @CURDTTM_CHAR = convert(nvarchar, @CURDTTM, 120)+\\'.0000000\\';\\n';",
+      "rslt += 'declare @MYUSER nvarchar(20);\\n';",
+      "rslt += 'set @MYUSER = {schema}.my_db_user();\\n';",
+      "rslt += 'declare @TP char(1);\\n';",
+      "rslt += 'if exists (select * from inserted) \\n';",
+      "rslt += '  if exists (select * from deleted) \\n';",
+      "rslt += '    set @TP = \\'U\\';\\n';",
+      "rslt += '  else \\n';",
+      "rslt += '    set @TP = \\'I\\';\\n';",
+      "rslt += 'else \\n';",
+      "rslt += '  if exists (select * from deleted) \\n';",
+      "rslt += '    set @TP = \\'D\\';\\n';",
+      "rslt += '  else \\n';",
+      "rslt += '    begin \\n';",
+      "rslt += '      return;\\n';",
+      "rslt += '    end;\\n';",
+      "rslt += 'open rowcur;\\n';",
+      "rslt += rsltfetch;",
+      "rslt += 'while (@@fetch_status = 0) begin \\n';",
+      "return rslt;"
+    ]
+  },
+  "end_trigger_cursor": {
+    "params": [],
+    "exec": [
+      "if(arguments.length<1) return '';",
+      "var rsltfetch = 'fetch next from rowcur into ';",
+      "for(var i=0;i<arguments.length;i++){",
+      "  var var_name = arguments[i].trim(); if(!var_name) continue;",
+      "  rsltfetch += '@deleted_' + var_name + ', @inserted_' + var_name + ',';",
+      "}",
+      "if(rsltfetch[rsltfetch.length-1]==',') rsltfetch = rsltfetch.substr(0,rsltfetch.length-1);",
+      "rsltfetch += ';\\n';",
+      "var rslt = rsltfetch;",
+      "rslt += 'end;\\n';",
+      "rslt += 'close rowcur;\\n';",
+      "rslt += 'deallocate rowcur;\\n';",
+      "return rslt;"
+    ]
+  },
+  "trigger_errorif": {
+    "params": ["COND","MSG"],
+    "exec": [
+      "var rslt = 'if('+COND.trim()+') ';",
+      "MSG = MSG.trim();",
+      "if(MSG && (MSG[0]=='\\'')) MSG = '\\'Application Error - '+MSG.substr(1);",
+      "rslt += 'begin raiserror('+MSG+',16,1); if (@@TRANCOUNT > 0) rollback transaction; return; end;';",
+      "return rslt;"
+    ]
+  },
+  "trigger_nequal": {
+    "params": ["A","B"],
     "sql": [
-      "(%%%a%%%+%%%b%%%)"
+      "((%%%A%%% is null and %%%B%%% is not null) or (%%%A%%% is not null and %%%B%%% is null) or ((%%%A%%% is not null and %%%B%%% is not null) and (%%%A%%% <> %%%B%%%)))"
+    ]
+  },
+  "log_audit_insert" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "exec @MY_audit_seq = {schema}.log_audit 'I', %%%TABLE%%%,%%%ID%%%,@MYUSER,@CURDTTM,%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%"
+    ]
+  },
+  "log_audit_update_mult" : {
+    "params": ["TABLE","ID","COL_ARRAY","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "var col_array = JSON.parse(COL_ARRAY);",
+      "for(var i=0;i<col_array.length;i++){",
+      "  rslt += 'log_audit_update('+TABLE+','+ID+','+col_array[i]+','+audit_ref_name+','+audit_ref_id+','+audit_subject+','+cust_id+','+item_id+')\\r\\n';",
+      "}",
+      "return rslt;"
+    ]
+  },
+  "log_audit_update" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "if (trigger_nequal(@deleted_%%%COL_NAME%%%, @inserted_%%%COL_NAME%%%))\n",
+      "  begin\n",
+      "    if (@MY_audit_seq=0)\n",
+      "      exec @MY_audit_seq = {schema}.log_audit 'U', %%%TABLE%%%,%%%ID%%%,@MYUSER,@CURDTTM,%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%\n",
+      "    insert into {schema}.audit_detail values (@MY_audit_seq, lower('%%%COL_NAME%%%'), @deleted_%%%COL_NAME%%%)\n",
+      "  end\n"
+    ]
+  },
+  "log_audit_delete_mult" : {
+    "params": ["TABLE","ID","COL_ARRAY","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "var col_array = JSON.parse(COL_ARRAY);",
+      "for(var i=0;i<col_array.length;i++){",
+      "  rslt += '%%%log_audit_delete('+JSON.stringify(TABLE)+','+JSON.stringify(ID)+','+JSON.stringify(col_array[i])+','+JSON.stringify(audit_ref_name)+','+JSON.stringify(audit_ref_id)+','+JSON.stringify(audit_subject)+','+JSON.stringify(cust_id)+','+JSON.stringify(item_id)+')%%%\\r\\n';",
+      "}",
+      "return rslt;"
+    ]
+  },
+  "log_audit_delete" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "if (@deleted_%%%COL_NAME%%% is not null)\n",
+      "  begin\n",
+      "    if (@MY_audit_seq=0)\n",
+      "      exec @MY_audit_seq = {schema}.log_audit 'D', %%%TABLE%%%,%%%ID%%%,@MYUSER,@CURDTTM,%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%\n",
+      "    insert into {schema}.audit_detail values (@MY_audit_seq, lower('%%%COL_NAME%%%'), @deleted_%%%COL_NAME%%%)\n",
+      "  end\n"
+    ]
+  },
+  "{schema}.get_cust_name":{
+    "params": ["col"],
+    "sql": [
+      "(select null)"
+    ]
+  },
+  "{schema}.get_cust_name_ext":{
+    "params": ["col"],
+    "sql": [
+      "(select null)"
+    ]
+  },
+  "{schema}.get_item_name":{
+    "params": ["col"],
+    "sql": [
+      "(select null)"
     ]
   }
 }

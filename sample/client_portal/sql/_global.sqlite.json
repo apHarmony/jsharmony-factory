@@ -1,0 +1,73 @@
+{
+  "jsharmony.check_scope_id": {
+    "params": ["in_scope","in_scope_id","in_cust_id"],
+    "sql": [
+      "(case ",
+      "  when %%%in_cust_id%%% is null then",
+      "    (case %%%in_scope%%%",
+      "      when 'C' then (select cust_id from cust where cust_id=%%%in_scope_id%%%)",
+      "      when 'U' then (select sys_user_id from jsharmony.sys_user where sys_user_id=%%%in_scope_id%%%)",
+      "      when 'S' then 1",
+      "      else null",
+      "    end)",
+      "  when %%%in_cust_id%%% = (case %%%in_scope%%%",
+      "      when 'C' then jsharmony.get_cust_id('cust', %%%in_scope_id%%%)",
+      "      else null",
+      "    end) then %%%in_cust_id%%%",
+      "  else null",
+      "end)"
+    ]
+  },
+  "jsharmony.get_cust_id": {
+    "params": ["tabn","tabid"],
+    "sql": [
+      "(jsharmony.get_cust_id_base(",
+      "  (case %%%tabn%%%",
+      "     when 'doc' then  (select ifnull(code_code, code_val) from jsharmony.doc inner join jsharmony.code_doc_scope on code_val = doc_scope where doc_id=%%%tabid%%%)",
+      "     when 'note' then (select ifnull(code_code, code_val) from jsharmony.note inner join jsharmony.code_note_scope on code_val = note_scope where note_id=%%%tabid%%%)",
+      "     else %%%tabn%%%",
+      "  end),",
+      "  (case %%%tabn%%%",
+      "     when 'doc' then  (select doc_scope_id from jsharmony.doc inner join jsharmony.code_doc_scope on code_val = doc_scope where doc_id=%%%tabid%%%)",
+      "     when 'note' then (select note_scope_id from jsharmony.note inner join jsharmony.code_note_scope on code_val = note_scope where note_id=%%%tabid%%%)",
+      "     else %%%tabid%%%",
+      "  end)",
+      "))"
+    ]
+  },
+  "jsharmony.get_cust_id_base": {
+    "params": ["tabn","tabid"],
+    "sql": [
+      "(case %%%tabn%%%",
+      "  when 'cust' then %%%tabid%%%",
+      "  when 'cust_user' then (select cust_id from jsharmony.cust_user where sys_user_id=%%%tabid%%%)",
+      "  when 'cust_user_role' then (select cust_id from jsharmony.cust_user_role inner join jsharmony.cust_user on jsharmony.cust_user.sys_user_id = jsharmony.cust_user_role.sys_user_id where cust_user_role_id=%%%tabid%%%)",
+      "  else null",
+      "end)"
+    ]
+  },
+  "jsharmony.get_cust_name":{
+    "params": ["col"],
+    "sql": [
+      "(select cust_name from cust where cust_id=%%%col%%%)"
+    ]
+  },
+  "jsharmony.get_cust_name_ext":{
+    "params": ["col"],
+    "sql": [
+      "(select cust_name from cust where cust_id=%%%col%%%)"
+    ]
+  },
+  "jsharmony.get_item_id":{
+    "params": ["tabn","tabid"],
+    "sql": [
+      "(select null)"
+    ]
+  },
+  "{schema}.get_item_name":{
+    "params": ["col"],
+    "sql": [
+      "(select null)"
+    ]
+  }
+}

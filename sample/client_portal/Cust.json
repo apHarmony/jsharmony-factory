@@ -1,0 +1,34 @@
+{
+  "Cust": {
+    "layout":"form", 
+    "table":"cust",
+    "title":"Customer Information",
+    "caption":["Customer", "Customers"],
+    "menu":"Customers",
+    "onecolumn":true,
+    "fields":[
+      {"name":"cust_sts","caption": "Status","control":"dropdown_S","default":"ACTIVE"},
+      {"name":"cust_stsdt","caption":"as of","control":"textbox_mmddyy","actions":"B","nl":false},
+      {"name":"cust_agreement_tstmp","caption": "User Agreement Signed","control":"textbox_mmddyy","actions": "B","nl":false},
+
+      {"name":"cust_name","caption": "Customer Name","control": "textbox_L"},
+      {"name":"cust_email","caption": "Email","control":"textbox_email","validate": ["IsEmail"]},
+      {"caption": "","control":"linkbutton","value": "Compose Email","onclick": "var email = jsh.$root('.cust_email').val().trim(); if(email){ var url = 'mailto:'+email; jsh.getFileProxy().prop('src', url); }","nl":false},
+      {"name":"cust_phone","caption": "Phone","control": "textbox_phone"},
+      {"name":"cust_phone_type","caption": "","caption_ext":"Phone Type","control": "dropdown_S","nl":false},
+	    {"name":"cust_notes","caption":"Notes","control":"textarea"},
+
+      {"name":"cust_etstmp","caption": "Entered","control":"textbox_tstmp","actions": "B"},
+      {"name":"cust_euser_fmt","caption":"","control":"textbox","sqlselect":"jsharmony.my_db_user_fmt(cust_euser)","controlstyle":"width:122px;","nl":false},
+      {"name":"cust_mtstmp","caption":"Last Updated","control":"textbox_tstmp","actions":"B"},
+      {"name":"cust_muser_fmt","caption":"","control":"textbox","sqlselect":"jsharmony.my_db_user_fmt(cust_muser)","controlstyle": "width:122px;","nl":false},
+      {"name":"cust_id","caption":"Customer ID","control":"label"}
+    ]
+  },
+  "Cust_Popup":{
+    "inherits":"Cust",
+    "title":"New Customer",
+    "popup":[1000,620],
+    "oninsert":"XExt.navTo(jsh._BASEURL+xmodel.namespace+'Cust_Tabs?action=update&cust_id='+urlkeys.cust_id); jsh.XPage.RefreshParent(); return false;"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "Settings": {
+    "layout":"form", 
+    "table":"cust",
+    "title":"Settings",
+    "menu":"Client/Admin/Settings",
+    "roles": { "client": {"CSYSADMIN":"*","CADMIN":"*"} },
+    "querystring":{"&cust_id":"@cust_id","&action":"update"},
+    "onecolumn":true,
+    "fields":[
+      {"name":"cust_id","caption":"Customer ID","control":"hidden","datalock":{"cust_id":"cust_id"} },
+
+      {"name":"cust_name","caption": "Customer Name","control": "textbox_L","actions":"B"},
+      {"name":"cust_email","caption": "Email","control":"textbox_email","validate": ["IsEmail"]},
+      {"name":"cust_phone","caption": "Phone","control": "textbox_phone"},
+      {"name":"cust_phone_type","caption": "","caption_ext":"Phone Type","control": "dropdown_S","nl":false}
+    ]
+  }
+}

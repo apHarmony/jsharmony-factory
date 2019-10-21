@@ -208,7 +208,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
       if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting remote queue request', -99999); }
       if (err == null) {
         queue_id = rslt;
-        queue_message_obj.url = '/_dl/'+this.jshFactory.namespace+_transform('Queue__model')+'/' + queue_id + '/'+_transform('queue__tbl')+'_file';
+        queue_message_obj.url = '/_dl/'+_this.jshFactory.namespace+_transform('Queue__model')+'/' + queue_id + '/'+_transform('queue__tbl')+'_file';
         queue_message_obj.filetype = 'pdf';
         let sqlparams = {};
         sqlparams[_transform('queue_id')] = queue_id;
