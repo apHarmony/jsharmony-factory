@@ -47,6 +47,14 @@
       "return rslt;"
     ]
   },
+  "length": {
+    "params": ["VAL"],
+    "sql": "len(%%%VAL%%%)"
+  },
+  "substr": {
+    "params": ["VAL","START","LEN"],
+    "sql": "substring(%%%VAL%%%,%%%START%%%,isnull(%%%LEN%%%,99999))"
+  },
   "begin_trigger_cursor": {
     "params": [],
     "exec": [
