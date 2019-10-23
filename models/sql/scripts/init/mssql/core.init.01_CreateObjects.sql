@@ -627,7 +627,10 @@ DECLARE @rslt bigint
   return (@rslt)
 
 END
-
+go
+GRANT EXECUTE ON [{schema}].[my_sys_user_id] TO [{schema}_role_exec] AS [dbo]
+go
+GRANT EXECUTE ON [{schema}].[my_sys_user_id] TO [{schema}_role_dev] AS [dbo]
 
 
 
@@ -681,7 +684,10 @@ DECLARE @rslt bigint
   return (@rslt)
 
 END
-
+go
+GRANT EXECUTE ON [{schema}].[my_cust_user_id] TO [{schema}_role_exec] AS [dbo]
+go
+GRANT EXECUTE ON [{schema}].[my_cust_user_id] TO [{schema}_role_dev] AS [dbo]
 
 
 
