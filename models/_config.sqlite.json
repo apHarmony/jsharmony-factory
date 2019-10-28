@@ -15,7 +15,7 @@
     "menu_title": "menu_desc",
     "menu_command": "menu_cmd",
     "menu_subcommand": "menu_subcmd",
-    "menu_parentname": "menu__tbl_parent_name",
+    "menu_parentname": "menu_parent_name",
     "{{code_val}}": "code_val",
     "{{code_val1}}": "code_val1",
     "{{code_val2}}": "code_val2",

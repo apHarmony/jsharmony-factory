@@ -385,6 +385,7 @@ function jsHarmonyFactoryTransform(module){
     "menu_sts": "menu_sts",
     "menu_subcmd": "menu_subcmd",
     "menu_group": "menu_group",
+    "menu_parent_name": "menu_parent_name",
     "sms_body": "sms_body",
     "sms_to": "sms_to",
     "sms_txt_attrib": "sms_txt_attrib",

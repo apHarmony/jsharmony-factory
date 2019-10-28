@@ -83,6 +83,16 @@ function jsHarmonyFactoryConfig(){
   //Mapping of database fields for job processor
   this.job_field_mapping = {};
 
+  //Static menu
+  this.static_menu = {
+    main_menu: [
+      //{ "menu_name": "Admin", "menu_desc": "Administration", "menu_cmd": "%%%NAMESPACE%%%Admin/Overview", "menu_subcmd": null, "menu_seq": 80000, "menu_id": 800, "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+    ],
+    sub_menu: [
+      //{ "menu_name": "Admin/SysUser_Listing", "menu_desc": "System Users", "menu_cmd": "%%%NAMESPACE%%%Admin/SysUser_Listing", "menu_subcmd": null, "menu_seq": 80000, "menu_id": 80000, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },      { "menu_name": "Admin/Param_User_Listing", "menu_desc": "User Settings", "menu_cmd": "%%%NAMESPACE%%%Admin/Param_User_Listing", "menu_subcmd": null, "menu_seq": 80081, "menu_id": 80081, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+    ],
+  };
+
   this._validProperties = _.keys(this);
 }
 jsHarmonyFactoryConfig.prototype = new jsHarmonyConfig.Base();

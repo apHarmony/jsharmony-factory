@@ -20,42 +20,6 @@ INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name,
 
 INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 70801, 'ACTIVE', 700, 'Reports/SysUser_Listing', NULL, 'User Listing', NULL, NULL, '%%%NAMESPACE%%%Reports/SysUser_Listing', NULL, NULL, NULL);
 
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90012, 'ACTIVE', 900, 'Dev/Menu_Tree_Editor', 90011, 'Menu Items', NULL, NULL, '%%%NAMESPACE%%%Dev/Menu_Tree_Editor', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90011, 'ACTIVE', 900, 'Dev/SysRole_Listing', 90012, 'User Roles', NULL, NULL, '%%%NAMESPACE%%%Dev/SysRole_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90013, 'ACTIVE', 900, 'Dev/Param_Listing', 90021, 'Settings Definitions', NULL, NULL, '%%%NAMESPACE%%%Dev/Param_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90014, 'ACTIVE', 900, 'Dev/Param_App_Listing', 90022, 'System Settings', NULL, NULL, '%%%NAMESPACE%%%Dev/Param_App_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90015, 'ACTIVE', 900, 'Dev/Param_Sys_Listing', 90023, 'Developer Settings', NULL, NULL, '%%%NAMESPACE%%%Dev/Param_Sys_Listing', NULL, NULL, NULL);
-:if:separate_code_type_tables:
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90016, 'ACTIVE', 900, 'Dev/Code_App_Listing', 90031, 'Admin 1D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code_App_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90017, 'ACTIVE', 900, 'Dev/Code2_App_Listing', 90032, 'Admin 2D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code2_App_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90018, 'ACTIVE', 900, 'Dev/Code_Sys_Listing', 90033, 'System 1D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code_Sys_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90019, 'ACTIVE', 900, 'Dev/Code2_Sys_Listing', 90034, 'System 2D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code2_Sys_Listing', NULL, NULL, NULL);
-:else:
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90016, 'ACTIVE', 900, 'Dev/Code_Listing', 90031, '1D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90017, 'ACTIVE', 900, 'Dev/Code2_Listing', 90032, '2D Codes', NULL, NULL, '%%%NAMESPACE%%%Dev/Code2_Listing', NULL, NULL, NULL);
-:endif:
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90021, 'ACTIVE', 900, 'Dev/Txt_Listing', 90041, 'Text Maint', NULL, NULL, '%%%NAMESPACE%%%Dev/Txt_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90022, 'ACTIVE', 900, 'Dev/HelpTarget_Listing', 90042, 'Help Targets', NULL, NULL, '%%%NAMESPACE%%%Dev/HelpTarget_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90023, 'ACTIVE', 900, 'Dev/DBSQL', 90043, 'DB SQL', NULL, NULL, '%%%NAMESPACE%%%Dev/DBSQL', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90024, 'ACTIVE', 900, 'Dev/DBScripts', 90044, 'DB Scripts', NULL, NULL, '%%%NAMESPACE%%%Dev/DBScripts', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90025, 'ACTIVE', 900, 'Dev/DBSchema', 90045, 'DB Schema', NULL, NULL, '%%%NAMESPACE%%%Dev/DBSchema', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90026, 'ACTIVE', 900, 'Dev/Models', 90046, 'Model Viewer', NULL, NULL, '%%%NAMESPACE%%%Dev/Models', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90027, 'ACTIVE', 900, 'Dev/DebugConsole', 90047, 'Debug Console', NULL, NULL, '%%%NAMESPACE%%%Dev/DebugConsole', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90028, 'ACTIVE', 900, 'Dev/JSShell', 90048, 'JS Shell', NULL, NULL, '%%%NAMESPACE%%%Dev/JSShell', NULL, NULL, NULL);
-
-
-
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 80000, 'ACTIVE', 800, 'Admin/SysUser_Listing', NULL, 'System Users', NULL, NULL, '%%%NAMESPACE%%%Admin/SysUser_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 80081, 'ACTIVE', 800, 'Admin/Param_User_Listing', NULL, 'User Settings', NULL, NULL, '%%%NAMESPACE%%%Admin/Param_User_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 80082, 'ACTIVE', 800, 'Admin/Param_App_Listing', NULL, 'System Settings', NULL, NULL, '%%%NAMESPACE%%%Admin/Param_App_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 80083, 'ACTIVE', 800, 'Admin/Code_App_Listing', NULL, '1D Code Tables', NULL, NULL, '%%%NAMESPACE%%%Admin/Code_App_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 80084, 'ACTIVE', 800, 'Admin/Code2_App_Listing', NULL, '2D Code Tables', NULL, NULL, '%%%NAMESPACE%%%Admin/Code2_App_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 80085, 'ACTIVE', 800, 'Admin/Txt_Listing', NULL, 'Text Maint', NULL, NULL, '%%%NAMESPACE%%%Admin/Txt_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 80086, 'ACTIVE', 800, 'Admin/Help_Listing', NULL, 'Help Screens', NULL, NULL, '%%%NAMESPACE%%%Admin/Help_Listing', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 80087, 'ACTIVE', 800, 'Admin/AuditTrail', NULL, 'Audit Trail', NULL, NULL, '%%%NAMESPACE%%%Admin/AuditTrail', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 80095, 'ACTIVE', 800, 'Admin/Log', NULL, 'Logs', NULL, NULL, '%%%NAMESPACE%%%Admin/Log', NULL, NULL, NULL);
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 80096, 'ACTIVE', 800, 'Admin/RestartSystem', NULL, 'Restart System', NULL, NULL, '%%%NAMESPACE%%%Admin/RestartSystem', NULL, NULL, NULL);
-
 
 INSERT INTO single (single_dummy, single_ident, dual_bigint, single_varchar50) VALUES ('X', 1, NULL, NULL);
 
@@ -1133,38 +1097,6 @@ INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES 
 INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (900, NULL, 'DEV');
 
 INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (70801, NULL, 'SYSADMIN');
-
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (80000, NULL, 'SYSADMIN');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (80000, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (80086, NULL, 'SYSADMIN');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (80095, NULL, 'SYSADMIN');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (80096, NULL, 'SYSADMIN');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (80087, NULL, 'SYSADMIN');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (80085, NULL, 'SYSADMIN');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (80083, NULL, 'SYSADMIN');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (80084, NULL, 'SYSADMIN');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (80081, NULL, 'SYSADMIN');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (80082, NULL, 'SYSADMIN');
-
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90011, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90012, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90013, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90014, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90015, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90016, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90017, NULL, 'DEV');
-:if:separate_code_type_tables:
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90018, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90019, NULL, 'DEV');
-:endif:
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90021, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90022, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90023, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90024, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90025, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90026, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90027, NULL, 'DEV');
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90028, NULL, 'DEV');
 
 
 INSERT INTO code_txt_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'TEXT', 'Text', NULL, NULL, NULL, NULL, NULL, NULL);

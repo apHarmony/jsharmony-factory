@@ -176,7 +176,7 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
       getuser_name: function (user_info, jsh) { return user_info[jsh.map.user_firstname] + ' ' + user_info[jsh.map.user_lastname]; },
       getContextUser: function (user_info, jsh) { return 'S' + user_info[jsh.map.user_id]; }
     },
-    menu: menu.bind(null, 'S'),
+    menu: menu(_this).bind(null, 'S'),
     help: help.bind(_this),
     globalparams: {
       'barcode_server': _this.Config.barcode_settings.server,
@@ -230,7 +230,7 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
         req.gdata[jsh.map.client_overdue_ignore] = 0;
       },
     },
-    menu: menu.bind(null, 'C'),
+    menu: menu(_this).bind(null, 'C'),
     help: help.bind(_this),
     datalock: { /* jsh.map.client_id (below) */ },
     datalocktypes: { /* jsh.map.client_id (below) */ },
@@ -299,6 +299,35 @@ jsHarmonyFactory.prototype.VerifyConfig = function(){
   if(_this.clientPortal) required_fields = required_fields.concat(['clientsalt', 'clientcookiesalt']);
   _.each(required_fields, function (val) { good_config &= verify_config(_this.Config[val], "config.modules['jsHarmonyFactory']." + val); });
   if (!good_config) { console.log('\r\n*** Invalid config, could not start server ***\r\n'); process.exit(1); }
+}
+
+jsHarmonyFactory.prototype.addMainMenuItem = function(menu_id, menu_name, menu_desc, menu_cmd, menu_subcmd, menu_seq, roles){
+  var _this = this;
+  if(!_this.Config.static_menu) throw new Error('static_menu not defined in module config');
+  if(!('main_menu' in _this.Config.static_menu)) _this.Config.static_menu.main_menu = [];
+  var menu_item = { roles: roles };
+  menu_item[_this.transform.fields['menu_id']] = menu_id;
+  menu_item[_this.transform.fields['menu_name']] = menu_name;
+  menu_item[_this.transform.fields['menu_desc']] = menu_desc;
+  menu_item[_this.transform.fields['menu_cmd']] = menu_cmd;
+  menu_item[_this.transform.fields['menu_subcmd']] = menu_subcmd;
+  menu_item[_this.transform.fields['menu_seq']] = menu_seq;
+  _this.Config.static_menu.main_menu.push(menu_item);
+}
+
+jsHarmonyFactory.prototype.addSubMenuItem = function(menu_id, menu_parent_name, menu_name, menu_desc, menu_cmd, menu_subcmd, menu_seq, roles){
+  var _this = this;
+  if(!_this.Config.static_menu) throw new Error('static_menu not defined in module config');
+  if(!('sub_menu' in _this.Config.static_menu)) _this.Config.static_menu.sub_menu = [];
+  var menu_item = { roles: roles };
+  menu_item[_this.transform.fields['menu_id']] = menu_id;
+  menu_item[_this.transform.fields['menu_parent_name']] = menu_parent_name;
+  menu_item[_this.transform.fields['menu_name']] = menu_name;
+  menu_item[_this.transform.fields['menu_desc']] = menu_desc;
+  menu_item[_this.transform.fields['menu_cmd']] = menu_cmd;
+  menu_item[_this.transform.fields['menu_subcmd']] = menu_subcmd;
+  menu_item[_this.transform.fields['menu_seq']] = menu_seq;
+  _this.Config.static_menu.sub_menu.push(menu_item);
 }
 
 exports = module.exports = jsHarmonyFactory;

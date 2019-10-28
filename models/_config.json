@@ -30,7 +30,51 @@
         "main": "Help_Listing",
         "client": "Client/Help_Listing"
       },
-      "help_panelid": "help_target_code"
+      "help_panelid": "help_target_code",
+      "static_menu": {
+        "main_menu": [
+          { "menu_name": "Admin", "menu_desc": "Administration", "menu_cmd": "{namespace}Admin/Overview", "menu_subcmd": null, "menu_seq": 80000, "menu_id": 800, "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Dev", "menu_desc": "Developer", "menu_cmd": "{namespace}Dev/Overview", "menu_subcmd": null, "menu_seq": 90000, "menu_id": 900, "roles": { "main": [ "DEV" ] } }
+        ],
+        "sub_menu": [
+          { "menu_name": "Admin/SysUser_Listing", "menu_desc": "System Users", "menu_cmd": "{namespace}Admin/SysUser_Listing", "menu_subcmd": null, "menu_seq": 80000, "menu_id": 80000, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Admin/Param_User_Listing", "menu_desc": "User Settings", "menu_cmd": "{namespace}Admin/Param_User_Listing", "menu_subcmd": null, "menu_seq": 80081, "menu_id": 80081, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Admin/Param_App_Listing", "menu_desc": "System Settings", "menu_cmd": "{namespace}Admin/Param_App_Listing", "menu_subcmd": null, "menu_seq": 80082, "menu_id": 80082, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Admin/Code_Listing", "menu_desc": "1D Code Tables", "menu_cmd": "{namespace}Admin/Code_Listing", "menu_subcmd": null, "menu_seq": 80083, "menu_id": 80083, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Admin/Code2_Listing", "menu_desc": "2D Code Tables", "menu_cmd": "{namespace}Admin/Code2_Listing", "menu_subcmd": null, "menu_seq": 80084, "menu_id": 80084, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Admin/Txt_Listing", "menu_desc": "Text Maint", "menu_cmd": "{namespace}Admin/Txt_Listing", "menu_subcmd": null, "menu_seq": 80085, "menu_id": 80085, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Admin/Help_Listing", "menu_desc": "Help Screens", "menu_cmd": "{namespace}Admin/Help_Listing", "menu_subcmd": null, "menu_seq": 80086, "menu_id": 80086, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Admin/AuditTrail", "menu_desc": "Audit Trail", "menu_cmd": "{namespace}Admin/AuditTrail", "menu_subcmd": null, "menu_seq": 80087, "menu_id": 80087, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Admin/Log", "menu_desc": "Logs", "menu_cmd": "{namespace}Admin/Log", "menu_subcmd": null, "menu_seq": 80095, "menu_id": 80095, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Admin/RestartSystem", "menu_desc": "Restart System", "menu_cmd": "{namespace}Admin/RestartSystem", "menu_subcmd": null, "menu_seq": 80096, "menu_id": 80096, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+
+          { "menu_name": "Dev/Menu_Tree_Editor", "menu_desc": "Menu Items", "menu_cmd": "{namespace}Dev/Menu_Tree_Editor", "menu_subcmd": null, "menu_seq": 90011, "menu_id": 90012, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/SysRole_Listing", "menu_desc": "User Roles", "menu_cmd": "{namespace}Dev/SysRole_Listing", "menu_subcmd": null, "menu_seq": 90012, "menu_id": 90011, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          //:if:client_portal:
+          { "menu_name": "Dev/CustRole_Listing", "menu_desc": "Client User Roles", "menu_cmd": "{namespace}Dev/CustRole_Listing", "menu_subcmd": null, "menu_seq": 90013, "menu_id": 90020, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          //:endif:
+          { "menu_name": "Dev/Param_Listing", "menu_desc": "Settings Definitions", "menu_cmd": "{namespace}Dev/Param_Listing", "menu_subcmd": null, "menu_seq": 90021, "menu_id": 90013, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/Param_App_Listing", "menu_desc": "System Settings", "menu_cmd": "{namespace}Dev/Param_App_Listing", "menu_subcmd": null, "menu_seq": 90022, "menu_id": 90014, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/Param_Sys_Listing", "menu_desc": "Developer Settings", "menu_cmd": "{namespace}Dev/Param_Sys_Listing", "menu_subcmd": null, "menu_seq": 90023, "menu_id": 90015, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          //:if:separate_code_type_tables:
+          { "menu_name": "Dev/Code_Listing", "menu_desc": "Admin 1D Codes", "menu_cmd": "{namespace}Dev/Code_App_Listing", "menu_subcmd": null, "menu_seq": 90031, "menu_id": 90016, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/Code2_Listing", "menu_desc": "Admin 2D Codes", "menu_cmd": "{namespace}Dev/Code2_App_Listing", "menu_subcmd": null, "menu_seq": 90032, "menu_id": 90017, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/Code_Listing", "menu_desc": "System 1D Codes", "menu_cmd": "{namespace}Dev/Code_Sys_Listing", "menu_subcmd": null, "menu_seq": 90033, "menu_id": 90018, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/Code2_Listing", "menu_desc": "System 2D Codes", "menu_cmd": "{namespace}Dev/Code2_Sys_Listing", "menu_subcmd": null, "menu_seq": 90034, "menu_id": 90019, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          //:else:
+          { "menu_name": "Dev/Code_Listing", "menu_desc": "1D Codes", "menu_cmd": "{namespace}Dev/Code_Listing", "menu_subcmd": null, "menu_seq": 90031, "menu_id": 90016, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/Code2_Listing", "menu_desc": "2D Codes", "menu_cmd": "{namespace}Dev/Code2_Listing", "menu_subcmd": null, "menu_seq": 90032, "menu_id": 90017, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          //:endif:
+          { "menu_name": "Dev/Txt_Listing", "menu_desc": "Text Maint", "menu_cmd": "{namespace}Dev/Txt_Listing", "menu_subcmd": null, "menu_seq": 90041, "menu_id": 90021, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/HelpTarget_Listing", "menu_desc": "Help Targets", "menu_cmd": "{namespace}Dev/HelpTarget_Listing", "menu_subcmd": null, "menu_seq": 90042, "menu_id": 90022, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/DBSQL", "menu_desc": "DB SQL", "menu_cmd": "{namespace}Dev/DBSQL", "menu_subcmd": null, "menu_seq": 90043, "menu_id": 90023, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/DBScripts", "menu_desc": "DB Scripts", "menu_cmd": "{namespace}Dev/DBScripts", "menu_subcmd": null, "menu_seq": 90044, "menu_id": 90024, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/DBSchema", "menu_desc": "DB Schema", "menu_cmd": "{namespace}Dev/DBSchema", "menu_subcmd": null, "menu_seq": 90045, "menu_id": 90025, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/Models", "menu_desc": "Model Viewer", "menu_cmd": "{namespace}Dev/Models", "menu_subcmd": null, "menu_seq": 90046, "menu_id": 90026, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/DebugConsole", "menu_desc": "Debug Console", "menu_cmd": "{namespace}Dev/DebugConsole", "menu_subcmd": null, "menu_seq": 90047, "menu_id": 90027, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
+          { "menu_name": "Dev/JSShell", "menu_desc": "JS Shell", "menu_cmd": "{namespace}Dev/JSShell", "menu_subcmd": null, "menu_seq": 90048, "menu_id": 90028, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } }
+        ]
+      }
     }
   }
 }

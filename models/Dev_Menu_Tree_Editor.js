@@ -113,15 +113,15 @@ jsh.App[modelid] = new (function(){
     if(jsh.XPage.GetChanges().length) return XExt.Alert('Please save changes before deleting menu items.');
     var item_desc = XExt.getLOVTxt(xmodel.controller.form.LOVs.menu_id_auto,context_item);
 
-    var menu__tbl = jsh.App[modelid].getSMbyValue(context_item);
-    var menu__tbl_parent = null;
+    var menu = jsh.App[modelid].getSMbyValue(context_item);
+    var menu_parent = null;
     var has_children = false;
-    if(menu__tbl){
-      if(!menu__tbl[jsh.uimap.code_parent_id]) return XExt.Alert('Cannot delete root node');
-      menu__tbl_parent = jsh.App[modelid].getSMbyID(menu__tbl[jsh.uimap.code_parent_id]);
+    if(menu){
+      if(!menu[jsh.uimap.code_parent_id]) return XExt.Alert('Cannot delete root node');
+      menu_parent = jsh.App[modelid].getSMbyID(menu[jsh.uimap.code_parent_id]);
       var lov = xmodel.controller.form.LOVs.menu_id_auto;
       for(var i=0;i<lov.length;i++){
-        if(lov[i][jsh.uimap.code_parent_id] && (lov[i][jsh.uimap.code_parent_id].toString()==menu__tbl[jsh.uimap.code_id].toString())) has_children = true;
+        if(lov[i][jsh.uimap.code_parent_id] && (lov[i][jsh.uimap.code_parent_id].toString()==menu[jsh.uimap.code_id].toString())) has_children = true;
       }
     }
 
@@ -130,7 +130,7 @@ jsh.App[modelid] = new (function(){
     //Move to parent ID if the deleted node is selected
     var new_menu_id_auto = null;
     if(_this.menu_id_auto==context_item){
-      if(menu__tbl_parent) new_menu_id_auto = menu__tbl_parent[jsh.uimap.code_val];
+      if(menu_parent) new_menu_id_auto = menu_parent[jsh.uimap.code_val];
     }
 
     XExt.Confirm('Are you sure you want to delete \''+item_desc+'\'?',function(){ 

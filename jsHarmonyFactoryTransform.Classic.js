@@ -380,6 +380,7 @@ transform.fields = {
   "menu_sts": "sm_sts",
   "menu_subcmd": "sm_subcmd",
   "menu_group": "sm_utype",
+  "menu_parent_name": "sm_parent_name",
   "sms_body": "sms_body",
   "sms_to": "sms_to",
   "sms_txt_attrib": "sms_txt_attrib",

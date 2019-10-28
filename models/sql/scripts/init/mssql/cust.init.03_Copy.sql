@@ -7,8 +7,6 @@ INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cu
 INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (3, 'ACTIVE', 'CX_B', 'Browse', NULL, NULL, NULL);
 INSERT INTO {schema}.cust_role (cust_role_seq, cust_role_sts, cust_role_name, cust_role_desc, cust_role_snotes, cust_role_code, cust_role_attrib) VALUES (4, 'ACTIVE', 'CX_X', 'Entry / Update', NULL, NULL, NULL);
 
-INSERT INTO {schema}.menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 90020, 'ACTIVE', 900, 'Dev/CustRole_Listing', 90013, 'Client User Roles', NULL, NULL, '%%%NAMESPACE%%%Dev/CustRole_Listing', NULL, NULL, NULL);
-
 INSERT INTO {schema}.menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('C', 2, 'ACTIVE', NULL, 'CLIENT', NULL, 'Customer', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO {schema}.menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('C', 200, 'ACTIVE', 2, 'Client/Dashboard', NULL, 'Dashboard', NULL, NULL, '%%%NAMESPACE%%%Client/Dashboard', NULL, NULL, NULL);
 INSERT INTO {schema}.menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('C', 2800, 'ACTIVE', 2, 'Client/Admin', 280000, 'Administration', NULL, NULL, NULL, NULL, NULL, NULL);
@@ -19,8 +17,6 @@ INSERT INTO {schema}.cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_n
 INSERT INTO {schema}.cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (280000, NULL, 'CSYSADMIN');
 INSERT INTO {schema}.cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (200, NULL, 'CX_X');
 INSERT INTO {schema}.cust_menu_role (menu_id, cust_menu_role_snotes, cust_role_name) VALUES (200, NULL, 'CUSER');
-
-INSERT INTO {schema}.sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (90020, NULL, 'DEV');
 
 INSERT INTO {schema}.sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (2, NULL, 'SYSADMIN');
 INSERT INTO {schema}.sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (200, NULL, 'SYSADMIN');
