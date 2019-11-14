@@ -505,7 +505,7 @@ AppSrvJobProc.prototype.PopQueue = function (req, res, queue_name, queueresult, 
     if (onComplete) onComplete(null);
     _this.SetSubscriberQueueResult(queueresult.ID, queueresult.RSLT, queueresult.NOTES, function () {
       //Delete request file, if applicable
-      if (queueresult.RSLT == 'OK') HelperFS.tryUnlink((_this.jsh.Config.datadir +_transform('queue__tbl')+'/'+_transform('queue__tbl')+'_file_' + queueresult.ID), onComplete);
+      if (queueresult.RSLT == 'OK') HelperFS.tryUnlink((_this.jsh.Config.datadir +_this._transform('queue__tbl')+'/'+_this._transform('queue__tbl')+'_file_' + queueresult.ID), onComplete);
       else if (onComplete) onComplete();
     });
   });
