@@ -15,14 +15,14 @@
     "fields":[
       { "control": "html", "value": "<div class=\"clear\" style=\"padding-bottom:15px;width:1000px;\"></div>" },
       {"name": "cur_menu_id_auto", "type": "bigint", "key": 1, "control":"hidden" },
-      {"name": "menu_id_auto","actions": "B","caption": "","control": "tree","unbound":true,"always_editable":true,
+      {"name": "menu_id_auto","actions": "BIUD","caption": "","control": "tree","unbound":true,"always_editable":true,
        "controlstyle": "display:inline-block;margin-right:10px;height:400px;width:300px;",
        "lov": { "sql": "menu_editor_lov" },
        "controlparams": {
           "expand_all": true,
           "item_context_menu": [
-            { "icon": "insert", "text": "Add Child Item", "command": "jsh.App[modelid].item_insert(context_item);", "actions": "IUD", "class": "insert" },
-            { "icon": "delete", "text": "Delete", "command": "jsh.App[modelid].item_delete(context_item);", "actions": "IUD", "class": "delete" }
+            { "icon": "insert", "text": "Add Child Item", "command": "jsh.App[modelid].item_insert(context_item);", "actions": "I", "class": "insert" },
+            { "icon": "delete", "text": "Delete", "command": "jsh.App[modelid].item_delete(context_item);", "actions": "D", "class": "delete" }
           ]
         },
         "onchange": "jsh.App[modelid].menu_id_onchange(obj,newval,undoChange,e);"

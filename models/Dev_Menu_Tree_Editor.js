@@ -59,7 +59,7 @@ jsh.App[modelid] = new (function(){
       "menu_name": { "caption": "Menu ID", "actions": "BI", "type": "varchar", "length": 30, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(30)] },
       "menu_desc": { "caption": "Display Name", "actions": "BI", "type": "varchar", "length": 255, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(255)] },
     }
-    var data = { 'menu_id_parent': jsh.xContentMenuItemData.id };
+    var data = { 'menu_id_parent': jsh.xContextMenuItemData.id };
     var validate = new XValidate();
     _.each(fields, function (val, key) { validate.AddControlValidator('.Menu_InsertPopup .' + key, '_obj.' + key, val.caption, 'BI', val.validators); });
 
