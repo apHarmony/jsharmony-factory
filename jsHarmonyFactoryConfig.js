@@ -72,6 +72,9 @@ function jsHarmonyFactoryConfig(){
   //Sample Scheduled Task
   this.scheduled_tasks["sample_task"] = {
     action: jsh.AppSrv.JobProc.ExecuteSQL("SQL;"),
+    options: {
+      quiet: false  //Do not log when starting task
+    },
     when: function (curdt, lastdt) {  //return true if the job should run
       var paused120minutes = (curdt.getTime() - lastdt.getTime() > (1000 * 60 * 120));
       if (!paused120minutes) return false; //if the job already ran, do not run it for 2 hrs

@@ -89,10 +89,12 @@ AppSrvJobProc.prototype.CheckJobQueue = function (onComplete) {
   if (_this.jshFactory.Config.enable_scheduler && _this.jshFactory.Config.scheduled_tasks) {
     var curdt = new Date();
     for (var t in _this.jshFactory.Config.scheduled_tasks) {
+      var task = _this.jshFactory.Config.scheduled_tasks[t];
       if (!(t in this.TaskHistory)) this.TaskHistory[t] = new Date(0);
-      if (_this.jshFactory.Config.scheduled_tasks[t].when(curdt, this.TaskHistory[t])) {
-        _this.jsh.Log.info('Running Task ' + t);
-        _this.jshFactory.Config.scheduled_tasks[t].action(this);
+      if (task.when(curdt, this.TaskHistory[t])) {
+        if(task.options && task.options.quiet){ }
+        else _this.jsh.Log.info('Running Task ' + t);
+        task.action(this);
         this.TaskHistory[t] = curdt;
       }
     }
