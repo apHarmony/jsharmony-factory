@@ -38,7 +38,7 @@
 <div class="container">
   <div class="dbselect">
     Database:
-    <select class="db"></select>
+    <select autocomplete="off" class="db"></select>
   </div>
   <div class="run" style="display:none;">
     <table width="100%">
@@ -46,16 +46,16 @@
         <td></td>
         <td align="right">
           Samples:
-          <select class="samples" style="margin-right:0px;"></select>
+          <select autocomplete="off" class="samples" style="margin-right:0px;"></select>
         </td>
       </tr>
     </table>
-    <textarea class="sql"></textarea><br/>
-    <a href="#" class="runas_toggle">Run as &gt;</a><br/>
+    <textarea autocomplete="off" class="sql"></textarea><br/>
+    <a href="#" class="runas_toggle">Run as database user &gt;</a><br/>
     <div class="runas" style="display:none;">
-      <label>User:</label> <input type="text" class="user" />
-      <label>Password:</label> <input type="password" class="password" />
-      <label><input type="checkbox" class="nocontext" /> No Context</label>
+      <label>User:</label> <input autocomplete="off" type="text" class="user" />
+      <label>Password:</label> <input autocomplete="off" type="password" class="password" />
+      <label><input autocomplete="off" type="checkbox" class="nocontext" /> No Context</label>
     </div>
     <input type="button" class="runsql" value="Run SQL" /><br/>
     <div class="rslt_container"><div class="rslt"></div></div>
