@@ -163,9 +163,9 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
     fs.stat(tmppath, function (err, stat) {
       if (err != null) return _this.SetJobResult(job, 'ERROR', 'Report file not found: '+err.toString(), onComplete);
       var fsize = stat.size;
-      if (fsize > _this.jsh.Config.max_filesize) return _this.SetJobResult(job, 'ERROR', 'Report file size exceeds system maximum file size', function () { dispose(onComplete); });
+      if (fsize > _this.jsh.Config.max_filesize) return _this.SetJobResult(job, 'ERROR', 'Report file size exceeds system maximum file size', function () { if(onComplete) onComplete(); dispose(); });
       //Report is available at tmppath
-      _this.processJobResult(job, dbdata, tmppath, fsize, function () { dispose(onComplete); });
+      _this.processJobResult(job, dbdata, tmppath, fsize, function () { if(onComplete) onComplete(); dispose(); });
     });
   });
 }
