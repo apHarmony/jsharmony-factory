@@ -11,6 +11,7 @@ jsh.App[modelid] = new (function(){
     "List Views": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='V' order by schema_name,table_name",
     "List Stored Procedures": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='P' order by schema_name,table_name",
     "Describe Table": "select * from information_schema.columns where table_name = 'xxxxx' order by ordinal_position",
+    "Describe View / Object": "select object_definition(object_id('VIEW_NAME')) as Source;",
     "Create Table": "",
     "Create View": "",
     "Create Stored Procedure": "",
@@ -99,6 +100,7 @@ jsh.App[modelid] = new (function(){
       jSamples.val('');
     });
     jform.find('.runsql').click(function(){ _this.RunSQL(); });
+    jform.find('.exportcsv').click(function(){ _this.ExportCSV(); });
     jform.find('.runas_toggle').click(function(){ jform.find('.runas').toggle(); return false; });
 
     _this.RenderDBListing(_.keys(_this.DBs));
@@ -154,12 +156,10 @@ jsh.App[modelid] = new (function(){
     }
   }
 
-  this.RunSQL = function(){
+  this.getExecParams = function(){
     var jform = _this.getFormElement();
     var sql = jform.find('.sql').val();
     var db = jform.find('.db').val();
-    var dbtype = _this.DBs[db];
-    var starttm = Date.now();
     var params = { sql: sql, db: db };
     var runas_user = jform.find('.user').val().trim();
     var runas_password = jform.find('.password').val();
@@ -170,8 +170,24 @@ jsh.App[modelid] = new (function(){
     }
     params.show_notices = true;
     params.nocontext = nocontext?'1':'';
+    return params;
+  }
+
+  this.ExportCSV = function(){
+    var params = _this.getExecParams();
+    params.export_csv = 1;
+    var url = jsh._BASEURL + '_db/exec';
+    jsh.postFileProxy(url, params);
+  }
+
+  this.RunSQL = function(){
+    var jform = _this.getFormElement();
+    var starttm = Date.now();
+
+    var params = _this.getExecParams();
+
     XForm.prototype.XExecutePost('../_db/exec', params, function (rslt) { //On success
-      if ('_success' in rslt) { 
+      if ('_success' in rslt) {
         var str = '';
         if(rslt._stats){
           _.each(rslt._stats.warnings, function(warning){ str += "<div><b>WARNING: </b>"+warning+"</div>"; });
@@ -222,6 +238,7 @@ jsh.App[modelid] = new (function(){
         jform.find('.rslt').html(str);
       }
     });
+    
   }
 
 })();
