@@ -77,6 +77,16 @@
   "Note_Sys_Listing": {
     "inherits": "Base/Note_Sys_Listing"
   },
+  "Admin/Note_Sys_Listing": {
+    "inherits": "Note_Listing",
+    "title":"System Notes",
+    "caption":[0,"Note","System Notes"],
+    "menu": "Admin/Note_Sys_Listing",
+    "roles": {
+      "main":{"SYSADMIN":"*"},
+    },
+    "bindings": { "note_scope": "'S'", "note_type": "'S'", "note_scope_id": 0 },
+  },
   "Client/Note_Listing": {
     "inherits": "Base/Client/Note_Listing"
   },
