@@ -6,7 +6,7 @@
     "actions": "B", 
     "caption": [ 0, "User", "Users" ],
     "menu": "Admin/SysUser_Listing",
-	"tabpos":"top",
+	  "tabpos":"bottom",
     "tabs":[
       {"name":"General","target":"Admin/SysUser","bindings":{"sys_user_id":"sys_user_id"}},
       {"name":"Documents","target":"Admin/SysUser_Doc_Listing","bindings":{"doc_scope_id":"sys_user_id","doc_scope":"'sys_user_code'"}},

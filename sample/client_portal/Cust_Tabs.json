@@ -9,7 +9,7 @@
     "roles":{
       "main":{}
     },
-	  "tabpos":"top",
+	  "tabpos":"bottom",
 	  "tabs":[
       {"name":"General","target":"Cust"},
       {"name":"Users","target":"jsHarmonyFactory/CustUser_Listing"},
