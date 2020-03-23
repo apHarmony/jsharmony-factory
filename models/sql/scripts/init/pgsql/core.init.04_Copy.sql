@@ -1279,6 +1279,7 @@ INSERT INTO code_note_type (code_seq, code_val, code_txt, code_code, code_end_dt
 
 INSERT INTO code_job_action (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'MESSAGE', 'Message', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO code_job_action (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'REPORT', 'Report Program', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO code_job_action (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (NULL, 'TASK', 'jsHarmony Task', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 

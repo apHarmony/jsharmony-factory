@@ -31,6 +31,7 @@ insert into {schema}_code_param_type (code_seq, code_val, code_txt, code_code, c
 
 insert into {schema}_code_job_action (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'MESSAGE', 'Message', NULL, NULL);
 insert into {schema}_code_job_action (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'REPORT', 'Report Program', NULL, NULL);
+INSERT INTO {schema}.code_job_action (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'TASK', 'jsHarmony Task', NULL, NULL);
 
 insert into {schema}_code_job_source (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'MAIN', 'Main Interface', NULL, NULL);
 insert into {schema}_code_job_source (code_seq, code_val, code_txt, code_code, code_attrib) VALUES (NULL, 'CLIENT', 'Client Interface', NULL, NULL);

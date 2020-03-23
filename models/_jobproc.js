@@ -72,8 +72,11 @@ AppSrvJobProc.prototype.map_db_rslt = function(row) {
 }
 
 AppSrvJobProc.prototype.Run = function () {
-  if (this.jshFactory.Config.debug_params.disable_job_processor) return;
   var _this = this;
+  if (this.jshFactory.Config.debug_params.disable_job_processor){
+    setTimeout(function () { _this.Run(); }, _this.jshFactory.Config.JobSleepDelay);
+    return;
+  }
   _this.CheckJobQueue(function (job) {
     if (job) {
       _this.ExecJob(job, function () {
@@ -125,6 +128,7 @@ AppSrvJobProc.prototype.ExecJob = function (job, onComplete) {
   
   if (job.job_action == 'REPORT') return _this.ExecJob_REPORT(job, onComplete);
   else if (job.job_action == 'MESSAGE') return _this.ExecJob_MESSAGE(job, onComplete);
+  else if (job.job_action == 'TASK') return _this.ExecJob_TASK(job, onComplete);
   else return _this.SetJobResult(job, 'ERROR', 'job_action not Supported', onComplete);
 };
 
@@ -139,10 +143,34 @@ AppSrvJobProc.prototype.ExecJob_MESSAGE = function (job, onComplete) {
       rparams = JSON.parse(job.job_params);
     }
     catch (ex) {
-      return _this.SetJobResult(job, 'ERROR', 'Error parsing JOB MESSAGE - Invalid JSON', onComplete);
+      return _this.SetJobResult(job, 'ERROR', 'Error parsing JOB MESSAGE - Invalid Parameter JSON: '+ex.toString(), onComplete);
     }
   }
   _this.processJobResult(job, rparams, '', 0, onComplete);
+};
+
+AppSrvJobProc.prototype.ExecJob_TASK = function (job, onComplete) {
+  var _this = this;
+  var thisapp = this.AppSrv;
+  if (job.job_action != 'TASK') return _this.SetJobResult(job, 'ERROR', 'job_action not TASK', onComplete);
+
+  //Process Task ID (make sure it's in the system)
+  var modelid = job.job_action_target;
+  if (!thisapp.jsh.hasTask(undefined, modelid)) return _this.SetJobResult(job, 'ERROR', 'Invalid Task Model ID: ' + modelid, onComplete);
+  
+  var rparams = {};
+  if (job.job_params){
+    try{
+      rparams = JSON.parse(job.job_params);
+    }
+    catch (ex) {
+      return _this.SetJobResult(job, 'ERROR', 'Error parsing JOB Parameters - Invalid Parameter JSON: '+ex.toString(), onComplete);
+    }
+  }
+  thisapp.tasksrv.exec(undefined, undefined, undefined, modelid, rparams, function(err, rslt){
+    if(err) return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete);
+    _this.processJobResult(job, rparams, '', 0, onComplete);
+  });
 };
 
 AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
@@ -155,7 +183,14 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
   if (!thisapp.jsh.hasModel(undefined, fullmodelid)) return _this.SetJobResult(job, 'ERROR', 'Report not found in collection', onComplete);
   
   var rparams = {};
-  if (job.job_params) rparams = JSON.parse(job.job_params);
+  if (job.job_params){
+    try{
+      rparams = JSON.parse(job.job_params);
+    }
+    catch (ex) {
+      return _this.SetJobResult(job, 'ERROR', 'Error parsing JOB Parameters - Invalid Parameter JSON: '+ex.toString(), onComplete);
+    }
+  }
 
   thisapp.rptsrv.queueReport(undefined, undefined, fullmodelid, rparams, {}, { db: _this.db, dbcontext: 'jobproc', errorHandler: function(num, txt){ return _this.SetJobResult(job, 'ERROR', txt, onComplete); } }, function (err, tmppath, dispose, dbdata) {
     if (err) return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete);
