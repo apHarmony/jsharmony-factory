@@ -4638,7 +4638,7 @@ ALTER TABLE job__tbl OWNER TO postgres;
 -- Name: TABLE job__tbl; Type: COMMENT; Schema: {schema}; Owner: postgres
 --
 
-COMMENT ON TABLE job__tbl IS 'Request (CONTROL)';
+COMMENT ON TABLE job__tbl IS 'Job (CONTROL)';
 
 
 --
@@ -4661,7 +4661,7 @@ ALTER TABLE job_doc OWNER TO postgres;
 -- Name: TABLE job_doc; Type: COMMENT; Schema: {schema}; Owner: postgres
 --
 
-COMMENT ON TABLE job_doc IS 'Request - Document (CONTROL)';
+COMMENT ON TABLE job_doc IS 'Job - Document (CONTROL)';
 
 
 --
@@ -4710,7 +4710,7 @@ ALTER TABLE job_email OWNER TO postgres;
 -- Name: TABLE job_email; Type: COMMENT; Schema: {schema}; Owner: postgres
 --
 
-COMMENT ON TABLE job_email IS 'Request - EMail (CONTROL)';
+COMMENT ON TABLE job_email IS 'Job - Email (CONTROL)';
 
 
 --
@@ -4754,7 +4754,7 @@ ALTER TABLE job_note OWNER TO postgres;
 -- Name: TABLE job_note; Type: COMMENT; Schema: {schema}; Owner: postgres
 --
 
-COMMENT ON TABLE job_note IS 'Request - Note (CONTROL)';
+COMMENT ON TABLE job_note IS 'Job - Note (CONTROL)';
 
 
 --
@@ -4796,7 +4796,7 @@ ALTER TABLE job_queue OWNER TO postgres;
 -- Name: TABLE job_queue; Type: COMMENT; Schema: {schema}; Owner: postgres
 --
 
-COMMENT ON TABLE job_queue IS 'Request - queue__tbl (CONTROL)';
+COMMENT ON TABLE job_queue IS 'Job Queue - queue__tbl (CONTROL)';
 
 
 --
@@ -4860,7 +4860,7 @@ ALTER TABLE job_sms OWNER TO postgres;
 -- Name: TABLE job_sms; Type: COMMENT; Schema: {schema}; Owner: postgres
 --
 
-COMMENT ON TABLE job_sms IS 'Request - SMS (CONTROL)';
+COMMENT ON TABLE job_sms IS 'Job - SMS (CONTROL)';
 
 
 --
@@ -5886,7 +5886,7 @@ ALTER TABLE code_job_action OWNER TO postgres;
 -- Name: TABLE code_job_action; Type: COMMENT; Schema: {schema}; Owner: postgres
 --
 
-COMMENT ON TABLE code_job_action IS 'System Codes - Request Type (CONTROL)';
+COMMENT ON TABLE code_job_action IS 'System Codes - Job Action Type (CONTROL)';
 
 
 --
@@ -5904,7 +5904,7 @@ ALTER TABLE code_job_source OWNER TO postgres;
 -- Name: TABLE code_job_source; Type: COMMENT; Schema: {schema}; Owner: postgres
 --
 
-COMMENT ON TABLE code_job_source IS 'System Codes - Request Source (CONTROL)';
+COMMENT ON TABLE code_job_source IS 'System Codes - Job Source (CONTROL)';
 
 
 --
