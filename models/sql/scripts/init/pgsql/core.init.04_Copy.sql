@@ -1259,8 +1259,8 @@ INSERT INTO code_sys (code_name, code_desc, code_code_desc, code_snotes, code_at
 INSERT INTO code_sys (code_name, code_desc, code_code_desc, code_snotes, code_attrib_desc, code_schema, code_type) VALUES ('note_scope', 'Note Scope', NULL, NULL, NULL, '{schema}', 'sys');
 INSERT INTO code_sys (code_name, code_desc, code_code_desc, code_snotes, code_attrib_desc, code_schema, code_type) VALUES ('note_type', 'Note Type', NULL, NULL, NULL, '{schema}', 'sys');
 INSERT INTO code_sys (code_name, code_desc, code_code_desc, code_snotes, code_attrib_desc, code_schema, code_type) VALUES ('param_type', 'Parameter Type', NULL, NULL, NULL, '{schema}', 'sys');
-INSERT INTO code_sys (code_name, code_desc, code_code_desc, code_snotes, code_attrib_desc, code_schema, code_type) VALUES ('job_action', 'Request Action Type', NULL, NULL, NULL, '{schema}', 'sys');
-INSERT INTO code_sys (code_name, code_desc, code_code_desc, code_snotes, code_attrib_desc, code_schema, code_type) VALUES ('job_source', 'Request Source', NULL, NULL, NULL, '{schema}', 'sys');
+INSERT INTO code_sys (code_name, code_desc, code_code_desc, code_snotes, code_attrib_desc, code_schema, code_type) VALUES ('job_action', 'Job Action Type', NULL, NULL, NULL, '{schema}', 'sys');
+INSERT INTO code_sys (code_name, code_desc, code_code_desc, code_snotes, code_attrib_desc, code_schema, code_type) VALUES ('job_source', 'Job Source', NULL, NULL, NULL, '{schema}', 'sys');
 INSERT INTO code_sys (code_name, code_desc, code_code_desc, code_snotes, code_attrib_desc, code_schema, code_type) VALUES ('txt_type', 'Text Type', NULL, NULL, NULL, '{schema}', 'sys');
 INSERT INTO code_sys (code_name, code_desc, code_code_desc, code_snotes, code_attrib_desc, code_schema, code_type) VALUES ('version_sts', 'Version Status', NULL, NULL, NULL, '{schema}', 'sys');
 

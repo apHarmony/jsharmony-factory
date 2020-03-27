@@ -7820,87 +7820,87 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request 
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Queue Request (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'queue__tbl'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_etstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Entry Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_etstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_user'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Entry User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_user'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Source - code_job_source' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_source'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Source - code_job_source' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_source'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Type - code_job_action' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_action'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Type - code_job_action' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_action'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_action_target'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Name' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_action_target'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Parameters' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_params'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Parameters' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_params'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result - OK, ERROR' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_rslt'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Result - OK, ERROR' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_rslt'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_rslt_tstmp'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Result Timestamp' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_rslt_tstmp'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Result User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_rslt_user'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Result User' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_rslt_user'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_snotes'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl', @level2type=N'COLUMN',@level2name=N'job_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job__tbl'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'job_doc_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Document ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'job_doc_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'job_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'job_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Scope' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'doc_scope'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Document Scope' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'doc_scope'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Scope ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'doc_scope_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Document Scope ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'doc_scope_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Category' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'doc_ctgr'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Document Category' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'doc_ctgr'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'doc_desc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Document Description' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc', @level2type=N'COLUMN',@level2name=N'doc_desc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - Document (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job - Document (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_doc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'job_email_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Email ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'job_email_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'job_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'job_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email SUBJECT' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'email_txt_attrib'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Email SUBJECT' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'email_txt_attrib'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email TO' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'email_to'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Email TO' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'email_to'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email CC' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'email_cc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Email CC' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'email_cc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Email BCC' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'email_bcc'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Email BCC' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email', @level2type=N'COLUMN',@level2name=N'email_bcc'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - EMail (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job - Email (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_email'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'job_note_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Note ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'job_note_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'job_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'job_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Scope' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'note_scope'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Note Scope' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'note_scope'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Scope ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'note_scope_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Note Scope ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'note_scope_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Type' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'note_type'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Note Type' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'note_type'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Note Note' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'note_body'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Note Note' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note', @level2type=N'COLUMN',@level2name=N'note_body'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - Note (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job - Note (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_note'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action Document ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_queue', @level2type=N'COLUMN',@level2name=N'job_queue_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action Document ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_queue', @level2type=N'COLUMN',@level2name=N'job_queue_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_queue', @level2type=N'COLUMN',@level2name=N'job_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_queue', @level2type=N'COLUMN',@level2name=N'job_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - queue__tbl (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_queue'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job - queue__tbl (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_queue'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_sms', @level2type=N'COLUMN',@level2name=N'job_sms_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action SMS ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_sms', @level2type=N'COLUMN',@level2name=N'job_sms_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_sms', @level2type=N'COLUMN',@level2name=N'job_id'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_sms', @level2type=N'COLUMN',@level2name=N'job_id'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS SUBJECT' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_sms', @level2type=N'COLUMN',@level2name=N'sms_txt_attrib'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action SMS SUBJECT' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_sms', @level2type=N'COLUMN',@level2name=N'sms_txt_attrib'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request Action SMS TO' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_sms', @level2type=N'COLUMN',@level2name=N'sms_to'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job Action SMS TO' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_sms', @level2type=N'COLUMN',@level2name=N'sms_to'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Request - SMS (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_sms'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Job - SMS (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'job_sms'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Scripts (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'script__tbl'
 GO
@@ -8678,7 +8678,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Las
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action', @level2type=N'COLUMN',@level2name=N'code_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Job Action Type (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_action'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_sys_id'
 GO
@@ -8704,7 +8704,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value Las
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code System Notes' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source', @level2type=N'COLUMN',@level2name=N'code_snotes'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Request Source (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'System Codes - Job Source (CONTROL)' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_job_source'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Code Value ID' , @level0type=N'SCHEMA',@level0name=N'{schema}', @level1type=N'TABLE',@level1name=N'code_txt_type', @level2type=N'COLUMN',@level2name=N'code_sys_id'
 GO
