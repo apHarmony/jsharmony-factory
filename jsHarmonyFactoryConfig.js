@@ -46,6 +46,10 @@ function jsHarmonyFactoryConfig(){
   this.help_view = {};
   //ID field for Help Listing
   this.help_panelid = "";
+  //Subtitle for main site
+  this.mainsitetitle = 'Database Management System';
+  //Subtitle for client site
+  this.clientsitetitle = 'Client Portal';
 
   //Debug settings
   this.debug_params = {

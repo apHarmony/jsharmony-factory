@@ -93,7 +93,7 @@ HEADER AND TOP BUTTONS
 	left:0px;
   top:0px;
 }
-<%-rootcss%> .xsublogo{
+<%-rootcss%> a.xsublogo{
   display:block;
   position:absolute;
 	top:0px;
@@ -102,6 +102,12 @@ HEADER AND TOP BUTTONS
   white-space:nowrap;
   color:white;
   vertical-align:top;
+  color:#fff;
+  position:relative;
+  top:57px;
+  left:63px;
+  font-size:12px;
+  letter-spacing:1px;
 }
 <%-rootcss%> .xsubcaption {
   display:inline-block;

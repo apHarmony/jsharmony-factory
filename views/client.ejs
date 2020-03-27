@@ -30,7 +30,7 @@
   <a class="xbrand_link" href="<%-ejsext.iif(req.isAuthenticated,'',req.jshsite.home_url)%>/">&nbsp;</a>
   <div class="xlogo">
     <a class="xlogoimg" href="<%-ejsext.iif(req.isAuthenticated,'/client',req.jshsite.home_url)%>/"><img src="<%-req.jshsite.publicurl%>images/logo.png" alt="<%=jsh.Config.app_name%>" title="<%=jsh.Config.app_name%>" /></a>
-    <a class="xsublogo" href="<%-ejsext.iif(req.isAuthenticated,'/client',req.jshsite.home_url)%>/"><img src="<%-req.jshsite.publicurl%>images/portal_client.png" /></a>
+    <a class="xsublogo" href="<%-ejsext.iif(req.isAuthenticated,'/client',req.jshsite.home_url)%>/"><%=req.jshsite.title%></a>
   </div>
   
   <%-jsh.RenderView('jsh_menu_horizontal',locals)%>

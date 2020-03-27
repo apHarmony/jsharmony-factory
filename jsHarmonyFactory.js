@@ -163,6 +163,7 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
     baseurl: '/',
     publicurl: '/',
     show_system_errors: true,
+    title: _this.Config.mainsitetitle,
     auth: {
       salt: _this.Config.mainsalt,
       supersalt: _this.Config.mainsalt,
@@ -209,6 +210,7 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
     baseurl: '/client/',
     publicurl: '/',
     show_system_errors: false,
+    title: _this.Config.clientsitetitle,
     auth: {
       salt: _this.Config.clientsalt,
       supersalt: _this.Config.mainsalt,
