@@ -86,7 +86,8 @@ HEADER AND TOP BUTTONS
 <%-rootcss%> .xlogo{
 	position:absolute;
 	top:0px;
-	left:0px;
+  left:0px;
+  z-index:4;
 }
 <%-rootcss%> .xlogoimg{
 	position:absolute;
