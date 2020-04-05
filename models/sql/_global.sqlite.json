@@ -461,7 +461,7 @@
     "sql": [
       "insert into {schema}_audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
       "  select ",
-      "    '%%%TABLE%%%',%%%ID%%%,'doc__tbl',datetime('now','localtime'),",
+      "    '%%%TABLE%%%',%%%ID%%%,'D',datetime('now','localtime'),",
       "    (select audit_ref_name from {schema}_audit__tbl where audit_table_name='%%%TABLE%%%' and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
       "    (select audit_ref_id from {schema}_audit__tbl where audit_table_name='%%%TABLE%%%' and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
       "    (select audit_subject from {schema}_audit__tbl where audit_table_name='%%%TABLE%%%' and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",

@@ -204,5 +204,140 @@
     "sql": [
       "(select null)"
     ]
-  }
+  },
+  "{schema}.nequal" : {
+    "params": ["A","B"],
+    "sql": ["(%%%A%%% is null and %%%B%%% is not null or %%%B%%% is null and %%%A%%% is not null or %%%A%%%<>%%%B%%%)"]
+  },
+  "{schema}.log_audit_insert" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "if(!('AUD_SEQ' in this.vars)){ rslt += 'declare @AUD_SEQ bigint;\\r\\n'; this.vars.AUD_SEQ = true; }",
+      "rslt += 'set @AUD_SEQ = null;\\r\\n';",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "rslt += '{schema}.log_audit_insert_base('+sqlescape(TABLE)+','+sqlescape(ID)+','+sqlescape(COL_NAME)+','+sqlescape(audit_ref_name)+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')';",
+      "return rslt;",
+    ]
+  },
+  "{schema}.log_audit_insert_base" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "if(@AUD_SEQ is null) begin ",
+      "  insert into {schema}.audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
+      "    select %%%TABLE%%%,%%%ID%%%,'I',{schema}.my_now_exec(),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,{schema}.my_db_user();",
+      "  select @AUD_SEQ = isnull(@AUD_SEQ, scope_identity())",
+      "end",
+    ]
+  },
+  "{schema}.log_audit_update_mult" : {
+    "params": ["TABLE","ID","COL_ARRAY","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "if(!('AUD_SEQ' in this.vars)){ rslt += 'declare @AUD_SEQ bigint;\\r\\n'; this.vars.AUD_SEQ = true; }",
+      "rslt += 'set @AUD_SEQ = null;\\r\\n';",
+      "if ((typeof COL_ARRAY === 'string' || COL_ARRAY instanceof String) && COL_ARRAY.length && COL_ARRAY.trim()[0]=='[') COL_ARRAY = JSON.parse(COL_ARRAY.trim());",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "var stmts = [];",
+      "for(var i=0;i<COL_ARRAY.length;i++){",
+      "  stmts.push('{schema}.log_audit_update_base('+TABLE+','+ID+','+COL_ARRAY[i]+','+audit_ref_name+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')');",
+      "}",
+      "rslt += stmts.join(';\\r\\n');",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_update" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "if(!('AUD_SEQ' in this.vars)){ rslt += 'declare @AUD_SEQ bigint;\\r\\n'; this.vars.AUD_SEQ = true; }",
+      "rslt += 'set @AUD_SEQ = null;\\r\\n';",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "rslt += '{schema}.log_audit_update_base('+sqlescape(TABLE)+','+sqlescape(ID)+','+sqlescape(COL_NAME)+','+sqlescape(audit_ref_name)+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')';",
+      "return rslt;",
+    ]
+  },
+  "{schema}.log_audit_update_base" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "if(jsharmony.nequal(deleted(%%%COL_NAME%%%), inserted(%%%COL_NAME%%%))) begin",
+      "  if(@AUD_SEQ is null) begin ",
+      "    insert into {schema}.audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
+      "      select %%%TABLE%%%,%%%ID%%%,'U',{schema}.my_now_exec(),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,{schema}.my_db_user();",
+      "    select @AUD_SEQ = isnull(@AUD_SEQ, scope_identity());",
+      "  end",
+      "  insert into {schema}.audit_detail(audit_seq,audit_column_name,audit_column_val)",
+      "    select @AUD_SEQ,lower('%%%COL_NAME%%%'),deleted(%%%COL_NAME%%%);",
+      "end",
+    ]
+  },
+  "{schema}.log_audit_update_custom" : {
+    "params": ["TABLE","ID","CONDITION","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "if(!('AUD_SEQ' in this.vars)){ rslt += 'declare @AUD_SEQ bigint;\\r\\n'; this.vars.AUD_SEQ = true; }",
+      "rslt += 'set @AUD_SEQ = null;\\r\\n';",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "rslt += '{schema}.log_audit_update_custom_base('+sqlescape(TABLE)+','+sqlescape(ID)+','+sqlescape(CONDITION)+','+sqlescape(audit_ref_name)+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')';",
+      "return rslt;",
+    ]
+  },
+  "{schema}.log_audit_update_custom_base" : {
+    "params": ["TABLE","ID","CONDITION","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "if(%%%CONDITION%%%) begin",
+      "  if(@AUD_SEQ is null) begin ",
+      "    insert into {schema}.audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
+      "      select %%%TABLE%%%,%%%ID%%%,'U',{schema}.my_now_exec(),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,{schema}.my_db_user();",
+      "    select @AUD_SEQ = isnull(@AUD_SEQ, scope_identity())",
+      "  end ",
+      "end",
+    ]
+  },
+  "{schema}.log_audit_delete_mult" : {
+    "params": ["TABLE","ID","COL_ARRAY"],
+    "exec": [
+      "var rslt = '';",
+      "if(!('AUD_SEQ' in this.vars)){ rslt += 'declare @AUD_SEQ bigint;\\r\\n'; this.vars.AUD_SEQ = true; }",
+      "rslt += 'set @AUD_SEQ = null;\\r\\n';",
+      "if ((typeof COL_ARRAY === 'string' || COL_ARRAY instanceof String) && COL_ARRAY.length && COL_ARRAY.trim()[0]=='[') COL_ARRAY = JSON.parse(COL_ARRAY.trim());",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "var stmts = [];",
+      "for(var i=0;i<COL_ARRAY.length;i++){",
+      "  stmts.push('{schema}.log_audit_delete_base('+TABLE+','+ID+','+COL_ARRAY[i]+')');",
+      "}",
+      "rslt += stmts.join(';\\r\\n');",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_delete" : {
+    "params": ["TABLE","ID","COL_NAME"],
+    "exec": [
+      "var rslt = '';",
+      "if(!('AUD_SEQ' in this.vars)){ rslt += 'declare @AUD_SEQ bigint;\\r\\n'; this.vars.AUD_SEQ = true; }",
+      "rslt += 'set @AUD_SEQ = null;\\r\\n';",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "rslt += '{schema}.log_audit_delete_base('+sqlescape(TABLE)+','+sqlescape(ID)+','+sqlescape(COL_NAME)+')';",
+      "return rslt;",
+    ]
+  },
+  "{schema}.log_audit_delete_base" : {
+    "params": ["TABLE","ID","COL_NAME"],
+    "sql": [
+      "if(@AUD_SEQ is null) begin ",
+      "  insert into {schema}.audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
+      "    select %%%TABLE%%%,%%%ID%%%,'D',{schema}.my_now_exec(),",
+      "      (select top 1 audit_ref_name from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
+      "      (select top 1 audit_ref_id from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
+      "      (select top 1 audit_subject from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
+      "      (select top 1 cust_id from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
+      "      (select top 1 item_id from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
+      "      {schema}.my_db_user()",
+      "      where (@AUD_SEQ is null);",
+      "  select @AUD_SEQ = scope_identity();",
+      "end",
+      "insert into {schema}.audit_detail(audit_seq,audit_column_name,audit_column_val)",
+      "  select @AUD_SEQ,lower('%%%COL_NAME%%%'),deleted(%%%COL_NAME%%%)",
+    ]
+  },
 }
