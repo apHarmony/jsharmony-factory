@@ -7149,11 +7149,11 @@ ALTER TABLE ONLY code2_doc_scope_doc_ctgr
 
 
 --
--- Name: code2_app_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
+-- Name: code2_app_h_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
 --
 
 ALTER TABLE ONLY code2_app
-    ADD CONSTRAINT code2_app_pkey PRIMARY KEY (code_name);
+    ADD CONSTRAINT code2_app_h_pkey PRIMARY KEY (code_name);
 
 
 --
@@ -7181,15 +7181,15 @@ ALTER TABLE ONLY code_app_base
 
 
 --
--- Name: code_app_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
+-- Name: code_app_h_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
 --
 
 ALTER TABLE ONLY code_app
-    ADD CONSTRAINT code_app_pkey PRIMARY KEY (code_name);
+    ADD CONSTRAINT code_app_h_pkey PRIMARY KEY (code_name);
 
 
 --
--- Name: code_app_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
+-- Name: code_app_base_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
 --
 
 ALTER TABLE ONLY code_app_base
@@ -7572,11 +7572,11 @@ ALTER TABLE ONLY code2_sys
 
 
 --
--- Name: code2_sys_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
+-- Name: code2_sys_h_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
 --
 
 ALTER TABLE ONLY code2_sys
-    ADD CONSTRAINT code2_sys_pkey PRIMARY KEY (code2_sys_h_id);
+    ADD CONSTRAINT code2_sys_h_pkey PRIMARY KEY (code2_sys_h_id);
 
 
 --
@@ -7643,11 +7643,11 @@ ALTER TABLE ONLY code_sys
 
 
 --
--- Name: code_sys_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
+-- Name: code_sys_h_pkey; Type: CONSTRAINT; Schema: {schema}; Owner: postgres
 --
 
 ALTER TABLE ONLY code_sys
-    ADD CONSTRAINT code_sys_pkey PRIMARY KEY (code_sys_h_id);
+    ADD CONSTRAINT code_sys_h_pkey PRIMARY KEY (code_sys_h_id);
 :endif:
 
 
