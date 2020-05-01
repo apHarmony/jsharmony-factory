@@ -131,29 +131,33 @@ jsh.App[modelid] = new (function(){
       params.runas_password = runas_password;
     }
 
-    XForm.prototype.XExecutePost('../_funcs/DEV_DB_SCRIPTS', { data: JSON.stringify(params) }, function (rslt) { //On success
-      if ('_success' in rslt) {
-        if(mode=='read'){
-          jform.find('.rslt').text(params.scriptid+"\r\n-------------------------------\r\n"+rslt.src);
-        }
-        else{
-          var txt = '';
-          if(rslt._stats){
-            _.each(rslt._stats, function(stats){
-              _.each(stats.warnings, function(warning){ txt += "WARNING: "+warning+"\r\n"; });
-              _.each(stats.notices, function(notice){ txt += "NOTICE: "+notice+"\r\n"; });
-            });
+    XExt.execif((mode=='run'), function(f){
+      XExt.Confirm('Are you sure you want to run '+scriptid.join('::')+'?', f);
+    }, function(){
+      XForm.prototype.XExecutePost('../_funcs/DEV_DB_SCRIPTS', { data: JSON.stringify(params) }, function (rslt) { //On success
+        if ('_success' in rslt) {
+          if(mode=='read'){
+            jform.find('.rslt').text(params.scriptid+"\r\n-------------------------------\r\n"+rslt.src);
           }
-          if(rslt.dbrslt[0]) for(var i=0;i<rslt.dbrslt[0].length;i++){
-            txt += "Resultset " + (i+1).toString() + "\r\n" + "------------------------------------\r\n";
-            txt += JSON.stringify(rslt.dbrslt[0][i],null,4) + "\r\n\r\n";
+          else{
+            var txt = '';
+            if(rslt._stats){
+              _.each(rslt._stats, function(stats){
+                _.each(stats.warnings, function(warning){ txt += "WARNING: "+warning+"\r\n"; });
+                _.each(stats.notices, function(notice){ txt += "NOTICE: "+notice+"\r\n"; });
+              });
+            }
+            if(rslt.dbrslt[0]) for(var i=0;i<rslt.dbrslt[0].length;i++){
+              txt += "Resultset " + (i+1).toString() + "\r\n" + "------------------------------------\r\n";
+              txt += JSON.stringify(rslt.dbrslt[0][i],null,4) + "\r\n\r\n";
+            }
+            txt += "\r\nOperation complete";
+            var endtm = Date.now();
+            txt += "\r\nTime: " + (endtm-starttm) + "ms";
+            jform.find('.rslt').text(txt);
           }
-          txt += "\r\nOperation complete";
-          var endtm = Date.now();
-          txt += "\r\nTime: " + (endtm-starttm) + "ms";
-          jform.find('.rslt').text(txt);
         }
-      }
+      });
     });
   }
 

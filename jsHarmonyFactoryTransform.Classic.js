@@ -470,6 +470,8 @@ transform.models = {
   "Dev/DBSQL": "DEV_DB",
   "Dev/DBSchema": "DEV_DB_SCHEMA",
   "Dev/DBScripts": "DEV_DB_SCRIPTS",
+  "Dev/DBDiff": "DEV_DB_DIFF",
+  "Dev/DBUpgrade": "DEV_DB_UPGRADE",
   "Dev/JSShell": "DEV_JS_SHELL",
   "Dev/Models": "DEV_MODELS",
   "Dev/Overview": "DEV_OVERVIEW",

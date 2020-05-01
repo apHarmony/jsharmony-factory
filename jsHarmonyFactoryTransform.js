@@ -475,6 +475,8 @@ function jsHarmonyFactoryTransform(module){
     "Dev/DBSQL": "Dev/DBSQL",
     "Dev/DBSchema": "Dev/DBSchema",
     "Dev/DBScripts": "Dev/DBScripts",
+    "Dev/DBDiff": "Dev/DBDiff",
+    "Dev/DBUpgrade": "Dev/DBUpgrade",
     "Dev/JSShell": "Dev/JSShell",
     "Dev/Models": "Dev/Models",
     "Dev/Overview": "Dev/Overview",
