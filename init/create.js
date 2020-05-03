@@ -81,6 +81,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
   jsh.Config.onConfigLoaded.push(function(cb){
     jsh.Config.system_settings.automatic_schema = false;
     jsh.Config.debug_params.jsh_error_level = 1;
+    jsh.Config.loadModels = false;
     return cb();
   });
   jsh.Init(function(){

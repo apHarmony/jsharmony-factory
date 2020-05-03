@@ -667,8 +667,8 @@ EXEC(N'DECLARE @pv binary(16)
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
              @D_code_val1, @I_code_val1,
-             @D_code_val2, @I_CO'',NULL,NULL) WHERE [script_name]=N''create_code2_TRIGGER''
-UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N''DEVAL2,
+             @D_code_val2, '',NULL,NULL) WHERE [script_name]=N''create_code2_TRIGGER''
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N''@I_code_val2,
              @D_code_txt, @I_code_txt,
              @D_code_code, @I_code_code,
              @D_code_attrib, @I_code_attrib,
@@ -1350,8 +1350,8 @@ EXEC(N'DECLARE @pv binary(16)
              @D_code_seq,  @I_code_seq,
              @D_code_end_dt, @I_code_end_dt,
              @D_code_val1, @I_code_val1,
-             @D_code_val2, @I_CO'',NULL,NULL) WHERE [script_name]=N''create_code2_app_TRIGGER''
-UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N''DEVAL2,
+             @D_code_val2, '',NULL,NULL) WHERE [script_name]=N''create_code2_app_TRIGGER''
+UPDATE [{schema}].[script__tbl] SET [script_txt].WRITE(N''@I_code_val2,
              @D_code_txt, @I_code_txt,
              @D_code_code, @I_code_code,
              @D_code_attrib, @I_code_attrib,
