@@ -387,6 +387,10 @@
       "\" }';"
     ]
   },
+  "{schema}.nequal" : {
+    "params": ["A","B"],
+    "sql": ["(%%%A%%% is null and %%%B%%% is not null or %%%B%%% is null and %%%A%%% is not null or %%%A%%%<>%%%B%%%)"]
+  },
   "nequal" : {
     "params": ["A","B"],
     "sql": ["(%%%A%%% is null and %%%B%%% is not null or %%%B%%% is null and %%%A%%% is not null or %%%A%%%<>%%%B%%%)"]
