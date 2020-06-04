@@ -137,6 +137,12 @@
       "((%%%A%%% is null and %%%B%%% is not null) or (%%%A%%% is not null and %%%B%%% is null) or ((%%%A%%% is not null and %%%B%%% is not null) and (%%%A%%% <> %%%B%%%)))"
     ]
   },
+  "get_insert_trigger_identity":{
+    "params": ["KEY"],
+    "sql": [
+      ""
+    ]
+  },
   "log_audit_insert" : {
     "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
     "sql": [

@@ -395,6 +395,12 @@
     "params": ["A","B"],
     "sql": ["(%%%A%%% is null and %%%B%%% is not null or %%%B%%% is null and %%%A%%% is not null or %%%A%%%<>%%%B%%%)"]
   },
+  "get_insert_trigger_identity":{
+    "params": ["KEY"],
+    "sql": [
+      "select last_insert_rowid_override %%%KEY%%% from jsharmony_meta;"
+    ]
+  },
   "log_audit_insert_ext" : {
     "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
     "sql": [

@@ -69,6 +69,12 @@
       "my_toa     {schema}.toaudit;"
     ]
   },
+  "get_insert_trigger_identity":{
+    "params": ["KEY"],
+    "sql": [
+      ""
+    ]
+  },
   "init_audit" : {
     "params": ["audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
     "sql": [
