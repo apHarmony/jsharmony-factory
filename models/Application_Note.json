@@ -11,7 +11,7 @@
     "inherits": "Note_User_Listing",
     "table":"{schema}.v_note",
     "roles": {"O_B":"B","O_X":"*"},
-    "buttons":[{"link":"insert:Admin/SysUser_Note","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"note_type"}}],
+    "buttons":[{"name":"insertNote","link":"insert:Admin/SysUser_Note","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"note_type"}}],
     "fields":[
       {"name":"note_etstmp","link":"update:Admin/SysUser_Note"}
     ]   

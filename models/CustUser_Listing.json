@@ -10,7 +10,7 @@
     },
     "caption":[0,"Customer User","Customer Users"],
     "sort":["^sys_user_name1"], 
-    "buttons":[{"link":"insert:CustUser"}],
+    "buttons":[{"name":"insertUser","link":"insert:CustUser"}],
     "fields":[
       {"name":"sys_user_id","type":"bigint","key":1,"datalock":{"cust_id":"sys_user_id"},"control":"hidden"},
       {"name":"cust_id","type":"bigint","datalock":{"cust_id":"cust_id"},"foreignkey":1,"control":"hidden"},

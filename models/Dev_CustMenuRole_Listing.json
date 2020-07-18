@@ -22,8 +22,8 @@
     "validationlevel": "cell",        "comment4":"cell, or row",
     "hide_system_buttons" : ["export"],    
     "buttons": [
-      {"link":"js:jsh.App[modelid].SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
-      {"link":"js:jsh.App[modelid].DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
+      {"name":"selectAll","link":"js:jsh.App[modelid].SelectAll();", "icon": "ok", "text": "Select All", "actions": "U" },
+      {"name":"deselectAll","link":"js:jsh.App[modelid].DeselectAll();", "icon": "cancel", "text": "Deselect All", "actions": "U" }
     ],
     "oninit": "jsh.App[modelid].oninit(xmodel);",
     "oncommit": "jsh.App[modelid].oncommit();",

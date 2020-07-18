@@ -7,7 +7,7 @@
     "caption":[0,"Menu Item","Menu Items"],
     "layout":"grid", 
     "sort":[{"menu_group":"desc"},{"menu_id_parent":"asc"},{"menu_seq":"asc"},{"menu_name":"asc"}], 
-    "buttons": [{"link":"Dev/Menu_Tree_Editor&", "icon": "design", "text": "Tree View", "actions": "B" }],
+    "buttons": [{"name":"viewTree","link":"Dev/Menu_Tree_Editor&", "icon": "design", "text": "Tree View", "actions": "B" }],
     "menu":"Dev/Menu_Tree_Editor",
     "reselectafteredit": "row",    "comment1":"row, or blank",
     "newrowposition": "first",      "comment2":"first or last",

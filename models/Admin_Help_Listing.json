@@ -7,7 +7,7 @@
     "layout":"grid", 
 	  "sort":["^help_seq","^help_title"], 
 	  "menu":"Admin/Help_Listing",
-	  "buttons":[{"link":"insert:Admin/Help"}],
+	  "buttons":[{"name":"insertHelp","link":"insert:Admin/Help"}],
     "reselectafteredit": "row",      "comment1":"row, or blank",
     "newrowposition": "last",        "comment2":"first or last",
     "commitlevel": "row",            "comment3":"cell, row, page, or none",

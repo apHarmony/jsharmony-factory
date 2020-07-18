@@ -8,7 +8,7 @@
 	  "samplerepeat":5,
 	  "caption":[0,"Document","Documents"],
 	  "menu":"dashboard",
-    "buttons":[{"link":"insert:Doc__model","bindings":{"doc_scope_id":"doc_scope_id","doc_scope":"doc_scope"}}],
+    "buttons":[{"name":"insertDoc","link":"insert:Doc__model","bindings":{"doc_scope_id":"doc_scope_id","doc_scope":"doc_scope"}}],
 	  "fields":[
 	    {"name":"doc_id","type":"bigint","key": 1,"datalock":{"cust_id":"doc_id"},"control":"hidden"},
       {"name":"doc_scope","type":"varchar","length":32,"foreignkey":1,"datalock":{"cust_id":"doc_scope"},"control":"hidden"},

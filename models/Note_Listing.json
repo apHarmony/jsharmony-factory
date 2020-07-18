@@ -5,7 +5,7 @@
     "actions":"B", 
     "sort":["vnote_etstmp"], 
     "caption":[0,"Note","Notes"],
-    "buttons":[{"link":"insert:Note__model","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"note_type"}}],
+    "buttons":[{"name":"insertNote","link":"insert:Note__model","bindings":{"note_scope_id":"note_scope_id","note_scope":"note_scope","note_type":"note_type"}}],
     "fields":[
 	    {"name":"note_id","type":"bigint","key":1,"datalock":{"cust_id":"note_id"},"control":"hidden"},
 	    {"name":"note_scope","type":"varchar","length":32,"foreignkey":1,"datalock":{"cust_id":"note_scope"},"control":"hidden"},
@@ -47,7 +47,7 @@
       "main":{"X_B":"B","X_X":"B"},
       "client":{"CX_B":"B","CX_X":"B","CSYSADMIN":"B"}
     },
-    "buttons":[],
+    "buttons":[ { "__REMOVEALL__": true } ],
     "fields": [
       {"name": "note_euser_fmt", "actions":""},
       {"name":"note_etstmp", "link":"update:Note_Browse"}

@@ -20,7 +20,7 @@
     "dev":1,
     "actions":"B", 
     "menu":"Dev/Txt_Listing",
-    "buttons":[{"link":"insert:Dev/Txt", "text": "Add Text Module"}],
+    "buttons":[{"name":"insertTxt","link":"insert:Dev/Txt", "text": "Add Text Module"}],
     "fields":[
       {"name":"txt_process","link":"update:Dev/Txt"},
       {"name":"txt_attrib","link":"update:Dev/Txt"},

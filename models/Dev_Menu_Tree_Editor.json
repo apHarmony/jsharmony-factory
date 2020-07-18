@@ -9,7 +9,7 @@
     "caption":[0,"Menu Item","Menu Items"],
     "sqlselect": "menu_editor_top",
     "querystring": { "|action": "update" },
-    "buttons": [{"link":"Dev/Menu_Listing&", "icon": "list", "text": "List View", "actions": "B" }],
+    "buttons": [{"name":"viewList","link":"Dev/Menu_Listing&", "icon": "list", "text": "List View", "actions": "B" }],
     "menu":"Dev/Menu_Tree_Editor",
     "hide_system_buttons" : ["print","export"], 
     "fields":[

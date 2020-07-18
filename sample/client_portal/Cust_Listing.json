@@ -7,7 +7,7 @@
     "menu":"Customer/Cust_Listing",
 	  "actions":"B",
     "roles": {"C_B":"B","C_BU":"B","C_X":"*"},
-    "buttons":[{"link":"insert:Cust_Popup"}],
+    "buttons":[{"name":"insertCust","link":"insert:Cust_Popup"}],
     "sort":["^cust_name"], 
     "default_search":[{"Column":"cust_name"}],
 	  "fields":[

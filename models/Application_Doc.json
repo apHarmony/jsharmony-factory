@@ -4,7 +4,7 @@
     "table":"{schema}.v_doc",
     "title":"Documents - <#=bcrumbs.sys_user_lname#>, <#=bcrumbs.sys_user_fname#>",
     "roles": {"O_B":"B","O_X":"*"},
-    "buttons":[{"link":"insert:Admin/SysUser_Doc","bindings":{"doc_scope_id":"doc_scope_id","doc_scope":"doc_scope"}}],
+    "buttons":[{"name":"insertDoc","link":"insert:Admin/SysUser_Doc","bindings":{"doc_scope_id":"doc_scope_id","doc_scope":"doc_scope"}}],
     "breadcrumbs":{
       "sql": ["select sys_user_fname, sys_user_lname from {schema}.sys_user where sys_user_id=@doc_scope_id"],
       "sql_params": ["doc_scope","doc_scope_id"]

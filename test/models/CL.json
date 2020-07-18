@@ -7,7 +7,7 @@
     "roles": {"BROWSE":"B"},
 	"caption":[0,"Customer","Customers"],
 	"sort":["^c_name"], 
-	"buttons":[{"link":"insert:C"}],
+	"buttons":[{"name":"insertCust","link":"insert:C"}],
 	"menu":"clients",
     "grid_expand_search": 1,
     "grid_require_search": 0,
