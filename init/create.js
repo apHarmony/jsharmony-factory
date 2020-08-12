@@ -65,6 +65,8 @@ var scriptConfig = {
   DB_USER_EXISTS: false,
   CLIENT_PORTAL: undefined,
   SAMPLE_DATA: false,
+  USE_IPC: false,
+  RESULT_MESSAGE: '',
 
   sqlFuncs: [],
 };
@@ -96,8 +98,8 @@ jsHarmonyFactory_Create.Run = function(run_cb){
   
     scriptConfig._ORIG_DBSERVER = dbs.getDBServer();
     scriptConfig._ORIG_DBNAME = dbs.getDBName();
-    scriptConfig._ORIG_DBUSER = jsh.DBConfig['default'].user;
-    scriptConfig._ORIG_DBPASS = jsh.DBConfig['default'].password;
+    scriptConfig._ORIG_DBUSER = jsh.DBConfig['default'].user || '';
+    scriptConfig._ORIG_DBPASS = jsh.DBConfig['default'].password || '';
   
     scriptConfig._ORIG_DEFAULTS = true;
   
@@ -150,6 +152,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
       else if(arg=='--with-client-portal') scriptConfig.CLIENT_PORTAL = true;
       else if(arg=='--no-client-portal') scriptConfig.CLIENT_PORTAL = false;
       else if(arg=='--with-sample-data') scriptConfig.SAMPLE_DATA = true;
+      else if(arg=='--use-ipc') scriptConfig.USE_IPC = true;
     }
   
     Promise.resolve()
@@ -253,6 +256,10 @@ jsHarmonyFactory_Create.Run = function(run_cb){
       if(scriptConfig._JSH_DBTYPE != 'sqlite') return false;
       if(scriptConfig._JSH_DBNAME){
         console.log('NEW Database path: ' + scriptConfig._JSH_DBNAME + '   (from app.config.js)');
+        var dbpath = path.resolve(scriptConfig._JSH_DBNAME);
+        var dbfolder = path.dirname(dbpath);
+        HelperFS.createFolderRecursiveSync(dbfolder);
+        HelperFS.touchSync(dbpath);
         return false;
       }
       process.stdout.write('NEW database path ['+scriptConfig.DEFAULT_SQLITE_PATH+']: ');
@@ -290,9 +297,9 @@ jsHarmonyFactory_Create.Run = function(run_cb){
 
     //Check if the database user already exists
     .then(function(){ return new Promise(function(resolve, reject){
+      if(scriptConfig._JSH_DBTYPE == 'sqlite') return resolve();
       if(!scriptConfig._JSH_DBUSER) scriptConfig._JSH_DBUSER = 'jsharmony_'+scriptConfig._JSH_DBNAME.toLowerCase()+'_user';
       if(!scriptConfig._JSH_DBPASS) scriptConfig._JSH_DBPASS = xlib.genDBPassword(16);
-      if(scriptConfig._JSH_DBTYPE == 'sqlite') return resolve();
       
       db.Scalar('',db.ParseSQLFuncs(db.ParseSQL('init_db_user_exists'), dbs.getSQLFuncs()),[],{},function(err,rslt){
         db.Close(function(){
@@ -328,35 +335,40 @@ jsHarmonyFactory_Create.Run = function(run_cb){
   
     //*** Update connection string in app.config.js
     .then(function(){ return new Promise(function(resolve, reject){
-      if(scriptConfig._ORIG_DEFAULTS || true){
-        var curconfig = fs.readFileSync(jsh.Config.appbasepath+'/app.config.js','utf8');
-        scriptConfig._ORIG_DEFAULTS = false;
-  
-        if(_.includes(['sqlite'],scriptConfig._JSH_DBTYPE)){
-          if(
-            ((curconfig.match(new RegExp(scriptConfig.DEFAULT_DB_NAME,'g')) || []).length==1)){
-            console.log('Updating app.config.js');
-            curconfig = curconfig.replace(scriptConfig.DEFAULT_DB_NAME, Helper.escapeJS(scriptConfig._JSH_DBNAME));
-            fs.writeFileSync(jsh.Config.appbasepath+'/app.config.js', curconfig, 'utf8');
-            scriptConfig._ORIG_DEFAULTS = true;
+      function updateConfig(fname){
+        if(!fs.existsSync(fname)) return;
+        if(scriptConfig._ORIG_DEFAULTS || true){
+          var curconfig = fs.readFileSync(fname,'utf8');
+          scriptConfig._ORIG_DEFAULTS = false;
+    
+          if(_.includes(['sqlite'],scriptConfig._JSH_DBTYPE)){
+            if(
+              ((curconfig.match(new RegExp(scriptConfig.DEFAULT_DB_NAME,'g')) || []).length==1)){
+              console.log('Updating '+fname);
+              curconfig = curconfig.replace(scriptConfig.DEFAULT_DB_NAME, Helper.escapeJS(scriptConfig._JSH_DBNAME));
+              fs.writeFileSync(fname, curconfig, 'utf8');
+              scriptConfig._ORIG_DEFAULTS = true;
+            }
           }
-        }
-        else if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE)){
-          if(
-            ((curconfig.match(new RegExp(scriptConfig.DEFAULT_DB_SERVER,'g')) || []).length==1) &&
-            ((curconfig.match(new RegExp(scriptConfig.DEFAULT_DB_NAME,'g')) || []).length==1) &&
-            ((curconfig.match(new RegExp(scriptConfig.DEFAULT_DB_USER,'g')) || []).length==1) &&
-            ((curconfig.match(new RegExp(scriptConfig.DEFAULT_DB_PASS,'g')) || []).length==1)){
-            console.log('Updating app.config.js');
-            curconfig = curconfig.replace(scriptConfig.DEFAULT_DB_SERVER, Helper.escapeJS(scriptConfig._JSH_DBSERVER));
-            curconfig = curconfig.replace(scriptConfig.DEFAULT_DB_NAME, Helper.escapeJS(scriptConfig._JSH_DBNAME));
-            curconfig = curconfig.replace(scriptConfig.DEFAULT_DB_USER, Helper.escapeJS(scriptConfig._JSH_DBUSER));
-            curconfig = curconfig.replace(scriptConfig.DEFAULT_DB_PASS, Helper.escapeJS(scriptConfig._JSH_DBPASS));
-            fs.writeFileSync(jsh.Config.appbasepath+'/app.config.js', curconfig, 'utf8');
-            scriptConfig._ORIG_DEFAULTS = true;
+          else if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE)){
+            if(
+              ((curconfig.match(new RegExp(scriptConfig.DEFAULT_DB_SERVER,'g')) || []).length==1) &&
+              ((curconfig.match(new RegExp(scriptConfig.DEFAULT_DB_NAME,'g')) || []).length==1) &&
+              ((curconfig.match(new RegExp(scriptConfig.DEFAULT_DB_USER,'g')) || []).length==1) &&
+              ((curconfig.match(new RegExp(scriptConfig.DEFAULT_DB_PASS,'g')) || []).length==1)){
+              console.log('Updating '+fname);
+              curconfig = curconfig.replace(scriptConfig.DEFAULT_DB_SERVER, Helper.escapeJS(scriptConfig._JSH_DBSERVER));
+              curconfig = curconfig.replace(scriptConfig.DEFAULT_DB_NAME, Helper.escapeJS(scriptConfig._JSH_DBNAME));
+              curconfig = curconfig.replace(scriptConfig.DEFAULT_DB_USER, Helper.escapeJS(scriptConfig._JSH_DBUSER));
+              curconfig = curconfig.replace(scriptConfig.DEFAULT_DB_PASS, Helper.escapeJS(scriptConfig._JSH_DBPASS));
+              fs.writeFileSync(fname, curconfig, 'utf8');
+              scriptConfig._ORIG_DEFAULTS = true;
+            }
           }
         }
       }
+      updateConfig(jsh.Config.appbasepath+'/app.config.js');
+      updateConfig(jsh.Config.appbasepath+'/app.config.local.js');
       dbs.setDBName(scriptConfig._JSH_DBNAME);
       db.Close(function(){
         resolve();
@@ -401,6 +413,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     }); })
 
     .then(function(){ return new Promise(function(resolve, reject){
+      var rslt = '';
       if(!scriptConfig._ORIG_DEFAULTS &&
         ((scriptConfig._ORIG_DBSERVER != scriptConfig._JSH_DBSERVER) ||
         (scriptConfig._ORIG_DBNAME != scriptConfig._JSH_DBNAME) ||
@@ -409,45 +422,48 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         (!scriptConfig._ORIG_DBPASS && scriptConfig.DB_USER_EXISTS))
       ){
         //*** If did not update app.config.js, show results and tell user to update app.config.js on their own 
-        console.log('');
-        console.log('------------------------------------------------');
-        console.log('Please update dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js with the following database connection information:');
-        console.log('------------------------------------------------');
-        if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE)) console.log('SERVER: ' + scriptConfig._JSH_DBSERVER);
-        console.log('DATABASE: ' + scriptConfig._JSH_DBNAME);
-        if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE)) console.log('USER: ' + scriptConfig._JSH_DBUSER);
-        if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE) && !scriptConfig.DB_USER_EXISTS) console.log('PASSWORD: ' + scriptConfig._JSH_DBPASS);
-        if(scriptConfig.DB_USER_EXISTS) console.log('DATABASE USER '+scriptConfig._JSH_DBUSER+' ALREADY EXISTED - PLEASE BE SURE TO ENTER THE PASSWORD IN app.config.js');
-        console.log('------------------------------------------------');
+        rslt += '------------------------------------------------\r\n';
+        rslt += 'Please update dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js with the following database connection information:\r\n';
+        rslt += '------------------------------------------------\r\n';
+        if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE)) rslt += 'SERVER: ' + scriptConfig._JSH_DBSERVER + '\r\n';
+        rslt += 'DATABASE: ' + scriptConfig._JSH_DBNAME + '\r\n';
+        if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE)) rslt += 'USER: ' + scriptConfig._JSH_DBUSER + '\r\n';
+        if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE) && !scriptConfig.DB_USER_EXISTS) rslt += 'PASSWORD: ' + scriptConfig._JSH_DBPASS + '\r\n';
+        if(scriptConfig.DB_USER_EXISTS) rslt += 'DATABASE USER '+scriptConfig._JSH_DBUSER+' ALREADY EXISTED - PLEASE BE SURE TO ENTER THE PASSWORD IN app.config.js / app.config.local.js\r\n';
+        rslt += '------------------------------------------------\r\n';
       }
       else {
-        console.log('');
-        console.log('');
-        console.log('');
-        console.log('The jsHarmony Factory database has been created!');
-        console.log('');
-        console.log('** Please verify the configuration in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js');
-        console.log('** Be sure to configure ports and HTTPS for security');
-        console.log('');
+        rslt += 'The jsHarmony database has been created!\r\n';
+        rslt += '\r\n';
+        rslt += '** Please verify the configuration in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js\r\n';
+        rslt += '** Be sure to configure ports and HTTPS for security\r\n';
+        rslt += '\r\n';
         if(scriptConfig.DB_USER_EXISTS){
-          console.log('------------------------------------------------');
-          console.log('DATABASE USER '+scriptConfig._JSH_DBUSER+' ALREADY EXISTED');
-          console.log('PLEASE BE SURE TO ENTER THE PASSWORD IN '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js');
-          console.log('------------------------------------------------');
-          console.log('');
+          rslt += '------------------------------------------------\r\n';
+          rslt += 'DATABASE USER '+scriptConfig._JSH_DBUSER+' ALREADY EXISTED\r\n';
+          rslt += 'PLEASE BE SURE TO ENTER THE PASSWORD IN '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js\r\n';
+          rslt += '------------------------------------------------\r\n';
+          rslt += '\r\n';
         }
       }
-      console.log('Then start the server by running '+(scriptConfig._IS_WINDOWS?'':'./')+scriptConfig._NSTART_CMD);
-      console.log('');
-      console.log('Log in with the admin account below:');
-      console.log('User: '+scriptConfig._JSH_ADMIN_EMAIL);
-      console.log('Password: '+scriptConfig._JSH_ADMIN_PASS);
-      console.log('');
+      rslt += 'Then start the server by running '+(scriptConfig._IS_WINDOWS?'':'./')+scriptConfig._NSTART_CMD+'\r\n';
+      rslt += '\r\n';
+      rslt += 'Log in with the admin account below:\r\n';
+      rslt += 'User: '+scriptConfig._JSH_ADMIN_EMAIL+'\r\n';
+      rslt += 'Password: '+scriptConfig._JSH_ADMIN_PASS+'\r\n';
+      rslt += '\r\n';
+      scriptConfig.RESULT_MESSAGE = rslt;
       resolve();
     }); })
   
     //Callback
     .then(function(){ return new Promise(function(resolve, reject){
+      if(scriptConfig.USE_IPC && process.send){
+        process.send(JSON.stringify(scriptConfig));
+      }
+      else {
+        console.log('\r\n\r\n\r\n' + scriptConfig.RESULT_MESSAGE);
+      }
       cliReturnCode = 0; //Success
 
       db.Close(function(){

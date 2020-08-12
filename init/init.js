@@ -52,6 +52,8 @@ var scriptConfig = {
 
   CLIENT_PORTAL: undefined,
   SAMPLE_DATA: false,
+  USE_IPC: false,
+  RESULT_MESSAGE: '',
 
   sqlFuncs: [],
 };
@@ -73,7 +75,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     process.on('uncaughtException', function (err) { console.log(err); });
 
     if(!jsh.DBConfig['default']){
-      console.log('\r\nPlease configure dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js before running init database operation');
+      console.log('\r\nPlease configure dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js before running init database operation');
       process.exit();
     }
   
@@ -106,6 +108,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
       else if(arg=='--with-client-portal') scriptConfig.CLIENT_PORTAL = true;
       else if(arg=='--no-client-portal') scriptConfig.CLIENT_PORTAL = false;
       else if(arg=='--with-sample-data') scriptConfig.SAMPLE_DATA = true;
+      else if(arg=='--use-ipc') scriptConfig.USE_IPC = true;
     }
   
     Promise.resolve()
@@ -113,7 +116,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     //Check if the database connection string works
     .then(function(){ return new Promise(function(resolve, reject){
       db.Scalar('','select 1',[],{},function(err,rslt){
-        if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js'); return reject(); }
+        if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js'); return reject(); }
         if(rslt && (rslt.toString()=="1")){
           resolve();
         }
@@ -248,22 +251,31 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   
     //Callback
     .then(function(){ return new Promise(function(resolve, reject){
-      console.log('');
-      console.log('');
-      console.log('');
-      console.log('The jsHarmony Factory database has been initialized!');
-      console.log('');
-      console.log('** Please verify the configuration in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js');
-      console.log('** Be sure to configure ports and HTTPS for security');
-      console.log('');
-      console.log('Then start the server by running '+(scriptConfig._IS_WINDOWS?'':'./')+scriptConfig._NSTART_CMD);
-      console.log('');
-      console.log('Log in with the admin account below:');
-      console.log('User: '+scriptConfig._JSH_ADMIN_EMAIL);
-      console.log('Password: '+scriptConfig._JSH_ADMIN_PASS);
-      console.log('');
+      rslt += 'The jsHarmony database has been initialized!\r\n';
+      rslt += '\r\n';
+      rslt += '** Please verify the configuration in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js\r\n';
+      rslt += '** Be sure to configure ports and HTTPS for security\r\n';
+      rslt += '\r\n';
+      rslt += 'Then start the server by running '+(scriptConfig._IS_WINDOWS?'':'./')+scriptConfig._NSTART_CMD+'\r\n';
+      rslt += '\r\n';
+      rslt += 'Log in with the admin account below:\r\n';
+      rslt += 'User: '+scriptConfig._JSH_ADMIN_EMAIL+'\r\n';
+      rslt += 'Password: '+scriptConfig._JSH_ADMIN_PASS+'\r\n';
+      rslt += '\r\n';
+      scriptConfig.RESULT_MESSAGE = rslt;
+      return resolve();
+    }); })
+
+    //Callback
+    .then(function(){ return new Promise(function(resolve, reject){
+      if(scriptConfig.USE_IPC && process.send){
+        process.send(JSON.stringify(scriptConfig));
+      }
+      else {
+        console.log('\r\n\r\n\r\n' + scriptConfig.RESULT_MESSAGE);
+      }
       cliReturnCode = 0; //Success
-  
+
       db.Close(function(){
         if(run_cb) run_cb();
         resolve();

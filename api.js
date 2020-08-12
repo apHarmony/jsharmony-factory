@@ -44,7 +44,7 @@ jsHarmonyFactoryAPI.prototype.Init = function(cb){
 //Execute DB Operation
 jsHarmonyFactoryAPI.prototype.dbTest = function(onComplete){
   this.db.Scalar('','select 1',[],{},function(err,rslt){
-    if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your database config in app.config.js and try again by running:\r\nnpm run -s init-factory'); return onComplete(err); }
+    if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your database config in app.config.js / app.config.local.js and try again by running:\r\nnpm run -s init-factory'); return onComplete(err); }
     if(rslt && (rslt.toString()=="1")){
       return onComplete();
     }
