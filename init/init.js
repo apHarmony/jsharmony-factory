@@ -75,7 +75,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     process.on('uncaughtException', function (err) { console.log(err); });
 
     if(!jsh.DBConfig['default']){
-      console.log('\r\nPlease configure dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js before running init database operation');
+      console.log('\r\nPlease configure dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js & app.config.local.js before running init database operation');
       process.exit();
     }
   
@@ -116,7 +116,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     //Check if the database connection string works
     .then(function(){ return new Promise(function(resolve, reject){
       db.Scalar('','select 1',[],{},function(err,rslt){
-        if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js'); return reject(); }
+        if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js & app.config.local.js'); return reject(); }
         if(rslt && (rslt.toString()=="1")){
           resolve();
         }
@@ -253,7 +253,7 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     .then(function(){ return new Promise(function(resolve, reject){
       rslt += 'The jsHarmony database has been initialized!\r\n';
       rslt += '\r\n';
-      rslt += '** Please verify the configuration in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js\r\n';
+      rslt += '** Please verify the configuration in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js & app.config.local.js\r\n';
       rslt += '** Be sure to configure ports and HTTPS for security\r\n';
       rslt += '\r\n';
       rslt += 'Then start the server by running '+(scriptConfig._IS_WINDOWS?'':'./')+scriptConfig._NSTART_CMD+'\r\n';

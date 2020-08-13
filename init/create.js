@@ -66,6 +66,7 @@ var scriptConfig = {
   CLIENT_PORTAL: undefined,
   SAMPLE_DATA: false,
   USE_IPC: false,
+  USE_DEFAULT_SQLITE_PATH: false,
   RESULT_MESSAGE: '',
 
   sqlFuncs: [],
@@ -153,6 +154,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
       else if(arg=='--no-client-portal') scriptConfig.CLIENT_PORTAL = false;
       else if(arg=='--with-sample-data') scriptConfig.SAMPLE_DATA = true;
       else if(arg=='--use-ipc') scriptConfig.USE_IPC = true;
+      else if(arg=='--use-default-sqlite-path') scriptConfig.USE_DEFAULT_SQLITE_PATH = true;
     }
   
     Promise.resolve()
@@ -254,6 +256,9 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     //Ask for the NEW database path, if applicable
     .then(xlib.getStringAsync(function(){
       if(scriptConfig._JSH_DBTYPE != 'sqlite') return false;
+      if(scriptConfig.USE_DEFAULT_SQLITE_PATH){
+        return '';
+      }
       if(scriptConfig._JSH_DBNAME){
         console.log('NEW Database path: ' + scriptConfig._JSH_DBNAME + '   (from app.config.js)');
         var dbpath = path.resolve(scriptConfig._JSH_DBNAME);
@@ -423,25 +428,25 @@ jsHarmonyFactory_Create.Run = function(run_cb){
       ){
         //*** If did not update app.config.js, show results and tell user to update app.config.js on their own 
         rslt += '------------------------------------------------\r\n';
-        rslt += 'Please update dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js with the following database connection information:\r\n';
+        rslt += 'Please update dbconfig in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js & app.config.local.js with the following database connection information:\r\n';
         rslt += '------------------------------------------------\r\n';
         if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE)) rslt += 'SERVER: ' + scriptConfig._JSH_DBSERVER + '\r\n';
         rslt += 'DATABASE: ' + scriptConfig._JSH_DBNAME + '\r\n';
         if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE)) rslt += 'USER: ' + scriptConfig._JSH_DBUSER + '\r\n';
         if(_.includes(['pgsql','mssql'],scriptConfig._JSH_DBTYPE) && !scriptConfig.DB_USER_EXISTS) rslt += 'PASSWORD: ' + scriptConfig._JSH_DBPASS + '\r\n';
-        if(scriptConfig.DB_USER_EXISTS) rslt += 'DATABASE USER '+scriptConfig._JSH_DBUSER+' ALREADY EXISTED - PLEASE BE SURE TO ENTER THE PASSWORD IN app.config.js / app.config.local.js\r\n';
+        if(scriptConfig.DB_USER_EXISTS) rslt += 'DATABASE USER '+scriptConfig._JSH_DBUSER+' ALREADY EXISTED - PLEASE BE SURE TO ENTER THE PASSWORD IN app.config.js & app.config.local.js\r\n';
         rslt += '------------------------------------------------\r\n';
       }
       else {
         rslt += 'The jsHarmony database has been created!\r\n';
         rslt += '\r\n';
-        rslt += '** Please verify the configuration in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js\r\n';
+        rslt += '** Please verify the configuration in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js & app.config.local.js\r\n';
         rslt += '** Be sure to configure ports and HTTPS for security\r\n';
         rslt += '\r\n';
         if(scriptConfig.DB_USER_EXISTS){
           rslt += '------------------------------------------------\r\n';
           rslt += 'DATABASE USER '+scriptConfig._JSH_DBUSER+' ALREADY EXISTED\r\n';
-          rslt += 'PLEASE BE SURE TO ENTER THE PASSWORD IN '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js / app.config.local.js\r\n';
+          rslt += 'PLEASE BE SURE TO ENTER THE PASSWORD IN '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js & app.config.local.js\r\n';
           rslt += '------------------------------------------------\r\n';
           rslt += '\r\n';
         }
