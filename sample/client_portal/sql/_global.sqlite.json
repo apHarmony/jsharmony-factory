@@ -64,7 +64,7 @@
       "(select null)"
     ]
   },
-  "{schema}.get_item_name":{
+  "jsharmony.get_item_name":{
     "params": ["col"],
     "sql": [
       "(select null)"

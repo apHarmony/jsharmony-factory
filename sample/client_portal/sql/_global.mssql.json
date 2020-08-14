@@ -11,7 +11,7 @@
       "(select cust_name from cust where cust_id=%%%col%%%)"
     ]
   },
-  "{schema}.get_item_name":{
+  "jsharmony.get_item_name":{
     "params": ["col"],
     "sql": [
       "(select null)"
