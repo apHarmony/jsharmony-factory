@@ -578,8 +578,6 @@ function jsHarmonyFactoryTransform(module){
     "Dev/Code_Sys_Listing": "Dev/Code_Listing",
     "Dev/Param_Sys_Listing": "Dev/Param_Sys_Listing",
     "Reports/Agreement": "Reports/Agreement",
-    "Reports/SysUser_Listing": "Reports/SysUser_Listing",
-    "Reports/Template_Default": "Reports/Template_Default",
   };
 
   this.sql = {

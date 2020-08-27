@@ -18,8 +18,6 @@ INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name,
 INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 800, 'ACTIVE', 1, 'Admin', 80000, 'Administration', NULL, NULL, '%%%NAMESPACE%%%Admin/Overview', NULL, NULL, NULL);
 INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 900, 'ACTIVE', 1, 'Dev', 90000, 'Developer', NULL, NULL, '%%%NAMESPACE%%%Dev/Overview', NULL, NULL, NULL);
 
-INSERT INTO menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_snotes, menu_subcmd) VALUES ('S', 70801, 'ACTIVE', 700, 'Reports/SysUser_Listing', NULL, 'User Listing', NULL, NULL, '%%%NAMESPACE%%%Reports/SysUser_Listing', NULL, NULL, NULL);
-
 
 INSERT INTO single (single_dummy, single_ident, dual_bigint, single_varchar50) VALUES ('X', 1, NULL, NULL);
 
@@ -1095,8 +1093,6 @@ INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES 
 INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (800, NULL, 'SYSADMIN');
 INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (800, NULL, 'DEV');
 INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (900, NULL, 'DEV');
-
-INSERT INTO sys_menu_role (menu_id, sys_menu_role_snotes, sys_role_name) VALUES (70801, NULL, 'SYSADMIN');
 
 
 INSERT INTO code_txt_type (code_seq, code_val, code_txt, code_code, code_end_dt, code_end_reason, code_snotes, code_notes, code_attrib) VALUES (1, 'TEXT', 'Text', NULL, NULL, NULL, NULL, NULL, NULL);

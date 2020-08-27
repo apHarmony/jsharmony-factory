@@ -172,8 +172,6 @@ INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, m
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 800, 'ACTIVE', 1, 'Admin', 80000, 'Administration', NULL, NULL, '%%%NAMESPACE%%%Admin/Overview', NULL, NULL);
 INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 900, 'ACTIVE', 1, 'Dev', 90000, 'Developer', NULL, NULL, '%%%NAMESPACE%%%Dev/Overview', NULL, NULL);
 
-INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, menu_name, menu_seq, menu_desc, menu_desc_ext, menu_desc_ext2, menu_cmd, menu_image, menu_subcmd) VALUES ('S', 70801, 'ACTIVE', 700, 'Reports/SysUser_Listing', NULL, 'User Listing', NULL, NULL, '%%%NAMESPACE%%%Reports/SysUser_Listing', NULL, NULL);
-
 INSERT INTO {schema}_sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_code, sys_role_attrib) VALUES (0, 'ACTIVE', '*', 'All Users', NULL, NULL);
 INSERT INTO {schema}_sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_code, sys_role_attrib) VALUES (97, 'ACTIVE', 'DADMIN', 'Data Administration', NULL, NULL);
 INSERT INTO {schema}_sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_code, sys_role_attrib) VALUES (98, 'ACTIVE', 'SYSADMIN', 'System Administration', NULL, NULL);
@@ -213,7 +211,6 @@ INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (900, 'DEV');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (800, 'SYSADMIN');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (800, 'DEV');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (3, '*');
-INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (70801, 'SYSADMIN');
 INSERT INTO {schema}_sys_menu_role (menu_id, sys_role_name) VALUES (700, 'SYSADMIN');
 
 INSERT INTO {schema}_code_sys (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('ac', 'ACTIVE-CLOSED', NULL, NULL, '{schema}', 'sys');

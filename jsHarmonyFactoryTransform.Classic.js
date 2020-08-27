@@ -572,9 +572,7 @@ transform.models = {
   "Dev/Code2_Sys_Listing": "X_UCOD2_HL",
   "Dev/Code_Sys_Listing": "X_UCOD_HL",
   "Dev/Param_Sys_Listing": "X_XPPL",
-  "Reports/Agreement": "reports/AGREEMENT",
-  "Reports/SysUser_Listing": "reports/SysUser_Listing",
-  "Reports/Template_Default": "reports/TMPL_DEFAULT"
+  "Reports/Agreement": "reports/AGREEMENT"
 };
 
 transform.sql = {

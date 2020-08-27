@@ -4,12 +4,15 @@
     "source_files_prefix":"Reports_Agreement",
     "layout": "report",
     "title": "Customer Agreement",
+  //:if:client_portal:
     "actions": "B",
+  //:else:
+    "actions": "",
+  //:endif:
     //"roles": { "client": {"CSYSADMIN":"*","CADMIN":"*"} },
     "menu":"reports",
     "description": "Generate Signed Customer Agreement",
     "template": "Agreement.ejs",
-    "inherits": "Reports/TMPL_DEFAULT",
     "fields": [
       {"name":"cust_id","type":"bigint","datalock":{"cust_id":"cust_cust_id"},"nl":1,
           "control":"dropdown_L","actions": "B",
