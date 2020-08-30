@@ -53,6 +53,8 @@ var scriptConfig = {
   CLIENT_PORTAL: undefined,
   SAMPLE_DATA: false,
   USE_IPC: false,
+  PRE_INIT: null,
+  POST_INIT: null,
   RESULT_MESSAGE: '',
 
   sqlFuncs: [],
@@ -109,6 +111,8 @@ jsHarmonyFactory_Init.Run = function(run_cb){
       else if(arg=='--no-client-portal') scriptConfig.CLIENT_PORTAL = false;
       else if(arg=='--with-sample-data') scriptConfig.SAMPLE_DATA = true;
       else if(arg=='--use-ipc') scriptConfig.USE_IPC = true;
+      else if(arg=='--pre-init'){ scriptConfig.PRE_INIT = nextarg; i++; }
+      else if(arg=='--post-init'){ scriptConfig.POST_INIT = nextarg; i++; }
     }
   
     Promise.resolve()
@@ -211,6 +215,18 @@ jsHarmonyFactory_Init.Run = function(run_cb){
       else if(rslt=="2"){ scriptConfig.CLIENT_PORTAL = false; return true; }
       else{ console.log('Invalid entry.  Please enter the number of your selection'); retry(); }
     }))
+
+    //Run Pre-Init Script
+    .then(function(){ return new Promise(function(resolve, reject){
+      if(!scriptConfig.PRE_INIT) return resolve();
+      if(fs.existsSync(scriptConfig.PRE_INIT)){
+        xlib.runNodeScript(scriptConfig.PRE_INIT,[],{},function(errCode){
+          if(!errCode) return resolve();
+        });
+        return;
+      }
+      else return reject(console.log('pre-init script not found'));
+    }); })
   
     //Initialize Database
     .then(function(){ return new Promise(function(resolve, reject){
@@ -248,9 +264,22 @@ jsHarmonyFactory_Init.Run = function(run_cb){
         });
       });
     }); })
+
+    //Run Post-Init Script
+    .then(function(){ return new Promise(function(resolve, reject){
+      if(!scriptConfig.POST_INIT) return resolve();
+      if(fs.existsSync(scriptConfig.POST_INIT)){
+        xlib.runNodeScript(scriptConfig.POST_INIT,[],{},function(errCode){
+          if(!errCode) return resolve();
+        });
+        return;
+      }
+      else return reject(console.log('post-init script not found'));
+    }); })
   
     //Callback
     .then(function(){ return new Promise(function(resolve, reject){
+      var rslt = '';
       rslt += 'The jsHarmony database has been initialized!\r\n';
       rslt += '\r\n';
       rslt += '** Please verify the configuration in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js & app.config.local.js\r\n';
