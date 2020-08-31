@@ -61,8 +61,8 @@ function jsHarmonyFactoryConfig(){
     disable_job_processor: false,             //Disable Job Processor
   };
 
-  //Job Processor sleep time after no jobs found - Default 60000
-  this.JobCheckDelay = 60000;
+  //Job Processor sleep time after no jobs found - Default 5000
+  this.JobCheckDelay = 5000;
   //Job Processor sleep time after last job item executed - Default 5000
   this.JobSleepDelay = 5000;
 
