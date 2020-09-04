@@ -25,9 +25,7 @@ var jsHarmony = require('jsharmony');
 var Helper = require('jsharmony/Helper');
 var HelperFS = require('jsharmony/HelperFS');
 var jsHarmonyFactory = require('../index');
-var wclib = require('jsharmony/WebConnect.js');
-var wc = new wclib.WebConnect();
-var xlib = wclib.xlib;
+var CLI = require('jsharmony/CLI');
 var fs = require('fs');
 
 var jsh = null;
@@ -74,6 +72,13 @@ var scriptConfig = {
 
   sqlFuncs: [],
 };
+
+function getNodeScriptParams(){
+  var rslt = [];
+  if(jsh.DBConfig['default'].user){ rslt.push('--db-user'); rslt.push(jsh.DBConfig['default'].user); }
+  if(jsh.DBConfig['default'].password){ rslt.push('--db-pass'); rslt.push(jsh.DBConfig['default'].password); }
+  return rslt;
+}
 
 jsHarmonyFactory_Create.Run = function(run_cb){
 
@@ -178,7 +183,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         Promise.resolve()
   
         //Ask for the database server
-        .then(xlib.getStringAsync(function(){
+        .then(CLI.getStringAsync(function(){
           if(scriptConfig._ORIG_DBSERVER){
             console.log('Database server: ' + scriptConfig._ORIG_DBSERVER + '   (from app.config.js)');
             return false;
@@ -196,7 +201,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         }); })
 
         //Ask for the database admin user
-        .then(xlib.getStringAsync(function(){
+        .then(CLI.getStringAsync(function(){
           if(jsh.DBConfig['default'].user){
             console.log('Database user: ' + jsh.DBConfig['default'].user + '   (from app.config.js / params)');
             return false;
@@ -208,7 +213,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
         }))
   
         //Ask for admin user
-        .then(xlib.getStringAsync(function(){
+        .then(CLI.getStringAsync(function(){
           if(jsh.DBConfig['default'].password){
             console.log('Database password: ******   (from app.config.js / params)');
             return false;
@@ -260,7 +265,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     }); })
 
     //Ask for the NEW database path, if applicable
-    .then(xlib.getStringAsync(function(){
+    .then(CLI.getStringAsync(function(){
       if(scriptConfig._JSH_DBTYPE != 'sqlite') return false;
       if(scriptConfig.USE_DEFAULT_SQLITE_PATH){
         return '';
@@ -294,7 +299,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     }))
   
     //Ask for the NEW database name, if applicable
-    .then(xlib.getStringAsync(function(){
+    .then(CLI.getStringAsync(function(){
       if(scriptConfig._JSH_DBTYPE == 'sqlite') return false;
       if(scriptConfig._JSH_DBNAME){
         console.log('NEW Database name: ' + scriptConfig._JSH_DBNAME + '   (from app.config.js)');
@@ -310,7 +315,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     .then(function(){ return new Promise(function(resolve, reject){
       if(scriptConfig._JSH_DBTYPE == 'sqlite') return resolve();
       if(!scriptConfig._JSH_DBUSER) scriptConfig._JSH_DBUSER = 'jsharmony_'+scriptConfig._JSH_DBNAME.toLowerCase()+'_user';
-      if(!scriptConfig._JSH_DBPASS) scriptConfig._JSH_DBPASS = xlib.genDBPassword(16);
+      if(!scriptConfig._JSH_DBPASS) scriptConfig._JSH_DBPASS = CLI.genDBPassword(16);
       
       db.Scalar('',db.ParseSQLFuncs(db.ParseSQL('init_db_user_exists'), dbs.getSQLFuncs()),[],{},function(err,rslt){
         db.Close(function(){
@@ -324,7 +329,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     }); })
 
     //Ask for the database type
-    .then(xlib.getStringAsync(function(){
+    .then(CLI.getStringAsync(function(){
       if(typeof scriptConfig.CLIENT_PORTAL != 'undefined') return false;
       console.log('\r\nInitialize client portal?');
       console.log('1) Yes');
@@ -339,7 +344,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     .then(function(){ return new Promise(function(resolve, reject){
       if(!scriptConfig.PRE_CREATE) return resolve();
       if(fs.existsSync(scriptConfig.PRE_CREATE)){
-        xlib.runNodeScript(scriptConfig.PRE_CREATE,[],{},function(errCode){
+        CLI.runNodeScript(scriptConfig.PRE_CREATE,getNodeScriptParams(),{},function(errCode){
           if(!errCode) return resolve();
         });
         return;
@@ -402,7 +407,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     .then(function(){ return new Promise(function(resolve, reject){
       if(!scriptConfig.PRE_INIT) return resolve();
       if(fs.existsSync(scriptConfig.PRE_INIT)){
-        xlib.runNodeScript(scriptConfig.PRE_INIT,[],{},function(errCode){
+        CLI.runNodeScript(scriptConfig.PRE_INIT,getNodeScriptParams(),{},function(errCode){
           if(!errCode) return resolve();
         });
         return;
@@ -451,7 +456,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
     .then(function(){ return new Promise(function(resolve, reject){
       if(!scriptConfig.POST_INIT) return resolve();
       if(fs.existsSync(scriptConfig.POST_INIT)){
-        xlib.runNodeScript(scriptConfig.POST_INIT,[],{},function(errCode){
+        CLI.runNodeScript(scriptConfig.POST_INIT,getNodeScriptParams(),{},function(errCode){
           if(!errCode) return resolve();
         });
         return;
