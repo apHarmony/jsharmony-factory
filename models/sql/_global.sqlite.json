@@ -395,9 +395,10 @@
     "params": ["A","B"],
     "sql": ["(%%%A%%% is null and %%%B%%% is not null or %%%B%%% is null and %%%A%%% is not null or %%%A%%%<>%%%B%%%)"]
   },
-  "get_insert_trigger_identity":{
-    "params": ["KEY"],
+  "with_insert_trigger_identity": {
+    "params": ["KEY","INSERT_STATEMENT"],
     "sql": [
+      "%%%INSERT_STATEMENT%%%;",
       "select last_insert_rowid_override %%%KEY%%% from jsharmony_meta;"
     ]
   },

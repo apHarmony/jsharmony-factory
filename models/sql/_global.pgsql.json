@@ -69,10 +69,10 @@
       "my_toa     {schema}.toaudit;"
     ]
   },
-  "get_insert_trigger_identity":{
-    "params": ["KEY"],
+  "with_insert_trigger_identity": {
+    "params": ["KEY","INSERT_STATEMENT"],
     "sql": [
-      ""
+      "%%%INSERT_STATEMENT%%% RETURNING %%%KEY%%%;"
     ]
   },
   "init_audit" : {
