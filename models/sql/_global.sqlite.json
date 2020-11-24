@@ -562,7 +562,7 @@
       "  when 'C' then (select my_db_user_fmt_cname from (select sys_user_id my_db_user_fmt_cust_user_id,'C-'||sys_user_lname||', '||sys_user_fname as my_db_user_fmt_cname from {schema}.cust_user) my_db_user_fmt_ctbl where my_db_user_fmt_cust_user_id=substr(%%%u%%%,2,1024))",
       //:endif:
       "  when 'U' then substr(%%%u%%%,2,2014)",
-      "  else 'unknown'",
+      "  else %%%u%%%",
       "end)"
     ]
   },
