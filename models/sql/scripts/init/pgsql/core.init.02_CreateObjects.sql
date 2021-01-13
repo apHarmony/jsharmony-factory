@@ -1819,7 +1819,7 @@ BEGIN
     when 'U' then
       rslt = coalesce(substring(u,2,1024), u);
     else
-      rslt = u;
+      rslt = coalesce(u, 'SYSTEM');
   end case;    
   
   RETURN rslt;
