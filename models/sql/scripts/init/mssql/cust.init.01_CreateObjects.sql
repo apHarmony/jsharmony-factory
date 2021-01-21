@@ -761,7 +761,7 @@ BEGIN
       
     SET @xloc = 'TP=' + ISNULL(@TP,'null')
     SET @xtxt = 'I_cust_user_role_id=' + LTRIM(ISNULL(STR(@I_cust_user_role_id),'null')) +
-                ' doc__tbl_cust_user_role_id=' + LTRIM(ISNULL(STR(@D_cust_user_role_id),'null')) 
+                ' D_cust_user_role_id=' + LTRIM(ISNULL(STR(@D_cust_user_role_id),'null')) 
     /*
     EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_iud',@xloc, @xtxt
     */
