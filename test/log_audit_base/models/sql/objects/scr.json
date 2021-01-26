@@ -1,0 +1,101 @@
+{
+  "code_scr_review_sts": {
+    "type": "code",
+    "caption": "Screening Review Status",
+    "init_data": [
+      {"code_seq":1, "code_val":"PENDING", "code_txt":"Pending Screening", "code_code":"N"},
+      {"code_seq":2, "code_val":"NEGATIVE", "code_txt":"Negative", "code_code":"N"},
+      {"code_seq":3, "code_val":"WAITREV", "code_txt":"Waiting for Review", "code_code":"Y"},
+      {"code_seq":4, "code_val":"REVINPRG", "code_txt":"Review in Progress", "code_code":"Y"},
+      {"code_seq":5, "code_val":"FALSEPOS", "code_txt":"False Positive", "code_code":"Y"},
+      {"code_seq":6, "code_val":"TRUEPOS", "code_txt":"True Positive", "code_code":"Y"}
+    ]
+  },
+
+  "code_scr_sts": {
+    "type": "code",
+    "caption": "Screening Status",
+    "init_data": [
+      {"code_seq":1, "code_val":"OPEN", "code_txt":"Open"},
+      {"code_seq":2, "code_val":"EXP", "code_txt":"Exported"},
+      {"code_seq":3, "code_val":"IMP", "code_txt":"Imported"}
+    ]
+  },
+
+  "scr":{
+    "type": "table",
+    "caption": "Screening",
+    "table": "scr",
+    "columns": [
+      {"name":"scr_id", "type":"bigint", "key":true, "identity": true, "null":false},
+      {"name":"scr_sts", "type":"varchar", "length":32, "foreignkey":{"code_scr_sts":"code_val"}, "null":false, "default":"OPEN"},
+      {"name":"scr_sts_tstmp", "type":"datetime", "precision":7, "null":false},
+      {"name":"scr_review_sts", "type":"varchar", "length":32, "foreignkey":{"code_scr_review_sts":"code_val"}, "null":false, "default":"PENDING"},
+      {"name":"scr_review_sts_tstmp", "type":"datetime", "precision":7, "null":false},
+      {"name":"scr_review_sts_user", "type":"varchar", "length":20, "null":false},
+      {"name":"scr_unotes", "type":"varchar", "length":255}
+    ],
+    "triggers": [
+      { "on": ["insert"], "exec": [
+          "jsharmony.log_audit_insert('scr',inserted(scr_id),scr_id)"
+        ]
+      },
+      { "on": ["update"], "exec": [
+          "jsharmony.log_audit_update('scr',deleted(scr_id),scr_sts)"
+        ]
+      },
+      {
+        "on": ["delete"], "exec": [
+          "jsharmony.log_audit_delete('scr',deleted(scr_id),scr_sts)"
+        ]
+      }
+    ]
+  },
+
+  "multi":{
+    "type": "table",
+    "caption": "Screening",
+    "table": "multi",
+    "columns": [
+      {"name":"scr_id", "type":"bigint", "key":true, "identity": true, "null":false},
+      {"name":"scr_sts", "type":"varchar", "length":32, "foreignkey":{"code_scr_sts":"code_val"}, "null":false, "default":"OPEN"},
+      {"name":"scr_sts_tstmp", "type":"datetime", "precision":7, "null":false},
+      {"name":"scr_review_sts", "type":"varchar", "length":32, "foreignkey":{"code_scr_review_sts":"code_val"}, "null":false, "default":"PENDING"},
+      {"name":"scr_review_sts_tstmp", "type":"datetime", "precision":7, "null":false},
+      {"name":"scr_review_sts_user", "type":"varchar", "length":20, "null":false},
+      {"name":"scr_unotes", "type":"varchar", "length":255}
+    ],
+    "triggers": [
+      { "on": ["update"], "exec": [
+          "jsharmony.log_audit_update_mult('multi',deleted(scr_id),[\"scr_sts\",\"scr_review_sts\",\"scr_unotes\"])"
+        ]
+      },
+      {
+        "on": ["delete"], "exec": [
+          "jsharmony.log_audit_delete_mult('multi',deleted(scr_id),[\"scr_sts\",\"scr_review_sts\",\"scr_unotes\"])"
+        ]
+      }
+    ]
+  },
+
+  "custom":{
+    "type": "table",
+    "caption": "Screening",
+    "table": "multi",
+    "columns": [
+      {"name":"scr_id", "type":"bigint", "key":true, "identity": true, "null":false},
+      {"name":"scr_sts", "type":"varchar", "length":32, "foreignkey":{"code_scr_sts":"code_val"}, "null":false, "default":"OPEN"},
+      {"name":"scr_sts_tstmp", "type":"datetime", "precision":7, "null":false},
+      {"name":"scr_review_sts", "type":"varchar", "length":32, "foreignkey":{"code_scr_review_sts":"code_val"}, "null":false, "default":"PENDING"},
+      {"name":"scr_review_sts_tstmp", "type":"datetime", "precision":7, "null":false},
+      {"name":"scr_review_sts_user", "type":"varchar", "length":20, "null":false},
+      {"name":"scr_unotes", "type":"varchar", "length":255}
+    ],
+    "triggers": [
+      { "on": ["update"], "exec": [
+          "jsharmony.log_audit_update_custom('custom',deleted(scr_id),inserted(scr_review_sts) = 'TRUEPOS')"
+        ]
+      }
+    ]
+  }
+}

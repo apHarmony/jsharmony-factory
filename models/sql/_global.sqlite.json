@@ -426,6 +426,7 @@
     "params": ["TABLE","ID","COL_ARRAY","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
     "exec": [
       "var rslt = '';",
+      "if ((typeof COL_ARRAY === 'string' || COL_ARRAY instanceof String) && COL_ARRAY.length && COL_ARRAY.trim()[0]=='[') COL_ARRAY = JSON.parse(COL_ARRAY.trim());",
       "for(var i=0;i<COL_ARRAY.length;i++){",
       "  rslt += '%%%log_audit_update('+JSON.stringify(TABLE)+','+JSON.stringify(ID)+','+JSON.stringify(COL_ARRAY[i])+','+JSON.stringify(audit_ref_name)+','+JSON.stringify(audit_ref_id)+','+JSON.stringify(audit_subject)+','+JSON.stringify(cust_id)+','+JSON.stringify(item_id)+')%%%\\r\\n';",
       "}",
@@ -461,7 +462,8 @@
     "params": ["TABLE","ID","COL_ARRAY","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
     "exec": [
       "var rslt = '';",
-      "for(var i=0;i<COL_ARRAY.length;i++){",
+      "if ((typeof COL_ARRAY === 'string' || COL_ARRAY instanceof String) && COL_ARRAY.length && COL_ARRAY.trim()[0]=='[') COL_ARRAY = JSON.parse(COL_ARRAY.trim());",
+        "for(var i=0;i<COL_ARRAY.length;i++){",
       "  rslt += '%%%log_audit_delete('+JSON.stringify(TABLE)+','+JSON.stringify(ID)+','+JSON.stringify(COL_ARRAY[i])+','+JSON.stringify(audit_ref_name)+','+JSON.stringify(audit_ref_id)+','+JSON.stringify(audit_subject)+','+JSON.stringify(cust_id)+','+JSON.stringify(item_id)+')%%%\\r\\n';",
       "}",
       "return rslt;"
@@ -642,6 +644,127 @@
     "params": ["doc_id","doc_ext"],
     "sql": [
       "(cast(%%%doc_id%%% as text)||%%%doc_ext%%%)"
+    ]
+  },
+  "{schema}.log_audit_insert" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "rslt += 'update jsharmony_meta set {{audit_seq}} = null\\\\;\\r\\n';",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "rslt += '{schema}.log_audit_insert_base('+sqlescape(TABLE)+','+sqlescape(ID)+','+sqlescape(COL_NAME)+','+sqlescape(audit_ref_name)+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')\\r\\n';",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_insert_base" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "insert into {schema}_audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)\n",
+      "  select %%%TABLE%%%,%%%ID%%%,'I',datetime('now','localtime'),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,(select context from jsharmony_meta limit 1)\n",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null)\\;\n",
+      "update jsharmony_meta set {{audit_seq}} = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())\n",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null)"
+    ]
+  },
+  "{schema}.log_audit_update_mult" : {
+    "params": ["TABLE","ID","COL_ARRAY","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "if ((typeof COL_ARRAY === 'string' || COL_ARRAY instanceof String) && COL_ARRAY.length && COL_ARRAY.trim()[0]=='[') COL_ARRAY = JSON.parse(COL_ARRAY.trim());",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "var stmts = [];",
+      "for(var i=0;i<COL_ARRAY.length;i++){",
+      "  stmts.push('{schema}.log_audit_update_base('+TABLE+','+ID+','+COL_ARRAY[i]+','+audit_ref_name+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')');",
+      "}",
+      "rslt += stmts.join('\\\\;\\n');",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_update" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "rslt += '{schema}.log_audit_update_base('+TABLE+','+ID+','+COL_NAME+','+audit_ref_name+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')';",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_update_base" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "insert into {schema}_audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
+      "  select %%%TABLE%%%,%%%ID%%%,'U',datetime('now','localtime'),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,(select context from jsharmony_meta limit 1)",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null) and (%%%nequal(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
+      "update jsharmony_meta set {{audit_seq}} = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null) and (%%%nequal(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)\\;",
+      "insert into {schema}_audit_detail(audit_seq,audit_column_name,audit_column_val)",
+      "  select (select {{audit_seq}} from jsharmony_meta),lower('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%",
+      "  where (%%%nequal(\"OLD.%%%COL_NAME%%%\", \"NEW.%%%COL_NAME%%%\")%%%)",
+      ""
+    ]
+  },
+  "{schema}.log_audit_update_custom" : {
+    "params": ["TABLE","ID","CONDITION","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "rslt += '{schema}.log_audit_update_custom_base('+TABLE+','+ID+','+sqlescape(CONDITION)+','+audit_ref_name+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')';",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_update_custom_base" : {
+    "params": ["TABLE","ID","CONDITION","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "insert into {schema}_audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
+      "  select %%%TABLE%%%,%%%ID%%%,'U',datetime('now','localtime'),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,(select context from jsharmony_meta limit 1)",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null) and (%%%CONDITION%%%)\\;",
+      "update jsharmony_meta set {{audit_seq}} = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null) and (%%%CONDITION%%%)",
+      ""
+    ]
+  },
+  "{schema}.log_audit_delete_mult" : {
+    "params": ["TABLE","ID","COL_ARRAY"],
+    "exec": [
+      "var rslt = '';",
+      "if ((typeof COL_ARRAY === 'string' || COL_ARRAY instanceof String) && COL_ARRAY.length && COL_ARRAY.trim()[0]=='[') COL_ARRAY = JSON.parse(COL_ARRAY.trim());",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "var stmts = [];",
+      "for(var i=0;i<COL_ARRAY.length;i++){",
+      "  stmts.push('{schema}.log_audit_delete_base('+TABLE+','+ID+','+COL_ARRAY[i]+')');",
+      "}",
+      "rslt += stmts.join('\\\\;\\r\\n');",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_delete" : {
+    "params": ["TABLE","ID","COL_NAME"],
+    "exec": [
+      "var rslt = '';",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "rslt += '{schema}.log_audit_delete_base('+TABLE+','+ID+','+COL_NAME+')';",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_delete_base" : {
+    "params": ["TABLE","ID","COL_NAME"],
+    "sql": [
+      "insert into {schema}_audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
+      "  select ",
+      "    %%%TABLE%%%,%%%ID%%%,'D',datetime('now','localtime'),",
+      "    (select audit_ref_name from {schema}_audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
+      "    (select audit_ref_id from {schema}_audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
+      "    (select audit_subject from {schema}_audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
+      "    (select cust_id from {schema}_audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
+      "    (select item_id from {schema}_audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc),",
+      "    (select context from jsharmony_meta limit 1)",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null)\\;",
+      "update jsharmony_meta set {{audit_seq}} = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null)\\;",
+
+      "insert into {schema}_audit_detail(audit_seq,audit_column_name,audit_column_val)",
+      "  select (select {{audit_seq}} from jsharmony_meta),lower('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%",
+      ""
     ]
   }
 }
