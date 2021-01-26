@@ -993,7 +993,7 @@ CREATE TABLE [{schema}].[audit__tbl](
     [audit_seq] [bigint] IDENTITY(1,1) NOT NULL,
     [audit_table_name] [varchar](32) NOT NULL,
     [audit_table_id] [bigint] NOT NULL,
-    [audit_op] [char](10) NOT NULL,
+    [audit_op] [char](1) NOT NULL,
     [audit_user] [nvarchar](20) NOT NULL,
     [db_id] [char](1) NOT NULL,
     [audit_tstmp] [datetime2](7) NOT NULL,
@@ -4178,9 +4178,9 @@ BEGIN
           INSERT INTO ZZ_LOG (LOG_PLACE, LOG_VALUE)
            VALUES('Q_UPDATE',
                      ' TP=' + @TP + 
-                     ' doc__tbl_QT_TNAME=' + @D_QT_TNAME + 
-                     ' doc__tbl_Q_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_Q_ID),'null'))) +
-                     ' doc__tbl_CT_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_CT_ID),'null'))) );
+                     ' D_QT_TNAME=' + @D_QT_TNAME + 
+                     ' D_Q_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_Q_ID),'null'))) +
+                     ' D_CT_ID=' + LTRIM(RTRIM(ISNULL(STR(@D_CT_ID),'null'))) );
 */
 END
 

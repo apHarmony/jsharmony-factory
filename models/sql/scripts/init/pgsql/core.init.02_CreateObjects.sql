@@ -53,7 +53,7 @@ CREATE FUNCTION audit(toa toaudit, INOUT par_audit_seq bigint, par_audit_table_i
       my_audit_ref_name text default null;
       my_audit_ref_id   bigint default null;
       my_audit_subject     text default null;
-      doc__tbl_audit_seq   bigint default null;
+      d_audit_seq   bigint default null;
     BEGIN
         IF par_audit_seq is null THEN
 
@@ -64,7 +64,7 @@ CREATE FUNCTION audit(toa toaudit, INOUT par_audit_seq bigint, par_audit_table_i
 		       audit_ref_name,
 		       audit_ref_id,
 		       audit_subject
-		  into doc__tbl_audit_seq,
+		  into d_audit_seq,
 		       my_cust_id,
 		       my_item_id,
 		       my_audit_ref_name,
@@ -125,7 +125,7 @@ CREATE FUNCTION audit_base(toa toaudit, INOUT par_audit_seq bigint, par_audit_ta
       my_audit_ref_name text default null;
       my_audit_ref_id   bigint default null;
       my_audit_subject     text default null;
-      doc__tbl_audit_seq   bigint default null;
+      d_audit_seq   bigint default null;
     BEGIN
         IF par_audit_seq is null THEN
 
@@ -134,7 +134,7 @@ CREATE FUNCTION audit_base(toa toaudit, INOUT par_audit_seq bigint, par_audit_ta
 		       audit_ref_name,
 		       audit_ref_id,
 		       audit_subject
-		  into doc__tbl_audit_seq,
+		  into d_audit_seq,
 		       my_audit_ref_name,
 		       my_audit_ref_id,
 		       my_audit_subject
@@ -3500,7 +3500,7 @@ CREATE TABLE audit__tbl (
     audit_seq bigint NOT NULL,
     audit_table_name character varying(32) NOT NULL,
     audit_table_id bigint NOT NULL,
-    audit_op character(10) NOT NULL,
+    audit_op character(1) NOT NULL,
     audit_user character varying(20) NOT NULL,
     db_id character(1) DEFAULT 0 NOT NULL,
     audit_tstmp timestamp without time zone NOT NULL,
@@ -3546,7 +3546,7 @@ COMMENT ON COLUMN audit__tbl.audit_table_id IS 'Audit Header Table ID Value';
 -- Name: COLUMN audit__tbl.audit_op; Type: COMMENT; Schema: {schema}; Owner: postgres
 --
 
-COMMENT ON COLUMN audit__tbl.audit_op IS 'Audit Header Operation (I, U or doc__tbl)';
+COMMENT ON COLUMN audit__tbl.audit_op IS 'Audit Header Operation (I, U or D)';
 
 
 --
