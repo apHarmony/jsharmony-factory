@@ -22,6 +22,7 @@ var _ = require('lodash');
 function ModuleFunctions(module){
 
   _.extend(this, require('./_funcs.LOG_DOWNLOAD.js')(module, this));
+  _.extend(this, require('./_funcs.SUGGEST_FEATURE.js')(module, this));
   _.extend(this, require('./_funcs.DEV_DB_SCRIPTS.js')(module, this));
   _.extend(this, require('./_funcs.DEV_DB_DIFF.js')(module, this));
   _.extend(this, require('./_funcs.DEV_DB_SCHEMA.js')(module, this));

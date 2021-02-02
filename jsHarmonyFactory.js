@@ -107,6 +107,8 @@ jsHarmonyFactory.prototype.Init = function(cb){
       clientSite.auth.allow_insecure_http_logins = true;
   }
 
+  this.jsh.AppSrv.modelsrv.srcfiles['jsHarmonyFactory.SuggestFeature'] = this.jsh.getEJS('jsHarmonyFactory.SuggestFeature');
+
   _this.jsh.Config.server.add_default_routes = false;
   this.jsh.CreateServer(_this.jsh.Config.server, function(server){
     _this.jsh.Servers['default'] = server;
@@ -190,6 +192,7 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
   jshconfig_main.private_apps = [
     {
       '/_funcs/LOG_DOWNLOAD': _this.funcs.LOG_DOWNLOAD,
+      '/_funcs/SUGGEST_FEATURE': _this.funcs.SUGGEST_FEATURE,
       '/_funcs/DEV_DB_SCRIPTS': _this.funcs.DEV_DB_SCRIPTS,
       '/_funcs/DEV_DB_DIFF': _this.funcs.DEV_DB_DIFF,
       '/_funcs/DEV_DB_SCHEMA': _this.funcs.DEV_DB_SCHEMA,
