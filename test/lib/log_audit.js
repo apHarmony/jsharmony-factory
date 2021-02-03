@@ -50,7 +50,7 @@ exports = module.exports = function shouldSupportLogAudit(dbconfig) {
       dbtypes.VarChar(20),
       dbtypes.VarChar(255),
     ];
-  
+
     var sql_params = {
       'scr_sts': 'OPEN',
       'scr_sts_tstmp': new Date(),
@@ -73,7 +73,7 @@ exports = module.exports = function shouldSupportLogAudit(dbconfig) {
       dbtypes.VarChar(32),
       dbtypes.VarChar(255),
     ];
-  
+
     var sql_params = {
       'scr_id': scr_id,
       'scr_sts': scr_sts,
@@ -91,12 +91,31 @@ exports = module.exports = function shouldSupportLogAudit(dbconfig) {
     var sql_ptypes = [
       dbtypes.BigInt,
     ];
-  
+
     var sql_params = {
       'scr_id': scr_id,
     };
 
     db.Command('','delete from application.'+table+' where scr_id=@scr_id',sql_ptypes,sql_params,function(err,rslt){
+      assert.ifError(err);
+      callback(err);
+    });
+  };
+
+  var otherCommand = function(table, col_name, value, callback) {
+    var sql_ptypes = [
+      dbtypes.VarChar(32),
+      dbtypes.VarChar(30),
+      dbtypes.VarChar(dbtypes.MAX),
+    ];
+
+    var sql_params = {
+      table: table,
+      col_name: col_name,
+      value: value
+    };
+
+    db.Command('','jsharmony.log_audit_other(@table,0,(@value)!=\'no\',@col_name,@value)',sql_ptypes,sql_params,function(err,rslt){
       assert.ifError(err);
       callback(err);
     });
@@ -325,6 +344,32 @@ exports = module.exports = function shouldSupportLogAudit(dbconfig) {
           assert.deepEqual(expectedColumns, {});
           done(err);
         });
+      });
+    });
+  });
+
+  it('log_audit_other yes', function(done) {
+    otherCommand('other', 'column', 'value', function(err) {
+      db.Recordset('','select * from jsharmony.v_audit_detail order by audit_seq',[],{},function(err,rslt){
+        assert.ifError(err);
+        if (printResult) console.log(rslt);
+        assert.equal(rslt.length, 1, 'no audit row generated');
+        assert.equal(rslt[0].audit_table_name, 'other');
+        assert.equal(rslt[0].audit_column_name, 'column');
+        assert.equal(rslt[0].audit_column_val, 'value');
+        assert.equal(rslt[0].audit_op.trim(), 'O');
+        done(err);
+      });
+    });
+  });
+
+  it('log_audit_other no', function(done) {
+    otherCommand('other', 'column', 'no', function(err) {
+      db.Recordset('','select * from jsharmony.v_audit_detail order by audit_seq',[],{},function(err,rslt){
+        assert.ifError(err);
+        if (printResult) console.log(rslt);
+        assert.equal(rslt.length, 0, 'audit row generated');
+        done(err);
       });
     });
   });

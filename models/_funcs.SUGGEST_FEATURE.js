@@ -32,6 +32,7 @@ module.exports = exports = function(module, funcs){
 
     var jsh = module.jsh;
     var appsrv = this;
+    var dbtypes = appsrv.DB.types;
 
     //Validate parameters
     if (!appsrv.ParamCheck('P', P, ['&message_text'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
@@ -49,6 +50,8 @@ module.exports = exports = function(module, funcs){
       if(accountCookie){
         if('username' in accountCookie) sys_user_name = accountCookie.username;
       }
+
+      // ----------------------- email -------------------
       var feedback_email = factoryConfig.feedback.email;
       var email_params = {
         'SYS_USER_NAME': sys_user_name,
@@ -60,6 +63,19 @@ module.exports = exports = function(module, funcs){
         res.end(JSON.stringify({
           '_success': 1,
         }));
+      });
+
+      // ----------------------- audit -------------------
+      var sql_ptypes = [
+        dbtypes.VarChar(dbtypes.MAX)
+      ];
+      var sql_params = {
+        audit_column_val: P.message_text
+      };
+
+      var sql = "jsharmony.log_audit_other('FEEDBACK_MESSAGE',0,1=1,'message_text',@audit_column_val)"
+      appsrv.ExecCommand('S1', sql, sql_ptypes, sql_params, function(err, dbrslt, stats) {
+        if(err) return console.log(err);
       });
 
       return;

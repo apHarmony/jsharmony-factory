@@ -766,5 +766,29 @@
       "  select (select {{audit_seq}} from jsharmony_meta),lower('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%",
       ""
     ]
+  },
+  "{schema}.log_audit_other" : {
+    "params": ["TABLE","ID","CONDITION","COL_NAME","VALUE","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "rslt += '{schema}.log_audit_other_base('+TABLE+','+ID+','+sqlescape(CONDITION)+','+COL_NAME+','+VALUE+','+audit_ref_name+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')';",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_other_base" : {
+    "params": ["TABLE","ID","CONDITION","COL_NAME","VALUE","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "insert into {schema}_audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
+      "  select %%%TABLE%%%,%%%ID%%%,'O',datetime('now','localtime'),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,(select context from jsharmony_meta limit 1)",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null) and (%%%CONDITION%%%);",
+
+      "update jsharmony_meta set {{audit_seq}} = (select audit_seq from {schema}_audit__tbl where rowid = last_insert_rowid())",
+      "  where exists(select * from jsharmony_meta where {{audit_seq}} is null) and (%%%CONDITION%%%);",
+
+      "insert into {schema}_audit_detail(audit_seq,audit_column_name,audit_column_val)",
+      "  select (select {{audit_seq}} from jsharmony_meta),lower(%%%COL_NAME%%%),%%%VALUE%%%",
+      "  where (%%%CONDITION%%%)"
+    ]
   }
 }
