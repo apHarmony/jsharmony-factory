@@ -43,7 +43,7 @@ function jsHarmonyFactoryConfig(){
     AUTH_TOKEN: ''            //Twilio Auth Token
   },
   //Settings for Suggest a Feature
-  this.feedback = {
+  this.suggest_feature = {
     email: null,
     enabled: false
   };

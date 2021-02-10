@@ -22,8 +22,8 @@
       <div class="xtoplinks_body">
         <b><%=jsh.Config.app_name%>:</b>&nbsp; <%=req.user_name%> &nbsp;|&nbsp; 
         <a class="toplink_help static" href="<%-req.baseurl%><%=req.jshsite.globalparams.help_view(req)%>/" onclick="<%=req.jshsite.instance%>.XExt.popupForm('<%=req.jshsite.globalparams.help_view(req)%>'); return false;">Help</a> &nbsp;|&nbsp; 
-        <%_ if (jsh.Config.modules.jsHarmonyFactory.feedback.enabled){ %>
-          <a class="toplink_feedback static" onclick="<%=req.jshsite.instance%>.System.suggestFeature('<%=jsh.Config.app_name%>'); return false;">Suggest a Feature</a> &nbsp;|&nbsp;
+        <%_ if (jsh.Config.modules.jsHarmonyFactory.suggest_feature.enabled){ %>
+          <a class="toplink_suggest_feature static" href="#" onclick="<%=req.jshsite.instance%>.System.suggestFeature('<%=jsh.Config.app_name%>'); return false;">Suggest a Feature</a> &nbsp;|&nbsp;
         <%_ } %>
         <a href="/logout">Logout</a>
       </div>

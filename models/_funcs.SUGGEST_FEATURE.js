@@ -38,10 +38,10 @@ module.exports = exports = function(module, funcs){
     if (!appsrv.ParamCheck('P', P, ['&message_text'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
     if (!appsrv.ParamCheck('Q', Q, [])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
 
-    if (!req.isAuthenticated) { Helper.GenError(req, res, -10, 'Only logged in users may submit feedback'); return; }
+    if (!req.isAuthenticated) { Helper.GenError(req, res, -10, 'Please log in to send a message'); return; }
 
     var factoryConfig = jsh.Config.modules['jsHarmonyFactory'];
-    if (!factoryConfig.feedback.enabled) { Helper.GenError(req, res, -1, 'Suggest a Feature is disabled'); return; }
+    if (!factoryConfig.suggest_feature.enabled) { Helper.GenError(req, res, -1, 'Suggest a Feature is disabled'); return; }
 
     if (req.method == 'POST') {
       var _this = this;
@@ -52,13 +52,14 @@ module.exports = exports = function(module, funcs){
       }
 
       // ----------------------- email -------------------
-      var feedback_email = factoryConfig.feedback.email;
+      var suggest_feature_email = factoryConfig.suggest_feature.email || jsh.Config.support_email;
+      if(!suggest_feature_email) { Helper.GenError(req, res, -99999, 'Suggest a Feature requires either jsHarmony Config support_email or Factory Config suggest_feature.email to be configured'); return; }
       var email_params = {
         'SYS_USER_NAME': sys_user_name,
         'MESSAGE_TEXT': P.message_text,
         'URL': req.header('Referer')
       };
-      jsh.SendTXTEmail(req._DBContext, 'FEEDBACK_MESSAGE', feedback_email, null, null, null, email_params, function (err) {
+      jsh.SendTXTEmail(req._DBContext, 'SUGGEST_FEATURE', suggest_feature_email, null, null, null, email_params, function (err) {
         if (err) { jsh.Log.error(err); return res.end('An error occurred sending the feature suggestion email.  Please contact support for assistance.'); }
         res.end(JSON.stringify({
           '_success': 1,
@@ -73,7 +74,7 @@ module.exports = exports = function(module, funcs){
         audit_column_val: P.message_text
       };
 
-      var sql = "jsharmony.log_audit_other('FEEDBACK_MESSAGE',0,1=1,'message_text',@audit_column_val)"
+      var sql = "jsharmony.log_audit_other('SUGGEST_FEATURE',0,1=1,'message_text',@audit_column_val)"
       appsrv.ExecCommand('S1', sql, sql_ptypes, sql_params, function(err, dbrslt, stats) {
         if(err) return console.log(err);
       });
