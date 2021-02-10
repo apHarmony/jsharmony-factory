@@ -266,5 +266,27 @@
       "  select currval('{schema}.audit__tbl_audit_seq_seq'),lower('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%;",
       "end if"
     ]
+  },
+  "{schema}.log_audit_other" : {
+    "params": ["TABLE","ID","CONDITION","COL_NAME","VALUE","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "rslt += '{schema}.log_audit_other_base('+TABLE+','+ID+','+CONDITION+','+audit_ref_name+','+audit_ref_id+','+audit_subject+','+cust_id+','+item_id+');\\r\\n';",
+      "rslt += '{schema}.log_audit_other_col('+ID+','+CONDITION+','+COL_NAME+','+VALUE+');\\r\\n';",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_other_base" : {
+    "params": ["TABLE","ID","CONDITION","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "insert into {schema}.audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user) select %%%TABLE%%%,%%%ID%%%,'O',{schema}.my_now(),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,{schema}.my_db_user() where %%%CONDITION%%%"
+    ]
+  },
+  "{schema}.log_audit_other_col" : {
+    "params": ["ID","CONDITION","COL_NAME","VALUE"],
+    "sql": [
+      "insert into {schema}.audit_detail(audit_seq,audit_column_name,audit_column_val)",
+      "  select currval('{schema}.audit__tbl_audit_seq_seq'),lower(%%%COL_NAME%%%),%%%VALUE%%% where %%%CONDITION%%%;"
+    ]
   }
 }

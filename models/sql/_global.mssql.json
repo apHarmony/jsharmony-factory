@@ -345,5 +345,30 @@
       "insert into {schema}.audit_detail(audit_seq,audit_column_name,audit_column_val)",
       "  select @AUD_SEQ,lower('%%%COL_NAME%%%'),deleted(%%%COL_NAME%%%)"
     ]
+  },
+  "{schema}.log_audit_other" : {
+    "params": ["TABLE","ID","CONDITION","COL_NAME","VALUE","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "if(!('AUD_SEQ' in this.vars)){ rslt += 'declare @AUD_SEQ bigint;\\r\\n'; this.vars.AUD_SEQ = true; }",
+      "rslt += 'set @AUD_SEQ = null;\\r\\n';",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "rslt += '{schema}.log_audit_other_base('+sqlescape(TABLE)+','+sqlescape(ID)+','+sqlescape(CONDITION)+','+sqlescape(COL_NAME)+','+sqlescape(VALUE)+','+sqlescape(audit_ref_name)+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')';",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_other_base" : {
+    "params": ["TABLE","ID","CONDITION","COL_NAME","VALUE","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "if(%%%CONDITION%%%) begin",
+      "  if(@AUD_SEQ is null) begin ",
+      "    insert into {schema}.audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
+      "      select %%%TABLE%%%,%%%ID%%%,'O',{schema}.my_now(),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,{schema}.my_db_user();",
+      "    select @AUD_SEQ = isnull(@AUD_SEQ, scope_identity());",
+      "  end",
+      "  insert into {schema}.audit_detail(audit_seq,audit_column_name,audit_column_val)",
+      "    select @AUD_SEQ,lower(%%%COL_NAME%%%),%%%VALUE%%%;",
+      "end"
+    ]
   }
 }

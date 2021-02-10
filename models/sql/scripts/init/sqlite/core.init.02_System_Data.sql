@@ -192,6 +192,14 @@ Please follow the link below to reset your password:<br />
 <%-data.RESET_LINK%> Reset Link');
 INSERT INTO {schema}_txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('CMS', 'Dashboard__model', 'HTML', 'Dashboard Message of the Day', '<p>Welcome to the jsHarmony System</p>
 ', NULL, 'Dashboard Message of the Day');
+INSERT INTO {schema}_txt__tbl (txt_process, txt_attrib, txt_type, txt_title, txt_body, txt_bcc, txt_desc) VALUES ('EMAIL', 'FEEDBACK_MESSAGE', 'HTML', 'Feature Suggestion', '<p><%-data.SYS_USER_NAME%> Suggests:</p>
+
+<p style="margin-left:40px"><%-data.MESSAGE_TEXT%></p>
+
+<p>While using: <a href="<%-data.URL%>"><%-data.URL%></a></p>
+', NULL, '<%-data.SYS_USER_NAME%> User Email
+<%-data.MESSAGE_TEXT%> Submitted Feedback
+<%-data.URL%> User Current Page');
 
 
 INSERT INTO {schema}_code2_app (code_name, code_desc, code_code_desc, code_attrib_desc, code_schema, code_type) VALUES ('doc_scope_doc_ctgr', 'Scope - Documents', NULL, NULL, '{schema}', 'app');

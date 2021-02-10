@@ -42,6 +42,11 @@ function jsHarmonyFactoryConfig(){
     ACCOUNT_SID: '',          //Twilio Account SID
     AUTH_TOKEN: ''            //Twilio Auth Token
   },
+  //Settings for Suggest a Feature
+  this.feedback = {
+    email: null,
+    enabled: false
+  };
   //Models for Help Listing
   this.help_view = {};
   //ID field for Help Listing
