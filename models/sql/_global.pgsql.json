@@ -69,10 +69,10 @@
       "my_toa     {schema}.toaudit;"
     ]
   },
-  "get_insert_trigger_identity":{
-    "params": ["KEY"],
+  "with_insert_trigger_identity": {
+    "params": ["KEY","INSERT_STATEMENT"],
     "sql": [
-      ""
+      "%%%INSERT_STATEMENT%%% RETURNING %%%KEY%%%;"
     ]
   },
   "init_audit" : {
@@ -164,6 +164,107 @@
     "params": ["col"],
     "sql": [
       "(select null)"
+    ]
+  },
+  "{schema}.log_audit_insert" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "insert into {schema}.audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user) values (%%%TABLE%%%,%%%ID%%%,'I',{schema}.my_now(),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,{schema}.my_db_user())"
+    ]
+  },
+  "{schema}.log_audit_update_mult" : {
+    "params": ["TABLE","ID","COL_ARRAY","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "rslt += '{schema}.log_audit_update_base('+TABLE+','+ID+','+audit_ref_name+','+audit_ref_id+','+audit_subject+','+cust_id+','+item_id+');\\r\\n';",
+      "var col_array = JSON.parse(COL_ARRAY);",
+      "for(var i=0;i<col_array.length;i++){",
+      "  rslt += '{schema}.log_audit_update_col('+ID+','+col_array[i]+');\\r\\n';",
+      "}",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_update" : {
+    "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "rslt += '{schema}.log_audit_update_base('+TABLE+','+ID+','+audit_ref_name+','+audit_ref_id+','+audit_subject+','+cust_id+','+item_id+');\\r\\n';",
+      "rslt += '{schema}.log_audit_update_col('+ID+','+COL_NAME+');\\r\\n';",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_update_base" : {
+    "params": ["TABLE","ID","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "insert into {schema}.audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user) values (%%%TABLE%%%,%%%ID%%%,'U',{schema}.my_now(),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,{schema}.my_db_user())"
+    ]
+  },
+  "{schema}.log_audit_update_col" : {
+    "params": ["ID","COL_NAME"],
+    "sql": [
+      "if {schema}.nequal(OLD.%%%COL_NAME%%%, NEW.%%%COL_NAME%%%) then",
+      "  insert into {schema}.audit_detail(audit_seq,audit_column_name,audit_column_val)",
+      "  select currval('{schema}.audit__tbl_audit_seq_seq'),lower('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%;",
+      "end if"
+    ]
+  },
+  "{schema}.log_audit_update_custom" : {
+    "params": ["TABLE","ID","CONDITION","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "exec": [
+      "var rslt = '';",
+      "rslt += '{schema}.log_audit_update_custom_base('+TABLE+','+ID+','+CONDITION+','+audit_ref_name+','+audit_ref_id+','+audit_subject+','+cust_id+','+item_id+');\\r\\n';",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_update_custom_base" : {
+    "params": ["TABLE","ID","CONDITION","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
+    "sql": [
+      "if %%%CONDITION%%% then",
+      "  insert into {schema}.audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user) values (%%%TABLE%%%,%%%ID%%%,'U',{schema}.my_now(),%%%audit_ref_name%%%,%%%audit_ref_id%%%,%%%audit_subject%%%,%%%cust_id%%%,%%%item_id%%%,{schema}.my_db_user());",
+      "end if"
+    ]
+  },
+  "{schema}.log_audit_delete_mult" : {
+    "params": ["TABLE","ID","COL_ARRAY"],
+    "exec": [
+      "var rslt = '';",
+      "rslt += '{schema}.log_audit_delete_base('+TABLE+','+ID+');\\r\\n';",
+      "var col_array = JSON.parse(COL_ARRAY);",
+      "for(var i=0;i<col_array.length;i++){",
+      "  rslt += '{schema}.log_audit_update_col('+ID+','+col_array[i]+');\\r\\n';",
+      "}",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_delete" : {
+    "params": ["TABLE","ID","COL_NAME"],
+    "exec": [
+      "var rslt = '';",
+      "rslt += '{schema}.log_audit_delete_base('+TABLE+','+ID+');\\r\\n';",
+      "rslt += '{schema}.log_audit_update_col('+ID+','+COL_NAME+');\\r\\n';",
+      "return rslt;"
+    ]
+  },
+  "{schema}.log_audit_delete_base" : {
+    "params": ["TABLE","ID"],
+    "sql": [
+      "insert into {schema}.audit__tbl(audit_table_name,audit_table_id,audit_op,audit_tstmp,audit_ref_name,audit_ref_id,audit_subject,cust_id,item_id,audit_user)",
+      "  select %%%TABLE%%%,%%%ID%%%,'D',{schema}.my_now(),",
+      "    (select audit_ref_name from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc limit 1),",
+      "    (select audit_ref_id from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc limit 1),",
+      "    (select audit_subject from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc limit 1),",
+      "    (select cust_id from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc limit 1),",
+      "    (select item_id from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc limit 1),",
+      "    {schema}.my_db_user();"
+    ]
+  },
+  "{schema}.log_audit_delete_col" : {
+    "params": ["ID","COL_NAME"],
+    "sql": [
+      "if OLD.%%%COL_NAME%%% is not null then",
+      "  insert into {schema}.audit_detail(audit_seq,audit_column_name,audit_column_val)",
+      "  select currval('{schema}.audit__tbl_audit_seq_seq'),lower('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%;",
+      "end if"
     ]
   }
 }
