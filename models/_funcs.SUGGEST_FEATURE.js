@@ -71,7 +71,7 @@ module.exports = exports = function(module, funcs){
         dbtypes.VarChar(dbtypes.MAX)
       ];
       var sql_params = {
-        audit_column_val: P.message_text
+        audit_column_val: P.message_text + ' :: ' + (req.header('Referer')||'')
       };
 
       var sql = "jsharmony.log_audit_other('SUGGEST_FEATURE',0,1=1,'message_text',@audit_column_val)"
