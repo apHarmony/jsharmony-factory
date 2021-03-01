@@ -2584,10 +2584,11 @@ CREATE FUNCTION sys_user_iud() RETURNS trigger
             
           IF TG_OP = 'INSERT' THEN
             NEW.sys_user_stsdt := curdttm;
-	    NEW.sys_user_etstmp := curdttm;
-	    NEW.sys_user_euser := myuser;
-	    NEW.sys_user_mtstmp := curdttm;
-	    NEW.sys_user_muser := myuser;
+            NEW.sys_user_etstmp := curdttm;
+            NEW.sys_user_euser := myuser;
+            NEW.sys_user_mtstmp := curdttm;
+            NEW.sys_user_muser := myuser;
+            INSERT INTO {schema}.sys_user_role (sys_user_id, sys_role_name) VALUES(NEW.sys_user_id, '*');
           ELSIF TG_OP = 'UPDATE' THEN
             IF audit_seq is not NULL THEN
               if {schema}.nequal(OLD.sys_user_sts, NEW.sys_user_sts) then
@@ -3078,7 +3079,7 @@ CREATE FUNCTION sys_user_role_iud() RETURNS trigger
           IF not exists (select sys_role_name
                            from {schema}.v_my_roles
                           where sys_role_name = 'DEV') THEN
-            RAISE EXCEPTION  'Application Error - Only Developer can maintain Developer Role.';
+            RAISE EXCEPTION  'Application Error - Only System Developer can maintain System Developer Role.';
           END IF;                 
            
         END IF;   

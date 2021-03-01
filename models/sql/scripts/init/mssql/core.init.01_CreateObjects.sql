@@ -5948,6 +5948,10 @@ BEGIN
              sys_user_pw2 = NULL
        WHERE sys_user.sys_user_id = @I_sys_user_id;
 
+
+      INSERT INTO {schema}.sys_user_role (sys_user_id, sys_role_name)
+                 VALUES(@I_sys_user_id, '*');
+
     END  
 
     SET @WK_audit_subject = ISNULL(@I_sys_user_lname,'')+', '+ISNULL(@I_sys_user_fname,'') 
@@ -6623,8 +6627,8 @@ BEGIN
                            from {schema}.v_my_roles
                           where sys_role_name = 'DEV') 
           BEGIN
-            EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_iud','ERR', 'Only Developer can maintain Developer Role(1)'
-            raiserror('Application Error - Only Developer can maintain Developer Role(1).',16,1)
+            EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_iud','ERR', 'Only System Developer can maintain System Developer Role(1)'
+            raiserror('Application Error - Only System Developer can maintain System Developer Role(1).',16,1)
             ROLLBACK TRANSACTION
             return
           END
@@ -6635,8 +6639,8 @@ BEGIN
         /* ME */
         IF @TP <> 'D' and @I_sys_role_name = 'DEV' 
         BEGIN
-          EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_iud','ERR', 'Only Developer can maintain Developer Role(2)'
-          raiserror('Application Error - Only Developer can maintain Developer Role(2).',16,1)
+          EXEC [{schema}].[zz-filedebug] 'TRIGGER','sys_user_role_iud','ERR', 'Only System Developer can maintain System Developer Role(2)'
+          raiserror('Application Error - Only System Developer can maintain System Developer Role(2).',16,1)
           ROLLBACK TRANSACTION
           return
         END

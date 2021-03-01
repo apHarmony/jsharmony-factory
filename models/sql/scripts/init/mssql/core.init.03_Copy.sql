@@ -1080,7 +1080,7 @@ INSERT INTO {schema}.sys_func (sys_func_seq, sys_func_sts, sys_func_name, sys_fu
 INSERT INTO {schema}.sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_snotes, sys_role_code, sys_role_attrib) VALUES (0, 'ACTIVE', '*', 'All Users', NULL, NULL, NULL);
 INSERT INTO {schema}.sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_snotes, sys_role_code, sys_role_attrib) VALUES (97, 'ACTIVE', 'DADMIN', 'Data Administration', NULL, NULL, NULL);
 INSERT INTO {schema}.sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_snotes, sys_role_code, sys_role_attrib) VALUES (98, 'ACTIVE', 'SYSADMIN', 'System Administration', NULL, NULL, NULL);
-INSERT INTO {schema}.sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_snotes, sys_role_code, sys_role_attrib) VALUES (99, 'ACTIVE', 'DEV', 'Developer', NULL, NULL, NULL);
+INSERT INTO {schema}.sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_snotes, sys_role_code, sys_role_attrib) VALUES (99, 'ACTIVE', 'DEV', 'System Developer', NULL, NULL, NULL);
 INSERT INTO {schema}.sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_snotes, sys_role_code, sys_role_attrib) VALUES (91, 'ACTIVE', 'X_B', 'General Browse', NULL, NULL, NULL);
 INSERT INTO {schema}.sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_snotes, sys_role_code, sys_role_attrib) VALUES (92, 'ACTIVE', 'X_X', 'General BIUD', NULL, NULL, NULL);
 

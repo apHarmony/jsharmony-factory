@@ -122,6 +122,8 @@ begin
     sys_user_mtstmp = datetime('now','localtime')
     where rowid = new.rowid\;
 
+  insert into {schema}_sys_user_role(sys_user_id, sys_role_name) values(NEW.sys_user_id, '*')\;
+
   update jsharmony_meta set jsexec = '{ "function": "sha1", "table": "{schema}_sys_user", "rowid": '||NEW.rowid||', "source":"sys_user_id||sys_user_pw1||(select param_cur_val from {schema}_v_param_cur where param_cur_process=''USERS'' and param_cur_attrib=''HASH_SEED_S'')", "dest":"sys_user_hash" }, { "function": "exec", "sql": "update {schema}_sys_user set sys_user_pw1=null,sys_user_pw2=null where rowid='||NEW.rowid||'" }'\;
 
   %%%log_audit_insert("sys_user","new.sys_user_id","sys_user_id","null","null","null")%%%
@@ -433,7 +435,7 @@ end;
 
 create trigger {schema}_sys_user_role_before_insert before insert on {schema}_sys_user_role
 begin
-  select case when (upper(new.sys_role_name)='DEV') and ({schema}.my_sys_user_id() is not null) and (not exists (select sys_role_name from {schema}.v_my_roles where sys_role_name='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
+  select case when (upper(new.sys_role_name)='DEV') and ({schema}.my_sys_user_id() is not null) and (not exists (select sys_role_name from {schema}.v_my_roles where sys_role_name='DEV')) then raise(FAIL,'Application Error - Only a System Developer can maintain the System Developer Role.') end\;
 end;
 
 create trigger {schema}_sys_user_role_after_insert after insert on {schema}_sys_user_role
@@ -446,7 +448,7 @@ create trigger {schema}_sys_user_role_before_update before update on {schema}_sy
 begin
   select case when ifnull(old.sys_user_role_id,'')<>ifnull(NEW.sys_user_role_id,'') then raise(FAIL,'Application Error - ID cannot be updated.') end\;
   select case when ifnull(old.sys_user_id,'')<>ifnull(NEW.sys_user_id,'') then raise(FAIL,'Application Error - User ID cannot be updated.') end\;
-  select case when (upper(new.sys_role_name)='DEV') and ({schema}.my_sys_user_id() is not null) and (not exists (select sys_role_name from {schema}.v_my_roles where sys_role_name='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
+  select case when (upper(new.sys_role_name)='DEV') and ({schema}.my_sys_user_id() is not null) and (not exists (select sys_role_name from {schema}.v_my_roles where sys_role_name='DEV')) then raise(FAIL,'Application Error - Only a System Developer can maintain the System Developer Role.') end\;
 end;
 
 create trigger {schema}_sys_user_role_after_update after update on {schema}_sys_user_role
@@ -457,7 +459,7 @@ end;
 
 create trigger {schema}_sys_user_role_delete before delete on {schema}_sys_user_role
 begin
-  select case when (upper(old.sys_role_name)='DEV') and ({schema}.my_sys_user_id() is not null) and (not exists (select sys_role_name from {schema}.v_my_roles where sys_role_name='DEV')) then raise(FAIL,'Application Error - Only a Developer can maintain the Developer Role.') end\;
+  select case when (upper(old.sys_role_name)='DEV') and ({schema}.my_sys_user_id() is not null) and (not exists (select sys_role_name from {schema}.v_my_roles where sys_role_name='DEV')) then raise(FAIL,'Application Error - Only a System Developer can maintain the System Developer Role.') end\;
   %%%log_audit_delete_mult("{schema}_sys_user_role","old.sys_user_role_id",["sys_user_role_id","sys_user_id","sys_role_name"])%%%
   update jsharmony_meta set {{audit_seq}} = null\;
 end;

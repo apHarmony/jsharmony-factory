@@ -9,7 +9,6 @@ insert into {schema}_sys_user (sys_user_fname,sys_user_lname,sys_user_email,sys_
   values ('Admin','User','%%%INIT_DB_ADMIN_EMAIL%%%','%%%INIT_DB_ADMIN_PASS%%%','%%%INIT_DB_ADMIN_PASS%%%',
           date('now','localtime'),datetime('now','localtime'),(select context from jsharmony_meta limit 1),datetime('now','localtime'),(select context from jsharmony_meta limit 1),datetime('now','localtime'));
 
-insert into {schema}_sys_user_role (sys_user_id, sys_role_name) values(1,'*');
 insert into {schema}_sys_user_role (sys_user_id, sys_role_name) values(1,'DEV');
 insert into {schema}_sys_user_role (sys_user_id, sys_role_name) values(1,'SYSADMIN');
 insert into {schema}.sys_user_role (sys_user_id, sys_role_name) values(1,'DADMIN');

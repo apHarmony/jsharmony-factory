@@ -117,6 +117,7 @@ jsh.App[modelid] = new (function(){
         html += '<td>'+XExt.escapeHTML(fielddesc.join(','))+'</td>';
         html += '</tr>';
       });
+      html += '<tr><td colspan="5"><a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&scripttype=recreate&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">&gt; Recreate</a></td>';
       html += '</table>';
       $(html).appendTo(jobj);
       //console.log(table);

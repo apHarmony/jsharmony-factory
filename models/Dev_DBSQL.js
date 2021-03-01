@@ -2,10 +2,13 @@ jsh.App[modelid] = new (function(){
   var _this = this;
 
   this.DBs = {};  //Populated onroute
+  this.TABLE_DEF = undefined;  //Populated onroute, if "table" is set
+  this.TABLE_OBJ = undefined;  //Populated onroute, if "table" is set
+  this.TABLE_INIT = '';  //Populated onroute, if "table" is set, and SqlObject is defined for the table
 
   this.samples = {};
   this.samples.mssql = {
-    "Select": "select top 1000 * from TABLE;",
+    "Select": "select top 1000 * from TABLENAME;",
     "Get DB / Server Name": "select db_name() db_name,@@servername server_name;",
     "List Tables": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='U' order by schema_name,table_name",
     "List Views": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='V' order by schema_name,table_name",
@@ -18,7 +21,7 @@ jsh.App[modelid] = new (function(){
     "Create UCOD": "",
   };
   this.samples.pgsql = {
-    "Select": "select * from TABLE limit 1000;",
+    "Select": "select * from TABLENAME limit 1000;",
     "Get DB Name": "select current_database() db_name;",
     "List Tables": "select table_schema||'.'||table_name as table from information_schema.tables where table_type='BASE TABLE' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
     "List Views": "select table_schema||'.'||table_name as view from information_schema.tables where table_type='VIEW' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
@@ -48,7 +51,7 @@ jsh.App[modelid] = new (function(){
     "Create UCOD": "",
   };
   this.samples.sqlite = {
-    "Select": "select * from TABLE limit 1000;",
+    "Select": "select * from TABLENAME limit 1000;",
     "List Tables": "SELECT name FROM sqlite_master WHERE type='table' order by name;",
     "List Views": "SELECT name FROM sqlite_master WHERE type='view' order by name;",
     "Describe Table": "PRAGMA table_info(xxxxx);",
@@ -67,6 +70,14 @@ jsh.App[modelid] = new (function(){
     foreign key (cust_sts) references code_sys_cust_sts(code_val)\r\n\
   );\r\n\
   insert into cust(cust_id,cust_sts,cust_name) values (1,'ACTIVE','ACME Industries');",
+    "Recreate Table": "--***Run Restructure Drop\r\n"+
+      "TABLE_INIT\r\n"+
+      "insert into TABLENAME2(COLUMNS) select COLUMNS from TABLENAME;\r\n"+
+      "PRAGMA foreign_keys=off;\r\n"+
+      "drop table TABLENAME;\r\n"+
+      "ALTER table TABLENAME2 RENAME TO TABLENAME;\r\n"+
+      "PRAGMA foreign_keys=on;\r\n"+
+      "--***Run Restructure Init\r\n",
     "Drop / Create View": "drop view if exists v_cust;\r\n\
   create view v_cust as\r\n\
   select cust_id,cust_sts,cust_name,code_sys_cust_sts.code_txt as cust_sts_txt,cust_einhash\r\n\
@@ -144,11 +155,24 @@ jsh.App[modelid] = new (function(){
         jSamples.append(option);
       }
       if(_GET['table']){
-        var sql = samples['Select'];
-        sql = sql.replace('TABLE',_GET['table']);
-        jform.find('.sql').val(sql);
-        jform.find('.runsql').click();
-
+        if(_GET['scripttype']=='recreate'){
+          var sql = samples['Recreate Table'];
+          if(_this.TABLE_OBJ){
+            var COLUMNS = _.map(_this.TABLE_OBJ.columns, function(column){ return column.name; }).join(',');
+            sql = sql.replace(/COLUMNS/g,COLUMNS);
+            var createSql = _this.TABLE_INIT||'create table TABLENAME();';
+            createSql = createSql.replace(/TABLENAME/g,_GET['table']+'2');
+            sql = sql.replace(/TABLE_INIT/g,createSql);
+          }
+          sql = sql.replace(/TABLENAME/g,_GET['table']);
+          jform.find('.sql').val(sql);
+        }
+        else {
+          var sql = samples['Select'];
+          sql = sql.replace('TABLENAME',_GET['table']);
+          jform.find('.sql').val(sql);
+          jform.find('.runsql').click();
+        }
       }
       else if('Select' in samples){
         jform.find('.sql').val(samples['Select'])

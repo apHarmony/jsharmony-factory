@@ -175,7 +175,7 @@ INSERT INTO {schema}_menu__tbl (menu_group, menu_id, menu_sts, menu_id_parent, m
 INSERT INTO {schema}_sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_code, sys_role_attrib) VALUES (0, 'ACTIVE', '*', 'All Users', NULL, NULL);
 INSERT INTO {schema}_sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_code, sys_role_attrib) VALUES (97, 'ACTIVE', 'DADMIN', 'Data Administration', NULL, NULL);
 INSERT INTO {schema}_sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_code, sys_role_attrib) VALUES (98, 'ACTIVE', 'SYSADMIN', 'System Administration', NULL, NULL);
-INSERT INTO {schema}_sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_code, sys_role_attrib) VALUES (99, 'ACTIVE', 'DEV', 'Developer', NULL, NULL);
+INSERT INTO {schema}_sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_code, sys_role_attrib) VALUES (99, 'ACTIVE', 'DEV', 'System Developer', NULL, NULL);
 INSERT INTO {schema}_sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_code, sys_role_attrib) VALUES (91, 'ACTIVE', 'X_B', 'General Browse', NULL, NULL);
 INSERT INTO {schema}_sys_role (sys_role_seq, sys_role_sts, sys_role_name, sys_role_desc, sys_role_code, sys_role_attrib) VALUES (92, 'ACTIVE', 'X_X', 'General BIUD', NULL, NULL);
 

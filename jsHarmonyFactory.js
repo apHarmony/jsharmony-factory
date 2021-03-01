@@ -66,6 +66,11 @@ function jsHarmonyFactory(name, options){
   //_this.transform.Add(require('./jsHarmonyFactoryTransform.Classic.js'));
 
   _this.onCreateServer = []; //function(server){}
+  _this.onFilterSQLScripts = function(fileObj){
+    if(fileObj.name.substr(0,5)=='cust.'){
+      if(!_this.clientPortal) return false;
+    }
+  }
 }
 
 jsHarmonyFactory.prototype = new jsHarmonyModule();

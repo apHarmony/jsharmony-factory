@@ -7,6 +7,7 @@
     "title":"",
     "caption":["","Role","Roles"],
     "onload": "if(jsh.is_insert) jsh.$root('.xelem'+xmodel.class+'.xselitem[value=\\'*\\']').prop('checked',true);",
+    "sqlwhere": "sys_role_name <> '*'",
     "fields":[
       {"name":"sys_user_id","type":"bigint","foreignkey":1,"control":"hidden"},
       {"name":"sys_user_role_id","type":"bigint","key":1,"control":"hidden"},
@@ -15,7 +16,7 @@
         "lov": { "sql": ["select sys_role_name as %%%jsh.map.{{code_val}}%%%, ",
                           "       sys_role_desc as %%%jsh.map.{{code_txt}}%%%, ",
                           "       sys_role_seq as %%%jsh.map.{{code_seq}}%%% ",
-                          "  from {schema}.sys_role"] }
+                          "  from {schema}.sys_role where sys_role_name <> '*'"] }
       }
     ],
     "dberrors":[

@@ -272,36 +272,6 @@ CREATE FUNCTION cust_user_role_iud() RETURNS trigger
           RAISE EXCEPTION  'Application Error - Customer User ID cannot be updated.';
         END IF;
 
-/*
-  THIS CODE DOES NOT BELONG IN jsharmony trigger - IT IS REQUIRED FOR BETTER PROTECTION IN ATRAX
-  BUT COULD BE SKIPPED
-
-
-        IF TG_OP = 'INSERT'
-           OR
-           TG_OP = 'UPDATE' THEN
-
-	  IF EXISTS (select 1
-	               from CF
-                      inner join cust_user on cust_user.cust_id = CF.cust_id
-                      where cust_user.sys_user_id = NEW.sys_user_id
-		        and CF.CF_TYPE = 'LVL2') THEN
-	    IF NEW.cust_role_name not in ('C*','CUSER','CMGR','CADMIN') THEN
-              RAISE EXCEPTION  'Role % not compatible with LVL2', coalesce(NEW.cust_role_name,'');
-            END IF;
-            
-	  ELSE
-	  
-	    IF NEW.cust_role_name not in ('C*','CL1') THEN
-              RAISE EXCEPTION  'Role % not compatible with LVL1', coalesce(NEW.cust_role_name,'');
-            END IF;
-
-	  END IF;
-
-	END IF;
-
-*/
-
 
         /**********************************/
         /* AUDIT TRAIL                    */ 

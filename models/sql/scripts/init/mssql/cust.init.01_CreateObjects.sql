@@ -775,44 +775,6 @@ BEGIN
      WHERE sys_user_id = @I_sys_user_id; 
 
 
-/*
-  THIS CODE DOES NOT BELONG IN jsharmony trigger - IT IS REQUIRED FOR BETTER PROTECTION IN ATRAX
-  BUT COULD BE SKIPPED
-
-    IF @I_cust_role_name IS NOT NULL
-       AND
-       @I_sys_user_id IS NOT NULL
-    BEGIN
-
-      IF EXISTS (select 1
-                   from CF
-                  inner join {schema}.cust_user on cust_user.cust_id = CF.cust_id
-                  where cust_user.sys_user_id = @I_sys_user_id
-                    and CF.CF_TYPE = 'LVL2')
-      BEGIN
-        IF @I_cust_role_name not in ('C*','CUSER','CMGR','CADMIN')
-        BEGIN
-          EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_iud','ERR', 'Invalid Role'
-          raiserror('Role not compatible with LVL2',16,1)
-          ROLLBACK TRANSACTION
-          return
-        END
-      END
-      ELSE
-      BEGIN
-        IF @I_cust_role_name not in ('C*','CL1')
-        BEGIN
-          EXEC [{schema}].[zz-filedebug] 'TRIGGER','cust_user_role_iud','ERR', 'Invalid Role'
-          raiserror('Role not compatible with LVL1',16,1)
-          ROLLBACK TRANSACTION
-          return
-        END
-      END
-
-    END
-*/
-
-
     /******************************************/
     /****** SPECIAL FRONT ACTION - END   ******/
     /******************************************/
