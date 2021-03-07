@@ -107,6 +107,7 @@ end;
 
 create trigger {schema}_sys_user_before_insert before insert on {schema}_sys_user
 begin
+  select case when (NEW.sys_user_sts='ACTIVE') and exists(select sys_user_id from {schema}_sys_user where lower(sys_user_email) = lower(NEW.sys_user_email) and sys_user_sts = 'ACTIVE') then raise(FAIL,'Application Error - Another active user with the same email address already exists in the system') end\;
   select case when ifnull(NEW.sys_user_pw1,'')<>ifnull(NEW.sys_user_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
   select case when length(ifnull(NEW.sys_user_pw1,''))< 6 then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
 end;
@@ -134,6 +135,7 @@ create trigger {schema}_sys_user_before_update before update on {schema}_sys_use
 begin
   select case when NEW.sys_user_stsdt is null then raise(FAIL,'sys_user_stsdt cannot be null') end\;
   select case when NEW.sys_user_id <> OLD.sys_user_id then raise(FAIL,'Application Error - ID cannot be updated.') end\;
+  select case when (NEW.sys_user_sts='ACTIVE') and exists(select sys_user_id from {schema}_sys_user where lower(sys_user_email) = lower(NEW.sys_user_email) and sys_user_id <> NEW.sys_user_id and sys_user_sts = 'ACTIVE') then raise(FAIL,'Application Error - Another active user with the same email address already exists in the system') end\;
   select case when ifnull(NEW.sys_user_pw1,'')<>ifnull(NEW.sys_user_pw2,'') then raise(FAIL,'Application Error - New Password and Repeat Password are different') end\;
   select case when (NEW.sys_user_pw1 is not null) and (length(ifnull(NEW.sys_user_pw1,''))< 6) then raise(FAIL,'Application Error - Password length - at least 6 characters required') end\;
 end;
