@@ -32,6 +32,8 @@
   "homepage": "https://github.com/apHarmony/jsharmony-factory",
   "devDependencies": {
     "jsharmony-db-pgsql": "^1.1.19",
+    "jsharmony-db-mssql": "^1.1.51",
+    "jsharmony-db-sqlite": "^1.1.46",
     "mocha": "^7.2.0"
   },
   "dependencies": {

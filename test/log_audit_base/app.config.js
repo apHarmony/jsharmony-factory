@@ -17,12 +17,18 @@ You should have received a copy of the GNU Lesser General Public License
 along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+var HelperFS = require('jsharmony/HelperFS');
+var path = require('path');
 
 exports = module.exports = function(jsh, config, dbconfig){
+
+  jsh.Config.datadir = path.join(__dirname, '..', 'data', 'log_audit_base');
+  HelperFS.createFolderRecursiveSync(jsh.Config.datadir);
 
   // in order to
   //  node ../../init/create.js
   // the database connection info needs to be set here. Database type can't be defined on the command line.
+  //dbconfig['default'] = require('../lib/dbconfig.sqlite.js');
   //dbconfig['default'] = require('../lib/dbconfig.mssql.js');
   //dbconfig['default'] = require('../lib/dbconfig.pgsql.js');
 
