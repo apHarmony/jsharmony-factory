@@ -791,6 +791,25 @@ ALTER FUNCTION {schema}.get_cust_user_name(in_sys_user_id bigint) OWNER TO postg
 
 
 --
+-- Name: raise_exception(errmsg text); Type: FUNCTION; Schema: {schema}; Owner: postgres
+--
+
+
+CREATE OR REPLACE FUNCTION raise_exception(errmsg text) RETURNS int
+  LANGUAGE plpgsql
+  AS $_$ 
+BEGIN 
+   RAISE EXCEPTION '%', errmsg;
+   return 0;
+END; 
+$_$;
+
+
+
+ALTER FUNCTION {schema}.raise_exception(errmsg text) OWNER TO postgres;
+
+
+--
 -- Name: get_item_id(in_tabn character varying, in_tabid bigint); Type: FUNCTION; Schema: {schema}; Owner: postgres
 --
 
@@ -2588,7 +2607,6 @@ CREATE FUNCTION sys_user_iud() RETURNS trigger
             NEW.sys_user_euser := myuser;
             NEW.sys_user_mtstmp := curdttm;
             NEW.sys_user_muser := myuser;
-            INSERT INTO {schema}.sys_user_role (sys_user_id, sys_role_name) VALUES(NEW.sys_user_id, '*');
           ELSIF TG_OP = 'UPDATE' THEN
             IF audit_seq is not NULL THEN
               if {schema}.nequal(OLD.sys_user_sts, NEW.sys_user_sts) then
@@ -2618,6 +2636,23 @@ $$;
 
 
 ALTER FUNCTION {schema}.sys_user_iud() OWNER TO postgres;
+
+
+--
+-- Name: sys_user_after_i(); Type: FUNCTION; Schema: {schema}; Owner: postgres
+--
+
+CREATE FUNCTION sys_user_after_i() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+    BEGIN
+            INSERT INTO {schema}.sys_user_role (sys_user_id, sys_role_name) VALUES(NEW.sys_user_id, '*');
+            RETURN NEW;
+    END;
+$$;
+
+
+ALTER FUNCTION {schema}.sys_user_after_i() OWNER TO postgres;
 
 --
 -- Name: param__tbl_iud(); Type: FUNCTION; Schema: {schema}; Owner: postgres
@@ -7849,6 +7884,12 @@ CREATE TRIGGER note__tbl_iud BEFORE INSERT OR DELETE OR UPDATE ON note__tbl FOR 
 
 CREATE TRIGGER sys_user_iud BEFORE INSERT OR DELETE OR UPDATE ON sys_user FOR EACH ROW EXECUTE PROCEDURE sys_user_iud();
 
+--
+-- Name: sys_user_after_i; Type: TRIGGER; Schema: {schema}; Owner: postgres
+--
+
+CREATE TRIGGER sys_user_after_i AFTER INSERT ON sys_user FOR EACH ROW EXECUTE PROCEDURE sys_user_after_i();
+
 
 --
 -- Name: param__tbl_iud; Type: TRIGGER; Schema: {schema}; Owner: postgres
@@ -8342,6 +8383,19 @@ GRANT ALL ON FUNCTION get_cust_id(in_tabn character varying, in_tabid bigint) TO
 
 
 --
+-- Name: raise_exception(errmsg text); Type: ACL; Schema: {schema}; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION raise_exception(errmsg text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION raise_exception(errmsg text) FROM postgres;
+GRANT ALL ON FUNCTION raise_exception(errmsg text) TO postgres;
+GRANT ALL ON FUNCTION raise_exception(errmsg text) TO PUBLIC;
+GRANT ALL ON FUNCTION raise_exception(errmsg text) TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION raise_exception(errmsg text) TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+
+--
 -- Name: get_item_id(in_tabn character varying, in_tabid bigint); Type: ACL; Schema: {schema}; Owner: postgres
 --
 
@@ -8788,6 +8842,18 @@ GRANT ALL ON FUNCTION sys_user_iud() TO postgres;
 GRANT ALL ON FUNCTION sys_user_iud() TO PUBLIC;
 GRANT ALL ON FUNCTION sys_user_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
 GRANT ALL ON FUNCTION sys_user_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
+
+--
+-- Name: sys_user_after_i(); Type: ACL; Schema: {schema}; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION sys_user_after_i() FROM PUBLIC;
+REVOKE ALL ON FUNCTION sys_user_after_i() FROM postgres;
+GRANT ALL ON FUNCTION sys_user_after_i() TO postgres;
+GRANT ALL ON FUNCTION sys_user_after_i() TO PUBLIC;
+GRANT ALL ON FUNCTION sys_user_after_i() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION sys_user_after_i() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
 
 
 --

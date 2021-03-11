@@ -80,6 +80,8 @@ module.exports = exports = function(module, funcs){
       var sqlFuncs  = [];
       sqlFuncs['DB'] = dbconfig.database;
       sqlFuncs['DB_LCASE'] = dbconfig.database.toLowerCase();
+      sqlFuncs['INIT_DB'] = sqlFuncs['DB'];
+      sqlFuncs['INIT_DB_LCASE'] = sqlFuncs['DB_LCASE'];
 
       db.getObjectDiff(jsh, sqlext, moduleName, function(err, sql){
         if(err) return jsh.AppSrv.AppDBError(req, res, err);

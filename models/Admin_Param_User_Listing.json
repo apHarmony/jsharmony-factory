@@ -2,10 +2,11 @@
   "Admin/Param_User_Listing": {
     "title":"User Settings",
 	  "table":"{schema}.param_user",
-	  "sqlwhere":"(sys_user_id=(select my_sys_user_id from {schema}.v_my_user))",
+    "sqlwhere":"(sys_user_id=(select my_sys_user_id from {schema}.v_my_user))",
+    "sqlwhere_disabled_on_insert": true,
 	  "actions":"BIUD", 
 	  "caption":[0,"Parameter","Parameters"],
-    "layout":"grid", 
+    "layout":"grid",
 	  "sort":["^param_user_process","^param_user_attrib"], 
 	  "menu":"Admin/Param_User_Listing",
     "reselectafteredit": "row",    "comment1":"row, or blank",
@@ -14,7 +15,7 @@
     "validationlevel": "row",     "comment4":"cell, or row",
 	  "fields":[
 	    {"name":"param_user_id","type":"bigint","key":1,"control":"hidden"},
-      {"name":"sys_user_id","type":"bigint","actions":"BI","control":"hidden",
+      {"name":"sys_user_id","type":"bigint","actions":"BI","control":"hidden","sqlinsert": "(select my_sys_user_id from {schema}.v_my_user)",
        "default": "js:jsh.globalparams.user_id"},
       {"name":"param_user_process","type":"varchar","length":32,"actions": "BIU","control": "dropdown_S",
        "lov": {"sql":"select code_val, code_txt from {schema}.code_param_user_process order by code_seq,code_txt",

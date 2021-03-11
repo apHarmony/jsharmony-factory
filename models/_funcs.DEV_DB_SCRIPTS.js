@@ -99,10 +99,14 @@ module.exports = exports = function(module, funcs){
         dbconfig = _.extend({}, dbconfig);
         dbconfig.user = P.runas_user;
         dbconfig.password = P.runas_password;
+        if(dbconfig.options) dbconfig.options = _.extend({}, dbconfig.options);
+        if(dbconfig.options.pooled) dbconfig.options.pooled = false;
       }
       var sqlFuncs  = [];
       sqlFuncs['DB'] = dbconfig.database;
       sqlFuncs['DB_LCASE'] = dbconfig.database.toLowerCase();
+      sqlFuncs['INIT_DB'] = sqlFuncs['DB'];
+      sqlFuncs['INIT_DB_LCASE'] = sqlFuncs['DB_LCASE'];
 
       if(mode=='run'){
         db.RunScripts(jsh, scriptid, { dbconfig: dbconfig, sqlFuncs: sqlFuncs }, function(err, rslt, stats){
