@@ -1822,7 +1822,11 @@ DECLARE
 BEGIN
   case substring(u,1,1)
     when 'S' then
+:if:client_portal:
       select 'S-'||sys_user_lname||', '||sys_user_fname
+:else:
+      select ''||sys_user_lname||', '||sys_user_fname
+:endif:
         into wk
         from {schema}.sys_user
        where sys_user_id::text = substring(u,2,1024);  

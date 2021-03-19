@@ -453,7 +453,11 @@ DECLARE @rslt nvarchar(255)
   else if (substring(@USER,1,1)='S' and isnumeric(substring(@USER,2,1024))=1)
   begin
     set @rslt = @USER;
+:if:client_portal:
     select @rslt = 'S-'+isnull(sys_user_name,'')
+:else:
+    select @rslt = ''+isnull(sys_user_name,'')
+:endif:
      from {schema}.sys_user
     where convert(varchar(50),sys_user_id)=substring(@USER,2,1024);
   end
