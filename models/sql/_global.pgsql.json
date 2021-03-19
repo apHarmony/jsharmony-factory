@@ -7,6 +7,7 @@
   "str_concat":"||",
   "func_prefix":"",
   "$ifnull":{ "params": ["a","b"], "sql": "coalesce(%%%a%%%,%%%b%%%)" },
+  "$addDays":{ "params": ["date","numdays"], "sql": "(%%%date%%% + interval '%%%numdays%%%' day)" },
   "proc_run":"select ",
   "par_list_beg":"(",
   "par_list_end":")",

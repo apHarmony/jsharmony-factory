@@ -7,6 +7,7 @@
   "str_concat":"||",
   "func_prefix":"",
   "$ifnull":{ "params": ["a","b"], "sql": "ifnull(%%%a%%%,%%%b%%%)" },
+  "$addDays":{ "params": ["date","numdays"], "sql": "datetime(%%%date%%%,'%%%numdays%%% days')" },
   "proc_run":"",
   "par_list_beg":"(",
   "par_list_end":")",
