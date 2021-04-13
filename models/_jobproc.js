@@ -32,6 +32,9 @@ function AppSrvJobProc(jshFactory, db) {
   this.AppSrv = jshFactory.jsh.AppSrv;
   this.TaskHistory = {};
   this.QueueHistory = {};
+  this.jobTimer = null;
+  this.isRunning = false;
+  this.runNextLoopImmediately = false;
 }
 
 AppSrvJobProc.prototype._transform = function(elem){
@@ -73,17 +76,38 @@ AppSrvJobProc.prototype.map_db_rslt = function(row) {
 
 AppSrvJobProc.prototype.Run = function () {
   var _this = this;
-  if (this.jshFactory.Config.debug_params.disable_job_processor){
-    setTimeout(function () { _this.Run(); }, _this.jshFactory.Config.JobSleepDelay);
+
+  if(_this.isRunning){
+    _this.runNextLoopImmediately = true;
     return;
+  }
+  _this.isRunning = true;
+
+  if(_this.jobTimer) clearTimeout(_this.jobTimer);
+  _this.jobTimer =  null;
+
+  function scheduleNextLoop(timeout){
+    _this.jobTimer = setTimeout(function () { _this.Run(); }, (_this.runNextLoopImmediately ? 1 : timeout));
+    _this.runNextLoopImmediately = false;
+    _this.isRunning = false;
+  }
+
+  if (this.jshFactory.Config.debug_params.disable_job_processor){
+    return scheduleNextLoop(_this.jshFactory.Config.JobSleepDelay);
   }
   _this.CheckJobQueue(function (job) {
     if (job) {
       _this.ExecJob(job, function () {
-        _this.CheckSubscriberQueue(function () { setTimeout(function () { _this.Run(); }, _this.jshFactory.Config.JobSleepDelay); });
+        _this.CheckSubscriberQueue(function () {
+          return scheduleNextLoop(_this.jshFactory.Config.JobSleepDelay);
+        });
       });
     }
-    else { _this.CheckSubscriberQueue(function () { setTimeout(function () { _this.Run(); }, _this.jshFactory.Config.JobCheckDelay); }); }
+    else {
+      _this.CheckSubscriberQueue(function () {
+        return scheduleNextLoop(_this.jshFactory.Config.JobCheckDelay);
+      });
+    }
   });
 }
 
