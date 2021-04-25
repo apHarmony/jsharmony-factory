@@ -50,6 +50,7 @@ var scriptConfig = {
 
   CLIENT_PORTAL: undefined,
   SAMPLE_DATA: false,
+  SUPERVISOR: false,
   USE_IPC: false,
   PRE_INIT: null,
   POST_INIT: null,
@@ -57,6 +58,14 @@ var scriptConfig = {
 
   sqlFuncs: [],
 };
+
+//Read args early to check whether client portal should be initialized
+for(var i=1;i<process.argv.length;i++){
+  var arg = process.argv[i];
+  if(process.argv.length > (i+1)) nextarg = process.argv[i+1];
+  if(arg=='--with-client-portal') scriptConfig.CLIENT_PORTAL = true;
+  else if(arg=='--no-client-portal') scriptConfig.CLIENT_PORTAL = false;
+}
 
 function getNodeScriptParams(){
   var rslt = [];
@@ -66,7 +75,7 @@ function getNodeScriptParams(){
 }
 
 jsHarmonyFactory_Init.Run = function(run_cb){
-  jsh = new jsHarmonyFactory.Application();
+  jsh = new jsHarmonyFactory.Application({ clientPortal: !!scriptConfig.CLIENT_PORTAL });
   jsh.Config.appbasepath = process.cwd();
   jsh.Config.silentStart = true;
   jsh.Config.interactive = true;
@@ -96,7 +105,6 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     scriptConfig._JSH_DBTYPE = dbs.getDBType();
     scriptConfig._ADMIN_DBUSER = '';
     scriptConfig._ADMIN_DBPASS = '';
-    scriptConfig.CLIENT_PORTAL = undefined;
     scriptConfig.SAMPLE_DATA = false;
 
     //Read command line arguments for user / pass
@@ -112,9 +120,8 @@ jsHarmonyFactory_Init.Run = function(run_cb){
         jsh.DBConfig['default'].password = nextarg;
         i++;
       }
-      else if(arg=='--with-client-portal') scriptConfig.CLIENT_PORTAL = true;
-      else if(arg=='--no-client-portal') scriptConfig.CLIENT_PORTAL = false;
       else if(arg=='--with-sample-data') scriptConfig.SAMPLE_DATA = true;
+      else if(arg=='--with-supervisor') scriptConfig.SUPERVISOR = true;
       else if(arg=='--use-ipc') scriptConfig.USE_IPC = true;
       else if(arg=='--pre-init'){ scriptConfig.PRE_INIT = nextarg; i++; }
       else if(arg=='--post-init'){ scriptConfig.POST_INIT = nextarg; i++; }
@@ -209,18 +216,6 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   
     }); })
 
-    //Ask for the database type
-    .then(CLI.getStringAsync(function(){
-      if(typeof scriptConfig.CLIENT_PORTAL != 'undefined') return false;
-      console.log('\r\nInitialize client portal?');
-      console.log('1) Yes');
-      console.log('2) No');
-    },function(rslt,retry){
-      if(rslt=="1"){ scriptConfig.CLIENT_PORTAL = true; return true; }
-      else if(rslt=="2"){ scriptConfig.CLIENT_PORTAL = false; return true; }
-      else{ console.log('Invalid entry.  Please enter the number of your selection'); retry(); }
-    }))
-
     //Run Pre-Init Script
     .then(function(){ return new Promise(function(resolve, reject){
       if(!scriptConfig.PRE_INIT) return resolve();
@@ -290,7 +285,12 @@ jsHarmonyFactory_Init.Run = function(run_cb){
       rslt += '** Please verify the configuration in '+jsh.Config.appbasepath+(scriptConfig._IS_WINDOWS?'\\':'/')+'app.config.js & app.config.local.js\r\n';
       rslt += '** Be sure to configure ports and HTTPS for security\r\n';
       rslt += '\r\n';
-      rslt += 'Then start the server by running '+(scriptConfig._IS_WINDOWS?'':'./')+scriptConfig._NSTART_CMD+'\r\n';
+      rslt += 'Then start the server by running:\r\n';
+      if(scriptConfig.SUPERVISOR){
+        rslt += '  '+(scriptConfig._IS_WINDOWS?'':'./')+scriptConfig._NSTART_CMD+'\r\n';
+        rslt += '  or\r\n';
+      }
+      rslt += '  node '+(scriptConfig._IS_WINDOWS?'':'./')+'app.js\r\n';
       rslt += '\r\n';
       rslt += 'Log in with the admin account below:\r\n';
       rslt += 'User: '+scriptConfig._JSH_ADMIN_EMAIL+'\r\n';
@@ -323,4 +323,18 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   });
 }
   
-jsHarmonyFactory_Init.Run();
+//Check whether Client Portal should be initialized - required before loading SQL
+Promise.resolve()
+.then(CLI.getStringAsync(function(){
+  if(typeof scriptConfig.CLIENT_PORTAL != 'undefined') return false;
+  console.log('\r\nInitialize client portal?');
+  console.log('1) Yes');
+  console.log('2) No');
+},function(rslt,retry){
+  if(rslt=="1"){ scriptConfig.CLIENT_PORTAL = true; return true; }
+  else if(rslt=="2"){ scriptConfig.CLIENT_PORTAL = false; return true; }
+  else{ console.log('Invalid entry.  Please enter the number of your selection'); retry(); }
+}))
+.then(function(resolve, reject){
+  setTimeout(function(){ jsHarmonyFactory_Init.Run() }, 1);
+});

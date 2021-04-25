@@ -66,7 +66,7 @@ exports.form = function (req, res, next) {
   
   if (req.gdata[jsh.map.client_agreement_tstmp]) { return jsh.Redirect302(res, req.baseurl); }
   
-  req.bcrumb_override = '<a href="' + req.jshsite.home_url + '/">Home</a> &gt; User Agreement';
+  req.bcrumb_override = '<a href="' + req.jshsite.home_url + '">Home</a> &gt; User Agreement';
   //Get cms_join_text from database
   var cms_agreement = '';
   var COD_STATE = [];
