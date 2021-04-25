@@ -496,7 +496,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
       rslt += 'Then start the server by running:\r\n';
       if(scriptConfig.SUPERVISOR){
         rslt += '  '+(scriptConfig._IS_WINDOWS?'':'./')+scriptConfig._NSTART_CMD+'\r\n';
-        rslt += '  or\r\n';
+        rslt += '    or\r\n';
       }
       rslt += '  node '+(scriptConfig._IS_WINDOWS?'':'./')+'app.js\r\n';
       rslt += '\r\n';
