@@ -289,5 +289,5 @@
       "insert into {schema}.audit_detail(audit_seq,audit_column_name,audit_column_val)",
       "  select currval('{schema}.audit__tbl_audit_seq_seq'),lower(%%%COL_NAME%%%),%%%VALUE%%% where %%%CONDITION%%%;"
     ]
-  }
+  },
 }

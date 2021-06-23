@@ -793,5 +793,5 @@
       "  select (select {{audit_seq}} from jsharmony_meta),lower(%%%COL_NAME%%%),%%%VALUE%%%",
       "  where (%%%CONDITION%%%)"
     ]
-  }
+  },
 }
