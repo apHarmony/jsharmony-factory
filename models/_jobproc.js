@@ -517,6 +517,15 @@ AppSrvJobProc.prototype.SubscribeToQueue = function (req, res, queue_name) {
     }
     else {
       _this.AppSrv.QueueSubscriptions.push({ id: queue_name, req: req, res: res });
+      req.on('close', function(){
+        for(var i=0;i<_this.AppSrv.QueueSubscriptions.length;i++){
+          var queue = _this.AppSrv.QueueSubscriptions[i];
+          if(queue.req === req){
+            _this.AppSrv.QueueSubscriptions.splice(i, 1);
+            i--;
+          }
+        }
+      });
     }
   });
 }
