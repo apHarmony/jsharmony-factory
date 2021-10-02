@@ -72,9 +72,9 @@ function jsHarmonyFactoryConfig(){
   this.JobSleepDelay = 5000;
 
   //Auto-start Job Processor
-  this.auto_start_job_processor = true;
+  this.auto_start_job_processor = undefined;
   //Enable scheduled tasks
-  this.enable_scheduler = 1;
+  this.enable_scheduler = true;
   //Scheduled task definition
   this.scheduled_tasks = {};
   /*

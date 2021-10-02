@@ -89,6 +89,7 @@ jsHarmonyFactory.prototype.onModuleAdded = function(jsh){
 jsHarmonyFactory.prototype.Init = function(cb){
   var _this = this;
 
+  if(typeof _this.Config.auto_start_job_processor == 'undefined') _this.Config.auto_start_job_processor = !_this.jsh.Config.interactive;
   this.jsh.SetJobProc(new jsHarmonyFactoryJobProc(this, _this.jsh.DB['default']));
 
   if(_this.clientPortal){
