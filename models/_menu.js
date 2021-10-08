@@ -241,7 +241,11 @@ exports = module.exports = function(module){
   };
 
   function generateLink(req, jsh, menuitem){
-    var rslt = req.baseurl + menuitem[jsh.map.menu_command];
+    var rslt = (menuitem[jsh.map.menu_command]||'').toString();
+    var cmdLowerCase = rslt.toLowerCase();
+    if(!rslt || (!Helper.beginsWith(cmdLowerCase, '/') && !Helper.beginsWith(cmdLowerCase, 'http://') && !Helper.beginsWith(cmdLowerCase, 'https://'))){
+      rslt = req.baseurl + rslt;
+    }
     if (menuitem[jsh.map.menu_subcommand]) rslt += menuitem[jsh.map.menu_subcommand];
     rslt = Helper.ResolveParams(req, rslt);
     return rslt;
