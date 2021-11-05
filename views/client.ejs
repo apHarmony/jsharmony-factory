@@ -21,7 +21,7 @@
   <% if(req.isAuthenticated){ %>
     <div class="xtoplinks"><img src="<%-req.jshsite.publicurl%>images/toplinks_corner.png" class="xtoplinks_corner" alt="" title="" />
       <div class="xtoplinks_body">
-        <b>Client Portal:</b>&nbsp; <%=(req.jshsite.globalparams.company_name(req)+' - '+req.user_name)%> &nbsp;|&nbsp; 
+        <span class="xtoplinks_desc"><span class="xtoplinks_desc_app"><b>Client Portal:</b>&nbsp;</span> <span class="xtoplinks_desc_user"><%=(req.jshsite.globalparams.company_name(req)+' - '+req.user_name)%></span> &nbsp;|&nbsp;</span>
         <a class="toplink_help static" href="<%-req.baseurl%><%=req.jshsite.globalparams.help_view(req)%>/" onclick="<%=req.jshsite.instance%>.XExt.popupForm('<%=req.jshsite.globalparams.help_view(req)%>'); return false;">Help</a> &nbsp;|&nbsp; 
         <a href="/client/logout">Logout</a>
       </div>

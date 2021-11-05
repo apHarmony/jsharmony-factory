@@ -20,7 +20,7 @@
   <% if(req.isAuthenticated){ %>
     <div class="xtoplinks"><img src="<%-req.jshsite.publicurl%>images/toplinks_corner.png" class="xtoplinks_corner" alt="" title="" />
       <div class="xtoplinks_body">
-        <b><%=jsh.Config.app_name%>:</b>&nbsp; <%=req.user_name%> &nbsp;|&nbsp; 
+        <span class="xtoplinks_desc"><span class="xtoplinks_desc_app"><b><%=jsh.Config.app_name%>:</b>&nbsp;</span> <span class="xtoplinks_desc_user"><%=req.user_name%></span> &nbsp;|&nbsp;</span>
         <a class="toplink_help static" href="<%-req.baseurl%><%=req.jshsite.globalparams.help_view(req)%>/" onclick="<%=req.jshsite.instance%>.XExt.popupForm('<%=req.jshsite.globalparams.help_view(req)%>'); return false;">Help</a> &nbsp;|&nbsp; 
         <%_ if (jsh.Config.modules.jsHarmonyFactory.suggest_feature.enabled){ %>
           <a class="toplink_suggest_feature static" href="#" onclick="<%=req.jshsite.instance%>.System.suggestFeature('<%=jsh.Config.app_name%>'); return false;">💡 Suggest a Feature</a> &nbsp;|&nbsp;

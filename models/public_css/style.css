@@ -30,7 +30,7 @@ HEADER AND TOP BUTTONS
   height:117px;
 }
 <%-rootcss%> .xbody.with_xhead {
-  margin-top:117px;
+  top:117px;
 }
 <%-rootcss%> .xtoplinks{
   background-color:#31245d;
