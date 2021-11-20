@@ -170,7 +170,7 @@ AppSrvJobProc.prototype.ExecJob_MESSAGE = function (job, onComplete) {
       return _this.SetJobResult(job, 'ERROR', 'Error parsing JOB MESSAGE - Invalid Parameter JSON: '+ex.toString(), onComplete);
     }
   }
-  _this.processJobResult(job, rparams, '', 0, onComplete);
+  _this.processJobResult(job, rparams, '', undefined, 0, onComplete);
 };
 
 AppSrvJobProc.prototype.ExecJob_TASK = function (job, onComplete) {
@@ -193,7 +193,7 @@ AppSrvJobProc.prototype.ExecJob_TASK = function (job, onComplete) {
   }
   thisapp.tasksrv.exec(undefined, undefined, undefined, modelid, rparams, function(err, rslt){
     if(err) return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete);
-    _this.processJobResult(job, rparams, '', 0, onComplete);
+    _this.processJobResult(job, rparams, '', undefined, 0, onComplete);
   });
 };
 
@@ -205,6 +205,8 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
   //Process Report ID (make sure it's in the system)
   var fullmodelid = job.job_action_target;
   if (!thisapp.jsh.hasModel(undefined, fullmodelid)) return _this.SetJobResult(job, 'ERROR', 'Report not found in collection', onComplete);
+  var model = thisapp.jsh.getModel(undefined, fullmodelid);
+  var reportFormat = model && model.format;
   
   var rparams = {};
   if (job.job_params){
@@ -224,12 +226,12 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
       var fsize = stat.size;
       if (fsize > _this.jsh.Config.max_filesize) return _this.SetJobResult(job, 'ERROR', 'Report file size exceeds system maximum file size', function () { if(onComplete) onComplete(); dispose(); });
       //Report is available at tmppath
-      _this.processJobResult(job, dbdata, tmppath, fsize, function () { if(onComplete) onComplete(); dispose(); });
+      _this.processJobResult(job, dbdata, tmppath, reportFormat, fsize, function () { if(onComplete) onComplete(); dispose(); });
     });
   });
 }
 
-AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize, onComplete) {
+AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, reportFormat, fsize, onComplete) {
   var _this = this;
   var _transform = function(elem){ return _this._transform(elem); };
 
@@ -238,15 +240,19 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
   var dbtypes = thisapp.DB.types;
   var doc_id = null;
   var queue_id = null;
+  var doc_ext = null;
+  if(reportFormat=='pdf') doc_ext = '.pdf';
+  else if(reportFormat=='xlsx') doc_ext = '.xlsx';
   var saveD = function (callback) {
     let sqlparams = {};
     sqlparams[_transform('doc_scope')] = job.doc_scope;
     sqlparams[_transform('doc_scope_id')] = job.doc_scope_id;
     sqlparams[_transform('doc_ctgr')] = job.doc_ctgr;
     sqlparams[_transform('doc_desc')] = job.doc_desc;
+    sqlparams[_transform('doc_ext')] = doc_ext;
     sqlparams[_transform('doc_size')] = fsize;
     _this.db.Scalar('jobproc', _this._transform("jobproc_save_doc"), 
-      [dbtypes.VarChar(32), dbtypes.BigInt, dbtypes.VarChar(32), dbtypes.VarChar(255), dbtypes.BigInt], 
+      [dbtypes.VarChar(32), dbtypes.BigInt, dbtypes.VarChar(32), dbtypes.VarChar(255), dbtypes.VarChar(16), dbtypes.BigInt], 
       sqlparams, function (err, rslt) {
       if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting document', -99999); }
       if (err == null) doc_id = rslt;
@@ -270,7 +276,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
       if (err == null) {
         queue_id = rslt;
         queue_message_obj.url = '/_dl/'+_this.jshFactory.namespace+_transform('Queue__model')+'/' + queue_id + '/'+_transform('queue__tbl')+'_file';
-        queue_message_obj.filetype = 'pdf';
+        queue_message_obj.filetype = reportFormat;
         let sqlparams = {};
         sqlparams[_transform('queue_id')] = queue_id;
         sqlparams[_transform('queue_message')] = JSON.stringify(queue_message_obj);
@@ -304,7 +310,7 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, fsize
         if (job.email_attach && tmppath){
           fs.exists(tmppath, function(exists){
             if(!exists) return cb(new Error('Report output does not exist'));
-            var filename = _transform('doc__tbl') + (doc_id||'0') + '.pdf';
+            var filename = _transform('doc__tbl') + (doc_id||'0') + doc_ext;
             if(job.email_attach.toString().substr(0,9)=='filename:') filename = job.email_attach.substr(9);
             attachments.push({ filename: filename, content: fs.createReadStream(tmppath) });
             return cb();
@@ -403,7 +409,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
     jobvalidate.AddValidator('_obj.doc_desc', _transform('doc_desc'), 'B', [XValidate._v_MaxLength(255), XValidate._v_Required()]);
   }
   if ('queue_name' in jrow) {
-    //Add Document to Job
+    //Add Queue to Job
     job_sql += this.AppSrv.getSQL('',_this._transform('jobproc_add_queue'));
     job_sql_ptypes.push(dbtypes.VarChar(255));
     job_sql_params['queue_name'] = jrow.queue_name;

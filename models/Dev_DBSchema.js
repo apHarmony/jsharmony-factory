@@ -72,9 +72,11 @@ jsh.App[modelid] = new (function(){
       var dispName = tableName;
       if(dispName && (dispName[0]=='.')) dispName = dispName.substr(1);
       dispName = 'table_' + dispName;
+      var tableColumns = _.map(table.fields, function(field){ return field.name; }).join(',');
       $('<a href="#" class="table_name expandable" onclick="return false;">'+XExt.escapeHTML(dispName.substr(6))+'</a> &nbsp; \
          <a href="#" class="expandable" onclick="return false;">Schema</a> &nbsp; \
          <a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">Data</a> &nbsp; \
+         <a href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=inserts&db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'&output=dbobject&rows=200&columns='+XExt.escapeHTML(tableColumns)+'" target="_blank">Inserts</a> &nbsp; \
          <br/>').appendTo(jobj);
       var html = '<table cellpadding="0" cellspacing="0" border="0" style="display:none;">';
       html += '<tr>';

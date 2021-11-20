@@ -42,19 +42,73 @@ module.exports = exports = function(module, funcs){
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
     if (verb == 'get') {
-      if (!appsrv.ParamCheck('Q', Q, ['|db'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
       var dbid = Q.db;
 
-      if(dbid){
-        if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Database ID'); return; }
-        var schema = jsh.DB[dbid].schema_definition;
-        res.end(JSON.stringify({ _success: 1, schema: schema, funcs: jsh.DB[dbid].SQLExt.Funcs }));
+      var action = 'schema';
+      if(Q.action){
+        if(!_.includes(['schema','inserts'], Q.action)){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+        action = Q.action.toString();
       }
-      else {
+
+      if(!dbid){
         var dbs = [];
         for(var dbid in jsh.DB) dbs.push(dbid);
         res.end(JSON.stringify({ _success: 1, dbs: dbs }));
+        return;
       }
+      if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Database ID'); return; }
+
+      if(action=='schema'){
+        if (!appsrv.ParamCheck('Q', Q, ['|db','|action'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+        var schema = jsh.DB[dbid].schema_definition;
+        res.end(JSON.stringify({ _success: 1, schema: schema, funcs: jsh.DB[dbid].SQLExt.Funcs }));
+      }
+      else if(action=='inserts'){
+        if (!appsrv.ParamCheck('Q', Q, ['|db','&action','&table','|output','|columns','|rows'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+        var table = (Q.table||'').toString();
+        if(!table){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+
+        var columns = null;
+        if(Q.columns){
+          try{
+            columns = (columns||'').split(',');
+          }
+          catch(ex){
+            return Helper.GenError(req, res, -4, 'Invalid Parameters');
+          }
+        }
+
+        var numrows = 200;
+        if(Q.rows && parseInt(Q.rows)){
+          numrows = parseInt(Q.rows);
+        }
+
+        //Get data
+        appsrv.ExecRecordset(req._DBContext, "select "+(numrows >= 0 ? "top "+numrows.toString() : "")+" * from "+table, [], {}, function(err, rslt){
+          if(err) return Helper.GenError(req, res, -99999, err);
+          var data = rslt && rslt.length && rslt[0];
+          if(Q.output=='dbobject'){
+            var rslttxt = '';
+            _.each(data, function(datarow){
+              var txt = '{';
+              var firstrow = true;
+              for(var key in datarow){
+                if(Q.columns && !_.includes(Q.columns, key)) continue;
+                if(!firstrow) txt += ',';
+                txt += ' '+JSON.stringify(key)+': '+JSON.stringify(datarow[key]);
+                firstrow = false;
+              }
+              txt += ' },\n';
+              rslttxt += txt;
+            });
+            res.end(rslttxt);
+          }
+          else {
+            res.end(JSON.stringify({ _success: 1, data: data }));
+          }
+        });
+      }
+      else { Helper.GenError(req, res, -9, 'Action not supported'); return; }
       
       return;
     }

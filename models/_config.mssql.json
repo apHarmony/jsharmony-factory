@@ -65,6 +65,7 @@
         "{{doc_scope_id}}": "doc_scope_id",
         "{{doc_ctgr}}": "doc_ctgr",
         "{{doc_desc}}": "doc_desc",
+        "{{doc_ext}}": "doc_ext",
         "{{queue_id}}": "queue_id",
         "{{queue_name}}": "queue_name",
         "{{queue_message}}": "queue_message",

@@ -18,7 +18,7 @@
   "jobproc_save_doc": [
     "insert into {schema}.doc__tbl(doc_scope,doc_scope_id,cust_id,doc_sts,doc_ctgr,doc_desc,doc_ext,doc_size,doc_upuser,doc_uptstmp) values(@doc_scope,@doc_scope_id, ",
     "case @doc_scope when 'C' then @doc_scope_id else null end, ",
-    "'A',@doc_ctgr,@doc_desc, '.pdf',@doc_size, 'jobproc', %%%get_tstmp%%%);select scope_identity();"
+    "'A', @doc_ctgr, @doc_desc, @doc_ext, @doc_size, 'jobproc', %%%get_tstmp%%%);select scope_identity();"
   ],
   "jobproc_save_queue": "insert into {schema}.queue__tbl(queue_name,queue_message) values(@queue_name,'{}');select scope_identity();",
   "jobproc_save_queue_message": "update {schema}.queue__tbl set queue_message = @queue_message where queue_id=@queue_id;",
