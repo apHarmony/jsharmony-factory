@@ -25,12 +25,11 @@ exports = module.exports = function(module){
   var _transform = function(elem){
     if(!module || !module.transform || !module.transform.mapping) return elem;
     return module.transform.mapping[elem];
-  }
+  };
 
   var generateMenu = function(type, req, res, jsh, params, onComplete) {
     var static_menu = _.extend({ main_menu: [], sub_menu: [] }, (module && module.Config) ? module.Config.static_menu : {} );
 
-    var startmodel = null;
     if(!req.isAuthenticated){
       params.menudata = {};
       params.startmodel = null;
@@ -51,8 +50,8 @@ exports = module.exports = function(module){
     }
     selectedmenu = (selectedmenu||'').toString().toUpperCase();
     
-    var menusql = "menu_main";
-    if (type == 'C') menusql = "menu_client";
+    var menusql = 'menu_main';
+    if (type == 'C') menusql = 'menu_client';
     else if(req.jshsite && !req.jshsite.auth && req._roles && (req._roles.SYSADMIN || req._roles.DEV)) menusql = 'menu_main_noauth';
 
     //Select menu data from the database
@@ -60,7 +59,7 @@ exports = module.exports = function(module){
     sqlparams[jsh.map.user_id] = req.user_id;
     sqlparams['root_menu'] = rootmenu;
     jsh.AppSrv.ExecMultiRecordset(req._DBContext, menusql, [dbtypes.BigInt, dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
-      if(err){ return Helper.GenError(req, res, -99999, "An unexpected database error has occurred: "+err.toString()); }
+      if(err){ return Helper.GenError(req, res, -99999, 'An unexpected database error has occurred: '+err.toString()); }
 
       var xmenu = {};
       xmenu.MainMenu = [];
@@ -76,7 +75,7 @@ exports = module.exports = function(module){
         var key_menu_cmd = _transform('menu_cmd');
 
         //Merge Database Menu with Static Menu
-        function merge_menu(menu_items, static_menu_items){
+        var merge_menu = function(menu_items, static_menu_items){
           var menu_ids = _.reduce(menu_items, function(rslt, menu_item, key){ rslt[(menu_item[key_menu_id]||'').toString()] = true; return rslt; }, {});
           _.each(static_menu_items, function(menu_item){
             var menu_id = (menu_item[key_menu_id]||'').toString();
@@ -95,32 +94,32 @@ exports = module.exports = function(module){
               if(has_access) menu_items.push(menu_item);
             }
           });
-        }
+        };
         merge_menu(main_menu, static_menu.main_menu);
         merge_menu(sub_menu, static_menu.sub_menu);
 
         //Add menu seq, if not defined
-        function add_menu_seq(menu_items){
+        var add_menu_seq = function(menu_items){
           _.each(menu_items, function(menu_item){
             var menu_seq = menu_item[key_menu_seq];
             if(!menu_seq && ((typeof menu_seq == 'undefined') || (menu_seq === null))) menu_item[key_menu_seq] = menu_item[key_menu_id];
           });
-        }
+        };
         add_menu_seq(main_menu);
         add_menu_seq(sub_menu);
 
         //Sort Menus
-        function sort_cmp(a,b){
+        var sort_cmp = function(a,b){
           if(a<b) return -1;
           else if(a>b) return 1;
           return 0;
-        }
+        };
 
         main_menu.sort(function(a,b){
           var rslt = 0;
           rslt = sort_cmp(a[key_menu_seq], b[key_menu_seq]);  if(rslt) return rslt;
           rslt = sort_cmp(a[key_menu_name], b[key_menu_name]);  if(rslt) return rslt;
-          rslt = sort_cmp(a[menu_id], b[menu_id]);  if(rslt) return rslt;
+          rslt = sort_cmp(a[key_menu_id], b[key_menu_id]);  if(rslt) return rslt;
           return 0;
         });
         
@@ -129,7 +128,7 @@ exports = module.exports = function(module){
           rslt = sort_cmp(a[key_menu_parent_name], b[key_menu_parent_name]);  if(rslt) return rslt;
           rslt = sort_cmp(a[key_menu_seq], b[key_menu_seq]);  if(rslt) return rslt;
           rslt = sort_cmp(a[key_menu_name], b[key_menu_name]);  if(rslt) return rslt;
-          rslt = sort_cmp(a[menu_id], b[menu_id]);  if(rslt) return rslt;
+          rslt = sort_cmp(a[key_menu_id], b[key_menu_id]);  if(rslt) return rslt;
           return 0;
         });
 
@@ -165,9 +164,9 @@ exports = module.exports = function(module){
           }
 
           //Add the menu item to the array
-          xmenu.MainMenu.push({ 
+          xmenu.MainMenu.push({
             ID: menuitem[jsh.map.menu_name].toString().toUpperCase(),
-            Title: menuitem[jsh.map.menu_title], 
+            Title: menuitem[jsh.map.menu_title],
             Link: link_url,
             OnClick: link_onclick,
             Selected: selected
@@ -212,8 +211,8 @@ exports = module.exports = function(module){
           //Add the menu item to the array
           cur_sub_menu.push({
             ID: menuitem[jsh.map.menu_name].toString().toUpperCase(),
-            Title: menuitem[jsh.map.menu_title], 
-            Link: link_url, 
+            Title: menuitem[jsh.map.menu_title],
+            Link: link_url,
             OnClick: link_onclick,
             Selected: selected
           });
@@ -221,7 +220,7 @@ exports = module.exports = function(module){
         if (cur_sub_menu.length > 0) xmenu.SubMenus[last_parentname] = cur_sub_menu;
       }
       else {
-        return Helper.GenError(req, res, -99999, "An unexpected database error has occurred: Menu SQL must return two recordsets - menu and submenu");
+        return Helper.GenError(req, res, -99999, 'An unexpected database error has occurred: Menu SQL must return two recordsets - menu and submenu');
       }
 
       //Find the startmodel
@@ -252,4 +251,4 @@ exports = module.exports = function(module){
   }
 
   return generateMenu;
-}
+};

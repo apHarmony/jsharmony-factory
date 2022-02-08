@@ -17,14 +17,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var _ = require('lodash');
-var Helper = require('jsharmony/Helper');
-
 function getHelpURL(req, jsh, jshFactory, helpid){
   var help_view = jshFactory.getHelpView(req);
   var help_view_model = jsh.getModel(req, help_view);
   if(!help_view_model) return '';
-  var helpid = helpid||'';
+  helpid = helpid||'';
   return req.baseurl + help_view_model.id + '/?' + jshFactory.Config.help_panelid + '=' + encodeURIComponent(helpid); //help_listing
 }
 

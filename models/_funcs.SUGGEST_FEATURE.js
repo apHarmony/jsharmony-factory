@@ -43,8 +43,7 @@ module.exports = exports = function(module, funcs){
     var factoryConfig = jsh.Config.modules['jsHarmonyFactory'];
     if (!factoryConfig.suggest_feature.enabled) { Helper.GenError(req, res, -1, 'Suggest a Feature is disabled'); return; }
 
-    if (req.method == 'POST') {
-      var _this = this;
+    if (verb == 'post') {
       var sys_user_name = 'an unknown user';
       var accountCookie = Helper.GetCookie(req, jsh, 'account');
       if(accountCookie){
@@ -74,16 +73,16 @@ module.exports = exports = function(module, funcs){
         audit_column_val: P.message_text + ' :: ' + (req.header('Referer')||'')
       };
 
-      var sql = "jsharmony.log_audit_other('SUGGEST_FEATURE',0,1=1,'message_text',@audit_column_val)"
+      var sql = "jsharmony.log_audit_other('SUGGEST_FEATURE',0,1=1,'message_text',@audit_column_val)";
       appsrv.ExecCommand('S1', sql, sql_ptypes, sql_params, function(err, dbrslt, stats) {
-        if(err) return console.log(err);
+        if(err) return jsh.Log.error(err);
       });
 
       return;
     }
 
     return next();
-  }
+  };
 
   return exports;
 };

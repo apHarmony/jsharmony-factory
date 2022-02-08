@@ -36,23 +36,22 @@ module.exports = exports = function(module, funcs){
     }
     var jsh = module.jsh;
     var appsrv = jsh.AppSrv;
-    var dbtypes = appsrv.DB.types;
     var model = jsh.getModel(req, module.namespace + funcs._transform('Dev/DBDiff'));
     
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
     if (verb == 'get') {
       if (!appsrv.ParamCheck('Q', Q, ['|db'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
-      var dbid = Q.db;
+      let dbid = Q.db;
 
       if(dbid){
         if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Databse ID'); return; }
-        var sqlext = jsh.DB[dbid].getSQLExt();
+        let sqlext = jsh.DB[dbid].getSQLExt();
         res.end(JSON.stringify({ _success: 1, modules: _.keys(sqlext.Objects) }));
       }
       else {
         var dbs = [];
-        for(var dbid in jsh.DB) dbs.push(dbid);
+        for(var dbid_key in jsh.DB) dbs.push(dbid_key);
         res.end(JSON.stringify({ _success: 1, dbs: dbs }));
       }
       
@@ -62,10 +61,10 @@ module.exports = exports = function(module, funcs){
       if (!appsrv.ParamCheck('Q', Q, [])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
       if (!appsrv.ParamCheck('P', P, ['&moduleName','&db','|runas_user','|runas_password'])) { return Helper.GenError(req, res, -4, 'Invalid Parameters'); }
 
-      var dbid = P.db;
+      let dbid = P.db;
       if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Database ID'); return; }
       var db = jsh.DB[dbid];
-      var sqlext = jsh.DB[dbid].getSQLExt();
+      let sqlext = jsh.DB[dbid].getSQLExt();
 
       var moduleName = P.moduleName;
       if(!(moduleName in sqlext.Objects)) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
@@ -85,13 +84,13 @@ module.exports = exports = function(module, funcs){
 
       db.getObjectDiff(jsh, sqlext, moduleName, function(err, sql){
         if(err) return jsh.AppSrv.AppDBError(req, res, err);
-        sql += "\r\n";
+        sql += '\r\n';
         res.end(JSON.stringify({ _success: 1, src: sql }));
       });
       return;
     }
     return next();
-  }
+  };
 
   return exports;
 };

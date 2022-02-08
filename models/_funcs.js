@@ -30,7 +30,7 @@ function ModuleFunctions(module){
   
   this._transform = function(elem){
     return module.transform.mapping[elem];
-  }
+  };
 }
 
 exports = module.exports = ModuleFunctions;

@@ -39,11 +39,11 @@ function AppSrvJobProc(jshFactory, db) {
 
 AppSrvJobProc.prototype._transform = function(elem){
   return this.jshFactory.transform.mapping[elem];
-}
+};
 
 AppSrvJobProc.prototype._map = function(elem){
   return this.jshFactory.Config.job_field_mapping[elem];
-}
+};
 
 AppSrvJobProc.prototype.transform_db_params = function(params) {
   var _this = this;
@@ -56,7 +56,7 @@ AppSrvJobProc.prototype.transform_db_params = function(params) {
     else rslt[f] = params[f];
   }
   return rslt;
-}
+};
 
 AppSrvJobProc.prototype.map_db_rslt = function(row) {
   var _this = this;
@@ -72,7 +72,7 @@ AppSrvJobProc.prototype.map_db_rslt = function(row) {
     if(!(f in foundkeys)) rslt[f] = row[f];
   }
   return rslt;
-}
+};
 
 AppSrvJobProc.prototype.Run = function () {
   var _this = this;
@@ -109,7 +109,7 @@ AppSrvJobProc.prototype.Run = function () {
       });
     }
   });
-}
+};
 
 AppSrvJobProc.prototype.CheckJobQueue = function (onComplete) {
   var _this = this;
@@ -119,14 +119,14 @@ AppSrvJobProc.prototype.CheckJobQueue = function (onComplete) {
       var task = _this.jshFactory.Config.scheduled_tasks[t];
       if (!(t in this.TaskHistory)) this.TaskHistory[t] = new Date(0);
       if (task.when(curdt, this.TaskHistory[t])) {
-        if(task.options && task.options.quiet){ }
+        if(task.options && task.options.quiet){ /* Do nothing */ }
         else _this.jsh.Log.info('Running Task ' + t);
         task.action(this);
         this.TaskHistory[t] = curdt;
       }
     }
   }
-  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_jobcheck"), [], {}, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', _this._transform('jobproc_jobcheck'), [], {}, function (err, rslt) {
     if (err != null) { _this.jsh.Log.error(err); return onComplete(null); }
     if ((rslt != null) && (rslt.length == 1) && (rslt[0] != null)) {
       var job = _this.map_db_rslt(rslt[0]);
@@ -134,11 +134,10 @@ AppSrvJobProc.prototype.CheckJobQueue = function (onComplete) {
     }
     else return onComplete(null);
   });
-}
+};
 
 AppSrvJobProc.prototype.ExecJob = function (job, onComplete) {
   var _this = this;
-  var thisapp = this.AppSrv;
   if (_this.jshFactory.Config.debug_params.email_override) {
     if (job.email_to) job.email_to = _this.jshFactory.Config.debug_params.email_override;
     if (job.email_cc) job.email_cc = _this.jshFactory.Config.debug_params.email_override;
@@ -158,7 +157,6 @@ AppSrvJobProc.prototype.ExecJob = function (job, onComplete) {
 
 AppSrvJobProc.prototype.ExecJob_MESSAGE = function (job, onComplete) {
   var _this = this;
-  var thisapp = this.AppSrv;
   if (job.job_action != 'MESSAGE') return _this.SetJobResult(job, 'ERROR', 'job_action not MESSAGE', onComplete);
   
   var rparams = {};
@@ -220,7 +218,7 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
 
   thisapp.rptsrv.queueReport(undefined, undefined, fullmodelid, rparams, {}, { db: _this.db, dbcontext: 'jobproc', errorHandler: function(num, txt){ return _this.SetJobResult(job, 'ERROR', txt, onComplete); } }, function (err, tmppath, dispose, dbdata) {
     if (err) return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete);
-    /* Report Done */ 
+    /* Report Done */
     fs.stat(tmppath, function (err, stat) {
       if (err != null) return _this.SetJobResult(job, 'ERROR', 'Report file not found: '+err.toString(), onComplete);
       var fsize = stat.size;
@@ -229,13 +227,13 @@ AppSrvJobProc.prototype.ExecJob_REPORT = function (job, onComplete) {
       _this.processJobResult(job, dbdata, tmppath, reportFormat, fsize, function () { if(onComplete) onComplete(); dispose(); });
     });
   });
-}
+};
 
 AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, reportFormat, fsize, onComplete) {
   var _this = this;
   var _transform = function(elem){ return _this._transform(elem); };
 
-  if (_this.jsh.Config.debug_params.report_debug) console.log(dbdata);
+  if (_this.jsh.Config.debug_params.report_debug) _this.jsh.Log.info(dbdata);
   var thisapp = this.AppSrv;
   var dbtypes = thisapp.DB.types;
   var doc_id = null;
@@ -251,13 +249,13 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, repor
     sqlparams[_transform('doc_desc')] = job.doc_desc;
     sqlparams[_transform('doc_ext')] = doc_ext;
     sqlparams[_transform('doc_size')] = fsize;
-    _this.db.Scalar('jobproc', _this._transform("jobproc_save_doc"), 
-      [dbtypes.VarChar(32), dbtypes.BigInt, dbtypes.VarChar(32), dbtypes.VarChar(255), dbtypes.VarChar(16), dbtypes.BigInt], 
+    _this.db.Scalar('jobproc', _this._transform('jobproc_save_doc'),
+      [dbtypes.VarChar(32), dbtypes.BigInt, dbtypes.VarChar(32), dbtypes.VarChar(255), dbtypes.VarChar(16), dbtypes.BigInt],
       sqlparams, function (err, rslt) {
-      if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting document', -99999); }
-      if (err == null) doc_id = rslt;
-      callback(err);
-    });
+        if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting document', -99999); }
+        if (err == null) doc_id = rslt;
+        callback(err);
+      });
   };
   var saveRQ = function (callback) {
     var queue_message = job.queue_message || '{}';
@@ -270,24 +268,24 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, repor
     }
     let sqlparams = {};
     sqlparams[_transform('queue_name')] = job.queue_name;
-    _this.db.Scalar('jobproc', _this._transform("jobproc_save_queue"), 
+    _this.db.Scalar('jobproc', _this._transform('jobproc_save_queue'),
       [dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
-      if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting remote queue request', -99999); }
-      if (err == null) {
-        queue_id = rslt;
-        queue_message_obj.url = '/_dl/'+_this.jshFactory.namespace+_transform('Queue__model')+'/' + queue_id + '/'+_transform('queue__tbl')+'_file';
-        queue_message_obj.filetype = reportFormat;
-        let sqlparams = {};
-        sqlparams[_transform('queue_id')] = queue_id;
-        sqlparams[_transform('queue_message')] = JSON.stringify(queue_message_obj);
-        _this.db.Command('jobproc', _this._transform("jobproc_save_queue_message"), 
-          [dbtypes.BigInt, dbtypes.VarChar(dbtypes.MAX)], 
-          sqlparams, function (err, rslt) {
-          callback(err);
-        });
-      }
-      else callback(err);
-    });
+        if ((err == null) && (rslt == null)) { _this.jsh.Log.error(err); err = Helper.NewError('Error inserting remote queue request', -99999); }
+        if (err == null) {
+          queue_id = rslt;
+          queue_message_obj.url = '/_dl/'+_this.jshFactory.namespace+_transform('Queue__model')+'/' + queue_id + '/'+_transform('queue__tbl')+'_file';
+          queue_message_obj.filetype = reportFormat;
+          let sqlparams = {};
+          sqlparams[_transform('queue_id')] = queue_id;
+          sqlparams[_transform('queue_message')] = JSON.stringify(queue_message_obj);
+          _this.db.Command('jobproc', _this._transform('jobproc_save_queue_message'),
+            [dbtypes.BigInt, dbtypes.VarChar(dbtypes.MAX)],
+            sqlparams, function (err, rslt) {
+              callback(err);
+            });
+        }
+        else callback(err);
+      });
   };
   var saveN = function (callback) {
     let sqlparams = {};
@@ -295,11 +293,11 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, repor
     sqlparams[_transform('note_scope_id')] = job.note_scope_id;
     sqlparams[_transform('note_type')] = job.note_type;
     sqlparams[_transform('note_body')] = job.note_body;
-    _this.db.Command('jobproc', _this._transform("jobproc_save_note"), 
-      [dbtypes.VarChar(32), dbtypes.BigInt, dbtypes.VarChar(32), dbtypes.VarChar(dbtypes.MAX)], 
+    _this.db.Command('jobproc', _this._transform('jobproc_save_note'),
+      [dbtypes.VarChar(32), dbtypes.BigInt, dbtypes.VarChar(32), dbtypes.VarChar(dbtypes.MAX)],
       sqlparams, function (err, rslt) {
-      callback(err);
-    });
+        callback(err);
+      });
   };
   var sendEMAIL = function (callback) {
     //Add attachment??
@@ -334,13 +332,13 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, repor
         else thisapp.jsh.SendBaseEmail('jobproc', job.email_subject, job.email_text, job.email_html, job.email_to, job.email_cc, job.email_bcc, attachments, dbdata, cb);
       }
     ], callback);
-  }
+  };
   var sendSMS = function (callback) {
     //Add attachment??
     if (_this.jshFactory.Config.debug_params.no_job_sms) return callback(null);
     if (job.sms_txt_attrib) SMS.SendTXTSMS('jobproc', thisapp.jsh, job.sms_txt_attrib, job.sms_to, dbdata, callback);
     else SMS.SendBaseSMS('jobproc', thisapp.jsh, job.sms_body, job.sms_to, dbdata, callback);
-  }
+  };
   
   var execarr = [];
   if (job.doc_scope && tmppath) {
@@ -356,11 +354,11 @@ AppSrvJobProc.prototype.processJobResult = function (job, dbdata, tmppath, repor
   if (job.email_to) execarr.push(sendEMAIL);
   
   async.waterfall(execarr, function (err, rslt) {
-    if(err && _this.jsh.Config.debug_params.report_debug) console.log(err);
+    if(err && _this.jsh.Config.debug_params.report_debug) _this.jsh.Log.info(err);
     if (err) return _this.SetJobResult(job, 'ERROR', err.toString(), onComplete);
     else return _this.SetJobResult(job, 'OK', null, onComplete);
   });
-}
+};
 
 AppSrvJobProc.prototype.SetJobResult = function (job, job_rslt, job_snotes, onComplete) {
   var _this = this;
@@ -370,15 +368,14 @@ AppSrvJobProc.prototype.SetJobResult = function (job, job_rslt, job_snotes, onCo
   sqlparams[_this._transform('job_rslt')] = job_rslt;
   sqlparams[_this._transform('job_snotes')] = job_snotes;
   sqlparams[_this._transform('job_id')] = job.job_id;
-  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_jobresult"), [dbtypes.VarChar(32), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', _this._transform('jobproc_jobresult'), [dbtypes.VarChar(32), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
     onComplete();
   });
-}
+};
 
 AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jrow, fullmodelid, rparams) {
   var _this = this;
   var _transform = function(elem){ return _this._transform(elem); };
-  var _map = function(elem){ return _this._map(elem); };
   var thisapp = this.AppSrv;
   var dbtypes = thisapp.DB.types;
   var jobvalidate = new XValidate();
@@ -489,7 +486,7 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
       if (err != null) { err.sql = job_sql; }
       callback(err, rslt);
     });
-  }
+  };
   return true;
 };
 
@@ -501,11 +498,11 @@ AppSrvJobProc.prototype.SetSubscriberQueueResult = function (queue_id, queue_rsl
   sqlparams[_this._transform('queue_rslt')] = queue_rslt;
   sqlparams[_this._transform('queue_snotes')] = queue_snotes;
   sqlparams[_this._transform('queue_id')] = queue_id;
-  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_queueresult"), [dbtypes.VarChar(32), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
+  this.AppSrv.ExecRow('jobproc', _this._transform('jobproc_queueresult'), [dbtypes.VarChar(32), dbtypes.VarChar(dbtypes.MAX), dbtypes.BigInt], sqlparams, function (err, rslt) {
     if (err) { _this.jsh.Log.error(err); }
     if (onComplete) onComplete();
   });
-}
+};
 
 AppSrvJobProc.prototype.SubscribeToQueue = function (req, res, queue_name) {
   //Check if queue has a message, otherwise, add to subscriptions
@@ -513,8 +510,8 @@ AppSrvJobProc.prototype.SubscribeToQueue = function (req, res, queue_name) {
   var dbtypes = this.AppSrv.DB.types;
   let sqlparams = {};
   sqlparams[_this._transform('queue_name')] = queue_name;
-  this.AppSrv.ExecRow('jobproc', _this._transform("jobproc_queuecheck"), [dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
-    if (err != null) { _this.jsh.Log.error(err); return onComplete(null); }
+  this.AppSrv.ExecRow('jobproc', _this._transform('jobproc_queuecheck'), [dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
+    if (err != null) { _this.jsh.Log.error(err); return Helper.GenError(req, res, -99999, err); }
     if ((rslt != null) && (rslt.length == 1) && (rslt[0])) {
       var queuetask = _this.map_db_rslt(rslt[0]);
       _this.jsh.Log.info('Notifying subscriber ' + queue_name);
@@ -534,7 +531,7 @@ AppSrvJobProc.prototype.SubscribeToQueue = function (req, res, queue_name) {
       });
     }
   });
-}
+};
 
 AppSrvJobProc.prototype.CheckSubscriberQueue = function (onComplete) {
   var _this = this;
@@ -543,7 +540,7 @@ AppSrvJobProc.prototype.CheckSubscriberQueue = function (onComplete) {
     if(_this.QueueHistory[queueName]==1) _this.QueueHistory[queueName] = 2;
     else delete _this.QueueHistory[queueName];
   }
-  this.AppSrv.ExecRecordset('jobproc', _this._transform("jobproc_queuesubscribers"), [], {}, function (err, rslt) {
+  this.AppSrv.ExecRecordset('jobproc', _this._transform('jobproc_queuesubscribers'), [], {}, function (err, rslt) {
     if (err != null) { _this.jsh.Log.error(err); return onComplete(null); }
     //Handle invalid queue
     //Update results
@@ -561,13 +558,13 @@ AppSrvJobProc.prototype.CheckSubscriberQueue = function (onComplete) {
           queue_cb(null);
         }
       },
-        function (err) {
+      function (err) {
         if (err) _this.jsh.Log.error(err);
         return onComplete(null);
       });
     }
   });
-}
+};
 
 AppSrvJobProc.prototype.PopQueue = function (req, res, queue_name, queueresult, onComplete) {
   var _this = this;
@@ -575,7 +572,7 @@ AppSrvJobProc.prototype.PopQueue = function (req, res, queue_name, queueresult, 
   let sqlparams = {};
   sqlparams[_this._transform('queue_id')] = queueresult.ID;
   sqlparams[_this._transform('queue_name')] = queue_name;
-  this.AppSrv.ExecScalar('jobproc', _this._transform("jobproc_queuepop"), [dbtypes.BigInt, dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
+  this.AppSrv.ExecScalar('jobproc', _this._transform('jobproc_queuepop'), [dbtypes.BigInt, dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
     if (err) { return Helper.GenError(req, res, -99999, err); }
     else if ((rslt == null) || (rslt.length != 1) || (!rslt[0])) { return Helper.GenError(req, res, -99999, 'Queue item ID does not exist or has already been resulted.'); }
     if (onComplete) onComplete(null);
@@ -585,6 +582,6 @@ AppSrvJobProc.prototype.PopQueue = function (req, res, queue_name, queueresult, 
       else if (onComplete) onComplete();
     });
   });
-}
+};
 
 module.exports = AppSrvJobProc;

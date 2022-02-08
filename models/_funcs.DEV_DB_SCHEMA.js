@@ -36,13 +36,14 @@ module.exports = exports = function(module, funcs){
     }
     var jsh = module.jsh;
     var appsrv = jsh.AppSrv;
-    var dbtypes = appsrv.DB.types;
     var model = jsh.getModel(req, module.namespace + funcs._transform('Dev/DBSchema'));
     
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
     if (verb == 'get') {
-      var dbid = Q.db;
+      let dbid = Q.db;
+
+      if (!appsrv.ParamCheck('P', P, [])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
 
       var action = 'schema';
       if(Q.action){
@@ -52,7 +53,7 @@ module.exports = exports = function(module, funcs){
 
       if(!dbid){
         var dbs = [];
-        for(var dbid in jsh.DB) dbs.push(dbid);
+        for(var dbid_key in jsh.DB) dbs.push(dbid_key);
         res.end(JSON.stringify({ _success: 1, dbs: dbs }));
         return;
       }
@@ -84,7 +85,7 @@ module.exports = exports = function(module, funcs){
         }
 
         //Get data
-        appsrv.ExecRecordset(req._DBContext, "select "+(numrows >= 0 ? "top "+numrows.toString() : "")+" * from "+table, [], {}, function(err, rslt){
+        appsrv.ExecRecordset(req._DBContext, 'select '+(numrows >= 0 ? 'top '+numrows.toString() : '')+' * from '+table, [], {}, function(err, rslt){
           if(err) return Helper.GenError(req, res, -99999, err);
           var data = rslt && rslt.length && rslt[0];
           if(Q.output=='dbobject'){
@@ -93,7 +94,7 @@ module.exports = exports = function(module, funcs){
               var txt = '{';
               var firstrow = true;
               for(var key in datarow){
-                if(Q.columns && !_.includes(Q.columns, key)) continue;
+                if(columns && !_.includes(columns, key)) continue;
                 if(!firstrow) txt += ',';
                 txt += ' '+JSON.stringify(key)+': '+JSON.stringify(datarow[key]);
                 firstrow = false;
@@ -114,7 +115,7 @@ module.exports = exports = function(module, funcs){
     }
 
     return next();
-  }
+  };
 
   return exports;
 };

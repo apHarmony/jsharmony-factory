@@ -39,13 +39,16 @@ module.exports = exports = function(module, funcs){
     }
     var jsh = module.jsh;
     var appsrv = jsh.AppSrv;
-    var dbtypes = appsrv.DB.types;
 
     var model = jsh.getModel(req, module.namespace + funcs._transform('Admin/Log'));
     
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
     
     if (verb == 'get') {
+
+      if (!appsrv.ParamCheck('Q', Q, [])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+      if (!appsrv.ParamCheck('P', P, [])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+
       var farr = [];
       async.waterfall([
         function (cb) {
@@ -74,7 +77,7 @@ module.exports = exports = function(module, funcs){
       return;
     }
     return next();
-  }
+  };
 
   return exports;
 };

@@ -36,20 +36,20 @@ module.exports = exports = function(module, funcs){
     }
     var jsh = module.jsh;
     var appsrv = jsh.AppSrv;
-    var dbtypes = appsrv.DB.types;
     var model = jsh.getModel(req, module.namespace + funcs._transform('Dev/Models'));
     
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
     if (verb == 'get') {
       if (!appsrv.ParamCheck('Q', Q, ['&action'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+      if (!appsrv.ParamCheck('P', P, [])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
 
       var actions = ['namespace_conflicts','auto_controls'];
 
       if (!_.includes(actions, Q.action)) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
 
       if(Q.action=='namespace_conflicts'){
-        appsrv.ExecRecordset(req._DBContext, "select "+funcs._transform('menu_cmd')+","+funcs._transform('menu_name')+" from "+module.schema+"."+funcs._transform('menu__tbl')+" order by "+funcs._transform('menu_cmd'), [], {}, function(err, rslt){
+        appsrv.ExecRecordset(req._DBContext, 'select '+funcs._transform('menu_cmd')+','+funcs._transform('menu_name')+' from '+module.schema+'.'+funcs._transform('menu__tbl')+' order by '+funcs._transform('menu_cmd'), [], {}, function(err, rslt){
           var menumodels = {};
           if(rslt && rslt[0]){
             _.each(rslt[0], function(row){
@@ -108,7 +108,7 @@ module.exports = exports = function(module, funcs){
     }
 
     return next();
-  }
+  };
 
   return exports;
 };

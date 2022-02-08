@@ -38,7 +38,7 @@ exports.check = function (req, res, next) {
     return this.jsh.Redirect302(res, req.baseurl + 'agreement/');
   }
   next();
-}
+};
 
 exports.welcome = function (req, res, next) {
   var _this = this;
@@ -48,7 +48,7 @@ exports.welcome = function (req, res, next) {
   var cms_welcome = '';
   var appsrv = this;
   async.series([
-    function (cb) { HelperRender.getTXT(req, res, appsrv, 'agreement', 'CMS', 'Client/Agreement_Complete', function (rslt) { cms_welcome = rslt; cb(); }) },
+    function (cb) { HelperRender.getTXT(req, res, appsrv, 'agreement', 'CMS', 'Client/Agreement_Complete', function (rslt) { cms_welcome = rslt; cb(); }); },
     function (cb) {
       var params = {};
       req.jshsite.menu(req, res, _this.jsh, params, function () {
@@ -56,7 +56,7 @@ exports.welcome = function (req, res, next) {
       });
     }
   ]);
-}
+};
 
 exports.form = function (req, res, next) {
   var _this = this;
@@ -77,13 +77,13 @@ exports.form = function (req, res, next) {
   blank_code[jsh.map.code_val] = '';
   blank_code[jsh.map.code_txt] = '';
   async.series([
-    function (cb) { HelperRender.getTXT(req, res, appsrv, 'agreeement', 'CMS', 'Client/Agreement', function (rslt) { cms_agreement = rslt; cb(); }) },
-    function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', _transform(jsh,"agreement_code_state"), [], {}, function (rslt) { COD_STATE = rslt; COD_STATE.unshift(blank_code); cb(); }) },
-    function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', _transform(jsh,"agreement_code_month"), [], {}, function (rslt) { COD_MONTH = rslt; COD_MONTH.unshift(blank_code); cb(); }) },
-    function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', _transform(jsh,"agreement_code_year"), [], {}, function (rslt) { COD_YEAR = rslt; COD_YEAR.unshift(blank_code); cb(); }) },
+    function (cb) { HelperRender.getTXT(req, res, appsrv, 'agreeement', 'CMS', 'Client/Agreement', function (rslt) { cms_agreement = rslt; cb(); }); },
+    function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', _transform(jsh,'agreement_code_state'), [], {}, function (rslt) { COD_STATE = rslt; COD_STATE.unshift(blank_code); cb(); }); },
+    function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', _transform(jsh,'agreement_code_month'), [], {}, function (rslt) { COD_MONTH = rslt; COD_MONTH.unshift(blank_code); cb(); }); },
+    function (cb) { HelperRender.getDBRecordset(req, res, appsrv, 'join', _transform(jsh,'agreement_code_year'), [], {}, function (rslt) { COD_YEAR = rslt; COD_YEAR.unshift(blank_code); cb(); }); },
     function (cb) { HelperRender.reqGet(req, res, jsh, 'agreement.form', 'User Agreement', { basetemplate: 'public', selectedmenu: 'join', params: { cms_agreement: cms_agreement, COD_STATE: COD_STATE, COD_MONTH: COD_MONTH, COD_YEAR: COD_YEAR, req: req } }, cb); }
   ]);
-}
+};
 
 exports.sign = function (req, res, next) {
   //Function to create new C_PRE
@@ -96,9 +96,9 @@ exports.sign = function (req, res, next) {
   var jsh = this.jsh;
   
   var fields = {
-    "a_name": { "caption": "Signed Name", "actions": "I", "type": "varchar", "length": 72, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
-    "a_dob": { "caption": "Date of Birth", "actions": "I", "type": "date", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_MaxAge(150)] }
-  }
+    'a_name': { 'caption': 'Signed Name', 'actions': 'I', 'type': 'varchar', 'length': 72, 'validators': [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
+    'a_dob': { 'caption': 'Date of Birth', 'actions': 'I', 'type': 'date', 'validators': [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_MaxAge(150)] }
+  };
   
   //Validate Parameters
   if (!appsrv.ParamCheck('Q', Q, [])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
@@ -111,22 +111,21 @@ exports.sign = function (req, res, next) {
   var dbtypes = appsrv.DB.types;
   var validate = new XValidate();
   
-  var job_params = {}
+  var job_params = {};
   job_params['a_name'] = P.a_name;
   job_params['a_dob'] = P.a_dob;
   job_params[_transform(jsh,'cust_id')] = req.gdata[jsh.map.client_id];
 
-  sql = _transform(jsh,"agreement_sign");
+  sql = _transform(jsh,'agreement_sign');
   sql_ptypes.push(dbtypes.BigInt, dbtypes.VarChar(dbtypes.MAX));
   sql_params[_transform(jsh,'cust_id')] = req.gdata[jsh.map.client_id];
   sql_params[_transform(jsh,'job_params')] = JSON.stringify(job_params);
   
-  var fieldnames = _.keys(fields);
   _.each(fields, function (val, key) {
     validate.AddValidator('_obj.' + key, val.caption, 'I', val.validators);
   });
   
-  var verrors = _.merge(verrors, validate.Validate('I', P));
+  verrors = _.merge(verrors, validate.Validate('I', P));
   if (!_.isEmpty(verrors)) { Helper.GenError(req, res, -2, verrors[''].join('\n')); return; }
   
   appsrv.ExecCommand('agreement', sql, sql_ptypes, sql_params, function (err, rslt, stats) {
@@ -135,7 +134,7 @@ exports.sign = function (req, res, next) {
     rslt['_success'] = 1;
     res.end(JSON.stringify(rslt));
   });
-}
+};
 exports.paymentresult = function (req, res, next) {
   //Validate hash and return result of payment to client
   var verb = req.method.toLowerCase();
@@ -147,9 +146,9 @@ exports.paymentresult = function (req, res, next) {
   var jsh = this.jsh;
   
   var fields = {
-    "payment_id": { "caption": "Invoice ID", "actions": "B", "type": "bigint", "validators": [XValidate._v_Required(), XValidate._v_IsNumeric()] },
-    "fp_hash": { "caption": "Hash", "actions": "B", "type": "varchar", "length": 50, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(50)] },
-  }
+    'payment_id': { 'caption': 'Invoice ID', 'actions': 'B', 'type': 'bigint', 'validators': [XValidate._v_Required(), XValidate._v_IsNumeric()] },
+    'fp_hash': { 'caption': 'Hash', 'actions': 'B', 'type': 'varchar', 'length': 50, 'validators': [XValidate._v_Required(), XValidate._v_MaxLength(50)] },
+  };
   
   //Validate Parameters
   if (!appsrv.ParamCheck('Q', Q, [])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
@@ -159,20 +158,18 @@ exports.paymentresult = function (req, res, next) {
   var sql_ptypes = [];
   var sql_params = {};
   var verrors = {};
-  var dbtypes = appsrv.DB.types;
   var validate = new XValidate();
   
-  var fieldnames = _.keys(fields);
-  sql = _transform(jsh,"agreement_paymentresult");
+  sql = _transform(jsh,'agreement_paymentresult');
   _.each(fields, function (val, key) {
     validate.AddValidator('_obj.' + key, val.caption, 'B', val.validators);
     var dbtype = appsrv.getDBType(val);
     sql_ptypes.push(dbtype);
-    if (key == 'fp_hash') sql_params[key] = new Buffer(P[key], "hex");
+    if (key == 'fp_hash') sql_params[key] = new Buffer(P[key], 'hex');
     else sql_params[key] = appsrv.DeformatParam(val, P[key], verrors);
   });
   
-  var verrors = _.merge(verrors, validate.Validate('B', sql_params));
+  verrors = _.merge(verrors, validate.Validate('B', sql_params));
   if (!_.isEmpty(verrors)) { Helper.GenError(req, res, -2, verrors[''].join('\n')); return; }
   
   appsrv.ExecRow('join', sql, sql_ptypes, sql_params, function (err, rslt, stats) {
@@ -196,4 +193,4 @@ exports.paymentresult = function (req, res, next) {
       else { Helper.GenError(req, res, -1, 'Record not found'); return; }
     }
   });
-}
+};

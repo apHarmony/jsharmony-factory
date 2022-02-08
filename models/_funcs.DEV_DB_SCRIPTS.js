@@ -31,7 +31,7 @@ module.exports = exports = function(module, funcs){
       for(var key in node){
         var val = node[key];
         if(_.isString(val)){
-          if(val.trim()) rslt[key] = "...";
+          if(val.trim()) rslt[key] = '...';
         }
         else{
           var childScripts = clearScripts(val);
@@ -54,16 +54,13 @@ module.exports = exports = function(module, funcs){
     }
     var jsh = module.jsh;
     var appsrv = jsh.AppSrv;
-    var dbtypes = appsrv.DB.types;
     var model = jsh.getModel(req, module.namespace + funcs._transform('Dev/DBScripts'));
     
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
-    var dbscripter = 1;
-    
     if (verb == 'get') {
       if (!appsrv.ParamCheck('Q', Q, ['|db'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
-      var dbid = Q.db;
+      let dbid = Q.db;
 
       if(dbid){
         if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Databse ID'); return; }
@@ -72,7 +69,7 @@ module.exports = exports = function(module, funcs){
       }
       else {
         var dbs = [];
-        for(var dbid in jsh.DB) dbs.push(dbid);
+        for(var dbid_key in jsh.DB) dbs.push(dbid_key);
         res.end(JSON.stringify({ _success: 1, dbs: dbs }));
       }
       
@@ -89,7 +86,7 @@ module.exports = exports = function(module, funcs){
       var mode = P.mode;
       if(!_.includes(['run','read'],mode)) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
 
-      var dbid = P.db;
+      let dbid = P.db;
       if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Database ID'); return; }
       var db = jsh.DB[dbid];
 
@@ -118,7 +115,7 @@ module.exports = exports = function(module, funcs){
       else if(mode=='read'){
         var sqlsrc = '';
         db.RunScripts(jsh, scriptid, { dbconfig: dbconfig, sqlFuncs: sqlFuncs, onSQL: function(dbscript_name, bi, sql){
-          sqlsrc += sql + "\r\n";
+          sqlsrc += sql + '\r\n';
           return false;
         } }, function(err, rslt){
           if(err){ err.sql = 'scriptid:'+scriptid; return jsh.AppSrv.AppDBError(req, res, err); }
@@ -130,7 +127,7 @@ module.exports = exports = function(module, funcs){
       return;
     }
     return next();
-  }
+  };
 
   return exports;
 };
