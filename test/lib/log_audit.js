@@ -21,7 +21,6 @@ var jsHarmonyFactory = require('../../index');
 var assert = require('assert');
 var _ = require('lodash');
 var path = require('path');
-var fs = require('fs');
 var async = require('async');
 
 exports = module.exports = function shouldSupportLogAudit(dbconfig) {
@@ -173,7 +172,7 @@ exports = module.exports = function shouldSupportLogAudit(dbconfig) {
   after(function(done) {
     db.RunScripts(jsh, ['application', 'drop'], options, function(err) {
       db.Close(done);
-    })
+    });
   });
 
   beforeEach(function(done) {
@@ -225,7 +224,7 @@ exports = module.exports = function shouldSupportLogAudit(dbconfig) {
             assert.equal(rslt[i].audit_table_id, scr_id);
             assert.equal(rslt[i].audit_op.trim(), 'U');
             var expected = expectedColumns[rslt[i].audit_column_name];
-            delete expectedColumns[rslt[i].audit_column_name]
+            delete expectedColumns[rslt[i].audit_column_name];
             assert.ok(expected, 'expected column audit not found');
             assert.equal(rslt[i].audit_column_val, expected);
           }
@@ -253,7 +252,7 @@ exports = module.exports = function shouldSupportLogAudit(dbconfig) {
             assert.equal(rslt[i].audit_table_id, scr_id);
             assert.equal(rslt[i].audit_op.trim(), 'U');
             var expected = expectedColumns[rslt[i].audit_column_name];
-            delete expectedColumns[rslt[i].audit_column_name]
+            delete expectedColumns[rslt[i].audit_column_name];
             assert.ok(expected, 'expected column audit not found');
             assert.equal(rslt[i].audit_column_val, expected);
           }
@@ -309,7 +308,7 @@ exports = module.exports = function shouldSupportLogAudit(dbconfig) {
             assert.equal(rslt[i].audit_table_id, scr_id);
             assert.equal(rslt[i].audit_op.trim(), 'D');
             var expected = expectedColumns[rslt[i].audit_column_name];
-            delete expectedColumns[rslt[i].audit_column_name]
+            delete expectedColumns[rslt[i].audit_column_name];
             assert.ok(expected, 'expected column audit not found');
             assert.equal(rslt[i].audit_column_val, expected);
           }
@@ -337,7 +336,7 @@ exports = module.exports = function shouldSupportLogAudit(dbconfig) {
             assert.equal(rslt[i].audit_table_id, scr_id);
             assert.equal(rslt[i].audit_op.trim(), 'D');
             var expected = expectedColumns[rslt[i].audit_column_name];
-            delete expectedColumns[rslt[i].audit_column_name]
+            delete expectedColumns[rslt[i].audit_column_name];
             assert.ok(expected, 'expected column audit not found');
             assert.equal(rslt[i].audit_column_val, expected);
           }
@@ -373,4 +372,4 @@ exports = module.exports = function shouldSupportLogAudit(dbconfig) {
       });
     });
   });
-}
+};

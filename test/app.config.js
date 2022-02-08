@@ -22,7 +22,7 @@ var pgsqlDBDriver = require('jsharmony-db-pgsql');
 exports = module.exports = function(jsh, config, dbconfig){
 
   //Database Configuration
-  dbconfig['default'] = { _driver: new pgsqlDBDriver(), host: "server.domain.com", database: "DBNAME", user: "DBUSER", password: "DBPASS" };
+  dbconfig['default'] = { _driver: new pgsqlDBDriver(), host: 'server.domain.com', database: 'DBNAME', user: 'DBUSER', password: 'DBPASS' };
 
   //Server Settings
   config.server.http_port = 8080;
@@ -30,13 +30,13 @@ exports = module.exports = function(jsh, config, dbconfig){
   config.server.https_cert = 'path/to/https-cert.pem';
   config.server.https_key = 'path/to/https-key.pem';
   config.server.https_ca = 'path/to/https-ca.crt';
-  config.frontsalt = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";   //REQUIRED: Use a 60+ mixed character string
+  config.frontsalt = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';   //REQUIRED: Use a 60+ mixed character string
 
   //jsHarmony Factory Configuration
   var configFactory = config.modules['jsHarmonyFactory'];
 
-  configFactory.clientsalt = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";   //REQUIRED: Use a 60+ mixed character string
-  configFactory.clientcookiesalt = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";   //REQUIRED: Use a 60+ mixed character string
-  configFactory.mainsalt = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";   //REQUIRED: Use a 60+ mixed character string
-  configFactory.maincookiesalt = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";   //REQUIRED: Use a 60+ mixed character string
-}
+  configFactory.clientsalt = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';   //REQUIRED: Use a 60+ mixed character string
+  configFactory.clientcookiesalt = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';   //REQUIRED: Use a 60+ mixed character string
+  configFactory.mainsalt = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';   //REQUIRED: Use a 60+ mixed character string
+  configFactory.maincookiesalt = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';   //REQUIRED: Use a 60+ mixed character string
+};

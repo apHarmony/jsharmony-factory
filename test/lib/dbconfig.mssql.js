@@ -31,6 +31,6 @@ if(fs.existsSync(path_TestDBConfig)){
   console.log('\r\n==== Loading test database config ====\r\n'+JSON.stringify(dbconfig,null,4)+'\r\n');
 }
 
-dbconfig = _.extend({_driver: new JSHmssql(), host: "server.domain.com", database: "DBNAME", user: "DBUSER", password: "DBPASS", options: { pooled: true }, pool: { max: 1 } },dbconfig);
+dbconfig = _.extend({_driver: new JSHmssql(), host: 'server.domain.com', database: 'DBNAME', user: 'DBUSER', password: 'DBPASS', options: { pooled: true }, pool: { max: 1 } },dbconfig);
 
 exports = module.exports = dbconfig;
