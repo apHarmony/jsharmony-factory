@@ -242,7 +242,10 @@ jsHarmonyFactory_Create.Run = function(run_cb){
                   console.log('\r\n');
                   return resolve();
                 }
-                if(err){ console.log('Could not log in, or user does not have db admin access ('+err + ')'); }
+                if(err){
+                  console.log('Could not log in or user does not have db admin access ('+err + ')');
+                  console.log('Please double-check your server name, database name, user / password, and try again');
+                }
                 //Log in
                 if(!err) console.log('> User does not have db admin access');
   
