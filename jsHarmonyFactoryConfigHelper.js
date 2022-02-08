@@ -28,7 +28,7 @@ jsHarmonyFactoryConfigHelper.JobProc.ExecuteSQL = function (sql, cb){
       if (rslt && rslt[0] && rslt[0].length) jobproc.AppSrv.jsh.Log.info('Task Result: '+JSON.stringify(rslt));
       if (cb) cb(rslt);
     });
-  }
-}
+  };
+};
 
 exports = module.exports = jsHarmonyFactoryConfigHelper;

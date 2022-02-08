@@ -18,15 +18,12 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
-var fs = require('fs');
 var path = require('path');
-var os = require("os");
 var _ = require('lodash');
 var jsHarmony = require('jsharmony');
 var jsHarmonyModule = require('jsharmony/jsHarmonyModule');
 var jsHarmonySite = require('jsharmony/jsHarmonySite');
 var jsHarmonyRouter = require('jsharmony/jsHarmonyRouter');
-var HelperFS = jsHarmony.lib.HelperFS;
 var Helper = jsHarmony.lib.Helper;
 var cookieParser = require('cookie-parser');
 var jsHarmonyFactoryConfig = require('./jsHarmonyFactoryConfig.js');
@@ -70,21 +67,21 @@ function jsHarmonyFactory(name, options){
     if(fileObj.name.substr(0,5)=='cust.'){
       if(!_this.clientPortal) return false;
     }
-  }
+  };
 }
 
 jsHarmonyFactory.prototype = new jsHarmonyModule();
 
 jsHarmonyFactory.Application = function(options){
   return (new jsHarmonyFactory(null,options)).Application();
-}
+};
 
 jsHarmonyFactory.prototype.onModuleAdded = function(jsh){
   var _this = this;
   //CREATE SITES in JSH
   if(!(_this.mainSiteID in jsh.Sites)) jsh.Sites[_this.mainSiteID] = new jsHarmonySite.Placeholder();
   if(_this.clientPortal && !(_this.clientSiteID in jsh.Sites)) jsh.Sites[_this.clientSiteID] = new jsHarmonySite.Placeholder();
-}
+};
 
 jsHarmonyFactory.prototype.Init = function(cb){
   var _this = this;
@@ -153,16 +150,15 @@ jsHarmonyFactory.prototype.Init = function(cb){
     if(cb) return cb();
 
   });
-}
+};
 
 jsHarmonyFactory.prototype.Run = function(onComplete){
   this.jsh.Servers['default'].Run(onComplete);
   if(this.Config.auto_start_job_processor) this.jsh.AppSrv.JobProc.Run();
-}
+};
 
 jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
   var _this = this;
-  var jsh = this.jsh;
   /*******************
    *** MAIN SYSTEM ***
    *******************/
@@ -175,11 +171,11 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
     auth: {
       salt: _this.Config.mainsalt,
       supersalt: _this.Config.mainsalt,
-      sql_auth: "main_sql_auth",
-      sql_login: "main_sql_login",
-      sql_superlogin: "main_sql_superlogin",
-      sql_loginsuccess: "main_sql_loginsuccess",
-      sql_passwordreset: "main_sql_passwordreset",
+      sql_auth: 'main_sql_auth',
+      sql_login: 'main_sql_login',
+      sql_superlogin: 'main_sql_superlogin',
+      sql_loginsuccess: 'main_sql_loginsuccess',
+      sql_passwordreset: 'main_sql_passwordreset',
       getuser_name: function (user_info, jsh) { return user_info[jsh.map.user_firstname] + ' ' + user_info[jsh.map.user_lastname]; },
       getContextUser: function (user_info, jsh) { return 'S' + user_info[jsh.map.user_id]; }
     },
@@ -194,7 +190,7 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
     },
     onLoad: function (jsh) {
     }
-  }
+  };
   jshconfig_main.private_apps = [
     {
       '/_funcs/LOG_DOWNLOAD': _this.funcs.LOG_DOWNLOAD,
@@ -206,7 +202,7 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
     }
   ];
   return jshconfig_main;
-}
+};
 
 jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
   var _this = this;
@@ -224,11 +220,11 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
     auth: {
       salt: _this.Config.clientsalt,
       supersalt: _this.Config.mainsalt,
-      sql_auth: "client_sql_auth",
-      sql_login: "client_sql_login",
-      sql_superlogin: "client_sql_superlogin",
-      sql_loginsuccess: "client_sql_loginsuccess",
-      sql_passwordreset: "client_sql_passwordreset",
+      sql_auth: 'client_sql_auth',
+      sql_login: 'client_sql_login',
+      sql_superlogin: 'client_sql_superlogin',
+      sql_loginsuccess: 'client_sql_loginsuccess',
+      sql_passwordreset: 'client_sql_passwordreset',
       getuser_name: function (user_info, jsh) { return user_info[jsh.map.user_firstname] + ' ' + user_info[jsh.map.user_lastname]; },
       getContextUser: function (user_info, jsh) { return 'C' + user_info[jsh.map.user_id]; },
       onAuthComplete: function (req, user_info, jsh) {
@@ -253,11 +249,10 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
       'help_view': function (req) { return _this.getHelpView(req); },
     }
   };
-  jshconfig_client.globalparams[jsh.map.client_id] = function (req) { return req.gdata[jsh.map.client_id]; }
-  jshconfig_client.globalparams[jsh.map.client_name] = function (req) { return req.gdata[jsh.map.client_name]; }
+  jshconfig_client.globalparams[jsh.map.client_id] = function (req) { return req.gdata[jsh.map.client_id]; };
+  jshconfig_client.globalparams[jsh.map.client_name] = function (req) { return req.gdata[jsh.map.client_name]; };
   jshconfig_client.datalock[jsh.map.client_id] = function (req) { return req.gdata[jsh.map.client_id]; };
   jshconfig_client.datalocktypes[jsh.map.client_id] = { 'name': jsh.map.client_id, 'type': 'bigint' };
-  var ignore_overdue = function (req, res, next) { req.gdata[jsh.map.client_overdue_ignore] = 1; next(); };
   var ignore_overdue_transaction = function (req, res, next) {
     if (req.gdata[jsh.map.client_overdue] <= 0) { return next(); }
     if (!('data' in req.body)) { return next(); }
@@ -283,13 +278,13 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
       '/_d/_transaction/': ignore_overdue_transaction,
       '*': function (req, res, next) {
         if (req.gdata[jsh.map.client_overdue_ignore] > 0) return next();
-        if (req.gdata[jsh.map.client_overdue] > 0) { console.log('Redirect-Payment '+req.url); return Helper.Redirect302(res, req.baseurl + 'C_PA_CC/'); }
+        if (req.gdata[jsh.map.client_overdue] > 0) { return Helper.Redirect302(res, req.baseurl + 'C_PA_CC/'); }
         next();
       }
     }
   ];
   return jshconfig_client;
-}
+};
 
 jsHarmonyFactory.prototype.getHelpView = function(req){
   if(!this.Config.help_view) return null;
@@ -299,17 +294,18 @@ jsHarmonyFactory.prototype.getHelpView = function(req){
   }
   return '';
   //throw new Error("help_view not defined in _config.json for '"+siteid+"' site");
-}
+};
 
 jsHarmonyFactory.prototype.VerifyConfig = function(){
   var _this = this;
-  function verify_config(x, _caption) { if (!x || (_.isObject(x) && _.isEmpty(x))) { console.log('*** Missing app.config.js setting: ' + _caption); return false; } return true; }
+  var jsh = _this.jsh;
+  function verify_config(x, _caption) { if (!x || (_.isObject(x) && _.isEmpty(x))) { jsh.Log.error('*** Missing app.config.js setting: ' + _caption); return false; } return true; }
   var good_config = true;
   var required_fields = ['mainsalt', 'maincookiesalt'];
   if(_this.clientPortal) required_fields = required_fields.concat(['clientsalt', 'clientcookiesalt']);
   _.each(required_fields, function (val) { good_config &= verify_config(_this.Config[val], "config.modules['jsHarmonyFactory']." + val); });
-  if (!good_config) { console.log('\r\n*** Invalid config, could not start server ***\r\n'); process.exit(1); }
-}
+  if (!good_config) { jsh.Log.error('\r\n*** Invalid config, could not start server ***\r\n'); process.exit(1); }
+};
 
 jsHarmonyFactory.prototype.addMainMenuItem = function(menu_id, menu_name, menu_desc, menu_cmd, menu_subcmd, menu_seq, roles){
   var _this = this;
@@ -323,7 +319,7 @@ jsHarmonyFactory.prototype.addMainMenuItem = function(menu_id, menu_name, menu_d
   menu_item[_this.transform.fields['menu_subcmd']] = menu_subcmd;
   menu_item[_this.transform.fields['menu_seq']] = menu_seq;
   _this.Config.static_menu.main_menu.push(menu_item);
-}
+};
 
 jsHarmonyFactory.prototype.addSubMenuItem = function(menu_id, menu_parent_name, menu_name, menu_desc, menu_cmd, menu_subcmd, menu_seq, roles){
   var _this = this;
@@ -338,6 +334,6 @@ jsHarmonyFactory.prototype.addSubMenuItem = function(menu_id, menu_parent_name, 
   menu_item[_this.transform.fields['menu_subcmd']] = menu_subcmd;
   menu_item[_this.transform.fields['menu_seq']] = menu_seq;
   _this.Config.static_menu.sub_menu.push(menu_item);
-}
+};
 
 exports = module.exports = jsHarmonyFactory;

@@ -18,10 +18,7 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 var jsHarmonyFactory = require('./index.js');
-var jsHarmony = require('jsharmony');
 var jsHarmonyCodeGen = require('jsharmony/CodeGen');
-var JSHdb = require('jsharmony-db');
-var path = require('path');
 var _ = require('lodash');
 var async = require('async');
 
@@ -40,21 +37,24 @@ jsHarmonyFactoryAPI.prototype.Init = function(cb){
     _this.codegen = new jsHarmonyCodeGen(_this.jsh);
     if(cb) return cb();
   });
-}
+};
 //Execute DB Operation
 jsHarmonyFactoryAPI.prototype.dbTest = function(onComplete){
   this.db.Scalar('','select 1',[],{},function(err,rslt){
-    if(err){ console.log('\r\nERROR: Could not connect to database.  Please check your database config in app.config.js & app.config.local.js and try again by running:\r\nnpm run -s init-factory'); return onComplete(err); }
-    if(rslt && (rslt.toString()=="1")){
+    if(err){
+      console.log('\r\nERROR: Could not connect to database.  Please check your database config in app.config.js & app.config.local.js and try again by running:\r\nnpm run -s init-factory'); // eslint-disable-line no-console
+      return onComplete(err);
+    }
+    if(rslt && (rslt.toString()=='1')){
       return onComplete();
     }
- });
-}
+  });
+};
 jsHarmonyFactoryAPI.prototype.dbClose = function(onComplete){
   var _this = this;
   async.eachOf(_this.jsh.DB, function(db, dbid, cb){
     db.Close(cb);
   }, onComplete);
-}
+};
 
 module.exports = exports = jsHarmonyFactoryAPI;

@@ -50,7 +50,7 @@ function jsHarmonyFactoryConfig(){
   //Models for Help Listing
   this.help_view = {};
   //ID field for Help Listing
-  this.help_panelid = "";
+  this.help_panelid = '';
   //Subtitle for main site
   this.mainsitetitle = 'Database Management System';
   //Subtitle for client site
@@ -114,7 +114,7 @@ jsHarmonyFactoryConfig.prototype.Merge = function(config, jsh, sourceModuleName)
   var _this = this;
   if(jsh && sourceModuleName) sourceModule = jsh.Modules[sourceModuleName];
   if(config.help_view){
-    if(_.isString(config.help_view)) config.help_view = addNamespace(config.help_view);
+    if(_.isString(config.help_view)) config.help_view = jsHarmonyConfig.addNamespace(config.help_view);
     else{
       for(var siteid in config.help_view){
         config.help_view[siteid] = jsHarmonyConfig.addNamespace(config.help_view[siteid], sourceModule);
@@ -122,7 +122,7 @@ jsHarmonyFactoryConfig.prototype.Merge = function(config, jsh, sourceModuleName)
     }
   }
   jsHarmonyConfig.Base.prototype.Merge.apply(_this, arguments);
-}
+};
 
 jsHarmonyFactoryConfig.prototype.Helper = require('./jsHarmonyFactoryConfigHelper.js');
 
