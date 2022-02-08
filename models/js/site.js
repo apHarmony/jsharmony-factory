@@ -15,5 +15,5 @@
         setTimeout(function(){ XExt.Alert('Thank you for your feedback'); }, 1);
       });
     });
-  }
+  };
 })(window['{req.jshsite.instance}']);

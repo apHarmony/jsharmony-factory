@@ -19,7 +19,7 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 
 var jsHarmonyAgreement = function(jsh){
   this.jsh = jsh;
-}
+};
 
 jsHarmonyAgreement.prototype.Init = function(){
   var _this = this;
@@ -50,7 +50,7 @@ jsHarmonyAgreement.prototype.Init = function(){
   /**************************
    * STEP 1
    * *************************/
-  this.step1_init = function() { }
+  this.step1_init = function() { };
 
   this.step1_submit = function() {
     var xf = new XFormStep1();
@@ -63,21 +63,21 @@ jsHarmonyAgreement.prototype.Init = function(){
     if (!valid) return;
     
     SignAgreement(xf);
-  }
+  };
 
   function _v_IsChecked() {
     var _val = jsh.$root('.a_accept').prop('checked');
-    if (!_val) return "E-signature must be checked to continue.";
-    return "";
+    if (!_val) return 'E-signature must be checked to continue.';
+    return '';
   }
 
   function XFormStep1() { }
   XFormStep1.prototype.Fields = {
-    "a_accept": { "caption": "E-signature", "actions": "I", "validators": [XValidate._v_Required(), _v_IsChecked] },
-    "a_date": { "caption": "Today's Date", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate()] },
-    "a_name": { "caption": "Signed Name", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
-    "a_dob": { "caption": "Date of Birth", "actions": "I", "validators": [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_MaxAge(150), XValidate._v_MinAge(18)] }
-  }
+    'a_accept': { 'caption': 'E-signature', 'actions': 'I', 'validators': [XValidate._v_Required(), _v_IsChecked] },
+    'a_date': { 'caption': "Today's Date", 'actions': 'I', 'validators': [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate()] },
+    'a_name': { 'caption': 'Signed Name', 'actions': 'I', 'validators': [XValidate._v_Required(), XValidate._v_MaxLength(72)] },
+    'a_dob': { 'caption': 'Date of Birth', 'actions': 'I', 'validators': [XValidate._v_Required(), XValidate._v_MaxLength(10), XValidate._v_IsDate(), XValidate._v_MaxAge(150), XValidate._v_MinAge(18)] }
+  };
   XFormStep1.prototype.GetValues = function () {
     var _this = this;
     _.each(this.Fields, function (field) {
@@ -97,7 +97,7 @@ jsHarmonyAgreement.prototype.Init = function(){
       }
     }
     return val;
-  }
+  };
   XFormStep1.prototype.xvalidate = new XValidate();
 
 
@@ -113,4 +113,4 @@ jsHarmonyAgreement.prototype.Init = function(){
       }
     });
   }
-}
+};
