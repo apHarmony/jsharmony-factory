@@ -13,7 +13,7 @@
     ],
     "tabpanelstyle": "min-width:900px;",
     "fields":[
-	  {"name":"note_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
+      {"name":"note_scope","type":"varchar","length":"32","foreignkey":1,"actions":""},
       {"name":"note_scope_id", "type": "bigint","foreignkey":1,"actions":""}
     ]
   },

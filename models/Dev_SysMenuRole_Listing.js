@@ -1,20 +1,20 @@
-jsh.App[modelid] = { }
+jsh.App[modelid] = { };
 
 jsh.App[modelid].loadobj = '';
 jsh.App[modelid].ops = [];
 
 jsh.App[modelid].oninit = function(xmodel) {
-  xmodel.controller.form.GetReselectParams = function(){ 
-	  var rslt = this.GetKeys(); 
-	  rslt.menu_id = this.Data.new_menu_id; 
-	  return rslt; 
+  xmodel.controller.form.GetReselectParams = function(){
+    var rslt = this.GetKeys();
+    rslt.menu_id = this.Data.new_menu_id;
+    return rslt;
   };
   var old_onbeforeunload = window.onbeforeunload;
   window.onbeforeunload = function(){
-	  jsh.XPage.RefreshParent();
-	  if(old_onbeforeunload) old_onbeforeunload();
-  }
-}
+    jsh.XPage.RefreshParent();
+    if(old_onbeforeunload) old_onbeforeunload();
+  };
+};
 
 jsh.App[modelid].oncommit = function(){
   var _this = this;
@@ -29,25 +29,25 @@ jsh.App[modelid].oncommit = function(){
   }
   var op = _this.ops.shift();
   op();
-}
+};
 
 jsh.App[modelid].SelectAll = function(){
   var _this = this;
-	_this.ForAllChildren(function (obj) {
+  _this.ForAllChildren(function (obj) {
     if ($(obj).is(':checked')) return;
     if ($(obj).css('visibility').toLowerCase() == 'hidden') return;
     _this.ops.push(function () { $(obj).trigger('click'); });
   });
-}
+};
 
 jsh.App[modelid].DeselectAll = function(){
   var _this = this;
-	_this.ForAllChildren(function (obj) {
+  _this.ForAllChildren(function (obj) {
     if (!$(obj).is(':checked')) return;
     if ($(obj).css('visibility').toLowerCase() == 'hidden') return;
     _this.ops.push(function () { $(obj).trigger('click'); });
   });
-}
+};
 
 jsh.App[modelid].ForAllChildren = function(add_op) {
   var _this = this;
@@ -59,7 +59,7 @@ jsh.App[modelid].ForAllChildren = function(add_op) {
   jsh.xLoader.StartLoading(_this.loadobj);
   
   function fselectall() {
-    jtbl.find('input.checkbox.sys_menu_role_selection').each(function () {
+    jtbl.$find('input.checkbox.sys_menu_role_selection').each(function () {
       add_op(this);
     });
     _this.oncommit();
@@ -71,4 +71,4 @@ jsh.App[modelid].ForAllChildren = function(add_op) {
     xgrid.Load(xgrid.RowCount, undefined, loadmore);
   }
   loadmore();
-}
+};

@@ -8,7 +8,7 @@ jsh.App[modelid] = new (function(){
     if('help_target_code' in _GET){
       xmodel.controller.grid.Data['help_target_code'] = _GET.help_target_code;
     }
-  }
+  };
 
   this.onload = function(xmodel, callback){
     var xgrid = xmodel.controller.grid;
@@ -29,6 +29,6 @@ jsh.App[modelid] = new (function(){
       }
     }
     return false;
-  }
+  };
 
 })();

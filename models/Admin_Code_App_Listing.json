@@ -1,12 +1,12 @@
 {
   "Admin/Code_App_Listing": {
-	  "title":"Admin 1-Dimensional Code Tables",
-	  "table":"{schema}.code_app",
-	  "actions":"B", 
+    "title":"Admin 1-Dimensional Code Tables",
+    "table":"{schema}.code_app",
+    "actions":"B", 
     "layout":"grid", 
     "caption":[0,"Code Table","Code Tables"],
     "roles": {"X_B":"B","DADMIN":"*"},
-	  "sort":["^code_name"], 
+    "sort":["^code_name"], 
     "menu":"Admin/Code_App_Listing",
     //:if:separate_code_type_tables::else:
     "sqlwhere":"code_type='app'",
@@ -15,7 +15,7 @@
     "newrowposition": "first",      "comment2":"first or last",
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
-	  "fields":[
+    "fields":[
       {"name":"code_schema","type":"varchar","length":"128","actions":"B","caption":"Schema","control":"hidden"},
       {"name":"code_name","type":"varchar","length":"128","key":1,"validate":["Required"],
        "caption":"Code Table Name","actions":"B","controlstyle":"width:120px;","control": "html",

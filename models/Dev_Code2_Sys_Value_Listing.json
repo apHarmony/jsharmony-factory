@@ -4,9 +4,9 @@
     "layout":"grid",
     "table":"",
     "caption":[0,"Code","Codes"],
-	  "actions":"BIUD", 
-	  "sort":["^code_val1","^code_seq","^code_val2"], 
-	  "menu":"Dev/Code2_Sys_Listing",
+    "actions":"BIUD", 
+    "sort":["^code_val1","^code_seq","^code_val2"], 
+    "menu":"Dev/Code2_Sys_Listing",
     "roles": {"X_B":"B","DADMIN":"*"},
     "breadcrumbs": { "parents": ["Dev/Code2_Sys_Listing"] },
     "reselectafteredit": "row",    "comment1":"row, or blank",
@@ -14,7 +14,7 @@
     "commitlevel": "row",          "comment3":"cell, row, page, or none",
     "validationlevel": "row",     "comment4":"cell, or row",
     "bindings":{"code_name":"code_name","code_schema":"code_schema"},
-	  "fields":[
+    "fields":[
       {"name":"code2_sys_id","type":"bigint","actions":"B","key":1,"control":"hidden"}, //Previously had "F"
       {"name":"code_name","type":"varchar","foreignkey":1,"actions":"IUD","sqlwhere":"1=1",
        "sqlupdate":"","sqlinsert":"","length":128,"control":"hidden"},
@@ -43,7 +43,7 @@
        "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
        "sqlselect":"({schema}.log_audit_info(code_etstmp,code_euser,code_mtstmp,code_muser))",
        "controlstyle":"width:48px;display:none;"}
-	  ],
+    ],
     "dberrors": [
       ["pk_code_sys_","CODE Value has to be unique"],
       ["unq_code_sys_","CODE Description has to be unique"],

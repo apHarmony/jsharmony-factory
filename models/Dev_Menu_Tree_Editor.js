@@ -4,12 +4,12 @@ jsh.App[modelid] = new (function(){
   this.menu_id_auto = 0;
 
   this.oninit = function(){
-    XModels[modelid].menu_id_auto = function () { 
+    XModels[modelid].menu_id_auto = function () {
       if(!_this.menu_id_auto) _this.menu_id_auto = xmodel.controller.form.Data.menu_id_auto;
       return _this.menu_id_auto;
     };
     jsh.$root('.menu_id_auto.tree').data('oncontextmenu','return '+XExt.getJSApp(modelid)+'.oncontextmenu(this, n);');
-  }
+  };
 
   this.oncontextmenu = function(ctrl, n){
     var menuid = '._item_context_menu_menu_id_auto';
@@ -31,11 +31,10 @@ jsh.App[modelid] = new (function(){
       menu_add.hide();
       menu_delete.show();
     }
-    else {
-    }
+    else { /* Do nothing */ }
     XExt.ShowContextMenu(menuid, $(ctrl).data('value'), { id:n });
     return false;
-  }
+  };
 
   this.menu_id_onchange = function(obj, newval, undoChange) {
     if(jsh.XPage.GetChanges().length){
@@ -43,22 +42,22 @@ jsh.App[modelid] = new (function(){
       return XExt.Alert('Please save changes before navigating to a different record.');
     }
     jsh.App[modelid].select_menu_id_auto(newval);
-  }
+  };
 
   this.select_menu_id_auto = function(newval, cb){
     xmodel.set('cur_menu_id_auto', newval);
     xmodel.controller.form.Data.menu_id_auto = newval;
     this.menu_id_auto = newval;
     jsh.XPage.Select({ modelid: XBase[xmodel.module_namespace+'Dev/Menu'][0], force: true }, cb);
-  }
+  };
 
   this.item_insert = function(context_item){
     if(jsh.XPage.GetChanges().length) return XExt.Alert('Please save changes before adding menu items.');
 
     var fields = {
-      "menu_name": { "caption": "Menu ID", "actions": "BI", "type": "varchar", "length": 30, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(30)] },
-      "menu_desc": { "caption": "Display Name", "actions": "BI", "type": "varchar", "length": 255, "validators": [XValidate._v_Required(), XValidate._v_MaxLength(255)] },
-    }
+      'menu_name': { 'caption': 'Menu ID', 'actions': 'BI', 'type': 'varchar', 'length': 30, 'validators': [XValidate._v_Required(), XValidate._v_MaxLength(30)] },
+      'menu_desc': { 'caption': 'Display Name', 'actions': 'BI', 'type': 'varchar', 'length': 255, 'validators': [XValidate._v_Required(), XValidate._v_MaxLength(255)] },
+    };
     var data = { 'menu_id_parent': jsh.xContextMenuItemData.id };
     var validate = new XValidate();
     _.each(fields, function (val, key) { validate.AddControlValidator('.Menu_InsertPopup .' + key, '_obj.' + key, val.caption, 'BI', val.validators); });
@@ -81,15 +80,15 @@ jsh.App[modelid] = new (function(){
       XForm.prototype.XExecutePost(insertTarget, data, function (rslt) { //On success
         if ('_success' in rslt) {
           jsh.App[modelid].select_menu_id_auto(parseInt(rslt[insertTarget][0].menu_id_auto), function(){
-            success(); 
-            jsh.XPage.Refresh(); 
+            success();
+            jsh.XPage.Refresh();
           });
         }
       });
     }, function () { //onCancel
     }, function () { //onClosed
     });
-  }
+  };
 
   this.getSMbyValue = function(menu_id_auto){
     if(!menu_id_auto) return null;
@@ -98,7 +97,7 @@ jsh.App[modelid] = new (function(){
       if(lov[i][jsh.uimap.code_val]==menu_id_auto.toString()) return lov[i];
     }
     return null;
-  }
+  };
 
   this.getSMbyID = function(menu_id){
     if(!menu_id) return null;
@@ -107,7 +106,7 @@ jsh.App[modelid] = new (function(){
       if(lov[i][jsh.uimap.code_id]==menu_id.toString()) return lov[i];
     }
     return null;
-  }
+  };
 
   this.item_delete = function(context_item){
     if(jsh.XPage.GetChanges().length) return XExt.Alert('Please save changes before deleting menu items.');
@@ -133,15 +132,15 @@ jsh.App[modelid] = new (function(){
       if(menu_parent) new_menu_id_auto = menu_parent[jsh.uimap.code_val];
     }
 
-    XExt.Confirm('Are you sure you want to delete \''+item_desc+'\'?',function(){ 
+    XExt.Confirm('Are you sure you want to delete \''+item_desc+'\'?',function(){
       XForm.prototype.XExecutePost(xmodel.module_namespace+'Dev/Menu_Exec_Delete', { menu_id_auto: context_item }, function (rslt) { //On success
-        if ('_success' in rslt) { 
+        if ('_success' in rslt) {
           //Select parent
           if(new_menu_id_auto) XExt.TreeSelectNode(jsh.$root('.menu_id_auto.tree'),new_menu_id_auto);
-          jsh.XPage.Refresh(); 
+          jsh.XPage.Refresh();
         }
       });
     });
-  }
+  };
 
 })();

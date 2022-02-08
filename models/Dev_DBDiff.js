@@ -3,31 +3,31 @@ jsh.App[modelid] = new (function(){
 
   this.getFormElement = function(){
     return jsh.$root('.xformcontainer.xelem'+xmodel.class);
-  }
+  };
 
   this.oninit = function(xmodel) {
     var jform = _this.getFormElement();
     XForm.prototype.XExecute('../_funcs/DEV_DB_DIFF', { }, function (rslt) { //On success
-      if ('_success' in rslt) { 
+      if ('_success' in rslt) {
         _this.RenderDBListing(rslt.dbs);
       }
     });
-    jform.find('.db').change(function(){
-      var db = jform.find('.db').val();
-      if(!db) jform.find('.run').hide();
+    jform.$find('.db').change(function(){
+      var db = jform.$find('.db').val();
+      if(!db) jform.$find('.run').hide();
       else _this.GetModules(db);
     });
-  }
+  };
 
   this.RenderDBListing = function(dbs){
     var jform = _this.getFormElement();
-    var jobj = jform.find('.db');
+    var jobj = jform.$find('.db');
     if(dbs.length > 1){
-      jform.find('.dbselect').show();
+      jform.$find('.dbselect').show();
       jobj.append($('<option>',{value:''}).text('Please select...'));
     }
     else {
-      jform.find('.dbselect').hide();
+      jform.$find('.dbselect').hide();
       jobj.empty();
     }
     for(var i=0;i<dbs.length;i++){
@@ -35,50 +35,37 @@ jsh.App[modelid] = new (function(){
       jobj.append($('<option>',{value:db}).text(db));
     }
     if(dbs.length==1) _this.GetModules(dbs[0]);
-  }
+  };
 
   this.GetModules = function(dbid){
     XForm.prototype.XExecute('../_funcs/DEV_DB_DIFF', { db: dbid }, function (rslt) { //On success
-      if ('_success' in rslt) { 
+      if ('_success' in rslt) {
         _this.RenderModules(rslt.modules);
         if(jsh._GET['moduleName']) _this.ExecDiff(jsh._GET['moduleName']);
       }
     });
-  }
+  };
 
   this.RenderModules = function(modules){
     var jform = _this.getFormElement();
-    jform.find('.run').show();
-    jform.find('.rslt').text('');
-
-    function union(a,b){
-      var rslt = {};
-      if((a=='...')||(b=='...')) return '...';
-      for(var key in a){
-        if(key in b) rslt[key] = union(a[key],b[key]);
-        else rslt[key] = a[key];
-      }
-      for(var key in b){
-        if(!(key in a)) rslt[key] = b[key];
-      }
-      return rslt;
-    }
+    jform.$find('.run').show();
+    jform.$find('.rslt').text('');
 
     //--------------------
 
-    var jobj = jform.find('.listing');
+    var jobj = jform.$find('.listing');
     //Clear any existing content
     jobj.empty();
     //Render modules tree
     jobj.append(_this.RenderModulesNode(modules));
     //Attach events
-    jobj.find('a.generate').click(function(e){
+    jobj.$find('a.generate').click(function(e){
       e.preventDefault();
       var moduleName = $(this).parent().closest('li').data('id');
       var url = window.location.href.split('?')[0];
       XExt.navTo(url + '?' + $.param({ moduleName: moduleName }));
     });
-  }
+  };
 
   this.RenderModulesNode = function(node){
     var jlist = $('<ul></ul>');
@@ -97,17 +84,15 @@ jsh.App[modelid] = new (function(){
     }
     if(!jlist.children().length) return $();
     return jlist;
-  }
+  };
 
   this.ExecDiff = function(moduleName, mode){
     var jform = _this.getFormElement();
-    jform.find('.rslt').text('');
+    jform.$find('.rslt').text('');
 
-    var starttm = Date.now();
-
-    var params = { moduleName: moduleName, db: jform.find('.db').val() };
-    var runas_user = jform.find('.user').val().trim();
-    var runas_password = jform.find('.password').val();
+    var params = { moduleName: moduleName, db: jform.$find('.db').val() };
+    var runas_user = jform.$find('.user').val().trim();
+    var runas_password = jform.$find('.password').val();
     if(runas_user){
       params.runas_user = runas_user;
       params.runas_password = runas_password;
@@ -115,9 +100,9 @@ jsh.App[modelid] = new (function(){
 
     XForm.prototype.XExecutePost('../_funcs/DEV_DB_DIFF', { data: JSON.stringify(params) }, function (rslt) { //On success
       if ('_success' in rslt) {
-        jform.find('.rslt').text(params.moduleName+"\r\n-------------------------------\r\n"+rslt.src);
+        jform.$find('.rslt').text(params.moduleName+'\r\n-------------------------------\r\n'+rslt.src);
       }
     });
-  }
+  };
 
 })();

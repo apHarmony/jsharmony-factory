@@ -10,7 +10,7 @@
     "menu":"Dev/DBSQL",
     "caption": [ "", "Database Management", "Database Management" ],
     "hide_system_buttons":["print","help"],
-    "fields":[	  ],
+    "fields":[    ],
     "oninit": "jsh.App[modelid].oninit(xmodel);"
 	}
 }

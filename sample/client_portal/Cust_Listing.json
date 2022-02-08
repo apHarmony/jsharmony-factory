@@ -5,16 +5,16 @@
     "title":"All Customers",
     "caption":[0,"Customer","Customers"],
     "menu":"Customer/Cust_Listing",
-	  "actions":"B",
+    "actions":"B",
     "roles": {"C_B":"B","C_BU":"B","C_X":"*"},
     "buttons":[{"name":"insertCust","link":"insert:Cust_Popup"}],
     "sort":["^cust_name"], 
     "default_search":[{"Column":"cust_name"}],
-	  "fields":[
+    "fields":[
       {"name":"cust_id","caption": "ID","link":"update:Cust_Tabs"},
       {"name":"cust_sts","caption":"Status"},
-	    {"name":"cust_name","caption":"Customer","caption_ext": "Customer Name","link":"update:Cust_Tabs"},
-	    {"name":"cust_email","caption":"Email"}
-	  ]
+      {"name":"cust_name","caption":"Customer","caption_ext": "Customer Name","link":"update:Cust_Tabs"},
+      {"name":"cust_email","caption":"Email"}
+    ]
   }
 }

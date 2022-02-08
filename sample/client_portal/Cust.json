@@ -16,7 +16,7 @@
       {"caption": "","control":"linkbutton","value": "Compose Email","onclick": "var email = jsh.$root('.cust_email').val().trim(); if(email){ var url = 'mailto:'+email; jsh.getFileProxy().prop('src', url); }","nl":false},
       {"name":"cust_phone","caption": "Phone","control": "textbox_phone"},
       {"name":"cust_phone_type","caption": "","caption_ext":"Phone Type","control": "dropdown_S","nl":false},
-	    {"name":"cust_notes","caption":"Notes","control":"textarea"},
+      {"name":"cust_notes","caption":"Notes","control":"textarea"},
 
       {"name":"cust_etstmp","caption": "Entered","control":"textbox_tstmp","actions": "B"},
       {"name":"cust_euser_fmt","caption":"","control":"textbox","sqlselect":"jsharmony.my_db_user_fmt(cust_euser)","controlstyle":"width:122px;","nl":false},

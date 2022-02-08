@@ -1,11 +1,11 @@
 {
   "Admin/Txt": {
-	  "title":"Text Module",
-	  "table":"{schema}.txt__tbl",
-	  "actions":"BU", 
+    "title":"Text Module",
+    "table":"{schema}.txt__tbl",
+    "actions":"BU", 
     "layout":"form", 
     "caption":[0,"Text Module","Text Modules"],
-	  "menu":"Admin/Txt_Listing",
+    "menu":"Admin/Txt_Listing",
     "breadcrumbs": { "parents": ["Admin/Txt_Listing"] },
     "onload": "if(xmodel.controller.form.Data.txt_type.toUpperCase()=='HTML'){ jsh.$root('.txt_body.xelem'+xmodel.class).attr('id',xmodel.class+'_txt_body'); XExt.CKEditor(xmodel.class+'_txt_body'); }",
     "fields":[

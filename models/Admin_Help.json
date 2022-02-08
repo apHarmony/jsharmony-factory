@@ -1,13 +1,13 @@
 {
   "Admin/Help": {
-	  "title":"Help Screen",
-	  "table":"{schema}.help__tbl",
-	  "actions":"BIUD", 
+    "title":"Help Screen",
+    "table":"{schema}.help__tbl",
+    "actions":"BIUD", 
     "layout":"form", 
     "caption": [ "", "Help Screen", "Help Screens" ],
     "menu":"Admin/Help_Listing",
     "breadcrumbs": { "parents": ["Admin/Help_Listing"] },
-	  "fields":[
+    "fields":[
       {"name":"help_id","type":"bigint","key":1,"control":"hidden"},
 
       {"name":"help_target_id","type":"bigint","actions":"BIU","control":"hidden"},
@@ -49,28 +49,28 @@
        {"name":"help_title","type":"varchar","length":70,"actions":"BIU","control":"textbox_VL","nl":1,
         "validate":["Required"],"caption":"Title"},
 
-	    {"name":"help_text","type":"varchar","length":99999,"actions":"BIU","nl":1,
-	     "control":"htmlarea","controlstyle":"width:590px;height:400px;","sample":"Here goes the text ...........",
-		   "caption":"Body","captionstyle":"width:120px;height:400px;vertical-align:top;padding-top:3px;text-align:right;",
+      {"name":"help_text","type":"varchar","length":99999,"actions":"BIU","nl":1,
+       "control":"htmlarea","controlstyle":"width:590px;height:400px;","sample":"Here goes the text ...........",
+       "caption":"Body","captionstyle":"width:120px;height:400px;vertical-align:top;padding-top:3px;text-align:right;",
 			 "validate":["Required"]},
-	    {"name":"help_etstmp","type":"datetime","length":7,"actions":"B","nl":1,
-	     "control":"textbox_tstmp",
-		    "caption":"Entered"},
+      {"name":"help_etstmp","type":"datetime","length":7,"actions":"B","nl":1,
+       "control":"textbox_tstmp",
+        "caption":"Entered"},
       {"name":"help_euser_fmt","type":"varchar","length":20,"actions":"B",
           "sqlselect":"({schema}.my_db_user_fmt(help_euser))",
           "control":"textbox","controlstyle":"width:158px;","caption":""},
-	    {"name":"help_mtstmp","type":"datetime","length":7,"actions":"B","nl":1,
-	      "control":"textbox_tstmp",
-		    "caption":"Last Updated"},
+      {"name":"help_mtstmp","type":"datetime","length":7,"actions":"B","nl":1,
+        "control":"textbox_tstmp",
+        "caption":"Last Updated"},
       {"name":"help_muser_fmt","type":"varchar","length":20,"actions":"B",
           "sqlselect":"({schema}.my_db_user_fmt(help_muser))",
           "control":"textbox","controlstyle":"width:158px;","caption":"","eol":1}
-	],
-	"dberrors":[
-    ["unq_help__tbl_help_unq_code","This Help Target has already been defined."],
-    ["unq_help__tbl_help_title","The Help Target with the same title has already been defined."],
-    ["help__tbl_help_target_code_unique","This Help Target has already been defined."],
-    ["help__tbl_help_title_key","The Help Target with the same title has already been defined."]
-	]
+    ],
+    "dberrors":[
+      ["unq_help__tbl_help_unq_code","This Help Target has already been defined."],
+      ["unq_help__tbl_help_title","The Help Target with the same title has already been defined."],
+      ["help__tbl_help_target_code_unique","This Help Target has already been defined."],
+      ["help__tbl_help_title_key","The Help Target with the same title has already been defined."]
+    ]
   }
 }

@@ -8,7 +8,7 @@
       //Save content to server
       var jprompt = jsh.$root('.xdialogblock .suggest_feature');
       var params = {
-        message_text: jprompt.find('.message_text').val()
+        message_text: jprompt.$find('.message_text').val()
       };
       XForm.Post('/_funcs/SUGGEST_FEATURE',{},params,function(){
         success();

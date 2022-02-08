@@ -1,12 +1,12 @@
 {
   "Admin/Txt_Listing": {
-	  "title":"Text Maintenance",
-	  "table":"{schema}.txt__tbl",
-	  "actions":"B", 
+    "title":"Text Maintenance",
+    "table":"{schema}.txt__tbl",
+    "actions":"B", 
     "layout":"grid", 
-	  "caption":[0,"Text","Text"],
-	  "sort":["^txt_process","^txt_attrib"], 
-	  "menu":"Admin/Txt_Listing",
+    "caption":[0,"Text","Text"],
+    "sort":["^txt_process","^txt_attrib"], 
+    "menu":"Admin/Txt_Listing",
     "fields":[
       {"name":"txt_id","type":"bigint","key":1,"control":"hidden"},
       {"name":"txt_process","type":"varchar","length":"32","caption":"Process","actions":"B","link":"update:Admin/Txt"},

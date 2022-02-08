@@ -15,15 +15,15 @@
     "validationlevel": "row",     "comment4":"cell, or row",
     "bindings":{"code_name":"code_name","code_schema":"code_schema"},
   	"fields":[
-	    {"name":"code_sys_id","type":"bigint","actions":"B","key":1,"control":"hidden"}, //Previously had "F"
+      {"name":"code_sys_id","type":"bigint","actions":"B","key":1,"control":"hidden"}, //Previously had "F"
       {"name":"code_name","type":"varchar","foreignkey":1,"actions":"IUD","sqlwhere":"1=1",
        "sqlupdate":"","sqlinsert":"","length":128,"control":"hidden"},
       {"name":"code_schema","type":"varchar","foreignkey":1,"actions":"IUD","sqlwhere":"1=1",
        "sqlupdate":"","sqlinsert":"","length":128,"control":"hidden"},
-	    {"name":"code_seq","type":"smallint","actions":"BIU","control":"textbox_VS","format":["decimal","0"],
-	     "validate":["IsNumeric"],"controlstyle":"text-align:right;","caption":"Seq"},
-	    {"name":"code_val","type":"varchar","length":"32","actions":"BI","control":"textbox_S",
-	     "validate":["Required"],"caption":"Value"},
+      {"name":"code_seq","type":"smallint","actions":"BIU","control":"textbox_VS","format":["decimal","0"],
+       "validate":["IsNumeric"],"controlstyle":"text-align:right;","caption":"Seq"},
+      {"name":"code_val","type":"varchar","length":"32","actions":"BI","control":"textbox_S",
+       "validate":["Required"],"caption":"Value"},
       {"name":"code_txt","type":"varchar","length":"50","actions":"BIU","control":"textbox_S",
        "validate":["Required"],"caption":"Description"},
       {"name":"code_code","type":"varchar","length":"50","actions":"BIU","control":"textbox_S",
@@ -41,7 +41,7 @@
        "caption":"INFO","caption_ext":"Additional Information","disable_search":1,"disable_search_all":1,
        "sqlselect":"({schema}.log_audit_info(code_etstmp,code_euser,code_mtstmp,code_muser))",
        "controlstyle":"width:48px;display:none;"}
-	  ],
+    ],
     "dberrors": [
       ["/unq_code_sys_.*_code_val/","CODE Value has to be unique"],
       ["_code_val_key","CODE Value has to be unique"],

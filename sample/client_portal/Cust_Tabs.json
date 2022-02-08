@@ -9,17 +9,17 @@
     "roles":{
       "main":{}
     },
-	  "tabpos":"bottom",
-	  "tabs":[
+    "tabpos":"bottom",
+    "tabs":[
       {"name":"General","target":"Cust"},
       {"name":"Users","target":"jsHarmonyFactory/CustUser_Listing"},
       {"name":"Documents","target":"jsHarmonyFactory/Doc_Listing"},
       {"name":"Notes","target":"jsHarmonyFactory/Note_UserCustSys_Tabs"}
-	  ],
-	  "popup":[1000,620],
-	  "fields":[
-	    {"name":"cust_id","type":"bigint","key":1,"control":"hidden"},
+    ],
+    "popup":[1000,620],
+    "fields":[
+      {"name":"cust_id","type":"bigint","key":1,"control":"hidden"},
       {"name":"cust_name","type": "varchar","actions": "B","control":"hidden"}
-	  ]
-  }	  
+    ]
+  }    
 }

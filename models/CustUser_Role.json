@@ -23,7 +23,7 @@
           "datalock":{"cust_id":"always"} 
         }
       }
-	  ]
+    ]
   }, 
   "CustUser_Role": {
     "inherits":"Base/CustUser_Role"

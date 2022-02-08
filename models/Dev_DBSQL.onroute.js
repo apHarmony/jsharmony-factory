@@ -9,7 +9,7 @@ if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'I
 
 var dbs = {};
 for(var dbid in jsh.DB) dbs[dbid] = jsh.DB[dbid].dbconfig._driver.name;
-model.oninit = "jsh.App[modelid].DBs = "+JSON.stringify(dbs)+";"+model.oninit;
+model.oninit = 'jsh.App[modelid].DBs = '+JSON.stringify(dbs)+';'+model.oninit;
 if(req.query.table){
   if(jsh.DB[dbid] && jsh.DB[dbid].schema_definition && jsh.DB[dbid].schema_definition.tables){
     var tableName = req.query.table;

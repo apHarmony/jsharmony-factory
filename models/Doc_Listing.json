@@ -2,31 +2,31 @@
   "Base/Doc_Listing": {
     "layout":"grid", 
     "title":"Documents",
-	  "table":"{schema}.doc__tbl",
-	  "actions":"B",
-	  "sort":["vdoc_uptstmp"], 
-	  "samplerepeat":5,
-	  "caption":[0,"Document","Documents"],
-	  "menu":"dashboard",
+    "table":"{schema}.doc__tbl",
+    "actions":"B",
+    "sort":["vdoc_uptstmp"], 
+    "samplerepeat":5,
+    "caption":[0,"Document","Documents"],
+    "menu":"dashboard",
     "buttons":[{"name":"insertDoc","link":"insert:Doc__model","bindings":{"doc_scope_id":"doc_scope_id","doc_scope":"doc_scope"}}],
-	  "fields":[
-	    {"name":"doc_id","type":"bigint","key": 1,"datalock":{"cust_id":"doc_id"},"control":"hidden"},
+    "fields":[
+      {"name":"doc_id","type":"bigint","key": 1,"datalock":{"cust_id":"doc_id"},"control":"hidden"},
       {"name":"doc_scope","type":"varchar","length":32,"foreignkey":1,"datalock":{"cust_id":"doc_scope"},"control":"hidden"},
       {"name":"doc_scope_fmt","type":"varchar","length":32,"foreignkey":1,"actions":"B","datalock":{"cust_id":"doc_scope"},
        "sqlselect":"(doc_scope)","link":"update:Doc__model","caption":"=","caption_ext":"Scope"},
-	    {"name":"doc_scope_id","type":"bigint","foreignkey":1,"datalock":{"cust_id":"doc_scope_id"},"control":"hidden"},
-	    {"name":"doc_uptstmp","type":"datetime","length":"7","format":"tstmp","caption":"Uploaded","actions":"B",
-	     "controlstyle": "width:100px;","link":"update:Doc__model"},
-	    {"name":"doc_sts","type":"varchar","length":32,"caption":"Status","actions":"B"},
+      {"name":"doc_scope_id","type":"bigint","foreignkey":1,"datalock":{"cust_id":"doc_scope_id"},"control":"hidden"},
+      {"name":"doc_uptstmp","type":"datetime","length":"7","format":"tstmp","caption":"Uploaded","actions":"B",
+       "controlstyle": "width:100px;","link":"update:Doc__model"},
+      {"name":"doc_sts","type":"varchar","length":32,"caption":"Status","actions":"B"},
       {"name":"title_head","type":"varchar","length":32,"actions":""},
-	    {"name":"title_detail","type":"varchar","length":32,"actions":""},
-	    {"name":"doc_ctgr_txt","type":"varchar","length":50,"caption":"Category","actions":"B","sqlselect":"(doc_ctgr)"},
-	    {"name":"doc_desc","type":"varchar","length":255,"caption":"Description","actions":"B","controlstyle":"width:200px;"},
+      {"name":"title_detail","type":"varchar","length":32,"actions":""},
+      {"name":"doc_ctgr_txt","type":"varchar","length":50,"caption":"Category","actions":"B","sqlselect":"(doc_ctgr)"},
+      {"name":"doc_desc","type":"varchar","length":255,"caption":"Description","actions":"B","controlstyle":"width:200px;"},
       {"name":"btndownload","caption": "Download","control": "html","disable_sort":1,
        "value": "<a href='<%=jsh._BASEURL%>_dl/<%=xmodel.module_namespace%>Doc__model/<%=data['doc_id']%>/doc_file'>Download</a>"},
       {"name":"btndetails","caption": "Details","value": "Details","control": "html",
        "link": "update:Doc__model","actions":"B"}
-	  ]
+    ]
   },
   "Doc_Listing": {
     "inherits":"Base/Doc_Listing"

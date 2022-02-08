@@ -5,31 +5,31 @@ jsh.App[modelid] = new (function(){
 
   this.getFormElement = function(){
     return jsh.$root('.xformcontainer.xelem'+xmodel.class);
-  }
+  };
 
   this.oninit = function(xmodel) {
     var jform = _this.getFormElement();
     XForm.prototype.XExecute('../_funcs/DEV_DB_SCHEMA', { }, function (rslt) { //On success
-      if ('_success' in rslt) { 
+      if ('_success' in rslt) {
         _this.RenderDBListing(rslt.dbs);
       }
     });
-    jform.find('.db').change(function(){
-      var db = jform.find('.db').val();
-      if(!db) jform.find('.run').hide();
+    jform.$find('.db').change(function(){
+      var db = jform.$find('.db').val();
+      if(!db) jform.$find('.run').hide();
       else _this.GetSchema(db);
     });
-  }
+  };
 
   this.RenderDBListing = function(dbs){
     var jform = _this.getFormElement();
-    var jobj = jform.find('.db');
+    var jobj = jform.$find('.db');
     if(dbs.length > 1){
-      jform.find('.dbselect').show();
+      jform.$find('.dbselect').show();
       jobj.append($('<option>',{value:''}).text('Please select...'));
     }
     else {
-      jform.find('.dbselect').hide();
+      jform.$find('.dbselect').hide();
       jobj.empty();
     }
     for(var i=0;i<dbs.length;i++){
@@ -37,15 +37,15 @@ jsh.App[modelid] = new (function(){
       jobj.append($('<option>',{value:db}).text(db));
     }
     if(dbs.length==1) _this.GetSchema(dbs[0]);
-  }
+  };
 
   this.GetSchema = function(dbid){
     XForm.prototype.XExecute('../_funcs/DEV_DB_SCHEMA', { db: dbid }, function (rslt) { //On success
-      if ('_success' in rslt) { 
+      if ('_success' in rslt) {
         _this.RenderSchema(dbid, rslt.schema, rslt.funcs);
       }
     });
-  }
+  };
 
   this.getTable = function(obj){
     var jobj = $(obj);
@@ -53,11 +53,11 @@ jsh.App[modelid] = new (function(){
       if(jobj.is('table')) return jobj;
       jobj = jobj.next();
     }
-  }
+  };
 
   this.RenderSchema = function(dbid, schema, funcs){
     var jform = _this.getFormElement();
-    var jobj = jform.find('.rslt');
+    var jobj = jform.$find('.rslt');
     jobj.html('');
     $('<div>Click on a database object for details:<br/><br/>\
         <div>\
@@ -65,8 +65,8 @@ jsh.App[modelid] = new (function(){
           <a href="#" class="hide_all" onclick="return false;">[Hide All]</a>\
         </div>\
       </div>').appendTo(jobj);
-    jobj.find('.show_all').click(function(){ jobj.find('table').show(); });
-    jobj.find('.hide_all').click(function(){ jobj.find('table').hide(); });
+    jobj.$find('.show_all').click(function(){ jobj.$find('table').show(); });
+    jobj.$find('.hide_all').click(function(){ jobj.$find('table').hide(); });
     //var tables = _.map(schema.tables, function(table){ console.log(table); });
     _.each(schema.tables, function(table, tableName){
       var dispName = tableName;
@@ -142,8 +142,8 @@ jsh.App[modelid] = new (function(){
       $(html).appendTo(jobj);
     });
     $('.expandable').click(function(){ _this.getTable(this).toggle(); });
-    //jform.find('.rslt').text(JSON.stringify(schema));
+    //jform.$find('.rslt').text(JSON.stringify(schema));
     jsh.XWindowResize();
-  }
+  };
 
 })();

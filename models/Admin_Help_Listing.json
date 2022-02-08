@@ -1,21 +1,21 @@
 {
   "Admin/Help_Listing": {
     "title":"Help Screens",
-	  "table":"{schema}.help__tbl",
-	  "actions":"BU", 
-	  "caption":[0,"Help Screen","Help Screens"],
+    "table":"{schema}.help__tbl",
+    "actions":"BU", 
+    "caption":[0,"Help Screen","Help Screens"],
     "layout":"grid", 
-	  "sort":["^help_seq","^help_title"], 
-	  "menu":"Admin/Help_Listing",
-	  "buttons":[{"name":"insertHelp","link":"insert:Admin/Help"}],
+    "sort":["^help_seq","^help_title"], 
+    "menu":"Admin/Help_Listing",
+    "buttons":[{"name":"insertHelp","link":"insert:Admin/Help"}],
     "reselectafteredit": "row",      "comment1":"row, or blank",
     "newrowposition": "last",        "comment2":"first or last",
     "commitlevel": "row",            "comment3":"cell, row, page, or none",
     "validationlevel": "row",        "comment4":"cell, or row",
-	  "fields":[
-	    {"name":"help_id","type":"bigint","key":1,"control":"hidden"},
-	    {"name":"help_title","type":"varchar","length":"70","caption":"Title","controlstyle":"min-width:200px;","actions":"B","link":"update:Admin/Help",
-	     "control":"label"},
+    "fields":[
+      {"name":"help_id","type":"bigint","key":1,"control":"hidden"},
+      {"name":"help_title","type":"varchar","length":"70","caption":"Title","controlstyle":"min-width:200px;","actions":"B","link":"update:Admin/Help",
+       "control":"label"},
       {"name":"help_target_desc","type":"varchar","length":"50","caption":"Target","controlstyle":"min-width:100px;","actions":"B",
        "sqlselect":"(select help_target_desc from {schema}.help_target where help_target.help_target_code = help__tbl.help_target_code)",
        "sqlsearch":"(select help_target_desc from {schema}.help_target where help_target.help_target_code = help__tbl.help_target_code)"},
@@ -26,7 +26,7 @@
       {"name":"help_listing_client","type":"boolean","actions":"BU","control":"checkbox",
        "controlparams":{"value_true":"true","value_false":"false"},"caption":"Client Portal"},
       //:endif:
-	    {"name":"help_mtstmp","type":"datetime","length":"7","format":"tstmp","caption":"Last Update","actions":"B"}
-	  ]
+      {"name":"help_mtstmp","type":"datetime","length":"7","format":"tstmp","caption":"Last Update","actions":"B"}
+    ]
   }
 }

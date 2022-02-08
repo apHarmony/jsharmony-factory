@@ -7,9 +7,9 @@
     "layout":"exec", 
     "menu":"Admin/Log",
     "caption": [ "", "Request", "Requests" ],
-	  "fields":[
+    "fields":[
       {"control":"button","value":"Download Logs","controlstyle": "padding:3px 8px;",
         "onclick": "jsh.getFileProxy().prop('src', '/_funcs/LOG_DOWNLOAD');"}
-	  ]
+    ]
 	}
 }

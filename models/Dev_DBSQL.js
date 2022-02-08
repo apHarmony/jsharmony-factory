@@ -8,26 +8,26 @@ jsh.App[modelid] = new (function(){
 
   this.samples = {};
   this.samples.mssql = {
-    "Select": "select top 1000 * from TABLENAME;",
-    "Get DB / Server Name": "select db_name() db_name,@@servername server_name;",
-    "List Tables": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='U' order by schema_name,table_name",
-    "List Views": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='V' order by schema_name,table_name",
-    "List Stored Procedures": "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='P' order by schema_name,table_name",
-    "Describe Table": "select * from information_schema.columns where table_name = 'xxxxx' order by ordinal_position",
-    "Describe View / Object": "select object_definition(object_id('VIEW_NAME')) as Source;",
-    "Create Table": "",
-    "Create View": "",
-    "Create Stored Procedure": "",
-    "Create UCOD": "",
+    'Select': 'select top 1000 * from TABLENAME;',
+    'Get DB / Server Name': 'select db_name() db_name,@@servername server_name;',
+    'List Tables': "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='U' order by schema_name,table_name",
+    'List Views': "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='V' order by schema_name,table_name",
+    'List Stored Procedures': "select schemas.name schema_name, objects.name table_name from sys.objects inner join sys.schemas on sys.schemas.schema_id = sys.objects.schema_id where TYPE='P' order by schema_name,table_name",
+    'Describe Table': "select * from information_schema.columns where table_name = 'xxxxx' order by ordinal_position",
+    'Describe View / Object': "select object_definition(object_id('VIEW_NAME')) as Source;",
+    'Create Table': '',
+    'Create View': '',
+    'Create Stored Procedure': '',
+    'Create UCOD': '',
   };
   this.samples.pgsql = {
-    "Select": "select * from TABLENAME limit 1000;",
-    "Get DB Name": "select current_database() db_name;",
-    "List Tables": "select table_schema||'.'||table_name as table from information_schema.tables where table_type='BASE TABLE' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
-    "List Views": "select table_schema||'.'||table_name as view from information_schema.tables where table_type='VIEW' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
-    "List Stored Procedures": "SELECT nspname||'.'||proname as proc from pg_catalog.pg_namespace n inner join pg_catalog.pg_proc p on pronamespace = n.oid where nspname not in ('information_schema','pg_catalog') order by nspname,proname",
-    "Describe Table": "select column_name, data_type, character_maximum_length from INFORMATION_SCHEMA.COLUMNS where table_schema = 'public' and table_name = 'xxxxx';",
-    "Drop / Create Table": "drop table if exists cust;\r\n\
+    'Select': 'select * from TABLENAME limit 1000;',
+    'Get DB Name': 'select current_database() db_name;',
+    'List Tables': "select table_schema||'.'||table_name as table from information_schema.tables where table_type='BASE TABLE' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
+    'List Views': "select table_schema||'.'||table_name as view from information_schema.tables where table_type='VIEW' and table_schema not in ('information_schema','pg_catalog') order by table_schema,table_name",
+    'List Stored Procedures': "SELECT nspname||'.'||proname as proc from pg_catalog.pg_namespace n inner join pg_catalog.pg_proc p on pronamespace = n.oid where nspname not in ('information_schema','pg_catalog') order by nspname,proname",
+    'Describe Table': "select column_name, data_type, character_maximum_length from INFORMATION_SCHEMA.COLUMNS where table_schema = 'public' and table_name = 'xxxxx';",
+    'Drop / Create Table': "drop table if exists cust;\r\n\
   create table public.cust (\
     cust_id bigserial primary key not null,\r\n\
     cust_sts character varying(32) NOT NULL references public.code_sys_cust_sts(code_val),\r\n\
@@ -42,20 +42,20 @@ jsh.App[modelid] = new (function(){
     foreign key (cust_sts) references public.code_sys_cust_sts(code_val)\r\n\
   );\r\n\
   insert into cust(cust_id,cust_sts,cust_name) values (1,'ACTIVE','ACME Industries');",
-    "Drop / Create View": "drop view if exists v_cust;\r\n\
+    'Drop / Create View': 'drop view if exists v_cust;\r\n\
     create view v_cust as\r\n\
     select cust_id,cust_sts,cust_name,code_sys_cust_sts.code_txt as cust_sts_txt,cust_einhash\r\n\
       from public.cust\r\n\
-      left outer join public.code_sys_cust_sts on cust.cust_sts = code_sys_cust_sts.code_val;",
-    "Create Stored Procedure": "",
-    "Create UCOD": "",
+      left outer join public.code_sys_cust_sts on cust.cust_sts = code_sys_cust_sts.code_val;',
+    'Create Stored Procedure': '',
+    'Create UCOD': '',
   };
   this.samples.sqlite = {
-    "Select": "select * from TABLENAME limit 1000;",
-    "List Tables": "SELECT name FROM sqlite_master WHERE type='table' order by name;",
-    "List Views": "SELECT name FROM sqlite_master WHERE type='view' order by name;",
-    "Describe Table": "PRAGMA table_info(xxxxx);",
-    "Drop / Create Table": "drop table if exists cust;\r\n\
+    'Select': 'select * from TABLENAME limit 1000;',
+    'List Tables': "SELECT name FROM sqlite_master WHERE type='table' order by name;",
+    'List Views': "SELECT name FROM sqlite_master WHERE type='view' order by name;",
+    'Describe Table': 'PRAGMA table_info(xxxxx);',
+    'Drop / Create Table': "drop table if exists cust;\r\n\
   create table cust (\r\n\
     cust_id integer primary key autoincrement not null,\r\n\
     cust_sts text not null,\r\n\
@@ -70,62 +70,62 @@ jsh.App[modelid] = new (function(){
     foreign key (cust_sts) references code_sys_cust_sts(code_val)\r\n\
   );\r\n\
   insert into cust(cust_id,cust_sts,cust_name) values (1,'ACTIVE','ACME Industries');",
-    "Recreate Table": "--***Run Restructure Drop\r\n"+
-      "TABLE_INIT\r\n"+
-      "insert into TABLENAME2(COLUMNS) select COLUMNS from TABLENAME;\r\n"+
-      "PRAGMA foreign_keys=off;\r\n"+
-      "drop table TABLENAME;\r\n"+
-      "ALTER table TABLENAME2 RENAME TO TABLENAME;\r\n"+
-      "PRAGMA foreign_keys=on;\r\n"+
-      "--***Run Restructure Init\r\n",
-    "Drop / Create View": "drop view if exists v_cust;\r\n\
+    'Recreate Table': '--***Run Restructure Drop\r\n'+
+      'TABLE_INIT\r\n'+
+      'insert into TABLENAME2(COLUMNS) select COLUMNS from TABLENAME;\r\n'+
+      'PRAGMA foreign_keys=off;\r\n'+
+      'drop table TABLENAME;\r\n'+
+      'ALTER table TABLENAME2 RENAME TO TABLENAME;\r\n'+
+      'PRAGMA foreign_keys=on;\r\n'+
+      '--***Run Restructure Init\r\n',
+    'Drop / Create View': 'drop view if exists v_cust;\r\n\
   create view v_cust as\r\n\
   select cust_id,cust_sts,cust_name,code_sys_cust_sts.code_txt as cust_sts_txt,cust_einhash\r\n\
     from cust\r\n\
-    left outer join code_sys_cust_sts on cust.cust_sts = code_sys_cust_sts.code_val;",
-    "Create UCOD": "create_code_sys('code_sys_cust_sts');\r\n\
+    left outer join code_sys_cust_sts on cust.cust_sts = code_sys_cust_sts.code_val;',
+    'Create UCOD': "create_code_sys('code_sys_cust_sts');\r\n\
   INSERT INTO {schema}_code_sys (code_name, code_desc) VALUES ('cust_sts', 'Customer Status');\r\n\
   insert into code_sys_cust_sts(code_seq,code_val,code_txt,code_code) values (1,'ACTIVE','Active','A');",
   };
 
   this.getFormElement = function(){
     return jsh.$root('.xformcontainer.xelem'+xmodel.class);
-  }
+  };
 
   this.oninit = function(xmodel) {
     var jform = _this.getFormElement();
-    jform.find('.db').change(function(){
-      var db = jform.find('.db').val();
-      if(!db) jform.find('.run').hide();
+    jform.$find('.db').change(function(){
+      var db = jform.$find('.db').val();
+      if(!db) jform.$find('.run').hide();
       else _this.LoadScripts(db);
     });
-    var jSamples = jform.find('.samples');
+    var jSamples = jform.$find('.samples');
     jSamples.change(function(){
-      var db = jform.find('.db').val();
+      var db = jform.$find('.db').val();
       var dbtype = _this.DBs[db];
       var sampleName = jSamples.val();
       var samples = _this.samples[dbtype];
       if(!(sampleName in samples)){ return XExt.Alert('Sample not found: '+sampleName); }
       var sampleSQL = samples[sampleName];
-      jform.find('.sql').val(sampleSQL)
+      jform.$find('.sql').val(sampleSQL);
       jSamples.val('');
     });
-    jform.find('.runsql').click(function(){ _this.RunSQL(); });
-    jform.find('.exportcsv').click(function(){ _this.ExportCSV(); });
-    jform.find('.runas_toggle').click(function(){ jform.find('.runas').toggle(); return false; });
+    jform.$find('.runsql').click(function(){ _this.RunSQL(); });
+    jform.$find('.exportcsv').click(function(){ _this.ExportCSV(); });
+    jform.$find('.runas_toggle').click(function(){ jform.$find('.runas').toggle(); return false; });
 
     _this.RenderDBListing(_.keys(_this.DBs));
-  }
+  };
 
   this.RenderDBListing = function(dbs){
     var jform = _this.getFormElement();
-    var jobj = jform.find('.db');
+    var jobj = jform.$find('.db');
     if(dbs.length > 1){
-      jform.find('.dbselect').show();
+      jform.$find('.dbselect').show();
       jobj.append($('<option>',{value:''}).text('Please select...'));
     }
     else {
-      jform.find('.dbselect').hide();
+      jform.$find('.dbselect').hide();
       jobj.empty();
     }
     for(var i=0;i<dbs.length;i++){
@@ -136,16 +136,17 @@ jsh.App[modelid] = new (function(){
     else if(_GET['db']){
       jobj.val(_GET['db']).change();
     }
-  }
+  };
 
   this.LoadScripts = function(db){
     var jform = _this.getFormElement();
-    jform.find('.run').show();
-    jform.find('.rslt').html('');
-    var jSamples = jform.find('.samples');
+    jform.$find('.run').show();
+    jform.$find('.rslt').html('');
+    var jSamples = jform.$find('.samples');
     jSamples.empty();
     jSamples.append($('<option>',{value:''}).text('Please select...'));
     var dbtype = _this.DBs[db];
+    var sql = '';
     if(dbtype in _this.samples){
       var samples = _this.samples[dbtype];
       for(var sampleName in samples){
@@ -156,7 +157,7 @@ jsh.App[modelid] = new (function(){
       }
       if(_GET['table']){
         if(_GET['scripttype']=='recreate'){
-          var sql = samples['Recreate Table'];
+          sql = samples['Recreate Table'];
           if(_this.TABLE_OBJ){
             var COLUMNS = _.map(_this.TABLE_OBJ.columns, function(column){ return column.name; }).join(',');
             sql = sql.replace(/COLUMNS/g,COLUMNS);
@@ -165,29 +166,29 @@ jsh.App[modelid] = new (function(){
             sql = sql.replace(/TABLE_INIT/g,createSql);
           }
           sql = sql.replace(/TABLENAME/g,_GET['table']);
-          jform.find('.sql').val(sql);
+          jform.$find('.sql').val(sql);
         }
         else {
-          var sql = samples['Select'];
+          sql = samples['Select'];
           sql = sql.replace('TABLENAME',_GET['table']);
-          jform.find('.sql').val(sql);
-          jform.find('.runsql').click();
+          jform.$find('.sql').val(sql);
+          jform.$find('.runsql').click();
         }
       }
       else if('Select' in samples){
-        jform.find('.sql').val(samples['Select'])
+        jform.$find('.sql').val(samples['Select']);
       }
     }
-  }
+  };
 
   this.getExecParams = function(){
     var jform = _this.getFormElement();
-    var sql = jform.find('.sql').val();
-    var db = jform.find('.db').val();
+    var sql = jform.$find('.sql').val();
+    var db = jform.$find('.db').val();
     var params = { sql: sql, db: db };
-    var runas_user = jform.find('.user').val().trim();
-    var runas_password = jform.find('.password').val();
-    var nocontext = jform.find('.nocontext').is(':checked');
+    var runas_user = jform.$find('.user').val().trim();
+    var runas_password = jform.$find('.password').val();
+    var nocontext = jform.$find('.nocontext').is(':checked');
     if(runas_user){
       params.runas_user = runas_user;
       params.runas_password = runas_password;
@@ -195,14 +196,14 @@ jsh.App[modelid] = new (function(){
     params.show_notices = true;
     params.nocontext = nocontext?'1':'';
     return params;
-  }
+  };
 
   this.ExportCSV = function(){
     var params = _this.getExecParams();
     params.export_csv = 1;
     var url = jsh._BASEURL + '_db/exec';
     jsh.postFileProxy(url, params);
-  }
+  };
 
   this.RunSQL = function(){
     var jform = _this.getFormElement();
@@ -214,8 +215,8 @@ jsh.App[modelid] = new (function(){
       if ('_success' in rslt) {
         var str = '';
         if(rslt._stats){
-          _.each(rslt._stats.warnings, function(warning){ str += "<div><b>WARNING: </b>"+warning+"</div>"; });
-          _.each(rslt._stats.notices, function(notice){ str += "<div><b>NOTICE: </b>"+notice+"</div>"; });
+          _.each(rslt._stats.warnings, function(warning){ str += '<div><b>WARNING: </b>'+warning+'</div>'; });
+          _.each(rslt._stats.notices, function(notice){ str += '<div><b>NOTICE: </b>'+notice+'</div>'; });
         }
         if(rslt.dbrslt && rslt.dbrslt.length){
           for(var i=0;i<rslt.dbrslt.length;i++){
@@ -225,8 +226,8 @@ jsh.App[modelid] = new (function(){
               str += '<table border=1>';
               var headers = _.keys(dbrslt[0]);
               str += '<tr>';
-              for(var j=0;j<headers.length;j++){
-                str += '<th>' + XExt.escapeHTMLBR(headers[j]) + '</th>';
+              for(var k=0;k<headers.length;k++){
+                str += '<th>' + XExt.escapeHTMLBR(headers[k]) + '</th>';
               }
               str += '</tr>';
               for(var j=0;j<dbrslt.length;j++){
@@ -258,11 +259,11 @@ jsh.App[modelid] = new (function(){
         */
         str += "<div style='font-weight:bold'>Operation complete</div>";
         var endtm = Date.now();
-        str += "<div style='font-weight:bold'>Time: " + (endtm-starttm) + "ms</div>";
-        jform.find('.rslt').html(str);
+        str += "<div style='font-weight:bold'>Time: " + (endtm-starttm) + 'ms</div>';
+        jform.$find('.rslt').html(str);
       }
     });
     
-  }
+  };
 
 })();

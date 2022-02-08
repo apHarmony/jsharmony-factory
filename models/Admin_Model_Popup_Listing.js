@@ -1,4 +1,4 @@
-jsh.App[modelid] = { }
+jsh.App[modelid] = { };
 
 jsh.App[modelid].ShowUserModels = function(popupmodelid, parentmodelid, fieldid, onComplete){
   var searchitems = [];
@@ -7,7 +7,7 @@ jsh.App[modelid].ShowUserModels = function(popupmodelid, parentmodelid, fieldid,
   var popupmodel = jsh.XModels[popupmodelid];
   popupmodel.controller.SetSearch(searchitems, true);
   popupmodel.controller.RunSearch(onComplete);
-}
+};
 
 jsh.App[modelid].ShowBaseModels = function(popupmodelid, parentmodelid, fieldid, onComplete){
   var searchitems = [];
@@ -15,4 +15,4 @@ jsh.App[modelid].ShowBaseModels = function(popupmodelid, parentmodelid, fieldid,
   var popupmodel = jsh.XModels[popupmodelid];
   popupmodel.controller.SetSearch(searchitems, true);
   popupmodel.controller.RunSearch(onComplete);
-}
+};

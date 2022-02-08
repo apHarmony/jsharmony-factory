@@ -3,31 +3,31 @@ jsh.App[modelid] = new (function(){
 
   this.getFormElement = function(){
     return jsh.$root('.xformcontainer.xelem'+xmodel.class);
-  }
+  };
 
   this.oninit = function(xmodel) {
     var jform = _this.getFormElement();
     XForm.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { }, function (rslt) { //On success
-      if ('_success' in rslt) { 
+      if ('_success' in rslt) {
         _this.RenderDBListing(rslt.dbs);
       }
     });
-    jform.find('.db').change(function(){
-      var db = jform.find('.db').val();
-      if(!db) jform.find('.run').hide();
+    jform.$find('.db').change(function(){
+      var db = jform.$find('.db').val();
+      if(!db) jform.$find('.run').hide();
       else _this.GetScripts(db);
     });
-  }
+  };
 
   this.RenderDBListing = function(dbs){
     var jform = _this.getFormElement();
-    var jobj = jform.find('.db');
+    var jobj = jform.$find('.db');
     if(dbs.length > 1){
-      jform.find('.dbselect').show();
+      jform.$find('.dbselect').show();
       jobj.append($('<option>',{value:''}).text('Please select...'));
     }
     else {
-      jform.find('.dbselect').hide();
+      jform.$find('.dbselect').hide();
       jobj.empty();
     }
     for(var i=0;i<dbs.length;i++){
@@ -35,37 +35,37 @@ jsh.App[modelid] = new (function(){
       jobj.append($('<option>',{value:db}).text(db));
     }
     if(dbs.length==1) _this.GetScripts(dbs[0]);
-  }
+  };
 
   this.GetScripts = function(dbid){
     XForm.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { db: dbid }, function (rslt) { //On success
-      if ('_success' in rslt) { 
+      if ('_success' in rslt) {
         _this.RenderScripts(rslt.scripts);
       }
     });
-  }
+  };
 
   this.RenderScripts = function(scripts){
     var jform = _this.getFormElement();
-    jform.find('.run').show();
-    jform.find('.rslt').text('');
+    jform.$find('.run').show();
+    jform.$find('.rslt').text('');
 
     function union(a,b){
       var rslt = {};
       if((a=='...')||(b=='...')) return '...';
-      for(var key in a){
-        if(key in b) rslt[key] = union(a[key],b[key]);
-        else rslt[key] = a[key];
+      for(var akey in a){
+        if(akey in b) rslt[akey] = union(a[akey],b[akey]);
+        else rslt[akey] = a[akey];
       }
-      for(var key in b){
-        if(!(key in a)) rslt[key] = b[key];
+      for(var bkey in b){
+        if(!(bkey in a)) rslt[bkey] = b[bkey];
       }
       return rslt;
     }
 
     //--------------------
 
-    var jobj = jform.find('.listing');
+    var jobj = jform.$find('.listing');
     //Clear any existing content
     jobj.empty();
     //Render scripts tree
@@ -76,15 +76,14 @@ jsh.App[modelid] = new (function(){
       if(allscripts===null) allscripts = scripts[module];
       else allscripts = union(allscripts, scripts[module]);
     }
-    allscripts = { "(All)": allscripts };
-    jobj.children("ul").prepend(_this.RenderScriptsNode(allscripts).children());
+    allscripts = { '(All)': allscripts };
+    jobj.children('ul').prepend(_this.RenderScriptsNode(allscripts).children());
     //Attach events
-    jobj.find('a.run').click(function(e){ e.preventDefault(); _this.ExecScript(this, 'run'); });
-    jobj.find('a.info').click(function(e){ e.preventDefault(); _this.ExecScript(this, 'read'); });
-  }
+    jobj.$find('a.run').click(function(e){ e.preventDefault(); _this.ExecScript(this, 'run'); });
+    jobj.$find('a.info').click(function(e){ e.preventDefault(); _this.ExecScript(this, 'read'); });
+  };
 
   this.RenderScriptsNode = function(node){
-    var jform = _this.getFormElement();
     var jlist = $('<ul></ul>');
     for(var childname in node){
       if(_.isString(node[childname])) continue;
@@ -107,12 +106,12 @@ jsh.App[modelid] = new (function(){
     }
     if(!jlist.children().length) return $();
     return jlist;
-  }
+  };
 
   this.ExecScript = function(obj, mode){
     var jform = _this.getFormElement();
     var jobj = $(obj);
-    jform.find('.rslt').text('');
+    jform.$find('.rslt').text('');
 
     var starttm = Date.now();
 
@@ -123,9 +122,9 @@ jsh.App[modelid] = new (function(){
       parent = parent.parent().closest('li');
     }
 
-    var params = { scriptid: scriptid, mode: mode, db: jform.find('.db').val() };
-    var runas_user = jform.find('.user').val().trim();
-    var runas_password = jform.find('.password').val();
+    var params = { scriptid: scriptid, mode: mode, db: jform.$find('.db').val() };
+    var runas_user = jform.$find('.user').val().trim();
+    var runas_password = jform.$find('.password').val();
     if(runas_user){
       params.runas_user = runas_user;
       params.runas_password = runas_password;
@@ -137,28 +136,28 @@ jsh.App[modelid] = new (function(){
       XForm.prototype.XExecutePost('../_funcs/DEV_DB_SCRIPTS', { data: JSON.stringify(params) }, function (rslt) { //On success
         if ('_success' in rslt) {
           if(mode=='read'){
-            jform.find('.rslt').text(params.scriptid+"\r\n-------------------------------\r\n"+rslt.src);
+            jform.$find('.rslt').text(params.scriptid+'\r\n-------------------------------\r\n'+rslt.src);
           }
           else{
             var txt = '';
             if(rslt._stats){
               _.each(rslt._stats, function(stats){
-                _.each(stats.warnings, function(warning){ txt += "WARNING: "+warning+"\r\n"; });
-                _.each(stats.notices, function(notice){ txt += "NOTICE: "+notice+"\r\n"; });
+                _.each(stats.warnings, function(warning){ txt += 'WARNING: '+warning+'\r\n'; });
+                _.each(stats.notices, function(notice){ txt += 'NOTICE: '+notice+'\r\n'; });
               });
             }
             if(rslt.dbrslt[0]) for(var i=0;i<rslt.dbrslt[0].length;i++){
-              txt += "Resultset " + (i+1).toString() + "\r\n" + "------------------------------------\r\n";
-              txt += JSON.stringify(rslt.dbrslt[0][i],null,4) + "\r\n\r\n";
+              txt += 'Resultset ' + (i+1).toString() + '\r\n' + '------------------------------------\r\n';
+              txt += JSON.stringify(rslt.dbrslt[0][i],null,4) + '\r\n\r\n';
             }
-            txt += "\r\nOperation complete";
+            txt += '\r\nOperation complete';
             var endtm = Date.now();
-            txt += "\r\nTime: " + (endtm-starttm) + "ms";
-            jform.find('.rslt').text(txt);
+            txt += '\r\nTime: ' + (endtm-starttm) + 'ms';
+            jform.$find('.rslt').text(txt);
           }
         }
       });
     });
-  }
+  };
 
 })();
