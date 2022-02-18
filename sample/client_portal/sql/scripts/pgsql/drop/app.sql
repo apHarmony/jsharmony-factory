@@ -6,8 +6,8 @@ SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 
 /*********Drop / delete existing tables / data*********/
-delete from jsharmony.menu where menu_id in (300,30001);
-delete from jsharmony.sys_menu_role where menu_id in (300,30001);
+delete from jsharmony.menu where menu_id in (300,30001,280001);
+delete from jsharmony.sys_menu_role where menu_id in (300,30001,280001);
 
 delete from jsharmony.code where code_name='cust_phone_type' and code_schema is null;
 delete from jsharmony.code where code_name='cust_sts' and code_schema is null;

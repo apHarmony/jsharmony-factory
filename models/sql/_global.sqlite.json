@@ -8,6 +8,7 @@
   "func_prefix":"",
   "$ifnull":{ "params": ["a","b"], "sql": "ifnull(%%%a%%%,%%%b%%%)" },
   "$addDays":{ "params": ["date","numdays"], "sql": "datetime(%%%date%%%,'%%%numdays%%% days')" },
+  "$topn": { "params": ["CNT","SQL"], "sql": "%%%SQL%%% limit %%%CNT%%%" },
   "proc_run":"",
   "par_list_beg":"(",
   "par_list_end":")",

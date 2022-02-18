@@ -8,6 +8,7 @@
   "func_prefix":"dbo.",
   "$ifnull":{ "params": ["a","b"], "sql": "isnull(%%%a%%%,%%%b%%%)" },
   "$addDays":{ "params": ["date","numdays"], "sql": "dateadd(day, %%%numdays%%%, %%%date%%%)" },
+  "$topn": { "params": ["CNT","SQL"], "sql": "top %%%CNT%%% %%%SQL%%%" },
   "proc_run":"EXEC",
   "par_list_beg":" ",
   "par_list_end":" ",

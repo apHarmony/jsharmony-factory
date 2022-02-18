@@ -8,6 +8,7 @@
   "func_prefix":"",
   "$ifnull":{ "params": ["a","b"], "sql": "coalesce(%%%a%%%,%%%b%%%)" },
   "$addDays":{ "params": ["date","numdays"], "sql": "(%%%date%%% + interval '%%%numdays%%%' day)" },
+  "$topn": { "params": ["CNT","SQL"], "sql": "%%%SQL%%% limit %%%CNT%%%" },
   "proc_run":"select ",
   "par_list_beg":"(",
   "par_list_end":")",

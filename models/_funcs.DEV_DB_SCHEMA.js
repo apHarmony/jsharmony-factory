@@ -72,7 +72,7 @@ module.exports = exports = function(module, funcs){
         var columns = null;
         if(Q.columns){
           try{
-            columns = (columns||'').split(',');
+            columns = (Q.columns||'').split(',');
           }
           catch(ex){
             return Helper.GenError(req, res, -4, 'Invalid Parameters');
@@ -85,7 +85,9 @@ module.exports = exports = function(module, funcs){
         }
 
         //Get data
-        appsrv.ExecRecordset(req._DBContext, 'select '+(numrows >= 0 ? 'top '+numrows.toString() : '')+' * from '+table, [], {}, function(err, rslt){
+        var sql = 'select * from '+table;
+        if(numrows >= 0) sql = 'select $topn('+numrows.toString()+', * from '+table + ')';
+        appsrv.ExecRecordset(req._DBContext, sql, [], {}, function(err, rslt){
           if(err) return Helper.GenError(req, res, -99999, err);
           var data = rslt && rslt.length && rslt[0];
           if(Q.output=='dbobject'){
