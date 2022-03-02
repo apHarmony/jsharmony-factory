@@ -13,7 +13,9 @@
     "left outer join {schema}.v_doc_filename job_email_doc__tbl on job_email.email_doc_id = job_email_doc__tbl.doc_id",
     "left outer join {schema}.job_note on job_note.job_id = job__tbl.job_id",
     "left outer join {schema}.job_sms on job_sms.job_id = job__tbl.job_id",
-    "where job_rslt is null limit 1"
+    "where job_rslt is null",
+    "order by job__tbl.job_id",
+    "limit 1"
   ],
   "jobproc_save_doc": [
     "insert into {schema}.doc__tbl(doc_scope,doc_scope_id,cust_id,doc_sts,doc_ctgr,doc_desc,doc_ext,doc_size,doc_upuser,doc_uptstmp) values(@doc_scope,@doc_scope_id, ",
