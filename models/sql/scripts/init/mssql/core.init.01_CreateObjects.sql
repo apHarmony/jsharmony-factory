@@ -4159,10 +4159,8 @@ BEGIN
   DECLARE @fname VARCHAR(255)
   DECLARE @mycmd VARCHAR(512)
 
-  /*
   RETURN 0
-  */
-
+  /*
   SET @sdttm = SUBSTRING(CONVERT(VARCHAR(255), @dttm, 101),1,6) + 
                SUBSTRING(CONVERT(VARCHAR(255), @dttm, 101),9,2) + ' ' +
                SUBSTRING(CONVERT(VARCHAR(255), @dttm, 114),1,11) ; 
@@ -4178,6 +4176,7 @@ BEGIN
   EXEC xp_cmdshell @mycmd, NO_OUTPUT
   
   RETURN 0
+  */
 /*
           INSERT INTO ZZ_LOG (LOG_PLACE, LOG_VALUE)
            VALUES('Q_UPDATE',

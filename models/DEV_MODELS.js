@@ -36,6 +36,9 @@ jsh.App[modelid] = new (function(){
     _this.panelUtilities.$find('.auto_controls').click(function(){
       _this.RenderAutoControls();
     });
+    _this.panelUtilities.$find('.model_listing').click(function(){
+      XExt.navTo('/_listing');
+    });
   };
   
   this.RenderModelListing = function(dbs){

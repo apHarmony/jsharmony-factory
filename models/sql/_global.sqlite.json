@@ -8,6 +8,7 @@
   "func_prefix":"",
   "$ifnull":{ "params": ["a","b"], "sql": "ifnull(%%%a%%%,%%%b%%%)" },
   "$addDays":{ "params": ["date","numdays"], "sql": "datetime(%%%date%%%,'%%%numdays%%% days')" },
+  "$addHours":{ "params": ["date","numhours"], "sql": "datetime(%%%date%%%,'%%%numhours%%% hours')" },
   "$topn": { "params": ["CNT","SQL"], "sql": "%%%SQL%%% limit %%%CNT%%%" },
   "proc_run":"",
   "par_list_beg":"(",
@@ -28,6 +29,16 @@
     "exec": [
       "var rslt = arguments[0];",
       "return rslt.replace(/'/g,\"''\").replace(/\\;/g,\"\\\\\\\\;\").replace(/\\r/g,\" \").replace(/\\n/g,\"\\\\n \");"
+    ]
+  },
+  "$lpad": {
+    "params": ["STR","LEN","PADCHAR"],
+    "exec": [
+      "var iLEN = parseInt(LEN);",
+      "PADCHAR = PADCHAR || ' ';",
+      "if(PADCHAR.length>1 && (PADCHAR[0]==\"'\")) PADCHAR=PADCHAR.substr(1);",
+      "if(PADCHAR.length>1) PADCHAR = PADCHAR.substr(0,1);",
+      "return 'substr(\\''+PADCHAR.repeat(iLEN)+'\\' || '+STR+', '+(-1*iLEN).toString()+', '+iLEN.toString()+')';",
     ]
   },
   "{{concat}}":{
