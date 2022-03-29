@@ -10,6 +10,10 @@
   "$addDays":{ "params": ["date","numdays"], "sql": "datetime(%%%date%%%,'%%%numdays%%% days')" },
   "$addHours":{ "params": ["date","numhours"], "sql": "datetime(%%%date%%%,'%%%numhours%%% hours')" },
   "$topn": { "params": ["CNT","SQL"], "sql": "%%%SQL%%% limit %%%CNT%%%" },
+  "$changes": {
+    "params": [],
+    "exec": "return [].slice.call(arguments).join(',')+'; select changes()+(select extra_changes from jsharmony_meta) xrowcount ';"
+  },
   "proc_run":"",
   "par_list_beg":"(",
   "par_list_end":")",

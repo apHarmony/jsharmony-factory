@@ -1,0 +1,33 @@
+{
+  "str_concat":" CONCAT ",
+  "$ifnull":{ "params": ["a","b"], "sql": "ifnull(%%%a%%%,%%%b%%%)" },
+  "$addDays":{ "params": ["date","numdays"], "sql": "(%%%date%%% + %%%numdays%%% days)" },
+  "$addHours":{ "params": ["date","numhours"], "sql": "(%%%date%%% + %%%numhours%%% hours)" },
+  "$topn": { "params": ["CNT","SQL"], "sql": "%%%SQL%%% limit %%%CNT%%%" },
+  "$changes": {
+    "params": [],
+    "exec": "return 'SELECT COUNT(*) \"xrowcount\" FROM FINAL TABLE ('+[].slice.call(arguments).join(',')+')';"
+  },
+  "$lpad": {
+    "params": ["STR","LEN","PADCHAR"],
+    "sql": [
+      "LPAD(%%%STR%%%, %%%LEN%%%, %%%PADCHAR%%%)"
+    ],
+  },
+  "{{concat}}":{
+    "params": [],
+    "exec": [
+      "if(arguments.length<1) return 'null';",
+      "var rslt = '(' + arguments[0];",
+      "for(var i=1;i<arguments.length;i++){",
+      "  rslt += ' CONCAT ' + arguments[i];",
+      "}",
+      "rslt += ')';",
+      "return rslt;"
+    ]
+  },
+  "{schema}.my_now":{
+    "params": [],
+    "sql": "(current timestamp)"
+  },
+}
