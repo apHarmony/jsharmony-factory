@@ -59,10 +59,12 @@ module.exports = exports = function(module, funcs){
       }
       if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Database ID'); return; }
 
+      var db = jsh.DB[dbid];
+
       if(action=='schema'){
         if (!appsrv.ParamCheck('Q', Q, ['|db','|action'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
-        var schema = jsh.DB[dbid].schema_definition;
-        res.end(JSON.stringify({ _success: 1, schema: schema, funcs: jsh.DB[dbid].SQLExt.Funcs }));
+        var schema = db.schema_definition;
+        res.end(JSON.stringify({ _success: 1, schema: schema, funcs: db.SQLExt.Funcs }));
       }
       else if(action=='inserts'){
         if (!appsrv.ParamCheck('Q', Q, ['|db','&action','&table','|output','|columns','|rows'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
@@ -87,9 +89,9 @@ module.exports = exports = function(module, funcs){
         //Get data
         var sql = 'select * from '+table;
         if(numrows >= 0) sql = 'select $topn('+numrows.toString()+', * from '+table + ')';
-        appsrv.ExecRecordset(req._DBContext, sql, [], {}, function(err, rslt){
+        db.Recordset(req._DBContext, sql, [], {}, undefined, function(err, rslt){
           if(err) return Helper.GenError(req, res, -99999, err);
-          var data = rslt && rslt.length && rslt[0];
+          var data = rslt;
           if(Q.output=='dbobject'){
             var rslttxt = '';
             _.each(data, function(datarow){
