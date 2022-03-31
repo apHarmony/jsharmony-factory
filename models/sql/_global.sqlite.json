@@ -665,6 +665,10 @@
       "(cast(%%%doc_id%%% as text)||%%%doc_ext%%%)"
     ]
   },
+  "{schema}.log_audit_done" : {
+    "params": [],
+    "sql": "    update jsharmony_meta set {{audit_seq}} = null",
+  },
   "{schema}.log_audit_insert" : {
     "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
     "exec": [

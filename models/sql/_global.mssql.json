@@ -218,6 +218,10 @@
     "params": ["A","B"],
     "sql": ["(%%%A%%% is null and %%%B%%% is not null or %%%B%%% is null and %%%A%%% is not null or %%%A%%%<>%%%B%%%)"]
   },
+  "{schema}.log_audit_done" : {
+    "params": [],
+    "sql": "",
+  },
   "{schema}.log_audit_insert" : {
     "params": ["TABLE","ID","COL_NAME","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
     "exec": [

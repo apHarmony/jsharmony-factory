@@ -90,6 +90,10 @@
       "my_toa.item_id := %%%item_id%%%;"
     ]
   },
+  "{schema}.log_audit_done" : {
+    "params": [],
+    "sql": "",
+  },
   "log_audit_insert" : {
     "params": ["ID","audit_ref_name","audit_ref_id","audit_subject","cust_id","item_id"],
     "sql": [
