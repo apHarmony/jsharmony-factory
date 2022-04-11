@@ -14,6 +14,7 @@
     "params": [],
     "exec": "return [].slice.call(arguments).join(',')+'; select changes()+(select extra_changes from jsharmony_meta) xrowcount ';"
   },
+  "$binary":{ "params": ["a"], "sql": "X'%%%a%%%'" },
   "proc_run":"",
   "par_list_beg":"(",
   "par_list_end":")",
@@ -675,7 +676,8 @@
       "var rslt = '';",
       "rslt += 'update jsharmony_meta set {{audit_seq}} = null\\\\;\\r\\n';",
       "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
-      "rslt += '{schema}.log_audit_insert_base('+sqlescape(TABLE)+','+sqlescape(ID)+','+sqlescape(COL_NAME)+','+sqlescape(audit_ref_name)+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')\\r\\n';",
+      "rslt += '{schema}.log_audit_insert_base('+sqlescape(TABLE)+','+sqlescape(ID)+','+sqlescape(COL_NAME)+','+sqlescape(audit_ref_name)+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')\\\\;\\r\\n';",
+      "rslt += '{schema}.log_audit_done()\\r\\n';",
       "return rslt;"
     ]
   },
@@ -699,6 +701,7 @@
       "for(var i=0;i<COL_ARRAY.length;i++){",
       "  stmts.push('{schema}.log_audit_update_base('+TABLE+','+ID+','+COL_ARRAY[i]+','+audit_ref_name+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')');",
       "}",
+      "stmts.push('{schema}.log_audit_done()');",
       "rslt += stmts.join('\\\\;\\n');",
       "return rslt;"
     ]
@@ -708,7 +711,8 @@
     "exec": [
       "var rslt = '';",
       "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
-      "rslt += '{schema}.log_audit_update_base('+TABLE+','+ID+','+COL_NAME+','+audit_ref_name+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')';",
+      "rslt += '{schema}.log_audit_update_base('+TABLE+','+ID+','+COL_NAME+','+audit_ref_name+','+sqlescape(audit_ref_id)+','+sqlescape(audit_subject)+','+sqlescape(cust_id)+','+sqlescape(item_id)+')\\\\;';",
+      "rslt += '{schema}.log_audit_done()';",
       "return rslt;"
     ]
   },
@@ -756,6 +760,7 @@
       "for(var i=0;i<COL_ARRAY.length;i++){",
       "  stmts.push('{schema}.log_audit_delete_base('+TABLE+','+ID+','+COL_ARRAY[i]+')');",
       "}",
+      "stmts.push('{schema}.log_audit_done()');",
       "rslt += stmts.join('\\\\;\\r\\n');",
       "return rslt;"
     ]
@@ -765,7 +770,8 @@
     "exec": [
       "var rslt = '';",
       "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
-      "rslt += '{schema}.log_audit_delete_base('+TABLE+','+ID+','+COL_NAME+')';",
+      "rslt += '{schema}.log_audit_delete_base('+TABLE+','+ID+','+COL_NAME+')\\\\;';",
+      "rslt += '{schema}.log_audit_done()\\r\\n';",
       "return rslt;"
     ]
   },

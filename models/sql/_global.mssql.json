@@ -10,6 +10,7 @@
   "$addDays":{ "params": ["date","numdays"], "sql": "dateadd(day, %%%numdays%%%, %%%date%%%)" },
   "$addHours":{ "params": ["date","numhours"], "sql": "dateadd(hour, %%%numhours%%%, %%%date%%%)" },
   "$topn": { "params": ["CNT","SQL"], "sql": "top %%%CNT%%% %%%SQL%%%" },
+  "$binary":{ "params": ["a"], "sql": "0x%%%a%%%" },
   "proc_run":"EXEC",
   "par_list_beg":" ",
   "par_list_end":" ",
