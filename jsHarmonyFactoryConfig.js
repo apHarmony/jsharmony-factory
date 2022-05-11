@@ -121,7 +121,25 @@ jsHarmonyFactoryConfig.prototype.Merge = function(config, jsh, sourceModuleName)
       }
     }
   }
-  jsHarmonyConfig.Base.prototype.Merge.apply(_this, arguments);
+  jsHarmonyConfig.Base.prototype.Merge.call(_this, config, jsh, sourceModuleName, {
+    'static_menu': function(obj, config){
+      if(!config.static_menu) return;
+      if(!obj.static_menu) obj.static_menu = {};
+      if(!('main_menu' in obj.static_menu)) obj.static_menu.main_menu = [];
+      if(!('sub_menu' in obj.static_menu)) obj.static_menu.sub_menu = [];
+      function appendArray(dst,src){
+        var menu_ids = {};
+        for(var i=0;i<dst.length;i++) menu_ids[dst[i].menu_id] = i;
+        for(var i=0;i<src.length;i++){
+          if(!src[i].menu_id){ dst.push(src[i]); continue; }
+          if(src[i].menu_id in menu_ids) dst[menu_ids[src[i].menu_id]] = src[i];
+          else dst.push(src[i]);
+        }
+      }
+      if(config.static_menu.main_menu) appendArray(obj.static_menu.main_menu,config.static_menu.main_menu);
+      if(config.static_menu.sub_menu) appendArray(obj.static_menu.sub_menu,config.static_menu.sub_menu);
+    }
+  });
 };
 
 jsHarmonyFactoryConfig.prototype.Helper = require('./jsHarmonyFactoryConfigHelper.js');
