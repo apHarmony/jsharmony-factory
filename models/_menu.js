@@ -88,7 +88,7 @@ exports = module.exports = function(module){
                 if((req.jshsite.id in roles) && !_.isString(roles[req.jshsite.id])) roles = roles[req.jshsite.id];
                 else if(req.jshsite.id != 'main') roles = [];
                 if(_.isArray(roles)){
-                  for(var i=0;i<roles.length;i++){ if(roles[i] in req._roles) has_access = true; break; }
+                  for(var i=0;i<roles.length;i++){ if(roles[i] in req._roles){ has_access = true; break; } }
                 }
               }
               if(has_access) menu_items.push(menu_item);
