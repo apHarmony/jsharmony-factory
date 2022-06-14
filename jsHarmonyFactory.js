@@ -198,7 +198,8 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
       '/_funcs/DEV_DB_SCRIPTS': _this.funcs.DEV_DB_SCRIPTS,
       '/_funcs/DEV_DB_DIFF': _this.funcs.DEV_DB_DIFF,
       '/_funcs/DEV_DB_SCHEMA': _this.funcs.DEV_DB_SCHEMA,
-      '/_funcs/DEV_MODELS': _this.funcs.DEV_MODELS
+      '/_funcs/DEV_MODELS': _this.funcs.DEV_MODELS,
+      '/_funcs/DEV_EMAILTEST': _this.funcs.DEV_EMAILTEST,
     }
   ];
   return jshconfig_main;

@@ -8,6 +8,7 @@
     "params": [],
     "exec": "return 'SELECT COUNT(*) \"xrowcount\" FROM FINAL TABLE ('+[].slice.call(arguments).join(',')+')';"
   },
+  "$topn": { "params": ["SQL"], "sql": "trim(%%%SQL%%%)" },
   "$lpad": {
     "params": ["STR","LEN","PADCHAR"],
     "sql": [

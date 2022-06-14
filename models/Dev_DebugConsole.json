@@ -10,7 +10,9 @@
     "caption": [ "", "Request", "Requests" ],
     "fields":[
       {"control":"button","value":"Launch Debug Console","controlstyle": "padding:3px 8px;",
-        "onclick": "if(jsh.xDebugConsole.isRunning()) return XExt.Alert('Debug Console is already open'); jsh.xDebugConsole.start();"}
+        "onclick": "if(jsh.xDebugConsole.isRunning()) return XExt.Alert('Debug Console is already open'); jsh.xDebugConsole.start();"},
+      {"control":"button","value":"Email Test","controlstyle": "padding:3px 8px;", "nl": true,
+        "onclick": "XExt.navTo(jsh._BASEURL+xmodel.module_namespace+'Dev/EmailTest')"}
     ]
   }
 }

@@ -27,6 +27,7 @@ function ModuleFunctions(module){
   _.extend(this, require('./_funcs.DEV_DB_DIFF.js')(module, this));
   _.extend(this, require('./_funcs.DEV_DB_SCHEMA.js')(module, this));
   _.extend(this, require('./_funcs.DEV_MODELS.js')(module, this));
+  _.extend(this, require('./_funcs.DEV_EMAILTEST.js')(module, this));
   
   this._transform = function(elem){
     return module.transform.mapping[elem];

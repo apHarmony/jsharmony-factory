@@ -1,0 +1,26 @@
+{
+  "Dev/EmailTest": {
+    "comment":"Dev/EmailTest",
+    "title":"Email Test",
+    "table":"",
+    "actions":"B", 
+    "layout":"exec",
+    "dev":1,
+    "menu":"Dev/DebugConsole",
+    "caption": [ "", "Request", "Requests" ],
+    "onecolumn": true,
+    "fields":[
+      {"control": "textbox", "name": "to", "caption": "To", "nl": true,"validate":["Required","IsEmail"]},
+      {"control": "textbox", "name": "subject", "caption": "Subject", "nl": true,"validate":["Required"],"default":"Message Subject"},
+      {"control": "textarea", "name": "body", "caption": "Body", "nl": true,"validate":["Required"],"default":"Message Body"},
+      {"control":"button","value":"Send Test Email","controlstyle": "padding:3px 8px;", "nl": true,
+        "onclick": [
+          "XForm.prototype.XExecutePost('../_funcs/DEV_EMAILTEST', { to: xmodel.get('to'), subject: xmodel.get('subject'), body: xmodel.get('body') }, function (rslt) {",
+          "  if ('_success' in rslt) {",
+          "    XExt.Alert('Email Sent');",
+          "  }",
+          "});"
+        ]}
+    ]
+  }
+}
