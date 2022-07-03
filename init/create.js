@@ -179,7 +179,7 @@ jsHarmonyFactory_Create.Run = function(run_cb){
       //Get database information
       .then(function(){ return new Promise(function(login_resolve, login_reject){
         if(_.includes(['sqlite'],scriptConfig._JSH_DBTYPE)) return login_resolve();
-  
+
         var try_login = function(){
   
           console.log('\r\n===================================');
@@ -208,6 +208,10 @@ jsHarmonyFactory_Create.Run = function(run_cb){
 
             //Ask for the database admin user
             .then(CLI.getStringAsync(function(){
+              if(jsh.DBConfig['default'].options && jsh.DBConfig['default'].options.trustedConnection){
+                console.log('Database Trusted Connection: True');
+                return false;
+              }
               if(jsh.DBConfig['default'].user){
                 console.log('Database user: ' + jsh.DBConfig['default'].user + '   (from app.config.js / params)');
                 return false;
@@ -220,6 +224,9 @@ jsHarmonyFactory_Create.Run = function(run_cb){
   
             //Ask for admin user
             .then(CLI.getStringAsync(function(){
+              if(jsh.DBConfig['default'].options && jsh.DBConfig['default'].options.trustedConnection){
+                return false;
+              }
               if(jsh.DBConfig['default'].password){
                 console.log('Database password: ******   (from app.config.js / params)');
                 return false;
@@ -265,7 +272,12 @@ jsHarmonyFactory_Create.Run = function(run_cb){
 
             .catch(function(err){
               if(err) console.log(err);
-              else try_login();
+              else{
+                if(jsh.DBConfig['default'].options && jsh.DBConfig['default'].options.trustedConnection){
+                  jsh.DBConfig['default'].options.trustedConnection = false;
+                }
+                try_login();
+              }
             });
   
         }; //END try_login

@@ -157,6 +157,10 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   
           //Ask for the database admin user
             .then(CLI.getStringAsync(function(){
+              if(jsh.DBConfig['default'].options && jsh.DBConfig['default'].options.trustedConnection){
+                console.log('Database Trusted Connection: True');
+                return false;
+              }
               if(jsh.DBConfig['default'].user){
                 console.log('Database user: ' + jsh.DBConfig['default'].user + '   (from app.config.js / params)');
                 return false;
@@ -169,6 +173,9 @@ jsHarmonyFactory_Init.Run = function(run_cb){
   
             //Ask for admin password
             .then(CLI.getStringAsync(function(){
+              if(jsh.DBConfig['default'].options && jsh.DBConfig['default'].options.trustedConnection){
+                return false;
+              }
               if(jsh.DBConfig['default'].password){
                 console.log('Database password: ******   (from app.config.js / params)');
                 return false;
@@ -200,6 +207,9 @@ jsHarmonyFactory_Init.Run = function(run_cb){
     
                     jsh.DBConfig['default'].user = '';
                     jsh.DBConfig['default'].password = '';
+                    if(jsh.DBConfig['default'].options && jsh.DBConfig['default'].options.trustedConnection){
+                      jsh.DBConfig['default'].options.trustedConnection = false;
+                    }
                     try_login();
                   });
                 });
