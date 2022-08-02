@@ -1,14 +1,15 @@
 {
   "str_concat":" CONCAT ",
   "$ifnull":{ "params": ["a","b"], "sql": "ifnull(%%%a%%%,%%%b%%%)" },
-  "$addDays":{ "params": ["date","numdays"], "sql": "(%%%date%%% + %%%numdays%%% days)" },
-  "$addHours":{ "params": ["date","numhours"], "sql": "(%%%date%%% + %%%numhours%%% hours)" },
-  "$topn": { "params": ["CNT","SQL"], "sql": "%%%SQL%%% limit %%%CNT%%%" },
+  "$addDays":{ "params": ["date","cnt"], "sql": "(%%%date%%% + %%%cnt%%% days)" },
+  "$addHours":{ "params": ["date","cnt"], "sql": "(%%%date%%% + %%%cnt%%% hours)" },
+  "$addMinutes":{ "params": ["date","cnt"], "sql": "(%%%date%%% + %%%cnt%%% minutes)" },
+  "$toDate":{ "params": ["date"], "sql": "cast(%%%date%%% as date)" },
+  "$topn": { "params": ["CNT","..."], "sql": "%%%...%%% limit %%%CNT%%%" },
   "$changes": {
     "params": [],
     "exec": "return 'SELECT COUNT(*) \"xrowcount\" FROM FINAL TABLE ('+[].slice.call(arguments).join(',')+')';"
   },
-  "$topn": { "params": ["SQL"], "sql": "trim(%%%SQL%%%)" },
   "$lpad": {
     "params": ["STR","LEN","PADCHAR"],
     "sql": [

@@ -7,9 +7,11 @@
   "str_concat":"||",
   "func_prefix":"",
   "$ifnull":{ "params": ["a","b"], "sql": "ifnull(%%%a%%%,%%%b%%%)" },
-  "$addDays":{ "params": ["date","numdays"], "sql": "datetime(%%%date%%%,'%%%numdays%%% days')" },
-  "$addHours":{ "params": ["date","numhours"], "sql": "datetime(%%%date%%%,'%%%numhours%%% hours')" },
-  "$topn": { "params": ["CNT","SQL"], "sql": "%%%SQL%%% limit %%%CNT%%%" },
+  "$addDays":{ "params": ["date",{ "name": "cnt", "options": { "trim": true } }], "sql": "datetime(%%%date%%%,'%%%cnt%%% days')" },
+  "$addHours":{ "params": ["date",{ "name": "cnt", "options": { "trim": true } }], "sql": "datetime(%%%date%%%,'%%%cnt%%% hours')" },
+  "$addMinutes":{ "params": ["date",{ "name": "cnt", "options": { "trim": true } }], "sql": "datetime(%%%date%%%,'%%%cnt%%% minutes')" },
+  "$toDate":{ "params": ["date"], "sql": "date(%%%date%%%)" },
+  "$topn": { "params": ["CNT","..."], "sql": "%%%...%%% limit %%%CNT%%%" },
   "$changes": {
     "params": [],
     "exec": "return [].slice.call(arguments).join(',')+'; select changes()+(select extra_changes from jsharmony_meta) xrowcount ';"
