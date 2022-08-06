@@ -380,5 +380,20 @@
       "    select @AUD_SEQ,lower(%%%COL_NAME%%%),%%%VALUE%%%;",
       "end"
     ]
-  }
+  },
+  "{schema}.audit_history" : {
+    "params": ["TABLE","AUDIT_TABLE_NAME","ID","COL_ARRAY"],
+    "exec": [
+      "var rslt = '';",
+      "if ((typeof COL_ARRAY === 'string' || COL_ARRAY instanceof String) && COL_ARRAY.length && COL_ARRAY.trim()[0]=='[') COL_ARRAY = JSON.parse(COL_ARRAY.trim());",
+      "function sqlescape(txt){ if(txt===null) return 'null'; return txt; };",
+      "var rslt = 'select audit_seq, audit_op, audit_tstmp, audit_user, '+ID;",
+      "for(var i=0;i<COL_ARRAY.length;i++){",
+      "  rslt += ',$ifnull((select $topn(1, $ifnull(audit_column_val,\\'\\') from {schema}.audit_detail inner join {schema}.audit audit2 on audit2.audit_seq = audit_detail.audit_seq and audit2.audit_table_name=audit.audit_table_name and audit2.audit_table_id=audit.audit_table_id where audit_detail.audit_seq > audit.audit_seq and audit_column_name=\\''+COL_ARRAY[i]+'\\' order by audit_detail.audit_seq)), '+COL_ARRAY[i]+') '+COL_ARRAY[i];",
+      "}",
+      "rslt += ' from '+TABLE;",
+      "rslt += ' inner join {schema}.audit on audit.audit_table_name = '+AUDIT_TABLE_NAME+' and audit.audit_table_id = '+ID;",
+      "return rslt;"
+    ]
+  },
 }

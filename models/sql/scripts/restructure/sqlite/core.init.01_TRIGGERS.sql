@@ -645,7 +645,7 @@ end;
 
 create trigger {schema}_version__tbl_after_update after update on {schema}_version__tbl
 begin
-  %%%log_audit_update_mult("{schema}_version__tbl","old.version_id",["version_id","version_component","version_no_major","version_no_minor","version_no_build","version_no_rev","version_sts","version_note","version_snotes"],"null","null","null","null","null")%%%
+  %%%log_audit_update_mult("{schema}_version__tbl","old.version_id",["version_id","version_component","version_no_major","version_no_minor","version_no_build","version_no_rev","version_sts","version_note"],"null","null","null","null","null")%%%
 
   update {schema}_version__tbl set 
     version_muser     = (select context from jsharmony_meta limit 1),
@@ -657,6 +657,6 @@ end;
 
 create trigger {schema}_version__tbl_delete before delete on {schema}_version__tbl
 begin
-  %%%log_audit_delete_mult("{schema}_version__tbl","old.version_id",["version_id","version_component","version_no_major","version_no_minor","version_no_build","version_no_rev","version_sts","version_note","version_snotes"],"null","null","null")%%%
+  %%%log_audit_delete_mult("{schema}_version__tbl","old.version_id",["version_id","version_component","version_no_major","version_no_minor","version_no_build","version_no_rev","version_sts","version_note"],"null","null","null")%%%
   update jsharmony_meta set {{audit_seq}} = null\;
 end;

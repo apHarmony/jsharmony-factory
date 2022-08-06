@@ -1,4 +1,9 @@
-alter FUNCTION sys_user_iud() RETURNS trigger
+SET search_path = {schema}, pg_catalog;
+
+drop trigger if exists sys_user_iud on sys_user;
+drop function if exists sys_user_iud();
+
+create FUNCTION sys_user_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     DECLARE
@@ -200,5 +205,17 @@ alter FUNCTION sys_user_iud() RETURNS trigger
 
     END;
 $$;
+
+ALTER FUNCTION {schema}.sys_user_iud() OWNER TO postgres;
+
+CREATE TRIGGER sys_user_iud BEFORE INSERT OR DELETE OR UPDATE ON sys_user FOR EACH ROW EXECUTE PROCEDURE sys_user_iud();
+
+REVOKE ALL ON FUNCTION sys_user_iud() FROM PUBLIC;
+REVOKE ALL ON FUNCTION sys_user_iud() FROM postgres;
+GRANT ALL ON FUNCTION sys_user_iud() TO postgres;
+GRANT ALL ON FUNCTION sys_user_iud() TO PUBLIC;
+GRANT ALL ON FUNCTION sys_user_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_exec;
+GRANT ALL ON FUNCTION sys_user_iud() TO {schema}_%%%INIT_DB_LCASE%%%_role_dev;
+
 
 jsharmony.version_increment('jsHarmonyFactory',1,1,110,0);

@@ -16,10 +16,10 @@
       {"name":"version_no_rev", "caption":"Rev"},
       {"name":"version_sts", "caption":"Status"},
       {"name":"version_note", "caption":"Note"},
-      {"name":"version_etstmp", "caption":"Entered"},
-      {"name":"version_euser", "sqlselect":"({schema}.my_db_user_fmt(version_etstmp))", "caption":"Entered By"},
-      {"name":"version_mtstmp", "caption":"Updated"},
-      {"name":"version_muser", "sqlselect":"({schema}.my_db_user_fmt(version_mtstmp))", "caption":"Updated By"},
+      {"name":"version_etstmp", "caption":"Entered", "format":["date","MM/DD/YY HH:mm"]},
+      {"name":"version_euser", "sqlselect":"({schema}.my_db_user_fmt(version_euser))", "caption":"Entered By"},
+      {"name":"version_mtstmp", "caption":"Updated", "format":["date","MM/DD/YY HH:mm"]},
+      {"name":"version_muser", "sqlselect":"({schema}.my_db_user_fmt(version_muser))", "caption":"Updated By"},
       {"name":"version_snotes", "caption":"System Notes"},
       {"control": "label", "value": "History", "link": "browse:Version_History&version_id"}
     ]

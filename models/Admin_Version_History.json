@@ -3,7 +3,7 @@
     "comment":"Admin/Version_History",
     "title":"Version History",
     "table":"{schema}.version__tbl",
-    "sqlselect": "select %%%SQLFIELDS%%% from (jsharmony.audit_history(jsharmony.version, 'jsharmony_version', version_id, [\"version_component\",\"version_no_major\",\"version_no_minor\",\"version_no_build\",\"version_no_rev\",\"version_sts\",\"version_note\"]) where version_id=@version_id) version_history %%%SQLSUFFIX%%%",
+    "sqlselect": "select %%%SQLFIELDS%%% from ({schema}.audit_history({schema}.version, '{schema}_version', version_id, [\"version_component\",\"version_no_major\",\"version_no_minor\",\"version_no_build\",\"version_no_rev\",\"version_sts\",\"version_note\"]) where version_id=@version_id) version_history %%%SQLSUFFIX%%%",
     "actions":"B", 
     "layout":"grid", 
     "menu":"Admin/Version",
@@ -12,7 +12,7 @@
     "fields":[
       {"name":"version_id", "caption": "ID", "control": "hidden"},
       {"name":"audit_op", "caption":"Op"},
-      {"name":"audit_tstmp", "caption":"Timestamp"},
+      {"name":"audit_tstmp", "caption":"Timestamp", "format":["date","MM/DD/YY HH:mm"]},
       {"name":"audit_user", "sqlselect":"({schema}.my_db_user_fmt(audit_user))", "caption":"User"},
       {"name":"version_component", "caption":"Component"},
       {"name":"version_no_major", "caption":"Major"},
