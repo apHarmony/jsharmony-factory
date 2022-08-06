@@ -1,6 +1,3 @@
-jsharmony.version_increment('jsHarmonyFactory',1,1,110,0);
-
-go
 alter trigger [{schema}].[sys_user_iud] on [{schema}].[sys_user]
 for insert, update, delete
 AS
@@ -365,3 +362,7 @@ BEGIN
   RETURN
 
 END
+go
+
+jsharmony.version_increment('jsHarmonyFactory',1,1,110,0);
+go

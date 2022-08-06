@@ -1,4 +1,5 @@
 <style type="text/css">
+.xformcontainer.xelem<%=model.class%> .xtabbody { min-width:1080px; }
 .xformcontainer.xelem<%=model.class%> .listing {
   border:1px solid #000;
   float:left;
@@ -31,7 +32,8 @@
 </style>
 <div class="xtabcontrol">
   <a href="DBScripts" class="xtab">DB Scripts</a>
-  <!--<a href="DBUpgrade" class="xtab">Upgrade</a>-->
+  <a href="DBObjects" class="xtab">DB Objects</a>
+  <a href="DBUpgrade" class="xtab">Upgrade</a>
   <a href="#" class="xtab selected">Diff</a>
   <div class="xpanel">
     <div class="xtabbody selected">
@@ -40,7 +42,7 @@
         <select autocomplete="off" class="db"></select>
       </div>
       <div class="run" style="display:none;">
-        <div style="padding-bottom:8px;">Please click on a module below to genereate a diff between the current database and the sql object definition:</div>
+        <div style="padding:4px 0 8px 0;">Please click on a module below to genereate a diff between the current database and the sql object definition:</div>
         <div class="listing"></div>
         <pre class="rslt"></pre>
         <div class="runas">

@@ -14,8 +14,8 @@ jsh.App[modelid] = new (function(){
     });
     jform.$find('.db').change(function(){
       var db = jform.$find('.db').val();
-      if(!db) jform.$find('.run').hide();
-      else _this.GetModules(db);
+      var url = window.location.href.split('?')[0];
+      XExt.navTo(url + '?' + $.param({ db: db }));
     });
   };
 
@@ -35,6 +35,10 @@ jsh.App[modelid] = new (function(){
       jobj.append($('<option>',{value:db}).text(db));
     }
     if(dbs.length==1) _this.GetModules(dbs[0]);
+    else if(jsh._GET['db']){
+      jobj.val(jsh._GET['db']);
+      _this.GetModules(jsh._GET['db']);
+    }
   };
 
   this.GetModules = function(dbid){
@@ -63,7 +67,7 @@ jsh.App[modelid] = new (function(){
       e.preventDefault();
       var moduleName = $(this).parent().closest('li').data('id');
       var url = window.location.href.split('?')[0];
-      XExt.navTo(url + '?' + $.param({ moduleName: moduleName }));
+      XExt.navTo(url + '?' + $.param({ db: jform.$find('.db').val(), moduleName: moduleName }));
     });
   };
 

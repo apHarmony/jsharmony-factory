@@ -1,0 +1,17 @@
+{
+  "Admin/Log_Listing": {
+    "source_files_prefix":"Admin_Log_Listing",
+    "comment":"Admin/Log_Listing",
+    "title":"",
+    "actions":"B", 
+    "layout":"form", 
+    "unbound": true,
+    "menu":"Admin/Log_Listing",
+    "caption": [ "", "Log", "Logs" ],
+    "hide_system_buttons" : ["print","help"],
+    "onload": "_this.onload();",
+    "fields":[
+      {"control":"html","value":"<div class='<%=model.class%>_grid_container'></div>"}
+    ]
+  }
+}

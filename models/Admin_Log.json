@@ -1,15 +1,26 @@
 {
   "Admin/Log": {
-    "comment":"Admin/Log",
-    "title":"Logs",
+    "source_files_prefix":"Admin_Log",
+    "layout":"form",
     "table":"",
-    "actions":"B", 
-    "layout":"exec", 
-    "menu":"Admin/Log",
-    "caption": [ "", "Request", "Requests" ],
-    "fields":[
-      {"control":"button","value":"Download Logs","controlstyle": "padding:3px 8px;",
-        "onclick": "jsh.getFileProxy().prop('src', '/_funcs/LOG_DOWNLOAD');"}
+    "title":"Log Viewer",
+    "unbound": true,
+    "actions":"B",
+    "onecolumn":true,
+    "menu":"Admin/Log_Listing",
+    "breadcrumbs": { "parents": ["<a href='Log_Listing'>Log Listing</a>"] },
+    "buttons": [
+      {"link": "js:jsh.getFileProxy().prop('src', '/_funcs/LOG_DOWNLOAD?filename='+jsh._GET['filename']);", "icon": "download", "actions":"BIU", "text":"Download"},
+    ],
+    "onload":"_this.onload();",
+    "css":[
+      ".xbody_<%=model.class%> { width:100%; padding-right:30px; box-sizing:border-box; padding-bottom:0px; }",
+      "#<%=model.class%>_log { padding-top:3px; padding-left:3px; margin-top:0; background-color:#fff; }"
+    ],
+    "fields": [
+      {"name":"filename","caption":"Filename","control":"label","captionstyle":"font-weight:bold;","key":true},
+      {"name": "mtime", "caption":"Last Modified", "type": "float", "actions":"B", "control":"label", "format": "date:'MM/DD/YYYY h:mm:ss A'" },
+      {"control":"html","value":"<h3 style='margin-bottom:8px;'>Log</h3><pre id='<%=model.class%>_log'></pre>"}
     ]
-	}
+  }
 }

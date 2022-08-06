@@ -18,6 +18,7 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 var Helper = require('jsharmony/Helper');
+var jsHarmonyCodeGen = require('jsharmony/CodeGen');
 var _ = require('lodash');
 
 module.exports = exports = function(module, funcs){
@@ -47,7 +48,7 @@ module.exports = exports = function(module, funcs){
 
       var action = 'schema';
       if(Q.action){
-        if(!_.includes(['schema','inserts'], Q.action)){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+        if(!_.includes(['schema','insert','create','model'], Q.action)){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
         action = Q.action.toString();
       }
 
@@ -63,12 +64,76 @@ module.exports = exports = function(module, funcs){
 
       if(action=='schema'){
         if (!appsrv.ParamCheck('Q', Q, ['|db','|action'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
-        var schema = db.schema_definition;
+        let schema = db.schema_definition;
         res.end(JSON.stringify({ _success: 1, schema: schema, funcs: db.SQLExt.Funcs }));
       }
-      else if(action=='inserts'){
+      else if(action=='model'){
+        if (!appsrv.ParamCheck('Q', Q, ['&db','&action','&table','&schema','|output'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+        let table = (Q.table||'').toString();
+        if(!table){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+        let schema = (Q.schema||'').toString();
+
+        let codegen = new jsHarmonyCodeGen(jsh);
+        codegen.generateModels({ name: table, schema: schema }, { db: Q.db, short: true }, function(err, messages, rslt){
+          if(err) return Helper.GenError(req, res, -99999, err);
+
+          if(Q.output=='text'){
+            var rslttxt = '';
+            if(messages && messages.length){
+              rslttxt += messages.join('\r\n') + '\r\n';
+            }
+            rslttxt += '{';
+            var first = true;
+            for(var modelName in rslt){
+              if(!first) rslttxt += ',';
+              rslttxt += '\r\n  ' + JSON.stringify(modelName) + ': ';
+              rslttxt += rslt[modelName].trim().replace(new RegExp('\\n','g'),'\n  ');
+              first = false;
+            }
+            rslttxt += '\r\n}';
+            res.end(rslttxt);
+          }
+          else {
+            res.end(JSON.stringify({ _success: 1, data: rslt, messages: messages }));
+          }
+        });
+      }
+      else if(action=='create'){
+        if (!appsrv.ParamCheck('Q', Q, ['&db','&action','&table','&schema','|output'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+        let table = (Q.table||'').toString();
+        if(!table){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+        let schema = (Q.schema||'').toString();
+
+        let codegen = new jsHarmonyCodeGen(jsh);
+        codegen.generateSQLObjects({ name: table, schema: schema }, { db: Q.db, withData: false, ignore_jsharmony_schema: false }, function(err, messages, rslt){
+          if(err) return Helper.GenError(req, res, -99999, err);
+          var sqlobjects = rslt;
+
+          if(Q.output=='dbobject'){
+            var rslttxt = '';
+            if(messages && messages.length){
+              rslttxt += messages.join('\r\n') + '\r\n';
+            }
+            rslttxt += '{';
+            var first = true;
+            for(var sqlobjectname in sqlobjects){
+              if(!first) rslttxt += ',';
+              rslttxt += '\r\n  ' + JSON.stringify(sqlobjectname) + ': ';
+              var sqlobjecttxt = sqlobjects[sqlobjectname].trim().replace(new RegExp('\\n','g'),'\n  ');
+              rslttxt += sqlobjecttxt;
+              first = false;
+            }
+            rslttxt += '\r\n}';
+            res.end(rslttxt);
+          }
+          else {
+            res.end(JSON.stringify({ _success: 1, data: rslt, messages: messages }));
+          }
+        });
+      }
+      else if(action=='insert'){
         if (!appsrv.ParamCheck('Q', Q, ['|db','&action','&table','|output','|columns','|rows'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
-        var table = (Q.table||'').toString();
+        let table = (Q.table||'').toString();
         if(!table){ Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
 
         var columns = null;

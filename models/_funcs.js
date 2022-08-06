@@ -18,16 +18,23 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 var _ = require('lodash');
+var Helper = require('jsharmony/Helper');
 
 function ModuleFunctions(module){
 
-  _.extend(this, require('./_funcs.LOG_DOWNLOAD.js')(module, this));
+  _.extend(this, require('./_funcs.LOG.js')(module, this));
   _.extend(this, require('./_funcs.SUGGEST_FEATURE.js')(module, this));
   _.extend(this, require('./_funcs.DEV_DB_SCRIPTS.js')(module, this));
+  _.extend(this, require('./_funcs.DEV_DB_OBJECTS.js')(module, this));
+  _.extend(this, require('./_funcs.DEV_DB_UPGRADE.js')(module, this));
   _.extend(this, require('./_funcs.DEV_DB_DIFF.js')(module, this));
   _.extend(this, require('./_funcs.DEV_DB_SCHEMA.js')(module, this));
   _.extend(this, require('./_funcs.DEV_MODELS.js')(module, this));
   _.extend(this, require('./_funcs.DEV_EMAILTEST.js')(module, this));
+
+  this.replaceSchema = function(sql){
+    return Helper.ReplaceAll(sql,'{schema}.', module.schema?module.schema+'.':'');
+  };
   
   this._transform = function(elem){
     return module.transform.mapping[elem];

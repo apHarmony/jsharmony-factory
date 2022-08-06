@@ -1,0 +1,27 @@
+{
+  "Admin/Version": {
+    "comment":"Admin/Version",
+    "title":"Versions",
+    "table":"{schema}.version__tbl",
+    "actions":"B", 
+    "layout":"grid", 
+    "menu":"Admin/Version",
+    "caption": [ "", "Version", "Versions" ],
+    "fields":[
+      {"name":"version_id", "caption":"ID", "control": "hidden"},
+      {"name":"version_component", "caption":"Component"},
+      {"name":"version_no_major", "caption":"Major"},
+      {"name":"version_no_minor", "caption":"Minor"},
+      {"name":"version_no_build", "caption":"Build"},
+      {"name":"version_no_rev", "caption":"Rev"},
+      {"name":"version_sts", "caption":"Status"},
+      {"name":"version_note", "caption":"Note"},
+      {"name":"version_etstmp", "caption":"Entered"},
+      {"name":"version_euser", "sqlselect":"({schema}.my_db_user_fmt(version_etstmp))", "caption":"Entered By"},
+      {"name":"version_mtstmp", "caption":"Updated"},
+      {"name":"version_muser", "sqlselect":"({schema}.my_db_user_fmt(version_mtstmp))", "caption":"Updated By"},
+      {"name":"version_snotes", "caption":"System Notes"},
+      {"control": "label", "value": "History", "link": "browse:Version_History&version_id"}
+    ]
+	}
+}

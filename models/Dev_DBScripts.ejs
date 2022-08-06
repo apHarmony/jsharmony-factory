@@ -1,4 +1,5 @@
 <style type="text/css">
+.xformcontainer.xelem<%=model.class%> .xtabbody { min-width:1080px; }
 .xformcontainer.xelem<%=model.class%> .listing {
   border:1px solid #000;
   float:left;
@@ -28,23 +29,30 @@
   display:inline-block;
   width:70px;
 }
+.xformcontainer.xelem<%=model.class%> .restart_link {
+  display:block;
+  float:right;
+}
 </style>
 <div class="xtabcontrol">
   <a href="#" class="xtab selected">DB Scripts</a>
-  <!--<a href="DBUpgrade" class="xtab">Upgrade</a>-->
+  <a href="DBObjects" class="xtab">DB Objects</a>
+  <a href="DBUpgrade" class="xtab">Upgrade</a>
   <a href="DBDiff" class="xtab">Diff</a>
   <div class="xpanel">
     <div class="xtabbody selected">
       <div class="dbselect">
         Database:
         <select autocomplete="off" class="db"></select>
+        <a href="<%=jsh._BASEURL%><%=model.module_namespace%>Admin/RestartSystem" target="_blank" class="restart_link" style="display:none;">Restart System</a>
       </div>
       <div class="run" style="display:none;">
-        <div style="padding-bottom:8px;">Please click on a script below to run the database operation:</div>
+        <div style="padding:4px 0 8px 0;">Please click on a script below to run the database operation:</div>
         <div class="listing"></div>
         <pre class="rslt"></pre>
         <div class="runas">
           <b>Run as database user:</b><br/>
+          <div class="admin_container"><label>Admin:</label><input type="checkbox" class="admin" /></div>
           <label>User:</label><input autocomplete="off" type="text" class="user" /><br/>
           <label>Password:</label><input autocomplete="new-password" type="password" class="password" />
         </div>

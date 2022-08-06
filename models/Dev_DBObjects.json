@@ -1,8 +1,8 @@
 {
-  "Dev/DBUpgrade": {
-    "comment":"Dev/DBUpgrade",
-    "source_files_prefix":"Dev_DBUpgrade",
-    "title":"Upgrade",
+  "Dev/DBObjects": {
+    "comment":"Dev/DBObjects",
+    "source_files_prefix":"Dev_DBObjects",
+    "title":"Database Objects",
     "table":"",
     "actions":"B", 
     "layout":"exec", 

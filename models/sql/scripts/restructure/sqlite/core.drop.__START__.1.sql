@@ -82,6 +82,7 @@ drop trigger if exists {schema}_code2_sys_after_update;
 
 drop trigger if exists {schema}_version__tbl_after_insert;
 drop trigger if exists {schema}_version__tbl_after_update;
+drop trigger if exists {schema}_version__tbl_delete;
 
 /***************VIEWS***************/
 drop view if exists {schema}_v_param_cur;

@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2017 apHarmony
+Copyright 2022 apHarmony
 
 This file is part of jsHarmony.
 
@@ -23,7 +23,7 @@ var _ = require('lodash');
 module.exports = exports = function(module, funcs){
   var exports = {};
 
-  exports.DEV_DB_SCRIPTS = function (req, res, next) {
+  exports.DEV_DB_UPGRADE = function (req, res, next) {
 
     //Replace scripts with "..." and prune empty scripts
     function clearScripts(node){
@@ -41,6 +41,18 @@ module.exports = exports = function(module, funcs){
       return rslt;
     }
 
+    function getUpdateScripts(scripts){
+      var rslt = clearScripts(scripts);
+      _.each(_.keys(rslt), function(moduleName){
+        if(!rslt[moduleName] || !rslt[moduleName].upgrade){ delete rslt[moduleName]; return; }
+        rslt[moduleName] = rslt[moduleName].upgrade;
+        for(var key in rslt[moduleName]){
+          rslt[moduleName][key] = '...';
+        }
+      });
+      return rslt;
+    }
+
     //-------------------------------------------------------
 
     var verb = req.method.toLowerCase();
@@ -54,9 +66,24 @@ module.exports = exports = function(module, funcs){
     }
     var jsh = module.jsh;
     var appsrv = jsh.AppSrv;
-    var model = jsh.getModel(req, module.namespace + funcs._transform('Dev/DBScripts'));
+    var model = jsh.getModel(req, module.namespace + funcs._transform('Dev/DBUpgrade'));
     
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
+
+    function getVersions(version_cb){
+      var sql = 'select version_component, version_no_major, version_no_minor, version_no_build, version_no_rev from {schema}.'+funcs._transform('version__tbl');
+      jsh.DB.default.Recordset('system', funcs.replaceSchema(sql), [], {}, undefined, function(err, rslt){
+        if(err) return version_cb(err);
+        var versions = {};
+        _.each(rslt, function(row){
+          if(row && row.version_component){
+            var moduleVersion = (row.version_no_major||'0').toString()+'-'+(row.version_no_minor||'0').toString()+'-'+(row.version_no_build||'0').toString()+'-'+(row.version_no_rev||'0').toString();
+            versions[row.version_component] = moduleVersion;
+          }
+        });
+        return version_cb(null, versions);
+      });
+    }
 
     if (verb == 'get') {
       if (!appsrv.ParamCheck('Q', Q, ['|db'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
@@ -64,31 +91,39 @@ module.exports = exports = function(module, funcs){
 
       if(dbid){
         if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Databse ID'); return; }
-        var sqlext = jsh.DB[dbid].getSQLExt();
-        res.end(JSON.stringify({ _success: 1, scripts: clearScripts(sqlext.Scripts), hasAdmin: !!jsh.DBConfig[dbid].admin_user }));
+        let sqlext = jsh.DB[dbid].getSQLExt();
+        var scripts = getUpdateScripts(sqlext.Scripts);
+        res.end(JSON.stringify({ _success: 1, scripts: scripts, hasAdmin: !!jsh.DBConfig[dbid].admin_user }));
       }
       else {
         var dbs = [];
         for(var dbid_key in jsh.DB) dbs.push(dbid_key);
-        res.end(JSON.stringify({ _success: 1, dbs: dbs }));
+        getVersions(function(err, versions){
+          if(err) return Helper.GenError(req, res, -99999, err.toString());
+          res.end(JSON.stringify({ _success: 1, dbs: dbs, versions: versions }));
+        });
       }
       
       return;
     }
     else if (verb == 'post') {
       if (!appsrv.ParamCheck('Q', Q, [])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
-      if (!appsrv.ParamCheck('P', P, ['&scriptid','&mode','&db','|runas_user','|runas_password','|runas_admin'])) { return Helper.GenError(req, res, -4, 'Invalid Parameters'); }
+      if (!appsrv.ParamCheck('P', P, ['&moduleName','&scriptName','&mode','&db','|runas_user','|runas_password','|runas_admin'])) { return Helper.GenError(req, res, -4, 'Invalid Parameters'); }
 
-      var scriptid = P.scriptid;
-      if(!_.isArray(scriptid)) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
-      for(var i=0;i<scriptid.length;i++){ if(!_.isString(scriptid[i])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; } }
+      var scriptName = P.scriptName;
+      if(!scriptName) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+      var moduleName = P.moduleName;
+      if(!moduleName) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
 
       var mode = P.mode;
-      if(!_.includes(['run','read'],mode)) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
+      if(!_.includes(['run','preview'],mode)) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
 
       let dbid = P.db;
       if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Database ID'); return; }
       var db = jsh.DB[dbid];
+
+      let sqlext = jsh.DB[dbid].getSQLExt();
+      if(!sqlext.Objects || !sqlext.Objects[moduleName]){ Helper.GenError(req, res, -1, 'Module not found'); return; }
 
       //Run as user, if applicable
       var dbconfig = jsh.DBConfig[dbid];
@@ -112,20 +147,26 @@ module.exports = exports = function(module, funcs){
       sqlFuncs['INIT_DB'] = sqlFuncs['DB'];
       sqlFuncs['INIT_DB_LCASE'] = sqlFuncs['DB_LCASE'];
 
+      var scriptid = [moduleName, 'upgrade', scriptName];
+
       if(mode=='run'){
         db.RunScripts(jsh, scriptid, { dbconfig: dbconfig, sqlFuncs: sqlFuncs }, function(err, rslt, stats, dbcommands){
           if(err){ err.sql = 'scriptid:'+scriptid; return jsh.AppSrv.AppDBError(req, res, err, stats); }
-          if(dbcommands && dbcommands.restart) jsh.Restart(1000);
-          res.end(JSON.stringify({
-            _success: 1,
-            _stats: Helper.FormatStats(req, stats, { notices: true, show_all_messages: true }),
-            dbrslt: rslt,
-            dbcommands: dbcommands,
-          }));
+          getVersions(function(err, versions){
+            if(err) return Helper.GenError(req, res, -99999, err.toString());
+            if(dbcommands && dbcommands.restart) jsh.Restart(1000);
+            res.end(JSON.stringify({
+              _success: 1,
+              _stats: Helper.FormatStats(req, stats, { notices: true, show_all_messages: true }),
+              dbrslt: rslt,
+              dbcommands: dbcommands,
+              versions: versions
+            }));
+          });
           return;
         });
       }
-      else if(mode=='read'){
+      else if(mode=='preview'){
         var sqlsrc = '';
         db.RunScripts(jsh, scriptid, { noCommands: true, dbconfig: dbconfig, sqlFuncs: sqlFuncs, onSQL: function(dbscript_name, bi, sql){
           sqlsrc += sql + '\r\n';

@@ -49,55 +49,61 @@ jsh.App[modelid] = new (function(){
 
   this.getTable = function(obj){
     var jobj = $(obj);
-    while(jobj.length){
-      if(jobj.is('table')) return jobj;
-      jobj = jobj.next();
-    }
+    var tableId = jobj.data('tableid');
+    return _this.getFormElement().$find('.schema_table_'+tableId);
   };
 
   this.RenderSchema = function(dbid, schema, funcs){
     var jform = _this.getFormElement();
     var jobj = jform.$find('.rslt');
-    jobj.html('');
-    $('<div>Click on a database object for details:<br/><br/>\
-        <div>\
-          <a href="#" class="show_all" onclick="return false;">[Show All]</a> | \
-          <a href="#" class="hide_all" onclick="return false;">[Hide All]</a>\
-        </div>\
-      </div>').appendTo(jobj);
-    jobj.$find('.show_all').click(function(){ jobj.$find('table').show(); });
-    jobj.$find('.hide_all').click(function(){ jobj.$find('table').hide(); });
+    var schemaHTML = '';
+    schemaHTML +=
+      '<div>Click on a database object for details:<br/><br/>\
+         <div>\
+           <a href="#" class="show_all" onclick="return false;">[Show All]</a> | \
+           <a href="#" class="hide_all" onclick="return false;">[Hide All]</a>\
+         </div>\
+       </div>';
     //var tables = _.map(schema.tables, function(table){ console.log(table); });
+    schemaHTML += '<table border="0" cellpadding="0" cellspacing="0" class="schema_container">';
+    var tableId = 0;
     _.each(schema.tables, function(table, tableName){
+      tableId++;
       var dispName = tableName;
       if(dispName && (dispName[0]=='.')) dispName = dispName.substr(1);
       dispName = 'table_' + dispName;
       var tableColumns = _.map(table.fields, function(field){ return field.name; }).join(',');
-      $('<a href="#" class="table_name expandable" onclick="return false;">'+XExt.escapeHTML(dispName.substr(6))+'</a> &nbsp; \
-         <a href="#" class="expandable" onclick="return false;">Schema</a> &nbsp; \
-         <a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">Data</a> &nbsp; \
-         <a href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=inserts&db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'&output=dbobject&rows=200&columns='+XExt.escapeHTML(tableColumns)+'" target="_blank">Inserts</a> &nbsp; \
-         <br/>').appendTo(jobj);
-      var html = '<table cellpadding="0" cellspacing="0" border="0" style="display:none;">';
-      html += '<tr>';
-      html += '<th>Column</th>';
-      html += '<th>Type</th>';
-      html += '<th>Null</th>';
-      html += '<th>Key</th>';
-      html += '<th>Attributes</th>';
-      html += '</tr>';
+      schemaHTML += '<tr>';
+      schemaHTML +=
+        '<td class="table_name"><a href="#" class="expandable" data-tableid="'+tableId+'" onclick="return false;">'+XExt.escapeHTML(dispName.substr(6))+'</a></td>\
+         <td><a href="#" class="expandable" data-tableid="'+tableId+'" onclick="return false;">Schema</a></td>\
+         <td><a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">Data</a></td>\
+         <td><a href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=model&db='+XExt.escapeHTML(dbid)+'&schema='+XExt.escapeHTML(table.schema)+'&table='+XExt.escapeHTML(table.name)+'&output=text" target="_blank">Gen:Model</a></td>\
+         <td><a href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=create&db='+XExt.escapeHTML(dbid)+'&schema='+XExt.escapeHTML(table.schema)+'&table='+XExt.escapeHTML(table.name)+'&output=dbobject" target="_blank">Gen:SQLObject</a></td>\
+         <td><a href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=insert&db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'&output=dbobject&rows=200&columns='+XExt.escapeHTML(tableColumns)+'" target="_blank">Gen:Insert</a></td>\
+         <td width="100%"></td>';
+      schemaHTML += '</tr>';
+      schemaHTML += '<tr><td colspan="7">';
+      schemaHTML += '<table class="schema_table schema_table_'+tableId+'" cellpadding="0" cellspacing="0" border="0" style="display:none;">';
+      schemaHTML += '<tr>';
+      schemaHTML += '<th>Column</th>';
+      schemaHTML += '<th>Type</th>';
+      schemaHTML += '<th>Null</th>';
+      schemaHTML += '<th>Key</th>';
+      schemaHTML += '<th>Attributes</th>';
+      schemaHTML += '</tr>';
       _.each(table.fields, function(field){
-        html += '<tr>';
-        html += '<td>'+XExt.escapeHTML(field.name)+'</td>';
+        schemaHTML += '<tr>';
+        schemaHTML += '<td>'+XExt.escapeHTML(field.name)+'</td>';
         var typedesc = field.type;
         if('length' in field) typedesc += '('+field.length+')';
         else if(('precision' in field) && field.precision && field.precision.length) typedesc += '(' + field.precision.join(',')+')';
         else if('precision' in field) typedesc += '('+field.precision+')';
-        html += '<td>'+XExt.escapeHTML(typedesc)+'</td>';
+        schemaHTML += '<td>'+XExt.escapeHTML(typedesc)+'</td>';
         var fielddesc = [];
         var notnull = false;
         if(field.coldef && field.coldef.required) notnull = true;
-        html += '<td>'+(notnull?'No':'Yes')+'</td>';
+        schemaHTML += '<td>'+(notnull?'No':'Yes')+'</td>';
         var keytype = '';
         if(field.coldef && field.coldef.primary_key) keytype = 'Primary';
         else if(field.foreignkeys){
@@ -112,35 +118,44 @@ jsh.App[modelid] = new (function(){
             });
           }
         }
-        html += '<td>'+XExt.escapeHTMLBR(keytype)+'</td>';
+        schemaHTML += '<td>'+XExt.escapeHTMLBR(keytype)+'</td>';
         if(field.coldef){
           if(field.coldef.readonly) fielddesc.push('readonly');
         }
-        html += '<td>'+XExt.escapeHTML(fielddesc.join(','))+'</td>';
-        html += '</tr>';
+        schemaHTML += '<td>'+XExt.escapeHTML(fielddesc.join(','))+'</td>';
+        schemaHTML += '</tr>';
       });
-      html += '<tr><td colspan="5"><a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&scripttype=recreate&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">&gt; Recreate</a></td>';
-      html += '</table>';
-      $(html).appendTo(jobj);
-      //console.log(table);
+      schemaHTML += '<tr><td colspan="5"><a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&scripttype=recreate&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">&gt; Recreate</a></td>';
+      schemaHTML += '</table>';
+      schemaHTML += '</td></tr>';
     });
     _.each(funcs, function(func, funcName){
+      tableId++;
       var dispName = funcName;
       if(dispName && (dispName[0]=='.')) dispName = dispName.substr(1);
       dispName = 'func_' + dispName;
       var funcVal = func;
       if(_.isString(funcVal)) funcVal = XExt.escapeHTMLBR(funcVal);
       else funcVal = '<pre>' + XExt.escapeHTML(JSON.stringify(funcVal,null,4)) + '</pre>';
-      $('<a href="#" class="func_name expandable" onclick="return false;">Func: '+XExt.escapeHTML(dispName.substr(5))+'</a> &nbsp; \
-         <a href="#" class="expandable" onclick="return false;">Definition</a> \
-         <br/>').appendTo(jobj);
-      var html = '<table cellpadding="0" cellspacing="0" border="0" style="display:none;">';
-      html += '<tr>';
-      html += '<td>' + funcVal + '</td>';
-      html += '</tr>';
-      html += '</table>';
-      $(html).appendTo(jobj);
+
+      schemaHTML += '<tr>';
+      schemaHTML +=
+        '<td class="func_name"><a href="#" class="func_name expandable" data-tableid="'+tableId+'" onclick="return false;">Func: '+XExt.escapeHTML(dispName.substr(5))+'</a></td>\
+         <td><a href="#" class="expandable" data-tableid="'+tableId+'" onclick="return false;">Definition</a></td>\
+         <td colspan="5" width="100%"></td>';
+      schemaHTML += '</tr>';
+      schemaHTML += '<tr><td colspan="7">';
+      schemaHTML += '<table class="schema_table schema_table_'+tableId+'" cellpadding="0" cellspacing="0" border="0" style="display:none;">';
+      schemaHTML += '<tr>';
+      schemaHTML += '<td>' + funcVal + '</td>';
+      schemaHTML += '</tr>';
+      schemaHTML += '</table>';
+      schemaHTML += '</td></tr>';
     });
+    schemaHTML += '</table>';
+    jobj[0].innerHTML = schemaHTML;
+    jobj.$find('.show_all').click(function(){ jobj.$find('table.schema_table').show(); });
+    jobj.$find('.hide_all').click(function(){ jobj.$find('table.schema_table').hide(); });
     $('.expandable').click(function(){ _this.getTable(this).toggle(); });
     //jform.$find('.rslt').text(JSON.stringify(schema));
     jsh.XWindowResize();

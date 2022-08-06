@@ -1,5 +1,3 @@
-jsharmony.version_increment('jsHarmonyFactory',1,1,110,0);
-
 alter FUNCTION sys_user_iud() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
@@ -202,3 +200,5 @@ alter FUNCTION sys_user_iud() RETURNS trigger
 
     END;
 $$;
+
+jsharmony.version_increment('jsHarmonyFactory',1,1,110,0);

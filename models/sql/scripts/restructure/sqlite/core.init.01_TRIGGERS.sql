@@ -638,12 +638,25 @@ begin
     version_muser     = (select context from jsharmony_meta limit 1),
     version_mtstmp = datetime('now','localtime')
     where rowid = new.rowid\;
+  
+  %%%log_audit_insert("{schema}_version__tbl","new.version_id","version_id","null","null","null","null","null")%%%
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;
 
 create trigger {schema}_version__tbl_after_update after update on {schema}_version__tbl
 begin
+  %%%log_audit_update_mult("{schema}_version__tbl","old.version_id",["version_id","version_component","version_no_major","version_no_minor","version_no_build","version_no_rev","version_sts","version_note","version_snotes"],"null","null","null","null","null")%%%
+
   update {schema}_version__tbl set 
     version_muser     = (select context from jsharmony_meta limit 1),
     version_mtstmp = datetime('now','localtime')
-    where rowid = new.rowid\;
+    where version_id = new.version_id and exists(select * from jsharmony_meta where {{audit_seq}} is not null)\; 
+
+  update jsharmony_meta set {{audit_seq}} = null\;
+end;
+
+create trigger {schema}_version__tbl_delete before delete on {schema}_version__tbl
+begin
+  %%%log_audit_delete_mult("{schema}_version__tbl","old.version_id",["version_id","version_component","version_no_major","version_no_minor","version_no_build","version_no_rev","version_sts","version_note","version_snotes"],"null","null","null")%%%
+  update jsharmony_meta set {{audit_seq}} = null\;
 end;

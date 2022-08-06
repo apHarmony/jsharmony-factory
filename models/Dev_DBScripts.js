@@ -14,9 +14,30 @@ jsh.App[modelid] = new (function(){
     });
     jform.$find('.db').change(function(){
       var db = jform.$find('.db').val();
-      if(!db) jform.$find('.run').hide();
+      if(!db){
+        jform.$find('.run').hide();
+        jform.$find('.restart_link').hide();
+      }
       else _this.GetScripts(db);
     });
+    jform.$find('.runas .admin').change(function(){
+      _this.renderRunAs();
+    });
+  };
+
+  this.renderRunAs = function(){
+    var jform = _this.getFormElement();
+    var checked = jform.$find('.runas .admin').prop('checked');
+    if(checked){
+      XPage.Disable(jform.$find('.runas .user'));
+      XPage.Disable(jform.$find('.runas .password'));
+      jform.$find('.runas .user').val('');
+      jform.$find('.runas .password').val('');
+    }
+    else {
+      XPage.Enable(jform.$find('.runas .user'));
+      XPage.Enable(jform.$find('.runas .password'));
+    }
   };
 
   this.RenderDBListing = function(dbs){
@@ -40,14 +61,15 @@ jsh.App[modelid] = new (function(){
   this.GetScripts = function(dbid){
     XForm.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { db: dbid }, function (rslt) { //On success
       if ('_success' in rslt) {
-        _this.RenderScripts(rslt.scripts);
+        _this.RenderScripts(rslt.scripts, rslt.hasAdmin);
       }
     });
   };
 
-  this.RenderScripts = function(scripts){
+  this.RenderScripts = function(scripts, hasAdmin){
     var jform = _this.getFormElement();
     jform.$find('.run').show();
+    jform.$find('.restart_link').show();
     jform.$find('.rslt').text('');
 
     function union(a,b){
@@ -81,6 +103,15 @@ jsh.App[modelid] = new (function(){
     //Attach events
     jobj.$find('a.run').click(function(e){ e.preventDefault(); _this.ExecScript(this, 'run'); });
     jobj.$find('a.info').click(function(e){ e.preventDefault(); _this.ExecScript(this, 'read'); });
+    if(hasAdmin){
+      jform.$find('.runas .admin_container').show();
+      jform.$find('.runas .admin').prop('checked', true);
+    }
+    else {
+      jform.$find('.runas .admin_container').hide();
+      jform.$find('.runas .admin').prop('checked', false);
+    }
+    _this.renderRunAs();
   };
 
   this.RenderScriptsNode = function(node){
@@ -123,11 +154,16 @@ jsh.App[modelid] = new (function(){
     }
 
     var params = { scriptid: scriptid, mode: mode, db: jform.$find('.db').val() };
-    var runas_user = jform.$find('.user').val().trim();
-    var runas_password = jform.$find('.password').val();
-    if(runas_user){
-      params.runas_user = runas_user;
-      params.runas_password = runas_password;
+    if(jform.$find('.admin').prop('checked')){
+      params.runas_admin = true;
+    }
+    else {
+      var runas_user = jform.$find('.user').val().trim();
+      var runas_password = jform.$find('.password').val();
+      if(runas_user){
+        params.runas_user = runas_user;
+        params.runas_password = runas_password;
+      }
     }
 
     XExt.execif((mode=='run'), function(f){
@@ -154,6 +190,7 @@ jsh.App[modelid] = new (function(){
             var endtm = Date.now();
             txt += '\r\nTime: ' + (endtm-starttm) + 'ms';
             jform.$find('.rslt').text(txt);
+            if(rslt.dbcommands.restart) XExt.Alert('Restarting jsHarmony');
           }
         }
       });

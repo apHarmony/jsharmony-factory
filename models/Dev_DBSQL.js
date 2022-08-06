@@ -1,6 +1,13 @@
 jsh.App[modelid] = new (function(){
   var _this = this;
 
+  this.state_default = {
+    db: '',
+    sql: '',
+  };
+  this.defaultSQL = '';
+  this.defaultDB = '';
+  this.state = _.extend({}, this.state_default);
   this.DBs = {};  //Populated onroute
   this.TABLE_DEF = undefined;  //Populated onroute, if "table" is set
   this.TABLE_OBJ = undefined;  //Populated onroute, if "table" is set
@@ -92,12 +99,20 @@ jsh.App[modelid] = new (function(){
     return jsh.$root('.xformcontainer.xelem'+xmodel.class);
   };
 
+  this.renderDB = function(){
+    var jform = _this.getFormElement();
+    var db = jform.$find('.db').val();
+    if(!db) jform.$find('.run').hide();
+    else{
+      _this.LoadScripts(db);
+    }
+  };
+
   this.oninit = function(xmodel) {
     var jform = _this.getFormElement();
     jform.$find('.db').change(function(){
-      var db = jform.$find('.db').val();
-      if(!db) jform.$find('.run').hide();
-      else _this.LoadScripts(db);
+      _this.defaultDB = '';
+      _this.renderDB();
     });
     var jSamples = jform.$find('.samples');
     jSamples.change(function(){
@@ -117,6 +132,32 @@ jsh.App[modelid] = new (function(){
     _this.RenderDBListing(_.keys(_this.DBs));
   };
 
+  this.onload = function(){
+    var jform = _this.getFormElement();
+    var jobj = jform.$find('.db');
+    var dbs = _.keys(_this.DBs);
+    _this.defaultDB = '';
+    _this.defaultSQL = '';
+    if(dbs.length==1){
+      _this.defaultDB = dbs[0];
+      _this.LoadScripts(dbs[0]);
+    }
+    else if(_this.state && _this.state.db){
+      jobj.val(_this.state.db);
+      _this.renderDB();
+    }
+    else if(_GET['db']){
+      _this.defaultDB = _GET['db'];
+      jobj.val(_GET['db']);
+      _this.renderDB();
+    }
+    else {
+      jobj.val('');
+      _this.renderDB();
+    }
+    _this.saveState();
+  };
+
   this.RenderDBListing = function(dbs){
     var jform = _this.getFormElement();
     var jobj = jform.$find('.db');
@@ -132,10 +173,6 @@ jsh.App[modelid] = new (function(){
       var db = dbs[i];
       jobj.append($('<option>',{value:db}).text(db));
     }
-    if(dbs.length==1) _this.LoadScripts(dbs[0]);
-    else if(_GET['db']){
-      jobj.val(_GET['db']).change();
-    }
   };
 
   this.LoadScripts = function(db){
@@ -146,7 +183,16 @@ jsh.App[modelid] = new (function(){
     jSamples.empty();
     jSamples.append($('<option>',{value:''}).text('Please select...'));
     var dbtype = _this.DBs[db];
+    
     var sql = '';
+    if(_this.state && _this.state.sql){
+      sql = _this.state.sql;
+    }
+    else if(_GET['sql']){
+      sql = _GET['sql'];
+    }
+    if(sql) jform.$find('.sql').val(sql);
+
     if(dbtype in _this.samples){
       var samples = _this.samples[dbtype];
       for(var sampleName in samples){
@@ -155,28 +201,34 @@ jsh.App[modelid] = new (function(){
         option.val(sampleName);
         jSamples.append(option);
       }
-      if(_GET['table']){
-        if(_GET['scripttype']=='recreate'){
-          sql = samples['Recreate Table'];
-          if(_this.TABLE_OBJ){
-            var COLUMNS = _.map(_this.TABLE_OBJ.columns, function(column){ return column.name; }).join(',');
-            sql = sql.replace(/COLUMNS/g,COLUMNS);
-            var createSql = _this.TABLE_INIT||'create table TABLENAME();';
-            createSql = createSql.replace(/TABLENAME/g,_GET['table']+'2');
-            sql = sql.replace(/TABLE_INIT/g,createSql);
+      if(!sql){
+        if(_GET['table']){
+          if(_GET['scripttype']=='recreate'){
+            sql = samples['Recreate Table'];
+            if(_this.TABLE_OBJ){
+              var COLUMNS = _.map(_this.TABLE_OBJ.columns, function(column){ return column.name; }).join(',');
+              sql = sql.replace(/COLUMNS/g,COLUMNS);
+              var createSql = _this.TABLE_INIT||'create table TABLENAME();';
+              createSql = createSql.replace(/TABLENAME/g,_GET['table']+'2');
+              sql = sql.replace(/TABLE_INIT/g,createSql);
+            }
+            sql = sql.replace(/TABLENAME/g,_GET['table']);
+            jform.$find('.sql').val(sql);
+            _this.defaultSQL = sql;
           }
-          sql = sql.replace(/TABLENAME/g,_GET['table']);
-          jform.$find('.sql').val(sql);
+          else {
+            sql = samples['Select'];
+            sql = sql.replace('TABLENAME',_GET['table']);
+            jform.$find('.sql').val(sql);
+            _this.defaultSQL = sql;
+            jform.$find('.runsql').click();
+          }
         }
-        else {
+        else if('Select' in samples){
           sql = samples['Select'];
-          sql = sql.replace('TABLENAME',_GET['table']);
           jform.$find('.sql').val(sql);
-          jform.$find('.runsql').click();
+          _this.defaultSQL = sql;
         }
-      }
-      else if('Select' in samples){
-        jform.$find('.sql').val(samples['Select']);
       }
     }
   };
@@ -205,11 +257,38 @@ jsh.App[modelid] = new (function(){
     jsh.postFileProxy(url, params);
   };
 
-  this.RunSQL = function(){
+  this.ongetstate = function(){ return _this.state; };
+
+  this.onloadstate = function(xmodel, state){
+    _this.state = _.extend({}, _this.state_default, _this.state, state);
+  };
+
+  this.saveState = function(){
+    var jform = _this.getFormElement();
+    var newState = {};
+    newState.db = jform.$find('.db').val() || '';
+    newState.sql = jform.$find('.sql').val() || '';
+    if(newState.db == _this.defaultDB) newState.db = '';
+    if(newState.sql == _this.defaultSQL) newState.sql = '';
+    if(!_this.state){
+      _this.state = newState;
+    }
+    else if(JSON.stringify(newState) != JSON.stringify(_this.state)){
+      _this.state = newState;
+      jsh.XPage.AddHistory();
+    }
+  };
+
+  this.RunSQL = function(options){
     var jform = _this.getFormElement();
     var starttm = Date.now();
 
     var params = _this.getExecParams();
+
+    if(jform.$find('.sql').val() != _this.defaultSQL) _this.defaultSQL = '';
+
+    //Save history state
+    _this.saveState();
 
     XForm.prototype.XExecutePost('../_db/exec', params, function (rslt) { //On success
       if ('_success' in rslt) {
