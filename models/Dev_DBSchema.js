@@ -58,10 +58,11 @@ jsh.App[modelid] = new (function(){
     var jobj = jform.$find('.rslt');
     var schemaHTML = '';
     schemaHTML +=
-      '<div>Click on a database object for details:<br/><br/>\
+      '<div class="no_print">Click on a database object for details:<br/><br/>\
          <div>\
            <a href="#" class="show_all" onclick="return false;">[Show All]</a> | \
-           <a href="#" class="hide_all" onclick="return false;">[Hide All]</a>\
+           <a href="#" class="hide_all" onclick="return false;">[Hide All]</a> | \
+           <a href="#" class="print" onclick="return false;">[Print]</a>\
          </div>\
        </div>';
     //var tables = _.map(schema.tables, function(table){ console.log(table); });
@@ -76,11 +77,11 @@ jsh.App[modelid] = new (function(){
       schemaHTML += '<tr>';
       schemaHTML +=
         '<td class="table_name"><a href="#" class="expandable" data-tableid="'+tableId+'" onclick="return false;">'+XExt.escapeHTML(dispName.substr(6))+'</a></td>\
-         <td><a href="#" class="expandable" data-tableid="'+tableId+'" onclick="return false;">Schema</a></td>\
-         <td><a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">Data</a></td>\
-         <td><a href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=model&db='+XExt.escapeHTML(dbid)+'&schema='+XExt.escapeHTML(table.schema)+'&table='+XExt.escapeHTML(table.name)+'&output=text" target="_blank">Gen:Model</a></td>\
-         <td><a href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=create&db='+XExt.escapeHTML(dbid)+'&schema='+XExt.escapeHTML(table.schema)+'&table='+XExt.escapeHTML(table.name)+'&output=dbobject" target="_blank">Gen:SQLObject</a></td>\
-         <td><a href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=insert&db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'&output=dbobject&rows=200&columns='+XExt.escapeHTML(tableColumns)+'" target="_blank">Gen:Insert</a></td>\
+         <td><a class="no_print expandable" href="#" data-tableid="'+tableId+'" onclick="return false;">Schema</a></td>\
+         <td><a class="no_print" href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">Data</a></td>\
+         <td><a class="no_print" href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=model&db='+XExt.escapeHTML(dbid)+'&schema='+XExt.escapeHTML(table.schema)+'&table='+XExt.escapeHTML(table.name)+'&output=text" target="_blank">Gen:Model</a></td>\
+         <td><a class="no_print" href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=create&db='+XExt.escapeHTML(dbid)+'&schema='+XExt.escapeHTML(table.schema)+'&table='+XExt.escapeHTML(table.name)+'&output=dbobject" target="_blank">Gen:SQLObject</a></td>\
+         <td><a class="no_print" href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=insert&db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'&output=dbobject&rows=200&columns='+XExt.escapeHTML(tableColumns)+'" target="_blank">Gen:Insert</a></td>\
          <td width="100%"></td>';
       schemaHTML += '</tr>';
       schemaHTML += '<tr><td colspan="7">';
@@ -125,7 +126,7 @@ jsh.App[modelid] = new (function(){
         schemaHTML += '<td>'+XExt.escapeHTML(fielddesc.join(','))+'</td>';
         schemaHTML += '</tr>';
       });
-      schemaHTML += '<tr><td colspan="5"><a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&scripttype=recreate&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">&gt; Recreate</a></td>';
+      schemaHTML += '<tr class="no_print"><td colspan="5"><a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&scripttype=recreate&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">&gt; Recreate</a></td>';
       schemaHTML += '</table>';
       schemaHTML += '</td></tr>';
     });
@@ -138,13 +139,13 @@ jsh.App[modelid] = new (function(){
       if(_.isString(funcVal)) funcVal = XExt.escapeHTMLBR(funcVal);
       else funcVal = '<pre>' + XExt.escapeHTML(JSON.stringify(funcVal,null,4)) + '</pre>';
 
-      schemaHTML += '<tr>';
+      schemaHTML += '<tr class="no_print">';
       schemaHTML +=
         '<td class="func_name"><a href="#" class="func_name expandable" data-tableid="'+tableId+'" onclick="return false;">Func: '+XExt.escapeHTML(dispName.substr(5))+'</a></td>\
          <td><a href="#" class="expandable" data-tableid="'+tableId+'" onclick="return false;">Definition</a></td>\
          <td colspan="5" width="100%"></td>';
       schemaHTML += '</tr>';
-      schemaHTML += '<tr><td colspan="7">';
+      schemaHTML += '<tr class="no_print"><td colspan="7">';
       schemaHTML += '<table class="schema_table schema_table_'+tableId+'" cellpadding="0" cellspacing="0" border="0" style="display:none;">';
       schemaHTML += '<tr>';
       schemaHTML += '<td>' + funcVal + '</td>';
@@ -156,6 +157,12 @@ jsh.App[modelid] = new (function(){
     jobj[0].innerHTML = schemaHTML;
     jobj.$find('.show_all').click(function(){ jobj.$find('table.schema_table').show(); });
     jobj.$find('.hide_all').click(function(){ jobj.$find('table.schema_table').hide(); });
+    jobj.$find('.print').click(function(){
+      jobj.$find('.no_print').remove();
+      jobj.$find('table.schema_table').show();
+      jobj.$find('.schema_container').addClass('schema_print');
+      window.print();
+    });
     $('.expandable').click(function(){ _this.getTable(this).toggle(); });
     //jform.$find('.rslt').text(JSON.stringify(schema));
     jsh.XWindowResize();

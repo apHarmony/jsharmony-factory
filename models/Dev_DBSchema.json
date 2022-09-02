@@ -2,7 +2,7 @@
   "Dev/DBSchema": {
     "comment":"Dev/DBSchema",
     "source_files_prefix":"Dev_DBSchema",
-    "title":"Database Schema",
+    "title":"Database Schema :: <#=jsh.globalparams.app_name#>",
     "table":"",
     "actions":"B", 
     "layout":"exec", 

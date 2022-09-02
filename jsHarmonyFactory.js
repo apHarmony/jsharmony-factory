@@ -187,6 +187,7 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
       'user_id': function (req) { return req.user_id; },
       'user_name': function (req) { return req.user_name; },
       'help_view': function (req) { return _this.getHelpView(req); },
+      'app_name': _this.jsh.Config.app_name,
     },
     onLoad: function (jsh) {
     }
@@ -251,6 +252,7 @@ jsHarmonyFactory.prototype.GetDefaultClientConfig = function(){
       'company_name': function (req) { return req.gdata[jsh.map.client_name]; },
       'barcode_server': _this.Config.barcode_settings.server,
       'help_view': function (req) { return _this.getHelpView(req); },
+      'app_name': 'Client Portal',
     }
   };
   jshconfig_client.globalparams[jsh.map.client_id] = function (req) { return req.gdata[jsh.map.client_id]; };
