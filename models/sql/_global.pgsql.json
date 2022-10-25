@@ -12,6 +12,8 @@
   "$addMinutes":{ "params": ["date",{ "name": "cnt", "options": { "trim": true } }], "sql": "(%%%date%%% + interval '%%%cnt%%%' minute)" },
   "$toDate":{ "params": ["date"], "sql": "(%%%date%%%)::date" },
   "$topn": { "params": ["CNT","..."], "sql": "%%%...%%% limit %%%CNT%%%" },
+  "$ceiling": { "params": ["VAL"], "sql": "ceiling(%%%VAL%%%)" },
+  "$floor": { "params": ["VAL"], "sql": "floor(%%%VAL%%%)" },
   "$binary":{ "params": ["a"], "sql": "x'%%%a%%%'" },
   "proc_run":"select ",
   "par_list_beg":"(",
@@ -265,7 +267,7 @@
       "    (select audit_subject from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc limit 1),",
       "    (select cust_id from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc limit 1),",
       "    (select item_id from {schema}.audit__tbl where audit_table_name=%%%TABLE%%% and audit_table_id=%%%ID%%% and audit_op='I' order by audit_seq desc limit 1),",
-      "    {schema}.my_db_user();"
+      "    {schema}.my_db_user()"
     ]
   },
   "{schema}.log_audit_delete_col" : {

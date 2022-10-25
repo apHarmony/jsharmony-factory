@@ -10,6 +10,8 @@
     "params": [],
     "exec": "return 'SELECT COUNT(*) \"xrowcount\" FROM FINAL TABLE ('+[].slice.call(arguments).join(',')+')';"
   },
+  "$ceiling": { "params": ["VAL"], "sql": "ceil(%%%VAL%%%)" },
+  "$floor": { "params": ["VAL"], "sql": "floor(%%%VAL%%%)" },
   "$lpad": {
     "params": ["STR","LEN","PADCHAR"],
     "sql": [

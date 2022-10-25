@@ -16,6 +16,8 @@
     "params": [],
     "exec": "return [].slice.call(arguments).join(',')+'; select changes()+(select extra_changes from jsharmony_meta) xrowcount ';"
   },
+  "$ceiling": { "params": ["VAL"], "sql": "cast ( (%%%VAL%%%) as int ) + ( (%%%VAL%%%) > cast ( (%%%VAL%%%) as int ))" },
+  "$floor": { "params": ["VAL"], "sql": "cast ( (%%%VAL%%%) as int ) - ( (%%%VAL%%%) < cast ( (%%%VAL%%%) as int ))" },
   "$binary":{ "params": ["a"], "sql": "X'%%%a%%%'" },
   "proc_run":"",
   "par_list_beg":"(",

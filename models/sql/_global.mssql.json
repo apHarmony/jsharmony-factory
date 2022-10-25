@@ -12,6 +12,8 @@
   "$addMinutes":{ "params": ["date","cnt"], "sql": "dateadd(minute, %%%cnt%%%, %%%date%%%)" },
   "$toDate":{ "params": ["date"], "sql": "cast(%%%date%%% as date)" },
   "$topn": { "params": ["CNT","..."], "sql": "top %%%CNT%%% %%%...%%%" },
+  "$ceiling": { "params": ["VAL"], "sql": "ceiling(%%%VAL%%%)" },
+  "$floor": { "params": ["VAL"], "sql": "floor(%%%VAL%%%)" },
   "$binary":{ "params": ["a"], "sql": "0x%%%a%%%" },
   "proc_run":"EXEC",
   "par_list_beg":" ",
