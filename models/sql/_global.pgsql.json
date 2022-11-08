@@ -155,9 +155,7 @@
   "log_audit_delete_col" : {
     "params": ["ID","COL_NAME"],
     "sql": [
-      "if (old.%%%COL_NAME%%% is not null) then\n",
-      "    select par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, %%%ID%%%, '%%%COL_NAME%%%', old.%%%COL_NAME%%%::text);",
-      "end if;\n"
+      "select par_audit_seq INTO audit_seq FROM {schema}.audit(my_toa, audit_seq, %%%ID%%%, '%%%COL_NAME%%%', old.%%%COL_NAME%%%::text);",
     ]
   },
   "{schema}.get_cust_name":{
@@ -243,7 +241,7 @@
       "rslt += '{schema}.log_audit_delete_base('+TABLE+','+ID+');\\r\\n';",
       "var col_array = JSON.parse(COL_ARRAY);",
       "for(var i=0;i<col_array.length;i++){",
-      "  rslt += '{schema}.log_audit_update_col('+ID+','+col_array[i]+');\\r\\n';",
+      "  rslt += '{schema}.log_audit_delete_col('+ID+','+col_array[i]+');\\r\\n';",
       "}",
       "return rslt;"
     ]
@@ -253,7 +251,7 @@
     "exec": [
       "var rslt = '';",
       "rslt += '{schema}.log_audit_delete_base('+TABLE+','+ID+');\\r\\n';",
-      "rslt += '{schema}.log_audit_update_col('+ID+','+COL_NAME+');\\r\\n';",
+      "rslt += '{schema}.log_audit_delete_col('+ID+','+COL_NAME+');\\r\\n';",
       "return rslt;"
     ]
   },
@@ -273,10 +271,8 @@
   "{schema}.log_audit_delete_col" : {
     "params": ["ID","COL_NAME"],
     "sql": [
-      "if OLD.%%%COL_NAME%%% is not null then",
-      "  insert into {schema}.audit_detail(audit_seq,audit_column_name,audit_column_val)",
-      "  select currval('{schema}.audit__tbl_audit_seq_seq'),lower('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%;",
-      "end if"
+      "insert into {schema}.audit_detail(audit_seq,audit_column_name,audit_column_val)",
+      "  select currval('{schema}.audit__tbl_audit_seq_seq'),lower('%%%COL_NAME%%%'),OLD.%%%COL_NAME%%%",
     ]
   },
   "{schema}.log_audit_other" : {
