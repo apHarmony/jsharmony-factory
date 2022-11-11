@@ -15,6 +15,7 @@
   "$ceiling": { "params": ["VAL"], "sql": "ceiling(%%%VAL%%%)" },
   "$floor": { "params": ["VAL"], "sql": "floor(%%%VAL%%%)" },
   "$binary":{ "params": ["a"], "sql": "x'%%%a%%%'" },
+  "$getInsertKey": { "params": ["TBL","KEY","..."], "sql": "with xrslt as (%%%...%%%) returning %%%KEY%%%) select %%%KEY%%% from xrslt" },
   "proc_run":"select ",
   "par_list_beg":"(",
   "par_list_end":")",

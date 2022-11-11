@@ -19,6 +19,7 @@
   "$ceiling": { "params": ["VAL"], "sql": "cast ( (%%%VAL%%%) as int ) + ( (%%%VAL%%%) > cast ( (%%%VAL%%%) as int ))" },
   "$floor": { "params": ["VAL"], "sql": "cast ( (%%%VAL%%%) as int ) - ( (%%%VAL%%%) < cast ( (%%%VAL%%%) as int ))" },
   "$binary":{ "params": ["a"], "sql": "X'%%%a%%%'" },
+  "$getInsertKey": { "params": ["TBL","KEY","..."], "sql": "%%%...%%%; select %%%KEY%%% from %%%TBL%%% where rowid=(select ifnull(last_insert_rowid_override,last_insert_rowid()) from jsharmony_meta)" },
   "proc_run":"",
   "par_list_beg":"(",
   "par_list_end":")",
