@@ -6,21 +6,25 @@
   "$addMinutes":{ "params": ["date","cnt"], "sql": "(%%%date%%% + %%%cnt%%% minutes)" },
   "$toDate":{ "params": ["date"], "sql": "cast(%%%date%%% as date)" },
   "$topn": { "params": ["CNT","..."], "sql": "%%%...%%% limit %%%CNT%%%" },
-  "$changes": {
+  "$getInsertCount": {
     "params": [],
     "exec": "return 'SELECT COUNT(*) \"xrowcount\" FROM FINAL TABLE ('+[].slice.call(arguments).join(',')+')';"
+  },
+  "$getUpdateCount": {
+    "params": [],
+    "exec": "return [].slice.call(arguments).join(',')+';return_row_count()';"
   },
   "$errorif": {
     "params": ["COND","MSG"],
     "exec": [
       "var errmsg_var = 'jsherrmsg'+Math.round(Math.random()*10000).toString();  while(errmsg_var in this.vars) errmsg_var += '_'; this.vars[errmsg_var] = true;",
-      "var rslt = 'begin declare '+errmsg_var+' varchar(2048); ';",
+      "var rslt = 'begin declare '+errmsg_var+' varchar(2048)\\\\; ';",
       "rslt += 'if ('+COND.trim()+') then \\n';",
       "MSG = MSG.trim();",
       "if(MSG && (MSG[0]=='\\'')) MSG = '\\'Application Error - '+MSG.substr(1);",
-      "rslt += 'set '+errmsg_var+'='+MSG+';\\n';",
-      "rslt += '  SIGNAL SQLSTATE VALUE 'JHERR' SET MESSAGE_TEXT = outParam; \\n';",
-      "rslt += 'end if; ';",
+      "rslt += 'set '+errmsg_var+'='+MSG+'\\\\;\\n';",
+      "rslt += '  SIGNAL SQLSTATE VALUE \\'JHERR\\' SET MESSAGE_TEXT = '+errmsg_var+'\\\\; \\n';",
+      "rslt += 'end if\\\\; ';",
       "rslt += 'END';",
       "return rslt;"
     ]

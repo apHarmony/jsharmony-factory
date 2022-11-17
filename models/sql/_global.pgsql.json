@@ -12,7 +12,8 @@
   "$addMinutes":{ "params": ["date",{ "name": "cnt", "options": { "trim": true } }], "sql": "(%%%date%%% + interval '%%%cnt%%%' minute)" },
   "$toDate":{ "params": ["date"], "sql": "(%%%date%%%)::date" },
   "$topn": { "params": ["CNT","..."], "sql": "%%%...%%% limit %%%CNT%%%" },
-  "$changes": {
+  "$getInsertCount": { "params": ["..."], "sql": "$getUpdateCount(%%%...%%%)" },
+  "$getUpdateCount": {
     "params": [],
     "exec": "return 'with xrslt as ('+[].slice.call(arguments).join(',')+' returning 1) select count(*) xrowcount from xrslt;';"
   },

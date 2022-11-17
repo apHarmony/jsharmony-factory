@@ -12,7 +12,8 @@
   "$addMinutes":{ "params": ["date","cnt"], "sql": "dateadd(minute, %%%cnt%%%, %%%date%%%)" },
   "$toDate":{ "params": ["date"], "sql": "cast(%%%date%%% as date)" },
   "$topn": { "params": ["CNT","..."], "sql": "top %%%CNT%%% %%%...%%%" },
-  "$changes": {
+  "$getInsertCount": { "params": ["..."], "sql": "$getUpdateCount(%%%...%%%)" },
+  "$getUpdateCount": {
     "params": [],
     "exec": "return [].slice.call(arguments).join(',')+';select @@rowcount as xrowcount ';"
   },
