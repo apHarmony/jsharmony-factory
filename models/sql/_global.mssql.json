@@ -12,9 +12,49 @@
   "$addMinutes":{ "params": ["date","cnt"], "sql": "dateadd(minute, %%%cnt%%%, %%%date%%%)" },
   "$toDate":{ "params": ["date"], "sql": "cast(%%%date%%% as date)" },
   "$topn": { "params": ["CNT","..."], "sql": "top %%%CNT%%% %%%...%%%" },
+  "$changes": {
+    "params": [],
+    "exec": "return [].slice.call(arguments).join(',')+';select @@rowcount as xrowcount ';"
+  },
+  "$errorif": {
+    "params": ["COND","MSG"],
+    "exec": [
+      "var errmsg_var = 'jsherrmsg'+Math.round(Math.random()*10000).toString();  while(errmsg_var in this.vars) errmsg_var += '_'; this.vars[errmsg_var] = true;",
+      "var rslt = 'if('+COND.trim()+') ';",
+      "MSG = MSG.trim();",
+      "if(MSG && (MSG[0]=='\\'')) MSG = '\\'Application Error - '+MSG.substr(1);",
+      "rslt += 'begin ';",
+      "rslt += 'declare @'+errmsg_var+' varchar(max); \\nselect @'+errmsg_var+'='+MSG+';\\n';",
+      "rslt += 'raiserror(@'+errmsg_var+',16,1); ';",
+      "rslt += 'if (@@TRANCOUNT > 0) rollback transaction; return; end;';",
+      "return rslt;"
+    ]
+  },
   "$ceiling": { "params": ["VAL"], "sql": "ceiling(%%%VAL%%%)" },
   "$floor": { "params": ["VAL"], "sql": "floor(%%%VAL%%%)" },
   "$binary":{ "params": ["a"], "sql": "0x%%%a%%%" },
+  "$greatest": {
+    "params": [],
+    "exec": [
+      "if(arguments.length<1) return 'null';",
+      "if(arguments.length<2) return arguments[0];",
+      "var rslt = '(case ';",
+      "for(var i=0;i<arguments.length-1;i++){",
+      "  rslt += ' when (';",
+      "  let firstItem = true;",
+      "  for(var j=0;j<arguments.length;j++){",
+      "    if(i==j) continue;",  
+      "    if(!firstItem) rslt += ' and ';",
+      "    firstItem = false;",
+      "    rslt += '(' + '(' + arguments[i] + ') >= (' + arguments[j] + ')' + ')';",
+      "  }",
+      "  rslt += ' ) then ('+arguments[i]+')';",
+      "}",
+      "rslt += ' else (' + arguments[arguments.length-1] + ')';",
+      "rslt += ' end)';",
+      "return rslt;"
+    ]
+  },
   "$getInsertKey": { "params": ["TBL","KEY","..."], "sql": "%%%...%%%; select scope_identity() as %%%KEY%%%" },
   "proc_run":"EXEC",
   "par_list_beg":" ",

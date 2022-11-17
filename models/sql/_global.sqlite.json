@@ -16,9 +16,21 @@
     "params": [],
     "exec": "return [].slice.call(arguments).join(',')+'; select changes()+(select extra_changes from jsharmony_meta) xrowcount ';"
   },
+  "$errorif": {
+    "params": ["COND","MSG"],
+    "exec": [
+      "MSG = MSG.trim();",
+      "if(MSG && (MSG[0]=='\\'')) MSG = '\\'Application Error - '+MSG.substr(1);",
+      "return 'update jsharmony_meta set errcode=-9,errmsg='+MSG+' where ('+COND.trim()+')';"
+    ]
+  },
   "$ceiling": { "params": ["VAL"], "sql": "cast ( (%%%VAL%%%) as int ) + ( (%%%VAL%%%) > cast ( (%%%VAL%%%) as int ))" },
   "$floor": { "params": ["VAL"], "sql": "cast ( (%%%VAL%%%) as int ) - ( (%%%VAL%%%) < cast ( (%%%VAL%%%) as int ))" },
   "$binary":{ "params": ["a"], "sql": "X'%%%a%%%'" },
+  "$greatest": {
+    "params": [],
+    "exec": "return 'max('+[].slice.call(arguments).join(',')+')';"
+  },
   "$getInsertKey": { "params": ["TBL","KEY","..."], "sql": "%%%...%%%; select %%%KEY%%% from %%%TBL%%% where rowid=(select ifnull(last_insert_rowid_override,last_insert_rowid()) from jsharmony_meta)" },
   "proc_run":"",
   "par_list_beg":"(",
