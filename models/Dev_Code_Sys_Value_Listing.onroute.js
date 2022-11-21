@@ -21,8 +21,7 @@ jsh.AppSrv.ExecRow(req._DBContext, "select code_desc,code_code_desc,code_attrib_
     //Set table
     model.table = 'code_sys_'+code_name;
     if(code_schema){
-      if(jsh.DBConfig['default']._driver.name=='sqlite') model.table = code_schema+'_'+model.table;
-      else model.table = code_schema+'.'+model.table;
+      model.table = code_schema+'.'+model.table;
     }
     //Set caption of code_code column
     jsh.AppSrv.getFieldByName(model.fields,'code_code').caption = rslt[0]['code_code_desc'];
