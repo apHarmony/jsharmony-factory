@@ -783,6 +783,7 @@ function jsHarmonyFactoryTransform(module){
     '@job_source': '@job_source',
     '@job_action': '@job_action',
     '@job_action_target': '@job_action_target',
+    '@job_prty': '@rqst_prty',
     '@email_txt_attrib': '@email_txt_attrib',
     '@email_to': '@email_to',
     '@email_cc': '@email_cc',
