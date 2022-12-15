@@ -2119,6 +2119,7 @@ CREATE TABLE [{schema}].[job__tbl](
     [job_action] [nvarchar](32) NOT NULL,
     [job_action_target] [nvarchar](50) NOT NULL,
     [job_params] [nvarchar](max) NULL,
+    [job_prty] [int] NOT NULL DEFAULT 0,
     [job_tag] [nvarchar](255) NULL,
     [job_rslt] [nvarchar](32) NULL,
     [job_rslt_tstmp] [datetime2](7) NULL,

@@ -351,6 +351,7 @@ function jsHarmonyFactoryTransform(module){
     'job_etstmp': 'job_etstmp',
     'job_user': 'job_user',
     'job_id': 'job_id',
+    'job_prty': 'job_prty',
     'job_tag': 'job_tag',
     'job_note_id': 'job_note_id',
     'job_params': 'job_params',

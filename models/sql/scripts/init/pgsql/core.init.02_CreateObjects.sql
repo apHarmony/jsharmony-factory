@@ -4787,6 +4787,7 @@ CREATE TABLE job__tbl (
     job_action character varying(32) NOT NULL,
     job_action_target character varying(50) NOT NULL,
     job_params text,
+    job_prty integer NOT NULL DEFAULT 0,
     job_tag character varying(255),
     job_rslt character varying(32),
     job_rslt_tstmp timestamp without time zone,

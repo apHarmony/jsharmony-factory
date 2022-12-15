@@ -231,6 +231,7 @@ CREATE TABLE {schema}_job__tbl (
   job_action text NOT NULL,
   job_action_target text NOT NULL,
   job_params text,
+  job_prty integer NOT NULL DEFAULT 0,
   job_tag text,
   job_rslt text,
   job_rslt_tstmp text,

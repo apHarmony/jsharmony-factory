@@ -60,6 +60,7 @@
         "{{job_action_target}}": "job_action_target",
         "{{job_params}}": "job_params",
         "{{job_source}}": "job_source",
+        "{{job_prty}}": "job_prty",
         "{{doc_id}}": "doc_id",
         "{{doc_scope}}": "doc_scope",
         "{{doc_scope_id}}": "doc_scope_id",

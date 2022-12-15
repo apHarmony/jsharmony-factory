@@ -381,13 +381,15 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   var jobvalidate = new XValidate();
   var jrow = _this.map_db_rslt(_jrow);
   var job_sql = this.AppSrv.getSQL('',_this._transform('jobproc_add_BEGIN'));
-  var job_sql_ptypes = [dbtypes.VarChar(32), dbtypes.VarChar(32), dbtypes.VarChar(50), dbtypes.VarChar(dbtypes.MAX)];
+  var job_sql_ptypes = [dbtypes.VarChar(32), dbtypes.VarChar(32), dbtypes.VarChar(50), dbtypes.VarChar(dbtypes.MAX), dbtypes.Int];
   var job_sql_params = {};
   job_sql_params['job_source'] = jrow.job_source;
   job_sql_params['job_action'] = 'REPORT';
   job_sql_params['job_action_target'] = fullmodelid;
   job_sql_params['job_params'] = JSON.stringify(rparams);
+  job_sql_params['job_prty'] = jrow.job_prty||0;
   jobvalidate.AddValidator('_obj.job_source', _transform('job_source'), 'B', [XValidate._v_MaxLength(32), XValidate._v_Required()]);
+  jobvalidate.AddValidator('_obj.job_prty', _transform('job_prty'), 'B', [XValidate._v_IsNumeric(), XValidate._v_Required()]);
   if ('doc_scope' in jrow) {
     //Add Document to Job
     if (!('doc_scope_id' in jrow) || !('doc_ctgr' in jrow) || !('doc_desc' in jrow)) throw new Error('Job with d_scope requires d_scope_id, d_ctgr, and d_desc');

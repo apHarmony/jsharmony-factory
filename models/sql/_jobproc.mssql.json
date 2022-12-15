@@ -14,7 +14,7 @@
     "left outer join {schema}.job_note on job_note.job_id = job__tbl.job_id",
     "left outer join {schema}.job_sms on job_sms.job_id = job__tbl.job_id",
     "where job_rslt is null",
-    "order by job__tbl.job_id"
+    "order by job__tbl.job_prty desc, job__tbl.job_id"
   ],
   "jobproc_save_doc": [
     "insert into {schema}.doc__tbl(doc_scope,doc_scope_id,cust_id,doc_sts,doc_ctgr,doc_desc,doc_ext,doc_size,doc_upuser,doc_uptstmp) values(@doc_scope,@doc_scope_id, ",
@@ -25,7 +25,7 @@
   "jobproc_save_queue_message": "update {schema}.queue__tbl set queue_message = @queue_message where queue_id=@queue_id;",
   "jobproc_save_note": "insert into {schema}.note__tbl(note_scope,note_scope_id,note_sts,note_type,note_body) values(@note_scope,@note_scope_id,'A',@note_type,@note_body);",
   "jobproc_jobresult": "update {schema}.job__tbl set job_rslt=@job_rslt,job_rslt_tstmp=[{schema}].[my_now](),job_snotes=@job_snotes where job_id=@job_id",
-  "jobproc_add_BEGIN": "declare @job_id bigint; begin transaction; insert into {schema}.job__tbl(job_source,job_action,job_action_target,job_params) values (@job_source,@job_action,@job_action_target,@job_params);select @job_id = SCOPE_IDENTITY();",
+  "jobproc_add_BEGIN": "declare @job_id bigint; begin transaction; insert into {schema}.job__tbl(job_source,job_action,job_action_target,job_params,job_prty) values (@job_source,@job_action,@job_action_target,@job_params,@job_prty);select @job_id = SCOPE_IDENTITY();",
   "jobproc_add_doc": "insert into {schema}.job_doc(job_id,doc_scope,doc_scope_id,doc_ctgr,doc_desc) values (@job_id,@doc_scope,@doc_scope_id,@doc_ctgr,@doc_desc);",
   "jobproc_add_queue": "insert into {schema}.job_queue(job_id,queue_name,queue_message) values (@job_id,@queue_name,@queue_message);",
   "jobproc_add_email": "insert into {schema}.job_email(job_id,email_txt_attrib,email_to,email_cc,email_bcc,email_attach,email_subject,email_text,email_html,email_doc_id) values (@job_id,@email_txt_attrib,@email_to,@email_cc,@email_bcc,@email_attach,@email_subject,@email_text,@email_html,@email_doc_id);",
