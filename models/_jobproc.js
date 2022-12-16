@@ -577,7 +577,6 @@ AppSrvJobProc.prototype.PopQueue = function (req, res, queue_name, queueresult, 
   this.AppSrv.ExecScalar('jobproc', _this._transform('jobproc_queuepop'), [dbtypes.BigInt, dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
     if (err) { return Helper.GenError(req, res, -99999, err); }
     else if ((rslt == null) || (rslt.length != 1) || (!rslt[0])) { return Helper.GenError(req, res, -99999, 'Queue item ID does not exist or has already been resulted.'); }
-    if (onComplete) onComplete(null);
     _this.SetSubscriberQueueResult(queueresult.ID, queueresult.RSLT, queueresult.NOTES, function () {
       //Delete request file, if applicable
       if (queueresult.RSLT == 'OK') HelperFS.tryUnlink((_this.jsh.Config.datadir +_this._transform('queue__tbl')+'/'+_this._transform('queue__tbl')+'_file_' + queueresult.ID), onComplete);
