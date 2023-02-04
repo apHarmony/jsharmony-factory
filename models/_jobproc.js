@@ -374,6 +374,15 @@ AppSrvJobProc.prototype.SetJobResult = function (job, job_rslt, job_snotes, onCo
 };
 
 AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jrow, fullmodelid, rparams) {
+  var rslt = false;
+  this.AddDBJobBase(req._DBContext, jobtasks, jobtaskid, _jrow, fullmodelid, rparams, function(err){
+    if(err){ return Helper.GenError(req, res, -99999, err.message); }
+    rslt = true;
+  });
+  return rslt;
+};
+
+AppSrvJobProc.prototype.AddDBJobBase = function (dbcontext, jobtasks, jobtaskid, _jrow, fullmodelid, rparams, callback) {
   var _this = this;
   var _transform = function(elem){ return _this._transform(elem); };
   var thisapp = this.AppSrv;
@@ -480,16 +489,15 @@ AppSrvJobProc.prototype.AddDBJob = function (req, res, jobtasks, jobtaskid, _jro
   var verrors = _.merge(verrors, jobvalidate.Validate('B', job_sql_params));
   //Transform job_sql_params
   job_sql_params = _this.transform_db_params(job_sql_params);
-  if (!_.isEmpty(verrors)) { Helper.GenError(req, res, -99999, 'Error during job queue: ' + verrors[''].join('\n') + ' ' + JSON.stringify(job_sql_params)); return; }
+  if (!_.isEmpty(verrors)) { return callback(new Error('Error during job queue: ' + verrors[''].join('\n') + ' ' + JSON.stringify(job_sql_params))); }
   //Add SQL to Transaction
-  
   jobtasks[jobtaskid] = function (dbtrans, callback, transtbl) {
-    _this.db.Command(req._DBContext, job_sql, job_sql_ptypes, job_sql_params, dbtrans, function (err, rslt) {
+    _this.db.Scalar(dbcontext, job_sql, job_sql_ptypes, job_sql_params, dbtrans, function (err, rslt) {
       if (err != null) { err.sql = job_sql; }
       callback(err, rslt);
     });
   };
-  return true;
+  return callback();
 };
 
 AppSrvJobProc.prototype.SetSubscriberQueueResult = function (queue_id, queue_rslt, queue_snotes, onComplete) {

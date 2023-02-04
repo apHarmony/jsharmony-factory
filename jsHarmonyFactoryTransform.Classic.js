@@ -680,6 +680,7 @@ transform.sql = {
   'jobproc_add_sms': 'jobproc_add_RQST_SMS',
   'jobproc_jobcheck': 'jobproc_jobcheck',
   'jobproc_jobresult': 'jobproc_jobresult',
+  'jobproc_getresult': 'jobproc_getresult',
   'jobproc_queuecheck': 'jobproc_queuecheck',
   'jobproc_queuepop': 'jobproc_queuepop',
   'jobproc_queueresult': 'jobproc_queueresult',
