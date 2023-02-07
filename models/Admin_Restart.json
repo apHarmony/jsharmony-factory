@@ -1,15 +1,15 @@
 {
-  "Admin/RestartSystem": {
-    "comment":"Admin/RestartSystem",
-    "title":"Restart System",
+  "Admin/Restart": {
+    "comment":"Admin/Restart",
+    "title":"Restart Service",
     "table":"",
     "actions":"B", 
     "layout":"exec", 
-    "menu":"Admin/RestartSystem",
+    "menu":"Admin/Restart",
     "caption": [ "", "Request", "Requests" ],
     "hide_system_buttons":["print","help"],
     "fields":[
-      {"control":"button","value":"Restart System","controlstyle": "padding:3px 8px;",
+      {"control":"button","value":"Restart Service","controlstyle": "padding:3px 8px;",
         "onclick": " window.location.href = '/_restart';"}
     ]
   }

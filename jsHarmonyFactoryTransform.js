@@ -544,7 +544,7 @@ function jsHarmonyFactoryTransform(module){
     'Dashboard_Note_Listing': 'Dashboard_Note_Listing',
     'Reports/Overview': 'Reports/Overview',
     'Client/Reports/Overview': 'Client/Reports/Overview',
-    'Admin/RestartSystem': 'Admin/RestartSystem',
+    'Admin/Restart': 'Admin/Restart',
     'Queue__model': 'Queue',
     'Dev/SysMenuRole_Listing': 'Dev/SysMenuRole_Listing',
     'Dev/SysRoleMenu_Listing': 'Dev/SysRoleMenu_Listing',

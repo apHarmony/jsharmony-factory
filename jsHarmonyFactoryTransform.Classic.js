@@ -538,7 +538,7 @@ transform.models = {
   'Dashboard_Note_Listing': 'QNSSL',
   'Reports/Overview': 'REPORTS',
   'Client/Reports/Overview': 'REPORTS_CLIENT',
-  'Admin/RestartSystem': 'RESTART_SYSTEM',
+  'Admin/Restart': 'RESTART',
   'Queue__model': 'RQ',
   'Dev/SysMenuRole_Listing': 'SRMSELR_SEL',
   'Dev/SysRoleMenu_Listing': 'SRMSEL_SEL',
