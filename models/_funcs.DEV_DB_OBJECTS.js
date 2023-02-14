@@ -134,7 +134,8 @@ module.exports = exports = function(module, funcs){
         var dbstats = [];
 
         async.eachSeries(sqlBatch, function(sql, sql_cb){
-          db.MultiRecordset('system', sql, [], {}, undefined, function(err, rslt, stats){
+          sql = Helper.trimLeft(sql||'');
+          db.MultiRecordset('', sql, [], {}, undefined, function(err, rslt, stats){
             if(err){ err.sql = sql; return jsh.AppSrv.AppDBError(req, res, err, stats); }
             dbrslt.push(rslt);
             dbstats.push(stats);
