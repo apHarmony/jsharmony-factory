@@ -205,9 +205,13 @@ jsh.App[modelid] = new (function(){
               _.each(stats.notices, function(notice){ txt += 'NOTICE: '+notice+'\r\n'; });
             });
           }
-          if(rslt.dbrslt[0]) for(var i=0;i<rslt.dbrslt[0].length;i++){
-            txt += 'Resultset ' + (i+1).toString() + '\r\n' + '------------------------------------\r\n';
-            txt += JSON.stringify(rslt.dbrslt[0][i],null,4) + '\r\n\r\n';
+          var rsltIdx = 0;
+          if(rslt.dbrslt) for(var i=0;j<rslt.dbrslt.length;i++){
+            if(rslt.dbrslt[i]) for(var j=0;j<rslt.dbrslt[i].length;j++){
+              rsltIdx++;
+              txt += 'Resultset ' + (rsltIdx).toString() + '\r\n' + '------------------------------------\r\n';
+              txt += JSON.stringify(rslt.dbrslt[i][j],null,4) + '\r\n\r\n';
+            }
           }
           txt += '\r\nOperation complete';
           var endtm = Date.now();

@@ -19,6 +19,7 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 
 var Helper = require('jsharmony/Helper');
 var _ = require('lodash');
+var async = require('async');
 
 module.exports = exports = function(module, funcs){
   var exports = {};
@@ -126,16 +127,26 @@ module.exports = exports = function(module, funcs){
         return Helper.GenError(req, res, -99999, 'Unsupported operation');
       }
       sqlsrc = db.ParseSQLFuncs(sqlsrc, sqlFuncs);
+      var sqlBatch = db.sql.ParseBatchSQL(sqlsrc);
 
       if(mode=='run'){
-        db.MultiRecordset('system', sqlsrc, [], {}, undefined, function(err, rslt, stats){
-          if(err){ err.sql = sqlsrc; return jsh.AppSrv.AppDBError(req, res, err, stats); }
-          res.end(JSON.stringify({ _success: 1, _stats: Helper.FormatStats(req, stats, { notices: true, show_all_messages: true }), dbrslt: rslt }));
-          return;
-        }, dbconfig);
+        var dbrslt = [];
+        var dbstats = [];
+
+        async.eachSeries(sqlBatch, function(sql, sql_cb){
+          db.MultiRecordset('system', sql, [], {}, undefined, function(err, rslt, stats){
+            if(err){ err.sql = sql; return jsh.AppSrv.AppDBError(req, res, err, stats); }
+            dbrslt.push(rslt);
+            dbstats.push(stats);
+            return sql_cb();
+          }, dbconfig);
+        }, function(err){
+          if(err) return Helper.GenError(req, res, -99999, 'Error running database operation: '+err.toString());
+          res.end(JSON.stringify({ _success: 1, _stats: Helper.FormatStats(req, dbstats, { notices: true, show_all_messages: true }), dbrslt: dbrslt }));
+        });
       }
       else if(mode=='preview'){
-        return res.end(JSON.stringify({ _success: 1, src: sqlsrc }));
+        return res.end(JSON.stringify({ _success: 1, src: sqlBatch.join('\n') }));
       }
 
       return;
