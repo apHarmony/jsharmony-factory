@@ -20,9 +20,7 @@ jsh.AppSrv.ExecRow(req._DBContext, "select code_desc,code_code_desc,code_attrib_
     model.title = rslt[0]['code_desc']+' - '+code_schema;
     //Set table
     model.table = 'code2_sys_'+code_name;
-    if(code_schema){
-      model.table = code_schema+'.'+model.table;
-    }
+    model.table = (code_schema||'')+'.'+model.table;
     //Set caption of code_code column
     jsh.AppSrv.getFieldByName(model.fields,'code_code').caption = rslt[0]['code_code_desc'];
     if (!rslt[0]['code_code_desc']) {
