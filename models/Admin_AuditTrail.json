@@ -5,7 +5,7 @@
     "actions":"B", 
     "layout":"grid", 
     "caption":[0,"Record","Test ResultsRecords"],
-    "sort":["vaudit_tstmp","^audit_column_name"], 
+    "sort":["vaudit_seq","^audit_column_name"], 
     "menu":"Admin/AuditTrail",
     "fields":[
       {"name":"db_id","type":"varchar","length":"1","caption":"Doc__model","actions":"","cellstyle":"text-align:right;"},
