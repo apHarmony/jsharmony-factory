@@ -52,7 +52,7 @@ function jsHarmonyFactoryConfig(){
   //ID field for Help Listing
   this.help_panelid = '';
   //Subtitle for main site
-  this.mainsitetitle = 'Database Management System';
+  this.mainsitetitle = '';
   //Subtitle for client site
   this.clientsitetitle = 'Client Portal';
 
