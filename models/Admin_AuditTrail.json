@@ -4,7 +4,7 @@
     "table":"{schema}.v_audit_detail",
     "actions":"B", 
     "layout":"grid", 
-    "caption":[0,"Record","Test ResultsRecords"],
+    "caption":[0,"Record","Records"],
     "sort":["vaudit_seq","^audit_column_name"], 
     "menu":"Admin/AuditTrail",
     "fields":[
@@ -19,7 +19,7 @@
       {"name":"audit_column_val","type":"varchar","length":"1","caption":"VAL","actions":"B"},
       {"name":"audit_subject","type":"varchar","length":"50","caption":"INFO","actions":"B"},
       {"name":"sys_user_name","type":"varchar","length":"50","caption":"User","actions":"B"},
-      {"name":"audit_table_id","type":"bigint","caption":"TID","actions":"B","cellstyle":"text-align:right;" },
+      {"name":"audit_table_id","type":"bigint","caption":"TID","actions":"B","cellstyle":"text-align:right;", "foreignkey": true },
       {"name":"audit_seq","type":"bigint","actions":"","key":1}
     ]
   },
