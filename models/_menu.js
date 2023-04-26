@@ -27,8 +27,11 @@ exports = module.exports = function(module){
     return module.transform.mapping[elem];
   };
 
-  var generateMenu = function(type, req, res, jsh, params, onComplete) {
+  var generateMenu = function(type, req, res, jsh, params, onComplete, options) {
+    options = _.extend({ override_menu: null, extend_menu: null, post_process: null /* function(params, callback){} */ }, options);
     var static_menu = _.extend({ main_menu: [], sub_menu: [] }, (module && module.Config) ? module.Config.static_menu : {} );
+    if(options.override_menu) static_menu = _.extend({ main_menu: [], sub_menu: [] }, options.override_menu);
+    var extend_menu = _.extend({ main_menu: [], sub_menu: [] }, options.extend_menu);
 
     if(!req.isAuthenticated){
       params.menudata = {};
@@ -58,15 +61,28 @@ exports = module.exports = function(module){
     var sqlparams = {};
     sqlparams[jsh.map.user_id] = req.user_id;
     sqlparams['root_menu'] = rootmenu;
-    jsh.AppSrv.ExecMultiRecordset(req._DBContext, menusql, [dbtypes.BigInt, dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
-      if(err){ return Helper.GenError(req, res, -99999, 'An unexpected database error has occurred: '+err.toString()); }
-
-      var xmenu = {};
-      xmenu.MainMenu = [];
-      xmenu.SubMenus = {};
-      if ((rslt != null) && (rslt.length == 1) && (rslt[0] != null) && (rslt[0].length == 2)) {
-        var main_menu = rslt[0][0];
-        var sub_menu = rslt[0][1];
+    var db_rslt = null;
+    Helper.execif(!options.override_menu,
+      function(done){
+        jsh.AppSrv.ExecMultiRecordset(req._DBContext, menusql, [dbtypes.BigInt, dbtypes.VarChar(255)], sqlparams, function (err, rslt) {
+          if(err){ return Helper.GenError(req, res, -99999, 'An unexpected database error has occurred: '+err.toString()); }
+          db_rslt = rslt;
+          return done();
+        });
+      },
+      function(){
+        var xmenu = {};
+        xmenu.MainMenu = [];
+        xmenu.SubMenus = {};
+        var main_menu = [];
+        var sub_menu = [];
+        if ((db_rslt != null) && (db_rslt.length == 1) && (db_rslt[0] != null) && (db_rslt[0].length == 2)){
+          main_menu = db_rslt[0][0];
+          sub_menu = db_rslt[0][1];
+        }
+        else {
+          if(!options.override_menu) return Helper.GenError(req, res, -99999, 'An unexpected database error has occurred: Menu SQL must return two recordsets - menu and submenu');
+        }
 
         var key_menu_id = _transform('menu_id');
         var key_menu_parent_name = _transform('menu_parent_name');
@@ -97,6 +113,8 @@ exports = module.exports = function(module){
         };
         merge_menu(main_menu, static_menu.main_menu);
         merge_menu(sub_menu, static_menu.sub_menu);
+        merge_menu(main_menu, extend_menu.main_menu);
+        merge_menu(sub_menu, extend_menu.sub_menu);
 
         //Add menu seq, if not defined
         var add_menu_seq = function(menu_items){
@@ -218,25 +236,27 @@ exports = module.exports = function(module){
           });
         });
         if (cur_sub_menu.length > 0) xmenu.SubMenus[last_parentname] = cur_sub_menu;
-      }
-      else {
-        return Helper.GenError(req, res, -99999, 'An unexpected database error has occurred: Menu SQL must return two recordsets - menu and submenu');
-      }
 
-      //Find the startmodel
-      for(var i=0;i<xmenu.MainMenu.length;i++){
-        var menuitem = xmenu.MainMenu[i];
-        if(menuitem.Link && (menuitem.Link != '/')){
-          startmodel = menuitem.Link;
-          break;
-        }
+        Helper.execif(options.post_process,
+          function(done){ options.post_process(xmenu, done); },
+          function(){
+            //Find the startmodel
+            for(var i=0;i<xmenu.MainMenu.length;i++){
+              var menuitem = xmenu.MainMenu[i];
+              if(menuitem.Link && (menuitem.Link != '/')){
+                startmodel = menuitem.Link;
+                break;
+              }
+            }
+      
+            //Return the data
+            params.startmodel = startmodel;
+            params.menudata = xmenu;
+            return onComplete();
+          }
+        );
       }
-
-      //Return the data
-      params.startmodel = startmodel;
-      params.menudata = xmenu;
-      onComplete();
-    });
+    );
   };
 
   function generateLink(req, jsh, menuitem){
