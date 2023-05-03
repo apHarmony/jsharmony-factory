@@ -3620,7 +3620,7 @@ SET default_with_oids = false;
 
 CREATE TABLE audit_detail (
     audit_seq bigint NOT NULL,
-    audit_column_name character varying(30) NOT NULL,
+    audit_column_name character varying(32) NOT NULL,
     audit_column_val text
 );
 

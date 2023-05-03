@@ -104,7 +104,7 @@ exports = module.exports = function shouldSupportLogAudit(dbconfig) {
   var otherCommand = function(table, col_name, value, callback) {
     var sql_ptypes = [
       dbtypes.VarChar(32),
-      dbtypes.VarChar(30),
+      dbtypes.VarChar(32),
       dbtypes.VarChar(dbtypes.MAX),
     ];
 

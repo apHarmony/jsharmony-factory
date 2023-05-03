@@ -1018,7 +1018,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [{schema}].[audit_detail](
     [audit_seq] [bigint] NOT NULL,
-    [audit_column_name] [varchar](30) NOT NULL,
+    [audit_column_name] [varchar](32) NOT NULL,
     [audit_column_val] [nvarchar](max) NULL,
  CONSTRAINT [pk_audit_detail] PRIMARY KEY CLUSTERED 
 (
