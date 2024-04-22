@@ -55,6 +55,7 @@ module.exports = exports = function(module, funcs){
       if(!dbid){
         var dbs = [];
         for(var dbid_key in jsh.DB) dbs.push(dbid_key);
+        res.type('json');
         res.end(JSON.stringify({ _success: 1, dbs: dbs }));
         return;
       }
@@ -65,6 +66,7 @@ module.exports = exports = function(module, funcs){
       if(action=='schema'){
         if (!appsrv.ParamCheck('Q', Q, ['|db','|action'])) { Helper.GenError(req, res, -4, 'Invalid Parameters'); return; }
         let schema = db.schema_definition;
+        res.type('json');
         res.end(JSON.stringify({ _success: 1, schema: schema, funcs: db.SQLExt.Funcs }));
       }
       else if(action=='model'){
@@ -94,6 +96,7 @@ module.exports = exports = function(module, funcs){
             res.end(rslttxt);
           }
           else {
+            res.type('json');
             res.end(JSON.stringify({ _success: 1, data: rslt, messages: messages }));
           }
         });
@@ -127,6 +130,7 @@ module.exports = exports = function(module, funcs){
             res.end(rslttxt);
           }
           else {
+            res.type('json');
             res.end(JSON.stringify({ _success: 1, data: rslt, messages: messages }));
           }
         });
@@ -158,7 +162,7 @@ module.exports = exports = function(module, funcs){
           if(err) return Helper.GenError(req, res, -99999, err);
           var data = rslt;
           if(Q.output=='dbobject'){
-            var rslttxt = '';
+            let rslttxt = '';
             _.each(data, function(datarow){
               var txt = '{';
               var firstrow = true;
@@ -173,7 +177,18 @@ module.exports = exports = function(module, funcs){
             });
             res.end(rslttxt);
           }
+          else if(Q.output=='sql'){
+            let rslttxt = '';
+            _.each(data, function(datarow){
+              for(var key in datarow){
+                if(columns && !_.includes(columns, key)) delete datarow[key];
+              }
+              rslttxt += db.sql.object.getRowInsert(jsh, null, { name: table, data_keys: [] }, datarow);
+            });
+            res.end(rslttxt);
+          }
           else {
+            res.type('json');
             res.end(JSON.stringify({ _success: 1, data: data }));
           }
         });

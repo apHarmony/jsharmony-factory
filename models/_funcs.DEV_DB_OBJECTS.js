@@ -47,11 +47,13 @@ module.exports = exports = function(module, funcs){
       if(dbid){
         if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Databse ID'); return; }
         let sqlext = jsh.DB[dbid].getSQLExt();
+        res.type('json');
         res.end(JSON.stringify({ _success: 1, objects: sqlext.Objects, hasAdmin: !!jsh.DBConfig[dbid].admin_user }));
       }
       else {
         var dbs = [];
         for(var dbid_key in jsh.DB) dbs.push(dbid_key);
+        res.type('json');
         res.end(JSON.stringify({ _success: 1, dbs: dbs }));
       }
       
@@ -113,7 +115,9 @@ module.exports = exports = function(module, funcs){
 
       var sqlsrc = '';
       if(scriptName=='view'){
-        return res.end(JSON.stringify({ _success: 1, src: JSON.stringify(sqlObject,null,4) }));
+        res.type('json');
+        res.end(JSON.stringify({ _success: 1, src: JSON.stringify(sqlObject,null,4) }));
+        return;
       }
       else if(_.includes(['drop','init','init_data','sample_data','restructure','recreate','recreate_sample'], scriptName)){
         let subScripts = [];
@@ -143,11 +147,14 @@ module.exports = exports = function(module, funcs){
           }, dbconfig);
         }, function(err){
           if(err) return Helper.GenError(req, res, -99999, 'Error running database operation: '+err.toString());
+          res.type('json');
           res.end(JSON.stringify({ _success: 1, _stats: Helper.FormatStats(req, dbstats, { notices: true, show_all_messages: true }), dbrslt: dbrslt }));
         });
       }
       else if(mode=='preview'){
-        return res.end(JSON.stringify({ _success: 1, src: sqlBatch.join('\n') }));
+        res.type('json');
+        res.end(JSON.stringify({ _success: 1, src: sqlBatch.join('\n') }));
+        return;
       }
 
       return;

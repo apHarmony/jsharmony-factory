@@ -132,6 +132,7 @@ exports.sign = function (req, res, next) {
     if (err != null) { err.sql = sql; appsrv.AppDBError(req, res, err, stats); return; }
     rslt = {};
     rslt['_success'] = 1;
+    res.type('json');
     res.end(JSON.stringify(rslt));
   });
 };
@@ -188,6 +189,7 @@ exports.paymentresult = function (req, res, next) {
         delete rslt[jsh.map.user_last_tstmp];
         delete rslt[_transform(jsh,'new_client_result')];
         rslt['_success'] = 1;
+        res.type('json');
         res.end(JSON.stringify(rslt));
       }
       else { Helper.GenError(req, res, -1, 'Record not found'); return; }

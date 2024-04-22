@@ -84,6 +84,7 @@ module.exports = exports = function(module, funcs){
               });
             }
           }
+          res.type('json');
           res.end(JSON.stringify({ _success: 1, conflicts: conflicts }));
         });
       }
@@ -101,6 +102,7 @@ module.exports = exports = function(module, funcs){
             }
           });
         });
+        res.type('json');
         res.end(JSON.stringify({ _success: 1, content: auto_controls }));
       }
       

@@ -47,11 +47,13 @@ module.exports = exports = function(module, funcs){
       if(dbid){
         if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Databse ID'); return; }
         let sqlext = jsh.DB[dbid].getSQLExt();
+        res.type('json');
         res.end(JSON.stringify({ _success: 1, modules: _.keys(sqlext.Objects) }));
       }
       else {
         var dbs = [];
         for(var dbid_key in jsh.DB) dbs.push(dbid_key);
+        res.type('json');
         res.end(JSON.stringify({ _success: 1, dbs: dbs }));
       }
       
@@ -85,6 +87,7 @@ module.exports = exports = function(module, funcs){
       db.getObjectDiff(jsh, sqlext, moduleName, function(err, sql){
         if(err) return jsh.AppSrv.AppDBError(req, res, err);
         sql += '\r\n';
+        res.type('json');
         res.end(JSON.stringify({ _success: 1, src: sql }));
       });
       return;

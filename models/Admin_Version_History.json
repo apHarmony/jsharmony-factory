@@ -3,7 +3,7 @@
     "comment":"Admin/Version_History",
     "title":"Version History",
     "table":"{schema}.version__tbl",
-    "sqlselect": "select %%%SQLFIELDS%%% from ({schema}.audit_history({schema}.version, '{schema}_version', version_id, [\"version_component\",\"version_no_major\",\"version_no_minor\",\"version_no_build\",\"version_no_rev\",\"version_sts\",\"version_note\"]) where version_id=@version_id) version_history %%%SQLSUFFIX%%%",
+    "sqlselect": "select %%%SQLFIELDS%%% from ({schema}.audit_history({schema}.version__tbl, '{schema}_version__tbl', version_id, [\"version_component\",\"version_no_major\",\"version_no_minor\",\"version_no_build\",\"version_no_rev\",\"version_sts\",\"version_note\"]) where version_id=@version_id) version_history %%%SQLSUFFIX%%%",
     "actions":"B", 
     "layout":"grid", 
     "menu":"Admin/Version",

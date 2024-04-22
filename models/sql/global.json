@@ -3,9 +3,9 @@
   "{schema}.version_increment": {
     "params": ["COMPONENT","MAJOR","MINOR","BUILD","REV"],
     "sql": [
-      "insert into jsharmony.version(version_component, version_no_major, version_no_minor, version_no_build, version_no_rev, version_sts)",
-      "  select %%%COMPONENT%%%,%%%MAJOR%%%,%%%MINOR%%%,%%%BUILD%%%,%%%REV%%%,'OK' where not exists(select version_id from jsharmony.version where version_component=%%%COMPONENT%%%);",
-      "update jsharmony.version set version_no_major=%%%MAJOR%%%, version_no_minor=%%%MINOR%%%, version_no_build=%%%BUILD%%%, version_no_rev=%%%REV%%% where version_component=%%%COMPONENT%%%",
+      "insert into jsharmony.version__tbl(version_component, version_no_major, version_no_minor, version_no_build, version_no_rev, version_sts)",
+      "  select %%%COMPONENT%%%,%%%MAJOR%%%,%%%MINOR%%%,%%%BUILD%%%,%%%REV%%%,'OK' where not exists(select version_id from jsharmony.version__tbl where version_component=%%%COMPONENT%%%);",
+      "update jsharmony.version__tbl set version_no_major=%%%MAJOR%%%, version_no_minor=%%%MINOR%%%, version_no_build=%%%BUILD%%%, version_no_rev=%%%REV%%% where version_component=%%%COMPONENT%%%",
       "  and (",
       "    (version_no_major < %%%MAJOR%%%) or ",
       "    (version_no_major = %%%MAJOR%%% and version_no_minor < %%%MINOR%%%) or ",

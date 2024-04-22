@@ -60,6 +60,7 @@ module.exports = exports = function(module, funcs){
       };
       jsh.SendTXTEmail(req._DBContext, 'SUGGEST_FEATURE', suggest_feature_email, null, null, null, email_params, function (err) {
         if (err) { jsh.Log.error(err); return res.end('An error occurred sending the feature suggestion email.  Please contact support for assistance.'); }
+        res.type('json');
         res.end(JSON.stringify({
           '_success': 1,
         }));

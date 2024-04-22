@@ -68,6 +68,7 @@ module.exports = exports = function(module, funcs){
               });
             }, function(err){
               if(err) return cb(err);
+              res.type('json');
               return res.end(JSON.stringify({ _success: 1, files : farr }));
             });
           });
@@ -114,6 +115,7 @@ module.exports = exports = function(module, funcs){
           if(Q.output=='json'){
             fs.readFile(filepath, 'utf8', function(err, fdata){
               if(err) return Helper.GenError(req, res, -99999, err.message);
+              res.type('json');
               return res.end(JSON.stringify({ _success: 1, log: (fdata||'').toString(), mtime: stats.mtimeMs }, null, 4));
             });
           }

@@ -51,6 +51,7 @@ module.exports = exports = function(module, funcs){
 
       jsh.SendBaseEmail(req._DBContext, P.subject, P.body, P.body, P.to, undefined, undefined, undefined, {}, function(err){
         if (err) { return Helper.GenError(req, res, -99999, err.toString()); }
+        res.type('json');
         res.end(JSON.stringify({ _success: 1 }));
       });
       return;

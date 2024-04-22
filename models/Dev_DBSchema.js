@@ -81,10 +81,11 @@ jsh.App[modelid] = new (function(){
          <td><a class="no_print" href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">Data</a></td>\
          <td><a class="no_print" href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=model&db='+XExt.escapeHTML(dbid)+'&schema='+XExt.escapeHTML(table.schema)+'&table='+XExt.escapeHTML(table.name)+'&output=text" target="_blank">Gen:Model</a></td>\
          <td><a class="no_print" href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=create&db='+XExt.escapeHTML(dbid)+'&schema='+XExt.escapeHTML(table.schema)+'&table='+XExt.escapeHTML(table.name)+'&output=dbobject" target="_blank">Gen:SQLObject</a></td>\
-         <td><a class="no_print" href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=insert&db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'&output=dbobject&rows=200&columns='+XExt.escapeHTML(tableColumns)+'" target="_blank">Gen:Insert</a></td>\
+         <td><a class="no_print" href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=insert&db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'&output=dbobject&rows=200&columns='+XExt.escapeHTML(tableColumns)+'" target="_blank">Gen:SampleData</a></td>\
+         <td><a class="no_print" href="<%=jsh._BASEURL%>_funcs/DEV_DB_SCHEMA?action=insert&db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dispName.substr(6))+'&output=sql&rows=200&columns='+XExt.escapeHTML(tableColumns)+'" target="_blank">Gen:Insert</a></td>\
          <td width="100%"></td>';
       schemaHTML += '</tr>';
-      schemaHTML += '<tr><td colspan="7">';
+      schemaHTML += '<tr><td colspan="8">';
       schemaHTML += '<table class="schema_table schema_table_'+tableId+'" cellpadding="0" cellspacing="0" border="0" style="display:none;">';
       schemaHTML += '<tr>';
       schemaHTML += '<th>Column</th>';
@@ -126,7 +127,7 @@ jsh.App[modelid] = new (function(){
         schemaHTML += '<td>'+XExt.escapeHTML(fielddesc.join(','))+'</td>';
         schemaHTML += '</tr>';
       });
-      schemaHTML += '<tr class="no_print"><td colspan="5"><a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&scripttype=recreate&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">&gt; Recreate</a></td>';
+      schemaHTML += '<tr class="no_print"><td colspan="6"><a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&scripttype=recreate&table='+XExt.escapeHTML(dispName.substr(6))+'" target="_blank">&gt; Recreate</a></td>';
       schemaHTML += '</table>';
       schemaHTML += '</td></tr>';
     });
@@ -143,9 +144,9 @@ jsh.App[modelid] = new (function(){
       schemaHTML +=
         '<td class="func_name"><a href="#" class="func_name expandable" data-tableid="'+tableId+'" onclick="return false;">Func: '+XExt.escapeHTML(dispName.substr(5))+'</a></td>\
          <td><a href="#" class="expandable" data-tableid="'+tableId+'" onclick="return false;">Definition</a></td>\
-         <td colspan="5" width="100%"></td>';
+         <td colspan="6" width="100%"></td>';
       schemaHTML += '</tr>';
-      schemaHTML += '<tr class="no_print"><td colspan="7">';
+      schemaHTML += '<tr class="no_print"><td colspan="8">';
       schemaHTML += '<table class="schema_table schema_table_'+tableId+'" cellpadding="0" cellspacing="0" border="0" style="display:none;">';
       schemaHTML += '<tr>';
       schemaHTML += '<td>' + funcVal + '</td>';

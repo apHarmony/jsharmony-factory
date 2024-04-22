@@ -93,6 +93,7 @@ module.exports = exports = function(module, funcs){
         if(!(dbid in jsh.DB)) { Helper.GenError(req, res, -4, 'Invalid Databse ID'); return; }
         let sqlext = jsh.DB[dbid].getSQLExt();
         var scripts = getUpdateScripts(sqlext.Scripts);
+        res.type('json');
         res.end(JSON.stringify({ _success: 1, scripts: scripts, hasAdmin: !!jsh.DBConfig[dbid].admin_user }));
       }
       else {
@@ -100,6 +101,7 @@ module.exports = exports = function(module, funcs){
         for(var dbid_key in jsh.DB) dbs.push(dbid_key);
         getVersions(function(err, versions){
           if(err) return Helper.GenError(req, res, -99999, err.toString());
+          res.type('json');
           res.end(JSON.stringify({ _success: 1, dbs: dbs, versions: versions }));
         });
       }
@@ -155,6 +157,7 @@ module.exports = exports = function(module, funcs){
           getVersions(function(err, versions){
             if(err) return Helper.GenError(req, res, -99999, err.toString());
             if(dbcommands && dbcommands.restart) jsh.Restart(1000);
+            res.type('json');
             res.end(JSON.stringify({
               _success: 1,
               _stats: Helper.FormatStats(req, stats, { notices: true, show_all_messages: true }),
@@ -173,6 +176,7 @@ module.exports = exports = function(module, funcs){
           return false;
         } }, function(err, rslt){
           if(err){ err.sql = 'scriptid:'+scriptid; return jsh.AppSrv.AppDBError(req, res, err); }
+          res.type('json');
           res.end(JSON.stringify({ _success: 1, src: sqlsrc }));
           return;
         });
