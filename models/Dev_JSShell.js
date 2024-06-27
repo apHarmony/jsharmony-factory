@@ -23,7 +23,10 @@ jsh.App[modelid] = new (function(){
       'var dbconfig = jsh.DBConfig[dbid];',
       "var sqlsrc = '';",
       "db.RunScripts(jsh, ['script','path'], { dbconfig: dbconfig, sqlFuncs: { DB: dbconfig.database, DB_LCASE: dbconfig.database.toLowerCase() } }, function(err, rslt, stats){ });",
-    ]
+    ],
+    'Static Menu': [
+      "return JSON.stringify(jsh.Modules['jsHarmonyFactory'].Config.static_menu,null,4);",
+    ],
   };
 
   this.getFormElement = function(){

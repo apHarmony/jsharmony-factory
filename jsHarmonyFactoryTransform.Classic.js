@@ -484,6 +484,8 @@ transform.models = {
   'Admin/Code2_App_Listing': 'GCOD2_HL',
   'Admin/Code_App_Value_Listing': 'GCODL',
   'Admin/Code_App_Listing': 'GCOD_HL',
+  'Admin/Code_Listing': 'GCOD_HL',
+  'Admin/Code2_Listing': 'GCOD2_HL',
   'Admin/SysUser_Doc': 'GPE_D',
   'Admin/SysUser_Doc_Listing': 'GPE_DL',
   'Admin/SysUser_Note': 'GPE_N',
@@ -574,7 +576,9 @@ transform.models = {
   'Dev/Code2_Sys_Listing': 'X_UCOD2_HL',
   'Dev/Code_Sys_Listing': 'X_UCOD_HL',
   'Dev/Param_Sys_Listing': 'X_XPPL',
-  'Reports/Agreement': 'reports/AGREEMENT'
+  'Reports/Agreement': 'reports/AGREEMENT',
+  'Dev/Code_Listing': 'X_GCOD_HL',
+  'Dev/Code2_Listing': 'X_GCOD2_HL',
 };
 
 transform.sql = {

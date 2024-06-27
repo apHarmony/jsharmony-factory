@@ -489,6 +489,8 @@ function jsHarmonyFactoryTransform(module){
     'Admin/Code2_App_Listing': 'Admin/Code2_Listing',
     'Admin/Code_App_Value_Listing': 'Admin/Code_Value_Listing',
     'Admin/Code_App_Listing': 'Admin/Code_Listing',
+    'Admin/Code_Listing': 'Admin/Code_Listing',
+    'Admin/Code2_Listing': 'Admin/Code2_Listing',
     'Admin/SysUser_Doc': 'Admin/SysUser_Doc',
     'Admin/SysUser_Doc_Listing': 'Admin/SysUser_Doc_Listing',
     'Admin/SysUser_Note': 'Admin/SysUser_Note',
@@ -580,6 +582,8 @@ function jsHarmonyFactoryTransform(module){
     'Dev/Code_Sys_Listing': 'Dev/Code_Listing',
     'Dev/Param_Sys_Listing': 'Dev/Param_Sys_Listing',
     'Reports/Agreement': 'Reports/Agreement',
+    'Dev/Code_Listing': 'Dev/Code_Listing',
+    'Dev/Code2_Listing': 'Dev/Code2_Listing',
   };
 
   this.sql = {

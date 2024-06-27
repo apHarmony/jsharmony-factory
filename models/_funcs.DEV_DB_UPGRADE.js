@@ -23,6 +23,10 @@ var _ = require('lodash');
 module.exports = exports = function(module, funcs){
   var exports = {};
 
+  function _transform(elem){
+    return module.transform.mapping[elem];
+  }
+
   exports.DEV_DB_UPGRADE = function (req, res, next) {
 
     //Replace scripts with "..." and prune empty scripts
@@ -71,14 +75,14 @@ module.exports = exports = function(module, funcs){
     if (!Helper.hasModelAction(req, model, 'B')) { Helper.GenError(req, res, -11, 'Invalid Model Access'); return; }
 
     function getVersions(version_cb){
-      var sql = 'select version_component, version_no_major, version_no_minor, version_no_build, version_no_rev from {schema}.'+funcs._transform('version__tbl');
+      var sql = 'select '+_transform('version_component')+', '+_transform('version_no_major')+', '+_transform('version_no_minor')+', '+_transform('version_no_build')+', '+_transform('version_no_rev')+' from {schema}.'+funcs._transform('version__tbl');
       jsh.DB.default.Recordset('system', funcs.replaceSchema(sql), [], {}, undefined, function(err, rslt){
         if(err) return version_cb(err);
         var versions = {};
         _.each(rslt, function(row){
-          if(row && row.version_component){
-            var moduleVersion = (row.version_no_major||'0').toString()+'-'+(row.version_no_minor||'0').toString()+'-'+(row.version_no_build||'0').toString()+'-'+(row.version_no_rev||'0').toString();
-            versions[row.version_component] = moduleVersion;
+          if(row && row[_transform('version_component')]){
+            var moduleVersion = (row[_transform('version_no_major')]||'0').toString()+'-'+(row[_transform('version_no_minor')]||'0').toString()+'-'+(row[_transform('version_no_build')]||'0').toString()+'-'+(row[_transform('version_no_rev')]||'0').toString();
+            versions[row[_transform('version_component')]] = moduleVersion;
           }
         });
         return version_cb(null, versions);
