@@ -1,0 +1,19 @@
+{
+  "Admin/Job_Doc": {
+    "comment":"Admin/Job_Doc",
+    "layout":"grid", 
+    "table":"jsharmony.job_doc",
+    "caption":["","Job Doc","Job Docs"],
+    "title":"Documents",
+    "actions":"B",
+    "menu":"Admin/Job_Doc",
+    "sort": ["vjob_doc_id"],
+    "fields":[
+      {"name":"job_doc_id","type":"bigint","length":"50","caption":"Doc ID"},
+      {"name":"doc_scope","type":"varchar","length":"32","caption":"Scope"},
+      {"name":"doc_scope_id","caption":"Scope ID"},
+      {"name":"doc_ctgr","type":"varchar","length":"32","caption":"Category"},
+      {"name":"doc_desc","type":"varchar","length":"255","caption":"Description"},
+    ],
+  }
+}

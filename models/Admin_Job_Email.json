@@ -1,0 +1,24 @@
+{
+  "Admin/Job_Email": {
+    "comment":"Admin/Job_Email",
+    "layout":"grid", 
+    "table":"jsharmony.job_email",
+    "caption":["","Job Email","Job Emails"],
+    "title":"Emails",
+    "actions":"B",
+    "menu":"Admin/Job_Email",
+    "sort": ["vjob_email_id"],
+    "fields":[
+      {"name":"job_email_id","type":"bigint","length":"50","caption":"Email ID"},
+      {"name":"email_txt_attrib","type":"varchar","length":"32","caption":"Text Attribute"},
+      {"name":"email_to","type":"varchar","length":"255","caption":"To"},
+      {"name":"email_cc","type":"varchar","length":"255","caption":"CC"},
+      {"name":"email_bcc","type":"varchar","length":"255","caption":"BCC"},
+      {"name":"email_attach","caption":"Attachment"},
+      {"name":"email_subject","type":"varchar","length":"500","caption":"Subject"},
+      {"name":"email_text","type":"varchar","caption":"Text"},
+      {"name":"email_html","type":"varchar","caption":"HTML"},
+      {"name":"email_doc_id","type":"bigint","caption":"Doc ID"},
+    ],
+  }
+}

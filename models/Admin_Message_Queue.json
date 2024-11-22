@@ -1,0 +1,24 @@
+{
+  "Admin/Message_Queue": {
+    "layout": "form",
+    "table": "jsharmony.queue",
+    "title":"Add Message Queue",
+    "caption":["","Message","Messages"],
+    "actions":"BI", 
+    "menu":"admin",
+    "popup":[700,300],
+	  "fields":[
+      {"name":"queue_id","control":"textbox","type":"bigint","key":"1", "caption":"ID","actions":"B"},
+      {"name":"queue_euser","control":"textbox","type":"varchar","length":"20","caption":"Entry user","actions":"B"},
+      {"name":"queue_etstmp","control":"textbox_M","type":"datetime","length":"7","caption":"Entry Timestamp","actions":"B"},
+
+      {"name":"queue_name","control":"textbox_S","caption":"Name","nl":true},
+      {"name":"queue_message","control":"textbox_L","caption":"Message"},
+
+      {"name":"queue_rslt","control":"textbox","type":"varchar","length":"50","caption":"Result","actions":"B"},
+      {"name":"queue_rslt_tstmp","control":"textbox_M","type":"datetime","length":"7","caption":"Results Timestamp","actions":"B"},
+      {"name":"queue_rslt_user","control":"textbox","type":"varchar","length":"20","caption":"Result User","actions":"B"},
+      {"name":"queue_snotes","control":"textbox_L","type":"varchar","caption":"System Notes","actions":"B"},
+    ],
+  },
+}

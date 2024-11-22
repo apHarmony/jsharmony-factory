@@ -1,0 +1,18 @@
+{
+  "Admin/Job_SMS": {
+    "comment":"Admin/Job_SMS",
+    "layout":"grid", 
+    "table":"jsharmony.job_sms",
+    "caption":["","Job SMS","Job SMS"],
+    "title":"SMS",
+    "actions":"B",
+    "menu":"Admin/Job_SMS",
+    "sort": ["vjob_sms_id"],
+    "fields":[
+      {"name":"job_sms_id","type":"bigint","caption":"SMS ID"},
+      {"name":"sms_txt_attrib","type":"varchar","length":"32","caption":"Text Attribute"},
+      {"name":"sms_to","type":"varchar","length":"255","caption":"To"},
+      {"name":"sms_body","type":"varchar","caption":"Body"},
+    ],
+  }
+}

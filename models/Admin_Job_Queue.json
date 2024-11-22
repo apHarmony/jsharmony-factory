@@ -1,0 +1,17 @@
+{
+  "Admin/Job_Queue": {
+    "comment":"Admin/Job_Queue",
+    "layout":"grid", 
+    "table":"jsharmony.job_queue",
+    "caption":["","Job Queue","Job Queues"],
+    "title":"Queues",
+    "actions":"B",
+    "menu":"Admin/Job_Queue",
+    "sort": ["vjob_queue_id", "vjob_id"],
+    "fields":[
+      {"name":"job_queue_id","type":"bigint","length":"50","caption":"Queue ID"},
+      {"name":"queue_name","type":"varchar","length":"255","caption":"Name"},
+      {"name":"queue_message","type":"varchar","caption":"Message"},
+    ],
+  }
+}
