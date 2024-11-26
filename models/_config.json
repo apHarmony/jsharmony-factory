@@ -49,6 +49,8 @@
           { "menu_name": "Admin/Version", "menu_desc": "Versions", "menu_cmd": "{namespace}Admin/Version", "menu_subcmd": null, "menu_seq": 80094, "menu_id": 80094, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
           { "menu_name": "Admin/Log_Listing", "menu_desc": "Logs", "menu_cmd": "{namespace}Admin/Log_Listing", "menu_subcmd": null, "menu_seq": 80095, "menu_id": 80095, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
           { "menu_name": "Admin/Restart", "menu_desc": "Restart", "menu_cmd": "{namespace}Admin/Restart", "menu_subcmd": null, "menu_seq": 80096, "menu_id": 80096, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Admin/Message_Queue_Listing", "menu_desc": "Message Queue", "menu_cmd": "{namespace}Admin/Message_Queue_Listing", "menu_subcmd": null, "menu_seq": 80097, "menu_id": 80097, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
+          { "menu_name": "Admin/Job_Listing", "menu_desc": "Jobs", "menu_cmd": "{namespace}Admin/Job_Listing", "menu_subcmd": null, "menu_seq": 80098, "menu_id": 80098, "menu_parent_name": "Admin", "roles": { "main": [ "SYSADMIN", "DEV" ] } },
 
           { "menu_name": "Dev/Menu_Tree_Editor", "menu_desc": "Menu Items", "menu_cmd": "{namespace}Dev/Menu_Tree_Editor", "menu_subcmd": null, "menu_seq": 90011, "menu_id": 90012, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },
           { "menu_name": "Dev/SysRole_Listing", "menu_desc": "User Roles", "menu_cmd": "{namespace}Dev/SysRole_Listing", "menu_subcmd": null, "menu_seq": 90012, "menu_id": 90011, "menu_parent_name": "Dev", "roles": { "main": [ "DEV" ] } },

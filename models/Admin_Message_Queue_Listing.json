@@ -1,0 +1,26 @@
+{
+  "Admin/Message_Queue_Listing": {
+    "comment":"Admin/Message_Queue_Listing",
+    "layout":"grid", 
+    "table":"jsharmony.queue",
+    "caption":["","Message Queue","Message Queues"],
+    "title":"Message Queues",
+    "actions":"B",
+    "menu":"admin",
+    "sort": ["vqueue_id"],
+    "buttons":[
+      {"name":"AddMessageQueue", "link":"insert:Message_Queue_Add", "icon":"add","text":"Add Message Queue", "actions": "B"}
+    ],
+    "fields":[
+      {"name":"queue_id","type":"bigint","key":"1","actions":"B", "caption":"ID"},
+      {"name":"queue_euser","type":"varchar","length":"20","caption":"Entry user"},
+      {"name":"queue_etstmp","type":"datetime","length":"7","caption":"Entry Timestamp"},
+      {"name":"queue_name","type":"varchar","length":"50","caption":"Name"},
+      {"name":"queue_message","type":"varchar","length":"50","caption":"Message"},
+      {"name":"queue_rslt","type":"varchar","length":"50","caption":"Result"},
+      {"name":"queue_rslt_tstmp","type":"datetime","length":"7","caption":"Results Timestamp"},
+      {"name":"queue_rslt_user","type":"varchar","length":"20","caption":"Result User"},
+      {"name":"queue_snotes","type":"varchar","caption":"System Notes"},
+    ],
+  }
+}
