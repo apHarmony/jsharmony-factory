@@ -51,6 +51,8 @@ function jsHarmonyFactoryConfig(){
   this.help_view = {};
   //ID field for Help Listing
   this.help_panelid = '';
+  //ID field for Menu
+  this.menu_menuid = '';
   //Subtitle for main site
   this.mainsitetitle = '';
   //Subtitle for client site
@@ -129,10 +131,11 @@ jsHarmonyFactoryConfig.prototype.Merge = function(config, jsh, sourceModuleName)
       if(!('sub_menu' in obj.static_menu)) obj.static_menu.sub_menu = [];
       function appendArray(dst,src){
         var menu_ids = {};
-        for(let i=0;i<dst.length;i++) menu_ids[dst[i].menu_id] = i;
+        let menu_menuid = _this.menu_menuid || 'menu_id';
+        for(let i=0;i<dst.length;i++) menu_ids[dst[i][menu_menuid]] = i;
         for(let i=0;i<src.length;i++){
-          if(!src[i].menu_id){ dst.push(src[i]); continue; }
-          if(src[i].menu_id in menu_ids) dst[menu_ids[src[i].menu_id]] = src[i];
+          if(!src[i][menu_menuid]){ dst.push(src[i]); continue; }
+          if(src[i][menu_menuid] in menu_ids) dst[menu_ids[src[i][menu_menuid]]] = src[i];
           else dst.push(src[i]);
         }
       }

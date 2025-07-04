@@ -31,6 +31,7 @@
         "client": "Client/Help_Listing"
       },
       "help_panelid": "help_target_code",
+      "menu_menuid": "menu_id",
       "static_menu": {
         "main_menu": [
           { "menu_name": "Admin", "menu_desc": "Administration", "menu_cmd": "{namespace}Admin/Overview", "menu_subcmd": null, "menu_seq": 80000, "menu_id": 800, "roles": { "main": [ "SYSADMIN", "DEV" ] } },
