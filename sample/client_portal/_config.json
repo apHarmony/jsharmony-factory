@@ -19,5 +19,11 @@
         "key:cust_id": "'C'"
       }
     }
+  },
+  {
+    "schema_replacement": [{
+      "search_schema": "application.",
+      "replace_schema": ""
+    }]
   }
 }

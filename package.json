@@ -1,6 +1,6 @@
 {
   "name": "jsharmony-factory",
-  "version": "1.21.3",
+  "version": "1.21.4",
   "description": "Enterprise framework for jsHarmony",
   "main": "index.js",
   "scripts": {
