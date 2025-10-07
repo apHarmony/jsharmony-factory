@@ -20,10 +20,8 @@
       }
     }
   },
-  {
-    "schema_replacement": [{
-      "search_schema": "application.",
-      "replace_schema": ""
-    }]
-  }
+  "schema_replacement": [{
+    "search_schema": "application.",
+    "replace_schema": ""
+  }]
 }
