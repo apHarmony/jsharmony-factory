@@ -82,7 +82,13 @@ function jsHarmonyFactoryConfig(){
   /*
   //Sample Scheduled Task
   this.scheduled_tasks["sample_task"] = {
-    action: jsh.AppSrv.JobProc.ExecuteSQL("SQL;"),
+    action: function(jobproc, options) {
+      
+      //Do not run auto before 6am unless manual executed
+      if(options.run_type == 'auto' && (new Date()).getHours() <= 5) return false;
+
+      jsh.AppSrv.JobProc.ExecuteSQL("SQL;"),
+    }
     options: {
       quiet: false  //Do not log when starting task
     },

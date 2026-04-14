@@ -119,9 +119,10 @@ AppSrvJobProc.prototype.CheckJobQueue = function (onComplete) {
       var task = _this.jshFactory.Config.scheduled_tasks[t];
       if (!(t in this.TaskHistory)) this.TaskHistory[t] = new Date(0);
       if (task.when(curdt, this.TaskHistory[t])) {
-        if(task.options && task.options.quiet){ /* Do nothing */ }
+        task.options = _.extend({ run_type: 'auto', quiet: false }, task.options);
+        if(task.options.quiet){ /* Do nothing */ }
         else _this.jsh.Log.info('Running Task ' + t);
-        task.action(this);
+        task.action(this, task.options);
         this.TaskHistory[t] = curdt;
       }
     }

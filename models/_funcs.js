@@ -24,6 +24,7 @@ function ModuleFunctions(module){
 
   _.extend(this, require('./_funcs.LOG.js')(module, this));
   _.extend(this, require('./_funcs.SUGGEST_FEATURE.js')(module, this));
+  _.extend(this, require('./_funcs.SCHEDULED_TASK_RUNNER.js')(module, this));
   _.extend(this, require('./_funcs.DEV_DB_SCRIPTS.js')(module, this));
   _.extend(this, require('./_funcs.DEV_DB_OBJECTS.js')(module, this));
   _.extend(this, require('./_funcs.DEV_DB_UPGRADE.js')(module, this));

@@ -1,0 +1,11 @@
+<script type="text/x-jsharmony-template" class="<%=model.class%>_scheduled_task_listing">
+  <# if (scheduled_tasks && scheduled_tasks.length){ #>
+    <ul>
+      <# _.each(scheduled_tasks, function(val){ #>
+        <li data-key="<#=val#>" class="scheduled_task"><a href="#"><#=val#></a></li>
+      <# }); #>
+    </ul>
+  <# } else { #>
+    <div>No scheduled tasks.</div>
+  <# } #>
+</script>

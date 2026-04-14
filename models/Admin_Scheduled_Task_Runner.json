@@ -1,0 +1,18 @@
+{
+  "Admin/Scheduled_Task_Runner": {
+    "source_files_prefix":"Admin_Scheduled_Task_Runner",
+    "layout": "form",
+    "unbound": true,
+    "title": "Run Scheduled Tasks",
+    "caption": ["","Scheduled Task","Scheduled Tasks"],
+    "actions":"B",
+    "oninit":"_this.oninit();",
+    "roles": {
+      "SYSADMIN":"*",
+      "DEV":"*",
+    },
+	  "fields":[
+      {"control":"html","value":"<div class='<%=model.class%>_scheduled_task_listing_container'></div>"},
+    ],
+  },
+}

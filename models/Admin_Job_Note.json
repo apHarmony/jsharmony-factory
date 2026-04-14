@@ -1,0 +1,18 @@
+{
+  "Admin/Job_Note": {
+    "comment":"Admin/Job_Note",
+    "layout":"grid", 
+    "table":"jsharmony.job_note",
+    "caption":["","Job Note","Job Notes"],
+    "title":"Notes",
+    "actions":"B",
+    "menu":"Admin/Job_Note",
+    "sort": ["vjob_note_id"],
+    "fields":[
+      {"name":"note_scope","type":"varchar","length":"32","caption":"Scope"},
+      {"name":"note_scope_id","type":"bigint","caption":"Scope ID"},
+      {"name":"note_type","type":"varchar","length":"32","caption":"Type"},
+      {"name":"note_body","type":"varchar","caption":"Body"},
+    ],
+  }
+}

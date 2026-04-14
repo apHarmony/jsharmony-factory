@@ -197,6 +197,7 @@ jsHarmonyFactory.prototype.GetDefaultMainConfig = function(){
       '/_funcs/LOG_DOWNLOAD': _this.funcs.LOG_DOWNLOAD,
       '/_funcs/LOG': _this.funcs.LOG,
       '/_funcs/SUGGEST_FEATURE': _this.funcs.SUGGEST_FEATURE,
+      '/_funcs/SCHEDULED_TASK_RUNNER': _this.funcs.SCHEDULED_TASK_RUNNER,
       '/_funcs/DEV_DB_SCRIPTS': _this.funcs.DEV_DB_SCRIPTS,
       '/_funcs/DEV_DB_OBJECTS': _this.funcs.DEV_DB_OBJECTS,
       '/_funcs/DEV_DB_UPGRADE': _this.funcs.DEV_DB_UPGRADE,
