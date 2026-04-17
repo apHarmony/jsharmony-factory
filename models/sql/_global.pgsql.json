@@ -55,6 +55,7 @@
   "$ceiling": { "params": ["VAL"], "sql": "ceiling(%%%VAL%%%)" },
   "$floor": { "params": ["VAL"], "sql": "floor(%%%VAL%%%)" },
   "$binary":{ "params": ["a"], "sql": "x'%%%a%%%'" },
+  "$ascii": { "params": ["VAL"], "sql": "ascii(%%%VAL%%%)" },
   "$greatest": {
     "params": [],
     "exec": "return 'greatest('+[].slice.call(arguments).join(',')+')';"
