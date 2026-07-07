@@ -2433,6 +2433,30 @@ $$;
 ALTER FUNCTION {schema}.nequal(x1 timestamp without time zone, x2 timestamp without time zone) OWNER TO postgres;
 
 --
+-- Name: nequal(time without time zone, time without time zone); Type: FUNCTION; Schema: {schema}; Owner: postgres
+--
+
+CREATE FUNCTION nequal(x1 time without time zone, x2 time without time zone) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+    BEGIN
+        If x1 is null and x2 is null THEN
+          RETURN FALSE;
+        ELSIF x1 is null and x2 is not null
+           or
+           x1 is not null and x2 is null THEN
+          RETURN TRUE;     
+        ELSE
+          RETURN x1 <> x2;
+        END IF;    
+    END;
+$$;
+
+
+ALTER FUNCTION {schema}.nequal(x1 time without time zone, x2 time without time zone) OWNER TO postgres;
+
+
+--
 -- Name: sys_user_iud(); Type: FUNCTION; Schema: {schema}; Owner: postgres
 --
 
