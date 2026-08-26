@@ -6,6 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title><%=jsh.Config.app_name%> - <%= title %></title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=chevron_forward,logout" />
 <link href='<%-req.jshsite.publicurl%>fonts/jsHarmonyFonts.css' rel='stylesheet' type='text/css' />
 <link rel="stylesheet" type="text/css" href="<%-req.baseurl%>application.css" />
 <script type="text/javascript" src="<%-req.jshsite.publicurl%>js/jsHarmony.dev.js"></script>
@@ -17,7 +18,7 @@
 <body>
 <div class="xmain">
 
-<div class="xhead xhead_vertical">
+<div class="xhead">
   <% if(req.isAuthenticated){ %>
     <div class="xtoplinks"><img src="<%-req.jshsite.publicurl%>images/toplinks_corner.png" class="xtoplinks_corner" alt="" title="" />
       <div class="xtoplinks_body">
@@ -32,7 +33,9 @@
     <a class="xlogoimg" href="<%-ejsext.iif(req.isAuthenticated,'/client/',req.jshsite.home_url)%>"><img src="<%-req.jshsite.publicurl%>images/logo.png" alt="<%=jsh.Config.app_name%>" title="<%=jsh.Config.app_name%>" /></a>
     <a class="xsublogo" href="<%-ejsext.iif(req.isAuthenticated,'/client/',req.jshsite.home_url)%>"><%=req.jshsite.title%></a>
   </div>
-  
+  <% if (req.isAuthenticated){ %>
+    <div class="xsidebar_user"><%=req.user_name%></div>
+  <% } %>
   <%-jsh.RenderView('jsh_menu_vertical',locals)%>
 </div>
 
