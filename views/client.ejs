@@ -36,11 +36,7 @@
   <% if (req.isAuthenticated){ %>
     <div class="xsidebar_user"><%=req.user_name%></div>
   <% } %>
-  <%-jsh.RenderView('jsh_menu_vertical',locals)%>
-</div>
-
-<div style="position:fixed;top:0;right:0;z-index:99999;background:red;color:white;">
-  TEST CLIENT EJS
+  <%-jsh.RenderView('jsh_menu_horizontal',locals)%>
 </div>
 
 <div class="xbody with_xhead"><%-ejsext.BreadCrumbs(req, jsh, modelid)%><% if(title){ %>

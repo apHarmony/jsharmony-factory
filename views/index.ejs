@@ -39,7 +39,7 @@
   <% if (req.isAuthenticated){ %>
     <div class="xsidebar_user"><%=req.user_name%></div>
   <% } %>
-  <%-jsh.RenderView('jsh_menu_vertical',locals)%>
+  <%-jsh.RenderView('jsh_menu_horizontal',locals)%>
 </div>
 
 <div class="xbody with_xhead"><%-ejsext.BreadCrumbs(req, jsh, modelid)%><% if(title){ %>
