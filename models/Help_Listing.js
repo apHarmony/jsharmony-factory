@@ -14,7 +14,7 @@ jsh.App[modelid] = new (function(){
     var xgrid = xmodel.controller.grid;
     if(xgrid.RowCount == 1){
       if(xmodel.get('help_target_code', 0)=='*'){
-        XExt.navTo(jsh.$root('.xgrid_'+xmodel.class+'_placeholder a').first().prop('href'));
+        XExt.navTo(jsh.xd('.xgrid_'+xmodel.class+'_placeholder a').first().element.href);
         return false;
       }
     }
@@ -25,7 +25,7 @@ jsh.App[modelid] = new (function(){
         delete jsh._GET.help_target_code;
         jsh.XPage.Select(undefined, callback);
       } else {
-        XExt.navTo(jsh.$root('.xgrid_'+xmodel.class+'_placeholder a').first().prop('href'));
+        XExt.navTo(jsh.xd('.xgrid_'+xmodel.class+'_placeholder a').first().element.href);
       }
     }
     return false;

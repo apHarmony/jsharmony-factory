@@ -15,10 +15,10 @@ jsh.App[modelid] = new (function(){
       if ('_success' in rslt) {
         //Render Log
         if(!(rslt.log||'').trim()){
-          $('#'+xmodel.class+'_log').html('-----------');
+          XDom('#'+xmodel.class+'_log').html = '-----------';
         }
         else {
-          $('#'+xmodel.class+'_log').html(XExt.escapeHTMLBR(rslt.log));
+          XDom('#'+xmodel.class+'_log').html = XExt.escapeHTMLBR(rslt.log);
         }
         xmodel.set('mtime', rslt.mtime);
       }

@@ -12,7 +12,7 @@
       "from jsharmony.single where 1=1 %%%DATALOCKS%%%"
     ],
     "nokey": 1,
-    "onload":"jsh.$root('.motd_'+xmodel.class).html(xmodel.controller.form.Data.motd);",
+    "onload":"jsh.xd('.motd_'+xmodel.class).html = xmodel.controller.form.Data.motd;",
     "fields":[
       {"name":"motd","type":"varchar","actions":"B","control":"hidden","caption":"","datalock":{"cust_id":"always"}},
       {"control":"html","value":"<div class='clear motd_<%=model.class%>' style='margin-top:10px;'></div>"},

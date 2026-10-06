@@ -18,3 +18,9 @@
     </div>
   </div>
 </div>
+<script type="text/x-jsharmony-template" class="<%=model.class%>_model_listing_template">
+  <option value="">Please select...</option>
+  <# for(var modelid of Models) { #>
+    <option value="<#=modelid#>"><#=modelid#></option>
+  <# } #>
+</script>

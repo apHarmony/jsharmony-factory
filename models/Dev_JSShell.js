@@ -30,42 +30,37 @@ jsh.App[modelid] = new (function(){
   };
 
   this.getFormElement = function(){
-    return jsh.$root('.xformcontainer.xelem'+xmodel.class);
+    return jsh.xd('.xformcontainer.xelem'+xmodel.class);
   };
 
   this.oninit = function(xmodel) {
-    var jform = _this.getFormElement();
+    var xdform = _this.getFormElement();
     _this.LoadScripts();
-    var jSamples = jform.$find('.samples');
-    jSamples.change(function(){
-      var sampleName = jSamples.val();
+    var xdSamples = xdform.get('.samples');
+    xdSamples.on('change', function(){
+      var sampleName = xdSamples.value;
       if(!(sampleName in _this.samples)){ return XExt.Alert('Sample not found: '+sampleName); }
       var sampleJS = _this.samples[sampleName];
       if(_.isArray(sampleJS)) sampleJS = sampleJS.join('\r\n');
-      jform.$find('.js').val(sampleJS);
-      jSamples.val('');
+      xdform.get('.js').value = sampleJS;
+      xdSamples.value = '';
     });
-    jform.$find('.runjs').click(function(){ _this.RunJS(); });
+    xdform.get('.runjs').on('click', function(){ _this.RunJS(); });
   };
 
   this.LoadScripts = function(){
-    var jform = _this.getFormElement();
-    jform.$find('.run').show();
-    jform.$find('.rslt').html('');
-    var jSamples = jform.$find('.samples');
-    jSamples.empty();
-    jSamples.append($('<option>',{value:''}).text('Please select...'));
-    for(var sampleName in _this.samples){
-      var option = $('<option></option>');
-      option.text(sampleName);
-      option.val(sampleName);
-      jSamples.append(option);
-    }
+    var xdform = _this.getFormElement();
+    xdform.get('.run').style.display = true;
+    xdform.get('.rslt').clear();
+    var xdSamples = xdform.get('.samples');
+    xdSamples.clear();
+    var tmpl = jsh.xd('.'+xmodel.class+'_script_listing_template').html;
+    xdSamples.append(XDom.render.ejs(tmpl, {samples: _this.samples}));
   };
 
   this.RunJS = function(){
-    var jform = _this.getFormElement();
-    var js = jform.$find('.js').val();
+    var xdform = _this.getFormElement();
+    var js = xdform.get('.js').value;
     var starttm = Date.now();
     var params = { js: js };
     XForm.prototype.XExecutePost('../_js/exec', params, function (rslt) { //On success
@@ -88,8 +83,8 @@ jsh.App[modelid] = new (function(){
 
         str += "<div style='font-weight:bold'>Operation complete</div>";
         var endtm = Date.now();
-        str += "<div style='font-weight:bold'>Time: " + (endtm-starttm) + 'ms</div>';
-        jform.$find('.rslt').html(str);
+        str += "<div style='font-weight:bold' class='runtime'>Time: " + (endtm-starttm) + 'ms</div>';
+        xdform.get('.rslt').html = str;
       }
     });
   };

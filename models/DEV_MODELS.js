@@ -9,14 +9,14 @@ jsh.App[modelid] = new (function(){
   this.panelUtilities = null;
 
   this.getFormElement = function(){
-    return jsh.$root('.xformcontainer.xelem'+xmodel.class);
+    return jsh.xd('.xformcontainer.xelem'+xmodel.class);
   };
 
   this.oninit = function(xmodel) {
-    var jform = _this.getFormElement();
-    this.panelViewer = jform.$find('.viewer');
-    this.panelNSConflicts = jform.$find('.namespace_conflicts');
-    this.panelUtilities = jform.$find('.utilities');
+    var xdform = _this.getFormElement();
+    this.panelViewer = xdform.get('.viewer');
+    this.panelNSConflicts = xdform.get('.namespace_conflicts');
+    this.panelUtilities = xdform.get('.utilities');
 
     _this.Models = _this.Models.sort(function(a, b){
       if(a.toUpperCase() > b.toUpperCase()) return 1;
@@ -24,34 +24,31 @@ jsh.App[modelid] = new (function(){
     });
 
     _this.RenderModelListing();
-    _this.panelViewer.$find('.modelid').change(function(){
-      var modelid = _this.panelViewer.$find('.modelid').val();
+    _this.panelViewer.get('.modelid').on('change', function(){
+      var modelid = _this.panelViewer.get('.modelid').value;
       if(!modelid) return XExt.Alert('Please select a Model ID');
       var url = window.location.href.split('?')[0];
-      XExt.navTo(url + '?' + $.param({ modelid: modelid }));
+      XExt.navTo(url + '?' + XExt.escapeQuery({ modelid: modelid }));
     });
-    _this.panelNSConflicts.$find('.run').click(function(){
+    _this.panelNSConflicts.get('.run').on('click', function(){
       _this.RenderNamespaceConflicts();
     });
-    _this.panelUtilities.$find('.auto_controls').click(function(){
+    _this.panelUtilities.get('.auto_controls').on('click', function(){
       _this.RenderAutoControls();
     });
-    _this.panelUtilities.$find('.model_listing').click(function(){
+    _this.panelUtilities.get('.model_listing').on('click', function(){
       XExt.navTo('/_listing');
     });
   };
   
   this.RenderModelListing = function(dbs){
-    var jobj = _this.panelViewer.$find('.modelid');
-    jobj.append($('<option>',{value:''}).text('Please select...'));
-    for(var i=0;i<_this.Models.length;i++){
-      var modelid = _this.Models[i];
-      jobj.append($('<option>',{value:modelid}).text(modelid));
-    }
+    var tmpl = jsh.xd('.'+xmodel.class+'_model_listing_template').html;
+    var xdobj = _this.panelViewer.get('.modelid');
+    xdobj.append(XDom.render.ejs(tmpl, {Models: _this.Models}));
     if(_GET['modelid']){
-      jobj.val(_GET['modelid']);
+      xdobj.value = _GET['modelid'];
       var modeldata = JSON.parse(_this.ModelData);
-      _this.panelViewer.$find('.rslt').text(JSON.stringify(modeldata,null,4));
+      _this.panelViewer.get('.rslt').text = JSON.stringify(modeldata,null,4);
     }
   };
 
@@ -69,7 +66,7 @@ jsh.App[modelid] = new (function(){
         var rslt_content = overview +  JSON.stringify(rslt.conflicts,null,4);
         rslt_content = XExt.ReplaceAll(rslt_content, '[RED]', '<span style="color:red;font-weight:bold;">');
         rslt_content = XExt.ReplaceAll(rslt_content, '[/RED]', '</span>');
-        _this.panelNSConflicts.$find('.rslt').html(rslt_content);
+        _this.panelNSConflicts.get('.rslt').html = rslt_content;
       }
     });
   };
@@ -78,7 +75,7 @@ jsh.App[modelid] = new (function(){
     XForm.prototype.XExecute('../_funcs/DEV_MODELS', { action: 'auto_controls' }, function (rslt) { //On success
       if ('_success' in rslt) {
         var rslt_content = JSON.stringify(rslt.content,null,4);
-        _this.panelUtilities.$find('.rslt').html(rslt_content);
+        _this.panelUtilities.get('.rslt').html = rslt_content;
       }
     });
   };

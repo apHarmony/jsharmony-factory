@@ -48,7 +48,7 @@
       {"name":"privs","control": "html","disable_sort":"1","disable_search":1,"disable_search_all":1,
        "value": ["<a href='<%=((data['menu_group']=='S')?jsh._BASEURL+xmodel.module_namespace+'Dev/SysMenuRole':jsh._BASEURL+xmodel.module_namespace+'Dev/CustMenuRole')%>?action=update&amp;menu_id=<%=data['menu_id']%>'",
                  " class=\"privs_link xform_ctrl xelemX_SML xform_label uneditable\"",
-                 " onclick=\"window.open(<%=instance%>.$(this).attr('href'),'_blank','width=1200,height=700,resizable=1,scrollbars=1');return false;\"",
+                 " onclick=\"window.open(<%=instance%>.XDom(this).attr.href,'_blank','width=1200,height=700,resizable=1,scrollbars=1');return false;\"",
                  "><%-((data['menu_id_auto'])?'<img src=\"'+jsh._PUBLICURL+'images/icon_update.png\" class=\"xicon\">':'')%></a>"],
        "caption": "Privileges"}
     ],

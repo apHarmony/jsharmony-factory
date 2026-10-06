@@ -2,59 +2,64 @@ jsh.App[modelid] = new (function(){
   var _this = this;
 
   this.dbmenuId = 0;
+  this.curScript = null;
 
   this.getFormElement = function(){
-    return jsh.$root('.xformcontainer.xelem'+xmodel.class);
+    return jsh.xd('.xformcontainer.xelem'+xmodel.class);
   };
 
   this.oninit = function(xmodel) {
-    var jform = _this.getFormElement();
+    var xdform = _this.getFormElement();
     XForm.prototype.XExecute('../_funcs/DEV_DB_OBJECTS', { }, function (rslt) { //On success
       if ('_success' in rslt) {
         _this.RenderDBListing(rslt.dbs);
       }
     });
-    jform.$find('.db').change(function(){
-      XExt.navTo(window.location.href.split('?')[0] + '?' + $.param({ db: jform.$find('.db').val() }));
+    xdform.get('.db').on('change', function(){
+      XExt.navTo(window.location.href.split('?')[0] + '?' + XExt.escapeQuery({ db: xdform.get('.db').value }));
     });
-    jform.$find('.runas .admin').change(function(){
+    xdform.get('.runas .admin').on('change', function(){
       _this.renderRunAs();
+    });
+    var xdrsltactions = xdform.get('.rslt_actions');
+    xdrsltactions.on('click', function(e){
+      if(_this.curScript){
+        _this.ExecScript(_this.curScript.mode, _this.curScript.obj, _this.curScript.name);
+      }
     });
   };
 
   this.renderRunAs = function(){
-    var jform = _this.getFormElement();
-    var checked = jform.$find('.runas .admin').prop('checked');
+    var xdform = _this.getFormElement();
+    var checked = xdform.get('.runas .admin').element.checked;
+    var xduser = xdform.get('.runas .user');
+    var xdpassword = xdform.get('.runas .password');
     if(checked){
-      XPage.Disable(jform.$find('.runas .user'));
-      XPage.Disable(jform.$find('.runas .password'));
-      jform.$find('.runas .user').val('');
-      jform.$find('.runas .password').val('');
+      XPage.Disable(xduser.elements);
+      XPage.Disable(xdpassword.elements);
+      xduser.value = '';
+      xdpassword.value = '';
     }
     else {
-      XPage.Enable(jform.$find('.runas .user'));
-      XPage.Enable(jform.$find('.runas .password'));
+      XPage.Enable(xduser.elements);
+      XPage.Enable(xdpassword.elements);
     }
   };
 
   this.RenderDBListing = function(dbs){
-    var jform = _this.getFormElement();
-    var jobj = jform.$find('.db');
+    var xdform = _this.getFormElement();
+    var xdobj = xdform.get('.db');
+    var tmpl = jsh.xd('.'+xmodel.class+'_DB_listing_template').html;
+    xdobj.append(XDom.render.ejs(tmpl, {dbs: dbs}));
     if(dbs.length > 1){
-      jform.$find('.dbselect').show();
-      jobj.append($('<option>',{value:''}).text('Please select...'));
+      xdform.get('.dbselect').style.display = true;
     }
     else {
-      jform.$find('.dbselect').hide();
-      jobj.empty();
-    }
-    for(var i=0;i<dbs.length;i++){
-      var db = dbs[i];
-      jobj.append($('<option>',{value:db}).text(db));
+      xdform.get('.dbselect').style.display = false;
     }
     if(dbs.length==1) _this.GetObjects(dbs[0]);
     else if(jsh._GET['db']){
-      jobj.val(jsh._GET['db']);
+      xdobj.value = jsh._GET['db'];
       _this.GetObjects(jsh._GET['db']);
     }
   };
@@ -68,53 +73,43 @@ jsh.App[modelid] = new (function(){
   };
 
   this.RenderObjects = function(objects, hasAdmin){
-    var jform = _this.getFormElement();
-    jform.$find('.run').show();
-    jform.$find('.restart_link').show();
-    jform.$find('.rslt').text('');
-    jform.$find('.rslt_actions').hide();
+    var xdform = _this.getFormElement();
+    xdform.get('.run').style.display = true;
+    xdform.get('.restart_link').style.display = true;
+    xdform.get('.rslt').text = '';
+    xdform.get('.rslt_actions').style.display = false;
 
-    var jobj = jform.$find('.listing');
+    var xdobj = xdform.get('.listing');
     //Clear any existing content
-    jobj.empty();
+    xdobj.clear();
     //Render objects
-    jobj.append(_this.RenderModules(objects));
+    xdobj.append(_this.RenderModules(objects));
     //Attach events
-    jobj.$find('a.dbmenu_link').click(function(e){ e.preventDefault(); var id = $(this).data('id'); jform.$find('.dbmenu[data-id='+id+']').toggle(); });
+    xdobj.get('a.dbmenu_link').on('click', function(e){ e.preventDefault(); var id = XDom(this).data.id; var xdDBitem = xdform.get('.dbmenu[data-id="'+id+'"]'); xdDBitem.style.display = !xdDBitem.isVisible(); });
     _.each(['view','drop','init','init_data','restructure','sample_data','recreate','recreate_sample'], function(scriptName){
-      jobj.$find('a.dbmenu_'+scriptName).click(function(e){ e.preventDefault(); _this.ExecScript('preview', this, scriptName); });
+      xdobj.get('a.dbmenu_'+scriptName).on('click', function(e){ e.preventDefault(); _this.ExecScript('preview', this, scriptName); });
     });
     if(hasAdmin){
-      jform.$find('.runas .admin_container').show();
-      jform.$find('.runas .admin').prop('checked', true);
+      xdform.get('.runas .admin_container').style.display = true;
+      xdform.get('.runas .admin').element.checked = true;
     }
     else {
-      jform.$find('.runas .admin_container').hide();
-      jform.$find('.runas .admin').prop('checked', false);
+      xdform.get('.runas .admin_container').style.display = false;
+      xdform.get('.runas .admin').element.checked = false;
     }
     _this.renderRunAs();
   };
 
   this.RenderModules = function(node){
-    var jlist = $('<ul></ul>');
-    for(var moduleName in node){
-      if(!node[moduleName] || !node[moduleName].length) continue;
-      var jchild = $('<li class="node"></li>');
-      jchild.data('id',moduleName);
-      jchild.append('<span>'+XExt.escapeHTML(moduleName)+'</span>');
-      //Children
-      var childlist = _this.RenderModuleObjects(moduleName, node[moduleName]);
-      if(childlist.length) jchild.append(childlist);
-      jlist.append(jchild);
-    }
-    if(!jlist.children().length) return $();
-    return jlist;
+    var xdform = _this.getFormElement();
+    var tmpl = xdform.get('.'+xmodel.class+'_module_listing_template').html;
+    return XDom.render.ejs(tmpl, {node: node, _this: _this});
   };
 
   this.RenderModuleObjects = function(moduleName, dbobjects){
-    var jform = _this.getFormElement();
-    var dbid = jform.$find('.db').val();
-    var jlist = $('<ul></ul>');
+    var xdform = _this.getFormElement();
+    var tmpl = xdform.get('.'+xmodel.class+'_module_objects_listing_template').html;
+    var dbid = xdform.get('.db').value;
     var objectTypes = {};
     _.each(dbobjects, function(dbobject){
       if(!dbobject) return;
@@ -122,64 +117,39 @@ jsh.App[modelid] = new (function(){
       if(!(objectType in objectTypes)) objectTypes[objectType] = [];
       objectTypes[objectType].push(dbobject);
     });
-    for(var objectType in objectTypes){
-      var jtype = $('<li class="node"></li>');
-      jtype.data('id',objectType);
-      jtype.append('<span>'+XExt.escapeHTML(objectType)+'</span>');
-
-      var jtypelist = $('<ul></ul>');
-      _.each(objectTypes[objectType], function(dbobject){
-        ++_this.dbmenuId;
-        var jobject = $('<li class="node"></li>');
-        jobject.data('id',dbobject.name);
-        jobject.append('<a href="#" class="dbmenu_link" data-id="'+_this.dbmenuId+'">'+XExt.escapeHTML(dbobject.name)+'</a>');
-        var dbmenu_html = '<div class="dbmenu" data-id="'+_this.dbmenuId+'" data-name="' + XExt.escapeHTML(dbobject.name) + '" data-module="' + XExt.escapeHTML(moduleName) + '">';
-        var actions = {
-          'view': 'View',
-          'drop': 'Drop',
-          'init': 'Init',
-          'init_data': 'Init Data',
-          'restructure': 'Restructure',
-          'sample_data': 'Sample Data',
-          'recreate': 'Recreate',
-          'recreate_sample': 'Recreate w/Sample Data',
-        };
-        for(var actionName in actions){
-          dbmenu_html += '<a href="#" class="dbmenu_'+XExt.escapeHTML(actionName)+'">'+XExt.escapeHTML(actions[actionName])+'</a>';
-        }
-        dbmenu_html += '<a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db='+XExt.escapeHTML(dbid)+'&table='+XExt.escapeHTML(dbobject.name)+'" target="_blank" class="dbmenu_select">Select</a>';
-        dbmenu_html += '</div>';
-        jobject.append(dbmenu_html);
-        jtypelist.append(jobject);
-      });
-      jtype.append(jtypelist);
-
-      jlist.append(jtype);
-    }
-    if(!jlist.children().length) return $();
-    return jlist;
+    var actions = {
+      'view': 'View',
+      'drop': 'Drop',
+      'init': 'Init',
+      'init_data': 'Init Data',
+      'restructure': 'Restructure',
+      'sample_data': 'Sample Data',
+      'recreate': 'Recreate',
+      'recreate_sample': 'Recreate w/Sample Data',
+    };
+    return XExt.renderClientEJS(tmpl, {moduleName: moduleName, objectTypes: objectTypes, dbid: dbid, _this: _this, actions: actions});
   };
 
   this.ExecScript = function(mode, obj, scriptName){
-    var jform = _this.getFormElement();
-    var jobj = $(obj);
+    var xdform = _this.getFormElement();
+    var xdobj = XDom(obj);
     if(mode=='preview'){
-      jform.$find('.rslt').text('');
-      jform.$find('.rslt_actions').hide();
+      xdform.get('.rslt').text = '';
+      xdform.get('.rslt_actions').style.display = false;
     }
-
-    var objectName = jobj.closest('.dbmenu').data('name');
-    var moduleName = jobj.closest('.dbmenu').data('module');
+    var xdDbMenu = xdobj.parent('.dbmenu');
+    var objectName = xdDbMenu.data.name;
+    var moduleName = xdDbMenu.data.module;
 
     var starttm = Date.now();
 
-    var params = { scriptName: scriptName, objectName: objectName, moduleName: moduleName, mode: mode, db: jform.$find('.db').val() };
-    if(jform.$find('.admin').prop('checked')){
+    var params = { scriptName: scriptName, objectName: objectName, moduleName: moduleName, mode: mode, db: xdform.get('.db').value };
+    if(xdform.get('.admin').element.checked){
       params.runas_admin = true;
     }
     else {
-      var runas_user = jform.$find('.user').val().trim();
-      var runas_password = jform.$find('.password').val();
+      var runas_user = xdform.get('.user').value.trim();
+      var runas_password = xdform.get('.password').value;
       if(runas_user){
         params.runas_user = runas_user;
         params.runas_password = runas_password;
@@ -189,12 +159,11 @@ jsh.App[modelid] = new (function(){
     XForm.prototype.XExecutePost('../_funcs/DEV_DB_OBJECTS', { data: JSON.stringify(params) }, function (rslt) { //On success
       if ('_success' in rslt) {
         if(mode=='preview'){
-          jform.$find('.rslt').text(objectName+' :: '+scriptName+'\r\n-------------------------------\r\n'+rslt.src);
+          xdform.get('.rslt').text = objectName+' :: '+scriptName+'\r\n-------------------------------\r\n'+rslt.src;
           if(_.includes(['drop','init','init_data','restructure','sample_data','recreate','recreate_sample'], scriptName)){
-            jform.$find('.rslt_actions').show();
-            jform.$find('.rslt_actions').off('click').on('click', function(){
-              _this.ExecScript('run', obj, scriptName);
-            });
+            var xdrsltactions = xdform.get('.rslt_actions');
+            xdrsltactions.style.display = true;
+            _this.curScript = {mode: 'run', obj: obj, name: scriptName};
           }
         }
         else{
@@ -216,7 +185,7 @@ jsh.App[modelid] = new (function(){
           txt += '\r\nOperation complete';
           var endtm = Date.now();
           txt += '\r\nTime: ' + (endtm-starttm) + 'ms';
-          jform.$find('.rslt').text(txt);
+          xdform.get('.rslt').text = txt;
         }
       }
     });

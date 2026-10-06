@@ -2,63 +2,68 @@ jsh.App[modelid] = new (function(){
   var _this = this;
 
   this.dbmenuId = 0;
+  this.curScript = null;
   this.moduleVersions = {};
   this.hasAdmin = false;
   this.scripts = {};
 
   this.getFormElement = function(){
-    return jsh.$root('.xformcontainer.xelem'+xmodel.class);
+    return jsh.xd('.xformcontainer.xelem'+xmodel.class);
   };
 
   this.oninit = function(xmodel) {
-    var jform = _this.getFormElement();
+    var xdform = _this.getFormElement();
     XForm.prototype.XExecute('../_funcs/DEV_DB_UPGRADE', { }, function (rslt) { //On success
       if ('_success' in rslt) {
         _this.RenderDBListing(rslt.dbs);
         _this.moduleVersions = rslt.versions;
       }
     });
-    jform.$find('.db').change(function(){
-      XExt.navTo(window.location.href.split('?')[0] + '?' + $.param({ db: jform.$find('.db').val() }));
+    xdform.get('.db').on('change', function(){
+      XExt.navTo(window.location.href.split('?')[0] + '?' + XExt.escapeQuery({ db: xdform.get('.db').value }));
     });
-    jform.$find('.runas .admin').change(function(){
+    xdform.get('.runas .admin').on('change', function(){
       _this.renderRunAs();
+    });
+    var xdrsltactions = xdform.get('.rslt_actions');
+    xdrsltactions.on('click', function(e){
+      if(_this.curScript){
+        _this.ExecScript(_this.curScript.mode, _this.curScript.obj, _this.curScript.name);
+      }
     });
   };
 
   this.renderRunAs = function(){
-    var jform = _this.getFormElement();
-    var checked = jform.$find('.runas .admin').prop('checked');
+    var xdform = _this.getFormElement();
+    var checked = xdform.get('.runas .admin').element.checked;
+    var xduser = xdform.get('.runas .user');
+    var xdpassword = xdform.get('.runas .password');
     if(checked){
-      XPage.Disable(jform.$find('.runas .user'));
-      XPage.Disable(jform.$find('.runas .password'));
-      jform.$find('.runas .user').val('');
-      jform.$find('.runas .password').val('');
+      XPage.Disable(xduser.elements);
+      XPage.Disable(xdpassword.elements);
+      xduser.value = '';
+      xdpassword.value = '';
     }
     else {
-      XPage.Enable(jform.$find('.runas .user'));
-      XPage.Enable(jform.$find('.runas .password'));
+      XPage.Enable(xduser.elements);
+      XPage.Enable(xdpassword.elements);
     }
   };
 
   this.RenderDBListing = function(dbs){
-    var jform = _this.getFormElement();
-    var jobj = jform.$find('.db');
+    var xdform = _this.getFormElement();
+    var xdobj = xdform.get('.db');
+    var tmpl = jsh.xd('.'+xmodel.class+'_DB_listing_template').html;
+    xdobj.append(XDom.render.ejs(tmpl, {dbs: dbs}));
     if(dbs.length > 1){
-      jform.$find('.dbselect').show();
-      jobj.append($('<option>',{value:''}).text('Please select...'));
+      xdform.get('.dbselect').style.display = true;
     }
     else {
-      jform.$find('.dbselect').hide();
-      jobj.empty();
-    }
-    for(var i=0;i<dbs.length;i++){
-      var db = dbs[i];
-      jobj.append($('<option>',{value:db}).text(db));
+      xdform.get('.dbselect').style.display = false;
     }
     if(dbs.length==1) _this.GetScripts(dbs[0]);
     else if(jsh._GET['db']){
-      jobj.val(jsh._GET['db']);
+      xdobj.value = jsh._GET['db'];
       _this.GetScripts(jsh._GET['db']);
     }
   };
@@ -74,44 +79,33 @@ jsh.App[modelid] = new (function(){
   };
 
   this.RenderScripts = function(){
-    var jform = _this.getFormElement();
-    jform.$find('.run').show();
-    jform.$find('.restart_link').show();
-    jform.$find('.rslt').text('');
-    jform.$find('.rslt_actions').hide();
+    var xdform = _this.getFormElement();
+    xdform.get('.run').style.display = true;
+    xdform.get('.restart_link').style.display = true;
+    xdform.get('.rslt').text = '';
+    xdform.get('.rslt_actions').style.display = false;
 
-    var jobj = jform.$find('.listing');
+    var xdobj = xdform.get('.listing');
     //Clear any existing content
-    jobj.empty();
+    xdobj.clear();
     //Render scripts
-    jobj.append(_this.RenderModules(_this.scripts));
+    xdobj.append(_this.RenderModules(_this.scripts));
     //Attach events
-    jobj.$find('a.upgrade_link').click(function(e){ e.preventDefault(); _this.ExecScript('preview', this); });
+    xdobj.get('a.upgrade_link').on('click', function(e){ e.preventDefault(); _this.ExecScript('preview', this); });
     if(_this.hasAdmin){
-      jform.$find('.runas .admin_container').show();
-      jform.$find('.runas .admin').prop('checked', true);
+      xdform.get('.runas .admin_container').style.display = true;
+      xdform.get('.runas .admin').element.checked = true;
     }
     else {
-      jform.$find('.runas .admin_container').hide();
-      jform.$find('.runas .admin').prop('checked', false);
+      xdform.get('.runas .admin_container').style.display = false;
+      xdform.get('.runas .admin').element.checked = false;
     }
     _this.renderRunAs();
   };
 
   this.RenderModules = function(node){
-    var jlist = $('<ul></ul>');
-    for(var moduleName in node){
-      if(_.isEmpty(node[moduleName])) continue;
-      var jchild = $('<li class="node"></li>');
-      jchild.data('id',moduleName);
-      jchild.append('<span>'+XExt.escapeHTML(moduleName)+'</span>');
-      //Children
-      var childlist = _this.RenderModuleScripts(moduleName, node[moduleName]);
-      if(childlist.length) jchild.append(childlist);
-      jlist.append(jchild);
-    }
-    if(!jlist.children().length) return $();
-    return jlist;
+    var tmpl = jsh.xd('.'+xmodel.class+'_module_listing_template').html;
+    return XDom.render.ejs(tmpl, {node: node, _: _, _this: _this});
   };
 
   this.isVersionActive = function(moduleName, scriptName){
@@ -132,38 +126,31 @@ jsh.App[modelid] = new (function(){
   };
 
   this.RenderModuleScripts = function(moduleName, scripts){
-    var jlist = $('<ul></ul>');
-    for(var scriptName in scripts){
-      var jtype = $('<li class="node"></li>');
-      jtype.data('id',scriptName);
-      var isActive = _this.isVersionActive(moduleName, scriptName);
-      jtype.append('<a href="#" class="upgrade_link '+(isActive?'active':'')+'" data-script="'+XExt.escapeHTML(scriptName)+'" data-module="'+XExt.escapeHTML(moduleName)+'">'+XExt.escapeHTML(scriptName)+'</a>');
-      jlist.append(jtype);
-    }
-    if(!jlist.children().length) return $();
-    return jlist;
+    var xdform = _this.getFormElement();
+    var tmpl = xdform.get('.'+xmodel.class+'_module_scripts_listing_template').html;
+    return XExt.renderClientEJS(tmpl, {scripts: scripts, moduleName: moduleName, _this: _this});
   };
 
   this.ExecScript = function(mode, obj){
-    var jform = _this.getFormElement();
-    var jobj = $(obj);
+    var xdform = _this.getFormElement();
+    var xdobj = XDom(obj);
     if(mode=='preview'){
-      jform.$find('.rslt').text('');
-      jform.$find('.rslt_actions').hide();
+      xdform.get('.rslt').text = '';
+      xdform.get('.rslt_actions').style.display = false;
     }
 
-    var scriptName = jobj.data('script');
-    var moduleName = jobj.data('module');
+    var scriptName = xdobj.data.script;
+    var moduleName = xdobj.data.module;
 
     var starttm = Date.now();
 
-    var params = { scriptName: scriptName, moduleName: moduleName, mode: mode, db: jform.$find('.db').val() };
-    if(jform.$find('.admin').prop('checked')){
+    var params = { scriptName: scriptName, moduleName: moduleName, mode: mode, db: xdform.get('.db').value };
+    if(xdform.get('.admin').element.checked){
       params.runas_admin = true;
     }
     else {
-      var runas_user = jform.$find('.user').val().trim();
-      var runas_password = jform.$find('.password').val();
+      var runas_user = xdform.get('.user').value.trim();
+      var runas_password = xdform.get('.password').value;
       if(runas_user){
         params.runas_user = runas_user;
         params.runas_password = runas_password;
@@ -173,11 +160,10 @@ jsh.App[modelid] = new (function(){
     XForm.prototype.XExecutePost('../_funcs/DEV_DB_UPGRADE', { data: JSON.stringify(params) }, function (rslt) { //On success
       if ('_success' in rslt) {
         if(mode=='preview'){
-          jform.$find('.rslt').text(moduleName+' :: '+scriptName+'\r\n-------------------------------\r\n'+rslt.src);
-          jform.$find('.rslt_actions').show();
-          jform.$find('.rslt_actions').off('click').on('click', function(){
-            _this.ExecScript('run', obj, scriptName);
-          });
+          xdform.get('.rslt').text = moduleName+' :: '+scriptName+'\r\n-------------------------------\r\n'+rslt.src;
+          var xdrsltactions = xdform.get('.rslt_actions');
+          xdrsltactions.style.display = true;
+          _this.curScript = {mode: 'run', obj: obj, name: scriptName};
         }
         else{
           var txt = moduleName+' :: '+scriptName+'\r\n-------------------------------\r\n';
@@ -196,7 +182,7 @@ jsh.App[modelid] = new (function(){
           txt += '\r\nTime: ' + (endtm-starttm) + 'ms';
           _this.moduleVersions = rslt.versions;
           _this.RenderScripts();
-          jform.$find('.rslt').text(txt);
+          xdform.get('.rslt').text = txt;
           if(rslt.dbcommands.restart) XExt.Alert('Restarting jsHarmony');
         }
       }

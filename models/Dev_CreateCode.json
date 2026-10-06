@@ -2,7 +2,7 @@
  "Dev/CreateCode_Base": {
   "inherits": "Dev/PopupExec",
   "title": "Table Create",
-  "onload":"jsh.$root('.get_code_schema').text(XExt.UndefinedBlank(_GET['code_schema']));jsh.$root('.get_code_name').text(XExt.UndefinedBlank(_GET['code_name']));jsh.$root('.get_code_desc').text(XExt.UndefinedBlank(_GET['code_desc']));",
+  "onload":"jsh.xd('.get_code_schema').text = XExt.UndefinedBlank(_GET['code_schema']); jsh.xd('.get_code_name').text = XExt.UndefinedBlank(_GET['code_name']); jsh.xd('.get_code_desc').text = XExt.UndefinedBlank(_GET['code_desc']);",
   "fields": [
     {"name":"question",
      "value":"Are you sure you want to create table <span class='get_code_schema'></span>.code_sys_<span class='get_code_name'></span> ? <br /> <span class='get_code_desc'></span>"},

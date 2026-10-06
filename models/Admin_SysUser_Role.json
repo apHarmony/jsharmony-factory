@@ -6,7 +6,7 @@
     "table":"{schema}.sys_user_role",
     "title":"",
     "caption":["","Role","Roles"],
-    "onload": "if(jsh.is_insert) jsh.$root('.xelem'+xmodel.class+'.xselitem[value=\\'*\\']').prop('checked',true);",
+    "onload": "if(jsh.is_insert) { var allSelItem = jsh.xd('.xelem'+xmodel.class+'.xselitem[value=\\'*\\']').element; if(allSelItem){ xdAllSelItem.checked = true;} }",
     "sqlwhere": "(sys_role_name is null or (sys_role_name <> '*'))",
     "fields":[
       {"name":"sys_user_id","type":"bigint","foreignkey":1,"control":"hidden"},

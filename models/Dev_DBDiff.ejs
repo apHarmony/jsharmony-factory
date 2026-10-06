@@ -54,3 +54,20 @@
     </div>
   </div>
 </div>
+<script type="text/x-jsharmony-template" class="<%=model.class%>_module_listing_template">
+  <ul>
+    <# for(var childname of node) { #>
+      <li class="node" data-id="<#=childname#>">
+        <a class="generate" href="#"><#=childname#></a>
+      </li>
+    <# } #>
+  </ul>
+</script>
+<script type="text/x-jsharmony-template" class="<%=model.class%>_DB_listing_template">
+  <# if(dbs.length > 1) { #>
+    <option value="">Please select...</option>
+  <# } #>
+  <# for(var db of dbs) { #>
+    <option value="<#=db#>"><#=db#></option>
+  <# } #>
+</script>

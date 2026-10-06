@@ -6,9 +6,9 @@
     XExt.CustomPrompt('.suggest_feature', jsh.RenderEJS(jsh.GetEJS('jsHarmonyFactory.SuggestFeature'),{app_name: app_name}), function () { //onInit
     }, function (success) { //onAccept
       //Save content to server
-      var jprompt = jsh.$root('.xdialogblock .suggest_feature');
+      var xdprompt = jsh.xd('.xdialogblock .suggest_feature');
       var params = {
-        message_text: jprompt.$find('.message_text').val()
+        message_text: xdprompt.get('.message_text').value
       };
       XForm.Post('/_funcs/SUGGEST_FEATURE',{},params,function(){
         success();

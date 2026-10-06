@@ -9,7 +9,7 @@
     "menu":"Client/Dashboard",
     "sqlselect": "select (select txt_body from {schema}.txt__tbl where txt_process='CMS' and txt_attrib='Client/Dashboard') as motd from {schema}.single where 1=1 %%%DATALOCKS%%%",
     "nokey": 1,
-    "onload":"jsh.$root('.Dashboard__model_MOTD').html(xmodel.controller.form.Data.motd);",
+    "onload":"jsh.xd('.Dashboard__model_MOTD').html = xmodel.controller.form.Data.motd;",
     "fields":[
       {"name":"motd","type":"varchar","actions":"B","control":"hidden","caption":"","datalock":{"cust_id":"always"}},
       {"control":"html","value":"<div class=\"clear Dashboard__model_MOTD\"></div>"},

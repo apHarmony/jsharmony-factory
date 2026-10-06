@@ -18,11 +18,13 @@ jsh.App[modelid].oninit = function(xmodel) {
 
 jsh.App[modelid].oncommit = function(){
   var _this = this;
-  if(!_this.loadobj){ $(document.activeElement).blur(); return; }
+  if(!_this.loadobj){ XDom(document.activeElement).blur(); return; }
   if (_this.ops.length == 0) {
     jsh.xLoader.StopLoading(_this.loadobj);
     XExt.Alert('Operation complete.',function(){
-      jsh.$root('.save').first().focus().blur();
+      var xdsave = jsh.xd('.save').first();
+      xdsave.focus();
+      xdsave.blur();
     });
     _this.loadobj = '';
     return;
@@ -34,18 +36,20 @@ jsh.App[modelid].oncommit = function(){
 jsh.App[modelid].SelectAll = function(){
   var _this = this;
   _this.ForAllChildren(function (obj) {
-    if ($(obj).is(':checked')) return;
-    if ($(obj).css('visibility').toLowerCase() == 'hidden') return;
-    _this.ops.push(function () { $(obj).trigger('click'); });
+    if (obj && obj.checked) return;
+    var xdobj = XDom(obj);
+    if (!xdobj.isVisible()) return;
+    _this.ops.push(function () { xdobj.emit('click'); });
   });
 };
 
 jsh.App[modelid].DeselectAll = function(){
   var _this = this;
   _this.ForAllChildren(function (obj) {
-    if (!$(obj).is(':checked')) return;
-    if ($(obj).css('visibility').toLowerCase() == 'hidden') return;
-    _this.ops.push(function () { $(obj).trigger('click'); });
+    if (obj && !obj.checked) return;
+    var xdobj = XDom(obj);
+    if (!xdobj.isVisible()) return;
+    _this.ops.push(function () { xdobj.emit('click'); });
   });
 };
 
@@ -54,13 +58,13 @@ jsh.App[modelid].ForAllChildren = function(add_op) {
   if (_this.loadobj) return;
   _this.ops = [];
   //First, Select All Unchecked
-  var jtbl = jsh.$root('.xform' + xmodel.class + '.xtbl');
+  var xdtbl = jsh.xd('.xform' + xmodel.class + '.xtbl');
   _this.loadobj = 'CRMSELR_SELLOADER';
   jsh.xLoader.StartLoading(_this.loadobj);
   
   function fselectall() {
-    jtbl.$find('input.checkbox.cust_menu_role_selection').each(function () {
-      add_op(this);
+    xdtbl.get('input.checkbox.cust_menu_role_selection').elements.forEach(function (obj) {
+      add_op(obj);
     });
     _this.oncommit();
   }

@@ -8,31 +8,32 @@ jsh.App[modelid] = new (function(){
       if(!_this.menu_id_auto) _this.menu_id_auto = xmodel.controller.form.Data.menu_id_auto;
       return _this.menu_id_auto;
     };
-    jsh.$root('.menu_id_auto.tree').data('oncontextmenu','return '+XExt.getJSApp(modelid)+'.oncontextmenu(this, n);');
+    jsh.xd('.menu_id_auto.tree').data.oncontextmenu = 'return '+XExt.getJSApp(modelid)+'.oncontextmenu(this, n);';
   };
 
   this.oncontextmenu = function(ctrl, n){
     var menuid = '._item_context_menu_menu_id_auto';
-    var menu_add = jsh.$root(menuid).children('.insert');
-    var menu_delete = jsh.$root(menuid).children('.delete');
-    var jctrl = $(ctrl);
+    var xdmenu = jsh.xd(menuid);
+    var xdmenu_add = xdmenu.getChildren('.insert');
+    var xdmenu_delete = xdmenu.getChildren('.delete');
+    var xdctrl = XDom(ctrl);
     var level = 0;
-    var jpctrl = jctrl;
-    while(!jpctrl.hasClass('tree') && (level < 100)){ level++; jpctrl = jpctrl.parent(); }
+    var xdpctrl = xdctrl;
+    while(!xdpctrl.class.contains('tree') && (level < 100)){ level++; xdpctrl = xdpctrl.parent(); }
     if(level == 1){
-      menu_add.show();
-      menu_delete.hide();
+      xdmenu_add.style.display = true;
+      xdmenu_delete.style.display = false;
     }
     else if(level == 2){
-      menu_add.show();
-      menu_delete.show();
+      xdmenu_add.style.display = true;
+      xdmenu_delete.style.display = true;
     }
     else if(level == 3){
-      menu_add.hide();
-      menu_delete.show();
+      xdmenu_add.style.display = false;
+      xdmenu_delete.style.display = true;
     }
     else { /* Do nothing */ }
-    XExt.ShowContextMenu(menuid, $(ctrl).data('value'), { id:n });
+    XExt.ShowContextMenu(menuid, XDom(ctrl).data.value, { id:n });
     return false;
   };
 
@@ -63,7 +64,7 @@ jsh.App[modelid] = new (function(){
     _.each(fields, function (val, key) { validate.AddControlValidator('.Menu_InsertPopup .' + key, '_obj.' + key, val.caption, 'BI', val.validators); });
 
     XExt.CustomPrompt('.Menu_InsertPopup','\
-      <div class="Menu_InsertPopup xdialogbox xpromptbox" style="width:360px;"> \
+      <div class="Menu_InsertPopup xdialogbox xpromptbox" style="width:402px;"> \
         <h3>Add Child Item</h3> \
         <div align="left" style="padding-top:15px;"> \
           <div style="width:100px;display:inline-block;margin-bottom:8px;text-align:right;">Menu ID:</div> <input autocomplete="off" type="text" class="menu_name" style="width:150px;" maxlength="255" /> (ex. ORDERS)<br/> \
@@ -72,9 +73,9 @@ jsh.App[modelid] = new (function(){
         </div> \
       </div> \
     ',function(){ //onInit
-      window.setTimeout(function(){jsh.$root('.Menu_InsertPopup .menu_name').focus();},1);
+      window.setTimeout(function(){jsh.xd('.Menu_InsertPopup .menu_name').focus();},1);
     }, function (success) { //onAccept
-      _.each(fields, function (val, key) { data[key] = jsh.$root('.Menu_InsertPopup .' + key).val(); });
+      _.each(fields, function (val, key) { data[key] = jsh.xd('.Menu_InsertPopup .' + key).value; });
       if (!validate.ValidateControls('I', data, '')) return;
       var insertTarget = xmodel.module_namespace+'Dev/Menu_Exec_Insert';
       XForm.prototype.XExecutePost(insertTarget, data, function (rslt) { //On success
@@ -136,7 +137,7 @@ jsh.App[modelid] = new (function(){
       XForm.prototype.XExecutePost(xmodel.module_namespace+'Dev/Menu_Exec_Delete', { menu_id_auto: context_item }, function (rslt) { //On success
         if ('_success' in rslt) {
           //Select parent
-          if(new_menu_id_auto) XExt.TreeSelectNode(jsh.$root('.menu_id_auto.tree'),new_menu_id_auto);
+          if(new_menu_id_auto) XExt.TreeSelectNode(jsh.xd('.menu_id_auto.tree').element,new_menu_id_auto);
           jsh.XPage.Refresh();
         }
       });

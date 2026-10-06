@@ -95,3 +95,42 @@
     </div>
   </div>
 </div>
+<script type="text/x-jsharmony-template" class="<%=model.class%>_module_listing_template">
+  <ul>
+    <# for(var moduleName in node) { #>
+      <# if(!node[moduleName] || !node[moduleName].length) continue; #>
+      <li class="node" data-id="<#=moduleName#>">
+        <span><#=moduleName#></span>
+        <#-_this.RenderModuleObjects(moduleName, node[moduleName])#>
+      </li>
+    <# } #>
+  </ul>
+</script>
+<script type="text/x-jsharmony-template" class="<%=model.class%>_module_objects_listing_template">
+  <ul>
+    <# for(var objectType in objectTypes) { #>
+      <li class="node" data-id="<#=objectType#>">
+        <span><#=objectType#></span>
+        <ul>
+          <# for(var dbobject of objectTypes[objectType]) { #>
+            <# ++_this.dbmenuId #>
+            <li class="node" data-id="<#=dbobject.name#>">
+              <a href="#" class="dbmenu_link" data-id="<#=_this.dbmenuId#>"><#=dbobject.name#></a>
+              <div class="dbmenu" data-id="<#=_this.dbmenuId#>" data-name="<#=dbobject.name#>" data-module="<#=moduleName#>">
+                <# for(var actionName in actions) { #><a href="#" class="dbmenu_<#=actionName#>"><#=actions[actionName]#></a><# } #><a href="<%=jsh._BASEURL%><%=model.module_namespace%>Dev/DBSQL?db=<#=dbid#>&table=<#=dbobject.name#>" target="_blank" class="dbmenu_select">Select</a>
+              </div>
+            </li>
+          <# } #>
+        </ul>
+      </li>
+    <# } #>
+  </ul>
+</script>
+<script type="text/x-jsharmony-template" class="<%=model.class%>_DB_listing_template">
+  <# if(dbs.length > 1) { #>
+    <option value="">Please select...</option>
+  <# } #>
+  <# for(var db of dbs) { #>
+    <option value="<#=db#>"><#=db#></option>
+  <# } #>
+</script>

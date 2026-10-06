@@ -22,7 +22,7 @@
       {"name":"help_target_desc","type":"varchar","length":"50","validate":["Required","MaxLength:50"],"actions":"BIU",
        "control":"textbox_L", "caption":"Name"}
     ],
-    "oninit":"jsh.$root('.xtbl.xelem'+xmodel.class).before('<div>** Help Targets should reference the Base Model (without Model Parents), unless a custom model.helpid is used</div>');",
+    "oninit":"var xdmodel = jsh.xd('.xtbl.xelem'+xmodel.class); xdmodel.parent().insertBefore(XDom.render('<div>** Help Targets should reference the Base Model (without Model Parents), unless a custom model.helpid is used</div>'), xdmodel.element);",
     "dberrors": [
       [ "help_target_help_target_code_key", "Duplicate Help Target Code" ],
       [ "help_target_help_target_desc_key", "Duplicate Help Target Name" ],

@@ -24,20 +24,19 @@ var jsHarmonyAgreement = function(jsh){
 jsHarmonyAgreement.prototype.Init = function(){
   var _this = this;
   var jsh = _this.jsh;
-  var $ = jsh.$;
   var _ = jsh._;
   var moment = jsh.moment;
   var XValidate = jsh.XValidate;
   var XFormat = jsh.XFormat;
   var XForm = jsh.XForm;
 
-  $(document).ready(function () {
-    jsh.$root('.a_date').val(moment().format('MM/DD/YYYY'));
+  jsh.XDom.onPageLoad(function () {
+    jsh.xd('.a_date').value = moment().format('MM/DD/YYYY');
   
     //Sample Data
-    /*jsh.$root('.a_name').val('Slim Stanowski');
-    jsh.$root('.a_dob').val('9/9/1990');
-    jsh.$root('.a_accept').prop('checked', true);*/
+    /*jsh.xd('.a_name').value = 'Slim Stanowski';
+    jsh.xd('.a_dob').value = '9/9/1990';
+    jsh.xd('.a_accept').element.checked = true;*/
     
     //Set up Step 1
     _.each(XFormStep1.prototype.Fields, function (field, fieldid) {
@@ -66,7 +65,7 @@ jsHarmonyAgreement.prototype.Init = function(){
   };
 
   function _v_IsChecked() {
-    var _val = jsh.$root('.a_accept').prop('checked');
+    var _val = jsh.xd('.a_accept').element.checked;
     if (!_val) return 'E-signature must be checked to continue.';
     return '';
   }
@@ -85,7 +84,7 @@ jsHarmonyAgreement.prototype.Init = function(){
     });
   };
   XFormStep1.prototype.GetValue = function (field) {
-    var val = jsh.$root('.' + field.name).val();
+    var val = jsh.xd('.' + field.name).value;
     if ('format' in field) {
       var format = field.format;
       if (_.isString(format)) val = XFormat[format + '_decode'](val);

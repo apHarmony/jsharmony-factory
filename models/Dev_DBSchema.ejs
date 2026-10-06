@@ -16,3 +16,11 @@
 </div>
 <div class="rslt">
 </div>
+<script type="text/x-jsharmony-template" class="<%=model.class%>_DB_listing_template">
+  <# if(dbs.length > 1) { #>
+    <option value="">Please select...</option>
+  <# } #>
+  <# for(var db of dbs) { #>
+    <option value="<#=db#>"><#=db#></option>
+  <# } #>
+</script>

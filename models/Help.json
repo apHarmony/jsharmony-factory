@@ -9,7 +9,7 @@
   "popup":[850,525],
   "hide_system_buttons": ["help"],
   "oninit": "xmodel.controller.form.Data.OnDBError = function(error){ if(error.Number==-1){ XExt.Alert('No help found for this screen',function(){ window.close(); }); return false; } }",
-  "onload": "jsh.$root('.help_text_disp').html(xmodel.controller.form.Data.help_text);",
+  "onload": "jsh.xd('.help_text_disp').html = xmodel.controller.form.Data.help_text;",
   "fields":[
     {"name":"help_id","type":"bigint","key": 1,"datalock":{"cust_id":"always"},"control":"hidden"},
     {"name":"help_title","type":"varchar","length":70,"actions":"BIU",

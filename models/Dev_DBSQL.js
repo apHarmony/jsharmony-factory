@@ -96,45 +96,45 @@ jsh.App[modelid] = new (function(){
   };
 
   this.getFormElement = function(){
-    return jsh.$root('.xformcontainer.xelem'+xmodel.class);
+    return jsh.xd('.xformcontainer.xelem'+xmodel.class);
   };
 
   this.renderDB = function(){
-    var jform = _this.getFormElement();
-    var db = jform.$find('.db').val();
-    if(!db) jform.$find('.run').hide();
+    var xdform = _this.getFormElement();
+    var db = xdform.get('.db').value;
+    if(!db) xdform.get('.run').style.display = false;
     else{
       _this.LoadScripts(db);
     }
   };
 
   this.oninit = function(xmodel) {
-    var jform = _this.getFormElement();
-    jform.$find('.db').change(function(){
+    var xdform = _this.getFormElement();
+    xdform.get('.db').on('change', function(){
       _this.defaultDB = '';
       _this.renderDB();
     });
-    var jSamples = jform.$find('.samples');
-    jSamples.change(function(){
-      var db = jform.$find('.db').val();
+    var xdSamples = xdform.get('.samples');
+    xdSamples.on('change', function(){
+      var db = xdform.get('.db').value;
       var dbtype = _this.DBs[db];
-      var sampleName = jSamples.val();
+      var sampleName = xdSamples.value;
       var samples = _this.samples[dbtype];
       if(!(sampleName in samples)){ return XExt.Alert('Sample not found: '+sampleName); }
       var sampleSQL = samples[sampleName];
-      jform.$find('.sql').val(sampleSQL);
-      jSamples.val('');
+      xdform.get('.sql').value = sampleSQL;
+      xdSamples.value = '';
     });
-    jform.$find('.runsql').click(function(){ _this.RunSQL(); });
-    jform.$find('.exportcsv').click(function(){ _this.ExportCSV(); });
-    jform.$find('.runas_toggle').click(function(){ jform.$find('.runas').toggle(); return false; });
+    xdform.get('.runsql').on('click', function(){ _this.RunSQL(); });
+    xdform.get('.exportcsv').on('click', function(){ _this.ExportCSV(); });
+    xdform.get('.runas_toggle').on('click', function(){ var xdrunas = xdform.get('.runas'); xdrunas.style.display = !xdrunas.isVisible(); return false; });
 
     _this.RenderDBListing(_.keys(_this.DBs));
   };
 
   this.onload = function(){
-    var jform = _this.getFormElement();
-    var jobj = jform.$find('.db');
+    var xdform = _this.getFormElement();
+    var xdobj = xdform.get('.db');
     var dbs = _.keys(_this.DBs);
     _this.defaultDB = '';
     _this.defaultSQL = '';
@@ -143,47 +143,45 @@ jsh.App[modelid] = new (function(){
       _this.LoadScripts(dbs[0]);
     }
     else if(_this.state && _this.state.db){
-      jobj.val(_this.state.db);
+      xdobj.value = _this.state.db;
       _this.renderDB();
     }
     else if(_GET['db']){
       _this.defaultDB = _GET['db'];
-      jobj.val(_GET['db']);
+      xdobj.value = _GET['db'];
       _this.renderDB();
     }
     else {
-      jobj.val('');
+      xdobj.value = '';
       _this.renderDB();
     }
     _this.saveState();
   };
 
   this.RenderDBListing = function(dbs){
-    var jform = _this.getFormElement();
-    var jobj = jform.$find('.db');
+    var xdform = _this.getFormElement();
+    var xdobj = xdform.get('.db');
+    var tmpl = jsh.xd('.'+xmodel.class+'_DB_listing_template').html;
+    xdobj.append(XDom.render.ejs(tmpl, {dbs: dbs}));
     if(dbs.length > 1){
-      jform.$find('.dbselect').show();
-      jobj.append($('<option>',{value:''}).text('Please select...'));
+      xdform.get('.dbselect').style.display = true;
     }
     else {
-      jform.$find('.dbselect').hide();
-      jobj.empty();
-    }
-    for(var i=0;i<dbs.length;i++){
-      var db = dbs[i];
-      jobj.append($('<option>',{value:db}).text(db));
+      xdform.get('.dbselect').style.display = false;
     }
   };
 
   this.LoadScripts = function(db){
-    var jform = _this.getFormElement();
-    jform.$find('.run').show();
-    jform.$find('.rslt').html('');
-    var jSamples = jform.$find('.samples');
-    jSamples.empty();
-    jSamples.append($('<option>',{value:''}).text('Please select...'));
+    var xdform = _this.getFormElement();
+    xdform.get('.run').style.display = true;
+    xdform.get('.rslt').clear();
+    var xdSamples = xdform.get('.samples');
+    xdSamples.clear();
+
     var dbtype = _this.DBs[db];
-    
+    var tmpl = jsh.xd('.'+xmodel.class+'_samples_listing_template').html;
+    xdSamples.append(XDom.render.ejs(tmpl, {_samples: _this.samples, dbtype: dbtype }));
+
     var sql = '';
     if(_this.state && _this.state.sql){
       sql = _this.state.sql;
@@ -191,16 +189,10 @@ jsh.App[modelid] = new (function(){
     else if(_GET['sql']){
       sql = _GET['sql'];
     }
-    if(sql) jform.$find('.sql').val(sql);
+    if(sql) xdform.get('.sql').value = sql;
 
     if(dbtype in _this.samples){
       var samples = _this.samples[dbtype];
-      for(var sampleName in samples){
-        var option = $('<option></option>');
-        option.text(sampleName);
-        option.val(sampleName);
-        jSamples.append(option);
-      }
       if(!sql){
         if(_GET['table']){
           if(_GET['scripttype']=='recreate'){
@@ -213,20 +205,20 @@ jsh.App[modelid] = new (function(){
               sql = sql.replace(/TABLE_INIT/g,createSql);
             }
             sql = sql.replace(/TABLENAME/g,_GET['table']);
-            jform.$find('.sql').val(sql);
+            xdform.get('.sql').value = sql;
             _this.defaultSQL = sql;
           }
           else {
             sql = samples['Select'];
             sql = sql.replace('TABLENAME',_GET['table']);
-            jform.$find('.sql').val(sql);
+            xdform.get('.sql').value = sql;
             _this.defaultSQL = sql;
-            jform.$find('.runsql').click();
+            xdform.get('.runsql').emit('click');
           }
         }
         else if('Select' in samples){
           sql = samples['Select'];
-          jform.$find('.sql').val(sql);
+          xdform.get('.sql').value = sql;
           _this.defaultSQL = sql;
         }
       }
@@ -234,13 +226,13 @@ jsh.App[modelid] = new (function(){
   };
 
   this.getExecParams = function(){
-    var jform = _this.getFormElement();
-    var sql = jform.$find('.sql').val();
-    var db = jform.$find('.db').val();
+    var xdform = _this.getFormElement();
+    var sql = xdform.get('.sql').value;
+    var db = xdform.get('.db').value;
     var params = { sql: sql, db: db };
-    var runas_user = jform.$find('.user').val().trim();
-    var runas_password = jform.$find('.password').val();
-    var nocontext = jform.$find('.nocontext').is(':checked');
+    var runas_user = xdform.get('.user').value.trim();
+    var runas_password = xdform.get('.password').value;
+    var nocontext = xdform.get('.nocontext').element.checked;
     if(runas_user){
       params.runas_user = runas_user;
       params.runas_password = runas_password;
@@ -264,10 +256,10 @@ jsh.App[modelid] = new (function(){
   };
 
   this.saveState = function(){
-    var jform = _this.getFormElement();
+    var xdform = _this.getFormElement();
     var newState = {};
-    newState.db = jform.$find('.db').val() || '';
-    newState.sql = jform.$find('.sql').val() || '';
+    newState.db = xdform.get('.db').value || '';
+    newState.sql = xdform.get('.sql').value || '';
     if(newState.db == _this.defaultDB) newState.db = '';
     if(newState.sql == _this.defaultSQL) newState.sql = '';
     if(!_this.state){
@@ -280,12 +272,12 @@ jsh.App[modelid] = new (function(){
   };
 
   this.RunSQL = function(options){
-    var jform = _this.getFormElement();
+    var xdform = _this.getFormElement();
     var starttm = Date.now();
 
     var params = _this.getExecParams();
 
-    if(jform.$find('.sql').val() != _this.defaultSQL) _this.defaultSQL = '';
+    if(xdform.get('.sql').value != _this.defaultSQL) _this.defaultSQL = '';
 
     //Save history state
     _this.saveState();
@@ -338,8 +330,8 @@ jsh.App[modelid] = new (function(){
         */
         str += "<div style='font-weight:bold'>Operation complete</div>";
         var endtm = Date.now();
-        str += "<div style='font-weight:bold'>Time: " + (endtm-starttm) + 'ms</div>';
-        jform.$find('.rslt').html(str);
+        str += "<div style='font-weight:bold' class='runtime'>Time: " + (endtm-starttm) + 'ms</div>';
+        xdform.get('.rslt').html = str;
       }
     });
     

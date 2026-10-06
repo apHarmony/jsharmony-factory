@@ -9,7 +9,7 @@
     "menu":"dashboard",
     "sqlselect": "select (select txt_body from {schema}.txt__tbl where txt_process='CMS' and txt_attrib='Dashboard__model') as motd from {schema}.single",
     "nokey": 1,
-    "onload":"jsh.$root('.Dashboard__model_MOTD').html(xmodel.controller.form.Data.motd);",
+    "onload":"jsh.xd('.Dashboard__model_MOTD').html = xmodel.controller.form.Data.motd;",
     "fields":[
       {"name":"motd","type":"varchar","actions":"B","control":"hidden","caption":""},
       {"control":"html","value":"<div class=\"clear Dashboard__model_MOTD\"></div>"},

@@ -2,58 +2,56 @@ jsh.App[modelid] = new (function(){
   var _this = this;
 
   this.getFormElement = function(){
-    return jsh.$root('.xformcontainer.xelem'+xmodel.class);
+    return jsh.xd('.xformcontainer.xelem'+xmodel.class);
   };
 
   this.oninit = function(xmodel) {
-    var jform = _this.getFormElement();
+    var xdform = _this.getFormElement();
     XForm.prototype.XExecute('../_funcs/DEV_DB_SCRIPTS', { }, function (rslt) { //On success
       if ('_success' in rslt) {
         _this.RenderDBListing(rslt.dbs);
       }
     });
-    jform.$find('.db').change(function(){
-      var db = jform.$find('.db').val();
+    xdform.get('.db').on('change', function(){
+      var db = xdform.get('.db').value;
       if(!db){
-        jform.$find('.run').hide();
-        jform.$find('.restart_link').hide();
+        xdform.get('.run').style.display = false;
+        xdform.get('.restart_link').style.display = false;
       }
       else _this.GetScripts(db);
     });
-    jform.$find('.runas .admin').change(function(){
+    xdform.get('.runas .admin').on('change', function(){
       _this.renderRunAs();
     });
   };
 
   this.renderRunAs = function(){
-    var jform = _this.getFormElement();
-    var checked = jform.$find('.runas .admin').prop('checked');
+    var xdform = _this.getFormElement();
+    var checked = xdform.get('.runas .admin').element.checked;
+    var xduser = xdform.get('.runas .user');
+    var xdpassword = xdform.get('.runas .password');
     if(checked){
-      XPage.Disable(jform.$find('.runas .user'));
-      XPage.Disable(jform.$find('.runas .password'));
-      jform.$find('.runas .user').val('');
-      jform.$find('.runas .password').val('');
+      XPage.Disable(xduser.elements);
+      XPage.Disable(xdpassword.elements);
+      xduser.value = '';
+      xdpassword.value = '';
     }
     else {
-      XPage.Enable(jform.$find('.runas .user'));
-      XPage.Enable(jform.$find('.runas .password'));
+      XPage.Enable(xduser.elements);
+      XPage.Enable(xdpassword.elements);
     }
   };
 
   this.RenderDBListing = function(dbs){
-    var jform = _this.getFormElement();
-    var jobj = jform.$find('.db');
+    var xdform = _this.getFormElement();
+    var xdobj = xdform.get('.db');
+    var tmpl = jsh.xd('.'+xmodel.class+'_DB_listing_template').html;
+    xdobj.append(XDom.render.ejs(tmpl, {dbs: dbs}));
     if(dbs.length > 1){
-      jform.$find('.dbselect').show();
-      jobj.append($('<option>',{value:''}).text('Please select...'));
+      xdform.get('.dbselect').style.display = true;
     }
     else {
-      jform.$find('.dbselect').hide();
-      jobj.empty();
-    }
-    for(var i=0;i<dbs.length;i++){
-      var db = dbs[i];
-      jobj.append($('<option>',{value:db}).text(db));
+      xdform.get('.dbselect').style.display = false;
     }
     if(dbs.length==1) _this.GetScripts(dbs[0]);
   };
@@ -67,10 +65,10 @@ jsh.App[modelid] = new (function(){
   };
 
   this.RenderScripts = function(scripts, hasAdmin){
-    var jform = _this.getFormElement();
-    jform.$find('.run').show();
-    jform.$find('.restart_link').show();
-    jform.$find('.rslt').text('');
+    var xdform = _this.getFormElement();
+    xdform.get('.run').style.display = true;
+    xdform.get('.restart_link').style.display = true;
+    xdform.get('.rslt').text = '';
 
     function union(a,b){
       var rslt = {};
@@ -87,11 +85,11 @@ jsh.App[modelid] = new (function(){
 
     //--------------------
 
-    var jobj = jform.$find('.listing');
+    var xdobj = xdform.get('.listing');
     //Clear any existing content
-    jobj.empty();
+    xdobj.clear();
     //Render scripts tree
-    jobj.append(_this.RenderScriptsNode(scripts));
+    xdobj.append(XDom.render(_this.RenderScriptsNode(scripts)));
     //Generate "All" tree
     var allscripts = null;
     for(var module in scripts){
@@ -99,67 +97,48 @@ jsh.App[modelid] = new (function(){
       else allscripts = union(allscripts, scripts[module]);
     }
     allscripts = { '(All)': allscripts };
-    jobj.children('ul').prepend(_this.RenderScriptsNode(allscripts).children());
+    xdobj.getChildren('ul').prepend(XDom(XDom.render(_this.RenderScriptsNode(allscripts))).children);
     //Attach events
-    jobj.$find('a.run').click(function(e){ e.preventDefault(); _this.ExecScript(this, 'run'); });
-    jobj.$find('a.info').click(function(e){ e.preventDefault(); _this.ExecScript(this, 'read'); });
+    xdobj.get('a.run').on('click', function(e){ e.preventDefault(); _this.ExecScript(this, 'run'); });
+    xdobj.get('a.info').on('click', function(e){ e.preventDefault(); _this.ExecScript(this, 'read'); });
     if(hasAdmin){
-      jform.$find('.runas .admin_container').show();
-      jform.$find('.runas .admin').prop('checked', true);
+      xdform.get('.runas .admin_container').style.display = true;
+      xdform.get('.runas .admin').element.checked = true;
     }
     else {
-      jform.$find('.runas .admin_container').hide();
-      jform.$find('.runas .admin').prop('checked', false);
+      xdform.get('.runas .admin_container').style.display = false;
+      xdform.get('.runas .admin').element.checked = false;
     }
     _this.renderRunAs();
   };
 
   this.RenderScriptsNode = function(node){
-    var jlist = $('<ul></ul>');
-    for(var childname in node){
-      if(_.isString(node[childname])) continue;
-      var jchild = $('<li class="node"></li>');
-      jchild.data('id',(childname=='(All)'?'*':childname));
-      //Link to run script
-      var jchildlink = $('<a class="run"></a>');
-      jchildlink.text(childname);
-      jchildlink.prop('href','#');
-      jchild.append(jchildlink);
-      //Link to read script
-      var jchildinfolink = $('<a class="info"></a>');
-      jchildinfolink.html('<img src="<%=jsh._PUBLICURL%>images/icon_search.png" width="12" style="padding-left:8px;position:relative;top:2px;" />');
-      jchildinfolink.prop('href','#');
-      jchild.append(jchildinfolink);
-      //Children
-      var childlist = _this.RenderScriptsNode(node[childname]);
-      if(childlist.length) jchild.append(childlist);
-      jlist.append(jchild);
-    }
-    if(!jlist.children().length) return $();
-    return jlist;
+    var xdform = _this.getFormElement();
+    var tmpl = xdform.get('.'+xmodel.class+'_scripts_listing_template').html;
+    return XExt.renderClientEJS(tmpl, {node: node, _this: _this, _: _});
   };
 
   this.ExecScript = function(obj, mode){
-    var jform = _this.getFormElement();
-    var jobj = $(obj);
-    jform.$find('.rslt').text('');
+    var xdform = _this.getFormElement();
+    var xdobj = XDom(obj);
+    xdform.get('.rslt').text = '';
 
     var starttm = Date.now();
 
     var scriptid = [];
-    var parent = jobj.parent().closest('li');
-    while(parent.hasClass('node')){
-      scriptid.unshift(parent.data('id'));
-      parent = parent.parent().closest('li');
+    var xdparent = xdobj.parent().parent('li');
+    while(xdparent.class.contains('node')){
+      scriptid.unshift(xdparent.data.id);
+      xdparent = xdparent.parent().parent('li');
     }
 
-    var params = { scriptid: scriptid, mode: mode, db: jform.$find('.db').val() };
-    if(jform.$find('.admin').prop('checked')){
+    var params = { scriptid: scriptid, mode: mode, db: xdform.get('.db').value };
+    if(xdform.get('.admin').element.checked){
       params.runas_admin = true;
     }
     else {
-      var runas_user = jform.$find('.user').val().trim();
-      var runas_password = jform.$find('.password').val();
+      var runas_user = xdform.get('.user').value.trim();
+      var runas_password = xdform.get('.password').value;
       if(runas_user){
         params.runas_user = runas_user;
         params.runas_password = runas_password;
@@ -172,7 +151,7 @@ jsh.App[modelid] = new (function(){
       XForm.prototype.XExecutePost('../_funcs/DEV_DB_SCRIPTS', { data: JSON.stringify(params) }, function (rslt) { //On success
         if ('_success' in rslt) {
           if(mode=='read'){
-            jform.$find('.rslt').text(params.scriptid+'\r\n-------------------------------\r\n'+rslt.src);
+            xdform.get('.rslt').text = params.scriptid+'\r\n-------------------------------\r\n'+rslt.src;
           }
           else{
             var txt = '';
@@ -189,7 +168,7 @@ jsh.App[modelid] = new (function(){
             txt += '\r\nOperation complete';
             var endtm = Date.now();
             txt += '\r\nTime: ' + (endtm-starttm) + 'ms';
-            jform.$find('.rslt').text(txt);
+            xdform.get('.rslt').text = txt;
             if(rslt.dbcommands.restart) XExt.Alert('Restarting jsHarmony');
           }
         }

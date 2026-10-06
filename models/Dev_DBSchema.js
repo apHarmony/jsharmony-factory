@@ -4,37 +4,33 @@ jsh.App[modelid] = new (function(){
   this.DBs = {};  //Populated onroute
 
   this.getFormElement = function(){
-    return jsh.$root('.xformcontainer.xelem'+xmodel.class);
+    return jsh.xd('.xformcontainer.xelem'+xmodel.class);
   };
 
   this.oninit = function(xmodel) {
-    var jform = _this.getFormElement();
+    var xdform = _this.getFormElement();
     XForm.prototype.XExecute('../_funcs/DEV_DB_SCHEMA', { }, function (rslt) { //On success
       if ('_success' in rslt) {
         _this.RenderDBListing(rslt.dbs);
       }
     });
-    jform.$find('.db').change(function(){
-      var db = jform.$find('.db').val();
-      if(!db) jform.$find('.run').hide();
+    xdform.get('.db').on('change', function(){
+      var db = xdform.get('.db').value;
+      if(!db) xdform.get('.run').style.display = false;
       else _this.GetSchema(db);
     });
   };
 
   this.RenderDBListing = function(dbs){
-    var jform = _this.getFormElement();
-    var jobj = jform.$find('.db');
+    var xdform = _this.getFormElement();
+    var xdobj = xdform.get('.db');
+    var tmpl = jsh.xd('.'+xmodel.class+'_DB_listing_template').html;
+    xdobj.append(XDom.render.ejs(tmpl, {dbs: dbs}));
     if(dbs.length > 1){
-      jform.$find('.dbselect').show();
-      jobj.append($('<option>',{value:''}).text('Please select...'));
+      xdform.get('.dbselect').style.display = true;
     }
     else {
-      jform.$find('.dbselect').hide();
-      jobj.empty();
-    }
-    for(var i=0;i<dbs.length;i++){
-      var db = dbs[i];
-      jobj.append($('<option>',{value:db}).text(db));
+      xdform.get('.dbselect').style.display = false;
     }
     if(dbs.length==1) _this.GetSchema(dbs[0]);
   };
@@ -48,14 +44,14 @@ jsh.App[modelid] = new (function(){
   };
 
   this.getTable = function(obj){
-    var jobj = $(obj);
-    var tableId = jobj.data('tableid');
-    return _this.getFormElement().$find('.schema_table_'+tableId);
+    var xdobj = XDom(obj);
+    var tableId = xdobj.data.tableid;
+    return _this.getFormElement().get('.schema_table_'+tableId);
   };
 
   this.RenderSchema = function(dbid, schema, funcs){
-    var jform = _this.getFormElement();
-    var jobj = jform.$find('.rslt');
+    var xdform = _this.getFormElement();
+    var xdobj = xdform.get('.rslt');
     var schemaHTML = '';
     schemaHTML +=
       '<div class="no_print">Click on a database object for details:<br/><br/>\
@@ -155,16 +151,16 @@ jsh.App[modelid] = new (function(){
       schemaHTML += '</td></tr>';
     });
     schemaHTML += '</table>';
-    jobj[0].innerHTML = schemaHTML;
-    jobj.$find('.show_all').click(function(){ jobj.$find('table.schema_table').show(); });
-    jobj.$find('.hide_all').click(function(){ jobj.$find('table.schema_table').hide(); });
-    jobj.$find('.print').click(function(){
-      jobj.$find('.no_print').remove();
-      jobj.$find('table.schema_table').show();
-      jobj.$find('.schema_container').addClass('schema_print');
+    xdobj.element.innerHTML = schemaHTML;
+    xdobj.get('.show_all').on('click', function(){ xdobj.get('table.schema_table').style.display = true; });
+    xdobj.get('.hide_all').on('click', function(){ xdobj.get('table.schema_table').style.display = false; });
+    xdobj.get('.print').on('click', function(){
+      xdobj.get('.no_print').remove();
+      xdobj.get('table.schema_table').style.display = true;
+      xdobj.get('.schema_container').class.add('schema_print');
       window.print();
     });
-    $('.expandable').click(function(){ _this.getTable(this).toggle(); });
+    XDom('.expandable').on('click', function(){ var xdTable = _this.getTable(this); xdTable.style.display = !xdTable.isVisible(); });
     //jform.$find('.rslt').text(JSON.stringify(schema));
     jsh.XWindowResize();
   };

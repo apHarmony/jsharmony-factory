@@ -10,7 +10,7 @@
     "menu":"Admin/Log_Listing",
     "breadcrumbs": { "parents": ["<a href='Log_Listing'>Log Listing</a>"] },
     "buttons": [
-      {"link": "js:jsh.getFileProxy().prop('src', '/_funcs/LOG_DOWNLOAD?filename='+jsh._GET['filename']);", "icon": "download", "actions":"BIU", "text":"Download"},
+      {"link": "js:jsh.getFileProxy().src = '/_funcs/LOG_DOWNLOAD?filename='+jsh._GET['filename'];", "icon": "download", "actions":"BIU", "text":"Download"},
     ],
     "onload":"_this.onload();",
     "css":[

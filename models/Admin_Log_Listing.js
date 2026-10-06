@@ -14,7 +14,7 @@ jsh.App[modelid] = new (function(){
     if('LogFiles' in jsh.XModels) return; //Grid already loaded
 
     //Define the grid in-memory
-    XPage.LoadVirtualModel($('.'+xmodel.class+'_grid_container')[0], {
+    XPage.LoadVirtualModel(XDom('.'+xmodel.class+'_grid_container').element, {
       'id': 'LogFiles',
       'layout': 'grid',
       'title': 'Log Files',
@@ -22,7 +22,7 @@ jsh.App[modelid] = new (function(){
       'unbound': true,
       'actions': 'B',
       'buttons': [
-        {'link': "js:jsh.getFileProxy().prop('src', '/_funcs/LOG_DOWNLOAD');", 'icon': 'download', 'actions':'BIU', 'text':'Download All'},
+        {'link': "js:jsh.getFileProxy().src = '/_funcs/LOG_DOWNLOAD';", 'icon': 'download', 'actions':'BIU', 'text':'Download All'},
       ],
       'sort': ['vmtime'],
       'hide_system_buttons': ['export'],

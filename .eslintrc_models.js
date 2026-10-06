@@ -13,6 +13,7 @@ module.exports = {
       "jsh": "readonly",
       "modelid": "readonly",
       "XExt": "readonly",
+      "XDom": "readonly",
       "XForm": "readonly",
       "XPage": "readonly",
       "XValidate": "readonly",

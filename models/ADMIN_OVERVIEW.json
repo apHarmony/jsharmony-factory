@@ -12,6 +12,6 @@
       {"control":"html","value":"<div class=\"clear\">Please select an administration option below</div>"},
       {"control":"html","value":"<ul class='xsubmenu_listing'></ul>"}
     ],
-    "oninit": "jsh.$root('.xsubmenu:visible').children('a').not('.xsubmenu_more').each(function(){ var link = $('<a href=\\'#\\'></a>').prop('href',this.href).text($(this).text()); $('<li/>').append(link).appendTo(jsh.$root('.xsubmenu_listing')); });"
+    "oninit": "jsh.xd('.xsubmenu_listing').append(XDom.render.ejs('<# for(var curLink of curLinks){ #><li><a href=\"<#=curLink.href#>\"><#=curLink.text#></a></li><# } #>', {curLinks: jsh.XMenu.Menus.horizontal.getSubMenuItems()}));"
   }
 }

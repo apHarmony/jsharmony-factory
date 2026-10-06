@@ -13,7 +13,7 @@
 
       {"name":"cust_name","caption": "Customer Name","control": "textbox_L"},
       {"name":"cust_email","caption": "Email","control":"textbox_email","validate": ["IsEmail"]},
-      {"caption": "","control":"linkbutton","value": "Compose Email","onclick": "var email = jsh.$root('.cust_email').val().trim(); if(email){ var url = 'mailto:'+email; jsh.getFileProxy().prop('src', url); }","nl":false},
+      {"caption": "","control":"linkbutton","value": "Compose Email","onclick": "var email = jsh.xd('.cust_email').value.trim(); if(email){ var url = 'mailto:'+email; jsh.getFileProxy().src = url; }","nl":false},
       {"name":"cust_phone","caption": "Phone","control": "textbox_phone"},
       {"name":"cust_phone_type","caption": "","caption_ext":"Phone Type","control": "dropdown_S","nl":false},
       {"name":"cust_notes","caption":"Notes","control":"textarea"},

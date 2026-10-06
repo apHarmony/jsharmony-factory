@@ -2,41 +2,37 @@ jsh.App[modelid] = new (function(){
   var _this = this;
 
   this.getFormElement = function(){
-    return jsh.$root('.xformcontainer.xelem'+xmodel.class);
+    return jsh.xd('.xformcontainer.xelem'+xmodel.class);
   };
 
   this.oninit = function(xmodel) {
-    var jform = _this.getFormElement();
+    var xdform = _this.getFormElement();
     XForm.prototype.XExecute('../_funcs/DEV_DB_DIFF', { }, function (rslt) { //On success
       if ('_success' in rslt) {
         _this.RenderDBListing(rslt.dbs);
       }
     });
-    jform.$find('.db').change(function(){
-      var db = jform.$find('.db').val();
+    xdform.get('.db').on('change', function(){
+      var db = xdform.get('.db').value;
       var url = window.location.href.split('?')[0];
-      XExt.navTo(url + '?' + $.param({ db: db }));
+      XExt.navTo(url + '?' + XExt.escapeQuery({ db: db }));
     });
   };
 
   this.RenderDBListing = function(dbs){
-    var jform = _this.getFormElement();
-    var jobj = jform.$find('.db');
+    var xdform = _this.getFormElement();
+    var xdobj = xdform.get('.db');
+    var tmpl = jsh.xd('.'+xmodel.class+'_DB_listing_template').html;
+    xdobj.append(XDom.render.ejs(tmpl, {dbs: dbs}));
     if(dbs.length > 1){
-      jform.$find('.dbselect').show();
-      jobj.append($('<option>',{value:''}).text('Please select...'));
+      xdform.get('.dbselect').style.display = true;
     }
     else {
-      jform.$find('.dbselect').hide();
-      jobj.empty();
-    }
-    for(var i=0;i<dbs.length;i++){
-      var db = dbs[i];
-      jobj.append($('<option>',{value:db}).text(db));
+      xdform.get('.dbselect').style.display = false;
     }
     if(dbs.length==1) _this.GetModules(dbs[0]);
     else if(jsh._GET['db']){
-      jobj.val(jsh._GET['db']);
+      xdobj.value = jsh._GET['db'];
       _this.GetModules(jsh._GET['db']);
     }
   };
@@ -51,52 +47,39 @@ jsh.App[modelid] = new (function(){
   };
 
   this.RenderModules = function(modules){
-    var jform = _this.getFormElement();
-    jform.$find('.run').show();
-    jform.$find('.rslt').text('');
+    var xdform = _this.getFormElement();
+    xdform.get('.run').style.display = true;
+    xdform.get('.rslt').text = '';
 
     //--------------------
 
-    var jobj = jform.$find('.listing');
+    var xdobj = xdform.get('.listing');
     //Clear any existing content
-    jobj.empty();
+    xdobj.clear();
     //Render modules tree
-    jobj.append(_this.RenderModulesNode(modules));
+    xdobj.append(_this.RenderModulesNode(modules));
     //Attach events
-    jobj.$find('a.generate').click(function(e){
+    xdobj.get('a.generate').on('click', function(e){
       e.preventDefault();
-      var moduleName = $(this).parent().closest('li').data('id');
+      var moduleName = XDom(this).parent().parent('li').data.id;
       var url = window.location.href.split('?')[0];
-      XExt.navTo(url + '?' + $.param({ db: jform.$find('.db').val(), moduleName: moduleName }));
+      XExt.navTo(url + '?' + XExt.escapeQuery({ db: xdform.get('.db').value, moduleName: moduleName }));
     });
   };
 
   this.RenderModulesNode = function(node){
-    var jlist = $('<ul></ul>');
-    for(var i=0;i<node.length;i++){
-      var childname = node[i];
-      //Generate node
-      var jchild = $('<li class="node"></li>');
-      jchild.data('id',childname);
-      //Link to run script
-      var jchildlink = $('<a class="generate"></a>');
-      jchildlink.text(childname);
-      jchildlink.prop('href','#');
-      jchild.append(jchildlink);
-      //Add node to list
-      jlist.append(jchild);
-    }
-    if(!jlist.children().length) return $();
-    return jlist;
+    if(!node || !node.length) return '';
+    var tmpl = jsh.xd('.'+xmodel.class+'_module_listing_template').html;
+    return XDom.render.ejs(tmpl, {node: node});
   };
 
   this.ExecDiff = function(moduleName, mode){
-    var jform = _this.getFormElement();
-    jform.$find('.rslt').text('');
+    var xdform = _this.getFormElement();
+    xdform.get('.rslt').text = '';
 
-    var params = { moduleName: moduleName, db: jform.$find('.db').val() };
-    var runas_user = jform.$find('.user').val().trim();
-    var runas_password = jform.$find('.password').val();
+    var params = { moduleName: moduleName, db: xdform.get('.db').value };
+    var runas_user = xdform.get('.user').value.trim();
+    var runas_password = xdform.get('.password').value;
     if(runas_user){
       params.runas_user = runas_user;
       params.runas_password = runas_password;
@@ -104,7 +87,7 @@ jsh.App[modelid] = new (function(){
 
     XForm.prototype.XExecutePost('../_funcs/DEV_DB_DIFF', { data: JSON.stringify(params) }, function (rslt) { //On success
       if ('_success' in rslt) {
-        jform.$find('.rslt').text(params.moduleName+'\r\n-------------------------------\r\n'+rslt.src);
+        xdform.get('.rslt').text = params.moduleName+'\r\n-------------------------------\r\n'+rslt.src;
       }
     });
   };
