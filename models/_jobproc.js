@@ -22,7 +22,7 @@ var fs = require('fs');
 var async = require('async');
 var Helper = require('jsharmony/Helper');
 var HelperFS = require('jsharmony/HelperFS');
-var XValidate = require('jsharmony-validate');
+var XValidate = require('jsharmony/XValidate');
 var SMS = require('../lib/SMS.js');
 
 function AppSrvJobProc(jshFactory, db) {

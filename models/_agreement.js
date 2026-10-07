@@ -19,7 +19,7 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 
 var HelperRender = require('jsharmony/HelperRender');
 var async = require('async');
-var XValidate = require('jsharmony-validate');
+var XValidate = require('jsharmony/XValidate');
 var _ = require('lodash');
 var Helper = require('jsharmony/Helper');
 var crypto = require('crypto');
